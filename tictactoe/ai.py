@@ -74,7 +74,7 @@ class AI(object):
 class ABAI(object):
     """ This is a class to use alpha beta pruning
         eventually it may keep track of partial trees"""
-        
+
     def find_move(self,board):
         """ explore all legal moves with minimax
             with alpha beta pruning and return
@@ -103,7 +103,6 @@ class ABAI(object):
                     beta = tbeta
                     if beta == -1:
                         return move
-
         return bmove
 
                 
@@ -118,7 +117,7 @@ class ABAI(object):
             return the value of it
        """
         win = board.win_check()
-        if not win_check is None:
+        if not win is None:
             return win
         if board.next_move > 0:
             for move in board.legal_moves():

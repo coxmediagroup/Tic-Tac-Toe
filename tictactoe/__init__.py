@@ -66,7 +66,7 @@ def play(ai_type=0):
     winner =  board.win_check()
     if winner == 1:
         print "X won the game"
-    if winner is None:
+    if winner == 0:
         print "The game was a tie"
     else:
         print "O won the game"

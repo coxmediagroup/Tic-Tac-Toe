@@ -54,6 +54,7 @@ class Board:
 
        #check diagonal
         win = list_check([self.board[i][i] for i in range(3)])
+        
         if win:
             return win
         if win is None:
@@ -61,7 +62,7 @@ class Board:
         win = list_check([self.board[i][2-i] for i in range(3)])
         if win:
             return win
-        if tie or win is None:
+        if not tie or win is None:
             return None
         return 0
         
