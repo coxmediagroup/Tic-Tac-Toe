@@ -1,9 +1,9 @@
 import string
 from board import Board, BadMoveError
-from ai import AI
+from ai import AI, ABAI
 
 
-def play():
+def play(ai_type=0):
     """ would you like to play a game of Tic-Tac-Toe? """
     humanx = True
     humany = True
@@ -29,7 +29,10 @@ def play():
 
     ai = None
     if (not humanx) or (not humany):
-        ai = AI()
+        if ai_type == 0:
+            ai = AI()
+        else:
+            ai = ABAI()
 
     board = Board()
 

@@ -69,3 +69,71 @@ class AI(object):
         f = open(DEF_POS_DICT,'wb')
         cPickle.dump(self.moves,f,2)
         f.close()
+
+
+class ABAI(object):
+    """ This is a class to use alpha beta pruning
+        eventually it may keep track of partial trees"""
+        
+    def find_move(self,board):
+        """ explore all legal moves with minimax
+            with alpha beta pruning and return
+            a best move
+        """
+        bmove = None
+        if board.next_move > 0:
+            alpha = -2
+            for move in board.legal_moves():
+                board.move(move[0],move[1])
+                talpha = self.ab_search(board,alpha,2)
+                board.unmove()
+                if talpha > alpha:
+                    bmove = move
+                    alpha = talpha
+                    if alpha == 1:
+                        return move
+        else:
+            beta = 2
+            for move in board.legal_moves():
+                board.move(move[0],move[1])
+                tbeta = self.ab_search(board,-2,beta)
+                board.unmove()
+                if tbeta < beta:
+                    bmove = move
+                    beta = tbeta
+                    if beta == -1:
+                        return move
+
+        return bmove
+
+                
+    def ab_search(self,board, alpha, beta):
+        """ return the value using minimax with alpha beta pruning
+            
+            board = the board of the current node
+            alpha = alpha
+            beta  = beta
+
+            search the board with alpha beta pruning and
+            return the value of it
+       """
+        win = board.win_check()
+        if not win_check is None:
+            return win
+        if board.next_move > 0:
+            for move in board.legal_moves():
+                board.move(move[0],move[1])
+                alpha = max(alpha, self.ab_search(board,alpha,beta))
+                board.unmove()
+                if beta <= alpha:
+                    return alpha
+            return alpha
+        
+        else:
+            for move in board.legal_moves():
+                board.move(move[0],move[1])
+                beta = min(beta, self.ab_search(board,alpha,beta))
+                board.unmove()
+                if beta <= alpha:
+                    return beta
+            return beta
