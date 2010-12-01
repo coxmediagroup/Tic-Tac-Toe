@@ -1,1 +1,3 @@
-Play tic tac toe with tictactoe.play()
+Play tic tac toe with tictactoe.play(ai_type)
+ai_type = 0(default) uses precalualted moves
+ai_type = 1 does a minimax search with alpha beta pruning for each move

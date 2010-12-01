@@ -4,7 +4,10 @@ from ai import AI, ABAI
 
 
 def play(ai_type=0):
-    """ would you like to play a game of Tic-Tac-Toe? """
+    """ would you like to play a game of Tic-Tac-Toe? 
+        ai_type 0 is dictionary method
+                1 is minimax with alpha beta pruning
+    """
     humanx = True
     humany = True
     tempp = None

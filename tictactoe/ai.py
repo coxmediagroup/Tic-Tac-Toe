@@ -5,6 +5,9 @@ from board import Board
 DEF_POS_DICT = "tic_tac.dic"
 
 class Position(object):
+    """ simply holds a winner and best move to make 
+        things more legible
+    """
     def __init__(self,winner,move):
         self.winner = winner
         self.move = copy.copy(move)
@@ -72,8 +75,7 @@ class AI(object):
 
 
 class ABAI(object):
-    """ This is a class to use alpha beta pruning
-        eventually it may keep track of partial trees"""
+    """ This is a class to use alpha beta pruning """
 
     def find_move(self,board):
         """ explore all legal moves with minimax
