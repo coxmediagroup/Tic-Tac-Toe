@@ -14,9 +14,6 @@ class TicTacToe(object):
 	self.winners=([0,1,2], [3,4,5], [6,7,8], [0,4,8],
 			[0,3,6], [1,4,7], [2,5,8], [2,4,6])
 		
-	#self.playing= False
-	#self.completed_moves= 0
-
    def get_display(self):
 	b=self.game_board
 	display="\n"+\
@@ -85,10 +82,7 @@ class TicTacToe(object):
                    moves.append(index)
         return moves
 
-   #def get_unblockedpairs(self):
-	#pairs=self.get_pairs()
-	#for pair in pairs:
-   def get_blockmove(self, state):
+   def get_blockingmove(self, state):
 	if state=="X":
 	   state="O"
 	elif state=="O":
@@ -101,7 +95,7 @@ class TicTacToe(object):
            return options[0]
         return None
 
-   def get_appendmove(self, state):
+   def get_appendingmove(self, state):
 	options = self.get_potentialwinningmoves(state,1)
 	if len(options) > 0:
 	   return options[0]
@@ -115,13 +109,11 @@ class TicTacToe(object):
         return index
 
    def get_cornermove(self):
-        #board = self.get_board()
-        #corners=[0,2,6,8]
-        #for corner in corners:
-           #if self.cell_is_mt(corner):
-              #return corner
-        #return None
-	return self.get_cornermoves[0]
+        cmoves=self.get_cornermoves()
+        if len(cmoves) == 0:
+           return None
+
+	return cmoves[0]
 
    def get_cornermoves(self):
         board = self.get_board()
@@ -195,10 +187,10 @@ class TicTacToe(object):
 
         counter=0
 
-	xmoves= set([])
+	xmoves= []
 	for cellstate in self.game_board:
 	   if cellstate=="X":
-	      xmoves.add(counter)
+	      xmoves.append(counter)
 	   counter+=1
 	return xmoves
 
@@ -206,15 +198,17 @@ class TicTacToe(object):
 
 	counter=0
 
-	omoves= set([])
+	omoves= []
 	for cellstate in self.game_board:
 	   if cellstate=="O":
-	      omoves.add(counter)
+	      omoves.append(counter)
 	   counter+=1
 	return omoves
 
    def get_moves(self):
-	return self.get_Xmoves().union(self.get_Omoves())
+	moves = self.get_Xmoves() + self.get_Omoves()
+	moves.sort()
+	return moves 
 
    def get_movecount(self):
         return len(self.get_moves())
@@ -241,7 +235,10 @@ class TicTacToe(object):
 		b[2]==b[5]==b[8]:
 	   winner=self.players_map[b[8]]
 	return winner
-	   
+
+   def hasa_winner(self):
+	return self.get_winner() is not None
+
 class TicTacToeController(object):
    def __init__(self, tictactoe):
 	self.game=tictactoe
@@ -283,28 +280,30 @@ class TicTacToeController(object):
 	 return True
       return False
 
-   def good_move(self):
+   def good_move(self, state):
 
       move_count=self.game.get_movecount()
 
+
       #Win if you can
-      move=self.game.get_winningmove()
+      move=self.game.get_winningmove(state)
 
       #Block your competitors potential winning move
       if move==None: 
-         move=self.game.get_blockingmove()
+         move=self.game.get_blockingmove(state)
       else:
          return move
 
       #Create a potential winner
       if move==None: 
-         move=self.game.get_appendingmove()
+         move=self.game.get_appendingmove(state)
       else:
          return move
 
       #Make a corner move if it is safe to do so 
-      if (move==None) and (move_count == 0):
-         move=self.game.get_cornermove()
+      if (move==None):
+         if move_count == 0:
+            move=self.game.get_cornermove()
       else:
          return move
 
@@ -320,31 +319,51 @@ class TicTacToeController(object):
 
       return move
 
-   #def corner_yield(self):
-      #pwms= self.game.get_potentialwinningmoves('X'
 	
    def first_player(self):
       #mover = self.game.get_firstmover() #simplify for now, assume X moves first
-      xmoves = self.game.get_Xmoves()
-      omoves = self.game.get_Omoves()
-      move_count = len(xmoves) + len(omoves)
-      if (move_count % 2) > 0:
-	 #Error, it is not the first players move
-         yield None
-      if (move_count == 0):
-         #yield self.game.get_cornermove() ##keep simple, for now
-         yield 0
-      if (move_count == 2):
-         if omoves[0] not in [1,2]:
-            yield 2
-         elif omoves[0] not in [3,6]:
-            yield 6
-      if (move_count > 4):
-         move=self.good_move()
-         move=self.game.get_potentialwinning
-      for cell in self.game.get_board():
-         yield cell
+      while True:
+         xmoves = self.game.get_Xmoves()
+         omoves = self.game.get_Omoves()
+         move_count = len(xmoves) + len(omoves)
 
+         move=None
+         if (move_count % 2) > 0:
+	    #Error, it is not the first players move
+            move=None
+         elif (move_count == 0):
+            #yield self.game.get_cornermove() ##keep simple, for now
+            move=0
+         elif (move_count == 2):
+            if len( set(omoves).intersection( set([1,2]) ) ) == 0:
+               move=2 
+            elif len( set(omoves).intersection( set([3,6]) ) ) == 0:
+               move=6
+         elif (move_count >= 4):
+            move=self.good_move("X") #assumed that first player uses X
+
+         yield move
+
+   def easy_player(self):
+      while True:
+         yield int(self.game.get_emptycells().pop()) 
+
+   def second_player(self):
+      while True:
+         "STARTING GOOD_MOVE", "O"
+         move = self.good_move("O")
+         "FINISHED GOOD-MOVE", "O"
+         yield move 
+
+   def second_player2(self):
+      count=9
+      while True:
+         count-=1
+         yield count
+
+##################
+#TEST STUFF BELOW#
+##################
 def test1(c):
    #c= TicTacToe()
    print "#############################\n"*3
@@ -392,27 +411,29 @@ def test1(c):
    print wm, "wm"
 
    c.move(8)
-   
-def test2():
+  
+def test3():
 	ttt= TicTacToe()
 	control=TicTacToeController(ttt)
-	moveit = control.first_player()
-	#for move in moveit:
-		#print move
-	control.game.move(0)
-	print moveit.next()
-	control.game.move(2)
-	print moveit.next()
-	print moveit.next()
-        control.game.move(8)
-	print moveit.next()
-	print moveit.next()
-	print moveit.next()
-	print moveit.next()
-	print moveit.next()
-	print moveit.next()
+	player1=control.first_player()
+        #player1=control.easy_player()
+	player2=control.second_player()
+	#player2=control.easy_player()
 
-test2()
+	print control.game.get_display()
+	count=0
+        while not control.game.hasa_winner() and count < 10:
+		p1move=player1.next()
+		control.game.move(p1move)
+		count+=1
+		if (not control.game.hasa_winner()):
+			p2move=player2.next()
+			control.game.move(p2move)
+			count+=1
+		print control.game.get_display()
+
+        #print control.game.get_display()
+test3()
 #c= TicTacToe()
 #test1(c)
 #c.reset_all()
