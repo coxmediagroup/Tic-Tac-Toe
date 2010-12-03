@@ -9,6 +9,11 @@ class TicTacToe(object):
 	self.players_map= {"X":self.players[0], "O":self.players[1]}
 	self.pieces= {"X":"X", "O":"O"}
 	self.last_mover=None
+	self.first_mover="X"
+	self.second_mover="O"
+	self.winners=([0,1,2], [3,4,5], [6,7,8], [0,4,8],
+			[0,3,6], [1,4,7], [2,5,8], [2,4,6])
+		
 	#self.playing= False
 	#self.completed_moves= 0
 
@@ -31,6 +36,101 @@ class TicTacToe(object):
                 '3','4','5',
                 '6','7','8'
                 ])
+
+   def get_pairs(self):
+   	pairs=[]
+	for winner in self.winners:
+	   pairs.append([winner[0], winner[1]])
+	   pairs.append([winner[0], winner[2]])
+	   pairs.append([winner[1], winner[2]])
+	return pairs
+
+   def get_superwinner(self, pair):
+	for winner in self.winners:
+	   if set(pair).issubset(winner):
+	      return(winner)
+	return [] 
+
+   def get_potentialwinningpairs(self, state, matches):
+	pwp=[]
+	sw=None
+	board=self.get_board()
+	for pair in self.get_pairs():
+	   if board[pair[0]] == state:
+	      matches-=1
+	   if board[pair[1]] == state:
+	      matches-=1
+           if matches <= 0:
+	   	sw=self.get_superwinner()
+		index=set(sw).difference(set(pair))
+		if self.cell_is_mt(index):
+		   pwp.append(pair)
+	return pwp
+
+   def get_potentialwinningmoves(self, state, matches):
+        matchcount=matches
+        moves=[]
+        sw=None
+        board=self.get_board()
+        for pair in self.get_pairs():
+	   matches=matchcount
+           if board[pair[0]] == state:
+              matches-=1
+           if board[pair[1]] == state:
+              matches-=1
+           if matches <= 0:
+                sw=self.get_superwinner(pair)
+                index=set(sw).difference(set(pair)).pop()
+                if self.cell_is_mt(index):
+                   moves.append(index)
+        return moves
+
+   #def get_unblockedpairs(self):
+	#pairs=self.get_pairs()
+	#for pair in pairs:
+   def get_blockmove(self, state):
+	if state=="X":
+	   state="O"
+	elif state=="O":
+	   state="X"
+	return self.get_winningmove(state)
+
+   def get_winningmove(self, state):
+        options = self.get_potentialwinningmoves(state,2)
+        if len(options) > 0:
+           return options[0]
+        return None
+
+   def get_appendmove(self, state):
+	options = self.get_potentialwinningmoves(state,1)
+	if len(options) > 0:
+	   return options[0]
+	return None
+
+   def get_centermove(self):
+        centerindex=4
+        index=None
+        if (self.get_board()[centerindex]):
+           index=centerindex
+        return index
+
+   def get_cornermove(self):
+        #board = self.get_board()
+        #corners=[0,2,6,8]
+        #for corner in corners:
+           #if self.cell_is_mt(corner):
+              #return corner
+        #return None
+	return self.get_cornermoves[0]
+
+   def get_cornermoves(self):
+        board = self.get_board()
+        corners=[0,2,6,8]
+        moves=[]
+        for corner in corners:
+           if self.cell_is_mt(corner):
+	      moves.append(corner)
+        return moves 
 
    def reset_board(self):
 	self.game_board=self.new_board()
@@ -66,9 +166,9 @@ class TicTacToe(object):
 
    def move(self, cell_id):
 	if self.last_mover==None or self.last_mover==1:
-	   state="X"
+	   state=self.first_mover
 	else:
-	   state="O"
+	   state=self.second_mover
 	return self.__set_cell__(cell_id, state)
 
    def set_lastmover(self):
@@ -77,6 +177,12 @@ class TicTacToe(object):
 	elif self.last_mover==0:
 	   self.last_mover=1
 
+   def get_firstmover(self):
+	return self.first_mover
+   
+   def get_secondmover(self):
+	return self.second_mover
+
    def get_lastmover(self):
 	if self.last_mover==None:
 	   return None
@@ -84,6 +190,41 @@ class TicTacToe(object):
 
    def cell_is_mt(self, number):
 	return self.game_board[number] == str(number)
+
+   def get_Xmoves(self):
+
+        counter=0
+
+	xmoves= set([])
+	for cellstate in self.game_board:
+	   if cellstate=="X":
+	      xmoves.add(counter)
+	   counter+=1
+	return xmoves
+
+   def get_Omoves(self):
+
+	counter=0
+
+	omoves= set([])
+	for cellstate in self.game_board:
+	   if cellstate=="O":
+	      omoves.add(counter)
+	   counter+=1
+	return omoves
+
+   def get_moves(self):
+	return self.get_Xmoves().union(self.get_Omoves())
+
+   def get_movecount(self):
+        return len(self.get_moves())
+
+   def get_emptycells(self):
+	return set([0,1,2,3,4,5,6,7,8]).difference(self.get_moves())
+
+   def get_opencorners(self):
+	corners=set([0,2,6,8])
+	return corners.intersection(self.get_emptycells())
 
    def get_winner(self):
 	winner=None
@@ -95,15 +236,15 @@ class TicTacToe(object):
 	      winner=self.players_map[b[4]]
         elif b[0]==b[1]==b[2] or \
 		b[0]==b[3]==b[6]:
-	  	   winner=self.players_map[b[0]]
+           winner=self.players_map[b[0]]
 	elif b[6]==b[7]==b[8] or \
 		b[2]==b[5]==b[8]:
-		   winner=self.players_map[b[8]]
+	   winner=self.players_map[b[8]]
 	return winner
 	   
 class TicTacToeController(object):
-   def __init__(self):
-	self.game=TicTacToe()
+   def __init__(self, tictactoe):
+	self.game=tictactoe
 	self.droid1_skill="high" #"low", "medium", or "high"
 	self.droid2_skill="low" #"low", "medium", or "high"
 	self.droid_predictability="high" #"low", "medium", or "high"
@@ -123,10 +264,92 @@ class TicTacToeController(object):
 	pass
 
    def set_gameType(self, selection):
-	self.gameType=selection
+      if self.gameTypes.has_key(selection):
+         self.gameType=self.gameTypes[selection]
+         return True
+      return False
+
+   def center_move(self):
+      index=self.game.get_centermove()
+      if index != None:
+         self.game.move(index)
+         return True
+      return False
+
+   def corner_move(self):
+      index=self.game.get_cornermove()
+      if index != None:
+         self.game.move(index)
+	 return True
+      return False
+
+   def good_move(self):
+
+      move_count=self.game.get_movecount()
+
+      #Win if you can
+      move=self.game.get_winningmove()
+
+      #Block your competitors potential winning move
+      if move==None: 
+         move=self.game.get_blockingmove()
+      else:
+         return move
+
+      #Create a potential winner
+      if move==None: 
+         move=self.game.get_appendingmove()
+      else:
+         return move
+
+      #Make a corner move if it is safe to do so 
+      if (move==None) and (move_count == 0):
+         move=self.game.get_cornermove()
+      else:
+         return move
+
+      #Make a defensive move
+      if move==None:
+         move=self.game.get_centermove()
+      else:
+         return move
+
+      #Make a corner move
+      if move==None:
+         move=self.game.get_cornermove()
+
+      return move
+
+   #def corner_yield(self):
+      #pwms= self.game.get_potentialwinningmoves('X'
 	
-def test1():
-   c= TicTacToe()
+   def first_player(self):
+      #mover = self.game.get_firstmover() #simplify for now, assume X moves first
+      xmoves = self.game.get_Xmoves()
+      omoves = self.game.get_Omoves()
+      move_count = len(xmoves) + len(omoves)
+      if (move_count % 2) > 0:
+	 #Error, it is not the first players move
+         yield None
+      if (move_count == 0):
+         #yield self.game.get_cornermove() ##keep simple, for now
+         yield 0
+      if (move_count == 2):
+         if omoves[0] not in [1,2]:
+            yield 2
+         elif omoves[0] not in [3,6]:
+            yield 6
+      if (move_count > 4):
+         move=self.good_move()
+         move=self.game.get_potentialwinning
+      for cell in self.game.get_board():
+         yield cell
+
+def test1(c):
+   #c= TicTacToe()
+   print "#############################\n"*3
+   print c.get_pairs()
+   print c.get_potentialwinningmoves("X",2), "pwm1"
    d= c.get_display()
    p1= c.get_player1()
    p2= c.get_player2()
@@ -137,7 +360,7 @@ def test1():
    p12= c.get_player1()
    p22= c.get_player2()
 
-   c.__set_cell__(0,"X")
+   #c.__set_cell__(0,"X")
    c.move(0)
    #c.__set_cell__(1,"O")
    c.move(1)
@@ -147,6 +370,8 @@ def test1():
    #c.__set_cell__(4,"O")
    c.move(4)
    #c.__set_cell__(6,"X")
+   print c.get_potentialwinningmoves("X",2), "pwm2"
+   wm=c.get_winningmove("X")
    c.move(6)
    w3=c.get_winner()
    d2= c.get_display()
@@ -164,4 +389,34 @@ def test1():
    print w2, "w2", w3, "w3"
    print d2
    print d3
-test1()
+   print wm, "wm"
+
+   c.move(8)
+   
+def test2():
+	ttt= TicTacToe()
+	control=TicTacToeController(ttt)
+	moveit = control.first_player()
+	#for move in moveit:
+		#print move
+	control.game.move(0)
+	print moveit.next()
+	control.game.move(2)
+	print moveit.next()
+	print moveit.next()
+        control.game.move(8)
+	print moveit.next()
+	print moveit.next()
+	print moveit.next()
+	print moveit.next()
+	print moveit.next()
+	print moveit.next()
+
+test2()
+#c= TicTacToe()
+#test1(c)
+#c.reset_all()
+#test1(c)
+#print c.get_Xmoves()
+#print c.get_Omoves()
+#print c.get_emptycells()
