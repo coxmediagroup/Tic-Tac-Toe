@@ -132,6 +132,10 @@ class TicTacToe(object):
 
    def set_player2(self, name):
 	self.players[1]=name
+  
+   def set_players(self, nameList):
+	self.set_player1(nameList[0])
+	self.set_player2(nameList[1])
 
    def get_player1(self):
 	return self.__getplayer__(0)
@@ -242,20 +246,50 @@ class TicTacToe(object):
 class TicTacToeController(object):
    def __init__(self, tictactoe):
 	self.game=tictactoe
+	#self.game=TicTacToe()
 	self.droid1_skill="high" #"low", "medium", or "high"
 	self.droid2_skill="low" #"low", "medium", or "high"
 	self.droid_predictability="high" #"low", "medium", or "high"
-	self.gameTypes={"dvd":"(dvd) Droid1 vs. Droid2",
-			"dvp":"(dvp) Droid vs. Player--- Droid moves first",
-			"pvd":"(pvd) Player vs. Droid --- Player moves first",
-			"pvp":"(pvp) Player1 vs. Player2"}
+	self.gameTypes={"dvd":"(1) Droid1 vs. Droid2",
+			"dvp":"(2) Droid vs. Player --- Droid moves first",
+			"pvd":"(3) Player vs. Droid --- Player moves first",
+			"pvp":"(4) Player1 vs. Player2"}
 	self.gameTypeToPlayers={"dvd":("Droid1", "Droid2"),
 				"dvp":("Droid", "Player"),
 				"pvd":("Player", "Droid"),
 				"pvp":("Player1", "Player2")
 				}
-	self.gameType=self.set_gameType("dvp")
-	self.playerName=None
+	self.gameType=None
+
+   def play(self):
+	play=True
+	while play:
+	   ##Get User Input For Game Type to Play or to Exit(play=False)
+
+	   if play:
+	   	##Play the selected game type
+		play_dvd
+
+   def play_dvd(self):
+	self.gameType=self.gameTypes["dvd"]
+	self.game.set_players(self.gameTypeToPlayers["dvd"])
+
+        droid1=self.smart_generator_X()
+        #droid1=self.easy_generator()
+        droid2=self.good_generator_XO("O")
+        #droid2=self.easy_generator()
+
+        print self.game.get_display()
+        count=0
+        while not self.game.hasa_winner() and count < 10:
+                d1move=droid1.next()
+                self.game.move(d1move)
+                count+=1
+                if (not self.game.hasa_winner()):
+                        d2move=droid2.next()
+                        self.game.move(d2move)
+                        count+=1
+                print self.game.get_display()
 
    def select_gameType(self):
 	pass
@@ -320,7 +354,7 @@ class TicTacToeController(object):
       return move
 
 	
-   def first_player(self):
+   def smart_generator_X(self):
       #mover = self.game.get_firstmover() #simplify for now, assume X moves first
       while True:
          xmoves = self.game.get_Xmoves()
@@ -344,22 +378,14 @@ class TicTacToeController(object):
 
          yield move
 
-   def easy_player(self):
+   def easy_generator(self):
       while True:
          yield int(self.game.get_emptycells().pop()) 
 
-   def second_player(self):
+   def good_generator_XO(self, state="O"):
       while True:
-         "STARTING GOOD_MOVE", "O"
-         move = self.good_move("O")
-         "FINISHED GOOD-MOVE", "O"
+         move = self.good_move(state)
          yield move 
-
-   def second_player2(self):
-      count=9
-      while True:
-         count-=1
-         yield count
 
 ##################
 #TEST STUFF BELOW#
@@ -415,10 +441,12 @@ def test1(c):
 def test3():
 	ttt= TicTacToe()
 	control=TicTacToeController(ttt)
-	player1=control.first_player()
-        #player1=control.easy_player()
-	player2=control.second_player()
-	#player2=control.easy_player()
+
+	player1=control.smart_generator_X()
+        #player1=control.easy_generator()
+
+	player2=control.good_generator_XO("O")
+	#player2=control.easy_generator()
 
 	print control.game.get_display()
 	count=0
