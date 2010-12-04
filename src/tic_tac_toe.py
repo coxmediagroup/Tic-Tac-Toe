@@ -279,8 +279,9 @@ class TicTacToeController(object):
 			"4":self.play_pvp}
 	   	##Play the selected game type
                 callMap[choice]()
+
+           #play=False
 	   self.game.reset_all()
-	   #play=False
 
    def play_game(self, choice, gen1, gen2):
         self.gameType=self.gameTypes[choice]
@@ -291,7 +292,7 @@ class TicTacToeController(object):
 
         print self.game.get_display()
         count=0
-        while not self.game.hasa_winner() and (len(self.game.get_emptycells()) > 0) and (count < 10):
+        while (not self.game.hasa_winner()) and (len(self.game.get_emptycells()) > 0) and (count < 10):
                 d1move=droid1.next()
                 self.game.move(d1move)
                 count+=1
@@ -417,19 +418,21 @@ class TicTacToeController(object):
 
    def manual_generator_X(self):
       while True:
-         try:
-            choice=int(raw_input("\nPlayer X: ")[0])
-            yield choice
-         except:
-            pass
+         invalid_choice=True
+         while invalid_choice:
+            choice=raw_input("\nPlayer X: ")
+            if (len(choice) == 1) and choice.isdigit():
+               invalid_choice=False
+         yield int(choice)
 
    def manual_generator_O(self):
       while True:
-         try:
-            choice=int(raw_input("\nPlayer O: ")[0])
-            yield choice
-         except:
-            pass
+         invalid_choice=True
+         while invalid_choice:
+            choice=raw_input("\nPlayer O: ")
+            if (len(choice) == 1) and choice.isdigit():
+               invalid_choice=False
+         yield int(choice)
 
 def main():
   ttt=TicTacToe()
