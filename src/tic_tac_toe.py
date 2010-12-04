@@ -265,31 +265,54 @@ class TicTacToeController(object):
 	play=True
 	while play:
 	   ##Get User Input For Game Type to Play or to Exit(play=False)
+           m=self.gameTypes
+           exit_option="(5) Exit"
+	   choice = raw_input("Please select an option:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t\t" %
+				(m["dvd"],m["dvp"],m["pvd"],m["pvp"],exit_option))[0]
+           if choice not in ["1", "2", "3", "4"]:
+              play=False
 
 	   if play:
+                callMap={"1":self.play_dvd,
+			"2":self.play_dvp,
+			"3":self.play_pvd,
+			"4":self.play_pvp}
 	   	##Play the selected game type
-		play_dvd
+                callMap[choice]()
+	   self.game.reset_all()
+	   #play=False
 
-   def play_dvd(self):
-	self.gameType=self.gameTypes["dvd"]
-	self.game.set_players(self.gameTypeToPlayers["dvd"])
+   def play_game(self, choice, gen1, gen2):
+        self.gameType=self.gameTypes[choice]
+        self.game.set_players(self.gameTypeToPlayers[choice])
 
-        droid1=self.smart_generator_X()
-        #droid1=self.easy_generator()
-        droid2=self.good_generator_XO("O")
-        #droid2=self.easy_generator()
+        droid1=gen1()
+        droid2=gen2()
 
         print self.game.get_display()
         count=0
-        while not self.game.hasa_winner() and count < 10:
+        while not self.game.hasa_winner() and (len(self.game.get_emptycells()) > 0) and (count < 10):
                 d1move=droid1.next()
                 self.game.move(d1move)
                 count+=1
-                if (not self.game.hasa_winner()):
+		print self.game.get_display()
+                if (not self.game.hasa_winner()) and (len(self.game.get_emptycells()) >0):
                         d2move=droid2.next()
                         self.game.move(d2move)
                         count+=1
-                print self.game.get_display()
+                	print self.game.get_display()
+
+   def play_dvd(self):
+	self.play_game("dvd", self.smart_generator_X, self.good_generator_O)
+
+   def play_dvp(self):
+	self.play_game("dvp", self.smart_generator_X, self.manual_generator_O)
+
+   def play_pvd(self):
+	self.play_game("pvd", self.manual_generator_X, self.good_generator_O)
+
+   def play_pvp(self):
+	self.play_game("pvp", self.manual_generator_X, self.manual_generator_O)
 
    def select_gameType(self):
 	pass
@@ -386,3 +409,32 @@ class TicTacToeController(object):
       while True:
          move = self.good_move(state)
          yield move 
+
+   def good_generator_O(self):
+      while True:
+         move = self.good_move("O")
+         yield move
+
+   def manual_generator_X(self):
+      while True:
+         try:
+            choice=int(raw_input("\nPlayer X: ")[0])
+            yield choice
+         except:
+            pass
+
+   def manual_generator_O(self):
+      while True:
+         try:
+            choice=int(raw_input("\nPlayer O: ")[0])
+            yield choice
+         except:
+            pass
+
+def main():
+  ttt=TicTacToe()
+  control=TicTacToeController(ttt) 
+  control.play()
+
+if __name__ == "__main__":
+   main()
