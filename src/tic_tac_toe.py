@@ -60,13 +60,15 @@ class TicTacToe(object):
 	   if board[pair[1]] == state:
 	      matches-=1
            if matches <= 0:
-	   	sw=self.get_superwinner()
+	   	sw=self.get_superwinner(pair)
 		index=set(sw).difference(set(pair))
-		if self.cell_is_mt(index):
+		if self.cell_is_mt(index.pop()):
 		   pwp.append(pair)
 	return pwp
 
-   def get_potentialwinningmoves(self, state, matches):
+   def get_potentialwinningmoves(self, state, matches, double_only=False):
+        moves_map= {0:0, 1:0, 2:0, 3:0, 4:0,
+		    5:0, 6:0, 7:0, 8:0}
         matchcount=matches
         moves=[]
         sw=None
@@ -82,6 +84,23 @@ class TicTacToe(object):
                 index=set(sw).difference(set(pair)).pop()
                 if self.cell_is_mt(index):
                    moves.append(index)
+	for m in moves:
+	   moves_map[m]+=1
+
+	max=0
+	key=-1
+        for k in moves_map.keys():
+	   if (moves_map[k] > max) or (k==4 and moves_map[k]==max):
+	      max= moves_map[k]
+	      key= k
+         
+        #print "PWMs", moves, moves_map
+	#print "max, key", max, key
+	if key > -1 and max>0:
+	   moves.remove(key)
+	   moves.insert(0, key)
+	if double_only and (max < 2):
+	   return None
         return moves
 
    def get_blockingmove(self, state):
@@ -192,7 +211,8 @@ class TicTacToe(object):
 	return self.players[self.last_mover]
 
    def cell_is_mt(self, number):
-	return self.game_board[number] == str(number)
+	empty=( self.game_board[number] == str(number) )
+	return empty
 
    def get_Xmoves(self):
 
@@ -358,6 +378,9 @@ class TicTacToeController(object):
 	   self.play_game("rvd", self.random_generator, self.good_generator_O, silent=True)
 	   if self.game.hasa_winner():
 	      victories[self.game.get_winner()]+=1
+	      #print players[0], self.game.players_map["X"]
+	      if players[0] == self.game.get_winner():
+	         print self.game.get_display()
 	   self.game.reset_board()
 	   self.game.reset_lastmover()
 	draw= simulations - (victories[players[0]] + victories[players[1]])
@@ -396,6 +419,31 @@ class TicTacToeController(object):
       #print "get_random_move", move
       return int(cells[move])
 
+   def swap_state(self, state):
+      if state=="X":
+         return "O"
+      elif state=="O":
+         return"X"
+      return None
+
+   def glue_if_needed(self, move, state):
+      ##This plugs a hole that allowed the droid to lose, occassionally
+      ## when droid was the second player ("O")
+      xmoves=self.game.get_Xmoves()
+      omoves=self.game.get_Omoves()
+      if (len(xmoves)==2) and (len(omoves)==1):
+         if 0 in xmoves and 8 in xmoves and 4 in omoves:
+            move=3
+         elif 0 in xmoves and 7 in xmoves and 4 in omoves:
+            move=3
+         elif 2 in xmoves and 7 in xmoves and 4 in omoves:
+            move=5
+         elif 2 in xmoves and 6 in xmoves and 4 in omoves:
+            move=5
+         
+      return move
+
+
    def good_move(self, state):
 
       move_count=self.game.get_movecount()
@@ -411,6 +459,24 @@ class TicTacToeController(object):
       else:
          return move
 
+      #Move to middle if only one move completed
+      if (move==None):
+         if self.game.get_movecount() == 1:
+            move=self.game.get_centermove()
+
+      #Block a double move
+      if move==None:
+         moves=self.game.get_potentialwinningmoves(self.swap_state(state), 1, double_only=True)
+         if (moves != None) and (len(moves) > 0):
+            move= moves[0]
+            move= self.glue_if_needed(move, state)
+
+      #Create a potential winner
+      if move==None:
+         move=self.game.get_appendingmove(state)
+      else:
+         return move
+
       #Move to center, if open
       if move==None:
          move=self.game.get_centermove()
@@ -418,17 +484,17 @@ class TicTacToeController(object):
          return move
 
       #Create a potential winner
-      if move==None: 
-         move=self.game.get_appendingmove(state)
-      else:
-         return move
+      #if move==None: 
+         #move=self.game.get_appendingmove(state)
+      #else:
+         #return move
 
       #Make a corner move if it is safe to do so 
-      if (move==None):
-         if move_count == 0:
-            move=self.game.get_cornermove()
-      else:
-         return move
+      #if (move==None):
+         #if move_count == 0:
+            #move=self.game.get_cornermove()
+      #else:
+         #return move
 
       #Make a defensive move
       #if move==None:
@@ -438,7 +504,13 @@ class TicTacToeController(object):
 
       #Make a corner move
       if move==None:
+	 #print "CORNER"
          move=self.game.get_cornermove()
+
+      #Make a random move	
+      if move==None:
+	print "RANDOM"
+	move=self.get_random_move()
 
       return move
 
