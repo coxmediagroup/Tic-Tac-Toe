@@ -5,12 +5,84 @@ import sys
 
 class Board:
    """Contains the board's state"""
-   pass
+   def __init__( self ):
+      self.empty_char = '_'
+      
+      # board is stored as 9 element list, left-to-right, top-to-bottom
+      self.spaces = [self.empty_char] * 9
+      
+      # indicies for all possible three-in-a-row's
+      self.all_triples = [[0, 1, 2], [3, 4, 5], [6, 7, 8], 
+                          [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                          [0, 4, 8], [2, 4, 6]]
+
+   def assert_move_location_ok( self, location  ):
+      if not (0 <= location < len(self.spaces)):
+         raise IndexError
+      if self.spaces[location] != self.empty_char:
+         raise IndexError
+   
+   def move_X( self, location ):
+      self.assert_move_location_ok(location)
+      self.spaces[location] = 'X'
+
+   def move_O( self, location ):
+      self.assert_move_location_ok(location)
+      self.spaces[location] = 'O'
+
+   def spot_empty( self, location ):
+      return (0 <= location < len(self.spaces)) and self.spaces[location] == self.empty_char
+
+   def find_winner( self ):
+      for three in self.all_triples:
+         if self._three_same_not_empty(three):
+            return self.spaces[three[0]]
+      return None
+
+   def is_full( self ):
+      for x in range(9):
+         if self.spaces[x] == self.empty_char:
+            return False
+      return True
+
+   def _row_str( self, r ):
+      if not (0 <= r < 3):
+         raise IndexError
+      return ','.join(self.spaces[r * 3:(r + 1) * 3])
+
+   def __str__( self ):
+      return '\n'.join([self._row_str(0), self._row_str(1), self._row_str(2)])
+
 
 class Game:
    """Contains a board and other game state"""
    def __init__( self ):
-      self._test()
+      # self._test()
+      self.board = Board()
+
+      print ("Welcome.  I move first.")
+      self.board.move_O(4)
+      print (self.board)
+
+      while (True):
+         move_int = self.get_player_move()
+         self.board.move_X(move_int)
+         print (self.board)
+         
+         
+   def get_player_move( self ):
+      move = -1
+      while not self.board.spot_empty(move):
+         try:
+            move = int(raw_input("Enter 0 - 8 for your move: "))
+            if move < 0 or move >= 9:
+               print ("Invalid number.")
+            elif not self.board.spot_empty(move):
+               print ("That spot is taken.")
+         except:
+            pass
+      return move
+
    def _test( self ):
    
       def assert_true(cond, msg):
