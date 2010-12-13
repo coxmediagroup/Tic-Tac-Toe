@@ -66,11 +66,39 @@ class Board:
             return self.spaces[three[0]]
       return None
 
+   def get_empty_sides( self ):
+      return [x for x in [1, 5, 7, 3] if self.spaces[x] == self.empty_char]
+
    def is_full( self ):
       for x in range(9):
          if self.spaces[x] == self.empty_char:
             return False
       return True
+
+   def get_opposite_and_other_empty_corners( self, oppposite_char ):
+      moves = []
+      # append all 'opposite' corners first
+      # NW corner
+      if self.spaces[0] == oppposite_char:
+         if self.spaces[8] == self.empty_char:
+            moves.append(8)
+      # NE corner
+      if self.spaces[2] == oppposite_char:
+         if self.spaces[6] == self.empty_char:
+            moves.append(6)
+      # SE corner
+      if self.spaces[8] == oppposite_char:
+         if self.spaces[0] == self.empty_char:
+            moves.append(0)
+      # SW corner
+      if self.spaces[6] == oppposite_char:
+         if self.spaces[2] == self.empty_char:
+            moves.append(2)
+      # append any remaining empty corners
+      for x in [0, 2, 6, 8]:
+         if self.spaces[x] == self.empty_char and x not in moves:
+            moves.append(x)
+      return moves
 
    def _row_str( self, r ):
       if not (0 <= r < 3):
@@ -83,6 +111,34 @@ class Board:
 
 class Game:
    """Contains a board and other game state"""
+   def move_computer( self ):
+      print ("I move again:")
+      # move to win
+      i = self.board.find_two_index('O')
+      if i:
+         self.board.move_O(i)
+         # print ("won")
+      else:
+         # move to block
+         i = self.board.find_two_index('X')
+         if i:
+            self.board.move_O(i)
+            # print ("blocked")
+         else:
+            # move to opposite or other corner
+            corners = self.board.get_opposite_and_other_empty_corners('X')
+            if corners:
+               self.board.move_O(corners[0])
+               # print 'corners:', corners
+            else:
+               sides = self.board.get_empty_sides()
+               if sides:
+                  self.board.move_O(sides[0])
+                  # print 'sides:', sides
+               else:
+                  print 'I don\'t know where to move.'
+      print (self.board)
+
    def __init__( self ):
       # self._test()
       self.board = Board()
@@ -95,7 +151,6 @@ class Game:
          move_int = self.get_player_move()
          self.board.move_X(move_int)
          print (self.board)
-         
          
          winner = self.board.find_winner()
          if winner:
