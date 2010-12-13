@@ -33,6 +33,33 @@ class Board:
    def spot_empty( self, location ):
       return (0 <= location < len(self.spaces)) and self.spaces[location] == self.empty_char
 
+   def _two_same_one_empty( self, indicies, a_char ):
+      if self.spaces[indicies[0]] == self.empty_char:
+         if self.spaces[indicies[1]] == a_char and \
+            self.spaces[indicies[2]] == a_char:
+            return indicies[0]
+      elif self.spaces[indicies[1]] == self.empty_char:
+         if self.spaces[indicies[0]] == a_char and \
+            self.spaces[indicies[2]] == a_char:
+            return indicies[1]
+      elif self.spaces[indicies[2]] == self.empty_char:
+         if self.spaces[indicies[1]] == a_char and \
+            self.spaces[indicies[0]] == a_char:
+            return indicies[2]
+      return None
+
+   def find_two_index( self, a_char ):
+      for three in self.all_triples:
+         empty_index = self._two_same_one_empty(three, a_char)
+         if empty_index != None:
+            return empty_index
+      return None
+
+   def _three_same_not_empty( self, indicies ):
+      return self.spaces[indicies[0]] != self.empty_char \
+         and self.spaces[indicies[0]] == self.spaces[indicies[1]] \
+         and self.spaces[indicies[1]] == self.spaces[indicies[2]]
+
    def find_winner( self ):
       for three in self.all_triples:
          if self._three_same_not_empty(three):
@@ -70,6 +97,23 @@ class Game:
          print (self.board)
          
          
+         winner = self.board.find_winner()
+         if winner:
+            print winner, "has won."
+            break
+         if self.board.is_full():
+            print 'Game tied.'
+            break
+
+         self.move_computer()
+         winner = self.board.find_winner()
+         if winner:
+            print winner, "has won."
+            break
+         if self.board.is_full():
+            print 'Game tied.'
+            break
+
    def get_player_move( self ):
       move = -1
       while not self.board.spot_empty(move):
