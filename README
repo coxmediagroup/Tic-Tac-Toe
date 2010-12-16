@@ -3,3 +3,9 @@ Instructions:
 2. Create an app that can interactively play the game of Tic Tac Toe against another player and never lose.
 3. Commit early and often, with good messages.
 4. Push your code back to github and send me a pull request.
+
+TODO:
+1. Determine Winner
+2. Create AI handling
+3. Spice things up a bit with CSS
+4. Test in MANY browsers
