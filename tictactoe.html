@@ -1,10 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 	<head>
-		<title>Unbeatable Tic Tac Toe</title>
+	    <title>Unbeatable Tic Tac Toe</title>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		
+		<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
+		<script type="text/javascript" src="uimodifier.js"></script>
+		<script type="text/javascript" src="logic.js"></script>
+		
 	</head>
 	
 	<body>
-		<div class="board">
+		<h1 id="status">Batter up! It's your move!</h1>
+		<div id="game">
+			<table id="board" class="tictactoe" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="spot vert bottom">X</td>
+					<td class="spot vert bottom">O</td>
+					<td class="spot bottom">X</td>
+				</tr>
+				<tr>
+					<td class="spot vert bottom">O</td>
+					<td class="spot vert bottom">X</td>
+					<td class="spot bottom">O</td>
+				</tr>
+				<tr>
+					<td class="spot vert">X</td>
+					<td class="spot vert">O</td>
+					<td class="spot">X</td>
+				</tr>
+				
+			</table>
 		</div>
 	</body>
 </html>

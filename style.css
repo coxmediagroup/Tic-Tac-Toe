@@ -5,14 +5,24 @@
 table.tictactoe {
 	width: 400px;
 	height: 400px;
+
+}
+	/*The next two elements disable selecting text on the game board in Webkit and Mozilla-based browsers. This was done because accidentally selecting text in game is kind of annoying and things don't look near as nice when a selection occurs.*/
+::selection {
+	background: transparent;
+}
+
+::-moz-selection { 
+	background: transparent; 
 }
 
 td {
 	text-align: center;
 	font-size: 50px;
 }
+
 td:hover {
-	background-color: green;
+	background-color: #f5f5f5;
 }
 
 td.vert {
