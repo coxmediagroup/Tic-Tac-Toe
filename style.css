@@ -1,0 +1,24 @@
+/* style.css
+   Created: December 15, 2010
+   Purpose: Make the tic tac toe board so appealing that you'd consider going on a date with it.*/
+   
+table.tictactoe {
+	width: 400px;
+	height: 400px;
+}
+
+td {
+	text-align: center;
+	font-size: 50px;
+}
+td:hover {
+	background-color: green;
+}
+
+td.vert {
+	border-right: 2px solid black;
+}
+
+td.bottom {
+	border-bottom: 2px solid black;
+}
