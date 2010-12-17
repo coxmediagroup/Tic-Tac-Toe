@@ -7,17 +7,18 @@
  * some sort of legit browser like (but not limited to) Chrome, Firefox, or Safari.
  * I can't take credit for this as I found this diddy at http://tinyurl.com/ldmzrg */
 var IE = /*@cc_on!@*/false;
-
 var piece = {X:'X', O:'O'}; 
-
 var currentPiece = piece.X;
-
 var endOfGame = false;
+var clickCount = 0;
 
 function init() {
-	$("#turn").text(currentPiece + " is up");
+	changeGameStatus(currentPiece + " is up");
 }
 
+function changeGameStatus(statusString) {
+	$("#turn").text(statusString);
+}
 /* Why are we doing this? Because we need to attach a function later 
  * on to disallow selection
  * across multiple browsers including IE6. */ 
@@ -36,10 +37,10 @@ if (IE) {
 function turnHandling() {
 	if (!endOfGame) {
 		currentPiece = (currentPiece == piece.X ? piece.O : piece.X);
-		$("#turn").text(currentPiece + " is up");
+		changeGameStatus(currentPiece + " is up");
 	}
 	else {
-		$("#turn").text(currentPiece + " is the Winner!");
+		changeGameStatus(currentPiece + " is the Winner!");
 	}
 }
 
@@ -48,8 +49,9 @@ function clearGameBoard() {
 		$(this).text("");
 	});
 	currentPiece = piece.X;
-	$("#turn").text(currentPiece + " is up");
+	changeGameStatus(currentPiece + " is up");
 	endOfGame = false;
+	clickCount = 0;
 }
 
 /*This let's us know a cell has been clicked. So, er, um, yeah, it means do something!*/
@@ -61,7 +63,11 @@ $(document).ready(function() {
 			$(this).text(currentPiece);
 			determineIfWin();
 			turnHandling();
-		}
+			 if (clickCount == 8) {
+				changeGameStatus("Game over! It's a cat's game!")
+			}
+			clickCount++;
+		} 
         //alert($(this).parent().index() + " " + $(this).parent().children().index($(this)));
     });
 });
