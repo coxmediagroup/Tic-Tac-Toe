@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2852"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2877"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2920"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2945"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3011"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="754.67992"
+     inkscape:cy="605.18217"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="1680"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:53.48861313px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+       x="23.584822"
+       y="77.807953"
+       id="text2816"><tspan
+         sodipodi:role="line"
+         id="tspan2818"
+         x="23.584822"
+         y="77.807953">Tic-Tac-Toe As a Django App</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+       x="67.14286"
+       y="146.64792"
+       id="text2820"><tspan
+         sodipodi:role="line"
+         id="tspan2822"
+         x="67.14286"
+         y="146.64792">Possible</tspan><tspan
+         sodipodi:role="line"
+         x="67.14286"
+         y="196.64792"
+         id="tspan3049">approaches:</tspan></text>
+    <g
+       id="g3041"
+       transform="matrix(0.72905544,0,0,0.72905544,167.59199,-2.5848687)">
+      <path
+         transform="translate(-22.857142,-37.64285)"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         sodipodi:ry="124.28571"
+         sodipodi:rx="124.28571"
+         sodipodi:cy="363.79074"
+         sodipodi:cx="368.57144"
+         id="path2824"
+         style="fill:none;stroke:#1a1a1a"
+         sodipodi:type="arc" />
+      <text
+         id="text2840"
+         y="319.49689"
+         x="345.33539"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           y="319.49689"
+           x="345.33539"
+           id="tspan2842"
+           sodipodi:role="line">In-browser</tspan><tspan
+           id="tspan2963"
+           y="341.99689"
+           x="345.33539"
+           sodipodi:role="line">JavaScript</tspan></text>
+    </g>
+    <g
+       id="g2984"
+       transform="matrix(0.72905544,0,0,0.72905544,25.946935,186.96955)">
+      <path
+         sodipodi:type="arc"
+         style="fill:none;stroke:#1a1a1a"
+         id="path2826"
+         sodipodi:cx="368.57144"
+         sodipodi:cy="363.79074"
+         sodipodi:rx="124.28571"
+         sodipodi:ry="124.28571"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         transform="translate(371.42857,-39.499999)" />
+      <text
+         transform="scale(0.97052505,1.0303701)"
+         id="text2840-3"
+         y="321.19427"
+         x="762.41089"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           y="321.19427"
+           x="762.41089"
+           id="tspan2842-9"
+           sodipodi:role="line">Structured Urls</tspan></text>
+    </g>
+    <g
+       id="g2977"
+       transform="matrix(0.72905544,0,0,0.72905544,160.30144,42.199961)">
+      <path
+         sodipodi:type="arc"
+         style="fill:none;stroke:#1a1a1a"
+         id="path2830"
+         sodipodi:cx="368.57144"
+         sodipodi:cy="363.79074"
+         sodipodi:rx="124.28571"
+         sodipodi:ry="124.28571"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         transform="translate(174.78572,-28.571423)" />
+      <text
+         transform="scale(0.97052505,1.0303701)"
+         id="text2840-3-3"
+         y="307.43774"
+         x="559.79596"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           y="307.43774"
+           x="559.79596"
+           id="tspan2842-9-3"
+           sodipodi:role="line">AJAX</tspan><tspan
+           id="tspan2969"
+           y="329.93774"
+           x="559.79596"
+           sodipodi:role="line">+</tspan><tspan
+           id="tspan2971"
+           y="352.43774"
+           x="559.79596"
+           sodipodi:role="line">Structured Urls</tspan></text>
+    </g>
+    <g
+       id="g2996"
+       transform="matrix(0.72905544,0,0,0.72905544,203.00325,90.109321)">
+      <path
+         transform="translate(-231.92857,-34.285709)"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         sodipodi:ry="124.28571"
+         sodipodi:rx="124.28571"
+         sodipodi:cy="363.79074"
+         sodipodi:cx="368.57144"
+         id="path2828"
+         style="fill:none;stroke:#1a1a1a"
+         sodipodi:type="arc" />
+      <text
+         transform="scale(0.97052505,1.0303701)"
+         id="text2840-3-3-1"
+         y="303.64688"
+         x="140.9875"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           y="303.64688"
+           x="140.9875"
+           id="tspan2842-9-3-0"
+           sodipodi:role="line">AJAX</tspan><tspan
+           id="tspan2965"
+           y="326.14688"
+           x="140.9875"
+           sodipodi:role="line">+</tspan><tspan
+           id="tspan2967"
+           y="348.64688"
+           x="140.9875"
+           sodipodi:role="line">Session</tspan></text>
+    </g>
+    <g
+       id="g2989"
+       transform="matrix(0.72905544,0,0,0.72905544,166.55048,44.282981)">
+      <path
+         transform="translate(40.063,291.75232)"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         sodipodi:ry="124.28571"
+         sodipodi:rx="124.28571"
+         sodipodi:cy="363.79074"
+         sodipodi:cx="368.57144"
+         id="path2828-4"
+         style="fill:none;stroke:#1a1a1a"
+         sodipodi:type="arc" />
+      <text
+         id="text2959"
+         y="639.50507"
+         x="408.57144"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           y="639.50507"
+           x="408.57144"
+           id="tspan2961"
+           sodipodi:role="line">Session</tspan><tspan
+           id="tspan2973"
+           y="662.00507"
+           x="408.57144"
+           sodipodi:role="line">+</tspan><tspan
+           id="tspan2975"
+           y="684.50507"
+           x="408.57144"
+           sodipodi:role="line">Structured Urls</tspan></text>
+    </g>
+    <g
+       id="g3036"
+       transform="matrix(0.72905544,0,0,0.72905544,230.08245,31.784881)">
+      <path
+         transform="translate(-244.28573,245.7143)"
+         d="m 492.85715,363.79074 c 0,68.6411 -55.6446,124.28571 -124.28571,124.28571 -68.6411,0 -124.28571,-55.64461 -124.28571,-124.28571 0,-68.6411 55.64461,-124.28571 124.28571,-124.28571 68.64111,0 124.28571,55.64461 124.28571,124.28571 z"
+         sodipodi:ry="124.28571"
+         sodipodi:rx="124.28571"
+         sodipodi:cy="363.79074"
+         sodipodi:cx="368.57144"
+         id="path2824-9"
+         style="fill:none;stroke:#1a1a1a"
+         sodipodi:type="arc" />
+      <text
+         id="text2840-1"
+         y="615.96704"
+         x="124.48048"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         xml:space="preserve"><tspan
+           id="tspan2963-8"
+           y="615.96704"
+           x="124.48048"
+           sodipodi:role="line">Session</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:18.11289978px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+       x="8.1496611"
+       y="621.63525"
+       id="text3051"><tspan
+         sodipodi:role="line"
+         id="tspan3053"
+         x="8.1496611"
+         y="621.63525">Notes:</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="644.27637"
+         id="tspan3055">- Different combos have different pros/cons</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="666.91748"
+         id="tspan3061" /><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="689.55865"
+         id="tspan3057">- Structured URLs is interesting, could save games by linking the current URL</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="712.19977"
+         id="tspan3059">- Requires complex urls.py </tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="734.84088"
+         id="tspan3063" /><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="757.48199"
+         id="tspan3075">- In browser Javascript would not present any need for Django or different URLs</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="780.12311"
+         id="tspan3069" /><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="802.76428"
+         id="tspan3071">- Session use mitigates the need for complex URLs, but still uses Django</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="825.4054"
+         id="tspan3081">- Depending on implementation, might be problematic to keep track of many games at once</tspan><tspan
+         sodipodi:role="line"
+         x="8.1496611"
+         y="848.04651"
+         id="tspan3073" /></text>
+  </g>
+</svg>
