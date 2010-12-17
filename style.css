@@ -1,7 +1,15 @@
 /* style.css
    Created: December 15, 2010
    Purpose: Make the tic tac toe board so appealing that you'd consider going on a date with it.*/
-   
+body {
+	margin-left: auto;
+	margin-right: auto;
+	width: 400px;
+}
+
+div#game {
+
+}   
 table.tictactoe {
 	width: 400px;
 	height: 400px;
@@ -19,6 +27,8 @@ table.tictactoe {
 td {
 	text-align: center;
 	font-size: 50px;
+	width: 33%;
+	height: 33%;
 }
 
 td:hover {

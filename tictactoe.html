@@ -8,16 +8,19 @@
 		<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
 		<script type="text/javascript" src="uimodifier.js"></script>
 		<script type="text/javascript" src="logic.js"></script>
+
 		
 	</head>
 	
-	<body>
-		<h1 id="status">Batter up! It's your move!</h1>
+	<body onload="init()">
+		<h1 id="name" class="heading">Tic Tac Toe</h1>
+		<div id="turn"></div>
 		<div id="game">
 			<table id="board" class="tictactoe" cellpadding="0" cellspacing="0">
 				<tr>
 					<td class="vert bottom"></td>
 					<td class="vert bottom"></td>
+
 					<td class="bottom"></td>
 				</tr>
 				<tr>
@@ -27,11 +30,13 @@
 				</tr>
 				<tr>
 					<td class="vert"></td>
+
 					<td class="vert"></td>
 					<td></td>
 				</tr>
 			</table>
 			<input type="button" onclick="clearGameBoard();" value="Reset Game"/>
 		</div>
+		
 	</body>
 </html>

@@ -8,9 +8,15 @@
  * I can't take credit for this as I found this diddy at http://tinyurl.com/ldmzrg */
 var IE = /*@cc_on!@*/false;
 
-var piece = {X:'X', O:'O'};
+var piece = {X:'X', O:'O'}; 
 
 var currentPiece = piece.X;
+
+var endOfGame = false;
+
+function init() {
+	$("#turn").text(currentPiece + " is up");
+}
 
 /* Why are we doing this? Because we need to attach a function later 
  * on to disallow selection
@@ -28,26 +34,34 @@ if (IE) {
 }
 
 function turnHandling() {
-	currentPiece = (currentPiece == piece.X ? piece.O : piece.X);
+	if (!endOfGame) {
+		currentPiece = (currentPiece == piece.X ? piece.O : piece.X);
+		$("#turn").text(currentPiece + " is up");
+	}
+	else {
+		$("#turn").text(currentPiece + " is the Winner!");
+	}
 }
 
 function clearGameBoard() {
-	$(document).ready(function() {
-		$("#board td").each(function() {
-			$(this).text("");
-		});
+	$("#board td").each(function() {
+		$(this).text("");
 	});
+	currentPiece = piece.X;
+	$("#turn").text(currentPiece + " is up");
+	endOfGame = false;
 }
 
 /*This let's us know a cell has been clicked. So, er, um, yeah, it means do something!*/
 $(document).ready(function() {
     $("#board td").click(function(e) {
 		//this disallows a user from selecting a spot that's already filled in.
-		if (!$(this).text())
+		if (!$(this).text() && !endOfGame)
 		{
 			$(this).text(currentPiece);
+			determineIfWin();
 			turnHandling();
 		}
-        /*alert($(this).parent().index() + " " + $(this).parent().children().index($(this)));*/
+        //alert($(this).parent().index() + " " + $(this).parent().children().index($(this)));
     });
 });
