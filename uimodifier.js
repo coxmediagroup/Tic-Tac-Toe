@@ -6,6 +6,7 @@
  * Why? Well, the window.onload statement would throw up an error if we were using
  * some sort of legit browser like (but not limited to) Chrome, Firefox, or Safari.
  * I can't take credit for this as I found this diddy at http://tinyurl.com/ldmzrg */
+
 var IE = /*@cc_on!@*/false;
 var piece = {X:'X', O:'O'}; 
 var currentPiece = piece.X;
@@ -14,6 +15,7 @@ var clickCount = 0;
 
 function init() {
 	changeGameStatus(currentPiece + " is up");
+	alert(9%9);
 }
 
 function changeGameStatus(statusString) {
