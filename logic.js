@@ -8,6 +8,7 @@ function determineIfWin() {
 	 * matches horizontally while also building up a list to check
 	 * for other directional matches later */
 	var gameboard = [];
+	var isWinner = false;
 	//Don't initialize a variable each time through the loop! Go through and fix!
 	$("#board tr").each(function() {
 		var rowData = $(this).find('td');
@@ -18,11 +19,10 @@ function determineIfWin() {
 		gameboard.push(firstCell);
 		gameboard.push(secondCell);
 		gameboard.push(thirdCell);
-		
 		if (firstCell == secondCell &&
 			secondCell == thirdCell &&
 			thirdCell != "") {
-				endOfGame = true;
+				isWinner = true;
 			}
 		
 	});
@@ -33,38 +33,64 @@ function determineIfWin() {
 		|| (gameboard[2]== gameboard[5] && gameboard[5] == gameboard[8] && gameboard[2] != "") 
 		|| (gameboard[0]== gameboard[4] && gameboard[4] == gameboard[8] && gameboard[0] != "")
 		|| (gameboard[2]== gameboard[4] && gameboard[4] == gameboard[6] && gameboard[2] != "")){
-		endOfGame = true;
+		isWinner = true;
 	}
+	
+	return isWinner;
 }
 
-function getComputerMove(){
-	var gameboard = [];
+function canWinNow(column, player) {
+	//We're going to pseduo add it to the game board and see if this move is a winner.
+	var winner = false;
+	if (column.text() == "") {
+		//column.text(player).css("color", "white");
+		winner = determineIfWin();
+		//We want to change the column back to the way it was
+		column.text("").css("color", "black");
+	}
 	
-	var winning_combos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]];
+	if (winner) {
+		alert("You betcha!");
+	}
+	return winner;
+}
+
+function getSpot(cellList) {
+	var choices = [];
+	$.each(cellList) {
+		
+	}
+}
+function doComputerMove(){
+	var gameboard = [];
+	var computerMove = null;
+	/*Here's the logic we're going to institue:
+	 * 1.) Can Comp Win this move?
+	 * if no --
+	 * 2.) Is there a possibility for the Player to Win next move?
+	 * if no --
+	 * 3.) Is a corner open?
+	 * if no --
+	 * 4.) Is center open?
+	 * if no --
+	 * 5.) Is side open?
+	 * If no, the game is over.
+	*/
 	
 	$("#board tr").each(function() {
 		var rowData = $(this).find('td');
-		var firstCell = rowData.eq(0).text();
-		var secondCell = rowData.eq(1).text();
-		var thirdCell = rowData.eq(2).text();
+		var firstCell = rowData.eq(0);
+		var secondCell = rowData.eq(1);
+		var thirdCell = rowData.eq(2);
 		
-		gameboard.push(firstCell);
-		gameboard.push(secondCell);
-		gameboard.push(thirdCell);
+		canWinNow(firstCell, pieces.O);
+		canWinNow(secondCell, pieces.O);
+		canWinNow(thirdCell, pieces.O);
+		canWinNow(firstCell, pieces.X);
+		canWinNow(secondCell, pieces.X);
+		canWinNow(thirdCell, pieces.X);
+		
 		
 	});
-	//TODO: Figure out how to fill in the Spot Directly!!
-	
-	//First, is the center open? If so, Mr. Computer wants that!
-	gameboard[4] = (gameboard[4] == "" ? piece.O : gameboard[4]);
-	if (gameboard[4] == "") {
-		//Ok, it is open. Mr. Computer would like to take this spot!
-		gameboard == piece.O;
-		
-		//Let's not continue to beat the bush and just return
-		return true;
-	}
-	
 	
 }

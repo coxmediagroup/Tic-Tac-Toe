@@ -15,7 +15,6 @@ var clickCount = 0;
 
 function init() {
 	changeGameStatus(currentPiece + " is up");
-	alert(9%9);
 }
 
 function changeGameStatus(statusString) {
@@ -63,7 +62,10 @@ $(document).ready(function() {
 		if (!$(this).text() && !endOfGame)
 		{
 			$(this).text(currentPiece);
-			determineIfWin();
+			if (currentPiece = piece.O) {
+				doComputerMove();
+			}
+			endOfGame = determineIfWin();
 			turnHandling();
 			 if (clickCount == 8) {
 				changeGameStatus("Game over! It's a cat's game!")
