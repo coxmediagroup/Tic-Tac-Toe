@@ -40,7 +40,7 @@ function determineIfWin() {
 }
 
 function canWinNow(column, player) {
-	//We're going to pseduo add it to the game board and see if this move is a winner.
+	//We're going to pseudo add it to the game board and see if this move is a winner.
 	var winner = null;
 	if (column.text() == "") {
 		column.text(player).css("color", "white");
@@ -58,11 +58,20 @@ function canWinNow(column, player) {
 /* Attempts to determine next open spot to be played. 
  * If a spot can't be found, null is returned. */
 function getSpot(cellList) {
-	var choices = [];
 	var cLength = -1;
 	
-	cLength = choices.length;
-	return (cLength > 0 ? choices[Math.floor(Math.random*cLength - 1)] : null);
+	cLength = cellList.length;
+	return (cLength > 0 ? cellList[Math.floor(Math.random() * cLength)] : null);
+}
+
+function makeMove(location) {
+	alert(location);
+		$("#board tr td").each(function() {
+			if ($(this).parent().index() == location[0] 
+				&& $(this).index() == location[1]) {
+				$(this).text(piece.O);
+			}
+		});
 }
 
 function doComputerMove(){
@@ -80,55 +89,56 @@ function doComputerMove(){
 	*/
 	
 	var computerMove = null;
-	var corners = [0,2,6,8];
-	var sides = [3,5];
-	var center = [4];
+	var corners = [];
+	var sides = [];
+	var center = [];
 	var ends = [0,2];
 	
-	$("#board td").each(function() {
-		computerMove = (canWinNow($(this), piece.O) ? canWinNow(cell, piece.O) : null);
+	$("#board tr td").each(function() {
+		computerMove = (canWinNow($(this), piece.O) ? 
+			[$(this).parent().index(), $(this).index()] : null);
 		
 		if (!computerMove)
-			computerMove = (canWinNow($(this), piece.X) ? canWinNow(cell, piece.X) : null);
+			computerMove = (canWinNow($(this), piece.X) ? 
+				[$(this).parent().index(), $(this).index()] : null);
 		
-		if ($.inArray($(this).parent().index(), ends)) 
-		{
-			if ($.inArray($(this).index(), ends)) {
-				//Get the Corners
-			    corners.push($(this));
+		if ($(this).text() == "") {
+			if ($.inArray($(this).parent().index(), ends)) 
+			{
+				if ($.inArray($(this).index(), ends)) {
+					//Get the Corners
+				    corners.push([$(this).parent().index(), $(this).index()]);
+				}
+				else if ($(this).index() == 1) {
+					//Get the Sides Piece
+					sides.push([$(this).parent().index(), $(this).index()]);
+				}
 			}
-			else if ($(this).index() == 1) {
-				//Get the Sides Piece
-				sides.push($(this));
+		
+			else if ($(this).parent().index() == 1) 
+			{
+				if ($.inArray($(this).index(), ends)) {
+					//Get the Sides
+					sides.push([$(this).parent().index(), $(this).index()]);
+				}
+				else if ($(this).index() == 1) {
+					//Get the Center
+					center.push([$(this).parent().index(), $(this).index()]);
+				}
 			}
 		}
-		
-		else if ($(this).parent().index() == 1) 
-		{
-			if ($.inArray($(this).index(), ends)) {
-				//Get the Sides
-				sides.push($(this));
-			}
-			else if ($(this).index() == 1) {
-				//Get the Center
-				center = $(this);
-			}
-		
 	});
 	
 	alert(corners.length);
-	alert(corners);
 	
 	if (!computerMove)
 		computerMove = (getSpot(corners) != null ? getSpot(corners) : null);
 	if (!computerMove)
-		computerMove = (getSpot(center) != null ? getSpot(center) : null);
+		computerMove = (getSpot([center]) != null ? getSpot([center]) : null);
 	if (!computerMove)
 		computerMove = (getSpot(sides) != null ? getSpot(sides) : null);
 	
-	alert("here" + computerMove);
-	alert(computerMove.text());
 	if (computerMove) {
-		computerMove.text(piece.O);
+		makeMove(computerMove);
 	}
 }

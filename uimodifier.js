@@ -4,7 +4,7 @@
 
 /* Er, um, what?!?!? The following is quick way to check if we're using IE.
  * Why? Well, the window.onload statement would throw up an error if we were using
- * some sort of legit browser like (but not limited to) Chrome, Firefox, or Safari.
+ * some sort of legit browserser like (but not limited to) Chrome, Firefox, or Safari.
  * I can't take credit for this as I found this diddy at http://tinyurl.com/ldmzrg */
 
 var IE = /*@cc_on!@*/false;
@@ -62,13 +62,15 @@ $(document).ready(function() {
 		if (!$(this).text() && !endOfGame)
 		{
 			$(this).text(currentPiece);
-			if (currentPiece = piece.O) {
-				doComputerMove();
-			}
 			endOfGame = determineIfWin();
 			turnHandling();
 			 if (clickCount == 8) {
-				changeGameStatus("Game over! It's a cat's game!")
+				changeGameStatus("Game over! It's a cat's game!");
+			}
+			if (!endOfGame) {
+				doComputerMove();
+				endOfGame = determineIfWin();
+				turnHandling();
 			}
 			clickCount++;
 		} 
