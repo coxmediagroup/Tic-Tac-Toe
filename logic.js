@@ -8,7 +8,7 @@ function determineIfWin() {
 	 * matches horizontally while also building up a list to check
 	 * for other directional matches later */
 	var gameboard = [];
-	var isWinner = false;
+	var isWinner = null;
 	//Don't initialize a variable each time through the loop! Go through and fix!
 	$("#board tr").each(function() {
 		var rowData = $(this).find('td');
@@ -41,9 +41,9 @@ function determineIfWin() {
 
 function canWinNow(column, player) {
 	//We're going to pseduo add it to the game board and see if this move is a winner.
-	var winner = false;
+	var winner = null;
 	if (column.text() == "") {
-		//column.text(player).css("color", "white");
+		column.text(player).css("color", "white");
 		winner = determineIfWin();
 		//We want to change the column back to the way it was
 		column.text("").css("color", "black");
@@ -55,16 +55,25 @@ function canWinNow(column, player) {
 	return winner;
 }
 
+/* Attempts to determine next open spot to be played. 
+ * If a spot can't be found, null is returned. */
 function getSpot(cellList) {
 	var choices = [];
+	var cLength = -1;
 	$.each(cellList) {
-		
+		if ($(this).text() =="")
+		 choices.push($(this));
 	}
+		cLength = choices.length;
+	return (cLength > 0 ? choices[Math.floor(Math.random*cLength)] : null);
 }
+
 function doComputerMove(){
-	var gameboard = [];
 	var computerMove = null;
-	/*Here's the logic we're going to institue:
+	var corners = [];
+	var sides = [];
+	var center = null;
+	/*Here's the logic we're going to institute:
 	 * 1.) Can Comp Win this move?
 	 * if no --
 	 * 2.) Is there a possibility for the Player to Win next move?
@@ -77,20 +86,41 @@ function doComputerMove(){
 	 * If no, the game is over.
 	*/
 	
-	$("#board tr").each(function() {
-		var rowData = $(this).find('td');
-		var firstCell = rowData.eq(0);
-		var secondCell = rowData.eq(1);
-		var thirdCell = rowData.eq(2);
+	$("#board td").each(function() {
+		alert($(this).index());
+		var cell = rowData.eq(0);
 		
-		canWinNow(firstCell, pieces.O);
-		canWinNow(secondCell, pieces.O);
-		canWinNow(thirdCell, pieces.O);
-		canWinNow(firstCell, pieces.X);
-		canWinNow(secondCell, pieces.X);
-		canWinNow(thirdCell, pieces.X);
+		canWinNow(cell, pieces.O);
+		canWinNow(cell, pieces.X);
 		
+		if ([0,2].contains($(this).parent().index())) 
+		{
+			if ([0,2].contains($(this).index())) {
+				//Get the Corners
+			    corners.push(cell);
+			}
+			else if ($(this).index() == 1) {
+				//Get the Sides Piece
+				sides.push(cell);
+			}
+		}
 		
+		else if ($(this).parent().index() == 1) 
+		{
+			if ([0,2].contains($(this).index())) {
+				//Get the Sides
+				sides.push(cell);
+			}
+			else if ($(this).index() == 1) {
+				//Get the Center
+				center = cell;
+			}
+		}
 	});
+	
+	getSpot(corners);
+	getSport(center);
+	getSpot(sides);
+	
 	
 }
