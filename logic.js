@@ -99,8 +99,11 @@ function doComputerMove(){
 			[$(this).parent().index(), $(this).index()] : null);
 		
 		if (!computerMove)
+			{
 			computerMove = (canWinNow($(this), piece.X) ? 
-				[$(this).parent().index(), $(this).index()] : null);
+				[$(this).parent().index(), $(this).index()] : null)
+				alert (computerMove)
+			};
 		
 		if ($(this).text() == "") {
 			if ($.inArray($(this).parent().index(), ends)) 
