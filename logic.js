@@ -60,19 +60,12 @@ function canWinNow(column, player) {
 function getSpot(cellList) {
 	var choices = [];
 	var cLength = -1;
-	$.each(cellList) {
-		if ($(this).text() =="")
-		 choices.push($(this));
-	}
-		cLength = choices.length;
-	return (cLength > 0 ? choices[Math.floor(Math.random*cLength)] : null);
+	
+	cLength = choices.length;
+	return (cLength > 0 ? choices[Math.floor(Math.random*cLength - 1)] : null);
 }
 
 function doComputerMove(){
-	var computerMove = null;
-	var corners = [];
-	var sides = [];
-	var center = null;
 	/*Here's the logic we're going to institute:
 	 * 1.) Can Comp Win this move?
 	 * if no --
@@ -86,41 +79,56 @@ function doComputerMove(){
 	 * If no, the game is over.
 	*/
 	
+	var computerMove = null;
+	var corners = [0,2,6,8];
+	var sides = [3,5];
+	var center = [4];
+	var ends = [0,2];
+	
 	$("#board td").each(function() {
-		alert($(this).index());
-		var cell = rowData.eq(0);
+		computerMove = (canWinNow($(this), piece.O) ? canWinNow(cell, piece.O) : null);
 		
-		canWinNow(cell, pieces.O);
-		canWinNow(cell, pieces.X);
+		if (!computerMove)
+			computerMove = (canWinNow($(this), piece.X) ? canWinNow(cell, piece.X) : null);
 		
-		if ([0,2].contains($(this).parent().index())) 
+		if ($.inArray($(this).parent().index(), ends)) 
 		{
-			if ([0,2].contains($(this).index())) {
+			if ($.inArray($(this).index(), ends)) {
 				//Get the Corners
-			    corners.push(cell);
+			    corners.push($(this));
 			}
 			else if ($(this).index() == 1) {
 				//Get the Sides Piece
-				sides.push(cell);
+				sides.push($(this));
 			}
 		}
 		
 		else if ($(this).parent().index() == 1) 
 		{
-			if ([0,2].contains($(this).index())) {
+			if ($.inArray($(this).index(), ends)) {
 				//Get the Sides
-				sides.push(cell);
+				sides.push($(this));
 			}
 			else if ($(this).index() == 1) {
 				//Get the Center
-				center = cell;
+				center = $(this);
 			}
-		}
+		
 	});
 	
-	getSpot(corners);
-	getSport(center);
-	getSpot(sides);
+	alert(corners.length);
+	alert(corners);
 	
+	if (!computerMove)
+		computerMove = (getSpot(corners) != null ? getSpot(corners) : null);
+	if (!computerMove)
+		computerMove = (getSpot(center) != null ? getSpot(center) : null);
+	if (!computerMove)
+		computerMove = (getSpot(sides) != null ? getSpot(sides) : null);
 	
+	alert("here" + computerMove);
+	alert(computerMove.text());
+	if (computerMove) {
+		computerMove.text(piece.O);
+	}
 }
