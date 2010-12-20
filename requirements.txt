@@ -1,4 +1,1 @@
-Django==1.2.3
-distribute==0.6.14
-wsgiref==0.1.2
-yolk==0.4.1
+Django>=1.2.3

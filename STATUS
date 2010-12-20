@@ -5,7 +5,52 @@ Have commencement ceremony tomorrow morning and family in town, so won't have mu
 
 
 
+2010-12-17:
+Commencement commenced and ended. After a nap, continuing project.
+
+Created needed graphic resources - 'x's, 'o's, and board.
+Created basic html flatpage to eventually expand and template from.
+Created basic css to format page and expand later.
+Created simple jQuery script to place x/o's on the board.
+	(Eventually will tie script in with AJAX.)
+
+Now moving on to writing the python game code.
+
+Planned Workflow:
+	Create basic webpage.
+	Create tic-tac-toe solver.
+	Create Django app to connect solver and webpage.
+		(Consider webpage as a Django template prototype.)
 
 
 
+2010-12-19:
+Created the tic-tac-toe solver.
 
+uses 4 functions:
+isValid(board)
+boardCondition(board)
+earlyGame(board, player, condition)
+plotMove(board, player)
+
+Computes a next move from a string representing current board state.
+If choosing moves from the start of a game, I believe it will always
+ win or draw.
+
+Now ready to start the django app part, tying my template outline together
+ with the game.
+
+I wrote the solver the way I did so I can write an AJAX view that sends the
+ game state and player as url arguments and returns the next move/game status
+ to the page which will handle a response to them with javascript.
+
+Probably this will be a good chance to
+ notice how rough my javascript skills are. Ha.
+
+
+
+2010-12-20:
+So the django part of this thing turns out to be pretty simple since it's
+ not doing a whole lot. No context, views, users, etc., to worry about.
+
+This update adds the javascript and templates.

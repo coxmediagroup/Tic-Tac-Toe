@@ -89,6 +89,13 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2853"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -98,8 +105,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.37722222"
-     inkscape:cx="645.29716"
-     inkscape:cy="170.49814"
+     inkscape:cx="-521.81375"
+     inkscape:cy="208.39152"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -138,9 +145,9 @@
        inkscape:tile-h="300"
        inkscape:tile-x0="2.6509573"
        inkscape:tile-y0="-1.3254782"
-       inkscape:export-filename="/media/localstore/Tic-Tac-Toe/grid-box.png"
-       inkscape:export-xdpi="89.010002"
-       inkscape:export-ydpi="89.010002" />
+       inkscape:export-filename="/media/localstore/Tic-Tac-Toe/resources/grid-box.png"
+       inkscape:export-xdpi="89.129997"
+       inkscape:export-ydpi="89.129997" />
     <use
        x="0"
        y="0"
@@ -331,5 +338,12 @@
        style="fill:#16502d;fill-opacity:0;stroke:none"
        d="m 555.81879,1307.8212 300,0 0,300 -300,0 0,-300 z"
        id="rect3594-4-9" />
+    <path
+       style="fill:#16502d;fill-opacity:0;stroke:none"
+       d="m -673.16809,480.30722 300,0 0,300 -300,0 0,-300 z"
+       id="rect3594-4-9-9"
+       inkscape:export-filename="/media/localstore/Tic-Tac-Toe/resources/grid-box.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>
