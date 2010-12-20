@@ -50,7 +50,7 @@ function canWinNow(column, player) {
 	}
 	
 	if (winner) {
-		alert("You betcha!");
+		//alert("You betcha!");
 	}
 	return winner;
 }
@@ -65,7 +65,7 @@ function getSpot(cellList) {
 }
 
 function makeMove(location) {
-	alert(location);
+	//alert(location +" moving");
 		$("#board tr td").each(function() {
 			if ($(this).parent().index() == location[0] 
 				&& $(this).index() == location[1]) {
@@ -74,41 +74,64 @@ function makeMove(location) {
 		});
 }
 
+function checkDiag(diagList) {
+	if (diagList[0][0] != diagList[1][0] && diagList[0][1] != diagList[1][1]) {
+		return [1, diagList[1][1]];
+	} 
+}
+
 function doComputerMove(){
 	/*Here's the logic we're going to institute:
 	 * 1.) Can Comp Win this move?
 	 * if no --
 	 * 2.) Is there a possibility for the Player to Win next move?
 	 * if no --
-	 * 3.) Is a corner open?
+	 * 3). Were 2 corners played? (if so, play piece on opposite side)
+	 * if no -- 
+	 * 4.) Is a corner open?
 	 * if no --
-	 * 4.) Is center open?
+	 * 5.) Is center open?
 	 * if no --
-	 * 5.) Is side open?
+	 * 6.) Is side open?
 	 * If no, the game is over.
 	*/
 	
-	var computerMove = null;
+	var moveCheck = null;
 	var corners = [];
 	var sides = [];
 	var center = [];
 	var ends = [0,2];
+	var nextMove = null;
+	var row = null;
+	var col = null;
+	var diagList = [];
 	
 	$("#board tr td").each(function() {
-		computerMove = (canWinNow($(this), piece.O) ? 
+		$(this).index();
+		moveCheck = (canWinNow($(this), piece.O) ? 
 			[$(this).parent().index(), $(this).index()] : null);
-		
-		if (!computerMove)
+
+		if (moveCheck) {
+			nextMove = moveCheck;
+			return;
+		}
+		if (!moveCheck)
 			{
-			computerMove = (canWinNow($(this), piece.X) ? 
+			moveCheck = (canWinNow($(this), piece.X) ? 
 				[$(this).parent().index(), $(this).index()] : null)
-				alert (computerMove)
 			};
-		
+		if (moveCheck) {
+			//alert("oh snap... winner found. let's block em.");
+			nextMove = moveCheck;
+			return;
+		}
+		row = $(this).parent().index();
+		col = $(this).index();
+		//Let's get a list of all spots are empty.
 		if ($(this).text() == "") {
-			if ($.inArray($(this).parent().index(), ends)) 
+			if ($.inArray(row, ends) > -1) 
 			{
-				if ($.inArray($(this).index(), ends)) {
+				if ($.inArray(col, ends) > -1) {
 					//Get the Corners
 				    corners.push([$(this).parent().index(), $(this).index()]);
 				}
@@ -118,30 +141,37 @@ function doComputerMove(){
 				}
 			}
 		
-			else if ($(this).parent().index() == 1) 
+			else if (row == 1) 
 			{
-				if ($.inArray($(this).index(), ends)) {
+				if ($.inArray($(this).index(), ends) > -1) {
 					//Get the Sides
 					sides.push([$(this).parent().index(), $(this).index()]);
 				}
 				else if ($(this).index() == 1) {
-					//Get the Center
-					center.push([$(this).parent().index(), $(this).index()]);
+					center.push([row, col]);
 				}
 			}
 		}
+		else {
+			/*Check if two X's were played on a diag, but only if 
+			  win hasn't already been calculated*/
+			if ($.inArray(row, ends) > -1 && $.inArray(col, ends) > -1
+				&& $(this).text() == piece.X) {
+					diagList.push([row, col]);
+				}
+		}
 	});
 	
-	alert(corners.length);
-	
-	if (!computerMove)
-		computerMove = (getSpot(corners) != null ? getSpot(corners) : null);
-	if (!computerMove)
-		computerMove = (getSpot([center]) != null ? getSpot([center]) : null);
-	if (!computerMove)
-		computerMove = (getSpot(sides) != null ? getSpot(sides) : null);
-	
-	if (computerMove) {
-		makeMove(computerMove);
+	//Probably could for loop the below
+	if (!nextMove && diagList.length == 2)
+	    nextMove = checkDiag(diagList);
+	if (!nextMove)
+		nextMove = getSpot(center);
+	if (!nextMove)
+		nextMove = getSpot(corners);
+	if (!nextMove )
+		nextMove = getSpot(sides);
+	if (nextMove) {
+		makeMove(nextMove);
 	}
 }

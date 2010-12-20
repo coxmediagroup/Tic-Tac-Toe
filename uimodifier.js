@@ -64,8 +64,9 @@ $(document).ready(function() {
 			$(this).text(currentPiece);
 			endOfGame = determineIfWin();
 			turnHandling();
-			 if (clickCount == 8) {
+			 if (clickCount == 4) {
 				changeGameStatus("Game over! It's a cat's game!");
+				endOfGame = true;
 			}
 			if (!endOfGame) {
 				doComputerMove();
