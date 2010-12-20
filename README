@@ -1,9 +1,13 @@
-Web-Based Tic Tac Toe ... powered by JQuery!
+Tic Tac Toe ... with some jQuery!
+---------
 
-Enter cool and relevant information here.
+This is a web-based Tic-Tac-Toe game entirely rendered and played in the browser with the help of jQuery. No server-side processing is necessary. 
 
-TODO:
-1. Spice things up a bit with CSS
-2. Refactor code
-3. Test in MANY browsers
-4. Update README with instructions
+A live demo is available at: http://cameronmwebb.com/tictactoe/tictactoe.html
+
+How to set this up:
+- Download the code from github
+- Open "tictactoe.html" in your favorite browser
+- Constantly fail trying to beat the AI.
+
+Any questions about this project can be sent to cam (aT) cameronmwebb (dot) com.
