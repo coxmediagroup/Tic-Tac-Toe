@@ -4,7 +4,7 @@
 body {
 	margin-left: auto;
 	margin-right: auto;
-	width: 550px;
+	width: 450px;
 	background-color: #bae8fe;
 }
 
@@ -17,8 +17,8 @@ body {
 }
 
 table.tictactoe {
-	width: 550px;
-	height: 550px;
+	width: 450px;
+	height: 450px;
 
 }
 	/*The next two elements disable selecting text on the game board in Webkit and Mozilla-based browsers. This was done because accidentally selecting text in game is kind of annoying and things don't look near as nice when a selection occurs.*/
