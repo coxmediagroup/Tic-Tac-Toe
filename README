@@ -3,7 +3,7 @@ Web-Based Tic Tac Toe ... powered by JQuery!
 Enter cool and relevant information here.
 
 TODO:
-1. Create AI handling
-2. Spice things up a bit with CSS
+1. Spice things up a bit with CSS
+2. Refactor code
 3. Test in MANY browsers
 4. Update README with instructions
