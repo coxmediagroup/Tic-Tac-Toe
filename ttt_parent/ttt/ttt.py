@@ -144,6 +144,9 @@ def earlyGame(board, player, condition):
                     return (False, '', (0,8)[randint(0,1)], 'x')
                 else:
                     return (False, '', (0,2,6,8)[randint(0,3)], 'x')
+    # if(condition[7] == 3):
+    #    if (player != 'o'):
+            
 
 
 def plotMove(board, player):
@@ -206,6 +209,10 @@ def plotMove(board, player):
                     return (False, '', win[1], 'o')
                 if(board[win[2]] == '_'):
                     return (False, '', win[2], 'o')
+            if( (board[0] == 'x') and (board[8] == 'x') and (condition[7] < 5) ):                    # if blue has split
+                return (False, '', (1,3,5,7)[randint(0,3)], 'o')
+            if( (board[2] == 'x') and (board[6] == 'x') and (condition[7] < 5) ):
+                return (False, '', (1,3,5,7)[randint(0,3)], 'o')
             else:
                 return (False, '', board.index('_'), 'o')
                 
