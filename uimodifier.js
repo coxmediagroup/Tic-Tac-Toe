@@ -1,6 +1,6 @@
 /*This file is intended to help clean up anything dealing with UI and to improve the user experience*/
 
-//Global Variable Definitions
+//Variable Definitions
 
 /* Er, um, what?!?!? The following is quick way to check if we're using IE.
  * Why? Well, the window.onload statement would throw up an error if we were using
@@ -14,7 +14,7 @@ var endOfGame = false;
 var clickCount = 0;
 
 function init() {
-	changeGameStatus(currentPiece + " is up");
+	changeGameStatus("Lay your first piece to begin!");
 }
 
 function changeGameStatus(statusString) {
@@ -35,10 +35,13 @@ if (IE) {
 	}
 }
 
+function scoffAtPlayer() {
+}
 function turnHandling() {
 	if (!endOfGame) {
 		currentPiece = (currentPiece == piece.X ? piece.O : piece.X);
-		changeGameStatus(currentPiece + " is up");
+		changeGameStatus("Game On, "+ currentPiece + "!");
+		
 	}
 	else {
 		changeGameStatus(currentPiece + " is the Winner!");
@@ -50,7 +53,7 @@ function clearGameBoard() {
 		$(this).text("");
 	});
 	currentPiece = piece.X;
-	changeGameStatus(currentPiece + " is up");
+	init();
 	endOfGame = false;
 	clickCount = 0;
 }

@@ -39,6 +39,7 @@ function determineIfWin() {
 	return isWinner;
 }
 
+/*Checks to see if the given player can win on the given move.*/
 function canWinNow(column, player) {
 	//We're going to pseudo add it to the game board and see if this move is a winner.
 	var winner = null;
@@ -59,8 +60,9 @@ function getSpot(cellList) {
 	return (cLength > 0 ? cellList[Math.floor(Math.random() * cLength)] : null);
 }
 
+/* Lays computer's piece based on the given location 
+ * (which is in the format of [row, col])*/
 function makeMove(location) {
-	//alert(location +" moving");
 		$("#board tr td").each(function() {
 			if ($(this).parent().index() == location[0] 
 				&& $(this).index() == location[1]) {
@@ -69,12 +71,15 @@ function makeMove(location) {
 		});
 }
 
+/* Returns best location when two corner pieces are in play*/
 function checkDiag(diagList) {
 	if (diagList[0][0] != diagList[1][0] && diagList[0][1] != diagList[1][1]) {
 		return [1, diagList[1][1]];
 	} 
 }
 
+/* Removes any open cells from our available cell moves that 
+ * could potentially lead to a computer loss*/
 function removeBadMove(oldList, sides, compList) {
 	var rowCounts = [0,0,0];
 	var tempList = [];
@@ -133,22 +138,9 @@ function removeBadMove(oldList, sides, compList) {
 	return tempList;
 }
 
+/* Calculates and carries out the computer's move based on where the player's pieces 
+	currently are and what is available.*/
 function doComputerMove(){
-	/*Here's the logic we're going to institute:
-	 * 1.) Can Comp Win this move?
-	 * if no --
-	 * 2.) Is there a possibility for the Player to Win next move?
-	 * if no --
-	 * 3). Were 2 corners played by opponent? (if so, play piece on opposite side)
-	 * 4). Were 2 sides played by opponent?
-	 * if no -- 
-	 * 4.) Is a corner open?
-	 * if no --
-	 * 5.) Is center open?
-	 * if no --
-	 * 6.) Is side open?
-	 * If no, the game is over.
-	*/
 	
 	var moveCheck = null;
 	var corners = [];
@@ -228,6 +220,7 @@ function doComputerMove(){
 	if (!nextMove && sides.length == 2) {
 		corners = removeBadMove(corners, true, sides);
 	}
+	
 	if (!nextMove)
 		nextMove = getSpot(center);
 	if (!nextMove)

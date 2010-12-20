@@ -5,11 +5,16 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	width: 550px;
+	background-color: #bae8fe;
 }
 
 .titlehead {
 	text-align: center;
 } 
+.statushead {
+	text-align: center;
+	padding-bottom: 20px;
+}
 
 table.tictactoe {
 	width: 550px;
@@ -27,13 +32,13 @@ table.tictactoe {
 
 td {
 	text-align: center;
-	font-size: 50px;
+	font-size: 75px;
 	width: 33%;
 	height: 33%;
 }
 
 td:hover {
-	background-color: #f5f5f5;
+	background-color: #9dc4d6;
 }
 
 td.vert {
