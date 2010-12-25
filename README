@@ -1,5 +1,5 @@
-Intructions:
-1. Fork this repo on github.
-2. Create an app that can interactively play the game of Tic Tac Toe against another player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to github and send me a pull request.
+This version of Tic-Tac-Toe is written in Common Lisp.
+For the best experience, you are encouraged to use Mac OS X or a Linux distro and install SBCL (Steel Bank Common Lisp).
+
+Many distros package sbcl but if yours doesn't or you're on OS X you'll want to check out http://www.sbcl.org/.
+Once that's installed and in your PATH you should be able to simply ./tic-tac-toe.lisp in the source directory.
