@@ -1,6 +1,3 @@
-; We probably won't do this as I think it's Linux only...double check before shipping.
-; #!/usr/bin/sbcl --script
-
 ; Who wants to run a script and see compiler style notes?
 (declaim (sb-ext:muffle-conditions style-warning))
 
@@ -31,6 +28,12 @@
   "This is an enumeration of all win conditions.
 Specifically, A list of lists each specifying a row
 of three Xs or Os constituting a win.")
+
+; Rather than explicitly defining generic functions for all of these,
+; I'll have this handler-bind muffle the compiler notes for clean terminal
+; output. I also violate traditional indentation rules here. The handler-bind
+; form is closed just below th
+(handler-bind ((sb-ext:implicit-generic-function-warning #'muffle-warning))
 
 (defmethod print-board ((game tic-tac-toe) &key moves)
   "Print each row of the board inside square brackets.
@@ -156,6 +159,7 @@ otherwise change the score appropriately and inform the user."
                 (display-results :draw game)
                 (return t))
                (t (return nil))))))
+) ; Closes the handler-bind muffling implicit-generic warnings...
 
 (defun three-in-a-row (letter condition board)
   "Check if LETTER occurs three times in a row

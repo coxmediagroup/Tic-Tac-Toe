@@ -1,2 +1,2 @@
 #!/bin/sh
-sbcl --load tic-tac-toe.lisp
+sbcl --script tic-tac-toe.lisp
