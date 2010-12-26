@@ -2,4 +2,6 @@ This version of Tic-Tac-Toe is written in Common Lisp.
 For the best experience, you are encouraged to use Mac OS X or a Linux distro and install SBCL (Steel Bank Common Lisp).
 
 Many distros package sbcl but if yours doesn't or you're on OS X you'll want to check out http://www.sbcl.org/.
-Once that's installed and in your PATH you should be able to simply ./tic-tac-toe.lisp in the source directory.
+Once SBCL is installed and in your PATH, you should be able to cd to the lisp source directory and run ./tic-tac-toe.
+
+If for some reason it doesn't work, ensure that running "sbcl" in the terminal brings up the Lisp prompt and try running chmod +x tic-tac-toe to ensure the script has execute permissions.
