@@ -29,10 +29,14 @@
 Specifically, A list of lists each specifying a row
 of three Xs or Os constituting a win.")
 
-; Rather than explicitly defining generic functions for all of these,
-; I'll have this handler-bind muffle the compiler notes for clean terminal
-; output. I also violate traditional indentation rules here. The handler-bind
-; form is closed just below th
+;; Rather than explicitly defining generic functions for all of these,
+;; I'll have this handler-bind muffle the compiler notes for clean terminal
+;; output. I also violate traditional indentation rules here.
+;; The handler-bind form is closed just below the last defmethod.
+;;
+;; For references, see:
+;; http://bugs.launchpad.net/sbcl/+bug/671523 (esp. Attila Lendvai's comment)
+;; http://sbcl.sourceforge.net/manual/Controlling-Verbosity.html
 (handler-bind ((sb-ext:implicit-generic-function-warning #'muffle-warning))
 
 (defmethod print-board ((game tic-tac-toe) &key moves)
@@ -100,8 +104,7 @@ start a new game each time they respond affirmatively."
   "Ask the player if they would like to go first. Whoever goes first gets
 Xs and the other player gets Os. Once a decision is made, loop back and
 forth between the competitors until the game is over."
-  (let ((human-p (yes-or-no-p "X moves first. Would you like to play X?"))
-        )
+  (let ((human-p (yes-or-no-p "X moves first. Would you like to play X?")))
     (catch 'game-over
       (loop
          (take-turn game "X" human-p) ; X goes first...
@@ -116,11 +119,11 @@ TAKE-TURNS."
   (if human-p
       (let* ((valid-moves (print-board game :moves t))
              (limit (length valid-moves))
-             (choice (find-if (lambda (num)
-                                (= num (get-numeric-input limit)))
-                              valid-moves :key #'car))
-             (row (second choice))
-             (column (third choice)))
+             (choice (get-numeric-input limit))
+             (move (find-if (lambda (num) (= num choice))
+                            valid-moves :key #'car))
+             (row (second move))
+             (column (third move)))
         (setf (aref (board game) row column) letter))
       (format t "TODO: Computer moves...~%"))
   (when (game-over-p game human-p)
@@ -131,15 +134,17 @@ TAKE-TURNS."
 provide junk input which contains non-numerics or is below 1
 or above UPPER-LIMIT."
   (let ((input nil))
-    (format t "Please select a move: ")
-    (loop
-       (setf input (parse-integer (read-line) :junk-allowed t))
-       (if (and input
-                (< input upper-limit)
-                (> input 0))
-           (return nil)
-           (format t "You must enter a number between 0 and ~A: " upper-limit)))
-    input))
+    (flet ((get-input (message)
+             (format t "~A" message)
+             (force-output)
+             (setf input (parse-integer (read-line) :junk-allowed t))))
+      (get-input "Please select a move: ")
+      (if (and input
+               (<= input upper-limit)
+               (> input 0))
+          input
+          (get-input (format nil "You must enter a number between 1 and ~A: "
+                             upper-limit))))))
 
 (defmethod game-over-p ((game tic-tac-toe) human-p)
   "Check the game board to see if a winner has emerged by first
