@@ -119,51 +119,48 @@ TAKE-TURNS."
   (if human-p
       (let* ((valid-moves (print-board game :moves t))
              (limit (length valid-moves))
-             (choice (get-numeric-input limit))
+             (choice (get-numeric-input "Please select a move" limit))
              (move (find-if (lambda (num) (= num choice))
                             valid-moves :key #'car))
              (row (second move))
              (column (third move)))
         (setf (aref (board game) row column) letter))
       (format t "TODO: Computer moves...~%"))
-  (when (game-over-p game human-p)
+  (when (game-over-p game letter human-p)
     (throw 'game-over nil)))
 
-(defun get-numeric-input (upper-limit)
+(defun get-numeric-input (prompt upper-limit)
   "Get numeric input from the user, reprompting them if they
 provide junk input which contains non-numerics or is below 1
 or above UPPER-LIMIT."
-  (let ((input nil))
+  (let ((input nil)
+        (range-str
+         (format nil "You must enter a number between 1 and ~A" upper-limit)))
     (flet ((get-input (message)
-             (format t "~A" message)
+             (format t "~A: " message)
              (force-output)
              (setf input (parse-integer (read-line) :junk-allowed t))))
-      (get-input "Please select a move: ")
+      (get-input prompt)
       (if (and input
                (<= input upper-limit)
                (> input 0))
           input
-          (get-input (format nil "You must enter a number between 1 and ~A: "
-                             upper-limit))))))
+          (get-input range-str)))))
 
-(defmethod game-over-p ((game tic-tac-toe) human-p)
-  "Check the game board to see if a winner has emerged by first
-iterating through the known *win-conditions* and then seeing
-if the board is full. Return nil if the game isn't over,
+(defmethod game-over-p ((game tic-tac-toe) letter human-p)
+  "Check the game board to see if a winner has emerged by seeing
+if the board is full and then iterating through the known
+*win-conditions*. Return nil if the game isn't over,
 otherwise change the score appropriately and inform the user."
   (let ((board (board game))
-        (xs-and-os (if human-p '(:human :ai) '(:ai :human))))
+        (player (if human-p :human :ai)))
+    (when (full-board-p board)
+      (display-results :draw game)
+      (return-from game-over-p t))
     (loop for condition in *win-conditions* do
-         (cond ((three-in-a-row "X" condition board)
-                (display-results (first xs-and-os) game)
-                (return t))
-               ((three-in-a-row "O" condition board)
-                (display-results (second xs-and-os) game)
-                (return t))
-               ((full-board-p board)
-                (display-results :draw game)
-                (return t))
-               (t (return nil))))))
+         (when (three-in-a-row letter condition board)
+           (display-results player game)
+           (return-from game-over-p t)))))
 ) ; Closes the handler-bind muffling implicit-generic warnings...
 
 (defun three-in-a-row (letter condition board)
