@@ -6,8 +6,10 @@
 
 (in-package :tic-tac-toe)
 
-(defconstant +win+ (expt 2 28))
-(defconstant +lose+ (- (expt 2 28)))
+(defconstant +win+ (expt 2 28)
+  "A semi-arbitrary numeric value denoting the best outcome.")
+(defconstant +lose+ (- (expt 2 28))
+  "A semi-arbitrary numeric value denoting the worst outcome.")
 
 (defclass tic-tac-toe ()
   ((score-human :initform 0
@@ -16,7 +18,8 @@
              :accessor score-ai)
    (players :initform '()
             :accessor players)
-   (board :initform (make-array '(3 3) :initial-element " ")
+   (board :initform (make-array '(3 3) :initial-element #\Space
+                                :element-type 'standard-char)
           :accessor board)))
 
 (defparameter *game-session* (make-instance 'tic-tac-toe)
@@ -45,7 +48,7 @@ of three Xs or Os constituting a win.")
     ; especially test/test-game-theory.lisp
     (dotimes (x 3)
       (dotimes (y 3)
-        (when (string= " " (aref board x y))
+        (when (char= #\Space (aref board x y))
           (push (list (incf move-count) x y) valid-moves))))
     valid-moves))
 
@@ -58,7 +61,7 @@ be numbered starting from 1."
              (with-output-to-string (result)
                (loop for i in '(0 1 2) do
                     (if (and moves
-                             (string= " " (aref board row-num i)))
+                             (char= #\Space (aref board row-num i)))
                         (format result " ~A" (incf move-count))
                         (format result " ~A" (aref board row-num i)))))))
       (when moves
@@ -84,7 +87,7 @@ will follow with milk and cookies.~%~%")
   "Given a BOARD, MOVE and LETTER, return a BOARD with the specified location
 set to LETTER. If PURE is T, ensure that the original board is not modified."
   (if pure
-      (let ((arr (make-array '(3 3) :element-type 'string)))
+      (let ((arr (make-array '(3 3) :element-type 'standard-char)))
         (loop for i from 0 upto 8 do
              (setf (row-major-aref arr i)
                    (row-major-aref board i)))
@@ -109,21 +112,8 @@ set to LETTER. If PURE is T, ensure that the original board is not modified."
 
 (defmethod reset-board ((game tic-tac-toe))
   "Reset the board for a new game."
-  (setf (board game) (make-array '(3 3) :initial-element " ")))
-
-(defun main ()
-  "Print the instructions for playing Tic-Tac-Toe.
-Afterwards, continually prompt the player to play and
-start a new game each time they respond affirmatively."
-  (print-help)
-  (flet ((new-game? ()
-           (reset-board *game-session*)
-           (yes-or-no-p "Would you like to play Tic-Tac-Toe?")))
-    (loop until (not (new-game?)) do
-         (take-turns *game-session*)
-         (print-score *game-session*)))
-  (format t "~%Thanks for playing!~%~%")
-  (sb-ext:quit))
+  (setf (board game) (make-array '(3 3) :initial-element #\Space
+                                 :element-type 'standard-char)))
 
 (defmethod take-turns ((game tic-tac-toe))
   "Ask the player if they would like to go first. Whoever goes first gets
@@ -135,8 +125,8 @@ forth between the competitors until the game is over."
         (setf (players game) '(:ai :human)))
     (catch 'game-over
       (loop
-         (take-turn game "X" human-p) ; X goes first...
-         (take-turn game "O" (not human-p))))))
+         (take-turn game #\X human-p) ; X goes first...
+         (take-turn game #\O (not human-p))))))
 
 (defmethod take-turn ((game tic-tac-toe) letter human-p)
   "If it is the computer's turn, compute the \"best\" move with SELECT-NEGAMAX,
@@ -166,11 +156,14 @@ by this move, display the results of the game and return from TAKE-TURNS."
 ) ; Closes the handler-bind muffling implicit-generic warnings...
 
 (defun select-negamax (board letter players alpha beta color)
+  "Check to see if the game is over, if so return a value based on who the
+winner is. Otherwise, for each valid move for BOARD, run SELECT-NEGAMAX on
+a new board where that move has been made, returning both the highest ALPHA
+found and the corresponding move."
+  ; Largely adapted from http://en.wikipedia.org/wiki/Negamax
   (let* ((winner-p (game-over-p board letter players)))
     (if winner-p
-        (* color (cond ((eql :draw winner-p) 0)
-                       ((string= "X" letter) +win+)
-                       (t +lose+)))
+        (* color (board-value winner-p color))
         (let ((moves (valid-moves board))
               (best-move nil)
               (opponent (opponent letter)))
@@ -182,6 +175,14 @@ by this move, display the results of the game and return from TAKE-TURNS."
                 (setf best-move move
                       alpha val))))
           (values alpha best-move)))))
+
+(defun board-value (winner color)
+  "Given a WINNER and the COLOR being \"rooted for\",
+compute the value of the board."
+  (ecase winner
+    (:draw 0)
+    (:ai (if (= color 1) +win+ +lose+))
+    (:human (if (= color -1) +win+ +lose+))))
 
 (defun get-numeric-input (prompt upper-limit)
   "Get numeric input from the user, reprompting them if they
@@ -203,17 +204,17 @@ or above UPPER-LIMIT."
 
 (defun opponent (letter)
   "Return the opponent of LETTER."
-  (if (string= "X" letter)
-      "O"
-      "X"))
+  (if (char= #\X letter)
+      #\O
+      #\X))
 
 (defun game-over-p (board letter players)
-  "Check the game board to see if a winner has emerged by
+  "Check the game BOARD to see if a winner has emerged by
 seeing if the board is full and then iterating through the
-known *win-conditions*. Return nil if the game isn't over,
+known *win-conditions*. Return NIL if the game isn't over,
 otherwise return the winner. Note that people might expect
 a *-p function to return only T or NIL...so don't export it."
-  (let ((player (if (string= "X" letter)
+  (let ((player (if (char= #\X letter)
                     (first players)
                     (second players))))
     (when (full-board-p board)
@@ -229,15 +230,15 @@ achieving the CONDITION. Returns T or NIL."
   (let ((opponent (opponent letter)))
     (if possible-p
         (loop for index in condition
-           never (string= opponent (row-major-aref board index)))
+           never (char= opponent (row-major-aref board index)))
         (loop for index in condition
-           always (string= letter (row-major-aref board index))))))
+           always (char= letter (row-major-aref board index))))))
 
 (defun full-board-p (board)
   "Check if any blank spaces remain on BOARD.
 If so, return NIL, otherwise return T."
   (loop for index from 0 upto 8
-        never (string= " " (row-major-aref board index))))
+        never (char= #\Space (row-major-aref board index))))
 
 (defun display-results (winner game)
   "Increment the score for the winning player or
@@ -253,4 +254,31 @@ of the game's outcome."
     (:draw
      (format t "No winner!~%"))))
 
-;(main)
+(defun main ()
+  "Print the instructions for playing Tic-Tac-Toe.
+Afterwards, continually prompt the player to play and
+start a new game each time they respond affirmatively."
+  (print-help)
+  (flet ((new-game? ()
+           (reset-board *game-session*)
+           (yes-or-no-p "Would you like to play Tic-Tac-Toe?")))
+    (loop until (not (new-game?)) do
+         (take-turns *game-session*)
+         (print-score *game-session*)))
+  (format t "~%Thanks for playing!~%~%")
+  (sb-ext:quit))
+
+(main)
+
+;;;; scrap?
+
+;; (defun row-advantage (board letter)
+;;   "Compute a value for a given BOARD state given a LETTER."
+;;   (let ((val 0)
+;;         (opponent (opponent letter)))
+;;     (dolist (win *win-conditions*)
+;;       (cond ((three-in-a-row-p letter win board t)
+;;              (incf val))
+;;             ((three-in-a-row-p opponent win board t)
+;;              (decf val))))
+;;     val))
