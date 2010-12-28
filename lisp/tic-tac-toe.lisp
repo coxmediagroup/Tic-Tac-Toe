@@ -163,7 +163,7 @@ found and the corresponding move."
   ; Largely adapted from http://en.wikipedia.org/wiki/Negamax
   (let* ((winner-p (game-over-p board letter players)))
     (if winner-p
-        (* color (board-value winner-p color))
+        (* color (board-value winner-p))
         (let ((moves (valid-moves board))
               (best-move nil)
               (opponent (opponent letter)))
@@ -176,13 +176,12 @@ found and the corresponding move."
                       alpha val))))
           (values alpha best-move)))))
 
-(defun board-value (winner color)
-  "Given a WINNER and the COLOR being \"rooted for\",
-compute the value of the board."
+(defun board-value (winner)
+  "Given a WINNER compute the value of the board."
   (ecase winner
     (:draw 0)
-    (:ai (if (= color 1) +win+ +lose+))
-    (:human (if (= color -1) +win+ +lose+))))
+    (:ai +win+)
+    (:human +lose+)))
 
 (defun get-numeric-input (prompt upper-limit)
   "Get numeric input from the user, reprompting them if they
@@ -269,16 +268,3 @@ start a new game each time they respond affirmatively."
   (sb-ext:quit))
 
 (main)
-
-;;;; scrap?
-
-;; (defun row-advantage (board letter)
-;;   "Compute a value for a given BOARD state given a LETTER."
-;;   (let ((val 0)
-;;         (opponent (opponent letter)))
-;;     (dolist (win *win-conditions*)
-;;       (cond ((three-in-a-row-p letter win board t)
-;;              (incf val))
-;;             ((three-in-a-row-p opponent win board t)
-;;              (decf val))))
-;;     val))
