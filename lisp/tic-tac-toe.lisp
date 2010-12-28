@@ -80,10 +80,17 @@ will follow with milk and cookies.~%~%")
   (format t "This is the board with the potential moves numbered...~%")
   (print-board (board *game-session*) :moves t))
 
-(defun make-move (board move letter)
-  "Given a BOARD, MOVE and LETTER, set the specified location to LETTER.
-If new-board-p, "
-  (setf (aref board (second move) (third move)) letter))
+(defun make-move (board move letter &key pure)
+  "Given a BOARD, MOVE and LETTER, return a BOARD with the specified location
+set to LETTER. If PURE is T, ensure that the original board is not modified."
+  (if pure
+      (let ((arr (make-array '(3 3) :element-type 'string)))
+        (loop for i from 0 upto 8 do
+             (setf (row-major-aref arr i)
+                   (row-major-aref board i)))
+        (setf (aref arr (second move) (third move)) letter)
+        arr)
+      (setf (aref board (second move) (third move)) letter)))
 
 ;; Rather than explicitly defining generic functions for all of these,
 ;; I'll have this handler-bind muffle the compiler notes for clean terminal
@@ -123,31 +130,58 @@ start a new game each time they respond affirmatively."
 Xs and the other player gets Os. Once a decision is made, loop back and
 forth between the competitors until the game is over."
   (let ((human-p (yes-or-no-p "X moves first. Would you like to play X?")))
+    (if human-p
+        (setf (players game) '(:human :ai))
+        (setf (players game) '(:ai :human)))
     (catch 'game-over
       (loop
          (take-turn game "X" human-p) ; X goes first...
          (take-turn game "O" (not human-p))))))
 
 (defmethod take-turn ((game tic-tac-toe) letter human-p)
-  "If it's the computers turn, TODO.
-Otherwise, print the options for the player and get
-their selection, then set that location to LETTER.
-Finally, if the game is ended by this move, return from
-TAKE-TURNS."
-  (if human-p
-      (let* ((valid-moves (valid-moves (board game)))
-             (limit (length valid-moves))
-             (choice (progn
-                       (print-board (board game) :moves t)
-                       (get-numeric-input "Please select a move" limit)))
-             (move (find-if (lambda (num) (= num choice))
-                            valid-moves :key #'car))
-             (row (second move))
-             (column (third move)))
-        (setf (aref (board game) row column) letter))
-      (format t "TODO: Computer moves...~%"))
-  (when (game-over-p game letter human-p)
-    (throw 'game-over nil)))
+  "If it is the computer's turn, compute the \"best\" move with SELECT-NEGAMAX,
+make the move and inform the user. Otherwise, print the options for the player
+and get their selection, then set that location to LETTER. If the game is ended
+by this move, display the results of the game and return from TAKE-TURNS."
+  (let* ((board (board game))
+         (moves (valid-moves board))
+         (players (players game)))
+    (if human-p
+        (let ((limit (length moves))
+              (input nil))
+          (print-board board :moves t)
+          (setf input (get-numeric-input "Please select a move" limit))
+          (make-move board (find-if (lambda (x)
+                                      (= x input)) moves :key #'car)
+                     letter))
+        (let ((move (nth-value 1 (select-negamax board letter players
+                                                 +lose+ +win+ 1))))
+          (format t "Computer moves:~%")
+          (make-move board move letter)
+          (print-board board)))
+    (let ((results (game-over-p (board game) letter players)))
+      (when results
+        (display-results results game)
+        (throw 'game-over nil)))))
+) ; Closes the handler-bind muffling implicit-generic warnings...
+
+(defun select-negamax (board letter players alpha beta color)
+  (let* ((winner-p (game-over-p board letter players)))
+    (if winner-p
+        (* color (cond ((eql :draw winner-p) 0)
+                       ((string= "X" letter) +win+)
+                       (t +lose+)))
+        (let ((moves (valid-moves board))
+              (best-move nil)
+              (opponent (opponent letter)))
+          (dolist (move moves) ; copy-seq doesn't work on board
+            (let* ((board* (make-move board move letter :pure t))
+                   (val (- (select-negamax board* opponent players
+                                           (- beta) (- alpha) (- color)))))
+              (when (> val alpha)
+                (setf best-move move
+                      alpha val))))
+          (values alpha best-move)))))
 
 (defun get-numeric-input (prompt upper-limit)
   "Get numeric input from the user, reprompting them if they
