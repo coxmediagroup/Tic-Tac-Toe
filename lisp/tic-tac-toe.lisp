@@ -29,6 +29,40 @@
 Specifically, A list of lists each specifying a row
 of three Xs or Os constituting a win.")
 
+(defun valid-moves (board)
+  "Iterate across the board finding all blank spaces
+(i.e. valid moves) and returning them as a numbered list of array indices."
+  (let ((valid-moves nil)
+        (move-count 0))
+    ; Note that we could generalize to an N-by-N board by
+    ; using a destructuring-bind on the array-dimensions.
+    ; See: http://quotenil.com/git/?p=micmac.git;a=summary
+    ; especially test/test-game-theory.lisp
+    (dotimes (x 3)
+      (dotimes (y 3)
+        (when (string= " " (aref board x y))
+          (push (list (incf move-count) x y) valid-moves))))
+    valid-moves))
+
+(defun print-board (board &key moves)
+  "Print each row of the board inside square brackets.
+If MOVES is T, blank spaces (i.e. available moves) will
+be numbered starting from 1."
+  (let ((move-count 0))
+    (flet ((print-row (row-num &key moves)
+             (with-output-to-string (result)
+               (loop for i in '(0 1 2) do
+                    (if (and moves
+                             (string= " " (aref board row-num i)))
+                        (format result " ~A" (incf move-count))
+                        (format result " ~A" (aref board row-num i)))))))
+      (when moves
+        (format t "Your potential moves are:~%"))
+      (format t "[~A ]~%[~A ]~%[~A ]~%"
+              (print-row 0 :moves moves)
+              (print-row 1 :moves moves)
+              (print-row 2 :moves moves)))))
+
 ;; Rather than explicitly defining generic functions for all of these,
 ;; I'll have this handler-bind muffle the compiler notes for clean terminal
 ;; output. I also violate traditional indentation rules here.
@@ -38,32 +72,6 @@ of three Xs or Os constituting a win.")
 ;; http://bugs.launchpad.net/sbcl/+bug/671523 (esp. Attila Lendvai's comment)
 ;; http://sbcl.sourceforge.net/manual/Controlling-Verbosity.html
 (handler-bind ((sb-ext:implicit-generic-function-warning #'muffle-warning))
-
-(defmethod print-board ((game tic-tac-toe) &key moves)
-  "Print each row of the board inside square brackets.
-If MOVES is T, blank spaces (i.e. available moves) will
-be numbered starting from 1 and we also return a list of
-valid moves, each of which is itself a list containing
-the number denoting that move and its respective array indices."
-  (let ((move-count 0)
-        (board (board game))
-        (valid-moves nil))
-    (flet ((print-row (row-num &key moves)
-             (with-output-to-string (result)
-               (loop for i in '(0 1 2) do
-                    (if (and moves
-                             (string= (aref board row-num i) " "))
-                        (progn
-                          (format result " ~A" (incf move-count))
-                          (push (list move-count row-num i) valid-moves))
-                        (format result " ~A" (aref board row-num i)))))))
-      (when moves
-        (format t "Your potential moves are:~%"))
-      (format t "[~A ]~%[~A ]~%[~A ]~%"
-              (print-row 0 :moves moves)
-              (print-row 1 :moves moves)
-              (print-row 2 :moves moves))
-      valid-moves)))
 
 (defmethod print-score ((game tic-tac-toe))
   "Print the score of the computer and player in GAME."
@@ -84,7 +92,7 @@ Whoever gets 3 in a row (vertical, horizontal or diagonal)
 first wins! Lectures on Game Trees and Combinatorics
 will follow with milk and cookies.~%~%")
   (format t "This is the board with the potential moves numbered...~%")
-  (print-board *game-session* :moves t))
+  (print-board (board *game-session*) :moves t))
 
 (defun main ()
   "Print the instructions for playing Tic-Tac-Toe.
@@ -117,9 +125,11 @@ their selection, then set that location to LETTER.
 Finally, if the game is ended by this move, return from
 TAKE-TURNS."
   (if human-p
-      (let* ((valid-moves (print-board game :moves t))
+      (let* ((valid-moves (valid-moves (board game)))
              (limit (length valid-moves))
-             (choice (get-numeric-input "Please select a move" limit))
+             (choice (progn
+                       (print-board (board game) :moves t)
+                       (get-numeric-input "Please select a move" limit)))
              (move (find-if (lambda (num) (= num choice))
                             valid-moves :key #'car))
              (row (second move))
