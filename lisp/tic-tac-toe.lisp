@@ -6,11 +6,16 @@
 
 (in-package :tic-tac-toe)
 
+(defconstant +win+ (expt 2 28))
+(defconstant +lose+ (- (expt 2 28)))
+
 (defclass tic-tac-toe ()
   ((score-human :initform 0
                 :accessor score-human)
    (score-ai :initform 0
              :accessor score-ai)
+   (players :initform '()
+            :accessor players)
    (board :initform (make-array '(3 3) :initial-element " ")
           :accessor board)))
 
@@ -63,6 +68,23 @@ be numbered starting from 1."
               (print-row 1 :moves moves)
               (print-row 2 :moves moves)))))
 
+(defun print-help ()
+  "Display instructions for playing Tic-Tac-Toe."
+  (format t "~%Welcome to the glorious world of Tic-Tac-Toe.
+If you've never tic'd or tac'd before the rules are simple:
+There is a 3 by 3 game board and each player takes turns
+filling the 9 empty spaces with their sign, an X or an O.
+Whoever gets 3 in a row (vertical, horizontal or diagonal)
+first wins! Lectures on Game Trees and Combinatorics
+will follow with milk and cookies.~%~%")
+  (format t "This is the board with the potential moves numbered...~%")
+  (print-board (board *game-session*) :moves t))
+
+(defun make-move (board move letter)
+  "Given a BOARD, MOVE and LETTER, set the specified location to LETTER.
+If new-board-p, "
+  (setf (aref board (second move) (third move)) letter))
+
 ;; Rather than explicitly defining generic functions for all of these,
 ;; I'll have this handler-bind muffle the compiler notes for clean terminal
 ;; output. I also violate traditional indentation rules here.
@@ -81,18 +103,6 @@ be numbered starting from 1."
 (defmethod reset-board ((game tic-tac-toe))
   "Reset the board for a new game."
   (setf (board game) (make-array '(3 3) :initial-element " ")))
-
-(defun print-help ()
-  "Display instructions for playing Tic-Tac-Toe."
-  (format t "~%Welcome to the glorious world of Tic-Tac-Toe.
-If you've never tic'd or tac'd before the rules are simple:
-There is a 3 by 3 game board and each player takes turns
-filling the 9 empty spaces with their sign, an X or an O.
-Whoever gets 3 in a row (vertical, horizontal or diagonal)
-first wins! Lectures on Game Trees and Combinatorics
-will follow with milk and cookies.~%~%")
-  (format t "This is the board with the potential moves numbered...~%")
-  (print-board (board *game-session*) :moves t))
 
 (defun main ()
   "Print the instructions for playing Tic-Tac-Toe.
@@ -157,27 +167,37 @@ or above UPPER-LIMIT."
           input
           (get-input range-str)))))
 
-(defmethod game-over-p ((game tic-tac-toe) letter human-p)
-  "Check the game board to see if a winner has emerged by seeing
-if the board is full and then iterating through the known
-*win-conditions*. Return nil if the game isn't over,
-otherwise change the score appropriately and inform the user."
-  (let ((board (board game))
-        (player (if human-p :human :ai)))
-    (when (full-board-p board)
-      (display-results :draw game)
-      (return-from game-over-p t))
-    (loop for condition in *win-conditions* do
-         (when (three-in-a-row letter condition board)
-           (display-results player game)
-           (return-from game-over-p t)))))
-) ; Closes the handler-bind muffling implicit-generic warnings...
+(defun opponent (letter)
+  "Return the opponent of LETTER."
+  (if (string= "X" letter)
+      "O"
+      "X"))
 
-(defun three-in-a-row (letter condition board)
-  "Check if LETTER occurs three times in a row
-on BOARD as specified by CONDITION. Returns T or NIL."
-  (loop for index in condition
-        always (string= letter (row-major-aref board index))))
+(defun game-over-p (board letter players)
+  "Check the game board to see if a winner has emerged by
+seeing if the board is full and then iterating through the
+known *win-conditions*. Return nil if the game isn't over,
+otherwise return the winner. Note that people might expect
+a *-p function to return only T or NIL...so don't export it."
+  (let ((player (if (string= "X" letter)
+                    (first players)
+                    (second players))))
+    (when (full-board-p board)
+      (return-from game-over-p :draw))
+    (loop for condition in *win-conditions* do
+         (when (three-in-a-row-p letter condition board)
+           (return-from game-over-p player)))))
+
+(defun three-in-a-row-p (letter condition board &optional possible-p)
+  "Check if LETTER occurs three times in a row on BOARD as specified
+by CONDITION or, if POSSIBLE-P is T, whether LETTER is blocked from
+achieving the CONDITION. Returns T or NIL."
+  (let ((opponent (opponent letter)))
+    (if possible-p
+        (loop for index in condition
+           never (string= opponent (row-major-aref board index)))
+        (loop for index in condition
+           always (string= letter (row-major-aref board index))))))
 
 (defun full-board-p (board)
   "Check if any blank spaces remain on BOARD.
