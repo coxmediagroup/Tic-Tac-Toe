@@ -167,7 +167,7 @@ found and the corresponding move."
         (let ((moves (valid-moves board))
               (best-move nil)
               (opponent (opponent letter)))
-          (dolist (move moves) ; copy-seq doesn't work on board
+          (dolist (move moves)
             (let* ((board* (make-move board move letter :pure t))
                    (val (- (select-negamax board* opponent players
                                            (- beta) (- alpha) (- color)))))
@@ -216,11 +216,11 @@ a *-p function to return only T or NIL...so don't export it."
   (let ((player (if (char= #\X letter)
                     (first players)
                     (second players))))
-    (when (full-board-p board)
-      (return-from game-over-p :draw))
     (loop for condition in *win-conditions* do
          (when (three-in-a-row-p letter condition board)
-           (return-from game-over-p player)))))
+           (return-from game-over-p player)))
+    (when (full-board-p board)
+      (return-from game-over-p :draw))))
 
 (defun three-in-a-row-p (letter condition board &optional possible-p)
   "Check if LETTER occurs three times in a row on BOARD as specified
@@ -266,5 +266,18 @@ start a new game each time they respond affirmatively."
          (print-score *game-session*)))
   (format t "~%Thanks for playing!~%~%")
   (sb-ext:quit))
+
+(defun the-kris-bugs ()
+  (let ((arr #2A((#\Space #\X #\X) (#\X #\X #\O) (#\Space #\O #\X)))
+        (players '(:human :ai)))
+    (multiple-value-bind (value move)
+        (select-negamax arr #\O players +lose+ +win+ 1)
+      (format t "Value: ~A~%Move: ~A~%" value move)
+      (make-move arr '(2 2 0) #\O)
+      (make-move arr '(1 0 0) #\X)
+      (format t "The Kris Bugs:~%Right Move? ~A~%Right Winner? ~A~%"
+              (eql '(1 0 0) move)
+              (eql  (game-over-p arr #\X players) :human))
+      (print-board arr))))
 
 (main)
