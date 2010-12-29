@@ -161,12 +161,13 @@ winner is. Otherwise, for each valid move for BOARD, run SELECT-NEGAMAX on
 a new board where that move has been made, returning both the highest ALPHA
 found and the corresponding move."
   ; Largely adapted from http://en.wikipedia.org/wiki/Negamax
-  (let* ((winner-p (game-over-p board letter players)))
+  (let* ((opponent (opponent letter))
+         (moves (valid-moves board))
+         (winner-p (game-over-p board (if (null moves) opponent letter) players))
+         (best-move nil))
     (if winner-p
         (* color (board-value winner-p))
-        (let ((moves (valid-moves board))
-              (best-move nil)
-              (opponent (opponent letter)))
+        (progn
           (dolist (move moves)
             (let* ((board* (make-move board move letter :pure t))
                    (val (- (select-negamax board* opponent players
@@ -268,7 +269,7 @@ start a new game each time they respond affirmatively."
   (sb-ext:quit))
 
 (defun the-kris-bugs ()
-  (let ((arr #2A((#\Space #\X #\X) (#\X #\X #\O) (#\Space #\O #\X)))
+  (let ((arr #2A((#\Space #\X #\X) (#\X #\O #\O) (#\Space #\O #\X)))
         (players '(:human :ai)))
     (multiple-value-bind (value move)
         (select-negamax arr #\O players +lose+ +win+ 1)
@@ -276,8 +277,11 @@ start a new game each time they respond affirmatively."
       (make-move arr '(2 2 0) #\O)
       (make-move arr '(1 0 0) #\X)
       (format t "The Kris Bugs:~%Right Move? ~A~%Right Winner? ~A~%"
-              (eql '(1 0 0) move)
+              (equal '(1 0 0) move)
               (eql  (game-over-p arr #\X players) :human))
       (print-board arr))))
 
+;(trace select-negamax game-over-p)
+
 (main)
+;(the-kris-bugs)
