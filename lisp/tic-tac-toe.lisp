@@ -166,16 +166,15 @@ found and the corresponding move."
          (winner-p (game-over-p board (if (null moves) opponent letter) players))
          (best-move nil))
     (if winner-p
-        (* color (board-value winner-p))
-        (progn
-          (dolist (move moves)
-            (let* ((board* (make-move board move letter :pure t))
-                   (val (- (select-negamax board* opponent players
-                                           (- beta) (- alpha) (- color)))))
-              (when (> val alpha)
-                (setf best-move move
-                      alpha val))))
-          (values alpha best-move)))))
+        (setf alpha (* color (board-value winner-p)))
+        (dolist (move moves)
+          (let* ((board* (make-move board move letter :pure t))
+                 (val (- (select-negamax board* opponent players
+                                         (- beta) (- alpha) (- color)))))
+            (when (> val alpha)
+              (setf best-move move
+                    alpha val)))))
+    (values alpha best-move)))
 
 (defun board-value (winner)
   "Given a WINNER compute the value of the board."
