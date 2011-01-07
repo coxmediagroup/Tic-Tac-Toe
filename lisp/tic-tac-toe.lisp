@@ -195,11 +195,11 @@ or above UPPER-LIMIT."
              (force-output)
              (setf input (parse-integer (read-line) :junk-allowed t))))
       (get-input prompt)
-      (if (and input
-               (<= input upper-limit)
-               (> input 0))
-          input
-          (get-input range-str)))))
+      (loop until (and input
+                       (<= input upper-limit)
+                       (> input 0))
+         do (get-input range-str))
+      input)))
 
 (defun opponent (letter)
   "Return the opponent of LETTER."
