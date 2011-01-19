@@ -2,8 +2,8 @@
 interface, since that comes default with every X11/Windows Python install.
 
 The way I see it, this is pretty simple- since we don't have to win, and
-just keep from losing, the algorithm becomes nearly trivial. While the game
-is running:
+just keep from losing, the algorithm becomes nearly trivial. I had originally
+planned to do something like:
 
 - Is the center empty?
 	- YES: Put an X in it
@@ -15,3 +15,6 @@ is running:
 		- NO: Put an X in a random square
 - (repeat)
 
+... but instead, later on, I decided it'd be simpler and probably faster to
+just plot out the winning tic-tac-toe lines (there are only 8 of them) and
+check them manually. Worked out pretty well.
