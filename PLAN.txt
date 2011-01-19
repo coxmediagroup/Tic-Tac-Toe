@@ -1,0 +1,17 @@
+* Project will be written in python and use the Tkinter library for the GUI
+interface, since that comes default with every X11/Windows Python install.
+
+The way I see it, this is pretty simple- since we don't have to win, and
+just keep from losing, the algorithm becomes nearly trivial. While the game
+is running:
+
+- Is the center empty?
+	- YES: Put an X in it
+	- NO: Does the player have any two X's whose X/Y edges touch,
+		or whose corners touch on the diagonal?
+		- YES: Determine the line on which the player's X's touch,
+			and place an X at the empty space at the end of the
+			line
+		- NO: Put an X in a random square
+- (repeat)
+
