@@ -6,11 +6,16 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from DJTickyTack.models import Game
 
-class SimpleTest(TestCase):
-    def test_hello(self):
+class GameTest(TestCase):
+
+    def test_startedOn(self):
         """
-        hello
+        Games should remember their start dates.
         """
-        self.assertEqual("hello", "hel" + "lo")
+        game = Game()
+        self.assertEquals(None, game.startedOn)
+        game.save()
+        self.assertNotEqual(None, game.startedOn)
 

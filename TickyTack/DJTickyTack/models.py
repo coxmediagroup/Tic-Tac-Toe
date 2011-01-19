@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+class Game(models.Model):
+    """
+    Represents a match between two players.
+    """
+    startedOn = models.DateTimeField(auto_now_add=True)
