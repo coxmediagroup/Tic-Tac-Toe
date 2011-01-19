@@ -8,16 +8,9 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
+    def test_hello(self):
         """
-        Tests that 1 + 1 always equals 2.
+        hello
         """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
+        self.assertEqual("hello", "hel" + "lo")
 
