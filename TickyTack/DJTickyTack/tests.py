@@ -15,11 +15,16 @@ class GameTest(TestCase):
         self.player1 = User.objects.create_user('player1', 'player1@example.com')
         self.player2 = User.objects.create_user('player2', 'player2@example.com')
 
-    def test_fields(self):
+    def test_construct(self):
         """
         A Game is a match between two players, started on a particular date.
         """
         game = Game(player1=self.player1, player2=self.player2)
+
+        # player 1 to play
+        self.assertEquals(self.player1, game.toPlay)
+
+        # auto-populate the date on save
         self.assertEquals(None, game.startedOn)
         game.save()
         self.assertNotEqual(None, game.startedOn)
