@@ -1,4 +1,5 @@
 # Django settings for TickyTack project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -77,7 +78,11 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'TickyTack.urls'
 
-TEMPLATE_DIRS = ('./templates',)
+# django wants the paths to use /, even on windows
+# this magically finds the directory relative to this file,
+# so we don't have to hard code the path (ugh!)
+_base = '/'.join(os.path.split(__file__)[0].split(os.sep))
+TEMPLATE_DIRS = (_base + "/templates")
 
 INSTALLED_APPS = (
     'django.contrib.auth',

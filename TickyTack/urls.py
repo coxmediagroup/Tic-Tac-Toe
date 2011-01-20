@@ -2,17 +2,23 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
+# some constants, for use with the tests
+kRoot  = "/"
+kLogin = "/accounts/login/"
+kHome = "/home/"
 
-import DJTickyTack
+def _u(url, suffix):
+    end = '?' if url.endswith('/') and len(url) > 1 else ''
+    return ''.join(('^', url[1:], end, suffix))
 
 urlpatterns = patterns('',
 
-    # Uncomment the next line to enable the admin:
+    # django-supplied parts:
     (r'^admin/', include(admin.site.urls)),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login',
+    (_u(kLogin, r'$'), 'django.contrib.auth.views.login',
         {'template_name': 'login.html'}),
 
-
     # mount the app:
-    (r'^$', 'DJTickyTack.views.index'),
+    (_u(kRoot, r'$'), 'DJTickyTack.views.index'),
+    (_u(kHome, r'$'), 'DJTickyTack.views.home'),
 )

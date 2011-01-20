@@ -1,5 +1,6 @@
 from django.db import models as m
 from django.contrib.auth.models import User
+Q = m.Q
 
 class Game(m.Model):
     """
@@ -13,5 +14,9 @@ class Game(m.Model):
     @property
     def toPlay(self):
         return self.player1 if self.nextPlayer == 1 else self.player2
+
+    @classmethod
+    def findAllFor(klass, user):
+        return klass.objects.filter(Q(player1=user) | Q(player2=user))
 
     
