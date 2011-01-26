@@ -1,0 +1,1 @@
+The following libraries where used in this project:
