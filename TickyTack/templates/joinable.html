@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>Available Games</h1>
+
+  {% if joinable %}
+
+    <table>
+      <thead>
+        <tr>
+          <th>opponent</th>
+          <th>as</th>
+          <th>join?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in joinable %}
+          <tr>
+            <td>{game.opponentOf(user)}</td>
+            <td>{game.playingAs(game.opponentOf(user))}</td>
+            <td><button>join</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% else %}
+
+    <p>There are no games available to join. Why not start one?</p>
+
+  {% endif %}
+
+{% endblock %}

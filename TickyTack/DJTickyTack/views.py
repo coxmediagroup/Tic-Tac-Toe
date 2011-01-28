@@ -18,3 +18,15 @@ def games(request):
             'activeGames': Game.findActiveFor(request.user),
             'pendingGames': Game.findPendingFor(request.user)
         })
+
+
+def joinable(request):
+    return render_to_response('joinable.html',
+    {
+        'joinable': Game.findJoinableBy(request.user)
+    })
+
+
+@login_required
+def join(request):
+    raise hell

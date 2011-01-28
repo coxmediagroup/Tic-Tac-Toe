@@ -2,9 +2,15 @@ from django.db import models as m
 from django.contrib.auth.models import User
 Q = m.Q
 
-qForUser = lambda u: Q(player1=u) | Q(player2=u)
 qUnfinished = lambda : Q(finished=False)
-qHas2Players = lambda : ~ (Q(player1=None) | Q(player2=None))
+qNeedsPlayer = lambda : Q(player1=None) | Q(player2=None)
+qHas2Players = lambda : ~qNeedsPlayer()
+qForUser = lambda u: Q(player1=u) | Q(player2=u)
+
+# !! logically:
+# qNotUser = lambda u: ~qForUser(u)
+# ... but django doesn't care about your logic. :)
+qNotUser = lambda u: ~Q(player1=u) & ~Q(player2=u)
 
 class Game(m.Model):
     """
@@ -16,6 +22,12 @@ class Game(m.Model):
     nextPlayer = m.IntegerField(default=1, choices=((1, 'player1'), (2, 'player2')))
     finished = m.BooleanField(default=False)
     winner = m.ForeignKey(User, related_name='winner', null=True)
+
+    def __str__(self):
+        return '#%i : %s vs %s' % (
+            self.id,
+            self.player1.username if self.player1 else '?',
+            self.player2.username if self.player2 else '?')
 
     @property
     def toPlay(self):
@@ -46,5 +58,10 @@ class Game(m.Model):
         else:
             raise TypeError("playAs should be 'X' or 'O', not %r" % playAs)
         game.save()
+        return game
+
+    @classmethod
+    def findJoinableBy(cls, user):
+        return cls.objects.filter(qNeedsPlayer() & qNotUser(user))
 
     
