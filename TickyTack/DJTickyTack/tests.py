@@ -33,6 +33,9 @@ class GameTest(BaseTest):
 class SiteTest(BaseTest):
 
     def setUp(self):
+        """
+        Create two players and a game between them.
+        """
         super(SiteTest, self).setUp()
         self.game = Game(player1=self.player1, player2=self.player2)
         self.game.save()
@@ -40,7 +43,28 @@ class SiteTest(BaseTest):
         self.client.login(username='player1', password='pw1')
 
 
-    def test_home(self):
+    def test_games(self):
+        """
+        The games page lists your active games.
+        """
         c = self.client
-        r = c.get(urls.kHome)
+
+        # at first, we should see the active game:
+        r = c.get(urls.kGames)
         self.assertEquals(1, len(r.context['activeGames']))
+
+        # there are no pending games yet:
+        self.assertEquals(0, len(r.context['pendingGames']))
+
+        # create two more games:
+        c.post(urls.kGames, {'playAs':'X'})
+        c.post(urls.kGames, {'playAs':'O'})
+
+        # now we have one active game and two pending games
+        r = c.get(urls.kGames)
+        self.assertEquals(1, len(r.context['activeGames']))
+        self.assertEquals(2, len(r.context['pendingGames']))
+
+
+
+

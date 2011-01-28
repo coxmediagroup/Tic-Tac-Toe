@@ -5,7 +5,7 @@ admin.autodiscover()
 # some constants, for use with the tests
 kRoot  = "/"
 kLogin = "/accounts/login/"
-kHome = "/home/"
+kGames = "/games/"
 
 def _u(url, suffix):
     end = '?' if url.endswith('/') and len(url) > 1 else ''
@@ -20,5 +20,6 @@ urlpatterns = patterns('',
 
     # mount the app:
     (_u(kRoot, r'$'), 'DJTickyTack.views.index'),
-    (_u(kHome, r'$'), 'DJTickyTack.views.home'),
+    (_u(kGames, r'$'), 'DJTickyTack.views.games'),
+
 )

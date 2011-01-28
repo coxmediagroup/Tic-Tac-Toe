@@ -6,7 +6,7 @@
   {% if user.is_authenticated %}
     <p>Welcome back, {{ user.username }}</p>
   {% else %}
-    <p><a href="{% url DJTickyTack.views.home %}">log in</a></p>
+    <p><a href="{% url DJTickyTack.views.games %}">log in</a></p>
   {% endif %}
 
 {% endblock %}
