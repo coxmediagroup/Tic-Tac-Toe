@@ -19,10 +19,11 @@ class BaseTest(TestCase):
         self.playerA = create('playerA', 'playerA@example.com', 'pwA')
         self.playerB = create('playerB', 'playerB@example.com', 'pwB')
 
+
 class GameTest(BaseTest):
     def test_construct(self):
         """
-        A Game is a match between two players, started on a particular date.
+        A Game is a match between two players, started at a particular time.
         """
         game = Game(player1=self.playerA, player2=self.playerB)
 

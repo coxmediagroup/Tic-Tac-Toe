@@ -78,9 +78,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'TickyTack.urls'
 
-# django wants the paths to use /, even on windows
 # this magically finds the directory relative to this file,
 # so we don't have to hard code the path (ugh!)
+# (note that django wants the paths to use /, even on windows)
 _base = '/'.join(os.path.split(__file__)[0].split(os.sep))
 TEMPLATE_DIRS = (_base + "/templates")
 
