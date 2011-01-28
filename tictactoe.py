@@ -13,8 +13,9 @@ winning_position = [
 ]
 
 winning_sum = 15
-challenger_path = []
 corners = [0,2,6,8]
+challenger_path = []
+computer_path = []
 
 def board():
     print " "
@@ -25,17 +26,42 @@ def board():
     print "  %s  |  %s  |  %s" % (layout[6], layout[7], layout[8])
     print " "
 
+def is_winning(pos, sign):
+    possibilities = [i for i in winning_position if pos in i]
+    
+    winner = [True for i in possibilities 
+              if layout[i[0]] == layout[i[1]] == layout[i[2]] == sign]
+    
+    if not available:
+        board()
+        sys.exit('Draw.')
+    
+    if winner:
+        board()
+        if sign == 'X':
+            print 'You won.'
+        else:
+            print 'You lost. Sorry.'
+        sys.exit()
+    return False
+
+def get_highest_value():
+    big_to_small = sorted(definition, reverse=True)
+    
+    for i in big_to_small:
+        
+        if layout[definition.index(i)] in available:
+            return definition.index(i)
+    
 def make_a_move(pos, sign='X'):
-    if layout[pos] != pos:
-        return False
     layout[pos] = sign
     available.remove(pos)
     
-    if not available:
-        sys.exit('Done.')
-    
     if sign == 'X':
         challenger_path.append(pos)
+    else:
+        computer_path.append(pos)
+    is_winning(pos, sign)
     return True
 
 def available_corner():
@@ -48,20 +74,23 @@ def counter_move(pos):
     # available = [i for i, v in enumerate(layout) if i == v]
     options = []
     best_chances = None
+    value = None
     
     if layout[4] == 4:
-        make_a_move(4, 'O')
+        value = 4
     
-    elif len(challenger_path) < 2:
-        
-        make_a_move(available_corner(), 'O')
+    elif len(challenger_path) < 2 and challenger_path[0] == 4:
+        value = available_corner()
     
     else:
+        combine_computer = combinations(computer_path, 2)
+        combine_challenger = combinations(challenger_path, 2)
         
-        combine_taken = combinations(challenger_path, 2)
-        combine_available = combinations(available, 2)
+        for x in combine_computer:
+            diff =  winning_sum - (definition[x[0]] + definition[x[1]])
+            options.append(diff)
         
-        for x in combine_taken:
+        for x in combine_challenger:
             diff =  winning_sum - (definition[x[0]] + definition[x[1]])
             options.append(diff)
         
@@ -77,21 +106,18 @@ def counter_move(pos):
                     break
             except:
                 pass
-                # print available
-                # make_a_move(layout[available[0]], 'O')
-                # break
         
         if best_chances:
             value = best_chances
         
         else:
             
-            if available_corner():
-                value = available_corner()
+            if get_highest_value():
+                value = get_highest_value()
             
             else:
                 value = available[0]
-        make_a_move(value, 'O')
+    make_a_move(value, 'O')
 
 def choose_position():
     position = raw_input('Choose your position: ')
