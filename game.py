@@ -168,6 +168,7 @@ class Game:
     def check_requirements(self, pathway, requires):
         """
         Check a pathway against the stated requirements.
+        
         """
         contents = {}
         for e in pathway:
@@ -184,18 +185,15 @@ class Game:
                 return False
         return True
 
-    def traverse_board(self, banned=[], min=3, requires={}):
+    def traverse_board(self, banned=[], requires={}):
         """
         Traverse the board and return the eight different pathways
         as a list of lists.
 
-        min: unused, soon to be deleted.
         banned: list of symbols to ignore
+        requires: {"X": 3}, etc.  {symbol, required number}
         """
 
-        #FIXME: min is worthless, delete.
-        #min = 3 if min > 3 else 0 if min < 0 else min
-        min = 3
         paths = []
         # rows
         for row in range(0, 3):
