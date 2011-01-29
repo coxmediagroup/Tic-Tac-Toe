@@ -164,32 +164,50 @@ class Game:
         """
         self.main_loop['function'](*self.main_loop['args'])
 
-    def traverse_board(self):
+    def traverse_board(self, min=3, banned=[]):
         """
         Traverse the board and return the eight different pathways
         as a list of lists.
+
+        min: the minimum number of continuous squares in a row.
+                1, 2, and 3 are valid values.  (5 is right out)
+        banned: list of symbols to ignore
         """
+
+        min = 3 if min > 3 else 0 if min < 0 else min
         paths = []
         # rows
         for row in range(0, 3):
             pathway = []
             for col in range(0, 3):
-                pathway.append((row, col))
-            paths.append(pathway)
+                if self.square_lookup((row, col)) in banned:
+                    continue
+                else:
+                    pathway.append((row, col))
+            if len(pathway) >= min:
+                paths.append(pathway)
 
         # columns
         for col in range(0, 3):
             pathway = []
             for row in range(0, 3):
-                pathway.append((row, col))
-            paths.append(pathway)
+                if self.square_lookup((row, col)) in banned:
+                    continue
+                else:
+                    pathway.append((row, col))
+            if len(pathway) >= min:
+                paths.append(pathway)
 
         # diagonals
         pathway = []
         for row in range(0, 3):
             col = row  # diagonal magic
-            pathway.append((row, col))
-        paths.append(pathway)
+            if self.square_lookup((row, col)) in banned:
+                continue
+            else:
+                pathway.append((row, col))
+        if len(pathway) >= min:
+            paths.append(pathway)
 
         pathway = []
         # Need to reverse the diagonal.  Subtracting
@@ -197,8 +215,12 @@ class Game:
         # appropriate numbers.
         for row in (range(0, 3)):
             col = abs(row-2)
-            pathway.append((row, col))
-        paths.append(pathway)
+            if self.square_lookup((row, col)) in banned:
+                continue
+            else:
+                pathway.append((row, col))
+        if len(pathway) >= min:
+            paths.append(pathway)
 
         return paths
 
