@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 """
 User interface for Tic-Tac-Toe game.
 """
@@ -13,33 +11,32 @@ class GUI:
     # Seems gross to have 9 identical functions, but exec() doesn't
     # love me anymore.
     def on_tbtn_00_toggled(self, widget, data=None):
-        self.tbtn_toggled(0, 0)
+        self.tbtn_toggled(0, 0, player="human")
     def on_tbtn_01_toggled(self, widget, data=None):
-        self.tbtn_toggled(0, 1)
+        self.tbtn_toggled(0, 1, player="human")
     def on_tbtn_02_toggled(self, widget, data=None):
-        self.tbtn_toggled(0, 2)
+        self.tbtn_toggled(0, 2, player="human")
     def on_tbtn_10_toggled(self, widget, data=None):
-        self.tbtn_toggled(1, 0)
+        self.tbtn_toggled(1, 0, player="human")
     def on_tbtn_11_toggled(self, widget, data=None):
-        self.tbtn_toggled(1, 1)
+        self.tbtn_toggled(1, 1, player="human")
     def on_tbtn_12_toggled(self, widget, data=None):
-        self.tbtn_toggled(1, 2)
+        self.tbtn_toggled(1, 2, player="human")
     def on_tbtn_20_toggled(self, widget, data=None):
-        self.tbtn_toggled(2, 0)
+        self.tbtn_toggled(2, 0, player="human")
     def on_tbtn_21_toggled(self, widget, data=None):
-        self.tbtn_toggled(2, 1)
+        self.tbtn_toggled(2, 1, player="human")
     def on_tbtn_22_toggled(self, widget, data=None):
-        self.tbtn_toggled(2, 2)
+        self.tbtn_toggled(2, 2, player="human")
 
-    def tbtn_toggled(self, x, y, player="X"):
-        #This splits x and y for the gameboard alter.
-        exec("""self.tbtn_%s%s.set_sensitive(False)""" % (x, y))
-        exec("""self.tbtn_%s%s.set_label("%s")""" % (x, y, player))
-        if player == "X":
-            import ai
-            (x, y) = ai.move()
-            exec("""self.tbtn_toggled(%s, %s, player="O")""" % (x, y))
+    #FIXME: This function is getting kludgey.  Move moves to game.py
+    #FIXME: and make an update function that updates using data from there.
+    def tbtn_toggled(self, x, y, player=None):
+        if not player:
+            return
 
+        self.game.move(player, x, y)
+        
     def list_buttons(self):
         """
         Toggle buttons are labeled by coordinate.  Return a list of them.
@@ -50,7 +47,27 @@ class GUI:
                 buttons.append("tbtn_%s%s" % (x, y))
         return buttons
 
-    def __init__(self):
+    def update_board(self):
+        print("update board")
+        board = self.game.get_board()
+        for row in board:
+            for col in row:
+                if board[row][col] == " ":
+                    self.unset("self.tbtn_%s%s" % (row, col))
+                else:
+                    self.set("self.tbtn_%s%s" % (row, col), board[row][col])
+    
+    def set(string, what):
+        exec(string + """.set_active(True)""")
+        exec(string + """.set_sensitive(False)""")
+        exec(string + """.set_label("%s")""" % what)
+
+    def unset(string):
+        exec(string + """.set_active(False)""")
+        exec(string + """.set_sensitive(True)""")
+        exec(string + """.set_label("")""")
+
+    def __init__(self, game):
         self.glade = "tictactoe.glade"
         self.win_main = gtk.glade.XML(self.glade, "win_main")
         self.win_main.signal_autoconnect(self)
@@ -65,12 +82,11 @@ class GUI:
                     self.win_main.get_widget(%s)" % (widget, '"'+widget+'"')
             exec(string)
 
+        self.game = game
+        game.register_main_loop(gtk.main())
+
     def destroy(self, widget, data=None):
         gtk.main_quit()
 
     def delete_event(self, widget, data=None):
         self.destroy(widget)
-
-if __name__ == "__main__":
-    gui = GUI()
-    gtk.main()
