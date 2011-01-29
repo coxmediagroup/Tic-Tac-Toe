@@ -47,7 +47,7 @@ def winning_move(game, player):
                 return coords
     return False
 
-def forking_move(game, player):
+def forking_move(game, player, format="single"):
     """
     Look for a move that will result in two possible ways to win,
     guaranteeing victory if the opposition can't win next round.
@@ -92,15 +92,30 @@ def forking_move(game, player):
 
     # If max is not > 0, then there aren't any interesting
     # intersections.
+    return_list = []
     if max > 0:
         for e in coords.keys():
             if coords[e] == max:
                 # We're indexing by coords, so just return e.
-                return e
+                if format == "single":
+                    return e
+                elif format == "list":
+                    return_list.append(e)
+
+    if format == "list":
+        return return_list
 
     #FIXME: Why do you keep returning False?  Doesn't it make
     #FIXME: more sense to return None?  Look into it.
     return False
+
+def forcing_move(game, player):
+    """
+    Force an opponent to move, thus preventing him from making
+    a fork you can't block otherwise.
+
+    """
+    pass
 
 def win(game):
     """
