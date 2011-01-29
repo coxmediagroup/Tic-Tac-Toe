@@ -35,6 +35,8 @@ class GUI:
         if not player:
             return
 
+        if self.game.winner:
+            return
         self.game.move(player, x, y)
         
     def list_buttons(self):

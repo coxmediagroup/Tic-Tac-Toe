@@ -10,6 +10,7 @@ class Game:
     # List of functions to call when we update the board.
     updates = []
     main_loop = None
+    winner = None
 
     def __init__(self, gui=None):
         import random
@@ -28,6 +29,7 @@ class Game:
         print(mark, player)
         if self.board[x][y] == " ":
             self.board[x][y] = mark
+            self.check_for_win()
             self.next_turn()
             return True
         return False
@@ -39,6 +41,8 @@ class Game:
         return self.board
 
     def next_turn(self):
+        if not self.turn:
+            return
         old = self.turn
         self.turn = "ai" if self.turn != "ai" else "human"
         print("Was %s's turn, now %s's." % (old, self.turn))
@@ -50,8 +54,67 @@ class Game:
             valid_move = False
             while not valid_move:
                 valid_move = ai.move(self)
-            print("AI MOVED")
             self.send_update()
+
+    def check_for_win(self):
+        winner = None
+        # Don't want victory to block updating by the GUI
+        self.send_update()
+
+        # rows
+        for row in range(0, 3):
+            string = ""
+            for col in range(0, 3):
+                string += self.board[row][col]
+                if string.count("X") == 3:
+                    winner = "X"
+                    break
+                if string.count("O") == 3:
+                    winner = "O"
+                    break
+
+        # columns
+        if not winner:
+            for col in range(0, 3):
+                string = ""
+                for row in range(0, 3):
+                    string += self.board[row][col]
+                    if string.count("X") == 3:
+                        winner = "X"
+                        break
+                    if string.count("O") == 3:
+                        winner = "O"
+                        break
+
+        # diagonals
+        if not winner:
+            string = ""
+            for row in range(0, 3):
+                col = row  # diagonal magic
+                string += self.board[row][col]
+
+            if string.count("X") == 3:
+                winner = "X"
+            elif string.count("O") == 3:
+                winner = "O"
+
+            string = ""
+            # Need to reverse the diagonal.  Subtracting
+            # 2 and taking the absolute value yields the
+            # appropriate numbers.
+            for row in (range(0, 3)):
+                col = abs(row-2)
+                string += self.board[row][col]
+                print("diagonal 2: %s, %s" % (row, col))
+
+            if string.count("X") == 3:
+                winner = "X"
+            elif string.count("O") == 3:
+                winner = "O"
+
+        if winner:
+            self.turn = None
+            print("Winner: %s" % winner)
 
     def ascii_board(self):
         for x in range(0, 3):
