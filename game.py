@@ -41,6 +41,13 @@ class Game:
             return True
         return False
 
+    def get_opponent(self, player):
+        """
+        Return the opponent's 'name'
+
+        """
+        return "ai" if player == "human" else "human"
+
     def get_mark(self, player):
         """
         Get player's symbol.  (X, or O).

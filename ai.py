@@ -23,7 +23,7 @@ def random_move(game):
     move = (random.randrange(0, 3), random.randrange(0, 3))
     return move
 
-def winning_move(game):
+def winning_move(game, player):
     """
     Look for a move that will win the game.  Take it, if one is found.
     """
@@ -38,5 +38,5 @@ def winning_move(game):
     return False
 
 def win(game):
-    move = winning_move(game)
+    move = winning_move(game, "ai")
     return move
