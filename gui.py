@@ -42,6 +42,7 @@ class GUI:
     def list_buttons(self):
         """
         Toggle buttons are labeled by coordinate.  Return a list of them.
+
         """
         buttons = []
         for x in range(0, 3):
@@ -50,6 +51,12 @@ class GUI:
         return buttons
 
     def update_board(self, *args):
+        """
+        Update the GUI game board to match the game module's board.
+
+        *args: unused, must be present for game module's update.
+
+        """
         print("update board")
         board = self.game.get_board()
         print(board)
@@ -62,11 +69,24 @@ class GUI:
                     self.set("self.tbtn_%s%s" % (row, col), board[row][col])
     
     def set(self, string, what):
+        """
+        Deactivate, press, and set button label.
+
+        string: input string containing widget name.
+        what: what do we set the label to?
+
+        """
         exec(string + """.set_active(True)""")
         exec(string + """.set_sensitive(False)""")
         exec(string + """.set_label("%s")""" % what)
 
     def unset(self, string):
+        """
+        Activate, depress, and clear button label.
+
+        string: input string containing widget name.
+
+        """
         exec(string + """.set_active(False)""")
         exec(string + """.set_sensitive(True)""")
         exec(string + """.set_label("")""")

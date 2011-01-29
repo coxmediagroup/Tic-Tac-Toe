@@ -25,7 +25,15 @@ class Game:
         self.check_ai_move()
 
     def move(self, player, x, y):
+        """
+        Add a move to the game board.
+        returns True if move is valid, False otherwise.
+
+        player = "human" or "ai"
+
+        """
         mark = self.get_mark(player)
+        # If spot is blank, add, otherwise don't.
         if self.board[x][y] == " ":
             self.board[x][y] = mark
             self.send_update()
@@ -34,12 +42,22 @@ class Game:
         return False
 
     def get_mark(self, player):
+        """
+        Get player's symbol.  (X, or O).
+
+        player = "human" or "ai"
+
+        """
         return "X" if player == "human" else "O"
 
     def get_board(self):
         return self.board
 
     def next_turn(self):
+        """
+        End current turn, start next turn. (changes whose turn it is)
+
+        """
         if not self.turn:
             return
         old = self.turn
@@ -48,6 +66,9 @@ class Game:
         self.check_ai_move()
 
     def check_ai_move(self):
+        """
+        See if it's the ai's turn to move, and, if so, move.
+        """
         if self.turn == "ai":
             import ai
             valid_move = False
@@ -56,6 +77,9 @@ class Game:
             self.send_update()
 
     def check_for_win(self):
+        """
+        See if there is a winner.
+        """
         winner = None
 
         paths = self.traverse_board()
@@ -76,9 +100,19 @@ class Game:
             print("Winner: %s" % winner)
 
     def square_lookup(self, coords):
+        """
+        Look up the symbol at the specified coords.
+
+        coords can be a list or tuple: (x, y)
+
+        """
         return self.board[coords[0]][coords[1]]
 
     def ascii_board(self):
+        """
+        Display an ascii map of the board, used for debugging purposes.
+
+        """
         for x in range(0, 3):
             print("\n----------")
             for y in range(0, 3):
@@ -87,6 +121,11 @@ class Game:
         print("\n----------")
 
     def register_update(self, what, *args):
+        """
+        Register a function for the game module to call when it
+        updates the board.
+
+        """
         print("register_update: %s" % what)
         d = {}
         d['function'] = what
@@ -95,6 +134,10 @@ class Game:
         self.updates.append(d)
 
     def send_update(self):
+        """
+        Notify update functions that the board has been updated.
+
+        """
         self.ascii_board()
         print(self.updates)
         for e in self.updates:
@@ -103,11 +146,22 @@ class Game:
     # Calling gtk.main from here breaks encapsulation,
     # so let's wrap it with these functions.
     def register_main_loop(self, what, *args):
+        """
+        Register main loop for game module to call.  Used for
+        encapsulating away details (external loops) that don't matter here.
+
+        """
         self.main_loop = {}
         self.main_loop['function'] = what
         self.main_loop['args'] = args
 
     def enter_main_loop(self):
+        """
+        Call the main loop specified.
+
+        Note: THERE CAN BE ONLY ONE.
+
+        """
         self.main_loop['function'](*self.main_loop['args'])
 
     def traverse_board(self):
