@@ -14,6 +14,14 @@ def move(game):
     if not move:
         move = block_fork(game)
     if not move:
+        move = center(game)
+    if not move:
+        move = opposite_corner(game)
+    if not move:
+        move = any_corner(game)
+    if not move:
+        move = any_side(game)
+    if not move:
         move = random_move(game)
     (x, y) = move
     return game.move("ai", x, y)
@@ -162,14 +170,21 @@ def fork(game):
         print("Fork!")
     return move
 
+#FIXME: block_fork is getting called when it shouldn't.
+#FIXME: such as after the game is over, and when there
+#FIXME: are no possible forks.
 def block_fork(game):
     """
     Detect a fork, and block it.
 
     """
+    #FIXME?  Block fork may be out of order.  force first, block fork after.
     move = None
     forks = forking_move(game, game.get_opponent("ai"), format="list")
-    if len(forks) == 1:
+    flen = len(forks)
+    if flen == 0:
+        return False
+    elif flen == 1:
         move = forks[0]
     else:
         print("Brute force!")
@@ -185,3 +200,47 @@ def block_fork(game):
     if move:
         print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
     return move
+
+def center(game):
+    """
+    Claim the center square, if available.
+    """
+
+    center = (1, 1)
+    if game.square_lookup(center) == " ":
+        return (1, 1)
+        
+    return False
+
+def opposite_corner(game):
+    print("FIXME: opposite_corner")
+
+def any_corner(game):
+    """
+    Grab any corner.
+
+    """
+    for corner in [(0, 0), (0, 2),
+                   (2, 0), (2, 2)]:
+        if game.square_lookup(corner) == " ":
+            return corner
+
+    return False
+
+def any_side(game):
+    """
+    Grab any middle side space.
+
+    """
+    #00 01 02
+    #10 11 12
+    #20 21 22
+    for side in [(0, 1),
+          (1, 0),       (1, 2),
+                 (2, 1)]:
+        if game.square_lookup(side) == " ":
+            return side 
+
+    return False
+
+
