@@ -33,7 +33,11 @@ def random_move(game):
     
     """
     import random
-    move = (random.randrange(0, 3), random.randrange(0, 3))
+    move = False
+    while not move and game.turn:
+        coords = (random.randrange(0, 3), random.randrange(0, 3))
+        if game.square_lookup(coords) != " ":
+            move = False
     return move
 
 def winning_move(game, player):
@@ -208,13 +212,30 @@ def center(game):
 
     center = (1, 1)
     if game.square_lookup(center) == " ":
+        print("The center cannot hold...")
         return (1, 1)
         
     return False
 
 def opposite_corner(game):
-    print("FIXME: opposite_corner")
+    """
+    If opponent is in one corner, grab the opposite.
 
+    """
+    opponent = game.get_opponent("ai")
+    opponent_mark = game.get_mark(opponent)
+    for corner in [(0, 0), (0, 2),
+                   (2, 0), (2, 2)]:
+        if game.square_lookup(corner) == opponent_mark:
+            print("Equal and opposite reaction.")
+            (x, y) = corner
+            x = abs(x - 2)
+            y = abs(y - 2)
+            if game.square_lookup((x, y)) == " ":
+                return (x, y)
+
+    return False
+    
 def any_corner(game):
     """
     Grab any corner.
@@ -223,6 +244,7 @@ def any_corner(game):
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
         if game.square_lookup(corner) == " ":
+            print("Corner!")
             return corner
 
     return False
@@ -239,6 +261,7 @@ def any_side(game):
           (1, 0),       (1, 2),
                  (2, 1)]:
         if game.square_lookup(side) == " ":
+            print("Side!")
             return side 
 
     return False

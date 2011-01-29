@@ -79,7 +79,7 @@ class Game:
         if self.turn == "ai":
             import ai
             valid_move = False
-            while not valid_move:
+            while not valid_move and self.turn:
                 valid_move = ai.move(self)
             self.send_update()
 
