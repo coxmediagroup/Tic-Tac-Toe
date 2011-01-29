@@ -37,7 +37,6 @@ def winning_move(game, player):
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
-    blank = " "
     paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 2})
 
     for p in paths:
@@ -109,13 +108,29 @@ def forking_move(game, player, format="single"):
     #FIXME: more sense to return None?  Look into it.
     return False
 
-def forcing_move(game, player):
+def list_forcing_moves(game, player):
     """
-    Force an opponent to move, thus preventing him from making
-    a fork you can't block otherwise.
+    Return moves that force opponent to move, thus preventing
+    him from making a fork you can't block otherwise.
 
     """
-    pass
+
+    opponent = game.get_opponent(player)
+    opponent_mark = game.get_mark(opponent)
+    my_mark = game.get_mark(player)
+    paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 1})
+
+    coord_list = []
+    move_list = []
+    for e in paths:
+        for c in e:
+            coord_list.append(c)
+
+    for e in coord_list:
+        if game.square_lookup(e) != my_mark:
+            move_list.append(e)
+
+    return move_list
 
 def win(game):
     """
@@ -152,7 +167,21 @@ def block_fork(game):
     Detect a fork, and block it.
 
     """
-    move = forking_move(game, game.get_opponent("ai"))
+    move = None
+    forks = forking_move(game, game.get_opponent("ai"), format="list")
+    if len(forks) == 1:
+        move = forks[0]
+    else:
+        print("Brute force!")
+        force_moves = list_forcing_moves(game, "ai")
+        from sets import Set
+        fork_set = Set(forks)
+        force_set = Set(force_moves)
+        try:
+            move = list(force_set - fork_set)[0]
+        except IndexError:
+            pass
+
     if move:
         print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
     return move
