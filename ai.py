@@ -28,7 +28,9 @@ def winning_move(game, player):
     Look for a move that will win the game.  Take it, if one is found.
     """
 
-    paths = game.traverse_board(banned=["X"], min=2)
+    opponent = game.get_opponent(player)
+    mark = game.get_mark(opponent)
+    paths = game.traverse_board(banned=[mark], min=2)
 
     for p in paths:
         for coords in p:
