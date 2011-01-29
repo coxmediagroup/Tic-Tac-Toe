@@ -12,6 +12,8 @@ def move(game):
     if not move:
         move = fork(game)
     if not move:
+        move = block_fork(game)
+    if not move:
         move = random_move(game)
     (x, y) = move
     return game.move("ai", x, y)
@@ -128,4 +130,14 @@ def fork(game):
     move = forking_move(game, "ai")
     if move:
         print("Fork!")
+    return move
+
+def block_fork(game):
+    """
+    Detect a fork, and block it.
+
+    """
+    move = forking_move(game, game.get_opponent("ai"))
+    if move:
+        print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
     return move

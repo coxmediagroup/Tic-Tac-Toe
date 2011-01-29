@@ -32,7 +32,7 @@ class GUI:
     #FIXME: This function is getting kludgey.  Move moves to game.py
     #FIXME: and make an update function that updates using data from there.
     def tbtn_toggled(self, x, y, player=None):
-        if not player:
+        if not player or not self.game.turn:
             return
 
         if self.game.winner:
