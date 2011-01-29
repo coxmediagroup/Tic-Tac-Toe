@@ -6,6 +6,7 @@ Created on Jan 29, 2011
 
 import sys
 
+import util
 from game import Game
 
 def read_move():
@@ -21,6 +22,7 @@ def main():
     
     game = Game()
     game.start()
+    print(util.board_to_str(game.board))
     
     while not game.is_over():
         if game.get_turn() == human:
@@ -29,6 +31,8 @@ def main():
             move = None
         
         game.play(move)
+
+        print(util.board_to_str(game.board))
     
     if game.is_draw():
         pass
