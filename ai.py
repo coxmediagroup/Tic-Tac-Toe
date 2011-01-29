@@ -6,8 +6,9 @@ def move(game):
     """
     Move randomly for now.
     """
-    print("Win?")
     move = win(game)
+    if not move:
+        move = block(game)
     if not move:
         move = random_move(game)
     (x, y) = move
@@ -29,16 +30,29 @@ def winning_move(game, player):
     """
 
     opponent = game.get_opponent(player)
-    mark = game.get_mark(opponent)
-    paths = game.traverse_board(banned=[mark], min=2)
+    opponent_mark = game.get_mark(opponent)
+    blank = " "
+    paths = game.traverse_board(banned=[blank, opponent_mark], min=2)
 
     for p in paths:
         for coords in p:
             if game.square_lookup(coords) == " ":
-                print("FTW!")
+                print("Win condition for: %s" % player)
                 return coords
     return False
 
 def win(game):
+    """
+    Win, if able.
+
+    """
     move = winning_move(game, "ai")
+    return move
+
+def block(game):
+    """
+    Block opponent from winning, if able.
+
+    """
+    move = winning_move(game, game.get_opponent("ai"))
     return move

@@ -91,8 +91,8 @@ class Game:
 
         paths = self.traverse_board()
 
-        x_wins = self.traverse_board(banned=["O", " "], min=3)
-        y_wins = self.traverse_board(banned=["X", " "], min=3)
+        x_wins = self.traverse_board(requires={"X": 3})
+        y_wins = self.traverse_board(requires={"O": 3})
         winner = x_wins if x_wins else y_wins if y_wins else None
         if winner:
             self.turn = None
@@ -166,27 +166,50 @@ class Game:
         """
         self.main_loop['function'](*self.main_loop['args'])
 
-    def traverse_board(self, min=3, banned=[]):
+    def check_requirements(self, pathway, requires):
+        """
+        Check a pathway against the stated requirements.
+        """
+        contents = {}
+        passes_reqs = True
+        for e in pathway:
+            val = self.square_lookup(e)
+            if val not in contents.keys():
+                contents[val] = 1
+            else:
+                contents[val] += 1
+        print("contents: %s" % str(contents))
+        for e in requires.keys():
+            try:
+                if contents[e] < requires[e]:
+                    passes_reqs = False
+            except KeyError:
+                passes_reqs = False
+        return passes_reqs
+
+    def traverse_board(self, banned=[], min=3, requires={}):
         """
         Traverse the board and return the eight different pathways
         as a list of lists.
 
-        min: the minimum number of continuous squares in a row.
-                1, 2, and 3 are valid values.  (5 is right out)
+        min: unused, soon to be deleted.
         banned: list of symbols to ignore
         """
 
-        min = 3 if min > 3 else 0 if min < 0 else min
+        #FIXME: min is worthless, delete.
+        #min = 3 if min > 3 else 0 if min < 0 else min
+        min = 3
         paths = []
         # rows
         for row in range(0, 3):
             pathway = []
+            passes_reqs = True
             for col in range(0, 3):
                 if self.square_lookup((row, col)) in banned:
                     continue
                 else:
                     pathway.append((row, col))
-            if len(pathway) >= min:
+            if self.check_requirements(pathway, requires):
                 paths.append(pathway)
 
         # columns
@@ -197,7 +220,7 @@ class Game:
                     continue
                 else:
                     pathway.append((row, col))
-            if len(pathway) >= min:
+            if self.check_requirements(pathway, requires):
                 paths.append(pathway)
 
         # diagonals
@@ -208,7 +231,7 @@ class Game:
                 continue
             else:
                 pathway.append((row, col))
-        if len(pathway) >= min:
+        if self.check_requirements(pathway, requires):
             paths.append(pathway)
 
         pathway = []
@@ -221,7 +244,7 @@ class Game:
                 continue
             else:
                 pathway.append((row, col))
-        if len(pathway) >= min:
+        if self.check_requirements(pathway, requires):
             paths.append(pathway)
 
         return paths
