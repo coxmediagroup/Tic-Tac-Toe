@@ -62,7 +62,7 @@ class GUI:
         print(board)
         for row in range(0, 3):
             for col in range(0, 3):
-                print("update_board: %s" % board[row][col])
+                #print("update_board: %s" % board[row][col])
                 if board[row][col] == " ":
                     self.unset("self.tbtn_%s%s" % (row, col))
                 else:

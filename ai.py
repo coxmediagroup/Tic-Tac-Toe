@@ -7,7 +7,7 @@ def move(game):
     Move randomly for now.
     """
     print("Win?")
-    move = winning_move(game)
+    move = win(game)
     if not move:
         move = random_move(game)
     (x, y) = move
@@ -27,19 +27,16 @@ def winning_move(game):
     """
     Look for a move that will win the game.  Take it, if one is found.
     """
-    paths = game.traverse_board(banned=["X"])
-    print("BOARD:" + repr(paths))
 
-    # This won't work, and it isn't a good way to do this.
-    # alter game.traverse_board() to allow pathway selection.
-    """
-    for e in paths:
-        if((game.square_lookup(e[0])
-            == game.square_lookup(e[1])
-            == game.square_lookup(e[2]))
-           and game.square_lookup(e[0]) != " "):
-            winner = game.square_lookup(e[0])
-            break
-    """
+    paths = game.traverse_board(banned=["X"], min=2)
+
+    for p in paths:
+        for coords in p:
+            if game.square_lookup(coords) == " ":
+                print("FTW!")
+                return coords
     return False
 
+def win(game):
+    move = winning_move(game)
+    return move
