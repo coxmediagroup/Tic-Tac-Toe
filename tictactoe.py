@@ -1,145 +1,175 @@
-#!/usr/bin/python
 from itertools import combinations
+
+import random
 import sys
 
-layout = [0,1,2,3,4,5,6,7,8]
-available = [0,1,2,3,4,5,6,7,8]
-definition = [8,1,6,3,5,7,4,9,2]
-
-winning_position = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-]
-
-winning_sum = 15
-corners = [0,2,6,8]
-challenger_path = []
-computer_path = []
-
-def board():
-    print " "
-    print "  %s  |  %s  |  %s" % (layout[0], layout[1], layout[2])
-    print "-----|-----|----"
-    print "  %s  |  %s  |  %s" % (layout[3], layout[4], layout[5])
-    print "-----|-----|----"
-    print "  %s  |  %s  |  %s" % (layout[6], layout[7], layout[8])
-    print " "
-
-def is_winning(pos, sign):
-    possibilities = [i for i in winning_position if pos in i]
+class TicTacToe:
     
-    winner = [True for i in possibilities 
-              if layout[i[0]] == layout[i[1]] == layout[i[2]] == sign]
+    def __init__(self):
+        self.layout = [0,1,2,3,4,5,6,7,8]
+        self.available = [0,1,2,3,4,5,6,7,8]
+        self.definition = [8,1,6,3,5,7,4,9,2]
+        self.corners = [0,2,6,8]
+        
+        self.winning_position = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ]
+        self.winning_sum = 15
+        
+        self.players = ['X', 'O']
+        self.challenger = None
+        self.computer = None
+        self.challenger_path = []
+        self.computer_path = []
+        self.finished = False
     
-    if not available:
-        board()
-        sys.exit('Draw.')
+    def board(self):
+        print "  %s  |  %s  |  %s" % (self.layout[0], self.layout[1], self.layout[2])
+        print "-----|-----|----"
+        print "  %s  |  %s  |  %s" % (self.layout[3], self.layout[4], self.layout[5])
+        print "-----|-----|----"
+        print "  %s  |  %s  |  %s" % (self.layout[6], self.layout[7], self.layout[8])
     
-    if winner:
-        board()
+    def get_highest_value(self):
+        big_to_small = sorted(self.definition, reverse=True)
+
+        for i in big_to_small:
+
+            if self.layout[self.definition.index(i)] in self.available:
+                return self.definition.index(i)
+    
+    def check_for_a_win(self, pos, sign):
+        possibilities = [i for i in self.winning_position if pos in i]
+
+        win = [True for i in possibilities 
+               if self.layout[i[0]] == self.layout[i[1]] == self.layout[i[2]] == sign]
+
+        if not self.available:
+            self.board()
+            sys.exit('Draw.')
+
+        if win:
+            self.board()
+
+            if win[0] == self.challenger:
+                sys.exit('You won.')
+            else:
+                sys.exit('You lost. Sorry.')
+        return False
+
+    def ask_for_position(self):
+        try:
+            position = raw_input('Choose your position: ')
+
+            if not position.isdigit():
+                print 'ERROR: Choose a layout number.'
+
+            elif int(position) not in self.available:
+                print 'ERROR: Invalid Position.'
+
+            else:
+                return int(position)
+        except KeyboardInterrupt:
+            sys.exit("\nBye.")
+        return False
+    
+    def make_a_move(self, pos, sign='X'):
+        self.layout[pos] = sign
+        self.available.remove(pos)
+
         if sign == 'X':
-            print 'You won.'
+            self.challenger_path.append(pos)
         else:
-            print 'You lost. Sorry.'
-        sys.exit()
-    return False
+            self.computer_path.append(pos)
+        self.check_for_a_win(pos, sign)
+        return True
+    
+    def counter_move(self, sign='X'):
+        options = []
+        best_chances = None
+        value = None
 
-def get_highest_value():
-    big_to_small = sorted(definition, reverse=True)
-    
-    for i in big_to_small:
-        
-        if layout[definition.index(i)] in available:
-            return definition.index(i)
-    
-def make_a_move(pos, sign='X'):
-    layout[pos] = sign
-    available.remove(pos)
-    
-    if sign == 'X':
-        challenger_path.append(pos)
-    else:
-        computer_path.append(pos)
-    is_winning(pos, sign)
-    return True
+        if self.layout[4] == 4:
+            value = 4
 
-def available_corner():
-    
-    for i in corners:
-        if i in available:
-            return i
+        elif len(self.challenger_path) < 2 and \
+                 self.challenger_path[0] == 4:
+            value = [i for i in self.corners if i in self.available][0]
 
-def counter_move(pos):
-    # available = [i for i, v in enumerate(layout) if i == v]
-    options = []
-    best_chances = None
-    value = None
-    
-    if layout[4] == 4:
-        value = 4
-    
-    elif len(challenger_path) < 2 and challenger_path[0] == 4:
-        value = available_corner()
-    
-    else:
-        combine_computer = combinations(computer_path, 2)
-        combine_challenger = combinations(challenger_path, 2)
-        
-        for x in combine_computer:
-            diff =  winning_sum - (definition[x[0]] + definition[x[1]])
-            options.append(diff)
-        
-        for x in combine_challenger:
-            diff =  winning_sum - (definition[x[0]] + definition[x[1]])
-            options.append(diff)
-        
-        priority = sorted(options)
-        
-        for i in priority:
-            
-            try:
-                y = definition.index(i)
-                
-                if y in available:
-                    best_chances = y
-                    break
-            except:
-                pass
-        
-        if best_chances:
-            value = best_chances
-        
         else:
-            
-            if get_highest_value():
-                value = get_highest_value()
+            combine_computer = combinations(self.computer_path, 2)
+            combine_challenger = combinations(self.challenger_path, 2)
+
+            for x in combine_computer:
+                diff =  self.winning_sum - (self.definition[x[0]] + 
+                        self.definition[x[1]])
+                options.append(diff)
+
+            for x in combine_challenger:
+                diff =  self.winning_sum - (self.definition[x[0]] + 
+                        self.definition[x[1]])
+                options.append(diff)
+
+            priority = sorted(options)
+
+            for i in priority:
+
+                try:
+                    y = self.definition.index(i)
+
+                    if y in self.available:
+                        best_chances = y
+                        break
+
+                except:
+                    pass
+
+            if best_chances:
+                value = best_chances
+
+            else:
+
+                if self.get_highest_value():
+                    value = self.get_highest_value()
+
+                else:
+                    value = available[0]
+        self.make_a_move(value, sign)
+    
+    def play(self):
+        '''
+        
+        '''
+        while not self.finished:
+            # use one of the corners if the computer has to make the first move
+            if self.challenger_path == self.computer_path and \
+                self.challenger == 'O':
+                self.counter_move(self.computer)
             
             else:
-                value = available[0]
-    make_a_move(value, 'O')
-
-def choose_position():
-    position = raw_input('Choose your position: ')
-    
-    if not position.isdigit():
-        print 'ERROR: Choose a layout number.'
-    
-    elif int(position) not in range(0,9):
-        print 'ERROR: Invalid Position.'
-
-    else:
-
-        if not make_a_move(int(position), 'X'):
-            print 'ERROR: That position has been filled'
-        else:
-            counter_move(int(position))
-
-def main():
-    counter = 1
-    while counter == 1:
-        board()
-        choose_position()
+                self.board()
+                new_pos = self.ask_for_position()
+                
+                self.make_a_move(new_pos, self.challenger)
+                self.counter_move(self.computer)
 
 if __name__ == "__main__":
-    sys.exit(main())
+    game = TicTacToe()
+    
+    while not game.challenger:
+        
+        try:
+            user_input = raw_input('Choose whether you want to be an "X" or an "O": ')
+        
+            if user_input not in game.players:
+                print 'ERROR: Please choose either "X" or "O"'
+        
+            else:
+                game.challenger = user_input
+                game.computer = [i for i in game.players if i != user_input][0]
+                game.play()
+        
+        except KeyboardInterrupt:
+            sys.exit("\nBye.")
