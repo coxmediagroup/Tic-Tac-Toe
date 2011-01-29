@@ -91,4 +91,5 @@ if __name__ == "__main__":
     game = Game()
     ui = gui.GUI(game)
     game.gui = ui
+    game.send_update()
     game.enter_main_loop()
