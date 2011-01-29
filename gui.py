@@ -47,22 +47,24 @@ class GUI:
                 buttons.append("tbtn_%s%s" % (x, y))
         return buttons
 
-    def update_board(self):
+    def update_board(self, *args):
         print("update board")
         board = self.game.get_board()
-        for row in board:
-            for col in row:
+        print(board)
+        for row in range(0, 3):
+            for col in range(0, 3):
+                print("update_board: %s" % board[row][col])
                 if board[row][col] == " ":
                     self.unset("self.tbtn_%s%s" % (row, col))
                 else:
                     self.set("self.tbtn_%s%s" % (row, col), board[row][col])
     
-    def set(string, what):
+    def set(self, string, what):
         exec(string + """.set_active(True)""")
         exec(string + """.set_sensitive(False)""")
         exec(string + """.set_label("%s")""" % what)
 
-    def unset(string):
+    def unset(self, string):
         exec(string + """.set_active(False)""")
         exec(string + """.set_sensitive(True)""")
         exec(string + """.set_label("")""")
@@ -83,7 +85,8 @@ class GUI:
             exec(string)
 
         self.game = game
-        game.register_main_loop(gtk.main())
+        game.register_main_loop(gtk.main)
+        game.register_update(self.update_board, self)
 
     def destroy(self, widget, data=None):
         gtk.main_quit()

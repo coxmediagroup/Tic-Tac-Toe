@@ -50,6 +50,7 @@ class Game:
             valid_move = False
             while not valid_move:
                 valid_move = ai.move(self)
+            print("AI MOVED")
             self.send_update()
 
     def ascii_board(self):
@@ -60,26 +61,34 @@ class Game:
 
         print("\n----------")
 
-    def register_update(self, what):
-        self.updates.append(what)
+    def register_update(self, what, *args):
+        print("register_update: %s" % what)
+        d = {}
+        d['function'] = what
+        d['args'] = args
+        print("register_update: %s" % repr(d))
+        self.updates.append(d)
 
     def send_update(self):
         self.ascii_board()
+        print(self.updates)
         for e in self.updates:
-            e()
+            print("send_update: %s" % (e['args']))
+            e['function'](*e['args'])
 
     # Calling gtk.main from here breaks encapsulation,
     # so let's wrap it with these functions.
-    def register_main_loop(self, what):
-        self.main_loop = what
+    def register_main_loop(self, what, *args):
+        self.main_loop = {}
+        self.main_loop['function'] = what
+        self.main_loop['args'] = args
 
-    def main_loop(self):
-        self.main_loop()
+    def enter_main_loop(self):
+        self.main_loop['function'](*self.main_loop['args'])
 
 if __name__ == "__main__":
     import gui
     game = Game()
     ui = gui.GUI(game)
     game.gui = ui
-    game.register_update(ui.update_board)
-    game.main_loop()
+    game.enter_main_loop()
