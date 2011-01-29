@@ -31,8 +31,9 @@ def winning_move(game, player):
 
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
+    my_mark = game.get_mark(player)
     blank = " "
-    paths = game.traverse_board(banned=[blank, opponent_mark], min=2)
+    paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 2})
 
     for p in paths:
         for coords in p:
@@ -47,6 +48,8 @@ def win(game):
 
     """
     move = winning_move(game, "ai")
+    if move:
+        print("FTW!")
     return move
 
 def block(game):
@@ -55,4 +58,6 @@ def block(game):
 
     """
     move = winning_move(game, game.get_opponent("ai"))
+    if move:
+        print("OH NO YOU DON'T!")
     return move
