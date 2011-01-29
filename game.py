@@ -60,20 +60,23 @@ class Game:
 
         paths = self.traverse_board()
 
-        # Ugh.  Convert tuples to nested indexes.
-        # I.e., (x, y) -> [x][y].
-        # This is ugly.  Encapsulate this where no eyes will ever see it.
+        # e represents a pathway.  That is, a list of 3 coordinates that make
+        # a potentially valid tic-tac-toe row.  Passing these to square lookup
+        # converts them into self.board[x][y] without causing eyebleeding.
         for e in paths:
-            if((self.board[e[0][0]][e[0][1]]
-                == self.board[e[1][0]][e[1][1]]
-                == self.board[e[2][0]][e[2][1]])
-               and self.board[e[0][0]][e[0][1]] != " "):
-                winner = self.board[e[0][0]][e[0][1]]
+            if((self.square_lookup(e[0])
+                == self.square_lookup(e[1])
+                == self.square_lookup(e[2]))
+               and self.square_lookup(e[0]) != " "):
+                winner = self.square_lookup(e[0])
                 break
 
         if winner:
             self.turn = None
             print("Winner: %s" % winner)
+
+    def square_lookup(self, coords):
+        return self.board[coords[0]][coords[1]]
 
     def ascii_board(self):
         for x in range(0, 3):
