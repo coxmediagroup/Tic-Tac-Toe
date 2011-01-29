@@ -10,7 +10,6 @@ import gtk
 import gtk.glade
 
 class GUI:
-
     # Seems gross to have 9 identical functions, but exec() doesn't
     # love me anymore.
     def on_tbtn_00_toggled(self, widget, data=None):
@@ -32,9 +31,24 @@ class GUI:
     def on_tbtn_22_toggled(self, widget, data=None):
         self.tbtn_toggled(2, 2)
 
-    def tbtn_toggled(self, x, y):
+    def tbtn_toggled(self, x, y, player="X"):
+        #This splits x and y for the gameboard alter.
         exec("""self.tbtn_%s%s.set_sensitive(False)""" % (x, y))
-        exec("""self.tbtn_%s%s.set_label("X")""" % (x, y))
+        exec("""self.tbtn_%s%s.set_label("%s")""" % (x, y, player))
+        if player == "X":
+            import ai
+            (x, y) = ai.move()
+            exec("""self.tbtn_toggled(%s, %s, player="O")""" % (x, y))
+
+    def list_buttons(self):
+        """
+        Toggle buttons are labeled by coordinate.  Return a list of them.
+        """
+        buttons = []
+        for x in range(0, 3):
+            for y in range(0, 3):
+                buttons.append("tbtn_%s%s" % (x, y))
+        return buttons
 
     def __init__(self):
         self.glade = "tictactoe.glade"
@@ -56,16 +70,6 @@ class GUI:
 
     def delete_event(self, widget, data=None):
         self.destroy(widget)
-
-    def list_buttons(self):
-        """
-        Toggle buttons are labeled by coordinate.  Return a list of them.
-        """
-        buttons = []
-        for x in range(0, 3):
-            for y in range(0, 3):
-                buttons.append("tbtn_%s%s" % (x, y))
-        return buttons
 
 if __name__ == "__main__":
     gui = GUI()
