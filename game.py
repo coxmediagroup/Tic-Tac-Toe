@@ -26,10 +26,9 @@ class Game:
 
     def move(self, player, x, y):
         mark = self.get_mark(player)
-        print(mark, player)
         if self.board[x][y] == " ":
             self.board[x][y] = mark
-            self.check_for_win()
+            self.send_update()
             self.next_turn()
             return True
         return False
@@ -58,8 +57,6 @@ class Game:
 
     def check_for_win(self):
         winner = None
-        # Don't want victory to block updating by the GUI
-        self.send_update()
 
         # rows
         for row in range(0, 3):
@@ -105,7 +102,6 @@ class Game:
             for row in (range(0, 3)):
                 col = abs(row-2)
                 string += self.board[row][col]
-                print("diagonal 2: %s, %s" % (row, col))
 
             if string.count("X") == 3:
                 winner = "X"
@@ -136,7 +132,6 @@ class Game:
         self.ascii_board()
         print(self.updates)
         for e in self.updates:
-            print("send_update: %s" % (e['args']))
             e['function'](*e['args'])
 
     # Calling gtk.main from here breaks encapsulation,
@@ -154,5 +149,8 @@ if __name__ == "__main__":
     game = Game()
     ui = gui.GUI(game)
     game.gui = ui
+    # This needs to be at the end.  Perhaps a priority system
+    # is in order here.
+    game.register_update(game.check_for_win)
     game.send_update()
     game.enter_main_loop()
