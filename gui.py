@@ -29,9 +29,11 @@ class GUI:
     def on_tbtn_22_toggled(self, widget, data=None):
         self.tbtn_toggled(2, 2, player="human")
 
-    #FIXME: This function is getting kludgey.  Move moves to game.py
-    #FIXME: and make an update function that updates using data from there.
     def tbtn_toggled(self, x, y, player=None):
+        """
+        Player has toggled one of the buttons.
+
+        """
         if not player or not self.game.turn:
             return
 

@@ -31,6 +31,7 @@ def random_move(game):
 def winning_move(game, player):
     """
     Look for a move that will win the game.  Take it, if one is found.
+
     """
 
     opponent = game.get_opponent(player)
@@ -94,7 +95,6 @@ def forking_move(game, player):
     if max > 0:
         for e in coords.keys():
             if coords[e] == max:
-                print("fork: %s" % str(e))
                 # We're indexing by coords, so just return e.
                 return e
 

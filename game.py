@@ -170,7 +170,6 @@ class Game:
         Check a pathway against the stated requirements.
         """
         contents = {}
-        passes_reqs = True
         for e in pathway:
             val = self.square_lookup(e)
             if val not in contents.keys():
@@ -180,10 +179,10 @@ class Game:
         for e in requires.keys():
             try:
                 if contents[e] < requires[e]:
-                    passes_reqs = False
+                    return False
             except KeyError:
-                passes_reqs = False
-        return passes_reqs
+                return False
+        return True
 
     def traverse_board(self, banned=[], min=3, requires={}):
         """
