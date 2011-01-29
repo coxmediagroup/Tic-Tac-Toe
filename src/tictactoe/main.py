@@ -7,10 +7,12 @@ Created on Jan 29, 2011
 import sys
 
 import util
+import engine
 from game import Game
 
 def read_move():
-    sys.stdout.write('Your move [x y]: ')
+    ''' doc '''
+    sys.stdout.write('Your move [x, y]: ')
     move = [int(c) for c in sys.stdin.readline().split(',')]
     return move
 
@@ -18,14 +20,14 @@ def main():
     ''' doc '''
     sys.stdout.write('Cross or nought? [default: O]: ')
     player_choice = sys.stdin.readline().strip().upper()
-    human = (player_choice == 'X') and Game.P1 or Game.P2
+    human = (player_choice == 'X') and engine.P1 or engine.P2
     
     game = Game()
     game.start()
     print(util.board_to_str(game.board))
     
     while not game.is_over():
-        if game.get_turn() == human:
+        if game.player == human:
             move = read_move()
         else:
             move = None
@@ -34,13 +36,17 @@ def main():
 
         print(util.board_to_str(game.board))
     
-    if game.is_draw():
-        pass
+    message = ['The game is over. ']
     
-    if game.has_cross_won():
-        pass
+    if game.is_draw():
+        message.append('It\'s a draw!')
     else:
-        pass
+        if game.has_cross_won():
+            message.append('Player 1 has won!')
+        else:
+            message.append('Player 2 has won!')
+            
+    print(''.join(message))
     
     return 0
 
