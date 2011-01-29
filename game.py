@@ -58,55 +58,18 @@ class Game:
     def check_for_win(self):
         winner = None
 
-        # rows
-        for row in range(0, 3):
-            string = ""
-            for col in range(0, 3):
-                string += self.board[row][col]
-                if string.count("X") == 3:
-                    winner = "X"
-                    break
-                if string.count("O") == 3:
-                    winner = "O"
-                    break
+        paths = self.traverse_board()
 
-        # columns
-        if not winner:
-            for col in range(0, 3):
-                string = ""
-                for row in range(0, 3):
-                    string += self.board[row][col]
-                    if string.count("X") == 3:
-                        winner = "X"
-                        break
-                    if string.count("O") == 3:
-                        winner = "O"
-                        break
-
-        # diagonals
-        if not winner:
-            string = ""
-            for row in range(0, 3):
-                col = row  # diagonal magic
-                string += self.board[row][col]
-
-            if string.count("X") == 3:
-                winner = "X"
-            elif string.count("O") == 3:
-                winner = "O"
-
-            string = ""
-            # Need to reverse the diagonal.  Subtracting
-            # 2 and taking the absolute value yields the
-            # appropriate numbers.
-            for row in (range(0, 3)):
-                col = abs(row-2)
-                string += self.board[row][col]
-
-            if string.count("X") == 3:
-                winner = "X"
-            elif string.count("O") == 3:
-                winner = "O"
+        # Ugh.  Convert tuples to nested indexes.
+        # I.e., (x, y) -> [x][y].
+        # This is ugly.  Encapsulate this where no eyes will ever see it.
+        for e in paths:
+            if((self.board[e[0][0]][e[0][1]]
+                == self.board[e[1][0]][e[1][1]]
+                == self.board[e[2][0]][e[2][1]])
+               and self.board[e[0][0]][e[0][1]] != " "):
+                winner = self.board[e[0][0]][e[0][1]]
+                break
 
         if winner:
             self.turn = None
@@ -143,6 +106,44 @@ class Game:
 
     def enter_main_loop(self):
         self.main_loop['function'](*self.main_loop['args'])
+
+    def traverse_board(self):
+        """
+        Traverse the board and return the eight different pathways
+        as a list of lists.
+        """
+        paths = []
+        # rows
+        for row in range(0, 3):
+            pathway = []
+            for col in range(0, 3):
+                pathway.append((row, col))
+            paths.append(pathway)
+
+        # columns
+        for col in range(0, 3):
+            pathway = []
+            for row in range(0, 3):
+                pathway.append((row, col))
+            paths.append(pathway)
+
+        # diagonals
+        pathway = []
+        for row in range(0, 3):
+            col = row  # diagonal magic
+            pathway.append((row, col))
+        paths.append(pathway)
+
+        pathway = []
+        # Need to reverse the diagonal.  Subtracting
+        # 2 and taking the absolute value yields the
+        # appropriate numbers.
+        for row in (range(0, 3)):
+            col = abs(row-2)
+            pathway.append((row, col))
+        paths.append(pathway)
+
+        return paths
 
 if __name__ == "__main__":
     import gui
