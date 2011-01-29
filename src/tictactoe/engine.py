@@ -15,6 +15,10 @@ class Engine(object):
         '''
         
     def next_move(self, board):
+        ''' doc '''
+        pass
+    
+    def is_over(self):
         pass
 
 class NegamaxEngine(Engine):
@@ -23,4 +27,4 @@ class NegamaxEngine(Engine):
     '''
     
     def __init__(self):
-        Engine.__init__(self)  
+        Engine.__init__(self) 
