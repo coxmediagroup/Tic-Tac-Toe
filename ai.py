@@ -2,6 +2,9 @@
 Module for AI opponent.
 """
 
+class AiError(Exception):
+    pass
+
 def move(game):
     """
     Move randomly for now.
@@ -22,23 +25,9 @@ def move(game):
     if not move:
         move = any_side(game)
     if not move:
-        move = random_move(game)
+        raise AiError
     (x, y) = move
     return game.move("ai", x, y)
-
-#FIXME: DELETE ME
-def random_move(game):
-    """
-    Move randomly.  Doesn't even check for valid moves.
-    
-    """
-    import random
-    move = False
-    while not move and game.turn:
-        coords = (random.randrange(0, 3), random.randrange(0, 3))
-        if game.square_lookup(coords) != " ":
-            move = False
-    return move
 
 def winning_move(game, player):
     """
