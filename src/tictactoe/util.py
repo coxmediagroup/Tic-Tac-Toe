@@ -6,15 +6,15 @@ Created on Jan 29, 2011
 
 import itertools
 
-from game import Game
+import engine
 
 def board_to_str(board):
     ''' '''       
  
     def value_to_char(value):
         ''' '''
-        if value == Game.P1: return 'X'
-        if value == Game.P2: return 'O'
+        if value == engine.P1: return 'X'
+        if value == engine.P2: return 'O'
         
         return ' '
 
