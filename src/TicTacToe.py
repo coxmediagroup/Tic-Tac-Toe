@@ -42,6 +42,7 @@ class TicTacToe(object):
     __maxPosition = 8
     players = ('X', 'O')
     moveResults = ('GAME_OVER_ALREADY', 'INVALID_MOVE', 'INVALID_TURN', 'INVALID_PLAYER', 'WIN', 'CONTINUE')
+    __game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
     __game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
     
     # Public methods
@@ -98,9 +99,9 @@ class TicTacToe(object):
         self.__last_player_to_move = player
         
         if player == TicTacToe.players[0]:
-            self.__x_location_score += TicTacToe.__game_location_win_scores[position]
+            self.__x_location_score += TicTacToe.__game_location_values[position]
         else:
-            self.__y_location_score += TicTacToe.__game_location_win_scores[position]
+            self.__o_location_score += TicTacToe.__game_location_values[position]
             
     def __checkForValidPlayer(self, player):
         if player == TicTacToe.players[0] or player == TicTacToe.players[1]:
@@ -121,7 +122,7 @@ class TicTacToe(object):
         if player == TicTacToe.players[0]:
             location_score = self.__x_location_score
         else:
-            location_score = self.__y_location_score
+            location_score = self.__o_location_score
             
         for score in TicTacToe.__game_location_win_scores:
             if location_score == score:
@@ -140,6 +141,41 @@ if __name__ == '__main__':
 	player = TicTacToe.players[0]
 	position = 0
 	state = game.nextMove(player, position)
-	print TicTacToe.players[0] + " on " + str(position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 2
+	player = TicTacToe.players[1]
+	position = 4
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 3
+	player = TicTacToe.players[0]
+	position = 1
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 4
+	player = TicTacToe.players[1]
+	position = 2
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 5
+	player = TicTacToe.players[0]
+	position = 3
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 6
+	player = TicTacToe.players[1]
+	position = 6
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
 	print state + "\n"
 
