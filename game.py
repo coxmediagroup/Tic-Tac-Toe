@@ -84,20 +84,15 @@ class Game:
 
         paths = self.traverse_board()
 
-        # e represents a pathway.  That is, a list of 3 coordinates that make
-        # a potentially valid tic-tac-toe row.  Passing these to square lookup
-        # converts them into self.board[x][y] without causing eyebleeding.
-        for e in paths:
-            if((self.square_lookup(e[0])
-                == self.square_lookup(e[1])
-                == self.square_lookup(e[2]))
-               and self.square_lookup(e[0]) != " "):
-                winner = self.square_lookup(e[0])
-                break
-
+        x_wins = self.traverse_board(banned=["O", " "], min=3)
+        y_wins = self.traverse_board(banned=["X", " "], min=3)
+        winner = x_wins if x_wins else y_wins if y_wins else None
         if winner:
             self.turn = None
-            print("Winner: %s" % winner)
+            # traverse_board returns paths, and we know each symbol
+            # is identical, so grab the first one in the nested list.
+            print("Victory: %s" % winner)
+            print("Winner: %s" % self.square_lookup(winner[0][0]))
 
     def square_lookup(self, coords):
         """

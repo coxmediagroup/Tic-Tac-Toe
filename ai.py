@@ -27,7 +27,7 @@ def winning_move(game):
     """
     Look for a move that will win the game.  Take it, if one is found.
     """
-    paths = game.traverse_board(banned="X")
+    paths = game.traverse_board(banned=["X"])
     print("BOARD:" + repr(paths))
 
     # This won't work, and it isn't a good way to do this.
