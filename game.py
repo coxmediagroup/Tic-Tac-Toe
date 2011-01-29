@@ -141,7 +141,6 @@ class Game:
 
         """
         self.ascii_board()
-        print(self.updates)
         for e in self.updates:
             e['function'](*e['args'])
 
@@ -178,7 +177,6 @@ class Game:
                 contents[val] = 1
             else:
                 contents[val] += 1
-        print("contents: %s" % str(contents))
         for e in requires.keys():
             try:
                 if contents[e] < requires[e]:
