@@ -23,5 +23,6 @@ urlpatterns = patterns('',
     # mount the app:
     (_u(kRoot), 'DJTickyTack.views.index'),
     (_u(kGames), 'DJTickyTack.views.games'),
+    (_u(kJoin, r'/(\d+)$'), 'DJTickyTack.views.join'),
     (_u(kJoin), 'DJTickyTack.views.joinable'),
 )

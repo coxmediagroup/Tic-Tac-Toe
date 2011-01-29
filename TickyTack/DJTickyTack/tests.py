@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.test.testcases import TestCase
 from DJTickyTack.models import Game
@@ -7,7 +8,11 @@ import urls
 # so we can inspect generated SQL via connection.queries:
 from django.db import connection
 from django.conf import settings
+
 settings.DEBUG = True
+
+def urlOf(viewName):
+    return reverse('DJTickyTack.views.%s' % viewName)
 
 
 class BaseTest(TestCase):
@@ -78,10 +83,27 @@ class SiteTest(BaseTest):
         Only games created by others that don't yet have a
         second player should be playable.
         """
-        p1x = Game.createFor(self.playerA, playAs='X')
-        p2x = Game.createFor(self.playerB, playAs='X')
-        p2o = Game.createFor(self.playerB, playAs='O')
+        pAx = Game.createFor(self.playerA, playAs='X')
+        pBx = Game.createFor(self.playerB, playAs='X')
+        pBo = Game.createFor(self.playerB, playAs='O')
 
+        # since we're logged in as player A, the two games started
+        # by player B should be joinable
         r = self.client.get(urls.kJoin)
         joinable = list(r.context['joinable'])
+        self.failIf(pAx in joinable)
+        self.assertTrue(pBx in joinable)
+        self.assertTrue(pBo in joinable)
         self.assertEquals(2, len(joinable))
+
+        # join player B's game as the new player X
+        r = self.client.post(urls.kJoin + str(pBo.id))
+        self.assertTrue(r.has_header('Location'))
+        # sure would be nice if reverse(views.games) worked here :/
+        self.assertTrue(r['Location'].endswith(urlOf('games')))
+
+        # the fixture has one active game, and we just joined another.
+        # we should have two active games.
+        r = self.client.get(urls.kGames)
+        self.assertEquals(2, len(r.context['activeGames']))
+

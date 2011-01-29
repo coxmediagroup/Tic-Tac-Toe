@@ -20,6 +20,7 @@ def games(request):
         })
 
 
+@login_required
 def joinable(request):
     return render_to_response('joinable.html',
     {
@@ -28,5 +29,9 @@ def joinable(request):
 
 
 @login_required
-def join(request):
-    raise hell
+def join(request, gameId):
+    if Game.tryToJoin(request.user, gameId):
+        # @TODO: go directly to game if we're playing as X
+        return redirect(reverse(games))
+    else:
+        return redirect(reverse(joinable))

@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 Q = m.Q
 
 qUnfinished = lambda : Q(finished=False)
-qNeedsPlayer = lambda : Q(player1=None) | Q(player2=None)
+qNeedsPlayer1 = lambda : Q(player1=None)
+qNeedsPlayer2 = lambda : Q(player2=None)
+qNeedsPlayer = lambda : qNeedsPlayer1() | qNeedsPlayer2()
 qHas2Players = lambda : ~qNeedsPlayer()
 qForUser = lambda u: Q(player1=u) | Q(player2=u)
 
@@ -63,5 +65,18 @@ class Game(m.Model):
     @classmethod
     def findJoinableBy(cls, user):
         return cls.objects.filter(qNeedsPlayer() & qNotUser(user))
+
+    @classmethod
+    def tryToJoin(cls, user, gameId):
+        """
+        The game may already be full, so just attempt to join, and
+        return True if joined, False otherwise
+        """
+        # We want to include the null in the where clause so we don't accidentally
+        # overwrite another player's foreign key if they beat us to joining.
+        # .update() returns a count, which here will always be 1 or 0
+        x = cls.objects.filter(qNeedsPlayer1() & Q(id=gameId)).update(player1=user)
+        o = cls.objects.filter(qNeedsPlayer2() & Q(id=gameId)).update(player2=user)
+        return bool(x or o)
 
     
