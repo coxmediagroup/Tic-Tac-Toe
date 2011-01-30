@@ -173,7 +173,9 @@ def block_fork(game):
 
     """
     move = None
-    forks = forking_move(game, game.get_opponent("ai"), format="list")
+    player = "ai"
+    opponent = game.get_opponent(player)
+    forks = forking_move(game, opponent, format="list")
     flen = len(forks)
     if flen == 0:
         return None
@@ -184,7 +186,13 @@ def block_fork(game):
         #FIXME?: move is chosen.  A better solution than this
         #FIXME?: may be necessary.
         print("Brute force!")
-        force_moves = list_forcing_moves(game, "ai")
+        force_moves = list_forcing_moves(game, player)
+        for e in force_moves:
+            game.move(player, x, y)
+            test_board = game.move(player, x, y, test=True)
+            # Blarg!  These all take games instead of boards.
+            #test_forks = forking_move(game, opponent, format="list")
+
         from sets import Set
         fork_set = Set(forks)
         force_set = Set(force_moves)

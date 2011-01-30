@@ -48,8 +48,8 @@ class Game:
         from copy import copy
         board = self.board if not test else copy(board)
         # If spot is blank, add, otherwise don't.
-        if self.board[x][y] == " ":
-            self.board[x][y] = mark
+        if board[x][y] == " ":
+            board[x][y] = mark
             if test:
                 return board
             self.send_update()
