@@ -110,8 +110,6 @@ def forking_move(game, player, format="single"):
     if format == "list":
         return return_list
 
-    #FIXME: Why do you keep returning False?  Doesn't it make
-    #FIXME: more sense to return None?  Look into it.
     return None
 
 def list_forcing_moves(game, player):
