@@ -31,15 +31,17 @@ class Grid(object):
 
     def __setattr__(self, key, value):
         if len(key) == 2:
+            col, row = self._cell(key)
+            self.data[row][col] = value
+        else:
             return super(Grid, self).__setattr__(key, value)
-        col, row = self._cell(key)
-        self.data[row][col] = value
 
     def __getattr__(self, key):
         if len(key) == 2:
+            col, row = self._cell(key)
+            return self.data[row][col]
+        else:
             return super(Grid, self).__getattr__(key)
-        col, row = self._cell(key)
-        return self.data[row][col]
 
 
 
