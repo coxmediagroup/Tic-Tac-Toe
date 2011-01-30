@@ -180,6 +180,9 @@ def block_fork(game):
     elif flen == 1:
         move = forks[0]
     else:
+        #FIXME?: We end up here trying to force moves, but no
+        #FIXME?: move is chosen.  A better solution than this
+        #FIXME?: may be necessary.
         print("Brute force!")
         force_moves = list_forcing_moves(game, "ai")
         from sets import Set

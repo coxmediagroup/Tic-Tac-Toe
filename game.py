@@ -34,18 +34,24 @@ class Game:
         print("%s's turn." % self.turn)
         self.check_ai_move()
 
-    def move(self, player, x, y):
+    def move(self, player, x, y, test=False):
         """
         Add a move to the game board.
         returns True if move is valid, False otherwise.
 
-        player = "human" or "ai"
+        player: "human" or "ai"
+        test: if test=True, copy the board, make the move
+              and return the board for viewing.
 
         """
         mark = self.get_mark(player)
+        from copy import copy
+        board = self.board if not test else copy(board)
         # If spot is blank, add, otherwise don't.
         if self.board[x][y] == " ":
             self.board[x][y] = mark
+            if test:
+                return board
             self.send_update()
             self.next_turn()
             return True
