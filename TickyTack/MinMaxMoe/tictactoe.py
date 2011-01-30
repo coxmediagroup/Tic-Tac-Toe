@@ -41,7 +41,7 @@ class Grid(object):
             col, row = self._cell(key)
             return self.data[row][col]
         else:
-            return super(Grid, self).__getattr__(key)
+            return super(Grid, self).__getattribute__(key)
 
 
 
@@ -49,5 +49,31 @@ class TicTacToe(Grid):
     """
     Represents the current state of a game.
     """
-    def __init__(self):
+    def __init__(self, toPlay=X, path='start'):
         super(TicTacToe, self).__init__()
+        self.toPlay = toPlay
+        self.path = path
+
+    @property
+    def moves(self):
+        return tuple('%s%s%s' % (self.toPlay, col, row)
+                     for col in 'ABC'
+                     for row in '123'
+                     if getattr(self, '%s%s' % (col, row)) == _)
+
+
+
+    def __getattr__(self, key):
+        """
+        Given an attribute like .XB2, return a new TicTacToe board
+        with the move in place.
+        """
+        if len(key) == 3 and key[0] == self.toPlay:
+            t = TicTacToe(toPlay = O if self.toPlay == X else X,
+                          path = self.path + '.' + key)
+            t.data = [[value for value in row] for row in self.data]
+            setattr(t, key[1:], self.toPlay)
+            return t
+        else:
+            return super(TicTacToe, self).__getattr__(key)
+
