@@ -47,7 +47,7 @@ class TicTacToeTest(unittest.TestCase):
 
         g = g.XC2
         self.assertEquals('O O _\nX X X\n_ _ _', str(g))
-        self.failUnless(g.isOver, "it's finally over")
+        self.failUnless(g.isOver, "should be over because X won")
         self.assertEquals(X, g.winner)
 
 
@@ -55,7 +55,7 @@ class TicTacToeTest(unittest.TestCase):
 
         g = TicTacToe().XB2.OA1.XA2.OC2.XC1.OA3.XB3.OB1.XC3
         self.assertEquals('O O X\nX X O\nO X X', str(g))
-        self.failUnless(g.isOver, "it's finally over")
+        self.failUnless(g.isOver, "should be over because grid is full")
         self.assertEquals(kTie, g.winner)
 
 

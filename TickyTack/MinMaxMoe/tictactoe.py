@@ -83,7 +83,7 @@ class TicTacToe(Grid):
 
     @property
     def isOver(self):
-        return len(self.moves) == 0 or self.winner != '?'
+        return len(self.moves) == 0 or self.winner != kUnknown
 
 
     # !! no need to be fancy with only a 3x3 grid
