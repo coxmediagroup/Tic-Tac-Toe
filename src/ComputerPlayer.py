@@ -10,10 +10,15 @@ Copyright (c) 2011 __Stakem Research__. All rights reserved.
 import TicTacToe as TicTacToe
 
 class ComputerPlayer(object):
-    """
+    """Computer AI to play Tic Tac Toe game.
     
+        1)  Positions on the Tic Tac Toe board are defined as follows:
     
-    
+              0  |  1  |  2  
+            -----------------
+              3  |  4  |  5
+            -----------------
+              6  |  7  |  8    
     """
  
     # Public methods
@@ -24,14 +29,19 @@ class ComputerPlayer(object):
     def newGame(self, player):
         self.__resetState(player)
         
-    def getNextMove(self, game_state):
-        move = self.calculateMove(game_state)
-        if move == -1:
-            return move
-        elif move == 1:
-            return self.__findFirstMove(game_state)
+    def getNextMove(self, last_move):
+        next_move = -1
+        if self.__move_count > 8 or last_move < 0 or last_move > 8:
+            return next_move
+                
+        if self.__move_count == 0:
+            next_move = self.__findFirstMove(last_move)
         else:
-            return self.__findOptimalMove(game_state, move)
+            self.__move += 1
+            next_move = self.__findOptimalMove(last_move)
+            
+        self.__move_count += 1
+        return next_move
         
     # Private methods
     #--------------------------------------------------------------------------
@@ -39,28 +49,26 @@ class ComputerPlayer(object):
         # Game solutions
         self.__player = self.__checkForValidPlayer(player)
         self.__solutions = None
+        self.__move_count = 0
         
     def __checkForValidPlayer(self, player):
         if player == TicTacToe.players[0] or player == TicTacToe.players[1]:
             return player
 
         return TicTacToe.players[0]
+                        
+    def __findFirstMove(self, last_move):
+        if last_move == -1:
+            pass
+        else:
+            pass
         
-    def __calculateMove(self, game_state):
-        pass
-                
-    def __calculateSolutionGraph(self):
-        pass
-        
-    def __getOtherPlayersInitialMove(self):
-        pass
-        
-    def __findFirstMove(self, game_state):
-        pass
-        
-    def __findOptimalMove(self, game_state):
+    def __findOptimalMove(self, last_move):
         if self.__solutions == None:
             self.__calculateSolutionGraph()
+            
+    def __calculateSolutionGraph(self):
+        pass
 
 
 if __name__ == '__main__':
