@@ -5,7 +5,7 @@ Module for AI opponent.
 class AiError(Exception):
     pass
 
-def move(game):
+def move(player, game):
     """
     Move according to strategy:
         Win, if able.
@@ -35,7 +35,7 @@ def move(game):
         print("game.turn: %s" % game.turn)
         raise AiError("Nothing to be done.")
     (x, y) = move
-    return game.move("ai", x, y)
+    return game.move(player, x, y)
 
 def winning_move(game, player):
     """

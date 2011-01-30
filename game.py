@@ -90,7 +90,7 @@ class Game:
             import ai
             valid_move = False
             while not valid_move and self.turn:
-                valid_move = ai.move(self)
+                valid_move = ai.move("ai", self)
         self.send_update()
 
     def check_for_win(self):
