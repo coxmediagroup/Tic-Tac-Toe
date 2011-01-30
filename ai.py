@@ -7,25 +7,33 @@ class AiError(Exception):
 
 def move(game):
     """
-    Move randomly for now.
+    Move according to strategy:
+        Win, if able.
+        Block opponent from winning, if able.
+        Create a fork to guarantee victory, if able.
+        Block an opponent from forking by:
+            forcing another move, if able
+            blocking the fork position, if able.
+        Take the center, if able.
+        Take the opposite corner from your opponent, if able.
+        Take any corner.
+        Take any side.
     """
-    move = win(game)
+    strategy = [win, block, fork, block_fork,
+                  center, opposite_corner, any_corner,
+                  any_side]
+
+    move = None
+    for tactic in strategy:
+        if move or not game.turn:
+            break
+        move = tactic(game)
+
+    if not game.turn:
+        return
     if not move:
-        move = block(game)
-    if not move:
-        move = fork(game)
-    if not move:
-        move = block_fork(game)
-    if not move:
-        move = center(game)
-    if not move:
-        move = opposite_corner(game)
-    if not move:
-        move = any_corner(game)
-    if not move:
-        move = any_side(game)
-    if not move:
-        raise AiError
+        print("game.turn: %s" % game.turn)
+        raise AiError("Nothing to be done.")
     (x, y) = move
     return game.move("ai", x, y)
 
@@ -43,7 +51,6 @@ def winning_move(game, player):
     for p in paths:
         for coords in p:
             if game.square_lookup(coords) == " ":
-                print("Win condition for: %s" % player)
                 return coords
     return False
 
@@ -66,8 +73,6 @@ def forking_move(game, player, format="single"):
     for e in paths:
         for c in e:
             coord_list.append(c)
-
-    print("coord_list: %s" % coord_list)
 
     # Intersect them, checking for overlapping coordinates.
     coords = {}
@@ -163,9 +168,6 @@ def fork(game):
         print("Fork!")
     return move
 
-#FIXME: block_fork is getting called when it shouldn't.
-#FIXME: such as after the game is over, and when there
-#FIXME: are no possible forks.
 def block_fork(game):
     """
     Detect a fork, and block it.
@@ -216,11 +218,11 @@ def opposite_corner(game):
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
         if game.square_lookup(corner) == opponent_mark:
-            print("Equal and opposite reaction.")
             (x, y) = corner
             x = abs(x - 2)
             y = abs(y - 2)
             if game.square_lookup((x, y)) == " ":
+                print("Equal and opposite reaction.")
                 return (x, y)
 
     return False

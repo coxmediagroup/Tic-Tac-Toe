@@ -86,6 +86,7 @@ class Game:
     def check_for_win(self):
         """
         See if there is a winner.
+
         """
         winner = None
 
@@ -100,6 +101,17 @@ class Game:
             # is identical, so grab the first one in the nested list.
             print("Victory: %s" % winner)
             print("Winner: %s" % self.square_lookup(winner[0][0]))
+
+    def check_for_draw(self):
+        """
+        See if the game is a draw.
+
+        """
+        
+        open_spaces = self.traverse_board(requires={" ": 1})
+        if not open_spaces:
+            self.turn = None
+            print("Oh, all right, we'll call it a draw.")
 
     def square_lookup(self, coords):
         """
@@ -128,11 +140,9 @@ class Game:
         updates the board.
 
         """
-        print("register_update: %s" % what)
         d = {}
         d['function'] = what
         d['args'] = args
-        print("register_update: %s" % repr(d))
         self.updates.append(d)
 
     def send_update(self):
@@ -252,5 +262,6 @@ if __name__ == "__main__":
     # This needs to be at the end.  Perhaps a priority system
     # is in order here.
     game.register_update(game.check_for_win)
+    game.register_update(game.check_for_draw)
     game.send_update()
     game.enter_main_loop()

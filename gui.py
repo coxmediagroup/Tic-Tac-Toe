@@ -59,12 +59,9 @@ class GUI:
         *args: unused, must be present for game module's update.
 
         """
-        print("update board")
         board = self.game.get_board()
-        print(board)
         for row in range(0, 3):
             for col in range(0, 3):
-                #print("update_board: %s" % board[row][col])
                 if board[row][col] == " ":
                     self.unset("self.tbtn_%s%s" % (row, col))
                 else:
