@@ -41,6 +41,11 @@ class GUI:
             return
         self.game.move(player, x, y)
         
+
+    def on_menu_new_activate(self, widget, data=None):
+        print("MENU")
+        self.game.initialize()
+
     def list_buttons(self):
         """
         Toggle buttons are labeled by coordinate.  Return a list of them.
@@ -59,6 +64,7 @@ class GUI:
         *args: unused, must be present for game module's update.
 
         """
+        print("update_board")
         board = self.game.get_board()
         for row in range(0, 3):
             for col in range(0, 3):

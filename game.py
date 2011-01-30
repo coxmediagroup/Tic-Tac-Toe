@@ -12,14 +12,25 @@ class Game:
     main_loop = None
     winner = None
 
-    def __init__(self, gui=None):
-        import random
+    def __init__(self):
+        self.initialize()
+
+    def initialize(self):
+        """
+        Need this in a seperate function so New can restart.
+
+        """
+        print("Initialize")
+        # Disable turns so resetting the board isn't counted
+        # as human moves.
+        self.turn = None
         self.board = {}
         for x in range(0, 3):
             self.board[x] = {}
             for y in range(0, 3):
                 self.board[x][y] = " "
-
+        self.send_update()
+        import random
         self.turn = random.choice(["human", "ai"])
         print("%s's turn." % self.turn)
         self.check_ai_move()
@@ -81,7 +92,7 @@ class Game:
             valid_move = False
             while not valid_move and self.turn:
                 valid_move = ai.move(self)
-            self.send_update()
+        self.send_update()
 
     def check_for_win(self):
         """
@@ -150,6 +161,7 @@ class Game:
         Notify update functions that the board has been updated.
 
         """
+        print("send_update")
         self.ascii_board()
         for e in self.updates:
             e['function'](*e['args'])
@@ -262,6 +274,8 @@ if __name__ == "__main__":
     # This needs to be at the end.  Perhaps a priority system
     # is in order here.
     game.register_update(game.check_for_win)
+    # Must be after win.  Priority system?
+    # Probably too much trouble for just these two.   
     game.register_update(game.check_for_draw)
     game.send_update()
     game.enter_main_loop()
