@@ -210,10 +210,11 @@ class Game:
         Traverse the board and return the eight different pathways
         as a list of lists.
 
-        banned: list of symbols to ignore
+        banned: ignore pathways if they contain these symbols
         requires: {"X": 3}, etc.  {symbol, required number}
         """
 
+        min = 3
         paths = []
         # rows
         for row in range(0, 3):
@@ -224,7 +225,8 @@ class Game:
                     continue
                 else:
                     pathway.append((row, col))
-            if self.check_requirements(pathway, requires):
+            if(len(pathway) >= min
+                    and self.check_requirements(pathway, requires)):
                 paths.append(pathway)
 
         # columns
@@ -235,7 +237,8 @@ class Game:
                     continue
                 else:
                     pathway.append((row, col))
-            if self.check_requirements(pathway, requires):
+            if(len(pathway) >= min
+                    and self.check_requirements(pathway, requires)):
                 paths.append(pathway)
 
         # diagonals
@@ -246,7 +249,8 @@ class Game:
                 continue
             else:
                 pathway.append((row, col))
-        if self.check_requirements(pathway, requires):
+        if(len(pathway) >= min
+                and self.check_requirements(pathway, requires)):
             paths.append(pathway)
 
         pathway = []
@@ -259,7 +263,8 @@ class Game:
                 continue
             else:
                 pathway.append((row, col))
-        if self.check_requirements(pathway, requires):
+        if(len(pathway) >= min
+                and self.check_requirements(pathway, requires)):
             paths.append(pathway)
 
         return paths

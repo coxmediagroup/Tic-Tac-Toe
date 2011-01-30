@@ -156,6 +156,7 @@ def block(game):
         print("OH NO YOU DON'T!")
     return move
 
+#FIXME: Non forks still being considered forks.
 def fork(game):
     """
     Create a fork, resulting in multiple ways to win.
@@ -164,7 +165,6 @@ def fork(game):
     move = forking_move(game, "ai")
     if move:
         print("Fork!")
-        print("move: %s" % str(move))
     return move
 
 def block_fork(game):
@@ -191,8 +191,6 @@ def block_fork(game):
             # not us.  We want to move there so we can force
             # his move in addition to mangling his fork options.
             move = list(force_set & fork_set)[0]
-            print("fork_set: %s, force_set: %s, diff: %s" % (
-                fork_set, force_set, move))
         except IndexError:
             pass
 
@@ -203,6 +201,7 @@ def block_fork(game):
 def center(game):
     """
     Claim the center square, if available.
+
     """
 
     center = (1, 1)
