@@ -1,5 +1,8 @@
+from django.core.urlresolvers import reverse
 from django.db import models as m
 from django.contrib.auth.models import User
+import urls
+
 Q = m.Q
 
 qUnfinished = lambda : Q(finished=False)
@@ -26,10 +29,12 @@ class Game(m.Model):
     winner = m.ForeignKey(User, related_name='winner', null=True)
 
     def __str__(self):
-        return '#%i : %s vs %s' % (
-            self.id,
+        return '#%i : %s' % (self.id, self.asVsString())
+
+    def asVsString(self):
+        return '%s vs %s' % (
             self.player1.username if self.player1 else '?',
-            self.player2.username if self.player2 else '?')
+            self.player2.username if self.player2 else '?')        
 
     @property
     def toPlay(self):
@@ -78,5 +83,24 @@ class Game(m.Model):
         x = cls.objects.filter(qNeedsPlayer1() & Q(id=gameId)).update(player1=user)
         o = cls.objects.filter(qNeedsPlayer2() & Q(id=gameId)).update(player2=user)
         return bool(x or o)
+
+
+    # @TODO: i think game<->player should be a many to many junction table...
+    @property
+    def firstPlayer(self):
+        return self.player2 if self.player1 is None else self.player1
+
+    @property
+    def firstPlayerRole(self):
+        return 'O' if self.player1 is None else 'X'
+
+    def asGrid(self):
+        _ = '_'
+        return ((_,_,_),
+                (_,_,_),
+                (_,_,_))
+
+    def asUrl(self):
+        return urls.kGames + str(self.id)
 
     

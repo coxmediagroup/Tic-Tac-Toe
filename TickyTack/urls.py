@@ -1,10 +1,12 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
+
 admin.autodiscover()
 
 # some constants, for use with the tests
 kRoot  = "/"
 kLogin = "/accounts/login/"
+kLogout = "/accounts/logout/"
 kGames = "/games/"
 kJoin = "/join/"
 
@@ -20,9 +22,15 @@ urlpatterns = patterns('',
     (_u(kLogin), 'django.contrib.auth.views.login',
         {'template_name': 'login.html'}),
 
+    (_u(kLogout), 'django.contrib.auth.views.logout'),
+
     # mount the app:
     (_u(kRoot), 'DJTickyTack.views.index'),
+    (_u(kGames, r'/(?P<gameId>\d+)$'), 'DJTickyTack.views.game'),
     (_u(kGames), 'DJTickyTack.views.games'),
     (_u(kJoin, r'/(\d+)$'), 'DJTickyTack.views.join'),
     (_u(kJoin), 'DJTickyTack.views.joinable'),
 )
+
+from staticfiles.urls import staticfiles_urlpatterns
+urlpatterns += staticfiles_urlpatterns()

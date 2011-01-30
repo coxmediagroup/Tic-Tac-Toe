@@ -95,4 +95,14 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'TickyTack.DJTickyTack',
+
+    # @TODO: upgrade to django.contrib.static
+    "staticfiles",
+    
 )
+
+
+STATIC_ROOT = (_base + "/static")
+STATICFILES_DIR = (_base + "/DJTickyTack/static")
+STATIC_URL = "/static/"
+

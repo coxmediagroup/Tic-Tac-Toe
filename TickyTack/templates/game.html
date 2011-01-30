@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load gametags %}
+
+{% block content %}
+
+  <h1>Game {{ game.id }} : {{ game.asVsString }}</h1>
+
+  <form method="post" action="">
+
+    {% csrf_token %}
+    {% game_board game %}
+
+    <input type="submit" value="submit move"/>
+
+  </form>
+
+{% endblock %}

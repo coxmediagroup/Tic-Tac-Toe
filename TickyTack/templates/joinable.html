@@ -1,28 +1,35 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-  <h1>Available Games</h1>
+  <h1>Choose a Game to Join</h1>
 
   {% if joinable %}
 
-    <table>
-      <thead>
-        <tr>
-          <th>opponent</th>
-          <th>as</th>
-          <th>join?</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for game in joinable %}
+    <form id="theForm" method="post" action="{% url DJTickyTack.views.joinable %}">
+      {% csrf_token %}
+      <table border="1">
+        <thead>
           <tr>
-            <td>{game.opponentOf(user)}</td>
-            <td>{game.playingAs(game.opponentOf(user))}</td>
-            <td><button>join</button></td>
+            <th>join?</th>
+            <th>opponent</th>
+            <th>playing as</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for game in joinable %}
+            <tr>
+              <td><input type="radio" id="game{{ game.id }}"
+                         name="gameId" value="{{ game.id }}"/></td>
+              <td><label for="game{{ game.id }}">{{ game.firstPlayer }}</label></td>
+              <td class="{{ game.firstPlayerRole }}">{{ game.firstPlayerRole }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <input type="submit" value="join"/>
+    </form>
 
   {% else %}
 

@@ -1,7 +1,30 @@
 {% extends "base.html" %}
+{% load gametags %}
+
 {% block content %}
 
   <h1>Your Games</h1>
-  
+
+  <h2>Active Games:</h2>
+
+  <div class="badges">
+    {% for game in activeGames %}
+      {% game_badge game %}
+    {% empty %}
+      <p>(no active games)</p>
+    {% endfor %}
+    <br/>
+  </div>
+
+  <h2>Pending Games:</h2>
+
+  <div class="badges">
+    {% for game in pendingGames %}
+      {% game_badge game %}
+    {% empty %}
+      <p>(no pending games)</p>
+    {% endfor %}
+    <br/>
+  </div>
 
 {% endblock %}

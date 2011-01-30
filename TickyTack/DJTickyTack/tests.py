@@ -41,6 +41,13 @@ class GameTest(BaseTest):
         self.assertNotEqual(None, game.startedOn)
 
 
+    def test_asGrid(self):
+        game = Game()
+        grid = game.asGrid()
+        self.assertEquals(3, len(grid))
+        self.assertEquals(3, len(grid[0]))
+
+
 
 class SiteTest(BaseTest):
 
