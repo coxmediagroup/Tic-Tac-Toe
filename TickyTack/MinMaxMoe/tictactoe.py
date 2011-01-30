@@ -5,6 +5,10 @@ Tools to represent and judge a tic tac toe game.
 # global symbols to make the tables look nice:
 X, O, _ = "XO_"
 
+kBlank = _
+kUnknown = '?'
+kTie = '='
+
 class Grid(object):
 
     def __init__(self, w=3, h=3, initialValue=_):
@@ -62,7 +66,6 @@ class TicTacToe(Grid):
                      if getattr(self, '%s%s' % (col, row)) == _)
 
 
-
     def __getattr__(self, key):
         """
         Given an attribute like .XB2, return a new TicTacToe board
@@ -76,4 +79,27 @@ class TicTacToe(Grid):
             return t
         else:
             return super(TicTacToe, self).__getattr__(key)
+
+
+    @property
+    def isOver(self):
+        return len(self.moves) == 0 or self.winner != '?'
+
+
+    # !! no need to be fancy with only a 3x3 grid
+    waysToWin = (
+        'A1 A2 A3', 'B1 B2 B3', 'C1 C2 C3', # win by column
+        'A1 B1 C1', 'A2 B2 C2', 'A3 B3 C3', # win by row
+        'A1 B2 C3', 'A3 B2 C1'              # win by diagonal
+    )
+
+    @property
+    def winner(self):
+        for way in self.waysToWin:
+            i,j,k = [getattr(self, cell) for cell in way.split()]
+            if i==j==k and i != kBlank:
+                return i
+        return kUnknown if len(self.moves) > 0 else kTie
+    
+
 

@@ -38,5 +38,26 @@ class TicTacToeTest(unittest.TestCase):
 
 
 
+    def test_winner(self):
+
+        g = TicTacToe().XB2.OA1.XA2.OB1
+        self.assertEquals('O O _\nX X _\n_ _ _', str(g))
+        self.failIf(g.isOver, "not quite yet")
+        self.assertEquals(kUnknown, g.winner)
+
+        g = g.XC2
+        self.assertEquals('O O _\nX X X\n_ _ _', str(g))
+        self.failUnless(g.isOver, "it's finally over")
+        self.assertEquals(X, g.winner)
+
+
+    def test_tied(self):
+
+        g = TicTacToe().XB2.OA1.XA2.OC2.XC1.OA3.XB3.OB1.XC3
+        self.assertEquals('O O X\nX X O\nO X X', str(g))
+        self.failUnless(g.isOver, "it's finally over")
+        self.assertEquals(kTie, g.winner)
+
+
 if __name__=="__main__":
     unittest.main()
