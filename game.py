@@ -160,7 +160,7 @@ class Game:
         Notify update functions that the board has been updated.
 
         """
-        self.ascii_board()
+        #self.ascii_board()
         for e in self.updates:
             e['function'](*e['args'])
 

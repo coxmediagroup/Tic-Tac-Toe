@@ -12,8 +12,8 @@ def move(game):
         Block opponent from winning, if able.
         Create a fork to guarantee victory, if able.
         Block an opponent from forking by:
-            forcing another move, if able
             blocking the fork position, if able.
+            forcing another move, if able
         Take the center, if able.
         Take the opposite corner from your opponent, if able.
         Take any corner.
@@ -166,6 +166,7 @@ def fork(game):
     move = forking_move(game, "ai")
     if move:
         print("Fork!")
+        print("move: %s" % str(move))
     return move
 
 def block_fork(game):
@@ -173,7 +174,6 @@ def block_fork(game):
     Detect a fork, and block it.
 
     """
-    #FIXME?  Block fork may be out of order.  force first, block fork after.
     move = None
     forks = forking_move(game, game.get_opponent("ai"), format="list")
     flen = len(forks)
@@ -188,7 +188,13 @@ def block_fork(game):
         fork_set = Set(forks)
         force_set = Set(force_moves)
         try:
-            move = list(force_set - fork_set)[0]
+            # Subtracting the fork set doesn't make sense.
+            # It's the OPPONENT we don't want moving there,
+            # not us.  We want to move there so we can force
+            # his move in addition to mangling his fork options.
+            move = list(force_set & fork_set)[0]
+            print("fork_set: %s, force_set: %s, diff: %s" % (
+                fork_set, force_set, move))
         except IndexError:
             pass
 
