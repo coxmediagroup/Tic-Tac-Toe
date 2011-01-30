@@ -20,7 +20,6 @@ class Game:
         Need this in a seperate function so New can restart.
 
         """
-        print("Initialize")
         # Disable turns so resetting the board isn't counted
         # as human moves.
         self.turn = None
@@ -161,7 +160,6 @@ class Game:
         Notify update functions that the board has been updated.
 
         """
-        print("send_update")
         self.ascii_board()
         for e in self.updates:
             e['function'](*e['args'])
