@@ -52,7 +52,7 @@ def winning_move(game, player):
         for coords in p:
             if game.square_lookup(coords) == " ":
                 return coords
-    return False
+    return None
 
 def forking_move(game, player, format="single"):
     """
@@ -112,7 +112,7 @@ def forking_move(game, player, format="single"):
 
     #FIXME: Why do you keep returning False?  Doesn't it make
     #FIXME: more sense to return None?  Look into it.
-    return False
+    return None
 
 def list_forcing_moves(game, player):
     """
@@ -178,7 +178,7 @@ def block_fork(game):
     forks = forking_move(game, game.get_opponent("ai"), format="list")
     flen = len(forks)
     if flen == 0:
-        return False
+        return None
     elif flen == 1:
         move = forks[0]
     else:
@@ -212,7 +212,7 @@ def center(game):
         print("The center cannot hold...")
         return (1, 1)
         
-    return False
+    return None
 
 def opposite_corner(game):
     """
@@ -231,7 +231,7 @@ def opposite_corner(game):
                 print("Equal and opposite reaction.")
                 return (x, y)
 
-    return False
+    return None
     
 def any_corner(game):
     """
@@ -244,7 +244,7 @@ def any_corner(game):
             print("Corner!")
             return corner
 
-    return False
+    return None
 
 def any_side(game):
     """
@@ -261,6 +261,6 @@ def any_side(game):
             print("Side!")
             return side 
 
-    return False
+    return None
 
 
