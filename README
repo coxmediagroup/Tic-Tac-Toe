@@ -1,1 +1,52 @@
-TickyTack is a simple Tic-Tac-Toe server written with Django.
+
+DJTickyTack
+===========
+
+DJTickyTack is a Tic-Tac-Toe server built in python with Django.
+Players can create or join any number of games, and play proceeds
+asynchronously.
+
+Although Tic-Tac-Toe is a rather silly application of this technology,
+the software serves as prototype server for more advanced turn based
+games, such as Chess, Checkers, or Go.
+
+It provides both a rudimentary HTML interface and a RESTful API.
+
+Requirements: # @TODO: urls and instructions
+-------------
+
+  python (developed with v 2.7)
+  django (developed with v1.2.4)
+
+  django-registration
+  staticfiles
+
+Running the Server
+------------------
+
+To set up the database (only required before the first run):
+
+  python manage.py syncdb
+
+To start the server:
+
+  python manage.py runserver localhost:8888
+
+Then go to:
+
+  http://localhost:8888/
+
+
+MinMaxMoe
+=========
+
+MinMaxMoe implements the rules of tic tac toe and a complete brute-force
+solution to the game based on the minimax algorithm from game theory. It
+can play you interactively in the shell, or can be scheduled to play
+asynchronously on a DJTickyTack server.
+
+
+
+
+
+
