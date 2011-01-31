@@ -186,13 +186,11 @@ class Game:
 
         """
         mark = self.get_mark(player)
-        #board = (self.board() if not test 
-            #else Board(self.game(), setup=self.board()))
-        board = self.board()
-        # If spot is blank, add, otherwise don't.
-        result = board.move(player, x, y)
+        board = (self.board() if not test 
+            else Board(self.game(), setup=self.board()))
+        result = board.move(player, x, y, test)
         if test:
-            return board
+            return result
         self.send_update()
         self.next_turn()
         return result
@@ -233,7 +231,7 @@ class Game:
             import ai
             valid_move = False
             while not valid_move and self.turn:
-                valid_move = ai.move("ai", self)
+                valid_move = ai.move("ai", self.board())
         self.send_update()
 
     def check_for_win(self):

@@ -5,7 +5,7 @@ Module for AI opponent.
 class AiError(Exception):
     pass
 
-def move(player, game):
+def move(player, board):
     """
     Move according to strategy:
         Win, if able.
@@ -19,6 +19,7 @@ def move(player, game):
         Take any corner.
         Take any side.
     """
+    game = board.game()
     strategy = [win, block, fork, block_fork,
                   center, opposite_corner, any_corner,
                   any_side]
@@ -27,7 +28,7 @@ def move(player, game):
     for tactic in strategy:
         if move or not game.turn:
             break
-        move = tactic(game)
+        move = tactic(board)
 
     if not game.turn:
         return
@@ -37,12 +38,13 @@ def move(player, game):
     (x, y) = move
     return game.move(player, x, y)
 
-def winning_move(game, player):
+def winning_move(board, player):
     """
     Look for a move that will win the game.  Take it, if one is found.
 
     """
 
+    game = board.game()
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
@@ -54,13 +56,14 @@ def winning_move(game, player):
                 return coords
     return None
 
-def forking_move(game, player, format="single"):
+def forking_move(board, player, format="single"):
     """
     Look for a move that will result in two possible ways to win,
     guaranteeing victory if the opposition can't win next round.
 
     """
 
+    game = board.game()
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
@@ -112,13 +115,14 @@ def forking_move(game, player, format="single"):
 
     return None
 
-def list_forcing_moves(game, player):
+def list_forcing_moves(board, player):
     """
     Return moves that force opponent to move, thus preventing
     him from making a fork you can't block otherwise.
 
     """
 
+    game = board.game()
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
@@ -136,46 +140,48 @@ def list_forcing_moves(game, player):
 
     return move_list
 
-def win(game):
+def win(board):
     """
     Win, if able.
 
     """
-    move = winning_move(game, "ai")
+    move = winning_move(board, "ai")
     if move:
         print("FTW!")
     return move
 
-def block(game):
+def block(board):
     """
     Block opponent from winning, if able.
 
     """
-    move = winning_move(game, game.get_opponent("ai"))
+    game = board.game()
+    move = winning_move(board, game.get_opponent("ai"))
     if move:
         print("OH NO YOU DON'T!")
     return move
 
 #FIXME: Non forks still being considered forks.
-def fork(game):
+def fork(board):
     """
     Create a fork, resulting in multiple ways to win.
 
     """
-    move = forking_move(game, "ai")
+    move = forking_move(board, "ai")
     if move:
         print("Fork!")
     return move
 
-def block_fork(game):
+def block_fork(board):
     """
     Detect a fork, and block it.
 
     """
+    game = board.game()
     move = None
     player = "ai"
     opponent = game.get_opponent(player)
-    forks = forking_move(game, opponent, format="list")
+    forks = forking_move(board, opponent, format="list")
     flen = len(forks)
     if flen == 0:
         return None
@@ -186,13 +192,13 @@ def block_fork(game):
         #FIXME?: move is chosen.  A better solution than this
         #FIXME?: may be necessary.
         print("Brute force!")
-        force_moves = list_forcing_moves(game, player)
+        force_moves = list_forcing_moves(board, player)
         for e in force_moves:
             pass
             #game.move(player, x, y)
             #test_board = game.move(player, x, y, test=True)
             # Blarg!  These all take games instead of boards.
-            #test_forks = forking_move(game, opponent, format="list")
+            #test_forks = forking_move(board, opponent, format="list")
 
         from sets import Set
         fork_set = Set(forks)
@@ -210,52 +216,53 @@ def block_fork(game):
         print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
     return move
 
-def center(game):
+def center(board):
     """
     Claim the center square, if available.
 
     """
 
     center = (1, 1)
-    if game.board().square(center) == " ":
+    if board.square(center) == " ":
         print("The center cannot hold...")
         return (1, 1)
         
     return None
 
-def opposite_corner(game):
+def opposite_corner(board):
     """
     If opponent is in one corner, grab the opposite.
 
     """
+    game = board.game()
     opponent = game.get_opponent("ai")
     opponent_mark = game.get_mark(opponent)
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
-        if game.board().square(corner) == opponent_mark:
+        if board.square(corner) == opponent_mark:
             (x, y) = corner
             x = abs(x - 2)
             y = abs(y - 2)
-            if game.board().square((x, y)) == " ":
+            if board.square((x, y)) == " ":
                 print("Equal and opposite reaction.")
                 return (x, y)
 
     return None
     
-def any_corner(game):
+def any_corner(board):
     """
     Grab any corner.
 
     """
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
-        if game.board().square(corner) == " ":
+        if board.square(corner) == " ":
             print("Corner!")
             return corner
 
     return None
 
-def any_side(game):
+def any_side(board):
     """
     Grab any middle side space.
 
@@ -266,7 +273,7 @@ def any_side(game):
     for side in [(0, 1),
           (1, 0),       (1, 2),
                  (2, 1)]:
-        if game.board().square(side) == " ":
+        if board.square(side) == " ":
             print("Side!")
             return side 
 
