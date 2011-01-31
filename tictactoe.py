@@ -40,23 +40,18 @@ class TicTacToe:
             if self.layout[self.definition.index(i)] in self.available:
                 return self.definition.index(i)
     
-    def check_for_a_win(self, pos, sign):
-        possibilities = [i for i in self.winning_position if pos in i]
-
-        win = [True for i in possibilities 
-               if self.layout[i[0]] == self.layout[i[1]] == self.layout[i[2]] == sign]
-
+    def who_wins(self):
+        
+        for i in self.winning_position:
+            
+            if self.layout[i[0]] == self.layout[i[1]] == self.layout[i[2]]:
+                self.finished = True
+                return self.layout[i[0]]
+        
         if not self.available:
-            self.board()
-            sys.exit('Draw.')
-
-        if win:
-            self.board()
-
-            if win[0] == self.challenger:
-                sys.exit('You won.')
-            else:
-                sys.exit('You lost. Sorry.')
+            self.finished = True
+            return True
+        
         return False
 
     def ask_for_position(self):
@@ -79,16 +74,18 @@ class TicTacToe:
         self.layout[pos] = sign
         self.available.remove(pos)
 
-        if sign == 'X':
+        if sign == self.challenger:
             self.challenger_path.append(pos)
         else:
             self.computer_path.append(pos)
-        self.check_for_a_win(pos, sign)
+        self.who_wins()
         return True
     
     def counter_move(self, sign='X'):
+        
+        if not self.available:
+            return False
         options = []
-        best_chances = None
         value = None
 
         if self.layout[4] == 4:
@@ -105,37 +102,34 @@ class TicTacToe:
             for x in combine_computer:
                 diff =  self.winning_sum - (self.definition[x[0]] + 
                         self.definition[x[1]])
-                options.append(diff)
+                options.append({'pos': diff, 
+                                'remain': self.winning_sum - diff})
 
             for x in combine_challenger:
                 diff =  self.winning_sum - (self.definition[x[0]] + 
                         self.definition[x[1]])
-                options.append(diff)
-
-            priority = sorted(options)
-
+                options.append({'pos': diff, 
+                              'remain': self.winning_sum - diff})
+            priority = sorted(options, key=lambda x: x['remain'])
+            
             for i in priority:
 
                 try:
-                    y = self.definition.index(i)
+                    y = self.definition.index(i['pos'])
 
                     if y in self.available:
-                        best_chances = y
+                        value = y
                         break
 
                 except:
                     pass
-
-            if best_chances:
-                value = best_chances
-
             else:
 
                 if self.get_highest_value():
                     value = self.get_highest_value()
 
                 else:
-                    value = available[0]
+                    value = self.available[0]
         self.make_a_move(value, sign)
     
     def play(self):
@@ -154,6 +148,18 @@ class TicTacToe:
                 
                 self.make_a_move(new_pos, self.challenger)
                 self.counter_move(self.computer)
+        
+        else:
+            winner = self.who_wins()
+            self.board()
+            
+            if winner == self.challenger:
+                sys.exit('You won')
+            
+            elif winner == self.computer:
+                sys.exit('You lost. Sorry')
+            else:
+                sys.exit('Draw')
 
 if __name__ == "__main__":
     game = TicTacToe()
