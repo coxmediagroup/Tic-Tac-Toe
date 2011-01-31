@@ -46,11 +46,11 @@ def winning_move(game, player):
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
-    paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 2})
+    paths = game.board().traverse(banned=[opponent_mark], requires={my_mark: 2})
 
     for p in paths:
         for coords in p:
-            if game.square_lookup(coords) == " ":
+            if game.board().square(coords) == " ":
                 return coords
     return None
 
@@ -66,7 +66,7 @@ def forking_move(game, player, format="single"):
     my_mark = game.get_mark(player)
 
     # Get a list of paths that have 1 move taken, unblocked by opponent.
-    paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 1})
+    paths = game.board().traverse(banned=[opponent_mark], requires={my_mark: 1})
 
     # Pathways are irrelevent, make one list.
     coord_list = []
@@ -78,10 +78,10 @@ def forking_move(game, player, format="single"):
     coords = {}
     for e in coord_list:
         if e not in coords.keys():
-            # Because of the way traverse_board slices the board,
+            # Because of the way Board.traverse slices the board,
             # moves intersect with themselves, leading to strange math.
             # Delete them, compare only spaces from this point forward.
-            if game.square_lookup(e) == my_mark:
+            if game.board().square(e) == my_mark:
                 continue
 
             # We're tracking intersections, not numbers,
@@ -122,7 +122,7 @@ def list_forcing_moves(game, player):
     opponent = game.get_opponent(player)
     opponent_mark = game.get_mark(opponent)
     my_mark = game.get_mark(player)
-    paths = game.traverse_board(banned=[opponent_mark], requires={my_mark: 1})
+    paths = game.board().traverse(banned=[opponent_mark], requires={my_mark: 1})
 
     coord_list = []
     move_list = []
@@ -131,7 +131,7 @@ def list_forcing_moves(game, player):
             coord_list.append(c)
 
     for e in coord_list:
-        if game.square_lookup(e) != my_mark:
+        if game.board().square(e) != my_mark:
             move_list.append(e)
 
     return move_list
@@ -188,8 +188,9 @@ def block_fork(game):
         print("Brute force!")
         force_moves = list_forcing_moves(game, player)
         for e in force_moves:
-            game.move(player, x, y)
-            test_board = game.move(player, x, y, test=True)
+            pass
+            #game.move(player, x, y)
+            #test_board = game.move(player, x, y, test=True)
             # Blarg!  These all take games instead of boards.
             #test_forks = forking_move(game, opponent, format="list")
 
@@ -216,7 +217,7 @@ def center(game):
     """
 
     center = (1, 1)
-    if game.square_lookup(center) == " ":
+    if game.board().square(center) == " ":
         print("The center cannot hold...")
         return (1, 1)
         
@@ -231,11 +232,11 @@ def opposite_corner(game):
     opponent_mark = game.get_mark(opponent)
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
-        if game.square_lookup(corner) == opponent_mark:
+        if game.board().square(corner) == opponent_mark:
             (x, y) = corner
             x = abs(x - 2)
             y = abs(y - 2)
-            if game.square_lookup((x, y)) == " ":
+            if game.board().square((x, y)) == " ":
                 print("Equal and opposite reaction.")
                 return (x, y)
 
@@ -248,7 +249,7 @@ def any_corner(game):
     """
     for corner in [(0, 0), (0, 2),
                    (2, 0), (2, 2)]:
-        if game.square_lookup(corner) == " ":
+        if game.board().square(corner) == " ":
             print("Corner!")
             return corner
 
@@ -265,7 +266,7 @@ def any_side(game):
     for side in [(0, 1),
           (1, 0),       (1, 2),
                  (2, 1)]:
-        if game.square_lookup(side) == " ":
+        if game.board().square(side) == " ":
             print("Side!")
             return side 
 

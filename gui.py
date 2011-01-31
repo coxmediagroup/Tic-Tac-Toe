@@ -34,11 +34,13 @@ class GUI:
         Player has toggled one of the buttons.
 
         """
-        if not player or not self.game.turn:
+        if self.game.turn != "human":
             return
 
         if self.game.winner:
             return
+        print("toggle")
+        print(self.game.winner, self.game.turn)
         self.game.move(player, x, y)
         
 
@@ -63,7 +65,7 @@ class GUI:
         *args: unused, must be present for game module's update.
 
         """
-        board = self.game.get_board()
+        board = self.game.board().full()
         for row in range(0, 3):
             for col in range(0, 3):
                 if board[row][col] == " ":
