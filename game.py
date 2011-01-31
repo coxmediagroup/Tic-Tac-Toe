@@ -16,6 +16,7 @@ class Board:
 
     # Duplicate the board functionality in game so we can move it here.
     def __init__(self, game, setup=None):
+        from copy import deepcopy
         self._board = {}
         if not setup:
             for x in range(0, 3):
@@ -23,7 +24,7 @@ class Board:
                 for y in range(0, 3):
                     self._board[x][y] = " "
         else:
-            self._board = setup
+            self._board = deepcopy(setup)
         self._game = game
 
     def game(self):
@@ -42,7 +43,7 @@ class Board:
         if not set:
             return self._board[coords[0]][coords[1]]
         else:
-            print("Setting %s, %s to %s" % (coords[0], coords[1], set))
+            print("Setting [%s] %s, %s to %s" % (self, coords[0], coords[1], set))
             self._board[coords[0]][coords[1]] = set
 
     def move(self, player, x, y, test=False):
@@ -57,10 +58,6 @@ class Board:
         """
         mark = self.game().get_mark(player)
         # If spot is blank, add, otherwise don't.
-        """
-        if board[x][y] == " ":
-            board[x][y] = mark
-        """
         if self.square((x, y)) == " ":
             self.square((x, y), set=mark)
             if test:
@@ -152,6 +149,18 @@ class Board:
 
         return paths
 
+    def ascii(self):
+        """
+        Display an ascii map of the board, used for debugging purposes.
+
+        """
+        for x in range(0, 3):
+            print("\n----------")
+            for y in range(0, 3):
+                print("|" + self.square((x, y)) + "|", end="")
+
+        print("\n----------")
+
 class Game:
     """
     Game object.  Represents the state of the current game.
@@ -178,7 +187,9 @@ class Game:
         self.send_update()
         
         import random
-        self.turn = random.choice(["human", "ai"])
+        #FIXME: debugging purposes, remove after.
+        #self.turn = random.choice(["human", "ai"])
+        self.turn = "human"
         print("%s's turn." % self.turn)
         self.check_ai_move()
 
@@ -189,13 +200,15 @@ class Game:
 
         player: "human" or "ai"
         test: if test=True, copy the board, make the move
-              nd return the board for viewing.
+              and return the board for viewing.
 
         """
         mark = self.get_mark(player)
         board = (self.board() if not test 
             else Board(self, setup=self.board().full()))
+        print("board: %s" % board)
         result = board.move(player, x, y, test)
+        board.ascii()
         if test:
             return result
         self.send_update()
@@ -272,18 +285,6 @@ class Game:
             self.turn = None
             print("Oh, all right, we'll call it a draw.")
 
-    def ascii_board(self):
-        """
-        Display an ascii map of the board, used for debugging purposes.
-
-        """
-        for x in range(0, 3):
-            print("\n----------")
-            for y in range(0, 3):
-                print("|" + self.board[x][y] + "|", end="")
-
-        print("\n----------")
-
     def register_update(self, what, *args):
         """
         Register a function for the game module to call when it
@@ -305,7 +306,6 @@ class Game:
         # human player for "updates" as moves.
         turn = self.turn
         self.turn = None
-        #self.ascii_board()
         for e in self.updates:
             e['function'](*e['args'])
         self.turn = turn
