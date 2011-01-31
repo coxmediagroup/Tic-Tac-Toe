@@ -25,7 +25,8 @@ def games(request):
         return render_csrf('games.html', request,
         {
             'activeGames': Game.findActiveFor(request.user),
-            'pendingGames': Game.findPendingFor(request.user)
+            'pendingGames': Game.findPendingFor(request.user),
+            'finishedGames': Game.findFinishedFor(request.user)
         })
 
 
@@ -33,19 +34,30 @@ def games(request):
 def game(request, gameId):
     game = Game.objects.get(pk=int(gameId))
     if request.method == "POST":
+
+        # @TODO: encapsulate all this junk as method in Game
         t = game.asTicTacToe()
         m = request.POST.get('move')
         if m in t.moves and game.toPlay == request.user:
             move = Move(game=game, player=request.user, move=m)
             move.save()
-            game.togglePlayer(save=True)
+            game.togglePlayer()
+            state = getattr(t, m)
+            if state.isOver:
+                game.finished = True
+                game.toPlay = None
+                game.winner = (game.player1 if state.winner == 'X' else
+                               game.player2 if state.winner == 'O' else
+                               None)
+
             return redirect(reverse(games))
         else:
             return HttpResponseBadRequest('no.')
     else:
         return render_csrf('game.html', request,
         {
-            'game' : game
+            'game' : game,
+            'state' : game.asTicTacToe().currentState,
         })
 
 

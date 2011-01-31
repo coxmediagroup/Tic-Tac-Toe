@@ -7,7 +7,7 @@ from settings import kGames
 
 Q = m.Q
 
-qUnfinished = lambda : Q(finished=False)
+qFinished = lambda : Q(finished=True)
 qNeedsPlayer1 = lambda : Q(player1=None)
 qNeedsPlayer2 = lambda : Q(player2=None)
 qNeedsPlayer = lambda : qNeedsPlayer1() | qNeedsPlayer2()
@@ -57,7 +57,14 @@ class Game(m.Model):
     @classmethod
     def findPendingFor(cls, user):
         return cls.objects.filter(
-                qForUser(user) & qUnfinished() & ~qToPlay(user))
+                qForUser(user) & ~qFinished() & ~qToPlay(user))
+
+    @classmethod
+    def findFinishedFor(cls, user):
+        return cls.objects.filter(
+                qForUser(user) & qFinished())
+
+
 
     @classmethod
     def createFor(cls, user, playAs):

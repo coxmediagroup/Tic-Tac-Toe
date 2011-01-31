@@ -27,4 +27,16 @@
     <br/>
   </div>
 
+  <h2>Finished Games:</h2>
+
+  <div class="badges">
+    {% for game in finishedGames %}
+      {% game_badge game %}
+    {% empty %}
+      <p>(no finished games)</p>
+    {% endfor %}
+    <br/>
+  </div>
+
+
 {% endblock %}

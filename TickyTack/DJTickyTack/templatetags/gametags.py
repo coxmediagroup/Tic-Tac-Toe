@@ -3,6 +3,8 @@ Custom tags for rendering tic tac toe games.
 """
 from django import template
 from django.template import Node
+from django.template.defaultfilters import stringfilter
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -16,6 +18,13 @@ def game_board(parser, token):
 def game_badge(parser, token):
     tag, gameVar = token.split_contents()
     return GameBadgeNode(gameVar)
+
+@register.filter
+@stringfilter
+def colorize(value):
+    return mark_safe((value
+        .replace('O', '<span class="O">O</span>')
+        .replace('X', '<span class="X">X</span>')))
 
 
 

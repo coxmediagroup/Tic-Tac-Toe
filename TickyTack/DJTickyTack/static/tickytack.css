@@ -147,13 +147,13 @@ td.empty
   color: white;
 }
 
-td.X
+.X
 {
   font-weight: bold;
   color: #b22222;
 }
 
-td.O
+.O
 {
   font-weight: bold;
   color: blue;
