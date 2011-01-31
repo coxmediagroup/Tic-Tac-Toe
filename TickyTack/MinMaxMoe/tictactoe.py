@@ -18,7 +18,6 @@ class Grid(object):
     def __str__(self):
         return '\n'.join(' '.join(row) for row in self.data)
 
-
     def _cell(self, key):
         """
         This is used by __getattr__ and __setattr__, below.
@@ -57,6 +56,18 @@ class TicTacToe(Grid):
         super(TicTacToe, self).__init__()
         self.toPlay = toPlay
         self.path = path
+        self.depth = path.count('.')
+
+    def __repr__(self):
+        winner = self.winner
+        state = ('Game tied.' if winner == kTie else
+                 ('%s to play.' % self.toPlay) if winner == kUnknown else
+                 ('%s wins.' % winner))
+
+        return '%s # [ %s ], %s' % (
+            self.path.replace('start', 'TicTacToe()'),
+            str(self).replace('\n',' | '),
+            state)
 
     @property
     def moves(self):

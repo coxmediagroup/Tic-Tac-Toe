@@ -59,5 +59,10 @@ class TicTacToeTest(unittest.TestCase):
         self.assertEquals(kTie, g.winner)
 
 
+    def test_depth(self):
+
+        self.assertEquals(0, TicTacToe().depth)
+        self.assertEquals(1, TicTacToe().XB2.depth)
+
 if __name__=="__main__":
     unittest.main()
