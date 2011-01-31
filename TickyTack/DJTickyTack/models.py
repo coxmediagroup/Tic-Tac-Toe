@@ -2,7 +2,8 @@ from django.core.urlresolvers import reverse
 from django.db import models as m
 from django.contrib.auth.models import User
 from django.db.models.expressions import F
-import urls
+from MinMaxMoe.tictactoe import TicTacToe
+from settings import kGames
 
 Q = m.Q
 
@@ -99,12 +100,27 @@ class Game(m.Model):
     def firstPlayerRole(self):
         return 'O' if self.player1 is None else 'X'
 
+    def asTicTacToe(self):
+        t = TicTacToe()
+        for move in self.moves.all():
+            t = getattr(t, move.move)
+        return t
+
     def asGrid(self):
-        _ = '_'
-        return ((_,_,_),
-                (_,_,_),
-                (_,_,_))
+        return self.asTicTacToe().data
 
     def asUrl(self):
-        return urls.kGames + str(self.id)
+        return kGames + str(self.id)
 
+
+    def togglePlayer(self, save=False):
+        self.toPlay = self.player1 if self.toPlay == self.player2\
+                                   else self.player2
+        if save:
+            self.save()
+
+
+class Move(m.Model):
+    game = m.ForeignKey(Game, related_name='moves')
+    player = m.ForeignKey(User)
+    move = m.TextField(max_length=64) # really 3 for tic tac toe

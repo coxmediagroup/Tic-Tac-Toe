@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.test.testcases import TestCase
 from DJTickyTack.models import Game
-import urls
+from settings import kGames, kJoin, kLogin, kLogout, kRoot
 
 # so we can inspect generated SQL via connection.queries:
 from django.db import connection
@@ -69,18 +69,18 @@ class SiteTest(BaseTest):
         c = self.client
 
         # it is our turn, so we should see the active game:
-        r = c.get(urls.kGames)
+        r = c.get(kGames)
         self.assertEquals(1, len(r.context['activeGames']))
 
         # there are no pending games yet:
         self.assertEquals(0, len(r.context['pendingGames']))
 
         # create two more games:
-        c.post(urls.kGames, {'playAs':'X'})
-        c.post(urls.kGames, {'playAs':'O'})
+        c.post(kGames, {'playAs':'X'})
+        c.post(kGames, {'playAs':'O'})
 
         # now we have one active game and two pending games
-        r = c.get(urls.kGames)
+        r = c.get(kGames)
         self.assertEquals(1, len(r.context['activeGames']))
         self.assertEquals(2, len(r.context['pendingGames']))
 
@@ -96,7 +96,7 @@ class SiteTest(BaseTest):
 
         # since we're logged in as player A, the two games started
         # by player B should be joinable
-        r = self.client.get(urls.kJoin)
+        r = self.client.get(kJoin)
         joinable = list(r.context['joinable'])
         self.failIf(pAx in joinable)
         self.assertTrue(pBx in joinable)
@@ -104,20 +104,28 @@ class SiteTest(BaseTest):
         self.assertEquals(2, len(joinable))
 
         # join player B's game as the new player X
-        r = self.client.post(urls.kJoin + str(pBo.id))
+        r = self.client.post(kJoin + str(pBo.id))
         self.assertTrue(r.has_header('Location'))
         # sure would be nice if reverse(views.games) worked here :/
         self.assertTrue(r['Location'].endswith(urlOf('games')))
 
         # the fixture has one active game, and we just joined another.
         # we should have two active games.
-        r = self.client.get(urls.kGames)
+        r = self.client.get(kGames)
         self.assertEquals(2, len(r.context['activeGames']))
         self.assertEquals(1, len(r.context['pendingGames']))
 
         # join the other game, but it will be pending rather than
         # active because it isn't our turn.
-        r = self.client.post(urls.kJoin + str(pBx.id))
-        r = self.client.get(urls.kGames)
+        r = self.client.post(kJoin + str(pBx.id))
+        r = self.client.get(kGames)
         self.assertEquals(2, len(r.context['activeGames'])) # same
         self.assertEquals(2, len(r.context['pendingGames'])) # +1
+
+
+    def test_move(self):
+        self.assertEquals(0, len(self.game.moves.all()))
+        r = self.client.post(kGames + str(self.game.id), {'move': 'XB2'})
+        self.game = Game.objects.get(pk=self.game.id) # no .reload() :/
+        self.assertEquals(1, len(self.game.moves.all()))
+    

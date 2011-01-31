@@ -1,16 +1,8 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-import settings
+from settings import *
 
 admin.autodiscover()
-
-# some constants, for use with the tests
-kRoot  = "/"
-kLogin = "/accounts/login/"
-kLogout = "/accounts/logout/"
-kGames = "/games/"
-kJoin = "/join/"
-
 
 def _u(url, suffix=r'$'):
     end = '?' if url.endswith('/') and len(url) > 1 else ''
@@ -35,5 +27,5 @@ urlpatterns = patterns('',
 
     # static files:
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root':settings.STATIC_ROOT_DIR})
+        {'document_root':STATIC_ROOT_DIR})
 )

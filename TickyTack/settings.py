@@ -100,3 +100,12 @@ INSTALLED_APPS = (
 
 STATIC_ROOT_DIR = (_base + "/DJTickyTack/static/")
 STATIC_ROOT_URL = "/static/"
+
+
+# some constants, for use with the tests
+kRoot  = "/"
+kLogin = "/accounts/login/"
+kLogout = "/accounts/logout/"
+kGames = "/games/"
+kJoin = "/join/"
+

@@ -114,6 +114,11 @@ th
   font-size: 10pt;
 }
 
+.GameBadge table :hover
+{
+  cursor:pointer;
+}
+
 .GameBadge .VsString
 {
   font-size: 60%;

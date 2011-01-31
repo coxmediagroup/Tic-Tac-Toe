@@ -10,8 +10,9 @@
     {% csrf_token %}
     {% game_board game %}
 
-    <input type="submit" value="submit move"/>
-
+    {% if game.toPlay == user %}
+      <input type="submit" value="submit move"/>
+    {% endif %}
   </form>
 
 {% endblock %}

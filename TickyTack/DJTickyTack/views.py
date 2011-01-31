@@ -1,10 +1,10 @@
 # Create your views here.
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
-from django.core.context_processors import csrf
 from django.template.context import RequestContext
-from DJTickyTack.models import Game
+from DJTickyTack.models import Game, Move
 
 
 def render_csrf(tpl, request, data):
@@ -31,12 +31,21 @@ def games(request):
 
 @login_required # @TODO: maybe games should be public?
 def game(request, gameId):
+    game = Game.objects.get(pk=int(gameId))
     if request.method == "POST":
-        pass # @TODO: post new move
+        t = game.asTicTacToe()
+        m = request.POST.get('move')
+        if m in t.moves and game.toPlay == request.user:
+            move = Move(game=game, player=request.user, move=m)
+            move.save()
+            game.togglePlayer(save=True)
+            return redirect(reverse(games))
+        else:
+            return HttpResponseBadRequest('no.')
     else:
         return render_csrf('game.html', request,
         {
-            'game' : Game.objects.get(pk=int(gameId))
+            'game' : game
         })
 
 
