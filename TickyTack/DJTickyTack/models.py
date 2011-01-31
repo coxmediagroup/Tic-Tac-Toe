@@ -29,7 +29,7 @@ class Game(m.Model):
     player1 = m.ForeignKey(User, related_name='player1', null=True)
     player2 = m.ForeignKey(User, related_name='player2', null=True)
     toPlay = m.ForeignKey(User, related_name='toPlay', null=True)
-    winner = m.ForeignKey(User, related_name='winner', null=True)
+    winner = m.ForeignKey(User, related_name='winner', null=True, blank=True)
     finished = m.BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):

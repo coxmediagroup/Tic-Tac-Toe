@@ -49,7 +49,7 @@ def game(request, gameId):
                 game.winner = (game.player1 if state.winner == 'X' else
                                game.player2 if state.winner == 'O' else
                                None)
-
+            game.save()
             return redirect(reverse(games))
         else:
             return HttpResponseBadRequest('no.')

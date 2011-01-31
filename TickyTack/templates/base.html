@@ -12,13 +12,17 @@
 <body>
 
   <div id="header" class="navigation">
-  
     <h1><a href="http://www.djangoproject.com/">DJ</a>TickyTack</h1>
-
     <p class="tagline">Best. Tic-Tac-Toe. Server. Ever.</p>
-
     {% if user.is_authenticated %}
+      <div id="navData">
+          <span>Logged in as: <strong>{{ user.username }}</strong></span>
+      </div>
+    {% endif %}
+  </div>
 
+  {% if user.is_authenticated %}
+    <div id="navBar" class="navigation">
       <div id="newGame">
         <form method="post" action="{% url DJTickyTack.views.games %}">
           {% csrf_token %}
@@ -33,25 +37,21 @@
         </form>
       </div>
 
-      <div id="navData">
-
-          <span>Logged in as: <strong>{{ user.username }}</strong></span>
-  
-          <ul id="navLinks" style="display:inline;">
-            <li style="display:inline">
-              <a href="{% url DJTickyTack.views.games %}">your games</a>
-            </li>
-            <li style="display:inline">
-              <a href="{% url DJTickyTack.views.joinable %}">join game</a>
-            </li>
-            <li style="display:inline">
-              <a href="{% url django.contrib.auth.views.logout %}">log out</a>
-            </li>
-          </ul>
+      <div id="navLinks">
+        <ul>
+          <li>
+            <a href="{% url DJTickyTack.views.games %}">your games</a>
+          </li>
+          <li>
+            <a href="{% url DJTickyTack.views.joinable %}">join game</a>
+          </li>
+          <li>
+            <a href="{% url django.contrib.auth.views.logout %}">log out</a>
+          </li>
+        </ul>
       </div>
-
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 
   <div id="content">
     {% block content %}
@@ -60,7 +60,8 @@
   </div>
 
   <div id="footer" class="navigation">
-    &copy; Copyright 2011 <a href="http://sabren.com/">Sabren Enterprises, Inc.</a>
+    &copy; Copyright 2011 <a href="http://sabren.com/">Sabren Enterprises, Inc.</a>.
+    Feel free to <a href="https://github.com/sabren/Tic-Tac-Toe">browse the source</a>!
   </div>
 
 </body>

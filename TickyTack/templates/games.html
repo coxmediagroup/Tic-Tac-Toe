@@ -5,24 +5,32 @@
 
   <h1>Your Games</h1>
 
-  <h2>Active Games:</h2>
+  <p>This is a correspondence-based gaming server. Games are updated when
+     your opponent logs in to make their move. <span class="aside">
+     (Nice AJAXy updates are still on the horizon. Meanwhile, hit
+     refresh once in a while to check for opponent's moves.)</span>
+  </p>
+
+
+  <h2>Your Turn:</h2>
 
   <div class="badges">
     {% for game in activeGames %}
       {% game_badge game %}
     {% empty %}
-      <p>(no active games)</p>
+      <p>No active games.
+        <span class="aside">Why not join or start one?</span></p>
     {% endfor %}
     <br/>
   </div>
 
-  <h2>Pending Games:</h2>
+  <h2>Waiting on Opponent:</h2>
 
   <div class="badges">
     {% for game in pendingGames %}
       {% game_badge game %}
     {% empty %}
-      <p>(no pending games)</p>
+      <p>No pending games.</p>
     {% endfor %}
     <br/>
   </div>
@@ -33,7 +41,7 @@
     {% for game in finishedGames %}
       {% game_badge game %}
     {% empty %}
-      <p>(no finished games)</p>
+      <p>No finished games.</p>
     {% endfor %}
     <br/>
   </div>

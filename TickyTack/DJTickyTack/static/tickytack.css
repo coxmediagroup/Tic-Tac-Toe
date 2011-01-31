@@ -39,16 +39,36 @@ h1
   top: 10px;
 }
 
-#newGame
+#navBar
 {
-  position: absolute;
+  background: black;
+  margin: 0;
+}
+
+#navLinks,
+#navLinks ul,
+#navLinks li
+{
+  display: inline;
+}
+#navLinks li
+{
+  margin-left: 20px;
+}
+
+#newGame,
+#newGame form
+{
+  /* position: absolute;
   right: 10px;
   bottom: 10px;
+   */
+  display: inline;
 }
 
 
 
-#header, #content, #footer
+#header, #content, #footer, #navBar
 {
   padding: 10px;
   border-top: solid #002800 5px;
@@ -157,4 +177,11 @@ td.empty
 {
   font-weight: bold;
   color: blue;
+}
+
+.aside
+{
+  color: gray;
+  font-style: italic;
+  display:block;
 }
