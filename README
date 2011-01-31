@@ -12,14 +12,13 @@ games, such as Chess, Checkers, or Go.
 
 It provides both a rudimentary HTML interface and a RESTful API.
 
-Requirements: # @TODO: urls and instructions
+Requirements:
 -------------
 
   python (developed with v 2.7)
   django (developed with v1.2.4)
 
   django-registration
-  staticfiles
 
 Running the Server
 ------------------

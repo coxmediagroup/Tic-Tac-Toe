@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
+import settings
 
 admin.autodiscover()
 
@@ -30,7 +31,9 @@ urlpatterns = patterns('',
     (_u(kGames), 'DJTickyTack.views.games'),
     (_u(kJoin, r'/(\d+)$'), 'DJTickyTack.views.join'),
     (_u(kJoin), 'DJTickyTack.views.joinable'),
-)
 
-from staticfiles.urls import staticfiles_urlpatterns
-urlpatterns += staticfiles_urlpatterns()
+
+    # static files:
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root':settings.STATIC_ROOT_DIR})
+)

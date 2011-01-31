@@ -31,10 +31,11 @@ class GameBoardNode(Node):
             cssClass = 'empty' if value == '_' else value
             return '<td class="%s">%s</td>' % (cssClass, value)
         else:
+            move = 'ABC'[c] + '123'[r]
             return ''.join(
             [
                 '<td class="%s">',
-                ' <input type="radio" name="cell" value="%s,%s"/>' % (r, c),
+                ' <input type="radio" name="cell" value="%s"/>' % move,
                 '</td>'
             ])
 
