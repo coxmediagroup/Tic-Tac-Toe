@@ -118,3 +118,7 @@ class TicTacToe(Grid):
     
 
 
+# I seem to keep reinventing this, so I put it here:
+def otherSide(side):
+    return O if side == X else X
+

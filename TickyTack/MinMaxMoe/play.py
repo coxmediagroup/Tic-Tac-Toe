@@ -8,7 +8,7 @@ import sys, anydbm
 ## sanity check ###########################################
 
 try:
-    from MinMaxMoe.tictactoe import TicTacToe, X, O, kBlank
+    from MinMaxMoe.tictactoe import TicTacToe, X, O, kBlank, otherSide
 except ImportError:
     print "ERROR: Couldn't load MinMaxMoe.tictactoe."
     print "Maybe try 'cd ..' first?"
@@ -19,6 +19,8 @@ try:
 except:
     print "ERROR: Couldn't load %s" % kDbmName
     print "Maybe try 'python MinMaxMoe/gentree.py' first?"
+
+from MinMaxMoe.bots import *
 
 
 ## user interface code ####################################
@@ -101,24 +103,6 @@ def botTurn(bot, game):
     return getattr(game, move)
 
 
-def otherSide(side):
-    return O if side == X else X
-
-
-
-## Bots ###################################################
-
-class DumbBot(object):
-    """
-    Always chooses the first available move.
-    """
-    name = 'DumbBot'
-    def choose(self, game):
-        print 'analyzing node:', game.path
-        return game.moves[0]
-
-
-
 ## main loop ##############################################
 
 
@@ -142,5 +126,5 @@ def main(bot):
 
 
 if __name__=="__main__":
-    main(DumbBot())
+    main(MinMaxMoeBot(gDbm, verbose=True))
 
