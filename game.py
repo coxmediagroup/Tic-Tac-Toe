@@ -43,7 +43,7 @@ class Board:
         if not set:
             return self._board[coords[0]][coords[1]]
         else:
-            print("Setting [%s] %s, %s to %s" % (self, coords[0], coords[1], set))
+            #print("Setting [%s] %s, %s to %s" % (self, coords[0], coords[1], set))
             self._board[coords[0]][coords[1]] = set
 
     def move(self, player, x, y, test=False):
@@ -187,9 +187,7 @@ class Game:
         self.send_update()
         
         import random
-        #FIXME: debugging purposes, remove after.
-        #self.turn = random.choice(["human", "ai"])
-        self.turn = "human"
+        self.turn = random.choice(["human", "ai"])
         print("%s's turn." % self.turn)
         self.check_ai_move()
 
@@ -206,9 +204,8 @@ class Game:
         mark = self.get_mark(player)
         board = (self.board() if not test 
             else Board(self, setup=self.board().full()))
-        print("board: %s" % board)
         result = board.move(player, x, y, test)
-        board.ascii()
+        #board.ascii()
         if test:
             return result
         self.send_update()

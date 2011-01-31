@@ -39,8 +39,6 @@ class GUI:
 
         if self.game.winner:
             return
-        print("toggle")
-        print(self.game.winner, self.game.turn)
         self.game.move(player, x, y)
         
 

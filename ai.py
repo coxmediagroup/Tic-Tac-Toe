@@ -33,7 +33,6 @@ def move(player, board):
     if not cur_game.turn:
         return
     if not move:
-        print("cur_game.turn: %s" % cur_game.turn)
         raise AiError("Nothing to be done.")
     (x, y) = move
     return cur_game.move(player, x, y)
@@ -169,7 +168,6 @@ def block(board):
         print("OH NO YOU DON'T!")
     return move
 
-#FIXME: Non forks still being considered forks.
 def fork(board):
     """
     Create a fork, resulting in multiple ways to win.
@@ -196,9 +194,6 @@ def block_fork(board):
     elif flen == 1:
         move = forks[0]
     else:
-        #FIXME?: We end up here trying to force moves, but no
-        #FIXME?: move is chosen.  A better solution than this
-        #FIXME?: may be necessary.
         print("Brute force!")
         force_moves = list_forcing_moves(board, player)
         for e in force_moves:
@@ -210,38 +205,17 @@ def block_fork(board):
             # for forks and wins by our opponent.  The coords that don't
             # result in these to a list.
             test_forks = forking_move(test_board, opponent, format="list")
-            print("test_forks: %s" % test_forks)
             #for forced_fork in test_forks:
             #    if forced_fork == e:
             from sets import Set
             new_forks = list(Set(test_forks) - Set(forks))
             if new_forks:
-                print("Useless force %s causes fork(s) at %s." % (str(e),
-                      str(test_forks)))
                 continue
             test_wins = winning_move(test_board, opponent, format="list")
             if test_wins:
-                print("Useless force %s causes win." % str(e))
                 continue
             move = e
             
-        """
-        print("force_moves: %s" % force_moves)
-        print("useful_moves: %s" % useful_moves)
-
-        from sets import Set
-        fork_set = Set(forks)
-        force_set = Set(force_moves)
-        try:
-            # Subtracting the fork set doesn't make sense.
-            # It's the OPPONENT we don't want moving there,
-            # not us.  We want to move there so we can force
-            # his move in addition to mangling his fork options.
-            move = list(force_set & fork_set)[0]
-        except IndexError:
-            pass
-        """
-
     if move:
         print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
     return move
