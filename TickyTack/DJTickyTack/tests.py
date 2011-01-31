@@ -68,7 +68,7 @@ class SiteTest(BaseTest):
         """
         c = self.client
 
-        # at first, we should see the active game:
+        # it is our turn, so we should see the active game:
         r = c.get(urls.kGames)
         self.assertEquals(1, len(r.context['activeGames']))
 
@@ -113,4 +113,11 @@ class SiteTest(BaseTest):
         # we should have two active games.
         r = self.client.get(urls.kGames)
         self.assertEquals(2, len(r.context['activeGames']))
+        self.assertEquals(1, len(r.context['pendingGames']))
 
+        # join the other game, but it will be pending rather than
+        # active because it isn't our turn.
+        r = self.client.post(urls.kJoin + str(pBx.id))
+        r = self.client.get(urls.kGames)
+        self.assertEquals(2, len(r.context['activeGames'])) # same
+        self.assertEquals(2, len(r.context['pendingGames'])) # +1
