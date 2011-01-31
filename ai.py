@@ -38,7 +38,7 @@ def move(player, board):
     (x, y) = move
     return cur_game.move(player, x, y)
 
-def winning_move(board, player):
+def winning_move(board, player, format="single"):
     """
     Look for a move that will win the game.  Take it, if one is found.
 
@@ -53,7 +53,14 @@ def winning_move(board, player):
     for p in paths:
         for coords in p:
             if board.square(coords) == " ":
-                return coords
+                if format == "single":
+                    return coords
+                else:
+                    return_list.append(coords)
+
+    if format == "list":
+        return return_list
+
     return None
 
 def forking_move(board, player, format="single"):
@@ -193,12 +200,27 @@ def block_fork(board):
         #FIXME?: may be necessary.
         print("Brute force!")
         force_moves = list_forcing_moves(board, player)
+        useful_moves = []
         for e in force_moves:
             (x, y) = e
             import game
             test_board = game.Board(cur_game, setup=board.full())
             test_board = test_board.move(player, x, y, test=True)
+            # We've added our move to our temporary board, now check it
+            # for forks and wins by our opponent.  The coords that don't
+            # result in these to a list.
             test_forks = forking_move(test_board, opponent, format="list")
+            for forced_fork in test_forks:
+                if forced_fork in force_moves:
+                    print("Useless force %s causes fork." % str(e))
+                useless_moves.append(forced_fork)
+            if winning_move(test_board, opponent):
+                print("Useless force %s causes win." % str(e))
+                continue
+            useful_moves.append(e)
+            
+        print("force_moves: %s" % force_moves)
+        print("useful_moves: %s" % useful_moves)
 
         from sets import Set
         fork_set = Set(forks)
