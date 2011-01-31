@@ -166,9 +166,8 @@ class Game:
         """
         # Disable turns so resetting the board isn't counted
         # as human moves.
-        self.turn = None
-        print("Game.initialize() self.turn: %s" % self.turn)
         self._board = Board(self)
+        self.turn = None
         self.send_update()
         
         import random
@@ -255,7 +254,6 @@ class Game:
             #identical, so grab the first one in the nested list.
             print("Victory: %s" % winner)
             print("Winner: %s" % self.board().square(winner[0][0]))
-            raise Exception
 
     def check_for_draw(self):
         """
@@ -297,9 +295,16 @@ class Game:
         Notify update functions that the board has been updated.
 
         """
+        # HACK
+        # Turn needs to be negated while updated to avoid charging
+        # human player for "updates" as moves.
+        turn = self.turn
+        self.turn = None
         #self.ascii_board()
         for e in self.updates:
             e['function'](*e['args'])
+        self.turn = turn
+        
 
     # Calling gtk.main from here breaks encapsulation,
     # so let's wrap it with these functions.
