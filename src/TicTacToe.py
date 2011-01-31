@@ -37,11 +37,11 @@ class TicTacToe(object):
     """
     
     # Class variables
-    __emptyPosition = '-'
-    __minPosition = 0
-    __maxPosition = 8
+    __empty_position = '-'
+    __min_position = 0
+    __max_position = 8
     players = ('X', 'O')
-    moveResults = ('GAME_OVER_ALREADY', 'INVALID_MOVE', 'INVALID_TURN', 'INVALID_PLAYER', 'WIN', 'CONTINUE')
+    move_results = ('GAME_OVER_ALREADY', 'INVALID_MOVE', 'INVALID_TURN', 'INVALID_PLAYER', 'WIN', 'CONTINUE')
     __game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
     __game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
     
@@ -57,25 +57,25 @@ class TicTacToe(object):
     def nextMove(self, player, position):
         # Check to make sure the move should be allowed
         if self.__winner != None:
-            return TicTacToe.moveResults[0]
+            return TicTacToe.move_results[0]
             
         if self.__last_player_to_move == player:
-            return TicTacToe.moveResults[2]
+            return TicTacToe.move_results[2]
             
         if not self.__checkForValidPlayer(player):
-            return TicTacToe.moveResults[3]
+            return TicTacToe.move_results[3]
             
         if not self.__checkForValidMove(position):
-            return TicTacToe.moveResults[1]
+            return TicTacToe.move_results[1]
         
         # Update the game state
         self.__updateGameState(player, position)
         
         # Check for a win    
         if self.__checkForWin(player):
-            return TicTacToe.moveResults[4]
+            return TicTacToe.move_results[4]
             
-        return TicTacToe.moveResults[5]
+        return TicTacToe.move_results[5]
         
     def getCurrentGameState(self):
         return tuple(self.__state)
@@ -90,9 +90,9 @@ class TicTacToe(object):
        self.__last_player_to_move = None
        self.__x_location_score = 0
        self.__o_location_score = 0
-       self.__state = [ TicTacToe.__emptyPosition, TicTacToe.__emptyPosition, TicTacToe.__emptyPosition,
-                        TicTacToe.__emptyPosition, TicTacToe.__emptyPosition, TicTacToe.__emptyPosition,
-                        TicTacToe.__emptyPosition, TicTacToe.__emptyPosition, TicTacToe.__emptyPosition ]
+       self.__state = [ TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
+                        TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
+                        TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position ]
                         
     def __updateGameState(self, player, position):
         self.__state[position] = player
@@ -110,9 +110,9 @@ class TicTacToe(object):
         return False
                         
     def __checkForValidMove(self, position):
-        if self.__state[position] == TicTacToe.__emptyPosition and \
-           position >= TicTacToe.__minPosition and \
-           position <= TicTacToe.__maxPosition:
+        if self.__state[position] == TicTacToe.__empty_position and \
+           position >= TicTacToe.__min_position and \
+           position <= TicTacToe.__max_position:
             return True
             
         return False
