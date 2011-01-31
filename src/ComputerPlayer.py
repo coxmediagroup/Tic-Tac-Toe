@@ -8,8 +8,8 @@ Copyright (c) 2011 __Stakem Research__. All rights reserved.
 """
 
 from TicTacToe import *
-
 import random
+
 
 class ComputerPlayer(object):
     """Computer AI to play Tic Tac Toe game.
@@ -87,9 +87,7 @@ class ComputerPlayer(object):
             self.__updateSolutionGraph()
             
     def __calculateSolutionGraph(self):
-        depth = 1
-        for i in range(len(ComputerPlayer.__maxPosition)):
-            pass
+        possible_moves = set(ComputerPlayer.__all_positions) - set(self.__self.__previous_moves) 
             
         
     def __updateSolutionGraph(self):
