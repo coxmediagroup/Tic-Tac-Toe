@@ -32,14 +32,18 @@ class Board:
     def full(self):
         return self._board
 
-    def square(self, coords):
+    def square(self, coords, set=None):
         """
         Look up the symbol at the specified coords.
 
         coords can be a list or tuple: (x, y)
 
         """
-        return self._board[coords[0]][coords[1]]
+        if not set:
+            return self._board[coords[0]][coords[1]]
+        else:
+            print("Setting %s, %s to %s" % (coords[0], coords[1], set))
+            self._board[coords[0]][coords[1]] = set
 
     def move(self, player, x, y, test=False):
         """
@@ -52,12 +56,15 @@ class Board:
 
         """
         mark = self.game().get_mark(player)
-        board = self.full()
         # If spot is blank, add, otherwise don't.
+        """
         if board[x][y] == " ":
             board[x][y] = mark
+        """
+        if self.square((x, y)) == " ":
+            self.square((x, y), set=mark)
             if test:
-                return board
+                return self
             return True
         return False
 
@@ -187,7 +194,7 @@ class Game:
         """
         mark = self.get_mark(player)
         board = (self.board() if not test 
-            else Board(self.game(), setup=self.board()))
+            else Board(self, setup=self.board().full()))
         result = board.move(player, x, y, test)
         if test:
             return result

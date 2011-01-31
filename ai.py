@@ -194,11 +194,9 @@ def block_fork(board):
         print("Brute force!")
         force_moves = list_forcing_moves(board, player)
         for e in force_moves:
-            pass
-            #game.move(player, x, y)
-            #test_board = game.move(player, x, y, test=True)
-            # Blarg!  These all take games instead of boards.
-            #test_forks = forking_move(board, opponent, format="list")
+            (x, y) = e
+            test_board = game.move(player, x, y, test=True)
+            test_forks = forking_move(test_board, opponent, format="list")
 
         from sets import Set
         fork_set = Set(forks)
