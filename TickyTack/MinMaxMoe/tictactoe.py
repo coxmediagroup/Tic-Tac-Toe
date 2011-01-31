@@ -58,16 +58,20 @@ class TicTacToe(Grid):
         self.path = path
         self.depth = path.count('.')
 
-    def __repr__(self):
+
+    @property
+    def currentState(self):
         winner = self.winner
-        state = ('Game tied.' if winner == kTie else
+        return ('Game tied.' if winner == kTie else
                  ('%s to play.' % self.toPlay) if winner == kUnknown else
                  ('%s wins.' % winner))
 
+
+    def __repr__(self):
         return '%s # [ %s ], %s' % (
             self.path.replace('start', 'TicTacToe()'),
             str(self).replace('\n',' | '),
-            state)
+            self.currentState)
 
     @property
     def moves(self):

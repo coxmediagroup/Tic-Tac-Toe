@@ -46,7 +46,26 @@ can play you interactively in the shell, or can be scheduled to play
 asynchronously on a DJTickyTack server.
 
 
+Setup
+-----
+
+MinMaxMoe uses a database of all possible lines of play. The game tree is
+stored in 'gametree.dbm', which you must generate manually.
+
+  # from TickyTack directory:
+  python MinMaxMoe/gentree.py
+
+On my low-end 2010 win64 laptop, this takes about two and half minutes and
+generates a 4.5MB file. Your mileage may vary depending on CPU strength
+and the anydbm modules you have configured in your python.
+
+NOTE: You only need to do this *once*.
+(See the docstrings in gentree.py for rationale.)
 
 
+Running
+-------
 
+  # from TickyTack directory:
+  python MinMaxMoe/play.py
 

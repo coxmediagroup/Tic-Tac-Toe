@@ -66,6 +66,9 @@ import datetime
 import anydbm
 
 
+kDbmName = 'gametree.dbm'
+
+
 NodeScoreBase = namedtuple('NodeScore', ('X', 'O', 'Tie'))
 class NodeScore(NodeScoreBase):
     """
@@ -115,7 +118,7 @@ class PrintCollector(object):
     def save(self, path, score):
         print path, "=>", score
     def done(self):
-        pass
+        print "-" * 60
 
 
 class DictCollector(object):
@@ -148,12 +151,11 @@ class AnyDbmCollector(object):
 
 def main(collector):
     started = datetime.datetime.now()
-    print '[%s] generating tree.' % started
-    print
+    print '[%s] generating tree to %s. This may take a few minutes...' \
+        % (started, kDbmName)
     score(TicTacToe(), collector)
     collector.done()
     ended = datetime.datetime.now()
-    print
     print "[%s] tree walked in %s seconds" % (ended, (ended-started).seconds)
 
 
@@ -164,4 +166,4 @@ if __name__=="__main__":
     elif "-p" in sys.argv:
         main(PrintCollector())
     else:
-        main(AnyDbmCollector('gametree.dbm'))
+        main(AnyDbmCollector(kDbmName))
