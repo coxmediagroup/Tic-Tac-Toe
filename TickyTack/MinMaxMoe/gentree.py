@@ -114,6 +114,8 @@ class PrintCollector(object):
     """
     def save(self, path, score):
         print path, "=>", score
+    def done(self):
+        pass
 
 
 class DictCollector(object):
@@ -124,6 +126,8 @@ class DictCollector(object):
         self.dict = data
     def save(self, path, score):
         self.dict[path] = score
+    def done(self):
+        pass
 
 class AnyDbmCollector(object):
     """
@@ -137,6 +141,8 @@ class AnyDbmCollector(object):
         self.dbm = anydbm.open(filename, 'n')
     def save(self, path, score):
         self.dbm[path] = '%s %s %s' % score
+    def done(self):
+        self.dbm.close()
 
 
 
@@ -145,6 +151,7 @@ def main(collector):
     print '[%s] generating tree.' % started
     print
     score(TicTacToe(), collector)
+    collector.done()
     ended = datetime.datetime.now()
     print
     print "[%s] tree walked in %s seconds" % (ended, (ended-started).seconds)
