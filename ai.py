@@ -50,6 +50,7 @@ def winning_move(board, player, format="single"):
     my_mark = cur_game.get_mark(player)
     paths = board.traverse(banned=[opponent_mark], requires={my_mark: 2})
 
+    return_list = []
     for p in paths:
         for coords in p:
             if board.square(coords) == " ":
@@ -200,7 +201,6 @@ def block_fork(board):
         #FIXME?: may be necessary.
         print("Brute force!")
         force_moves = list_forcing_moves(board, player)
-        useful_moves = []
         for e in force_moves:
             (x, y) = e
             import game
@@ -213,12 +213,15 @@ def block_fork(board):
             for forced_fork in test_forks:
                 if forced_fork in force_moves:
                     print("Useless force %s causes fork." % str(e))
-                useless_moves.append(forced_fork)
-            if winning_move(test_board, opponent):
-                print("Useless force %s causes win." % str(e))
-                continue
-            useful_moves.append(e)
+                    continue
+            test_wins = winning_move(test_board, opponent, format="list")
+            for forced_win in test_wins:
+                if forced_win in force_moves:
+                    print("Useless force %s causes win." % str(e))
+                    continue
+            move = e
             
+        """
         print("force_moves: %s" % force_moves)
         print("useful_moves: %s" % useful_moves)
 
@@ -233,6 +236,7 @@ def block_fork(board):
             move = list(force_set & fork_set)[0]
         except IndexError:
             pass
+        """
 
     if move:
         print("A FISHFORK IS NO MATCH FOR MY MACHINE.")
