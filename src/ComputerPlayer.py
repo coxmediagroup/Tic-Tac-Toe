@@ -86,6 +86,10 @@ class ComputerPlayer(object):
         else:
             self.__updateSolutionGraph()
             
+        # TODO -> add simple code to pick the next move from the graph
+        
+        return 1
+            
     def __calculateSolutionGraph(self):
         possible_moves = set(ComputerPlayer.__all_positions) - set(self.__self.__previous_moves) 
             
