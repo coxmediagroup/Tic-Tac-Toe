@@ -205,8 +205,7 @@ def block_fork(board):
             # for forks and wins by our opponent.  The coords that don't
             # result in these to a list.
             test_forks = forking_move(test_board, opponent, format="list")
-            #for forced_fork in test_forks:
-            #    if forced_fork == e:
+
             from sets import Set
             new_forks = list(Set(test_forks) - Set(forks))
             if new_forks:
