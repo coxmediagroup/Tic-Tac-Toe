@@ -11,6 +11,7 @@ import sys
 import os
 import copy
 
+file = open("output.txt","w")
 
 class Node(object):
    
@@ -21,7 +22,10 @@ class Node(object):
         self.links = links
         
     def __str__(self):
-        return str(self.position) + " :: " + str(self.score)
+        return " " + str(self.state[0]) + " | " + str(self.state[1]) + " | " + str(self.state[2]) + "\n" + \
+               " " + str(self.state[3]) + " | " + str(self.state[4]) + " | " + str(self.state[5]) + "\n" + \
+               " " + str(self.state[6]) + " | " + str(self.state[7]) + " | " + str(self.state[8]) + "\n" + \
+               str(self.score) + "\n\n"
         
 def foo(current_state, player):
     open_positions = findRemainingPositions(current_state)
@@ -37,6 +41,7 @@ def foo(current_state, player):
              ( player =='o' and testForWinner(new_state, 'x') == True ):
             score = -1
         node = Node(position, new_state, score)
+        file.write( str(node) )
         return [node]
 
     nodes = []
@@ -90,4 +95,5 @@ if __name__ == '__main__':
               '-', 'o', '-',
               '-', '-', '-' ]
     a = foo(state, 'x')
-
+    
+file.close()
