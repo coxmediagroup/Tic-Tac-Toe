@@ -6,6 +6,8 @@ Created on Jan 29, 2011
 
 import numpy
 
+import util
+
 P1 = 1
 P2 = -1
 EMPTY = 0
@@ -63,7 +65,7 @@ class NegamaxEngine(Engine):
         
     def next_move(self, board, player):
         # P1 = 1, P2 = -1
-        self._negamax(board, 0, player, 1)
+        self._negamax(board, 0, player)
         
         return self.move
     
@@ -90,10 +92,10 @@ class NegamaxEngine(Engine):
             
         return IN_PROGRESS
         
-    def _negamax(self, board, depth, player, color):
+    def _negamax(self, board, depth, player):
         state = self.get_state(board)
         if state != IN_PROGRESS or depth > self.max_depth:
-            return color*self._evaluate_board(board, state)
+            return player*self._evaluate_board(board, state)
         
         maximum = float('-Infinity')
         
@@ -101,7 +103,7 @@ class NegamaxEngine(Engine):
             next_board = board.copy()
             next_board[move[0], move[1]] = player
             
-            x = -self._negamax(next_board, depth + 1, self.change_player(player), -1*color)
+            x = -self._negamax(next_board, depth + 1, self.change_player(player))
             
             if x > maximum:
                 maximum = x
@@ -110,7 +112,4 @@ class NegamaxEngine(Engine):
         return maximum
     
     def _evaluate_board(self, board, state):
-        if state == P1_WON or state == P2_WON: return 3
-        if state == DRAW: return 2
-        
-        return 1
+        return state
