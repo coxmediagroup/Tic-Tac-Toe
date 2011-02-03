@@ -11,7 +11,8 @@ import util
 
 class GameEngineTest(object):
     
-    _MESSAGE = 'Expected {0}, got {1}.\n{2}'
+    _MESSAGE_STATE_TEST = 'Expected {0}, got {1}.\n{2}'
+
     _STATE_NAMES = { 
                         P1_WON: 'player 1 (X) win',
                         P2_WON: 'player 2 (O) win',
@@ -19,14 +20,27 @@ class GameEngineTest(object):
                         IN_PROGRESS: 'in progress'
                     }
     
+    _MESSAGE_PLAY_TEST = 'Expected one of {0}, got {1}.\n{2}'
+    
     def setUp(self):
         self._engine = None
         
-    def _run_go_scenarios(self, scenarios):
-        pass
+    def _run_play_scenarios(self, scenarios):
+        ''' '''
+        for scenario in scenarios:
+            board = scenario['board']
+            player = scenario['player']
+            expected_moves = scenario['expected_moves']
+            
+            move = self._engine.next_move(board, player)
+            
+            self.assertTrue(move in expected_moves, 
+                             self._MESSAGE_PLAY_TEST.format(expected_moves,
+                                                  move, 
+                                                  util.board_to_str(board)))            
     
     def _run_state_scenarios(self, scenarios):
-
+        ''' '''
         for scenario in scenarios:
             board = scenario['board']
             expected_state = scenario['expected_state']
@@ -34,33 +48,9 @@ class GameEngineTest(object):
             state = self._engine.get_state(board)
             
             self.assertEqual(state, expected_state, 
-                             self._MESSAGE.format(self._STATE_NAMES[expected_state],
+                             self._MESSAGE_STATE_TEST.format(self._STATE_NAMES[expected_state],
                                                   self._STATE_NAMES[state], 
-                                                  util.board_to_str(board)))        
-
-    def test_go_for_win(self):
-        pass
-    
-    def test_got_for_block(self):
-        pass
-    
-    def test_go_for_fork(self):
-        pass
-    
-    def test_go_for_fork_block(self):
-        pass
-    
-    def test_go_for_center(self):
-        pass
-    
-    def test_go_for_opposite_corner(self):
-        pass
-    
-    def test_go_for_empty_corner(self):
-        pass
-    
-    def test_go_for_empty_side(self):
-        pass
+                                                  util.board_to_str(board)))
     
     def test_state_evaluation(self):
         scenarios = [
@@ -161,7 +151,57 @@ class NegamaxEngineTest(unittest.TestCase, GameEngineTest):
     
     def setUp(self):
         self._engine = NegamaxEngine()
+        
+class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
     
+    def setUp(self):
+        self._engine = RulesBasedEngine()
+        
+    def test_play_win(self):
+        scenarios = [
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, EMPTY],
+                                                    [P1, P2, P2],
+                                                    [EMPTY, P2, P1],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(2, 0)]
+                        },
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, EMPTY],
+                                                    [EMPTY, P2, EMPTY],
+                                                    [EMPTY, P2, P1],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(0, 1)]
+                        },
+                    ]
+        self._run_play_scenarios(scenarios)
+    
+    def test_play_block(self):
+        scenarios = [
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, EMPTY],
+                                                    [EMPTY, P2, P2],
+                                                    [EMPTY, P2, P1],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(0, 1), (1, 0)]
+                        },
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, EMPTY],
+                                                    [EMPTY, P2, EMPTY],
+                                                    [EMPTY, P2, P1],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(0, 1)]
+                        },
+                    ]
+        self._run_play_scenarios(scenarios)    
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

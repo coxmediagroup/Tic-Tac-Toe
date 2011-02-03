@@ -29,7 +29,7 @@ class Engine(object):
                                     [8, 16, 32],
                                     [64, 128, 256],
                                 ])
-    
+
     _WIN_VALUES = (7, 56, 73, 84, 146, 273, 292, 448)
     
     _TOTAL = 511
@@ -45,20 +45,12 @@ class Engine(object):
     
     def get_state(self, board):
         #TODO: Something faster; possibly use Magic Square
-        total = 0 
-        scores = { P1: 0, P2: 0 }
-        
-        for i in xrange(0, 3):
-            for j in xrange(0, 3):
-                if board[i, j] != EMPTY:
-                    value = Engine._COMP_MATRIX[i, j]
-                    total += value
-                    scores[board[i, j]] += value
+        total, p1_score, p2_score = self._compute_scores(board)
                     
         for win_value in Engine._WIN_VALUES:
-            if (scores[P1] & win_value) == win_value:
+            if (p1_score & win_value) == win_value:
                 return P1_WON
-            if (scores[P2] & win_value) == win_value:
+            if (p2_score & win_value) == win_value:
                 return P2_WON
             
         if total == Engine._TOTAL:
@@ -72,6 +64,19 @@ class Engine(object):
     def get_legal_moves(self, board):
         return [(i, j) for i in xrange(0, 3) for j in xrange(0, 3) 
                 if board[i, j] == EMPTY]
+        
+    def _compute_scores(self, board):
+        total = 0 
+        scores = { P1: 0, P2: 0 }
+                
+        for i in xrange(0, 3):
+            for j in xrange(0, 3):
+                if board[i, j] != EMPTY:
+                    value = Engine._COMP_MATRIX[i, j]
+                    total += value
+                    scores[board[i, j]] += value
+                    
+        return total, scores[P1], scores[P2]        
 
 class NegamaxEngine(Engine):
     '''
@@ -110,35 +115,54 @@ class NegamaxEngine(Engine):
     
     def _evaluate_board(self, board, state):
         ''' docstring '''
+        #TODO: Board evaluation when depth > max_depth
         return state
     
 class RulesBasedEngine(Engine):
     '''
     docstring
     '''
+    
+    def __init__(self):
+        self._strategies = [
+                                '_play_win', '_play_block',
+                                '_play_fork', '_play_block_fork',
+                                '_play_center', '_play_opposite_corner',
+                                '_play_empty_corner', '_play_empty_side',
+                            ]
+    
     def next_move(self, board, player):
         ''' doc '''
-        pass    
+        scores = { P1: 0, P2: 0 }
+        total, scores[P1], scores[P2] = self._compute_scores(board)        
+        
+        for strategy in self._strategies:
+            fn = getattr(RulesBasedEngine, strategy)
+            move = fn(self, board, player, total, scores)
+            if move: return move
 
-    def _play_win(self, board):
+    def _play_win(self, board, player, total, scores):
+        for win_value in Engine._WIN_VALUES:
+            move = numpy.where(Engine._COMP_MATRIX == win_value - (scores[player] & win_value))
+            if board[move] == EMPTY:
+                return (move[0], move[1])
+    
+    def _play_block(self, board, player, total, scores):
+        return self._play_win(board, self.change_player(player), total, scores)
+    
+    def _play_fork(self, board, player):
         pass
     
-    def _play_block(self, board):
+    def _play_block_fork(self, board, player):
         pass
     
-    def _play_fork(self, board):
+    def _play_center(self, baord, player):
         pass
     
-    def _play_block_fork(self, board):
+    def _play_opposite_corner(self, board, player):
         pass
     
-    def _play_center(self, baord):
-        pass
-    
-    def _play_opposite_corner(self, board):
-        pass
-    
-    def _play_empty_corner(self, board):
+    def _play_empty_corner(self, board, player):
         pass    
     
     def _play_empty_side(self, board):

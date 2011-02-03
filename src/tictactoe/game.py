@@ -10,7 +10,7 @@ import engine
 
 class Game(object):
     
-    def __init__(self, game_engine=engine.NegamaxEngine()):
+    def __init__(self, game_engine=engine.RulesBasedEngine()):
         self._engine = game_engine
         self._state = engine.NOT_STARTED
         self.board = numpy.zeros((3, 3), dtype=numpy.int16)
