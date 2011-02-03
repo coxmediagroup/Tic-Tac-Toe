@@ -4,8 +4,6 @@ Created on Jan 29, 2011
 @author: Krzysztof Tarnowski (krzysztof.tarnowski@ymail.com)
 '''
 
-import itertools
-
 import engine
 
 def board_to_str(board):
@@ -18,7 +16,7 @@ def board_to_str(board):
         
         return ' '
 
-    fields = [value_to_char(value) for value in list(itertools.chain.from_iterable(board))]
+    fields = [value_to_char(value) for value in board.flat]
     
     board_str = \
 '''    0   1   2

@@ -79,14 +79,14 @@ class NegamaxEngine(Engine):
                     total += value
                     scores[board[i, j]] += value
                     
-        if total ==  NegamaxEngine._TOTAL:
-            return DRAW
-        
         for win_value in NegamaxEngine._WIN_VALUES:
             if (scores[P1] & win_value) == win_value:
                 return P1_WON
             if (scores[P2] & win_value) == win_value:
                 return P2_WON
+            
+        if total == NegamaxEngine._TOTAL:
+            return DRAW            
             
         return IN_PROGRESS
         
@@ -110,7 +110,7 @@ class NegamaxEngine(Engine):
         return maximum
     
     def _evaluate_board(self, board, state):
-        if state == P1_WON or state == P2_WON: return 8
-        if state == DRAW: return 4
+        if state == P1_WON or state == P2_WON: return 3
+        if state == DRAW: return 2
         
         return 1
