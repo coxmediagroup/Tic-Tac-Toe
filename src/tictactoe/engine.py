@@ -45,6 +45,7 @@ class Engine(object):
     
     def get_state(self, board):
         #TODO: Something faster; possibly use Magic Square
+        #TODO: Refactor - use short self._XXX
         total, p1_score, p2_score = self._compute_scores(board)
                     
         for win_value in Engine._WIN_VALUES:
@@ -123,12 +124,22 @@ class RulesBasedEngine(Engine):
     docstring
     '''
     
+    _CORNERS = [(0, 0), (0, 2), (2, 0), (2, 2)]
+    _OPPOSITE_CORNERS = {   
+                            (0, 0): (2, 2),
+                            (0, 2): (2, 0),
+                            (2, 0): (0, 2),
+                            (2, 2): (0, 0),
+                        }
+    _SIDES = [(0, 1), (1, 0), (1, 2), (2, 1)]
+    
     def __init__(self):
         self._strategies = [
                                 '_play_win', '_play_block',
                                 '_play_fork', '_play_block_fork',
                                 '_play_center', '_play_opposite_corner',
                                 '_play_empty_corner', '_play_empty_side',
+                                '_play_anywhere',
                             ]
     
     def next_move(self, board, player):
@@ -138,32 +149,69 @@ class RulesBasedEngine(Engine):
         
         for strategy in self._strategies:
             fn = getattr(RulesBasedEngine, strategy)
-            move = fn(self, board, player, total, scores)
-            if move: return move
+            moves = fn(self, board, player, total, scores)
+            if moves: break
+            
+        return moves[0]
 
     def _play_win(self, board, player, total, scores):
+        moves = []
         for win_value in Engine._WIN_VALUES:
             move = numpy.where(Engine._COMP_MATRIX == win_value - (scores[player] & win_value))
-            if board[move] == EMPTY:
-                return (move[0], move[1])
+            if board[move] == EMPTY: moves.append(move)
+            
+        return moves
     
     def _play_block(self, board, player, total, scores):
         return self._play_win(board, self.change_player(player), total, scores)
     
-    def _play_fork(self, board, player):
-        pass
+    def _play_fork(self, board, player, total, scores):
+        moves = []
+        new_scores = { P1: 0, P2: 0 }
+        
+        for legal_move in self.get_legal_moves(board):
+            board[legal_move[0], legal_move[1]] = player
+            new_total, new_scores[0], new_scores[1] = self._compute_scores(board)
+            next_moves = self._play_win(board, player, new_total, new_scores)
+            #Revert
+            board[legal_move[0], legal_move[1]] = EMPTY
+            #Did the move create a fork?
+            if len(next_moves) > 1: moves.append(legal_move)
+            
+        return moves
     
-    def _play_block_fork(self, board, player):
-        pass
+    def _play_block_fork(self, board, player, total, scores):
+        return self._play_fork(board, self.change_player(player), total, scores)
     
-    def _play_center(self, baord, player):
-        pass
+    def _play_center(self, board, player, total, scores):
+        if board[1][1] == EMPTY: return [(1, 1)]
     
-    def _play_opposite_corner(self, board, player):
-        pass
+    def _play_opposite_corner(self, board, player, total, scores):
+        moves = []
+        opponent = self.change_player(player)
+        
+        for corner in self._CORNERS:
+            if board[corner[0], corner[1]] == opponent:
+                opp_corner = self._OPPOSITE_CORNERS[corner]
+                if board[opp_corner[0], opp_corner[1]] == EMPTY: moves.append(opp_corner)
+                
+        return moves 
     
-    def _play_empty_corner(self, board, player):
-        pass    
+    def _play_empty_corner(self, board, player, total, scores):
+        moves = []
+        
+        for corner in self._CORNERS:
+            if board[corner[0], corner[1]] == EMPTY: moves.append(corner)
+            
+        return moves
     
-    def _play_empty_side(self, board):
-        pass
+    def _play_empty_side(self, board, player, total, scores):
+        moves = []
+        
+        for side in self._SIDES:
+            if board[side[0], side[1]] == EMPTY: moves.append(side)
+            
+        return moves
+
+    def _play_anywhere(self, board, player, total, scores):
+        return self.get_legal_moves(board)
