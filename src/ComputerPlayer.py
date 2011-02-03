@@ -59,8 +59,7 @@ class ComputerPlayer(object):
         next_move = -1
         if len(self.__current_state) > 7 or opponents_move < 0 or opponents_move > 8:
             return next_move
-        
-        # TODO => Either add opponents move to state here or in the functions        
+              
         if len(self.__current_state) == 0:
             next_move = self.__findFirstMove(opponents_move)
         else:
@@ -123,11 +122,12 @@ class ComputerPlayer(object):
             new_state = copy.deepcopy(current_state)
             next_position = open_positions.pop()
             new_state[next_position] = player
-            if ( self.__player == 'x' and self.__isWinner('x') == True ) or \
-               ( self.__player == 'o' and self.__isWinner('o') == True ):
+            # Split into a funtion that returns the score??
+            if ( self.__player == 'x' and self.__isWinner(game_state, 'x') == True ) or \
+               ( self.__player == 'o' and self.__isWinner(game_state, 'o') == True ):
                 return [ Node(next_position, new_state, 1) ]
-            elif ( self.__opponent == 'x' and self.__isWinner('x') == True ) or \
-                 ( self.__opponent == 'o' and self.__isWinner('o') == True ):
+            elif ( self.__opponent == 'x' and self.__isWinner(game_state, 'x') == True ) or \
+                 ( self.__opponent == 'o' and self.__isWinner(game_state, 'o') == True ):
                 return [ Node(next_position, new_state, 1) ]
          
             return [ Node(next_position, new_state, 0) ]
@@ -137,21 +137,23 @@ class ComputerPlayer(object):
             new_state = copy.deepcopy(current_state)
             new_state[next_position] = player
             score = 0
-            if ( self.__player == 'x' and self.__isWinner('x') == True ) or \
-               ( self.__player == 'o' and self.__isWinner('o') == True ):
+            if ( self.__player == 'x' and self.__isWinner(game_state, 'x') == True ) or \
+               ( self.__player == 'o' and self.__isWinner(game_state, 'o') == True ):
                 score = 1
-            elif ( self.__opponent == 'x' and self.__isWinner('x') == True ) or \
-                 ( self.__opponent == 'o' and self.__isWinner('o') == True ):
+            elif ( self.__opponent == 'x' and self.__isWinner(game_state, 'x') == True ) or \
+                 ( self.__opponent == 'o' and self.__isWinner(game_state, 'o') == True ):
                 score = -1
             links = []
             if score == 0:
                 # Not sure if you should min or max the links score???
                 score = 1
+                # Split this into a function that switches the player??
                 next_player = None
                 if player == 'x':
                     next_player = 'o'
                 else:
                     next_player = 'x'
+                # Split this into a function that finds the score from links???
                 links = foo(new_state, next_player)
                 for link in links:
                     if link.score < score:
@@ -169,7 +171,7 @@ class ComputerPlayer(object):
                 open_positions.append(i)
         return open_positions
         
-    def __isWinner(self, player):
+    def __isWinner(self, game_state, player):
         pass
         
     def __updateSolutionGraph(self):
