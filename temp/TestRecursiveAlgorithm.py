@@ -25,20 +25,21 @@ class Node(object):
         return " " + str(self.state[0]) + " | " + str(self.state[1]) + " | " + str(self.state[2]) + "\n" + \
                " " + str(self.state[3]) + " | " + str(self.state[4]) + " | " + str(self.state[5]) + "\n" + \
                " " + str(self.state[6]) + " | " + str(self.state[7]) + " | " + str(self.state[8]) + "\n" + \
-               str(self.score) + "\n\n"
+               str(self.score) +  "\n\n"
         
-def foo(current_state, player):
+def foo(current_state, ai_player, current_player):
     open_positions = findRemainingPositions(current_state)
+    
     if len(open_positions) == 1:
         position = open_positions.pop()
         new_state = copy.deepcopy(current_state)
-        new_state[position] = player
+        new_state[position] = current_player
         score = 0
-        if ( player == 'x' and testForWinner(new_state, 'x') == True ) or \
-           ( player =='o' and testForWinner(new_state, 'o') == True ):
+        if ( ai_player == 'x' and testForWinner(new_state, 'x') == True ) or \
+           ( ai_player =='o' and testForWinner(new_state, 'o') == True ):
             score = 1
-        elif ( player == 'x' and testForWinner(new_state, 'o') == True ) or \
-             ( player =='o' and testForWinner(new_state, 'x') == True ):
+        elif ( ai_player == 'x' and testForWinner(new_state, 'o') == True ) or \
+             ( ai_player =='o' and testForWinner(new_state, 'x') == True ):
             score = -1
         node = Node(position, new_state, score)
         file.write( str(node) )
@@ -47,20 +48,32 @@ def foo(current_state, player):
     nodes = []
     for position in open_positions:
         new_state = copy.deepcopy(current_state)
-        new_state[position] = player
-        new_player = None
-        if player == 'x':
-            new_player = 'o'
+        new_state[position] = current_player
+        score = 0
+        if ( ai_player == 'x' and testForWinner(new_state, 'x') == True ) or \
+           ( ai_player =='o' and testForWinner(new_state, 'o') == True ):
+            score = 1
+        elif ( ai_player == 'x' and testForWinner(new_state, 'o') == True ) or \
+             ( ai_player =='o' and testForWinner(new_state, 'x') == True ):
+            score = -1
+        links = []
+        if score == 0:
+            score = 1
+            next_player = None
+            if current_player == 'x':
+                next_player = 'o'
+            else:
+                next_player = 'x'
+            links = foo(new_state, ai_player, next_player)
+            for link in links:
+                if link.score < score:
+                    score = link.score
         else:
-            new_player = 'x'
-        links = foo(new_state, new_player)
-        score = 1
-        for link in links:
-            if link.score < score:
-                score == link.score
+            node = Node(position, new_state, score, links)
+            file.write( str(node) )
         node = Node(position, new_state, score, links)
         nodes.append(node)
-    
+        
     return nodes
 
 def findRemainingPositions(current_state):
@@ -94,6 +107,6 @@ if __name__ == '__main__':
     state = [ 'x', '-', '-',
               '-', 'o', '-',
               '-', '-', '-' ]
-    a = foo(state, 'x')
+    a = foo(state, 'x', 'x')
     
 file.close()
