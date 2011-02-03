@@ -1,7 +1,7 @@
 '''
 Created on Jan 29, 2011
 
-@author: Krzysztof Tarnowski
+@author: Krzysztof Tarnowski (krzysztof.tarnowski@ymail.com)
 '''
 
 import sys
@@ -11,20 +11,32 @@ import engine
 from game import Game
 
 def read_move():
-    ''' doc '''
+    ''' Reads user move from STDIN.
+    
+    The method expects the input to be formated as "x, y".
+
+    Currently no sanity checks are performed.
+    
+    Returns:
+        A two-item list representing field to capture. For example [0, 0].
+    '''
+    #TODO(krzysztof.tarnowski@ymail.com): Sanitize the input 
     sys.stdout.write('Your move [x, y]: ')
     move = [int(c) for c in sys.stdin.readline().split(',')]
     return move
 
 def main():
-    ''' doc '''
+    ''' Entry method of the Tic-Tac-Toe application. '''
     sys.stdout.write('Cross or nought? [default: O]: ')
     player_choice = sys.stdin.readline().strip().upper()
     human = (player_choice == 'X') and engine.P1 or engine.P2
     
     game = Game()
     game.start()
-    print(util.board_to_str(game.board))
+    
+    # Print the board only if human player plays the 'X'
+    if human == engine.P1:
+        print(util.board_to_str(game.board))
     
     while not game.is_over():
         if game.player == human:
@@ -32,6 +44,7 @@ def main():
         else:
             move = None
         
+        # If the move is None, get move from AI engine
         game.play(move)
 
         print(util.board_to_str(game.board))

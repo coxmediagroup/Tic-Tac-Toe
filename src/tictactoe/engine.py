@@ -6,8 +6,6 @@ Created on Jan 29, 2011
 
 import numpy
 
-import util
-
 P1 = 1
 P2 = -1
 EMPTY = 0
