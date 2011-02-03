@@ -23,6 +23,17 @@ class Engine(object):
     classdocs
     '''
 
+    #Can be computed with 2**to_flat_index((i, j)) as well
+    _COMP_MATRIX = numpy.array([
+                                    [1, 2, 4],
+                                    [8, 16, 32],
+                                    [64, 128, 256],
+                                ])
+    
+    _WIN_VALUES = (7, 56, 73, 84, 146, 273, 292, 448)
+    
+    _TOTAL = 511
+
     def __init__(self):
         '''
         Constructor
@@ -33,7 +44,27 @@ class Engine(object):
         pass
     
     def get_state(self, board):
-        pass
+        #TODO: Something faster; possibly use Magic Square
+        total = 0 
+        scores = { P1: 0, P2: 0 }
+        
+        for i in xrange(0, 3):
+            for j in xrange(0, 3):
+                if board[i, j] != EMPTY:
+                    value = Engine._COMP_MATRIX[i, j]
+                    total += value
+                    scores[board[i, j]] += value
+                    
+        for win_value in Engine._WIN_VALUES:
+            if (scores[P1] & win_value) == win_value:
+                return P1_WON
+            if (scores[P2] & win_value) == win_value:
+                return P2_WON
+            
+        if total == Engine._TOTAL:
+            return DRAW         
+            
+        return IN_PROGRESS
     
     def change_player(self, player):
         return (player == P1) and P2 or P1
@@ -47,17 +78,6 @@ class NegamaxEngine(Engine):
     classdocs
     '''
     
-    #Can be computed with 2**to_flat_index((i, j)) as well
-    _COMP_MATRIX = numpy.array([
-                                    [1, 2, 4],
-                                    [8, 16, 32],
-                                    [64, 128, 256],
-                                ])
-    
-    _WIN_VALUES = (7, 56, 73, 84, 146, 273, 292, 448)
-    
-    _TOTAL = 511
-    
     def __init__(self, max_depth=float('Infinity')):
         Engine.__init__(self)
         self.max_depth = max_depth
@@ -68,30 +88,7 @@ class NegamaxEngine(Engine):
         self._negamax(board, 0, player)
         
         return self.move
-    
-    def get_state(self, board):
-        #TODO: Something faster; possibly use Magic Square
-        total = 0 
-        scores = { P1: 0, P2: 0 }
-        
-        for i in xrange(0, 3):
-            for j in xrange(0, 3):
-                if board[i, j] != EMPTY:
-                    value = NegamaxEngine._COMP_MATRIX[i, j]
-                    total += value
-                    scores[board[i, j]] += value
-                    
-        for win_value in NegamaxEngine._WIN_VALUES:
-            if (scores[P1] & win_value) == win_value:
-                return P1_WON
-            if (scores[P2] & win_value) == win_value:
-                return P2_WON
             
-        if total == NegamaxEngine._TOTAL:
-            return DRAW            
-            
-        return IN_PROGRESS
-        
     def _negamax(self, board, depth, player):
         state = self.get_state(board)
         if state != IN_PROGRESS or depth > self.max_depth:
@@ -112,4 +109,37 @@ class NegamaxEngine(Engine):
         return maximum
     
     def _evaluate_board(self, board, state):
+        ''' docstring '''
         return state
+    
+class RulesBasedEngine(Engine):
+    '''
+    docstring
+    '''
+    def next_move(self, board, player):
+        ''' doc '''
+        pass    
+
+    def _play_win(self, board):
+        pass
+    
+    def _play_block(self, board):
+        pass
+    
+    def _play_fork(self, board):
+        pass
+    
+    def _play_block_fork(self, board):
+        pass
+    
+    def _play_center(self, baord):
+        pass
+    
+    def _play_opposite_corner(self, board):
+        pass
+    
+    def _play_empty_corner(self, board):
+        pass    
+    
+    def _play_empty_side(self, board):
+        pass
