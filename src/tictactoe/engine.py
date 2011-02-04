@@ -1,7 +1,7 @@
 '''
 Created on Jan 29, 2011
 
-@author: Krzysztof Tarnowski
+@author: Krzysztof Tarnowski (krzysztof.tarnowski@ymail.com)
 '''
 
 import numpy
