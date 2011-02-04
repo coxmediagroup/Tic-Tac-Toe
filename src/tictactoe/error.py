@@ -11,7 +11,7 @@ class InvalidGameState(Exception):
     
     Attributes:
         state: The state that is invalid.
-        valid_states: A list of valid values.
+        valid_states: A list of valid state values.
     
     Class attributes:
         _MESSAGE: Message format for pretty-printing.
@@ -27,8 +27,11 @@ class InvalidGameState(Exception):
                      }
 
     def __init__(self, state, valid_states):
-        '''
-        Constructor
+        ''' Constructor.
+        
+        Args:
+            state: Invalid state.
+            valid_states: A list of valid state values.
         '''
         
         self.state = state
@@ -40,7 +43,7 @@ class InvalidGameState(Exception):
         
 
 class InvalidMove(Exception):
-    '''
+    ''' Signals an attempt to play invalid move.
     
     Attributes:
         move: Illegal move that was played.
@@ -53,6 +56,13 @@ class InvalidMove(Exception):
     _MESSAGE = 'Invalid move: {0}. Expected one of {1}.'
     
     def __init__(self, move, legal_moves):
+        ''' 
+        
+        Args:
+            move: Illegal move.
+            legal_moves: A list of legal moves.
+        '''
+        
         self.move = move
         self.lega_moves = legal_moves
         Exception.__init__(self, self._MESSAGE.format(move, legal_moves))
