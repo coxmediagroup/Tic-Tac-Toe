@@ -8,6 +8,7 @@ import numpy
 
 import engine
 from error import InvalidGameState
+from error import InvalidMove
 
 class Game(object):
     ''' This class encapsulates generic game logic and its interfaces.
@@ -45,7 +46,7 @@ class Game(object):
         '''
         
         if self._state != engine.NOT_STARTED:
-            raise InvalidGameState()
+            raise InvalidGameState(self._state, [engine.IN_PROGRESS])
         
         self._state = engine.IN_PROGRESS
         
@@ -65,15 +66,20 @@ class Game(object):
         Raises:
             InvalidGameState: Game is not in progress, i.e. has either not
                                 started or has ended.
+            InvalidMove: The move is not valid for the current game state.
         '''
         
         if self._state != engine.IN_PROGRESS:
-            raise InvalidGameState()
+            raise InvalidGameState(self._state, [engine.IN_PROGRESS])
         
         game_engine = game_engine and game_engine or self._engine
         
         if move == None:
             move = game_engine.next_move(self.board, self.player)
+        else:
+            legal_moves = game_engine.get_legal_moves(self.board)
+            if not move in legal_moves:
+                raise InvalidMove(move, legal_moves)
         
         self.board[move[0], move[1]] = self.player
         self.player = game_engine.change_player(self.player)
@@ -109,4 +115,4 @@ class Game(object):
         Returns: True if the move is valid.
         '''
         
-        return move in self._engine.get_legal_moves()
+        return move in self._engine.get_legal_moves(self.board)

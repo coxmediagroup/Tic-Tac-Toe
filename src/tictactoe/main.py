@@ -23,7 +23,7 @@ def read_move():
     #TODO(krzysztof.tarnowski@ymail.com): Sanitize the input 
     sys.stdout.write('Your move [x, y]: ')
     move = [int(c) for c in sys.stdin.readline().split(',')]
-    return move
+    return tuple(move)
 
 def main():
     ''' Entry method of the Tic-Tac-Toe application. '''
