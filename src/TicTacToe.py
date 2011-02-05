@@ -37,13 +37,13 @@ class TicTacToe(object):
     """
     
     # Class variables
-    __empty_position = '-'
+    empty_position = '-'
     __min_position = 0
     __max_position = 8
     players = ('X', 'O')
     move_results = ('GAME_OVER_ALREADY', 'INVALID_MOVE', 'INVALID_TURN', 'INVALID_PLAYER', 'WIN', 'CONTINUE')
-    __game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
-    __game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
+    game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
+    game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
     
     # Public methods
     #--------------------------------------------------------------------------
@@ -90,18 +90,18 @@ class TicTacToe(object):
        self.__last_player_to_move = None
        self.__x_location_score = 0
        self.__o_location_score = 0
-       self.__state = [ TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
-                        TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
-                        TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position ]
+       self.__state = [ TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                        TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                        TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position ]
                         
     def __updateGameState(self, player, position):
         self.__state[position] = player
         self.__last_player_to_move = player
         
         if player == TicTacToe.players[0]:
-            self.__x_location_score += TicTacToe.__game_location_values[position]
+            self.__x_location_score += TicTacToe.game_location_values[position]
         else:
-            self.__o_location_score += TicTacToe.__game_location_values[position]
+            self.__o_location_score += TicTacToe.game_location_values[position]
             
     def __checkForValidPlayer(self, player):
         if player == TicTacToe.players[0] or player == TicTacToe.players[1]:
@@ -110,7 +110,7 @@ class TicTacToe(object):
         return False
                         
     def __checkForValidMove(self, position):
-        if self.__state[position] == TicTacToe.__empty_position and \
+        if self.__state[position] == TicTacToe.empty_position and \
            position >= TicTacToe.__min_position and \
            position <= TicTacToe.__max_position:
             return True
@@ -123,11 +123,9 @@ class TicTacToe(object):
             location_score = self.__x_location_score
         else:
             location_score = self.__o_location_score
-            
-        for score in TicTacToe.__game_location_win_scores:
-            if location_score == score:
-                self.__winner = player
-                return True
+        
+        if location_score in TicTacToe.game_location_win_scores:
+            return True     
                 
         return False
 

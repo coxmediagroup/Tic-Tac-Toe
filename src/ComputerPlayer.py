@@ -116,64 +116,73 @@ class ComputerPlayer(object):
         possible_moves = set(ComputerPlayer.__all_positions) - set(self.__self.__previous_moves) 
        
     def __generateNodes(self, current_state, player):
-        open_positions = self.__findOpenPositions()
+        open_positions = self.__findOpenPositions(current_state)
 
         if len(open_positions) == 1:
             new_state = copy.deepcopy(current_state)
             next_position = open_positions.pop()
             new_state[next_position] = player
-            # Split into a funtion that returns the score??
-            if ( self.__player == 'x' and self.__isWinner(game_state, 'x') == True ) or \
-               ( self.__player == 'o' and self.__isWinner(game_state, 'o') == True ):
-                return [ Node(next_position, new_state, 1) ]
-            elif ( self.__opponent == 'x' and self.__isWinner(game_state, 'x') == True ) or \
-                 ( self.__opponent == 'o' and self.__isWinner(game_state, 'o') == True ):
-                return [ Node(next_position, new_state, 1) ]
-         
-            return [ Node(next_position, new_state, 0) ]
+            return [ Node(next_position, new_state, self.__calculateGameScore(self.__player, new_state)) ]
 
         nodes = []
         for next_position in open_positions:
             new_state = copy.deepcopy(current_state)
             new_state[next_position] = player
-            score = 0
-            if ( self.__player == 'x' and self.__isWinner(game_state, 'x') == True ) or \
-               ( self.__player == 'o' and self.__isWinner(game_state, 'o') == True ):
-                score = 1
-            elif ( self.__opponent == 'x' and self.__isWinner(game_state, 'x') == True ) or \
-                 ( self.__opponent == 'o' and self.__isWinner(game_state, 'o') == True ):
-                score = -1
+            score = self.__calculateGameScore(self.__player, new_state)
             links = []
             if score == 0:
-                # Not sure if you should min or max the links score???
-                score = 1
-                # Split this into a function that switches the player??
-                next_player = None
-                if player == 'x':
-                    next_player = 'o'
-                else:
-                    next_player = 'x'
-                # Split this into a function that finds the score from links???
+                next_player = self.__getOtherPlayer(player)
                 links = foo(new_state, next_player)
-                for link in links:
-                    if link.score < score:
-                        score = link.score
-            
+                score = self.__findBestScore(links)
+                
             node = Node(next_position, new_state, score, links)
             nodes.append(node)
 
         return nodes  
         
-    def __findOpenPositions():
+    def __findOpenPositions(self, current_state):
         open_positions = []
-        for i, state in enumerate(self.__current_state):
-            if state == '-':
+        for i, state in enumerate(current_state):
+            if state == TicTacToe.empty_position:
                 open_positions.append(i)
         return open_positions
         
-    def __isWinner(self, game_state, player):
-        pass
+    def __calculateGameScore(self, player, game_state):
+        if ( player == TicTacToe.players[0] and self.__isWinner(TicTacToe.players[0], game_state) == True ) or \
+           ( player == TicTacToe.players[1] and self.__isWinner(TicTacToe.players[1], game_state) == True ):
+            return 1
+        elif ( player == TicTacToe.players[1] and self.__isWinner(TicTacToe.players[0], game_state) == True ) or \
+             ( player == TicTacToe.players[0] and self.__isWinner(TicTacToe.players[1], game_state) == True ):
+            return -1
+            
+        return 0
         
+    def __isWinner(self, player, game_state):
+        score = 0
+        for i, state in enumerate(game_state):
+            if state == player:
+                score += TicTacToe.game_location_values[i]
+                
+        if score in TicTacToe.game_location_win_scores:
+            return True
+            
+        return False
+        
+    def __getOtherPLayer(self, player):
+        if player == TicTacToe.players[0]:
+            return TicTacToe.players[1]
+        
+        return TicTacToe.players[0]
+        
+    def __findBestScore(self, links):
+        # TODO => redo this
+        score = 0
+        for node in links:
+            if node.score < score:
+                score = node.score
+                
+        return score
+                
     def __updateSolutionGraph(self):
         pass
 
