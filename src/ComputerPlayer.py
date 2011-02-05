@@ -242,7 +242,7 @@ class ComputerPlayer(object):
         elif opponents_first_move == 0:
             position = self.__findPositionToBlock(opponents_first_move, opponents_move)
             
-            if position != -1:
+            if position != -1 and position != computers_first_move:
                 return position
             elif opponents_move == 5:
                 return 2
@@ -251,7 +251,7 @@ class ComputerPlayer(object):
         elif opponents_first_move == 2:
             position = self.__findPositionToBlock(opponents_first_move, opponents_move)
             
-            if position != -1:
+            if position != -1 and position != computers_first_move:
                 return position
             elif opponents_move == 3:
                 return 1
@@ -260,7 +260,7 @@ class ComputerPlayer(object):
         elif opponents_first_move == 6:
             position = self.__findPositionToBlock(opponents_first_move, opponents_move)
             
-            if position != -1:
+            if position != -1 and position != computers_first_move:
                 return position
             elif opponents_move == 1:
                 return 0
@@ -269,7 +269,7 @@ class ComputerPlayer(object):
         elif opponents_first_move == 8:
             position = self.__findPositionToBlock(opponents_first_move, opponents_move)
             
-            if position != -1:
+            if position != -1 and position != computers_first_move:
                 return position
             elif opponents_move == 1:
                 return 2
@@ -279,12 +279,14 @@ class ComputerPlayer(object):
     def __findMoveWhenOpponentFirstMovedEdge(self, computers_first_move, opponents_first_move, opponents_move):
         position = self.__findPositionToBlock(opponents_first_move, opponents_move)
         
-        if position != -1:
+        if position != -1 and position != computers_first_move:
             return position
         else:
-            open_positions = set( self.__findOpenPositions(self.__current_state) )
-            good_positions = open_positions - set([1, 3, 5, 7])
-            return random.choice(list(good_positions))
+            if computers_first_move == 4:
+                good_move = set([0, 2, 6, 8]) - set([opponents_move])
+                return random.choice(list(good_move))
+            else:
+                return 4
         
     def __findOptimalMove(self, opponents_move):
         self.__current_state[opponents_move] = self.__opponent
@@ -296,15 +298,18 @@ class ComputerPlayer(object):
         self.__solutions = self.__generateNodes(self.__current_state, self.__player)
         
         next_move = -1
+        
         winning_moves = self.__winningMoves(self.__player, self.__current_state)
         if len(winning_moves) != 0:
+            print "Winning move: " + str(winning_moves[0])
             next_move = winning_moves[0]
-            
+       
         losing_moves = self.__winningMoves(self.__opponent, self.__current_state)
-        if len(losing_moves) != 0:
-            next_move = losing_moves[0]
-            
-        if next_move != -1:
+        #if len(losing_moves) != 0:
+         #   print "Losing move: " + str(losing_moves[0])
+          #  next_move = losing_moves[0]
+         
+        if next_move == -1:
             next_move = self.__findHighestScoreNode().move
             
         self.__current_state[next_move] = self.__player
@@ -387,13 +392,15 @@ class ComputerPlayer(object):
         
     def __isWinner(self, player, game_state):
         for combination in self.__winning_combinations:
-            if combination[0] == player and combination[1] == player and combination[2] == player:
+            if game_state[ combination[0] ] == player and \
+               game_state[ combination[1] ] == player and \
+               game_state[ combination[2] ] == player:
                 return True
                 
         return False
         
     def __winningMoves(self, player, game_state):
-        winningMoves = []
+        winning_moves = []
         for combo in self.__winning_combinations:
             moves = list(combo)
             for position in combo:
@@ -401,9 +408,9 @@ class ComputerPlayer(object):
                     moves.remove(position) 
                     
             if len(moves) == 1:
-                winningMoves.append(moves[0])
+                winning_moves.append(moves[0])
                 
-        return winningMoves
+        return winning_moves
         
     def __almostWinner(self, player, game_state):
         pass
@@ -457,6 +464,12 @@ if __name__ == '__main__':
 	    open_positions = player._ComputerPlayer__findOpenPositions(player._ComputerPlayer__current_state)
 	    opponents_move = random.choice(open_positions)
 	    players_move = player.getNextMove( opponents_move )
+	    
+	    if move == 3:
+	        for i, node in enumerate(player._ComputerPlayer__solutions):
+	            file = open("../temp/node_" + str(i) + ".txt","w")
+	            file.write(str(node))
+	            file.close
 	     
 	    if players_move == -1:
 	        game_over = True
