@@ -71,7 +71,7 @@ class ComputerPlayer(object):
         if len(open_positions) >= 8:
             next_move = self.__findFirstMove(opponents_move)
         # Second move
-        elif if len(open_positions) >= 6:
+        elif len(open_positions) >= 6:
             next_move = self.__findSecondMove(opponents_move)
         # Subsequent moves
         else:
@@ -125,18 +125,18 @@ class ComputerPlayer(object):
         self.__current_state[opponents_move] = self.__opponent
         
         # Computer moved first
-        if opponent_first_move == -1:
+        if opponents_first_move == -1:
             next_move = self.__findMoveWhenComputerMovedFirst(computers_first_move, opponents_move)
         # Opponent moved first
         else:
-            next_move = self.__findMoveWhenOpponentMovedFirst(computers_first_move, opponents_first_move, 
+            next_move = self.__findMoveWhenOpponentMovedFirst(computers_first_move, opponents_first_move,
                                                                opponents_move)
-                                                               
-       self.__current_state[next_move] = self.__player
+        
+        self.__current_state[next_move] = self.__player
 
-       return next_move
+        return next_move
                                                                
-   def __findMoveWhenComputerMovedFirst(self, computers_first_move, opponents_move):
+    def __findMoveWhenComputerMovedFirst(self, computers_first_move, opponents_move):
        # Computer goes first with center move
        if computers_first_move == 4:
            return self.__findMoveWhenComputerFirstMovedCenter(computers_first_move, opponents_move)
@@ -283,7 +283,7 @@ class ComputerPlayer(object):
             return position
         else:
             open_positions = set( self.__findOpenPositions(self.__current_state) )
-            good_positions = open_positions - set(1, 3, 5, 7)
+            good_positions = open_positions - set([1, 3, 5, 7])
             return random.choice(list(good_positions))
         
     def __findOptimalMove(self, opponents_move):
@@ -297,7 +297,7 @@ class ComputerPlayer(object):
         
         next_move = -1
         winning_moves = self.__winningMoves(self.__player, self.__current_state)
-        if len(winningMoves) != 0:
+        if len(winning_moves) != 0:
             next_move = winning_moves[0]
             
         losing_moves = self.__winningMoves(self.__opponent, self.__current_state)
@@ -350,7 +350,7 @@ class ComputerPlayer(object):
                 moves[0] = i
             elif state == self.__opponent:
                 moves[1] = i
-                
+               
         return moves
         
     def __findPositionToBlock(self, first_move, second_move):
