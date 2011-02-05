@@ -43,26 +43,26 @@ class InvalidGameState(Exception):
         
 
 class InvalidMove(Exception):
-    ''' Signals an attempt to play invalid move.
+    ''' Signals an attempt to play invalid _move.
     
     Attributes:
-        move: Illegal move that was played.
+        _move: Illegal _move that was played.
         legal_moves: A list of expected values/moves - tuples (x, y)
         
     Class attributes:
         _MESSAGE: Message format for pretty-printing.
     '''
     
-    _MESSAGE = 'Invalid move: {0}. Expected one of {1}.'
+    _MESSAGE = 'Invalid _move: {0}. Expected one of {1}.'
     
     def __init__(self, move, legal_moves):
         ''' 
         
         Args:
-            move: Illegal move.
+            _move: Illegal _move.
             legal_moves: A list of legal moves.
         '''
         
-        self.move = move
+        self._move = move
         self.lega_moves = legal_moves
         Exception.__init__(self, self._MESSAGE.format(move, legal_moves))
