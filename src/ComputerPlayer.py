@@ -10,6 +10,7 @@ Copyright (c) 2011 __Stakem Research__. All rights reserved.
 from TicTacToe import *
 from Node import *
 import random
+import copy
 
 
 class ComputerPlayer(object):
@@ -57,15 +58,17 @@ class ComputerPlayer(object):
         
     def getNextMove(self, opponents_move):
         next_move = -1
-        if len(self.__current_state) > 7 or opponents_move < 0 or opponents_move > 8:
+        if len( self.__findOpenPositions(self.__current_state) ) == 0 or opponents_move < 0 or opponents_move > 8:
             return next_move
               
         if len(self.__current_state) == 0:
             next_move = self.__findFirstMove(opponents_move)
         else:
             next_move = self.__findOptimalMove(opponents_move)
-           
-        self.__current_state[next_move] = self.__player
+         
+        if next_move != -1:   
+            self.__current_state[next_move] = self.__player
+            
         return next_move
         
     # Private methods
@@ -102,13 +105,17 @@ class ComputerPlayer(object):
         
     def __findOptimalMove(self, opponents_move):
         self.__current_state[opponents_move] = self.__opponent
+        open_positions = self.__findOpenPositions(self.__current_state)
+        
+        if len(open_positions) == 0:
+            return -1
         
         if self.__solutions == None:
             self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
         else:
             self.__updateSolutionGraph(opponents_move)
          
-        optimal_move = __findHighestScoreNode().move
+        optimal_move = self.__findHighestScoreNode().move
         self.__updateSolutionGraph(optimal_move)
         
         return optimal_move
@@ -130,7 +137,7 @@ class ComputerPlayer(object):
             links = []
             if score == 0:
                 next_player = self.__getOtherPlayer(player)
-                links = foo(new_state, next_player)
+                links = self.__generateNodes(new_state, next_player)
                 score = self.__findLowestScore(links)
                 
             node = Node(next_position, new_state, score, links)
@@ -160,13 +167,13 @@ class ComputerPlayer(object):
         for i, state in enumerate(game_state):
             if state == player:
                 score += TicTacToe.game_location_values[i]
-                
+               
         if score in TicTacToe.game_location_win_scores:
             return True
             
         return False
         
-    def __getOtherPLayer(self, player):
+    def __getOtherPlayer(self, player):
         if player == TicTacToe.players[0]:
             return TicTacToe.players[1]
         
@@ -188,7 +195,7 @@ class ComputerPlayer(object):
                 score = node.score
                 index_of_node = i
                 
-        return links[index_of_node]
+        return self.__solutions[index_of_node]
                 
     def __updateSolutionGraph(self, move):
         for node in self.__solutions:
@@ -208,19 +215,38 @@ if __name__ == '__main__':
               " " + str(game_state[6]) + " | " + str(game_state[7]) + " | " + str(game_state[8]) + "\n" 
 	
 	move = 1
+	game_over = False
 	while 1:
-	    print "Turn:  " + str(move)
-	    move =+ 1
-	    
 	    open_positions = player._ComputerPlayer__findOpenPositions(player._ComputerPlayer__current_state)
 	    opponents_move = random.choice(open_positions)
-	    print "Opponent moves: " + str(opponents_move)
-	   
 	    players_move = player.getNextMove( opponents_move )
-	    print "Players moves: " + str(players_move) + "\n"
 	    
+	    if move == 1:
+	        file = open("../temp/solutions_graph.txt","w")
+	        for node in player._ComputerPlayer__solutions:
+	            file.write(str(node) + "\n\n")
+	        file.close()
+	    
+	    if players_move == -1:
+	        game_over = True
+	     
+	    print "Turn:  " + str(move)
+	    print "Opponent moves: " + str(opponents_move)
+	    print "Players moves: " + str(players_move)
+	    move += 1
+	    
+	    if player._ComputerPlayer__isWinner(player._ComputerPlayer__player, player._ComputerPlayer__current_state):
+	        print "Computer wins!!!"
+	        game_over = True
+	    elif player._ComputerPlayer__isWinner(opponent_marker, player._ComputerPlayer__current_state):
+	        print "Opponent wins :("
+	        game_over = True
+	    
+	    print
 	    printGame(player._ComputerPlayer__current_state)
 	    print
-	    break
+	    
+	    if game_over:
+	        break
 	    
 
