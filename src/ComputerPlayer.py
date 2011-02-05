@@ -49,7 +49,7 @@ class ComputerPlayer(object):
                                (0, 3, 6), (1, 4, 7), (2, 5, 8), 
                                (0, 4, 8), (2, 4, 6) )
     __winning_score = 1000
-    __good_row_score = 100
+    __good_score = 100
  
     # Public methods
     #--------------------------------------------------------------------------   
@@ -68,11 +68,11 @@ class ComputerPlayer(object):
             return next_move
         
         # First move      
-        if len(open_positions) > 8:
+        if len(open_positions) >= 8:
             next_move = self.__findFirstMove(opponents_move)
         # Second move
-        elif 1:
-            pass
+        elif if len(open_positions) >= 6:
+            next_move = self.__findSecondMove(opponents_move)
         # Subsequent moves
         else:
             next_move = self.__findOptimalMove(opponents_move)
@@ -293,8 +293,20 @@ class ComputerPlayer(object):
         if len(open_positions) == 0:
             return -1
         
-        self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
-        next_move = self.__findHighestScoreNode().move
+        self.__solutions = self.__generateNodes(self.__current_state, self.__player)
+        
+        next_move = -1
+        winning_moves = self.__winningMoves(self.__player, self.__current_state)
+        if len(winningMoves) != 0:
+            next_move = winning_moves[0]
+            
+        losing_moves = self.__winningMoves(self.__opponent, self.__current_state)
+        if len(losing_moves) != 0:
+            next_move = losing_moves[0]
+            
+        if next_move != -1:
+            next_move = self.__findHighestScoreNode().move
+            
         self.__current_state[next_move] = self.__player
         
         return next_move
@@ -352,6 +364,7 @@ class ComputerPlayer(object):
         return -1
             
     def __calculateGameScore(self, game_state):
+        # Find if there is a winner
         if (self.__player == TicTacToe.players[0]) and (self.__isWinner(TicTacToe.players[0], game_state) == True):
             return ComputerPlayer.__winning_score
         elif (self.__player == TicTacToe.players[1]) and (self.__isWinner(TicTacToe.players[1], game_state) == True):
@@ -360,7 +373,16 @@ class ComputerPlayer(object):
             return -ComputerPlayer.__winning_score
         elif (self.__player == TicTacToe.players[0]) and (self.__isWinner(TicTacToe.players[1], game_state) == True):
             return -ComputerPlayer.__winning_score
-            
+        # Find a good move
+        #if (self.__player == TicTacToe.players[0]) and (self.__almostWinner(TicTacToe.players[0], game_state) == True):
+        #    return ComputerPlayer.__good_score
+        #elif (self.__player == TicTacToe.players[1]) and (self.__almostWinner(TicTacToe.players[1], game_state) == True):
+        #    return ComputerPlayer.__good_score
+        #elif (self.__player == TicTacToe.players[1]) and (self.__almostWinner(TicTacToe.players[0], game_state) == True):
+        #    return -ComputerPlayer.__good_score
+        #elif (self.__player == TicTacToe.players[0]) and (self.__almostWinner(TicTacToe.players[1], game_state) == True):
+        #    return -ComputerPlayer.__good_score
+                
         return 0
         
     def __isWinner(self, player, game_state):
@@ -370,12 +392,22 @@ class ComputerPlayer(object):
                 
         return False
         
+    def __winningMoves(self, player, game_state):
+        winningMoves = []
+        for combo in self.__winning_combinations:
+            moves = list(combo)
+            for position in combo:
+                if game_state[position] == player:
+                    moves.remove(position) 
+                    
+            if len(moves) == 1:
+                winningMoves.append(moves[0])
+                
+        return winningMoves
+        
     def __almostWinner(self, player, game_state):
         pass
-        
-    def __hasGoodPosition(self, player, game_state):
-        pass
-                  
+                          
     def __getOtherPlayer(self, player):
         if player == TicTacToe.players[0]:
             return TicTacToe.players[1]
