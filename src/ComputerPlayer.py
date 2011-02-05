@@ -45,8 +45,11 @@ class ComputerPlayer(object):
     __min_position = 0
     __max_position = 8
     __all_positions = range(__min_position, __max_position)
-    __game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
-    __game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
+    __winning_combinations = ( (0, 1, 2), (3, 4, 5), (6, 7, 8), 
+                               (0, 3, 6), (1, 4, 7), (2, 5, 8), 
+                               (0, 4, 8), (2, 4, 6) )
+    __winning_score = 1000
+    __good_row_score = 100
  
     # Public methods
     #--------------------------------------------------------------------------   
@@ -58,17 +61,22 @@ class ComputerPlayer(object):
         
     def getNextMove(self, opponents_move):
         next_move = -1
-        if len( self.__findOpenPositions(self.__current_state) ) == 0 or opponents_move < 0 or opponents_move > 8:
+        open_positions = self.__findOpenPositions(self.__current_state)
+        
+        # Error no positions open or incorrect move
+        if len(open_positions) == 0 or opponents_move < 0 or opponents_move > 8:
             return next_move
-              
-        if len(self.__current_state) == 0:
+        
+        # First move      
+        if len(open_positions) > 8:
             next_move = self.__findFirstMove(opponents_move)
+        # Second move
+        elif 1:
+            pass
+        # Subsequent moves
         else:
             next_move = self.__findOptimalMove(opponents_move)
-         
-        if next_move != -1:   
-            self.__current_state[next_move] = self.__player
-            
+             
         return next_move
         
     # Private methods
@@ -90,18 +98,193 @@ class ComputerPlayer(object):
         return TicTacToe.players[0]
                         
     def __findFirstMove(self, opponents_move):
+        next_move = -1
+        
+        # Opponent has moved yet
         if opponents_move == -1:
-            return random.randrange(0,9,2)
+            next_move = random.randrange(0,9,2)
+        # Respond to opponents first move
         else:
             self.__current_state[opponents_move] = self.__opponent
             
             if opponents_move == 4:
-                return random.choice([0, 2, 6, 8])
+                next_move = random.choice([0, 2, 6, 8])
             elif opponents_move == 0 or opponents_move == 2 or \
                  opponents_move == 6 or opponents_move == 8:
-                return 4
+                next_move = 4
             else:
-                return random.choice([0, 2, 4, 6, 8])
+                next_move = random.choice([0, 2, 4, 6, 8])
+                
+        self.__current_state[next_move] = self.__player
+        
+        return next_move
+        
+    def __findSecondMove(self, opponents_move):
+        next_move = -1
+        computers_first_move, opponents_first_move = self.__getFirstMoves()
+        self.__current_state[opponents_move] = self.__opponent
+        
+        # Computer moved first
+        if opponent_first_move == -1:
+            next_move = self.__findMoveWhenComputerMovedFirst(computers_first_move, opponents_move)
+        # Opponent moved first
+        else:
+            next_move = self.__findMoveWhenOpponentMovedFirst(computers_first_move, opponents_first_move, 
+                                                               opponents_move)
+                                                               
+       self.__current_state[next_move] = self.__player
+
+       return next_move
+                                                               
+   def __findMoveWhenComputerMovedFirst(self, computers_first_move, opponents_move):
+       # Computer goes first with center move
+       if computers_first_move == 4:
+           return self.__findMoveWhenComputerFirstMovedCenter(computers_first_move, opponents_move)
+       # Computer goes first with corner move
+       else:
+           return self.__findMoveWhenComputerFirstMovedCorner(computers_first_move, opponents_move)
+
+    def __findMoveWhenOpponentMovedFirst(self, computers_first_move, opponents_first_move, opponents_move):
+        # Opponent goes first with center move
+        if opponents_first_move == 4:
+            return self.__findMoveWhenOpponentFirstMovedCenter(computers_first_move, opponents_first_move, opponents_move)
+        # Opponent goes first with corner move
+        elif opponents_first_move == 0 or opponents_first_move == 2 or \
+             opponents_first_move == 6 or opponents_first_move ==8:
+             return self.__findMoveWhenOpponentFirstMovedCorner(computers_first_move, opponents_first_move, opponents_move)
+        # Opponent goes first with edge move
+        else:
+            return self.__findMoveWhenOpponentFirstMovedEdge(computers_first_move, opponents_first_move, opponents_move)
+
+    def __findMoveWhenComputerFirstMovedCenter(self, computers_first_move, opponents_move):
+        # Opponent chose a corner
+        if opponents_move == 0:
+            return 8
+        elif opponents_move == 2:
+           return 6
+        elif opponents_move == 6:
+           return 2
+        elif opponents_move == 8:
+           return 0
+        # Opponent chose an edge
+        elif opponents_move == 1:
+           return random.choice([6, 8])
+        elif opponents_move == 3:
+           return random.choice([2, 8])
+        elif opponents_move == 5:
+           return random.choice([0, 6])
+        elif opponents_move == 7:
+           return random.choice([0, 2])
+        
+    def __findMoveWhenComputerFirstMovedCorner(self, computers_first_move, opponents_move):
+        # Opponent chose the center
+        if opponents_move == 4:
+            if computers_first_move == 0:
+                return 8
+            elif computers_first_move == 1:
+                return 7
+            elif computers_first_move == 2:
+                return 6
+            elif computers_first_move == 3:
+                return 5
+            elif computers_first_move == 5:
+                return 3
+            elif computers_first_move == 6:
+                return 2
+            elif computers_first_move == 7:
+                return 1
+            elif computers_first_move == 8:
+                return 0
+        # Opponent chose another square
+        else:
+            if computers_first_move == 0:
+                if opponents_move == 2 or opponents_move == 3 or opponents_move == 5:
+                    return 6
+                else:
+                    return 2
+            elif computers_first_move == 2:
+                if opponents_move == 0 or opponents_move == 1 or opponents_move == 3:
+                    return 8
+                else:
+                    return 0
+            elif computers_first_move == 6:
+                if opponents_move == 0 or opponents_move == 1 or opponents_move == 3:
+                    return 8
+                else:
+                    return 0
+            elif computers_first_move == 8:
+                if opponents_move == 3 or opponents_move == 6 or opponents_move == 7:
+                    return 2
+                else:
+                    return 6
+                
+    def __findMoveWhenOpponentFirstMovedCenter(self, computers_first_move, opponents_first_move, opponents_move):
+        # Opponent moves into the opposite corner
+        if computers_first_move == 0 and opponents_move == 8:
+            return 2
+        elif computers_first_move == 2 and opponents_move == 6:
+            return 0
+        elif computers_first_move == 6 and opponents_move == 2:
+            return 8
+        elif computers_first_move == 8 and opponents_move == 0:
+            return 6
+        # Opponent goes for win so block them
+        else:
+            return 8 - opponents_move
+        
+    def __findMoveWhenOpponentFirstMovedCorner(self, computers_first_move, opponents_first_move, opponents_move):
+        # Opponent forms a diagonal with you
+        if (opponents_first_move == 0 and opponents_move == 8) or \
+           (opponents_first_move == 8 and opponents_move == 0) or \
+           (opponents_first_move == 2 and opponents_move == 6) or \
+           (opponents_first_move == 6 and opponents_move == 2):
+            return random.choice([1, 3, 5, 7])
+        elif opponents_first_move == 0:
+            position = self.__findPositionToBlock(opponents_first_move, opponents_move)
+            
+            if position != -1:
+                return position
+            elif opponents_move == 5:
+                return 2
+            elif opponents_move == 7:
+                return 6
+        elif opponents_first_move == 2:
+            position = self.__findPositionToBlock(opponents_first_move, opponents_move)
+            
+            if position != -1:
+                return position
+            elif opponents_move == 3:
+                return 1
+            elif opponents_move == 7:
+                return 8
+        elif opponents_first_move == 6:
+            position = self.__findPositionToBlock(opponents_first_move, opponents_move)
+            
+            if position != -1:
+                return position
+            elif opponents_move == 1:
+                return 0
+            elif opponents_move == 5:
+                return 8
+        elif opponents_first_move == 8:
+            position = self.__findPositionToBlock(opponents_first_move, opponents_move)
+            
+            if position != -1:
+                return position
+            elif opponents_move == 1:
+                return 2
+            elif opponents_move == 3:
+                return 6
+        
+    def __findMoveWhenOpponentFirstMovedEdge(self, computers_first_move, opponents_first_move, opponents_move):
+        position = self.__findPositionToBlock(opponents_first_move, opponents_move)
+        
+        if position != -1:
+            return position
+        else:
+            open_positions = set( self.__findOpenPositions(self.__current_state) )
+            good_positions = open_positions - set(1, 3, 5, 7)
+            return random.choice(list(good_positions))
         
     def __findOptimalMove(self, opponents_move):
         self.__current_state[opponents_move] = self.__opponent
@@ -110,15 +293,11 @@ class ComputerPlayer(object):
         if len(open_positions) == 0:
             return -1
         
-        if self.__solutions == None:
-            self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
-        else:
-            self.__updateSolutionGraph(opponents_move)
-         
-        optimal_move = self.__findHighestScoreNode().move
-        self.__updateSolutionGraph(optimal_move)
+        self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
+        next_move = self.__findHighestScoreNode().move
+        self.__current_state[next_move] = self.__player
         
-        return optimal_move
+        return next_move
                    
     def __generateNodes(self, current_state, player):
         open_positions = self.__findOpenPositions(current_state)
@@ -127,18 +306,18 @@ class ComputerPlayer(object):
             new_state = copy.deepcopy(current_state)
             next_position = open_positions.pop()
             new_state[next_position] = player
-            return [ Node(next_position, new_state, self.__calculateGameScore(self.__player, new_state)) ]
+            return [ Node(next_position, new_state, self.__calculateGameScore(new_state)) ]
 
         nodes = []
         for next_position in open_positions:
             new_state = copy.deepcopy(current_state)
             new_state[next_position] = player
-            score = self.__calculateGameScore(self.__player, new_state)
+            score = self.__calculateGameScore(new_state)
             links = []
             if score == 0:
                 next_player = self.__getOtherPlayer(player)
                 links = self.__generateNodes(new_state, next_player)
-                score = self.__findLowestScore(links)
+                score = self.__findScore(player, links)
                 
             node = Node(next_position, new_state, score, links)
             nodes.append(node)
@@ -152,39 +331,72 @@ class ComputerPlayer(object):
                 open_positions.append(i)
         return open_positions
         
-    def __calculateGameScore(self, player, game_state):
-        if ( player == TicTacToe.players[0] and self.__isWinner(TicTacToe.players[0], game_state) == True ) or \
-           ( player == TicTacToe.players[1] and self.__isWinner(TicTacToe.players[1], game_state) == True ):
-            return 1
-        elif ( player == TicTacToe.players[1] and self.__isWinner(TicTacToe.players[0], game_state) == True ) or \
-             ( player == TicTacToe.players[0] and self.__isWinner(TicTacToe.players[1], game_state) == True ):
-            return -1
+    def __getFirstMoves(self):
+        moves = [None, None]
+        for i, state in enumerate(self.__current_state):
+            if state == self.__player:
+                moves[0] = i
+            elif state == self.__opponent:
+                moves[1] = i
+                
+        return moves
+        
+    def __findPositionToBlock(self, first_move, second_move):
+        for combo in ComputerPlayer.__winning_combinations:
+            c = list(combo)
+            if first_move in c and second_move in c:
+                c.remove(first_move)
+                c.remove(second_move)
+                return c[0]
+                
+        return -1
+            
+    def __calculateGameScore(self, game_state):
+        if (self.__player == TicTacToe.players[0]) and (self.__isWinner(TicTacToe.players[0], game_state) == True):
+            return ComputerPlayer.__winning_score
+        elif (self.__player == TicTacToe.players[1]) and (self.__isWinner(TicTacToe.players[1], game_state) == True):
+            return ComputerPlayer.__winning_score
+        elif (self.__player == TicTacToe.players[1]) and (self.__isWinner(TicTacToe.players[0], game_state) == True):
+            return -ComputerPlayer.__winning_score
+        elif (self.__player == TicTacToe.players[0]) and (self.__isWinner(TicTacToe.players[1], game_state) == True):
+            return -ComputerPlayer.__winning_score
             
         return 0
         
     def __isWinner(self, player, game_state):
-        score = 0
-        for i, state in enumerate(game_state):
-            if state == player:
-                score += TicTacToe.game_location_values[i]
-               
-        if score in TicTacToe.game_location_win_scores:
-            return True
-            
+        for combination in self.__winning_combinations:
+            if combination[0] == player and combination[1] == player and combination[2] == player:
+                return True
+                
         return False
         
+    def __almostWinner(self, player, game_state):
+        pass
+        
+    def __hasGoodPosition(self, player, game_state):
+        pass
+                  
     def __getOtherPlayer(self, player):
         if player == TicTacToe.players[0]:
             return TicTacToe.players[1]
         
         return TicTacToe.players[0]
         
-    def __findLowestScore(self, links):
-        score = 1
-        for node in links:
-            if node.score < score:
-                score = node.score
-                
+    def __findScore(self, player, links):
+        score = 0
+        # Max
+        if player == self.__player:
+            score = -ComputerPlayer.__winning_score
+            for node in links:
+                if node.score > score:
+                    score = node.score
+        # Min
+        else:
+            score = ComputerPlayer.__winning_score
+            for node in links:
+                if node.score < score:
+                    score = node.score
+                        
         return score
         
     def __findHighestScoreNode(self):
@@ -197,13 +409,6 @@ class ComputerPlayer(object):
                 
         return self.__solutions[index_of_node]
                 
-    def __updateSolutionGraph(self, move):
-        for node in self.__solutions:
-            if node.move == move:
-                self.__solutions = node.links
-                break
-
-
 if __name__ == '__main__':
     # Simple test of the class
 	player = ComputerPlayer(TicTacToe.players[0])
@@ -220,13 +425,7 @@ if __name__ == '__main__':
 	    open_positions = player._ComputerPlayer__findOpenPositions(player._ComputerPlayer__current_state)
 	    opponents_move = random.choice(open_positions)
 	    players_move = player.getNextMove( opponents_move )
-	    
-	    if move == 1:
-	        file = open("../temp/solutions_graph.txt","w")
-	        for node in player._ComputerPlayer__solutions:
-	            file.write(str(node) + "\n\n")
-	        file.close()
-	    
+	     
 	    if players_move == -1:
 	        game_over = True
 	     
