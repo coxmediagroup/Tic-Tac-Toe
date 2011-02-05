@@ -16,8 +16,8 @@ class Node(object):
  
     # Public methods
     #--------------------------------------------------------------------------   
-    def __init__(self, current_move=0, game_state=[], score=0, links=[]):
-        self.current_move = current_move
+    def __init__(self, move=0, game_state=[], score=0, links=[]):
+        self.move = move
         self.game_state = game_state
         self.score = score
         self.links = links

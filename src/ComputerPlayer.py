@@ -104,17 +104,14 @@ class ComputerPlayer(object):
         self.__current_state[opponents_move] = self.__opponent
         
         if self.__solutions == None:
-            self.__calculateSolutionGraph()
+            self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
         else:
             self.__updateSolutionGraph()
-            
-        # TODO -> add simple code to pick the next move from the graph
+         
+        highestScoreNode = __findHighestScoreNode()
         
-        return 1
-            
-    def __calculateSolutionGraph(self):
-        possible_moves = set(ComputerPlayer.__all_positions) - set(self.__self.__previous_moves) 
-       
+        return highestScoreNode.move
+                   
     def __generateNodes(self, current_state, player):
         open_positions = self.__findOpenPositions(current_state)
 
@@ -133,7 +130,7 @@ class ComputerPlayer(object):
             if score == 0:
                 next_player = self.__getOtherPlayer(player)
                 links = foo(new_state, next_player)
-                score = self.__findBestScore(links)
+                score = self.__findLowestScore(links)
                 
             node = Node(next_position, new_state, score, links)
             nodes.append(node)
@@ -174,17 +171,26 @@ class ComputerPlayer(object):
         
         return TicTacToe.players[0]
         
-    def __findBestScore(self, links):
-        # TODO => redo this
-        score = 0
+    def __findLowestScore(self, links):
+        score = 1
         for node in links:
             if node.score < score:
                 score = node.score
                 
         return score
+        
+    def __findHighestScoreNode(self):
+        score = -1  
+        index_of_node = 0
+        for i, node in enumerate(self.__solutions):
+            if node.score > score:
+                score = node.score
+                index_of_node = i
+                
+        return links[index_of_node]
                 
     def __updateSolutionGraph(self):
-        pass
+        temp_graph = self.__solutions
 
 
 if __name__ == '__main__':
