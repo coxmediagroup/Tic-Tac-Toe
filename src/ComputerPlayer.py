@@ -106,11 +106,12 @@ class ComputerPlayer(object):
         if self.__solutions == None:
             self.__solutions = self.__generateNodes(self.__current_state, self.__player) 
         else:
-            self.__updateSolutionGraph()
+            self.__updateSolutionGraph(opponents_move)
          
-        highestScoreNode = __findHighestScoreNode()
+        optimal_move = __findHighestScoreNode().move
+        self.__updateSolutionGraph(optimal_move)
         
-        return highestScoreNode.move
+        return optimal_move
                    
     def __generateNodes(self, current_state, player):
         open_positions = self.__findOpenPositions(current_state)
@@ -189,8 +190,11 @@ class ComputerPlayer(object):
                 
         return links[index_of_node]
                 
-    def __updateSolutionGraph(self):
-        temp_graph = self.__solutions
+    def __updateSolutionGraph(self, move):
+        for node in self.__solutions:
+            if node.move == move:
+                self.__solutions = node.links
+                break
 
 
 if __name__ == '__main__':
