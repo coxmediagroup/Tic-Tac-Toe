@@ -74,9 +74,9 @@ class ComputerPlayer(object):
         # Game solutions
         self.__player, self.__opponent = self.__checkForValidPlayer(player)
         self.__solutions = None
-        self.__current_state = [ TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
-                                 TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position,
-                                 TicTacToe.__empty_position, TicTacToe.__empty_position, TicTacToe.__empty_position ]
+        self.__current_state = [ TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                                 TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                                 TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position ]
         
     def __checkForValidPlayer(self, player):
         if player == TicTacToe.players[0]:
@@ -200,4 +200,27 @@ class ComputerPlayer(object):
 if __name__ == '__main__':
     # Simple test of the class
 	player = ComputerPlayer(TicTacToe.players[0])
+	opponent_marker = TicTacToe.players[1]
+	
+	def printGame(game_state):
+	    print " " + str(game_state[0]) + " | " + str(game_state[1]) + " | " + str(game_state[2]) + "\n" + \
+              " " + str(game_state[3]) + " | " + str(game_state[4]) + " | " + str(game_state[5]) + "\n" + \
+              " " + str(game_state[6]) + " | " + str(game_state[7]) + " | " + str(game_state[8]) + "\n" 
+	
+	move = 1
+	while 1:
+	    print "Turn:  " + str(move)
+	    move =+ 1
+	    
+	    open_positions = player._ComputerPlayer__findOpenPositions(player._ComputerPlayer__current_state)
+	    opponents_move = random.choice(open_positions)
+	    print "Opponent moves: " + str(opponents_move)
+	   
+	    players_move = player.getNextMove( opponents_move )
+	    print "Players moves: " + str(players_move) + "\n"
+	    
+	    printGame(player._ComputerPlayer__current_state)
+	    print
+	    break
+	    
 
