@@ -49,7 +49,6 @@ class ComputerPlayer(object):
                                (0, 3, 6), (1, 4, 7), (2, 5, 8), 
                                (0, 4, 8), (2, 4, 6) )
     __winning_score = 1000
-    __good_score = 100
  
     # Public methods
     #--------------------------------------------------------------------------   
@@ -303,12 +302,7 @@ class ComputerPlayer(object):
         if len(winning_moves) != 0:
             print "Winning move: " + str(winning_moves[0])
             next_move = winning_moves[0]
-       
-        losing_moves = self.__winningMoves(self.__opponent, self.__current_state)
-        #if len(losing_moves) != 0:
-         #   print "Losing move: " + str(losing_moves[0])
-          #  next_move = losing_moves[0]
-         
+        
         if next_move == -1:
             next_move = self.__findHighestScoreNode().move
             
@@ -378,15 +372,6 @@ class ComputerPlayer(object):
             return -ComputerPlayer.__winning_score
         elif (self.__player == TicTacToe.players[0]) and (self.__isWinner(TicTacToe.players[1], game_state) == True):
             return -ComputerPlayer.__winning_score
-        # Find a good move
-        #if (self.__player == TicTacToe.players[0]) and (self.__almostWinner(TicTacToe.players[0], game_state) == True):
-        #    return ComputerPlayer.__good_score
-        #elif (self.__player == TicTacToe.players[1]) and (self.__almostWinner(TicTacToe.players[1], game_state) == True):
-        #    return ComputerPlayer.__good_score
-        #elif (self.__player == TicTacToe.players[1]) and (self.__almostWinner(TicTacToe.players[0], game_state) == True):
-        #    return -ComputerPlayer.__good_score
-        #elif (self.__player == TicTacToe.players[0]) and (self.__almostWinner(TicTacToe.players[1], game_state) == True):
-        #    return -ComputerPlayer.__good_score
                 
         return 0
         
@@ -411,9 +396,6 @@ class ComputerPlayer(object):
                 winning_moves.append(moves[0])
                 
         return winning_moves
-        
-    def __almostWinner(self, player, game_state):
-        pass
                           
     def __getOtherPlayer(self, player):
         if player == TicTacToe.players[0]:
