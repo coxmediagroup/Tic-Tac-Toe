@@ -12,6 +12,7 @@ from Tkinter import *
 # Game parameters
 computer_goes_first = True
 background_color = 'white'
+highlight_color = 'red'
 canvas_height = 400
 canvas_width = 400
 board_margins = 40
@@ -37,7 +38,26 @@ def setStartingPlayer():
     pass
 
 def calculateCoord(position):
-    pass
+    # x, y, radius, width/height
+    coords = [None, None, None, None]
+    column = position % 3
+    row = position / 3
+    
+    if column == 0:
+        coords[0] = 1
+    elif column == 1:
+        coords[0] = 1
+    elif column == 2:
+        coords[0] = 1
+        
+    if row == 0:
+        coords[1] = 1
+    elif row == 1:
+        coords[1] = 1
+    elif row == 2:
+        coords[1] = 1
+    
+    return coords
     
 def drawCircle(canvas, x, y, rad):
     canvas.create_oval(x-rad, y-rad, x+rad, y+rad, width=3, fill=background_color)
