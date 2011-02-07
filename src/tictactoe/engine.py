@@ -294,7 +294,7 @@ class RulesBasedEngine(Engine):
         ''' Strategy. AI attempts to create a fork, i.e. two possible winning
             moves.
             
-            The algorithm tries all possible move to create a new board, which
+            The algorithm tries all possible moves to create a new board, which
             is then evaluated according to the 'Play win' strategy.
         '''
         
@@ -304,7 +304,8 @@ class RulesBasedEngine(Engine):
         # Check whether any of the legal moves creates two possible win moves
         for legal_move in self.get_legal_moves(board):
             board[legal_move[0], legal_move[1]] = player
-            new_total, new_scores[0], new_scores[1] = self._compute_scores(board)
+            # Recalculate scores
+            new_total, new_scores[P1], new_scores[P2] = self._compute_scores(board)
             next_moves = self._play_win(board, player, new_total, new_scores)
             # Revert
             board[legal_move[0], legal_move[1]] = EMPTY
@@ -347,7 +348,7 @@ class RulesBasedEngine(Engine):
         
         for corner in self._CORNERS:
             if board[corner[0], corner[1]] == EMPTY: moves.append(corner)
-            
+
         return moves
     
     def _play_empty_side(self, board, player, total, scores):

@@ -276,6 +276,31 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
                     ]
         self._run_play_scenarios(scenarios)
         
+    def test_play_fork(self):
+        ''' Tests whether the algorithm attempts to to play fork. '''
+        
+        scenarios = [
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, P2],
+                                                    [EMPTY, EMPTY, P1],
+                                                    [EMPTY, P2, EMPTY],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(1, 0)]
+                        },
+                        {
+                            'board': numpy.array([
+                                                    [P1, EMPTY, EMPTY],
+                                                    [EMPTY, P2, EMPTY],
+                                                    [EMPTY, EMPTY, P1],
+                                                  ]),
+                            'player': P1,
+                            'expected_moves': [(2, 0), (0, 2)]
+                        },
+                    ]
+        self._run_play_scenarios(scenarios)        
+        
     def test_unbeatable_cross(self):
         ''' Tests whether the engine is unbeatable given that it opens the game.
         
@@ -303,13 +328,13 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
         self._run_unbeatable(board, [], P1, P1)
         
     def _run_unbeatable(self, board, move_history, player, human):
-        '''
+        ''' Checks every possible game permutation for computer defeat.
         
         Args:
-            board:
-            move_history:
-            player:
-            human:
+            board: The game board represented by numpy 3x3 array of arrays.
+            move_history: An ordered list of tuples (x, y) representing moves.
+            player: Current player.
+            human: Human player.
         '''
         
         state = self._engine.get_state(board)
@@ -347,7 +372,7 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
             human: Human player (P1 or P2)
             
         Returns:
-            True of computer has lost.
+            True if computer has lost.
         '''
         
         if state == P1_WON and human == P1: return True
