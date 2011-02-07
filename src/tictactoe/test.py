@@ -4,6 +4,7 @@ Created on Jan 29, 2011
 @author: Krzysztof Tarnowski (krzysztof.tarnowski@ymail.com)
 '''
 import unittest
+import copy
 
 import util
 from engine import *
@@ -33,6 +34,11 @@ class GameEngineTest(object):
         
         _MESSAGE_PLAY_TEST: String format for text printed in case the run
                             test fails for a scenario.
+                            
+        _PLAYER_CHAR: Mapping player => character (X or O)
+                            
+        _MESSAGE_UNBEATALBE_TEST: String format for text printed in case the
+                                  test_unbeatable_{} fails.
     '''
     
     _MESSAGE_STATE_TEST = 'Expected {0}, got {1}.\n{2}'
@@ -45,6 +51,10 @@ class GameEngineTest(object):
                     }
     
     _MESSAGE_PLAY_TEST = 'Expected one of {0}, got {1}.\n{2}'
+    
+    _PLAYER_CHAR = { P1: 'X', P2: 'O' }
+    
+    _MESSAGE_UBEATABLE_TEST = 'Computer lost when playing {0}.\nMove history: {1}.\n{2}'
     
     def setUp(self):
         self._engine = None
@@ -264,9 +274,87 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
                             'expected_moves': [(0, 1)]
                         },
                     ]
-        self._run_play_scenarios(scenarios)    
-
+        self._run_play_scenarios(scenarios)
         
+    def test_unbeatable_cross(self):
+        ''' Tests whether the engine is unbeatable given that it opens the game.
+        
+            This test recursively generates whole game tree, i.e. examines all
+            possible moves for non-AI player.
+        '''
+        # TODO (krzysztof.tarnowski@ymail.com): Move to GameEngineTest later.
+        # This test would take too long to finish for NegamaxEngine.
+        
+        board = numpy.zeros((3, 3), dtype=numpy.int16)
+         
+        self._run_unbeatable(board, [], P1, P2)
+        
+    def test_unbeatable_nough(self):
+        ''' Tests whether the engine is unbeatable given that it plays nought.
+        
+            This test recursively generates whole game tree, i.e. examines all
+            possible moves for non-AI player.
+        '''
+        # TODO (krzysztof.tarnowski@ymail.com): Move to GameEngineTest later.
+        # This test would take too long to finish for NegamaxEngine.
+        
+        board = numpy.zeros((3, 3), dtype=numpy.int16)
+                        
+        self._run_unbeatable(board, [], P1, P1)
+        
+    def _run_unbeatable(self, board, move_history, player, human):
+        '''
+        
+        Args:
+            board:
+            move_history:
+            player:
+            human:
+        '''
+        
+        state = self._engine.get_state(board)
+        if state != IN_PROGRESS:
+            computer = self._engine.change_player(human)
+            self.assertFalse(self._has_computer_lost(state, human),
+                             self._MESSAGE_UBEATABLE_TEST
+                             .format(self._PLAYER_CHAR[computer],
+                                     move_history,
+                                     util.board_to_str(board)))
+            return
+            
+        if player == human:
+            for move in self._engine.get_legal_moves(board):
+                new_board = board.copy()
+                new_move_history = copy.copy(move_history)
+                
+                new_move_history.append(move)
+                new_board[move[0], move[1]] = player
+                
+                self._run_unbeatable(new_board, new_move_history, 
+                                     self._engine.change_player(player), human)
+        else:
+            move = self._engine.next_move(board, player)
+            move_history.append(move)
+            board[move[0], move[1]] = player
+            
+            self._run_unbeatable(board, move_history, self._engine.change_player(player), human)
+
+    def _has_computer_lost(self, state, human):
+        ''' Checks whether the computer has lost the game.
+        
+        Args:
+            state: Game state.
+            human: Human player (P1 or P2)
+            
+        Returns:
+            True of computer has lost.
+        '''
+        
+        if state == P1_WON and human == P1: return True
+        if state == P2_WON and human == P2: return True
+        
+        return False
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
