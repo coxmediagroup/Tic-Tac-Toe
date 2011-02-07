@@ -84,11 +84,11 @@ class Engine(object):
         '''
         #TODO: Something faster; possibly use Magic Square
 
-        total, p1_score, p2_score = self._compute_scores(board)
+        total, scores = self._compute_scores(board)
                     
         for win_value in self._WIN_VALUES:
-            if (p1_score & win_value) == win_value: return P1_WON
-            if (p2_score & win_value) == win_value: return P2_WON
+            if (scores[P1] & win_value) == win_value: return P1_WON
+            if (scores[P2] & win_value) == win_value: return P2_WON
         
         # All fields are taken and no one has won
         if total == self._TOTAL:
@@ -96,7 +96,7 @@ class Engine(object):
             
         return IN_PROGRESS
     
-    def change_player(self, player):
+    def get_opponent(self, player):
         ''' Gets opponent to the given player.
         
         Args:
@@ -143,7 +143,7 @@ class Engine(object):
                     
         total = scores[P1] + scores[P2]
                     
-        return total, scores[P1], scores[P2]
+        return total, scores
         
 
 class NegamaxEngine(Engine):
@@ -193,7 +193,7 @@ class NegamaxEngine(Engine):
             next_board = board.copy()
             next_board[move[0], move[1]] = player
             
-            x = -self._negamax(next_board, depth + 1, self.change_player(player))
+            x = -self._negamax(next_board, depth + 1, self.get_opponent(player))
             
             if x > maximum:
                 maximum = x
@@ -254,8 +254,7 @@ class RulesBasedEngine(Engine):
                             ]
     
     def next_move(self, board, player):
-        scores = { P1: 0, P2: 0 }
-        total, scores[P1], scores[P2] = self._compute_scores(board)        
+        total, scores = self._compute_scores(board)        
         
         # Try available strategies in the specific order. Stop if a strategy
         # produces valid move(s).
@@ -288,7 +287,7 @@ class RulesBasedEngine(Engine):
             perspective.
         '''
         
-        return self._play_win(board, self.change_player(player), total, scores)
+        return self._play_win(board, self.get_opponent(player), total, scores)
     
     def _play_fork(self, board, player, total, scores):
         ''' Strategy. AI attempts to create a fork, i.e. two possible winning
@@ -299,13 +298,12 @@ class RulesBasedEngine(Engine):
         '''
         
         moves = []
-        new_scores = { P1: 0, P2: 0 }
         
         # Check whether any of the legal moves creates two possible win moves
         for legal_move in self.get_legal_moves(board):
             board[legal_move[0], legal_move[1]] = player
             # Recalculate scores
-            new_total, new_scores[P1], new_scores[P2] = self._compute_scores(board)
+            new_total, new_scores = self._compute_scores(board)
             next_moves = self._play_win(board, player, new_total, new_scores)
             # Revert
             board[legal_move[0], legal_move[1]] = EMPTY
@@ -315,12 +313,29 @@ class RulesBasedEngine(Engine):
         return moves
     
     def _play_block_fork(self, board, player, total, scores):
-        ''' Strategy. AI attempts to block opponents fork.
+        ''' Strategy. AI attempts to force the opponent into defending.
         
-            It is the same as trying to play a fork from opponent's perspective.
+            The algorithm attempts to play two in row as long as it does not
+            result in the opponent creating a fork or winning.
         '''
+        moves = []
+        opponent = self.get_opponent(player)
         
-        return self._play_fork(board, self.change_player(player), total, scores)
+        for move in self.get_legal_moves(board):
+            board[move[0], move[1]] = player
+            new_total, new_scores = self._compute_scores(board)
+            
+            # Get winning moves for the player on the new board
+            winning_moves = self._play_win(board, player, new_total, new_scores)
+            # Get fork moves for the opponent on the new board
+            fork_moves = self._play_fork(board, opponent, new_total, new_scores)
+            # The move is valid only if it does not create a fork
+            for winning_move in winning_moves:
+                if not winning_move in fork_moves: moves.append(move)
+            # Revert the board
+            board[move[0], move[1]] = EMPTY
+            
+        return moves
     
     def _play_center(self, board, player, total, scores):
         ''' Strategy. AI attempts to play center. '''
@@ -329,10 +344,9 @@ class RulesBasedEngine(Engine):
     
     def _play_opposite_corner(self, board, player, total, scores):
         ''' Strategy. AI attempts to play opposite corner. '''
-        # TODO: Try different variants/definitions of opposite corner 
         
         moves = []
-        opponent = self.change_player(player)
+        opponent = self.get_opponent(player)
         
         for corner in self._CORNERS:
             if board[corner[0], corner[1]] == opponent:

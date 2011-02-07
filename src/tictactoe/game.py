@@ -82,7 +82,7 @@ class Game(object):
                 raise InvalidMove(move, legal_moves)
         
         self.board[move[0], move[1]] = self.player
-        self.player = game_engine.change_player(self.player)
+        self.player = game_engine.get_opponent(self.player)
         self._state = game_engine.get_state(self.board)
     
     def is_over(self):

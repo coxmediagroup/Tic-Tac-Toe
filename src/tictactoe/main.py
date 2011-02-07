@@ -20,7 +20,8 @@ def read_move():
     Returns:
         A two-item list representing field to capture. For example [0, 0].
     '''
-    #TODO(krzysztof.tarnowski@ymail.com): Sanitize the input 
+    #TODO(krzysztof.tarnowski@ymail.com): Sanitize the input
+     
     sys.stdout.write('Your move [x, y]: ')
     move = [int(c) for c in sys.stdin.readline().split(',')]
     return tuple(move)
@@ -62,6 +63,7 @@ def main():
     print(''.join(message))
     
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

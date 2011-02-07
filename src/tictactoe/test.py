@@ -277,7 +277,7 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
         self._run_play_scenarios(scenarios)
         
     def test_play_fork(self):
-        ''' Tests whether the algorithm attempts to to play fork. '''
+        ''' Tests whether the algorithm attempts to create fork. '''
         
         scenarios = [
                         {
@@ -339,7 +339,7 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
         
         state = self._engine.get_state(board)
         if state != IN_PROGRESS:
-            computer = self._engine.change_player(human)
+            computer = self._engine.get_opponent(human)
             self.assertFalse(self._has_computer_lost(state, human),
                              self._MESSAGE_UBEATABLE_TEST
                              .format(self._PLAYER_CHAR[computer],
@@ -356,13 +356,13 @@ class RulesBasedEngineTest(unittest.TestCase, GameEngineTest):
                 new_board[move[0], move[1]] = player
                 
                 self._run_unbeatable(new_board, new_move_history, 
-                                     self._engine.change_player(player), human)
+                                     self._engine.get_opponent(player), human)
         else:
             move = self._engine.next_move(board, player)
             move_history.append(move)
             board[move[0], move[1]] = player
             
-            self._run_unbeatable(board, move_history, self._engine.change_player(player), human)
+            self._run_unbeatable(board, move_history, self._engine.get_opponent(player), human)
 
     def _has_computer_lost(self, state, human):
         ''' Checks whether the computer has lost the game.
