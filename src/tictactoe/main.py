@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Created on Jan 29, 2011
 
@@ -28,7 +29,7 @@ def read_move():
 
 def main():
     ''' Entry method of the Tic-Tac-Toe application. '''
-    sys.stdout.write('Cross or nought? [default: O]: ')
+    sys.stdout.write('Cross (X) or nought (0)? [default: O]: ')
     player_choice = sys.stdin.readline().strip().upper()
     human = (player_choice == 'X') and engine.P1 or engine.P2
     
