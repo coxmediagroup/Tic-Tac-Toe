@@ -82,22 +82,45 @@ class TicTacToe:
         return True
     
     def counter_move(self, sign='X'):
-        
+
         if not self.available:
             return False
         options = []
         value = None
 
-        if self.layout[4] == 4:
+        if self.computer == 'X' and self.layout[4] == 4:
             value = 4
 
-        elif len(self.challenger_path) < 2 and \
-                 self.challenger_path[0] == 4:
-            value = [i for i in self.corners if i in self.available][0]
+        elif len(self.challenger_path) < 2 and self.computer == 'O':
+
+            if self.challenger_path[0] not in self.corners:
+                options = [i for i in self.corners if i in self.available]
+
+                for i in options:
+                    if i + 1 == self.challenger_path[0] or i -1 == self.challenger_path:
+                        value = i
+                        break
+
+        elif len(self.challenger_path) < 2 and self.computer == 'X':
+
+            if self.layout[4] == 4:
+                value = 4
+            else:
+                value = [i for i in self.corners if i in self.available][0]
 
         else:
-            combine_computer = combinations(self.computer_path, 2)
-            combine_challenger = combinations(self.challenger_path, 2)
+
+            try:
+                combine_computer = combinations(self.computer_path, 2)
+
+            except ValueError:
+                combine_computer = []
+
+            try:
+                combine_challenger = combinations(self.challenger_path, 2)
+
+            except ValueError:
+                combine_computer = []
 
             for x in combine_computer:
                 diff =  self.winning_sum - (self.definition[x[0]] + 
@@ -111,7 +134,7 @@ class TicTacToe:
                 options.append({'pos': diff, 
                               'remain': self.winning_sum - diff})
             priority = sorted(options, key=lambda x: x['remain'])
-            
+
             for i in priority:
 
                 try:
@@ -130,7 +153,7 @@ class TicTacToe:
 
                 else:
                     value = self.available[0]
-        self.make_a_move(value, sign)
+        return self.make_a_move(value, sign)
     
     def play(self):
         '''
