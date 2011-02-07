@@ -4,8 +4,13 @@ import random
 import sys
 
 class TicTacToe:
-    
+    '''
+    A tictactoe game that will let user chooses to be an X or an O.
+    '''
     def __init__(self):
+        '''
+        Set default values
+        '''
         self.layout = [0,1,2,3,4,5,6,7,8]
         self.available = [0,1,2,3,4,5,6,7,8]
         self.definition = [8,1,6,3,5,7,4,9,2]
@@ -26,6 +31,9 @@ class TicTacToe:
         self.finished = False
     
     def board(self):
+        '''
+        Print current board.
+        '''
         print "  %s  |  %s  |  %s" % (self.layout[0], self.layout[1], self.layout[2])
         print "-----|-----|----"
         print "  %s  |  %s  |  %s" % (self.layout[3], self.layout[4], self.layout[5])
@@ -33,6 +41,10 @@ class TicTacToe:
         print "  %s  |  %s  |  %s" % (self.layout[6], self.layout[7], self.layout[8])
     
     def get_highest_value(self):
+        '''
+        Based on self.definition, the winning sum for all position is 15.
+        So, this function will check which ones are closer to winning sum.
+        '''
         big_to_small = sorted(self.definition, reverse=True)
 
         for i in big_to_small:
@@ -41,7 +53,9 @@ class TicTacToe:
                 return self.definition.index(i)
     
     def who_wins(self):
-        
+        '''
+        Check who won based on pre-defined winning position possibilities.
+        '''
         for i in self.winning_position:
             
             if self.layout[i[0]] == self.layout[i[1]] == self.layout[i[2]]:
@@ -55,6 +69,9 @@ class TicTacToe:
         return False
 
     def ask_for_position(self):
+        '''
+        This function will ask for user input what positions the user wants to go.
+        '''
         try:
             position = raw_input('Choose your position: ')
 
@@ -71,6 +88,10 @@ class TicTacToe:
         return False
     
     def make_a_move(self, pos, sign='X'):
+        '''
+        This function is the actual position assignment. When that spot is filled,
+        remove them from the available choices.
+        '''
         self.layout[pos] = sign
         self.available.remove(pos)
 
@@ -82,25 +103,36 @@ class TicTacToe:
         return True
     
     def counter_move(self, sign='X'):
-
+        '''
+        This is the main AI of computer moves. It will check (hopefully) every possibilities
+        to either win or draw.
+        '''
         if not self.available:
             return False
         options = []
         value = None
 
+        # when the computer goes first, make sure the centered square is filled
         if self.computer == 'X' and self.layout[4] == 4:
             value = 4
 
+        # when the computer is defending, check if the fist move is on a corner,
+        # or an edge. If it was on a corner, fill the centered square, else,
+        # the computer will choose the spot beside it.
         elif len(self.challenger_path) < 2 and self.computer == 'O':
+            options = [i for i in self.corners if i in self.available]
 
             if self.challenger_path[0] not in self.corners:
-                options = [i for i in self.corners if i in self.available]
 
                 for i in options:
                     if i + 1 == self.challenger_path[0] or i -1 == self.challenger_path:
                         value = i
                         break
+            else:
+                value = 4
 
+        # when the computer is on offense, grab the centered square. However,
+        # if it is already filled, choose any of available corners.
         elif len(self.challenger_path) < 2 and self.computer == 'X':
 
             if self.layout[4] == 4:
@@ -109,7 +141,9 @@ class TicTacToe:
                 value = [i for i in self.corners if i in self.available][0]
 
         else:
-
+            # as the game goes on, the computer will calculate priorities
+            # on which spots have the biggest chance to win. Winning is preferred
+            # when there are options between winning and blocking.
             try:
                 combine_computer = combinations(self.computer_path, 2)
 
@@ -147,7 +181,10 @@ class TicTacToe:
                 except:
                     pass
             else:
-
+                # if it cannot find any priority, it will check which ones
+                # are closer to winning. If it cannot find any, just choose the
+                # first one available on the board, since at this point, the aim
+                # is only for a draw. 
                 if self.get_highest_value():
                     value = self.get_highest_value()
 
@@ -157,7 +194,7 @@ class TicTacToe:
     
     def play(self):
         '''
-        
+        The function who calls on other functions to keep the game alive.
         '''
         while not self.finished:
             # use one of the corners if the computer has to make the first move
@@ -185,6 +222,9 @@ class TicTacToe:
                 sys.exit('Draw')
 
 if __name__ == "__main__":
+    '''
+    Let challenger chooses to play with X or O.
+    '''
     game = TicTacToe()
     
     while not game.challenger:
