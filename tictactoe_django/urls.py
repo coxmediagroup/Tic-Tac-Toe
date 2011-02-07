@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls.defaults import *
 
 # Uncomment the next two lines to enable the admin:
@@ -17,3 +18,9 @@ urlpatterns = patterns('',
     url(r'^set-challenger/$', 'game.views.set_challenger', name='set_challenger'),
     url(r'^play/$', 'game.views.play', name='play_game'),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('', 
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT}),
+    )
