@@ -1,0 +1,107 @@
+<html>
+    
+    <head>
+        <title>Tic Tac Toe Test</title>
+        <style type="text/css">
+            #container {
+                width: 500px;
+                margin: 50px auto;
+                font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+                text-align: center;
+                color: #606060;
+            }
+            
+            .board {
+                width: 150px;
+                height: 150px;
+                margin: 0;
+                padding: 0;
+                float: left;
+                text-align: center;
+                background: #fbfbfb;
+                border: solid 1px #ddd;
+            }
+            
+            .board p {
+                height: 150px;
+                width: 150px;
+                margin: 0;
+                padding: 0;
+                font-size: 40px;
+                font-weight: 700;
+                line-height: 150px;
+                border: solid 1px #ddd;
+            }
+            
+            .challenger {
+                /* color: blue; */
+                background: #d3e8f4;
+            }
+            
+            .computer {
+                background: #fac8c8;
+            }
+            .clear {
+                clear: both;
+            }
+        </style>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script type="text/javascript">
+        $(function() {
+            $(".choose").click(function() {
+                var player = $(this).text();
+                $("#result").empty();
+                
+                $.post('/set-challenger/', { 'challenger': player }, function(res) {
+                    
+                    if (res.error) {
+                        alert(res.error);
+                    }
+                    
+                    if (res.counter) {
+                        $("#pos_"+res.counter.pos).addClass('computer').html('<p>'+res.counter.sign+'</p>');
+                    }
+                });
+                
+                $("#result").append('<p>Click on the position number you want to play. As a reminder, you are playing as <strong class="challenger">'+ player +'<strong></p>');
+                return false;
+            });
+            
+            $(".board p").click(function() {
+                pos = $(this).parent().attr('id').split('_');
+                $.post('/play/', {'pos': pos[1]}, function(res) {
+                    
+                    if (res.error) {
+                        alert(res.error);
+                    
+                    } else {
+                        $("#pos_"+res.move.pos).addClass('challenger').html('<p>'+res.move.sign+'</p>');
+                        $("#pos_"+res.counter.pos).addClass('computer').html('<p>'+res.counter.sign+'</p>');
+                    }
+                    
+                    if (res.finish_message) {
+                        
+                        alert(res.finish_message);
+                        location.reload();
+                    }
+                });
+                return false;
+            })
+        });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            {% for i in layout %}
+            <div id="pos_{{ forloop.counter0 }}" class="board"><p>{{ i }}</p></div>
+            {% endfor %}
+            <div class="clear">&nbsp;</div>
+            
+            <div id="result" style="margin: 10px 0 0 0">
+                <p>Choose whether you want to be <a class="choose" href="#">X</a> or <a class="choose" href="#">O</a></p>
+            </div>
+        </div>
+    </body>
+</html>
