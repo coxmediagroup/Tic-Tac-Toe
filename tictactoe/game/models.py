@@ -42,3 +42,7 @@ class Game(models.Model):
                 return bs[1][1]
 
         return None
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_game', (), { 'game_id': self.id })
