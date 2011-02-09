@@ -1,0 +1,10 @@
+{% comment %}
+This template renders a game's board_state.
+{% endcomment %}
+
+{% for row in game.board_state %}
+    {% for value in row %}
+        <div class="cell{% if value == 'X' %} exed{% endif %}{% if value == 'O' %} owed{% endif %}"
+            id="cell-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">&nbsp;</div>
+    {% endfor %}
+{% endfor %}
