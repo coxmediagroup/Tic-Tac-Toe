@@ -28,7 +28,7 @@
 
     <script type="text/javascript" charset="utf-8">
         $(function() {
-            $("#game_board").delegate('.cell', 'click', function() {
+            $("#play_area").delegate('.cell', 'click', function() {
                 // Extract the row and column from the cell's id.
                 var matches = this.id.match(/cell-(\d)-(\d)/);
                 var row = matches[1];
@@ -38,7 +38,7 @@
                     '{% url make_move game.id %}',
                     { 'row': row, 'column': column },
                     function(data) {
-                        $('#game_board').html(data);
+                        $('#play_area').html(data);
                     }
                 );
             });
@@ -47,7 +47,7 @@
 {% endblock head %}
 
 {% block content %}
-    <div id="game_board">
+    <div id="play_area">
         {% include "game/_board.html" %}
     </div>
 
