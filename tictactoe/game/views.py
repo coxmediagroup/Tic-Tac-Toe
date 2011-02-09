@@ -1,9 +1,12 @@
 from django.shortcuts import redirect, get_object_or_404, render_to_response
 from game.models import Game
+from game.ai import perform_move
 
 def new_game(request):
     "Create a new game and redirect to its url."
-    game = Game.objects.create()
+    game = Game()
+    perform_move(game)  # Computer goes first
+    game.save()
     return redirect(game)
 
 def show_game(request, game_id):
@@ -27,6 +30,8 @@ def make_move(request, game_id):
     row, column = int(request.POST['row']), int(request.POST['column'])
     if game.board_state[row][column] is None:
         game.board_state[row][column] = 'O'
+        if not game.is_game_over():
+            perform_move(game)
         game.save();
 
     return render_to_response("game/_board.html", { 'game': game })

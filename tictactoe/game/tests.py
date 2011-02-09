@@ -1,5 +1,6 @@
 from django.test import TestCase
 from game.models import Game
+from game.ai import perform_move
 
 class GameTest(TestCase):
     """
@@ -64,3 +65,92 @@ class GameTest(TestCase):
                          ['X', 'O', 'X'],
                          ['O', 'X', 'O']]
         self.assertTrue(g.is_game_over())
+
+class AITests(TestCase):
+    """
+    Unit tests for AI.
+    """
+    def test_take_win(self):
+        "The AI should always take a winning move if available."
+        # Row
+        g = Game()
+        g.board_state[0][0] = g.board_state[0][1] = 'X'
+        perform_move(g)
+        self.assertEquals(g.board_state[0][2], 'X')
+
+        # Col
+        g = Game()
+        g.board_state[0][0] = g.board_state[1][0] = 'X'
+        perform_move(g)
+        self.assertEquals(g.board_state[2][0], 'X')
+
+        # Diagonals
+        g = Game()
+        g.board_state[0][2] = g.board_state[2][0] = 'X'
+        perform_move(g)
+        self.assertEquals(g.board_state[1][1], 'X')
+
+        g = Game()
+        g.board_state[0][0] = g.board_state[1][1] = 'X'
+        perform_move(g)
+        self.assertEquals(g.board_state[2][2], 'X')
+
+        g = Game()
+        g.board_state[2][0] = g.board_state[1][1] = 'X'
+        perform_move(g)
+        self.assertEquals(g.board_state[0][2], 'X')
+
+    def test_take_block(self):
+        "The AI should always block the player if possible."
+        # Row
+        g = Game()
+        g.board_state[0][0] = g.board_state[0][1] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[0][2], 'X')
+
+        # Col
+        g = Game()
+        g.board_state[0][0] = g.board_state[1][0] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[2][0], 'X')
+
+        # Diagonals
+        g = Game()
+        g.board_state[0][2] = g.board_state[2][0] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[1][1], 'X')
+
+        g = Game()
+        g.board_state[0][0] = g.board_state[1][1] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[2][2], 'X')
+
+        g = Game()
+        g.board_state[2][0] = g.board_state[1][1] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[0][2], 'X')
+
+    def test_first_move(self):
+        "The AI should always take the middle cell if it is the first move."
+        g = Game()
+        perform_move(g)
+        self.assertEquals(g.board_state[1][1], 'X')
+
+    def test_second_move(self):
+        """
+        The AI should always try for the middle cell, but fallback to any
+        corner if it is taken.
+        """
+        g = Game()
+        g.board_state[0][1] = 'O'
+        perform_move(g)
+        self.assertEquals(g.board_state[1][1], 'X')
+
+        g = Game()
+        g.board_state[1][1] = 'O'
+        perform_move(g)
+        corners = [
+            g.board_state[0][0], g.board_state[0][2],
+            g.board_state[2][0], g.board_state[2][2]
+        ]
+        self.assertTrue('X' in set(corners))
