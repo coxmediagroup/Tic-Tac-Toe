@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p class="instructions">
+        You will be playing as 'O' and the computer will be 'X'.  The computer
+        will go first.  Simply get three O's in a row to win!
+    </p>
+
+    <p><a href="{% url new_game %}">Start</a></p>
+{% endblock content %}
