@@ -1,3 +1,16 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", Tahoma, Verdana, Arial, sans-serif;
+    line-height: 1.5em;
+}
+
+#container {
+    width: 310px;
+    margin: 0 auto;
+    text-align: center;
+}
+
 #game_board {
     padding: 0;
     margin: 0;
