@@ -8,6 +8,8 @@ Copyright (c) 2011 __Stakem Research__. All rights reserved.
 """
 
 from Tkinter import *
+from TicTacToe import *
+from ComputerPlayer import *
 
 class TicTacToeGui(object):
     
@@ -32,13 +34,16 @@ class TicTacToeGui(object):
         self.board_height = 0
         self.width_of_square = 0
         self.height_of_square = 0
+        self.game = TicTacToe()
+        self.computer = ComputerPlayer(TicTacToe.players[0])
         
         self.root.title('Tic Tac Toe')
         self.setupMenu()
         self.canvas = Canvas(width=TicTacToeGui.canvas_init_width, height=TicTacToeGui.canvas_init_height, bg=TicTacToeGui.background_color)
         self.canvas.pack(fill=BOTH, expand=YES)
         self.canvas.bind('<Configure>', self.resize)
-        self.canvas.bind('<Button-1>', onCanvasClick)
+        self.canvas.bind('<Button-1>', self.onCanvasClick)
+        self.newGame()
         
     def setupMenu(self):
         menubar = Menu(self.root)
@@ -58,16 +63,20 @@ class TicTacToeGui(object):
     def drawCanvas(self):
         self.recalculateCanvas()
         self.drawBoard()
-        for coords in self.marker_positions:
-            self.drawX(coords[0], coords[1], coords[2])
-        #self.canvas.create_oval(100, 100, 200, 200, width=TicTacToeGui.marker_line_width, fill=TicTacToeGui.background_color, outline=TicTacToeGui.marker_color)
-    
+        state = self.game.getCurrentGameState()
+        for i, s in enumerate(state):
+            coords = self.marker_positions[i]
+            if s == TicTacToe.players[0]:
+                self.drawX(coords[0], coords[1], coords[2])
+            elif s == TicTacToe.players[1]:
+                self.canvas.create_oval(coords[0], coords[1], coords[0] + coords[2], coords[1] + coords[2], width=TicTacToeGui.marker_line_width, fill=TicTacToeGui.background_color, outline=TicTacToeGui.marker_color)
+           
     def recalculateCanvas(self):
         self.board_width = self.canvas.width - 2 * TicTacToeGui.board_margins
         self.board_height = self.canvas.height - 2 * TicTacToeGui.board_margins
         
-        self.width_of_square = ( self.board_width - 2 * TicTacToeGui.board_line_width - 2 * TicTacToeGui.marker_line_width) / 3
-        self.height_of_square = ( self.board_height - 2 * TicTacToeGui.board_line_width - 2 * TicTacToeGui.marker_line_width ) / 3
+        self.width_of_square = ( self.board_width - 2 * TicTacToeGui.board_line_width - 6 * TicTacToeGui.marker_line_width) / 3
+        self.height_of_square = ( self.board_height - 2 * TicTacToeGui.board_line_width - 6 * TicTacToeGui.marker_line_width ) / 3
         self.marker_positions = []
         
         for i in range(9):
@@ -108,7 +117,12 @@ class TicTacToeGui(object):
         
     def newGame(self):
         print "New game."
-    
+        self.game.newGame()
+        if self.computer_goes_first:
+            self.computer.newGame(TicTacToe.players[0])
+        else:
+            self.computer.newGame(TicTacToe.players[1])
+        
     def setStartingPlayer(self):
         print "Set start player."
         
