@@ -90,14 +90,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'registration',
     'TickyTack.DJTickyTack',
 )
 
-
+ACCOUNT_ACTIVATION_DAYS = 7
 STATIC_ROOT_DIR = (_base + "/DJTickyTack/static/")
 STATIC_ROOT_URL = "/static/"
 
@@ -109,3 +108,7 @@ kLogout = "/accounts/logout/"
 kGames = "/games/"
 kJoin = "/join/"
 
+if os.path.exists("/etc/redhat-release:"):
+    EMAIL_BACKEND = 'sendmail_backend.SendMailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

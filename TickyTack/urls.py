@@ -12,10 +12,14 @@ urlpatterns = patterns('',
 
     # django-supplied parts:
     (r'^admin/', include(admin.site.urls)),
-    (_u(kLogin), 'django.contrib.auth.views.login',
-        {'template_name': 'login.html'}),
 
-    (_u(kLogout), 'django.contrib.auth.views.logout'),
+    # django-registration:
+    (r'^accounts/', include('registration.backends.default.urls')),
+
+    #(_u(kLogin), 'django.contrib.auth.views.login',
+    #    {'template_name': 'login.html'}),
+
+    #(_u(kLogout), 'django.contrib.auth.views.logout'),
 
     # mount the app:
     (_u(kRoot), 'DJTickyTack.views.index'),

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>New User Registration</h2>
+
+  <form action="" method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit" />
+  </form>
+
+  <p><strong>Anti-Spam Policy:</strong> Your address will not be shared with any
+  outside parties, and you will only receive email directly related to
+    your account.</p>
+
+{% endblock %}
+
+

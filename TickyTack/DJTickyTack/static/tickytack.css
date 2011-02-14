@@ -185,3 +185,13 @@ td.empty
   font-style: italic;
   display:block;
 }
+
+label
+{
+  display: block;
+}
+
+#navBar label
+{
+  display: inline;
+}

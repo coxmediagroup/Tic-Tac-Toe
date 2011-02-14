@@ -1,0 +1,9 @@
+
+Thank you for registering with DJTickyTack!
+
+Click the link below to activate your account:
+
+   http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
+
+This link will be active for {{ expiration_days }} days.
+
