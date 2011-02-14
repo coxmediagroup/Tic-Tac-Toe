@@ -97,9 +97,10 @@ INSTALLED_APPS = (
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
+DEFAULT_FROM_EMAIL = 'djtickytack@michaljwallace.com'
+
 STATIC_ROOT_DIR = (_base + "/DJTickyTack/static/")
 STATIC_ROOT_URL = "/static/"
-
 
 # some constants, for use with the tests
 kRoot  = "/"
@@ -108,7 +109,7 @@ kLogout = "/accounts/logout/"
 kGames = "/games/"
 kJoin = "/join/"
 
-if os.path.exists("/etc/redhat-release:"):
+if os.path.exists("/etc/redhat-release"):
     EMAIL_BACKEND = 'sendmail_backend.SendMailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
