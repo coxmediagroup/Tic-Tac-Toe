@@ -1,11 +1,6 @@
 #-------------------------------------------------------------------------------
 # Name:        Tic Tac Toe - By Demario
 # Purpose:     Fun interactive tic tac toe game
-#
-# Author:      proto
-#
-# Created:     03/02/2011
-# Copyright:   (c) proto 2011
 #-------------------------------------------------------------------------------
 from random import choice as rc
 posnval={1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9}
