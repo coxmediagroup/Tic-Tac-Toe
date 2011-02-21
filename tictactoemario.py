@@ -279,13 +279,6 @@ def player_vs_computer():
 
 def status_checker(pc='O',npc='X',turn='npcturn'):
     while True:
-        posmoves=[]        
-        for i in posnval:
-                if i==posnval[i]:
-                    posmoves.append(i)
-        if len(posmoves)==0:
-            print '\nYou have not beaten me\n'
-            break
         
         if posnval[1]==posnval[2]==posnval[3]:
             board_values()
@@ -318,7 +311,14 @@ def status_checker(pc='O',npc='X',turn='npcturn'):
         if posnval[1]==posnval[5]==posnval[9]:
             board_values()
             print 'Player',posnval[1],'wins.'
-            break      
+            break
+                posmoves=[]        
+        for i in posnval:
+                if i==posnval[i]:
+                    posmoves.append(i)
+        if len(posmoves)==0:
+            print '\nYou have not beaten me\n'
+            break
 
         if turn=='npcturn':
             npc_turn(npc)
