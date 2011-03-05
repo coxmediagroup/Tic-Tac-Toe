@@ -13,16 +13,31 @@ class Board:
     def __init__(self):
         #Game Board Value Key: 0=Empty, 1=X, 2=O
         self.gameBoard = [[0,0,0],[0,0,0],[0,0,0]]
-        
-    #Update Board Method. Takes in a row, column, and an 'X' or 'O' to put there. 
+    
+    #Update Board Method. Takes in a row, column, and a mark to put there. 
     #Returns true if update was successful, false otherwise. 
     def updateBoard(self, row, col, mark):
-        pass
+        #If Board Location Is Valid (i.e. readBoard returns something other than -1),
+        #attempt to save provided mark
+        if(self.readBoard(row, col) != -1):
+            self.gameBoard[row][col] = mark
+            return True
+        #Otherwise, return False
+        else:
+            return False
+        
     
-    #Read Board Method. Takes in a row and column. Returns an 'X', 'O', 'N' (for empty), or 'E' for 
+    #Read Board Method. Takes in a row and column. Returns a 0,1,2, or -1 for 
     #an invalid space. 
     def readBoard(self, row,col):
-        pass
+        #Check to see if provided space is valid. 
+        validRow = 0<=row<3
+        validCol = 0<=col<3
+        if(validRow and validCol):
+            #Return mark at current location
+            return self.gameBoard[row][col]
+        else:
+            return -1
     
     #Render Board Method. Outputs the contents of the board to the screen.
     def renderBoard(self):
