@@ -24,6 +24,14 @@ class Test(unittest.TestCase):
     def test_invalidReadAndWriteToGameBoard(self):
         result = self.gameBoard.updateBoard(10, 1, 1)
         self.assertEqual(result, False)
-
+        
+    #Test board rendering after updating board in a few valid locations
+    def test_renderBoard(self):
+        self.gameBoard.updateBoard(0, 0, 1)
+        self.gameBoard.updateBoard(1, 1, 2)
+        self.gameBoard.updateBoard(2, 2, 1)
+        output = self.gameBoard.renderBoard()
+        self.assertEqual(output, 'X|_|_|\n_|O|_|\n_|_|X|\n')
+        
 if __name__ == "__main__":
     unittest.main()

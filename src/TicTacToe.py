@@ -25,7 +25,6 @@ class Board:
         #Otherwise, return False
         else:
             return False
-        
     
     #Read Board Method. Takes in a row and column. Returns a 0,1,2, or -1 for 
     #an invalid space. 
@@ -39,9 +38,22 @@ class Board:
         else:
             return -1
     
-    #Render Board Method. Outputs the contents of the board to the screen.
+    #Render Board Method. Returns a string representing board.
     def renderBoard(self):
-        pass
+        output=''
+        for r in range(3):
+            for c in range(3):
+                markAtLocation = self.readBoard(r, c)
+                correspondingSymbol=''
+                if(markAtLocation==0):
+                    correspondingSymbol = '_'
+                elif(markAtLocation==1):
+                    correspondingSymbol = 'X'
+                elif(markAtLocation==2):
+                    correspondingSymbol = 'O'
+                output += correspondingSymbol+'|'
+            output +='\n'
+        return output
 
 #Make Next Move Function: Algorithm that makes computer player's next move, and modifies the board
 #accordingly. 
