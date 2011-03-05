@@ -152,5 +152,49 @@ def MakeNextMove(gameBoard):
                
 #Main Function. Procedure for playing a game. Ties together Board, AI, and user input. 
 if __name__ == '__main__':
-    pass
+    
+    #Instantiate Board Object
+    gameBoard = Board()
+    
+    #Display Welcome Text
+    print "------Tic Tac Toe - By Sam Aparo-------"
+    print"\n Note: Game Board is 3x3, indexed from 0 to 2. Player is O, computer is X"
+    
+    #Prompt user for game type choice
+    choice = raw_input("\nPlease Enter One of the Following Options: 1 (You Move First), 2 (Computer Moves First):")
+    
+    #Set current player based on choice
+    isPlayerTurn = (choice=='1')
+    
+    #While the game has not ended, let the current player move and render the board
+    while(isGameOver(gameBoard)==0):
+        #If it's the player's turn
+        if(isPlayerTurn):
+            #Render Board
+            print '\n'
+            print gameBoard.renderBoard()
+            #Prompt user for game type choice
+            move = raw_input("Please Enter Your Move (Format: r,c):")
+            #Update Board With Player's Move
+            gameBoard.updateBoard(int(move[0]), int(move[2]), 2)
+            #Switch turn over to computer
+            isPlayerTurn=False
+        else:
+            #Determine computer's move and update board
+            nextMove = MakeNextMove(gameBoard)
+            gameBoard.updateBoard(nextMove[0], nextMove[1],1)
+            #Switch turn over to player
+            isPlayerTurn=True
+            
+    #Display game results text and exit
+    print gameBoard.renderBoard()
+    print "\n Game Over!"
+    winner = isGameOver(gameBoard)
+    if(winner==1):
+        print " Computer Wins"
+    elif(winner==2):
+        print " Player Wins"
+    else:
+        print " Tie Game"
+    
     
