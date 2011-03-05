@@ -49,9 +49,9 @@ class Test(unittest.TestCase):
     #Test game over function (when game is actually over)
     def test_gameOverWin(self):
         
-        self.gameBoard.updateBoard(0, 2, 1)
-        self.gameBoard.updateBoard(1, 2, 1)
-        self.gameBoard.updateBoard(2, 2, 1)
+        self.gameBoard.updateBoard(0, 1, 1)
+        self.gameBoard.updateBoard(1, 1, 1)
+        self.gameBoard.updateBoard(2, 1, 1)
         isGameOverValue = ttt.isGameOver(self.gameBoard)
         self.assertEqual(isGameOverValue, 1)
     
@@ -76,6 +76,45 @@ class Test(unittest.TestCase):
         self.gameBoard.updateBoard(2, 2, 2)
         isGameOverValue = ttt.isGameOver(self.gameBoard)
         self.assertEqual(isGameOverValue, -1)
+    
+    #Test make next move function (when a WIN condition is available)
+    def test_makeMoveWin(self):
+        self.gameBoard.updateBoard(0, 2, 1)
+        self.gameBoard.updateBoard(1, 1, 1)
+        nextMove = ttt.MakeNextMove(self.gameBoard)
+        self.assertEqual(nextMove[0],2)
+        self.assertEqual(nextMove[1],0)
+        
+    #Test make next move function (when a BLOCK condition is available)
+    def test_makeMoveBlock(self):
+        self.gameBoard.updateBoard(1, 0, 2)
+        self.gameBoard.updateBoard(1, 1, 2)
+        nextMove = ttt.MakeNextMove(self.gameBoard)
+        self.assertEqual(nextMove[0],1)
+        self.assertEqual(nextMove[1],2)
+    
+    #Test make next move function (when a neither BLOCK nor WIN conditions available)
+    def test_makeMoveCorner(self):
+        self.gameBoard.updateBoard(1, 0, 2)
+        self.gameBoard.updateBoard(0, 1, 2)
+        nextMove = ttt.MakeNextMove(self.gameBoard)
+        self.assertEqual(nextMove[0],0)
+        self.assertEqual(nextMove[1],0)
+    
+    #Test make next move function (when a neither BLOCK, WIN, and CORNER are not available)
+    def test_makeMoveFreeSpace(self):
+        self.gameBoard.updateBoard(0, 0, 1)
+        self.gameBoard.updateBoard(0, 2, 2)
+        self.gameBoard.updateBoard(1, 0, 2)
+        self.gameBoard.updateBoard(1, 1, 2)
+        self.gameBoard.updateBoard(1, 2, 1)
+        self.gameBoard.updateBoard(2, 2, 2)
+        self.gameBoard.updateBoard(2, 0, 1)
+        self.gameBoard.updateBoard(2, 1, 1)
+        nextMove = ttt.MakeNextMove(self.gameBoard)
+        self.assertEqual(nextMove[0],0)
+        self.assertEqual(nextMove[1],1)
+        
         
         
 if __name__ == "__main__":

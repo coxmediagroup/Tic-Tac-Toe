@@ -63,10 +63,6 @@ def RotateBoard(gameBoard):
             newBoard.updateBoard(i, j, gameBoard.readBoard((3-j)-1, i))
     return newBoard
 
-#Make Next Move Function: Algorithm that makes computer player's next move, and modifies the board
-#accordingly. 
-def MakeNextMove(gameBoard):
-    pass
 
 #Is Game Over Function: Algorithm for determining if the game is over. Returns 0 for no, 1 for X win
 #2 for 0 win, and -1 for a tie game. 
@@ -97,7 +93,63 @@ def isGameOver(gameBoard):
             
     #Otherwise, return 'tie' value
     return -1
-                
+
+#Copy Board Function: Creates a by-value copy of game board
+def CopyBoard(gameBoard):
+    newBoard = Board()
+    for i in range(3):
+        for j in range(3):
+            newBoard.updateBoard(i, j, gameBoard.readBoard(i, j))
+    return newBoard
+
+#Make Next Move Function: Algorithm that decides computer player's next move.
+def MakeNextMove(gameBoard):
+    #Find a free space that would result in a win or, if winning isn't possible, would block the
+    #computer player's win. 
+    moveToReturn = [-1,-1]
+    lastAvailableFreeSpace = [-1,-1]
+    for i in range(3):
+        for j in range(3):
+            if(gameBoard.readBoard(i,j)==0):
+                lastAvailableFreeSpace[0] = i
+                lastAvailableFreeSpace[1]= j
+                newBoard = CopyBoard(gameBoard)
+                newBoard.updateBoard(i,j,1)
+                gameStatus = isGameOver(newBoard)
+                if(gameStatus==1):
+                    moveToReturn[0] = i
+                    moveToReturn[1] = j
+                    return moveToReturn
+                else:
+                    newBoard.updateBoard(i,j,2)
+                    gameStatus = isGameOver(newBoard)
+                    if(gameStatus == 2):
+                        moveToReturn[0] = i
+                        moveToReturn[1] = j
+    #If no BLOCK was found,  attempt to occupy a corner
+    if(moveToReturn[0]==-1):
+        if(gameBoard.readBoard(0,0)==0):
+            moveToReturn[0]=0
+            moveToReturn[1]=0
+        elif(gameBoard.readBoard(0,2)==0):
+            moveToReturn[0]=0
+            moveToReturn[1]=2
+        elif(gameBoard.readBoard(2,0)==0):
+            moveToReturn[0]=2
+            moveToReturn[1]=0
+        elif(gameBoard.readBoard(0,2)==0):
+            moveToReturn[0]=0
+            moveToReturn[1]=2
+        #If no corner was found, assign the last available space
+        else:
+            moveToReturn[0] = lastAvailableFreeSpace[0]
+            moveToReturn[1] = lastAvailableFreeSpace[1]
+            
+    #Return Move
+    return moveToReturn
+    
+    
+               
 #Main Function. Procedure for playing a game. Ties together Board, AI, and user input. 
 if __name__ == '__main__':
     pass
