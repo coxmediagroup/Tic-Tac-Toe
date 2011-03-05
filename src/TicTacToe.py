@@ -8,7 +8,25 @@
 #interface to the board data structure to ensure that only valid moves are read and written. 
 #It is also able to 'print' itself. 
 class Board:
-    pass
+    
+    #Constructor. Initialize board data structure (a list of lists)
+    def __init__(self):
+        #Game Board Value Key: 0=Empty, 1=X, 2=O
+        self.gameBoard = [[0,0,0],[0,0,0],[0,0,0]]
+        
+    #Update Board Method. Takes in a row, column, and an 'X' or 'O' to put there. 
+    #Returns true if update was successful, false otherwise. 
+    def updateBoard(self, row, col, mark):
+        pass
+    
+    #Read Board Method. Takes in a row and column. Returns an 'X', 'O', 'N' (for empty), or 'E' for 
+    #an invalid space. 
+    def readBoard(self, row,col):
+        pass
+    
+    #Render Board Method. Outputs the contents of the board to the screen.
+    def renderBoard(self):
+        pass
 
 #Make Next Move Function: Algorithm that makes computer player's next move, and modifies the board
 #accordingly. 
@@ -22,3 +40,4 @@ def isGameOver(gameBoard):
 #Main Function. Procedure for playing a game. Ties together Board, AI, and user input. 
 if __name__ == '__main__':
     pass
+    
