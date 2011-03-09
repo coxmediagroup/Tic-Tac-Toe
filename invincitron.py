@@ -179,13 +179,41 @@ class RandomPlayer(object):
         print "NEXT_MOVE:", game, player, moves
         return random.choice(moves)
 
-class CliPlayer(object):
-    def next_move(self,game,player):
-        
+def format(game):
+    g = [(x,'_')[x is None] for x in game]  
+    a = ('''%s %s %s  1 2 3 \n'''
+         '''%s %s %s  4 5 6 \n'''
+         '''%s %s %s  7 8 9 \n''' % 
+        (g[0],g[1],g[2],g[3],g[4],g[5],g[6],g[7],g[8])
+        )
+    return a
 
+class LivePlayer(object):
+    def next_move(self,game,player):
+        print format(game)
+        moves = dict([(str(ii+1),ii) for (ii,x) in enumerate(game) if x is None])
+        while True:
+            provisional = raw_input("your move? choose from [%s] " % " ".join(sorted(moves))).strip()
+            if provisional not in moves:
+                print "%s: not a valid move, try again" % (provisional)
+            else:
+                return moves[provisional]
 
 if __name__ == '__main__':
-    interactive()
+    ans = raw_input("X or 0? ").strip().upper()
+    X = 'X' in ans
+    if X:
+        print "you are X"
+        players = (LivePlayer(),RandomPlayer())
+    else:
+        print "you are O"
+        players = players[::-1]
+
+    winner,game,moves =  interactive(*players)
+    print "winner", winner
+    print "game board:"
+    print format(game)
+    print "move sequeunce:", moves
 
 
 
