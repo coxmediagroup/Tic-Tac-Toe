@@ -53,6 +53,13 @@ triples = [
     (2,4,6)
 ]
 
+corners = {0:8,2:6,6:2,8:0}
+sides = {1:7,3:5,5:3,7:1}
+
+
+def opponent(player):
+    return 'XO'[player=='X']
+
 def won(game):
     ''' return play who wins the game, or False 
 
@@ -97,31 +104,71 @@ def tie(game):
 
 ## all of these are brute force.  We could save state along the way.
 def can_win(game,player):
-    pass
+    ''' in some triple, there is a None, and two 'player' tokens. 
+
+    >>> can_win(['X','X'] + [None,]*7,'X')
+    2
+    '''
+    for t in triples:
+        run = (game[t[0]],game[t[1]],game[t[2]])
+        if None in run and sorted([None,player,player]) == sorted(run):
+             for k in t:
+                if game[k] is None: return k
+
+    return None
 
 def can_block(game,player):
-    pass
+    # block the enemy
+    return can_win(game,opponent(player))
 
 def can_fork(game,player):
-    pass
+    return None
 
 def block_fork(game,player):
-    pass
+    return None
 
 def center(game,player):
-    pass
+    '''
+
+    >>> center([None,]*9,'X')
+    4
+    >>> w = [None,]*9
+    >>> w[4] = 'O'
+    >>> print center(w,'X')
+    None
+    '''
+    if game[4] is None:
+        return 4
+    else:
+        return None
 
 def opposite_corner(game,player):
-    pass
+    move = None
+    for k,v  in corners.iteritems():
+        if game[k] is None and game[v] == opponent(player):
+            move = k
+            break
+
+    return move
 
 def empty_corner(game,player):
-    pass
+    moves = [x for x in corners if game[x] is None]
+    if moves:
+        return random.choice(moves)
+    else:
+        return None
 
 def empty_side(game,player):
-    pass
+    moves = [x for x in sides if game[x] is None]
+    if moves:
+        return random.choice(moves)
+    else:
+        return None
 
 def random_move(game,player):
-    pass
+    moves = [ii for (ii,x) in enumerate(game) if x is None]
+    #print "NEXT_MOVE:", game, player, moves
+    return random.choice(moves)
 
 def suggest_optimal_move(game,player):
     move = None
@@ -130,13 +177,15 @@ def suggest_optimal_move(game,player):
         opposite_corner, empty_corner,
         empty_side)
      
-    while not move:
-        for move_fn in move_fns:
-            move = move_fn(game,player)
-
+    for move_fn in move_fns:
+        move = move_fn(game,player)
+        #print move, move_fn.__name__
+        if move is not None:  
+            break
+    
     return move
 
-def interactive(player1,player2):
+def play_game(player1,player2):
     '''
     Play an interactive tic-tac-toe game.
 
@@ -171,13 +220,11 @@ def interactive(player1,player2):
 
 class GoodPlayer(object):
     def next_move(self,game,player):
-        pass
+        return suggest_optimal_move(game,player)
 
 class RandomPlayer(object):
     def next_move(self,game,player):
-        moves = [ii for (ii,x) in enumerate(game) if x is None]
-        print "NEXT_MOVE:", game, player, moves
-        return random.choice(moves)
+        return random_move(game,player)
 
 def format(game):
     g = [(x,'_')[x is None] for x in game]  
@@ -202,14 +249,14 @@ class LivePlayer(object):
 if __name__ == '__main__':
     ans = raw_input("X or 0? ").strip().upper()
     X = 'X' in ans
+    players = (LivePlayer(),GoodPlayer())
     if X:
         print "you are X"
-        players = (LivePlayer(),RandomPlayer())
     else:
         print "you are O"
         players = players[::-1]
 
-    winner,game,moves =  interactive(*players)
+    winner,game,moves =  play_game(*players)
     print "winner", winner
     print "game board:"
     print format(game)
