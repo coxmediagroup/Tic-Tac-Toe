@@ -4,7 +4,8 @@ INVINCITRON, an opponent that can win *all games* with 100% certainty [1]
 
 Note [1]: current implementation only plays tic-tac-toe, future versions will expand on this.
 
-Note: requires 2.5+ since we are going to use co-routines
+LICENSE:  BSD, with attribution
+AUTHOR:  Gregg Lind <gregg.lind@gmail.com>
 
 
 '''
@@ -19,7 +20,7 @@ Intructions:
 
 
 '''
-Strategy
+Strategy (from Wikipedia)
 
 A player can play perfect tic-tac-toe (win or draw) given they move according to the highest possible move from the following table.[4]
 Win: If the player has two in a row, play the third to get three in a row.
