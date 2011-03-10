@@ -1,4 +1,4 @@
-# Traduzindo um antigo código em Pascal de jogo da velha feito ainda na faculdade para Python
+# Traduzindo um antigo codigo em Pascal de jogo da velha feito ainda na faculdade para Python
 
 
 Vazio = ' '
@@ -43,7 +43,7 @@ class Tabuleiro:
                 return self.casas[row[0]]
 
     def fimJogo(self):
-        """Indica se o jogo acabou, se alguem ganhou ou fim das jogadas."""
+        #Print "Indica se o jogo acabou, se alguem ganhou ou fim das jogadas."
         return self.ganhador() or not self.retornaCasasLivres()
 
 
@@ -61,7 +61,7 @@ def computador(Tabuleiro, jogador):
     #print "Funcao para o computador"
     #t0 = time.time()
     Tabuleiro.mostraTabuleiro()
-    #print "Implementar a inteligência do computador"
+    #print "Implementar a inteligencia do computador"
     
     #print "Passei aqui!"
     Tabuleiro.fazJogada(1, jogador)
