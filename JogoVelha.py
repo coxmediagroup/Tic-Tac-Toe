@@ -1,8 +1,10 @@
-# Traduzindo um antigo codigo em Pascal de jogo da velha feito ainda na faculdade para Python
+# Portando um antigo codigo em Pascal de jogo da velha feito ainda na faculdade para Python
+# Porting an old code I've done in Pascal during the college time.
+# Jogo da Velha is the Brazilian name for Tic Tac Toe. [Programming and learning, it's all culture! :-)]
 
 import random
 
-def tudoIgual(lista):
+def equals(lista):
     #print "retorna vazio se todos os elementos de uma lista sao iguais ou se a lista eh igual a Vazio."
     return not lista or lista == [lista[0]] * len(lista)
     
@@ -44,7 +46,7 @@ class Tabuleiro:
                         [0,3,6],[1,4,7],[2,5,8],    # horizontal
                         [0,4,8],[2,4,6]]            # diagonal
         for row in jogos_possiveis:
-            if self.casas[row[0]] != Vazio and tudoIgual([self.casas[i] for i in row]):
+            if self.casas[row[0]] != Vazio and equals([self.casas[i] for i in row]):
                 return self.casas[row[0]]
 
     def fimJogo(self):
@@ -56,10 +58,10 @@ def jogador(Tabuleiro, jogador):
     #print "Funcao do jogador."
     Tabuleiro.mostraTabuleiro()
     casas_livres = dict([(Tabuleiro.numCasa(move), move) for move in Tabuleiro.retornaCasasLivres()])
-    jogada = raw_input("Qual a sua jogada (%s)? " % (', '.join(sorted(casas_livres))))
+    jogada = raw_input("What's your move (%s)? " % (', '.join(sorted(casas_livres))))
     while jogada not in casas_livres:
-        print "A casa, '%s' nao eh valida. Tente novamente." % move
-        jogada = raw_input("Qual a sua jogada (%s)? " % (', '.join(sorted(casas_livres))))
+        print "The move, '%s' is invalid. Try again." % move
+        jogada = raw_input("What's your move (%s)? " % (', '.join(sorted(casas_livres))))
     Tabuleiro.fazJogada(casas_livres[jogada], jogador)
     
 def computador(Tabuleiro, jogador):
@@ -105,7 +107,7 @@ def jogo():
     b = Tabuleiro()
     turn = 1
     while True:
-        print "Jogada %i." % turn
+        print "Move %i." % turn
         jogador(b, Jogador_O)
         if b.fimJogo(): 
             break
@@ -116,9 +118,9 @@ def jogo():
 
     b.mostraTabuleiro()
     if b.ganhador():
-        print 'Jogador "%s" ganhou' % b.ganhador()
+        print 'Player "%s" wins' % b.ganhador()
     else:
-        print 'Sem vencedores.'
+        print 'Nobody won.'
     
 if __name__ == "__main__":
     jogo()
