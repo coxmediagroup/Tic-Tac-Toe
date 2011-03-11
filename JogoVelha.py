@@ -1,6 +1,11 @@
 # Traduzindo um antigo codigo em Pascal de jogo da velha feito ainda na faculdade para Python
 
+import random
 
+def tudoIgual(lista):
+    #print "retorna vazio se todos os elementos de uma lista sao iguais ou se a lista eh igual a Vazio."
+    return not lista or lista == [lista[0]] * len(lista)
+    
 Vazio = ' '
 Jogador_X = 'x'
 Jogador_O = 'o'
@@ -59,12 +64,41 @@ def jogador(Tabuleiro, jogador):
     
 def computador(Tabuleiro, jogador):
     #print "Funcao para o computador"
-    #t0 = time.time()
     Tabuleiro.mostraTabuleiro()
-    #print "Implementar a inteligencia do computador"
-    
+    oponente = { Jogador_O : Jogador_X, Jogador_X : Jogador_O }
+
+    def defineGanhador(ganhador):
+        if ganhador == jogador:
+            return +1
+        if ganhador == None:
+            return 0
+        return -1
+
+    #print "Aqui o computador avalia as possiveis jogadas para a tomada de decisao."
+    def avaliaJogada(jogada, p=jogador):
+        #print "Entrando na funcao de avaliar a jogada."
+        try:
+            Tabuleiro.fazJogada(jogada, p)
+            if Tabuleiro.fimJogo():
+                return defineGanhador(Tabuleiro.ganhador())
+            results = (avaliaJogada(next_move, oponente[p]) for next_move in Tabuleiro.retornaCasasLivres())
+
+            if p == jogador:
+                #print "p = jogador"
+                return min(results)
+            else:
+                #print "p <> jogador"
+                return max(results)
+
+        finally:
+            Tabuleiro.desfazJogada(jogada)
+
+    jogadas = [(jogada, avaliaJogada(jogada)) for jogada in Tabuleiro.retornaCasasLivres()]
+    random.shuffle(jogadas)
+    jogadas.sort(key = lambda (jogada, ganhador): ganhador)
+    #print jogadas
     #print "Passei aqui!"
-    Tabuleiro.fazJogada(1, jogador)
+    Tabuleiro.fazJogada(jogadas[-1][0], jogador)
     
 def jogo():
     #print "Rodando o jogo"
