@@ -4,123 +4,123 @@
 
 import random
 
-def equals(lista):
+def equals(list):
     #print "retorna vazio se todos os elementos de uma lista sao iguais ou se a lista eh igual a Vazio."
-    return not lista or lista == [lista[0]] * len(lista)
+    return not list or list == [list[0]] * len(list)
     
-Vazio = ' '
-Jogador_X = 'x'
-Jogador_O = 'o'
+Nobody = '.'
+Player_X = 'x'
+Player_O = 'o'
 
-class Tabuleiro:
-    #print "Classe representando o tabuleiro."""
+class Board:
+    #print "Classe representando o Board."""
     def __init__(self):
-        #print "Zerando o tabuleiro."
-        self.casas = [Vazio]*9
-        self.casas_livres = '123456789'
+        #print "Zerando o Board."
+        self.places = [Nobody]*9
+        self.freePlaces = '123456789'
 
-    def mostraTabuleiro(self):
-        #print "Mostra o tabuleiro na tela."
-        for linha in [self.casas[0:3], self.casas[3:6], self.casas[6:9]]:
-            print ' '.join(linha)
+    def showBoard(self):
+        #print "Show the board on the screen."
+        for line in [self.places[0:3], self.places[3:6], self.places[6:9]]:
+            print ' '.join(line)
     
-    def fazJogada(self, casa, jogador):
-       #print "Executa uma jogada."
-        self.casas[casa] = jogador
+    def doMove(self, place, player):
+       #print "Do a move."
+        self.places[place] = player
 
-    def desfazJogada(self, casa):
-        #print "Desfaz uma jogada."
-        self.fazJogada(casa, Vazio)
+    def undoMove(self, casa):
+        #print "Undo a move."
+        self.doMove(casa, Nobody)
     
-    def retornaCasasLivres(self):
-        #print "Retorna uma lsita com as jogadas possiveis."
-        return [pos for pos in range(9) if self.casas[pos] == Vazio]
+    def getFreePlaces(self):
+        #print "Return a list of available places to move."
+        return [pos for pos in range(9) if self.places[pos] == Nobody]
 
-    def numCasa(self, casa):
-        #print "Retorna os numeros das casas livres."
-        return self.casas_livres[casa]
+    def getPlace(self, casa):
+        #print "Return the number os the free places."
+        return self.freePlaces[casa]
 
-    def ganhador(self):
-        #print "Determina se alguem ganhou o jogo. Retorna Jogador_X, Jogador_O or None"
-        jogos_possiveis = [[0,1,2],[3,4,5],[6,7,8], # vertical
+    def winner(self):
+        #print "Tells if someone won the game, Player_X, Player_O or Nobody"
+        winMoves = [[0,1,2],[3,4,5],[6,7,8],        # vertical
                         [0,3,6],[1,4,7],[2,5,8],    # horizontal
                         [0,4,8],[2,4,6]]            # diagonal
-        for row in jogos_possiveis:
-            if self.casas[row[0]] != Vazio and equals([self.casas[i] for i in row]):
-                return self.casas[row[0]]
+        for row in winMoves:
+            if self.places[row[0]] != Nobody and equals([self.places[i] for i in row]):
+                return self.places[row[0]]
 
-    def fimJogo(self):
+    def endGame(self):
         #Print "Indica se o jogo acabou, se alguem ganhou ou fim das jogadas."
-        return self.ganhador() or not self.retornaCasasLivres()
+        return self.winner() or not self.getFreePlaces()
 
 
-def jogador(Tabuleiro, jogador):
-    #print "Funcao do jogador."
-    Tabuleiro.mostraTabuleiro()
-    casas_livres = dict([(Tabuleiro.numCasa(move), move) for move in Tabuleiro.retornaCasasLivres()])
-    jogada = raw_input("What's your move (%s)? " % (', '.join(sorted(casas_livres))))
-    while jogada not in casas_livres:
+def player(Board, player):
+    #print "Funcao do player."
+    Board.showBoard()
+    freePlaces = dict([(Board.getPlace(move), move) for move in Board.getFreePlaces()])
+    move = raw_input("What's your move (%s)? " % (', '.join(sorted(freePlaces))))
+    while move not in freePlaces:
         print "The move, '%s' is invalid. Try again." % move
-        jogada = raw_input("What's your move (%s)? " % (', '.join(sorted(casas_livres))))
-    Tabuleiro.fazJogada(casas_livres[jogada], jogador)
+        move = raw_input("What's your move (%s)? " % (', '.join(sorted(freePlaces))))
+    Board.doMove(freePlaces[move], player)
     
-def computador(Tabuleiro, jogador):
+def computer(Board, player):
     #print "Funcao para o computador"
-    Tabuleiro.mostraTabuleiro()
-    oponente = { Jogador_O : Jogador_X, Jogador_X : Jogador_O }
+    Board.showBoard()
+    opponent = { Player_O : Player_X, Player_X : Player_O }
 
-    def defineGanhador(ganhador):
-        if ganhador == jogador:
+    def getWinner(winner):
+        if winner == player:
             return +1
-        if ganhador == None:
+        if winner == None:
             return 0
         return -1
 
     #print "Aqui o computador avalia as possiveis jogadas para a tomada de decisao."
-    def avaliaJogada(jogada, p=jogador):
+    def evaluateMove(move, p=player):
         #print "Entrando na funcao de avaliar a jogada."
         try:
-            Tabuleiro.fazJogada(jogada, p)
-            if Tabuleiro.fimJogo():
-                return defineGanhador(Tabuleiro.ganhador())
-            results = (avaliaJogada(next_move, oponente[p]) for next_move in Tabuleiro.retornaCasasLivres())
+            Board.doMove(move, p)
+            if Board.endGame():
+                return getWinner(Board.winner())
+            results = (evaluateMove(next_move, opponent[p]) for next_move in Board.getFreePlaces())
 
-            if p == jogador:
-                #print "p = jogador"
+            if p == player:
+                #print "p = player"
                 return min(results)
             else:
-                #print "p <> jogador"
+                #print "p <> player"
                 return max(results)
 
         finally:
-            Tabuleiro.desfazJogada(jogada)
+            Board.undoMove(move)
 
-    jogadas = [(jogada, avaliaJogada(jogada)) for jogada in Tabuleiro.retornaCasasLivres()]
-    random.shuffle(jogadas)
-    jogadas.sort(key = lambda (jogada, ganhador): ganhador)
-    #print jogadas
-    #print "Passei aqui!"
-    Tabuleiro.fazJogada(jogadas[-1][0], jogador)
+    moves = [(move, evaluateMove(move)) for move in Board.getFreePlaces()]
+    random.shuffle(moves)
+    moves.sort(key = lambda (move, winner): winner)
+    #print moves
+    #print "Checkpoint 1!"
+    Board.doMove(moves[-1][0], player)
     
-def jogo():
+def game():
     #print "Rodando o jogo"
-    b = Tabuleiro()
+    b = Board()
     turn = 1
     while True:
         print "Move %i." % turn
-        jogador(b, Jogador_O)
-        if b.fimJogo(): 
+        player(b, Player_O)
+        if b.endGame(): 
             break
-        computador(b, Jogador_X)
-        if b.fimJogo(): 
+        computer(b, Player_X)
+        if b.endGame(): 
             break
         turn += 1
 
-    b.mostraTabuleiro()
-    if b.ganhador():
-        print 'Player "%s" wins' % b.ganhador()
+    b.showBoard()
+    if b.winner():
+        print 'Player "%s" wins' % b.winner()
     else:
         print 'Nobody won.'
     
 if __name__ == "__main__":
-    jogo()
+    game()
