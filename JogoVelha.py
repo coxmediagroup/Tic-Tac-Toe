@@ -1,6 +1,8 @@
 # Portando um antigo codigo em Pascal de jogo da velha feito ainda na faculdade para Python
 # Porting an old code I've done in Pascal during the college time.
 # Jogo da Velha is the Brazilian name for Tic Tac Toe. [Programming and learning, it's all culture! :-)]
+# Git command: git push origin master
+# Jose Dantas
 
 import random, time
 
