@@ -5,7 +5,7 @@
 import random
 
 def equals(list):
-    #print "retorna vazio se todos os elementos de uma lista sao iguais ou se a lista eh igual a Vazio."
+    #print "Return true if all elements in a list are equal or if the list is empty."
     return not list or list == [list[0]] * len(list)
     
 Nobody = '.'
@@ -13,14 +13,14 @@ Player_X = 'x'
 Player_O = 'o'
 
 class Board:
-    #print "Classe representando o Board."""
+    #print "The Board class."
     def __init__(self):
         #print "Zerando o Board."
         self.places = [Nobody]*9
         self.freePlaces = '123456789'
 
     def showBoard(self):
-        #print "Show the board on the screen."
+        #print "Show the board on screen."
         for line in [self.places[0:3], self.places[3:6], self.places[6:9]]:
             print ' '.join(line)
     
@@ -33,7 +33,7 @@ class Board:
         self.doMove(casa, Nobody)
     
     def getFreePlaces(self):
-        #print "Return a list of available places to move."
+        #print "Return a list of available places in the Board."
         return [pos for pos in range(9) if self.places[pos] == Nobody]
 
     def getPlace(self, casa):
@@ -50,7 +50,7 @@ class Board:
                 return self.places[row[0]]
 
     def endGame(self):
-        #Print "Indica se o jogo acabou, se alguem ganhou ou fim das jogadas."
+        #Print "The end of the game."
         return self.winner() or not self.getFreePlaces()
 
 
@@ -60,12 +60,11 @@ def player(Board, player):
     freePlaces = dict([(Board.getPlace(move), move) for move in Board.getFreePlaces()])
     move = raw_input("What's your move (%s)? " % (', '.join(sorted(freePlaces))))
     while move not in freePlaces:
-        print "The move, '%s' is invalid. Try again." % move
+        print "The position '%s' is invalid. Try again." % move
         move = raw_input("What's your move (%s)? " % (', '.join(sorted(freePlaces))))
     Board.doMove(freePlaces[move], player)
     
 def computer(Board, player):
-    #print "Funcao para o computador"
     Board.showBoard()
     opponent = { Player_O : Player_X, Player_X : Player_O }
 
@@ -76,9 +75,7 @@ def computer(Board, player):
             return 0
         return -1
 
-    #print "Aqui o computador avalia as possiveis jogadas para a tomada de decisao."
     def evaluateMove(move, p=player):
-        #print "Entrando na funcao de avaliar a jogada."
         try:
             Board.doMove(move, p)
             if Board.endGame():
@@ -103,7 +100,6 @@ def computer(Board, player):
     Board.doMove(moves[-1][0], player)
     
 def game():
-    #print "Rodando o jogo"
     b = Board()
     turn = 1
     while True:
