@@ -2,7 +2,7 @@
 # Porting an old code I've done in Pascal during the college time.
 # Jogo da Velha is the Brazilian name for Tic Tac Toe. [Programming and learning, it's all culture! :-)]
 
-import random
+import random, time
 
 def equals(list):
     #print "Return true if all elements in a list are equal or if the list is empty."
@@ -55,7 +55,7 @@ class Board:
 
 
 def player(Board, player):
-    #print "Funcao do player."
+    #print "Funcao do jogador."
     Board.showBoard()
     freePlaces = dict([(Board.getPlace(move), move) for move in Board.getFreePlaces()])
     move = raw_input("What's your move (%s)? " % (', '.join(sorted(freePlaces))))
@@ -83,11 +83,19 @@ def computer(Board, player):
             results = (evaluateMove(next_move, opponent[p]) for next_move in Board.getFreePlaces())
 
             if p == player:
-                #print "p = player"
-                return min(results)
+                minE = 1
+                for r in results:
+                    if r == -1:
+                        return r
+                    minE = min(r,minE)
+                return minE
             else:
-                #print "p <> player"
-                return max(results)
+                maxE = -1
+                for r in results:
+                    if r == 1:
+                        return r
+                    maxE = max(r,maxE)
+                return maxE
 
         finally:
             Board.undoMove(move)
