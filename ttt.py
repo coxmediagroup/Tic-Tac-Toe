@@ -12,15 +12,17 @@ class Board:
             self.cells[str(i)] = "_"
 
     def computer_player(self):
-        moves = [(self.judge_move(move), move) for move in self.get_legal_moves()]
-        moves.sort()
-        self.set_cell(moves[-1][1],"O")
+        moves = [(move, self.judge_move(move)) for move in self.get_legal_moves()]
+        moves.sort(key = lambda xy: xy[1])
+        self.set_cell(moves[-1][0],"O")
 
     def get_legal_moves(self):
         return [str(pos) for pos in range(1,10) if self.cells[str(pos)] == "_"]
 
     def get_game_over(self):
-        return self.get_winner()[0] or not self.get_legal_moves()
+        #This is great n all - but it forces you to play the
+        #last move, even if you can't win at all
+        return self.get_winner()[0]  or not self.get_legal_moves()
 
     def get_status(self):
         """returns the board in a human readable form"""
@@ -99,19 +101,19 @@ class Board:
 
     def start_game(self):
         while True:
+            if self.get_game_over():
+              break
             self.human_player()
-            if self.get_winner()[0]:
-                break
+            if self.get_game_over():
+              break
             self.computer_player()
-            if self.get_winner()[0]:
+            if self.get_game_over():
                 break
+        if self.get_winner()[0]:
+            self.get_status()
+            print(self.get_winner()[1] + " wins!")
+        else:
+            print("No one wins! Try again!")
 if __name__ == "__main__":
     x = Board()
-
-    if DEBUG == True:
-        for i in [0,4,8]:
-            x.set_cell(i,"X")
-        x.get_legal_moves()
-        x.get_status()
-
     x.start_game()
