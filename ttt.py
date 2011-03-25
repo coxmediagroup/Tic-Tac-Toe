@@ -5,7 +5,6 @@ winning_rows = [[1,2,3],[4,5,6],[7,8,9],
                         [7,4,1],[8,5,2],[9,6,3],
                         [1,5,9],[3,5,7]]
 
-
 def are_equal(list):
     return not list or list == [list[0]]*len(list)
 
@@ -23,40 +22,48 @@ class Board:
         # 5) if a side square (8,4,6,2) is available and you've
         #     already got center, take it.
         # 6) else...pick randomly?
+        # Also: Good god is this ugly and makes a case for
+        # switch statements in python -_-
 
         moves = self.get_legal_moves()
+        move = None
         for row in winning_rows:
             x = self.cells[str(row[0])]
             y = self.cells[str(row[1])]
             z = self.cells[str(row[2])]
-            move = None
+
             # check for #1
-            if x == "O" or y == "O" or z == "O":
-                print("x,y, or z = O")
-                if x == "O" and y == "O":
+            if move == None and ( x == "O" or y == "O" or z == "O"):
+                if x == "O" and y == "O" and z == "_":
                     move = row[2]
-                elif y== "O" and z == "O":
+                elif y== "O" and z == "O" and x == "_":
                     move = row[0]
-                elif x == "O" and z == "O":
+                elif x == "O" and z == "O" and y == "_":
                     move = row[1]
+                if DEBUG == True:
+                    print("Method #1 - " + str(move))
+
             # check for #2
-            if move == None:
-                if x == "X"  or y == "X" or z == "X":
-                    print("x,y, or z = X")
-                    print(x,y,z)
-                    if x == "X" and y == "X":
-                        move = row[2]
-                    elif y == "X" and z == "X":
-                        move = row[0]
-                    elif x == "X" and z == "X":
-                        move = row[1]
+            if move == None and (x == "X"  or y == "X" or z == "X"):
+                if x == "X" and y == "X" and z == "_":
+                    move = row[2]
+                elif y == "X" and z == "X" and x == "_":
+                    move = row[0]
+                elif x == "X" and z == "X" and y == "_":
+                    move = row[1]
+                if DEBUG == True:
+                    print("Method #2 - " + str(move))
+
         #check for #3
         if move == None and self.cells['5'] == "_":
-            print("Using #3")
-            move  == '5'
+            if DEBUG == True:
+                print("Using #3")
+            move  = '5'
+
         #check for #4
         if move == None:
-            print("Using #4")
+            if DEBUG == True:
+                print("Using #4")
             if self.cells['7'] == "_":
                 move = '7'
             elif self.cells['9'] == "_":
@@ -65,9 +72,11 @@ class Board:
                 move = '1'
             elif self.cells['3'] == "_":
                 move = '3'
+
         #check for #5
         if move == None and self.cells['5'] == "O":
-            print("Using #5")
+            if DEBUG == True:
+                print("Using #5")
             if self.cells['8'] == "_":
                 move = '8'
             elif self.cells['6'] == "_":
@@ -77,18 +86,17 @@ class Board:
             elif self.cells['2'] == "_":
                 move = '2'
         if move == None:
-            print("Nothing worked...Picking Randomly")
-            import random
-            move = int(random.randrange(0, len(self.get_legal_moves()),1))
-        print(move)
+            if DEBUG == True:
+                print("Nothing worked...Picking Randomly")
+            move = int(randrange(0, len(self.get_legal_moves()),1))
+        if DEBUG == True:
+           print(move)
         self.set_cell(move, "O")
 
     def get_legal_moves(self):
         return [str(pos) for pos in range(1,10) if self.cells[str(pos)] == "_"]
 
     def get_game_over(self):
-        #This is great n all - but it forces you to play the
-        #last move, even if you can't win at all
         return self.get_winner()[0]  or not self.get_legal_moves()
 
     def get_status(self):
@@ -119,43 +127,6 @@ class Board:
             move = input("Please enter a move:")
         self.set_cell(move, "X")
 
-    def judge_game(self, winner):
-        if winner == "X":
-            return +1
-        elif winner == "O":
-            return -1
-        return 0
-
-    def judge_move(self, move, player="O"):
-        try:
-            #This recursively calculates 'outcomes'
-            self.set_cell(move, player)
-            if self.get_game_over():
-                return self.judge_game(self.get_winner()[1])
-            outcomes = (self.judge_move(next_move, player)
-                for next_move in self.get_legal_moves())
-
-            #Calculate the weight of the move in 'outcomes'
-            if player == "O":
-                min_element = 1
-                for outcome in outcomes:
-                    if outcome == -1:
-                        return outcome
-                    min_element = min(outcome, min_element)
-                return min_element
-            elif player == "X":
-                max_element = -1
-                for outcome in outcomes:
-                    if outcome == 1:
-                        return outcome
-                    max_element = max(outcome, max_element)
-                return max_element
-
-        #undo everything we've done to the board, so we
-        #can use the same instance throughout the program
-        finally:
-            self.set_cell(move, "_")
-
     def set_cell(self, cell, owner):
         if owner in ["X","O", "_"]:
             self.cells[str(cell)] = owner
@@ -164,7 +135,7 @@ class Board:
             return False
 
     def start_game(self):
-        coin_flip = randrange(0,1,1)
+        coin_flip = randrange(0,2,1)
         if coin_flip == 0:
             print("You go first this time.")
             while True:
@@ -186,7 +157,7 @@ class Board:
                   break
                 self.human_player()
                 if self.get_game_over():
-                    break          
+                    break
         if self.get_winner()[0]:
             self.get_status()
             print(self.get_winner()[1] + " wins!")
