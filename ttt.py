@@ -29,27 +29,35 @@ def winner(char = ''):
 	'''
 	global board
 	
-	# did someone win horizontally?
-	if board[0] == board[1] == board[2] == char:
-		return char
-	if board[3] == board[4] == board[5] == char:
-		return char
-	if board[6] == board[7] == board[8] == char:
-		return char
+	if char == '':
+		# if no character was specified, check if X won, then check if O won
+		if winner('X'): return 'X'
+		if winner('O'): return 'O'
+	else:
+		# did someone win horizontally?
+		if board[0] == board[1] == board[2] == char:
+			return char
+		if board[3] == board[4] == board[5] == char:
+			return char
+		if board[6] == board[7] == board[8] == char:
+			return char
 	
-	# can we find a vertical winner?
-	if board[0] == board[3] == board[6] == char:
-		return char
-	if board[1] == board[4] == board[7] == char:
-		return char
-	if board[2] == board[5] == board[8] == char:
-		return char
+		# can we find a vertical winner?
+		if board[0] == board[3] == board[6] == char:
+			return char
+		if board[1] == board[4] == board[7] == char:
+			return char
+		if board[2] == board[5] == board[8] == char:
+			return char
 		
-	# did a diagonal player win?
-	if board[0] == board[4] == board[8] == char:
-		return char
-	if board[2] == board[4] == board[6] == char:
-		return char
+		# did a diagonal player win?
+		if board[0] == board[4] == board[8] == char:
+			return char
+		if board[2] == board[4] == board[6] == char:
+			return char
+			
+	# what if there was a tie? this is always possible. return 'T'.
+	if '-' not in board: return 'T'
 	
 	return None
 
@@ -96,6 +104,18 @@ while winner() == None:
 	coord = computer_move()
 	place_mark('X', coord[0], coord[1])
 	render_board()
+	# break loop if the computer had the winning move (or tie)
+	if winner('X') or winner('T'):
+		break
 	print 'Your Move!'
 	coord = human_move()
 	place_mark('O', coord[0], coord[1])
+
+# end game
+render_board()
+if winner() == 'X':
+	print 'See? I told you I was awesome.'
+elif winner() == 'O':
+	print 'What?! Impossible! Robert needs to make me perfect.'
+else:
+	print 'Not bad, so we tied.'
