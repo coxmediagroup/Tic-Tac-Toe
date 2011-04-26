@@ -60,7 +60,14 @@ def computer_move():
 	
 	Returns a tuple of the computer's next movie's coordinates. 
 	'''
-	return (1, 1)
+	global board
+	# for now: simple AI that just adds a mark on the board
+	for offset in range(len(board)):
+		# if this is an open mark on the tic-tac-toe bard, release its coordinates!
+		if board[offset] == '-':
+			return (offset % 3, offset / 3)
+			
+	# return (1, 1)
 
 def human_move():
 	'''
@@ -83,3 +90,12 @@ print '''
 	make the first move though. Press the enter/return key when you are ready 
 	for a beating!
 '''
+
+# main game loop
+while winner() == None:
+	coord = computer_move()
+	place_mark('X', coord[0], coord[1])
+	render_board()
+	print 'Your Move!'
+	coord = human_move()
+	place_mark('O', coord[0], coord[1])
