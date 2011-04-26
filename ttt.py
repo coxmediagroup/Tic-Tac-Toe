@@ -24,6 +24,16 @@ def place_mark(mark, x, y):
 	board[offset] = mark[0]
 
 
+def get_mark(x, y):
+	'''
+	Returns the mark at (x, y) on our game board. If (x, y) is out of range 
+	then return None.
+	'''
+	global board
+	if x < 0 or x > 2 or y < 0 or y > 2:
+		return None
+	return board[y * 3 + x]
+
 def coords(offset):
 	'''
 	Returns a tuple pair of coordinates based on the game board's offset.
@@ -90,6 +100,21 @@ def computer_move():
 		shuffle(corners)
 		return coords(corners[0])
 	else:	
+		global memorize
+		try:
+			memorize
+		except:
+			# memorize the player board and find the opponent's first move
+			memorize = board[:]
+			coord = coords(memorize.index('O'))
+			# print 'first move is: ', coord
+		
+		# mark next X based on current strategic priority
+		# -- PROPOSAL: make a "board" class with built in functions for the 
+		#    computer AI, such as "need to protect square", "fork opportunity", 
+		#    etc.
+		#
+		#
 		# for now: simple AI that just adds a mark on the board
 		for offset in range(len(board)):
 			# if this is an open mark on the tic-tac-toe bard, release its coordinates!
