@@ -13,6 +13,7 @@ def render_board():
 	print board[3], board[4], board[5]
 	print board[6], board[7], board[8]
 
+
 def place_mark(mark, x, y):
 	'''
 	Place a mark on the game board. minimum to maximum coordinates range from 
@@ -31,6 +32,7 @@ def coords(offset):
 	coordinates are calculated based on the offset.
 	'''
 	return (offset % 3, offset / 3)
+
 
 def winner(char = ''):
 	'''
@@ -71,6 +73,7 @@ def winner(char = ''):
 	
 	return None
 
+
 def computer_move():
 	'''
 	Makes a move onto the game board for the computer. This is essentially 
@@ -84,8 +87,8 @@ def computer_move():
 	# less squares to force a tie :)
 	if 'X' not in board:
 		corners = [0, 2, 6, 8]
-		shuffle(offset_corners)
-		return coords(offset_corners[0])
+		shuffle(corners)
+		return coords(corners[0])
 	else:	
 		# for now: simple AI that just adds a mark on the board
 		for offset in range(len(board)):
@@ -106,6 +109,7 @@ def human_move():
 	except ValueError:
 		print 'Your coordinates are off. Please only input 2 numbers separated by a space.'
 		return human_move()
+
 
 # introduction
 print '''
