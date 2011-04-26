@@ -84,6 +84,30 @@ def winner(char = ''):
 	return None
 
 
+def ai_take_win():
+	'''
+	Returns the coordinates to win the tic-tac-toe match!
+	False if the computer's AI can not win.
+	'''
+
+def ai_block_win()::
+	'''
+	Returns the coordinates to block the opponents win.
+	False if opponent cannot win.
+	'''
+
+def ai_take_fork():
+	'''
+	Returns coordinates to setup a fork to guarantee the next move is a win!
+	Returns False if there are no fork opportunities.
+	'''
+
+def ai_block_fork():
+	'''
+	Returns the coordinates to blocks an opponents fork opportunity.
+	False if the opponent has no chance. 
+	'''
+
 def computer_move():
 	'''
 	Makes a move onto the game board for the computer. This is essentially 
@@ -109,12 +133,24 @@ def computer_move():
 			coord = coords(memorize.index('O'))
 			# print 'first move is: ', coord
 		
-		# mark next X based on current strategic priority
-		# -- PROPOSAL: make a "board" class with built in functions for the 
-		#    computer AI, such as "need to protect square", "fork opportunity", 
-		#    etc.
-		#
-		#
+		# strategic priority:
+		# 1 - go for winning move
+		if ai_take_win(): return ai_take_win()
+		# 2 - prevent human player's victory if we have to block
+		if ai_block_win(): return ai_block_win()
+		# 3 - create a fork opportunity (to force a win!)
+		if ai_take_fork(): return ai_take_fork()
+		# 4 - prevent human player from setting up a fork
+		if ai_block_fork(): return ai_block_fork()
+		
+		# what are the strongest moves, respectively, when none of the 
+		# above conditions are true? In situations where the computer 
+		# does not go first, we'll have to consider those moves as well.
+		
+		# ? - Grab the center (if available)
+		# ? - Mark one of the side squares (adjacent? opposite?)
+		# ? - Play in a corner (which one? adjacent corner? opposite corner?)
+		
 		# for now: simple AI that just adds a mark on the board
 		for offset in range(len(board)):
 			# if this is an open mark on the tic-tac-toe bard, release its coordinates!
@@ -135,32 +171,37 @@ def human_move():
 		print 'Your coordinates are off. Please only input 2 numbers separated by a space.'
 		return human_move()
 
+def start_game():
+	'''
+	Starts the game and begins the main engine loop.
+	'''
+	while winner() == None:
+		coord = computer_move()
+		place_mark('X', coord[0], coord[1])
+		render_board()
+		# break loop if the computer had the winning move (or tie)
+		if winner('X') or winner('T'):
+			break
+		print 'Your Move!'
+		coord = human_move()
+		place_mark('O', coord[0], coord[1])
+
+def end_game():
+	# end game
+	render_board()
+	if winner() == 'X':
+		print 'See? I told you I was awesome.'
+	elif winner() == 'O':
+		print 'What?! Impossible! Robert needs to make me perfect.'
+	else:
+		print 'Not bad, so we tied.'
 
 # introduction
 print '''
 	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
 	playing you a game of tic-tac-toe and never losing a single game! I'll 
-	make the first move though. Press the enter/return key when you are ready 
-	for a beating!
+	make the first move though.
 '''
 
-# main game loop
-while winner() == None:
-	coord = computer_move()
-	place_mark('X', coord[0], coord[1])
-	render_board()
-	# break loop if the computer had the winning move (or tie)
-	if winner('X') or winner('T'):
-		break
-	print 'Your Move!'
-	coord = human_move()
-	place_mark('O', coord[0], coord[1])
-
-# end game
-render_board()
-if winner() == 'X':
-	print 'See? I told you I was awesome.'
-elif winner() == 'O':
-	print 'What?! Impossible! Robert needs to make me perfect.'
-else:
-	print 'Not bad, so we tied.'
+start_game()
+end_game()
