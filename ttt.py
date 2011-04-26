@@ -34,7 +34,8 @@ def get_mark(x, y):
 		return None
 	return board[y * 3 + x]
 
-def coords(offset):
+
+def get_coords(offset):
 	'''
 	Returns a tuple pair of coordinates based on the game board's offset.
 	Basically, this does the opposite of place_mark(): instead of 
@@ -84,23 +85,99 @@ def winner(char = ''):
 	return None
 
 
+def find_wins(char):
+	'''
+	Lists the winning coordinates to where the player can mark on their next 
+	move! 'char' is the character mark to look for.
+	'''
+	win_coords = []
+	# STEP 1: search for horizontal wins
+	for y in range(3):
+		marks = []
+		blank = []
+		for x in range(3):
+			if get_mark(x, y) == char:
+				marks.append([x, y])
+			elif get_mark(x, y) == '-':
+				blank.append([x, y])
+		# if there were 2 character marks and 1 blank mark, then there's a
+		# winning opportunity!
+		if len(marks) == 2 and len(blank) == 1:
+			win_coords.append(blank)
+	# STEP 2: search for vertical wins
+	for x in range(3):
+		marks = []
+		blank = []
+		for y in range(3):
+			if get_mark(x, y) == char:
+				marks.append([x, y])
+			elif get_mark(x, y) == '-':
+				blank.append([x, y])
+		if len(marks) == 2 and len(blank) == 1:
+			win_coords.append(blank)
+	# STEP 3: search the game board's 2 diagonals for a win
+	global board
+	num_marks = 0
+	blank = []
+	diag_offsets = (0, 4, 8)
+	for i in diag_offsets:
+		if board[i] == char:
+			num_marks += 1
+		elif board[i] == '-':
+			blank.append(get_coords(i))
+	if num_marks == 2 and len(blank) == 1:
+		win_coords.append(blank)
+	# test the next diagonal
+	num_marks = 0
+	blank = []
+	diag_offsets = (2, 4, 6)
+	for i in diag_offsets:
+		if board[i] == char:
+			num_marks += 1
+		elif board[i] == '-':
+			blank.append(get_coords(i))
+	if num_marks == 2 and len(blank) == 1:
+		win_coords.append(blank)
+	# no winning situations were found :(
+	if len(win_coords) == 0:
+		return None
+	return win_coords
+
 def ai_take_win():
 	'''
 	Returns the coordinates to win the tic-tac-toe match!
 	False if the computer's AI can not win.
 	'''
+	global board
+	# Step 1: 
+	# find the pattern where there are 2 X's in a row followed by open area
+	# pattern = ('X', 'X', '-')
+	# VERTICAL PATTERNS
+	# for col in range(3):
+	# for row in range(3):
+	# 	# computer's marks on the board, and our blank square coordinates
+	# 	marks = []
+	# 	blank = ()
+		
+	return False
 
-def ai_block_win()::
+def ai_block_win():
 	'''
 	Returns the coordinates to block the opponents win.
 	False if opponent cannot win.
 	'''
+	# Step 1: 
+	# find the pattern where there are 2 X's in a row followed by open area
+	
+	return False
 
 def ai_take_fork():
 	'''
 	Returns coordinates to setup a fork to guarantee the next move is a win!
 	Returns False if there are no fork opportunities.
 	'''
+	
+	return False
 
 def ai_block_fork():
 	'''
@@ -122,7 +199,7 @@ def computer_move():
 	if 'X' not in board:
 		corners = [0, 2, 6, 8]
 		shuffle(corners)
-		return coords(corners[0])
+		return get_coords(corners[0])
 	else:	
 		global memorize
 		try:
@@ -130,7 +207,7 @@ def computer_move():
 		except:
 			# memorize the player board and find the opponent's first move
 			memorize = board[:]
-			coord = coords(memorize.index('O'))
+			coord = get_coords(memorize.index('O'))
 			# print 'first move is: ', coord
 		
 		# strategic priority:
@@ -155,7 +232,7 @@ def computer_move():
 		for offset in range(len(board)):
 			# if this is an open mark on the tic-tac-toe bard, release its coordinates!
 			if board[offset] == '-':
-				return coords(offset)
+				return get_coords(offset)
 
 def human_move():
 	'''
@@ -170,6 +247,14 @@ def human_move():
 	except ValueError:
 		print 'Your coordinates are off. Please only input 2 numbers separated by a space.'
 		return human_move()
+
+def intro_game():
+	'''Game introduction -- and any possible setup needed :)'''
+	print '''
+		Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
+		playing you a game of tic-tac-toe and never losing a single game! I'll 
+		make the first move though.
+	'''
 
 def start_game():
 	'''
@@ -196,12 +281,6 @@ def end_game():
 	else:
 		print 'Not bad, so we tied.'
 
-# introduction
-print '''
-	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
-	playing you a game of tic-tac-toe and never losing a single game! I'll 
-	make the first move though.
-'''
-
-start_game()
-end_game()
+# intro_game()
+# start_game()
+# end_game()
