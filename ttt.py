@@ -1,5 +1,6 @@
 # Tic Tac Toe
 # -- classic game :)
+from random import shuffle
 
 board = ['-'] * 9
 
@@ -21,6 +22,15 @@ def place_mark(mark, x, y):
 	offset = y * 3 + x
 	board[offset] = mark[0]
 
+
+def coords(offset):
+	'''
+	Returns a tuple pair of coordinates based on the game board's offset.
+	Basically, this does the opposite of place_mark(): instead of 
+	calculating the offset based off the x- and y-coordinate, the 
+	coordinates are calculated based on the offset.
+	'''
+	return (offset % 3, offset / 3)
 
 def winner(char = ''):
 	'''
@@ -64,18 +74,24 @@ def winner(char = ''):
 def computer_move():
 	'''
 	Makes a move onto the game board for the computer. This is essentially 
-	our Tic-Tac-Toe AI.
+	our Tic-Tac-Toe AI made for perfection.
 	
 	Returns a tuple of the computer's next movie's coordinates. 
 	'''
 	global board
-	# for now: simple AI that just adds a mark on the board
-	for offset in range(len(board)):
-		# if this is an open mark on the tic-tac-toe bard, release its coordinates!
-		if board[offset] == '-':
-			return (offset % 3, offset / 3)
-			
-	# return (1, 1)
+	
+	# beginning game strategy: play a corner, because this gives human players
+	# less squares to force a tie :)
+	if 'X' not in board:
+		corners = [0, 2, 6, 8]
+		shuffle(offset_corners)
+		return coords(offset_corners[0])
+	else:	
+		# for now: simple AI that just adds a mark on the board
+		for offset in range(len(board)):
+			# if this is an open mark on the tic-tac-toe bard, release its coordinates!
+			if board[offset] == '-':
+				return coords(offset)
 
 def human_move():
 	'''
