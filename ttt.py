@@ -103,7 +103,7 @@ def find_wins(char):
 		# if there were 2 character marks and 1 blank mark, then there's a
 		# winning opportunity!
 		if len(marks) == 2 and len(blank) == 1:
-			win_coords.append(blank)
+			win_coords.append(blank[0])
 	# STEP 2: search for vertical wins
 	for x in range(3):
 		marks = []
@@ -114,30 +114,32 @@ def find_wins(char):
 			elif get_mark(x, y) == '-':
 				blank.append([x, y])
 		if len(marks) == 2 and len(blank) == 1:
-			win_coords.append(blank)
+			win_coords.append(blank[0])
 	# STEP 3: search the game board's 2 diagonals for a win
 	global board
 	num_marks = 0
-	blank = []
+	blank = -1
 	diag_offsets = (0, 4, 8)
 	for i in diag_offsets:
 		if board[i] == char:
 			num_marks += 1
 		elif board[i] == '-':
-			blank.append(get_coords(i))
-	if num_marks == 2 and len(blank) == 1:
-		win_coords.append(blank)
+			blank = i
+	if num_marks == 2 and blank >= 0:
+		x, y = get_coords(blank)
+		win_coords.append([x, y])
 	# test the next diagonal
 	num_marks = 0
-	blank = []
+	blank = -1
 	diag_offsets = (2, 4, 6)
 	for i in diag_offsets:
 		if board[i] == char:
 			num_marks += 1
 		elif board[i] == '-':
-			blank.append(get_coords(i))
-	if num_marks == 2 and len(blank) == 1:
-		win_coords.append(blank)
+			blank = i
+	if num_marks == 2 and blank >= 0:
+		x, y = get_coords(blank)
+		win_coords.append([x, y])
 	# no winning situations were found :(
 	if len(win_coords) == 0:
 		return None
@@ -145,30 +147,24 @@ def find_wins(char):
 
 def ai_take_win():
 	'''
-	Returns the coordinates to win the tic-tac-toe match!
+	Finds and returns the FIRST winning position's coordinates.
 	False if the computer's AI can not win.
 	'''
-	global board
-	# Step 1: 
-	# find the pattern where there are 2 X's in a row followed by open area
-	# pattern = ('X', 'X', '-')
-	# VERTICAL PATTERNS
-	# for col in range(3):
-	# for row in range(3):
-	# 	# computer's marks on the board, and our blank square coordinates
-	# 	marks = []
-	# 	blank = ()
-		
+	# Step 1: find winning position and take it!
+	coord = find_wins('X')
+	if coord:
+		return coord[0]
 	return False
 
 def ai_block_win():
 	'''
-	Returns the coordinates to block the opponents win.
+	Finds and returns the first coordinates to block the opponents win.
+	Hopefully there are no more than 1 way for the opponent to win :(
 	False if opponent cannot win.
 	'''
-	# Step 1: 
-	# find the pattern where there are 2 X's in a row followed by open area
-	
+	coord = find_wins('O')
+	if coord:
+		return coord[0]	
 	return False
 
 def ai_take_fork():
@@ -176,7 +172,6 @@ def ai_take_fork():
 	Returns coordinates to setup a fork to guarantee the next move is a win!
 	Returns False if there are no fork opportunities.
 	'''
-	
 	return False
 
 def ai_block_fork():
@@ -184,6 +179,7 @@ def ai_block_fork():
 	Returns the coordinates to blocks an opponents fork opportunity.
 	False if the opponent has no chance. 
 	'''
+	return False
 
 def computer_move():
 	'''
@@ -208,7 +204,6 @@ def computer_move():
 			# memorize the player board and find the opponent's first move
 			memorize = board[:]
 			coord = get_coords(memorize.index('O'))
-			# print 'first move is: ', coord
 		
 		# strategic priority:
 		# 1 - go for winning move
@@ -251,9 +246,9 @@ def human_move():
 def intro_game():
 	'''Game introduction -- and any possible setup needed :)'''
 	print '''
-		Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
-		playing you a game of tic-tac-toe and never losing a single game! I'll 
-		make the first move though.
+	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
+	playing you a game of tic-tac-toe and never losing a single game! I'll 
+	make the first move though.
 	'''
 
 def start_game():
@@ -267,7 +262,7 @@ def start_game():
 		# break loop if the computer had the winning move (or tie)
 		if winner('X') or winner('T'):
 			break
-		print 'Your Move!'
+		print 'Your Turn!'
 		coord = human_move()
 		place_mark('O', coord[0], coord[1])
 
@@ -281,6 +276,6 @@ def end_game():
 	else:
 		print 'Not bad, so we tied.'
 
-# intro_game()
-# start_game()
-# end_game()
+intro_game()
+start_game()
+end_game()
