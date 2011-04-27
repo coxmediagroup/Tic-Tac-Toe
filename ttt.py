@@ -61,7 +61,6 @@ def winner(char = ''):
 		if winner('O') == 'O': return 'O'
 	else:
 		# did someone win horizontally?
-		print "is there a horizontal win?"
 		if board[0] == board[1] == board[2] == char:
 			return char
 		if board[3] == board[4] == board[5] == char:
@@ -69,7 +68,6 @@ def winner(char = ''):
 		if board[6] == board[7] == board[8] == char:
 			return char
 		
-		print "is there a vertical win?"
 		# can we find a vertical winner?
 		if board[0] == board[3] == board[6] == char:
 			return char
@@ -78,13 +76,11 @@ def winner(char = ''):
 		if board[2] == board[5] == board[8] == char:
 			return char
 		
-		print "how about a diagonal win?"
 		# did a diagonal player win?
 		if board[0] == board[4] == board[8] == char:
 			return char
 		if board[2] == board[4] == board[6] == char:
 			return char
-		print "NOPE!!!"
 		
 	return None
 
@@ -365,6 +361,6 @@ def end_game():
 	else:
 		print 'Not bad, so we tied.'
 
-# intro_game()
-# start_game()
-# end_game()
+intro_game()
+start_game()
+end_game()
