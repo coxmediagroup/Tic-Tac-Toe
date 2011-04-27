@@ -279,7 +279,6 @@ def computer_move():
 	else:
 		# strategic priority:
 		# 1 - go for winning move
-		# if ai_take_win(): return ai_take_win()
 		coord = find_wins('X')
 		print 'any wins?'
 		if coord: return coord[0]
@@ -327,11 +326,20 @@ def human_move():
 	x, y = coord.split()
 	# make sure these values are proper integers
 	try:
-		# hmm, we should also make sure these values are within range
-		return (int(x), int(y))
+		x = int(x)
+		y = int(y)
 	except ValueError:
 		print 'Your coordinates are off. Please only input 2 numbers separated by a space.'
 		return human_move()
+	# hmm, we should also make sure these values are within range
+	if x < 0 or x > 2 or y < 0 or y > 2:
+		print 'Your coordinates are out of range. Valid ranges are from "0 0" to "2 2".'
+		return human_move()
+	# is the space already occupied by another mark?
+	if get_mark(x, y) != '-':
+		print 'Cannot mark that space because it is already marked!'
+		return human_move()
+	return (x, y)
 
 def intro_game():
 	'''Game introduction -- and any possible setup needed :)'''
