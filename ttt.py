@@ -227,15 +227,7 @@ def computer_move():
 		corners = [0, 2, 6, 8]
 		shuffle(corners)
 		return get_coords(corners[0])
-	else:	
-		global memorize
-		try:
-			memorize
-		except:
-			# memorize the player board and find the opponent's first move
-			memorize = board[:]
-			coord = get_coords(memorize.index('O'))
-		
+	else:
 		# strategic priority:
 		# 1 - go for winning move
 		# if ai_take_win(): return ai_take_win()
