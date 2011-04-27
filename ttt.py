@@ -228,7 +228,6 @@ def setup_fork(char):
 				# disregard this offset as a good choice. (move onto next offset)
 				block = find_wins(opponent)
 				if block and block[0] != fork_coord:
-					print "** whoa! that block doesnt setup a fork! go to next offset **"
 					board = memorize[:]
 					continue
 				
@@ -270,53 +269,51 @@ def computer_move():
 	'''
 	global board
 	
-	# beginning game strategy: play a corner, because this gives human players
-	# less squares to force a tie :)
+	# strategic priority:
+	# 1 - go for winning move
+	coord = find_wins('X')
+	if coord: return coord[0]
+	# 2 - prevent human player's victory if we have to block
+	coord = find_wins('O')
+	if coord: return coord[0]
+	# 3 - create a fork opportunity (to force a win!)
+	coord = find_fork('X')
+	if coord: return coord
+	# 4 - prevent human player from setting up a fork
+	coord = find_fork('O')
+	if coord: return coord
+	# 5 - if we can't fork right away, can we setup a fork?
+	coord = setup_fork('X')
+	if coord: return coord
+	
+	# what are the strongest moves, respectively, when none of the 
+	# above conditions are true? In situations where the computer 
+	# does not go first, we'll have to consider these moves as well...
+	
+	# 6 - Grab the center (if available) -- YES, best defense if human
+	#     gets the first move!!
+	if 'O' in board and get_mark(1, 1) == '-':
+		return (1, 1)
+	# 7 - Play in a corner (which one? adjacent corner? opposite corner?)
 	if 'X' not in board:
-		corners = [0, 2, 6, 8]
-		shuffle(corners)
-		return get_coords(corners[0])
-	else:
-		# strategic priority:
-		# 1 - go for winning move
-		coord = find_wins('X')
-		print 'any wins?'
-		if coord: return coord[0]
-		# 2 - prevent human player's victory if we have to block
-		coord = find_wins('O')
-		print 'any blocks?'
-		if coord: return coord[0]
-		# 3 - create a fork opportunity (to force a win!)
-		coord = find_fork('X')
-		print 'any winning forks?'
-		if coord: return coord
-		# 4 - prevent human player from setting up a fork
-		coord = find_fork('O')
-		print 'any forks to block?'
-		if coord: return coord
-		# 5 - if we can't fork right away, can we setup a fork?
-		coord = setup_fork('X')
-		print 'any fork setups?'
-		if coord: return coord
-		print 'NOPE!!!'
-		
-		# what are the strongest moves, respectively, when none of the 
-		# above conditions are true? In situations where the computer 
-		# does not go first, we'll have to consider those moves as well.
-		
-		# ? - Grab the center (if available) -- YES, best defense if human
-		#     gets the first move!!
-		# 1 - Play in a corner (which one? adjacent corner? opposite corner?)
-		# 2 - Mark one of the side squares (adjacent? opposite?) -- human 
-		#     can force a winning fork if this is done before a corner is
-		#     taken! better safe to play a corner before a side square
-		
-		# for now: simple AI that just adds a mark on the board
-		print 'gunna return some way generic shiz:'
-		for offset in range(len(board)):
-			# if this is an open mark on the tic-tac-toe bard, release its coordinates!
-			if board[offset] == '-':
-				return get_coords(offset)
+		corners = []
+		if board[0] == '-': corners += [0]
+		if board[2] == '-': corners += [2]
+		if board[6] == '-': corners += [6]
+		if board[8] == '-': corners += [8]
+		if len(corners) > 1: shuffle(corners)
+		if len(corners) > 0: return get_coords(corners[0])
+
+	# 8 - Mark one of the side squares (adjacent? opposite?) -- human 
+	#     can force a winning fork if this is done before a corner is
+	#     taken! better safe to play a corner before a side square
+	# at this point in the AI, there will be no corner squares remaining,
+	# so just select whatever space is remaining.
+	for offset in range(len(board)):
+		# if this is an open mark on the tic-tac-toe bard, release its coordinates!
+		if board[offset] == '-':
+			return get_coords(offset)
+	return None
 
 def human_move():
 	'''
