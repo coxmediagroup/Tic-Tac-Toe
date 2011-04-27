@@ -167,19 +167,50 @@ def ai_block_win():
 		return coord[0]	
 	return False
 
+def find_fork(char):
+	'''
+	Retrieves the first set of coordinates found to create a guaranteed 
+	winning fork for the player marked with 'char'.
+	'''
+	global board
+	# STEP 1: find the offset of all spaces that can be marked
+	blanks = []
+	for i in range(len(board)):
+		if board[i] == '-':
+			blanks.append(i)
+	# STEP 2: test each blank position to see if it is a fork :D
+	memorize = board[:]
+	for offset in blanks:
+		board[offset] = char
+		# STEP 3: when placing the char mark on this area of the board, 
+		# is it a fork? if so, return the offset's coordinates :D
+		winning_coords = find_wins(char)
+		board = memorize[:]
+		if winning_coords != None and len(winning_coords) > 1:
+			return get_coords(offset)
+	# at this point we have found no forks =\
+	return None
+	
+
 def ai_take_fork():
 	'''
 	Returns coordinates to setup a fork to guarantee the next move is a win!
 	Returns False if there are no fork opportunities.
 	'''
-	return False
+	coords = find_fork('X')
+	if coords == None:
+		return False
+	return coords
 
 def ai_block_fork():
 	'''
 	Returns the coordinates to blocks an opponents fork opportunity.
 	False if the opponent has no chance. 
 	'''
-	return False
+	coords = find_fork('O')
+	if coords == None:
+		return False
+	return coords
 
 def computer_move():
 	'''
@@ -207,21 +238,31 @@ def computer_move():
 		
 		# strategic priority:
 		# 1 - go for winning move
-		if ai_take_win(): return ai_take_win()
+		# if ai_take_win(): return ai_take_win()
+		coord = find_wins('X')
+		if coord: return coord[0]
 		# 2 - prevent human player's victory if we have to block
-		if ai_block_win(): return ai_block_win()
-		# 3 - create a fork opportunity (to force a win!)
-		if ai_take_fork(): return ai_take_fork()
-		# 4 - prevent human player from setting up a fork
-		if ai_block_fork(): return ai_block_fork()
+		coord = find_wins('O')
+		if coord: return coord[0]
+		# 3 - setup a possible fork opportunity.
+		# coord = setup_fork('X')
+		# if coord: return coord
+		# 4 - create a fork opportunity (to force a win!)
+		coord = find_fork('X')
+		if coord: return coord
+		# 5 - prevent human player from setting up a fork
+		coord = find_fork('O')
+		if coord: return coord
 		
 		# what are the strongest moves, respectively, when none of the 
 		# above conditions are true? In situations where the computer 
 		# does not go first, we'll have to consider those moves as well.
 		
 		# ? - Grab the center (if available)
-		# ? - Mark one of the side squares (adjacent? opposite?)
-		# ? - Play in a corner (which one? adjacent corner? opposite corner?)
+		# 1 - Play in a corner (which one? adjacent corner? opposite corner?)
+		# 2 - Mark one of the side squares (adjacent? opposite?) -- player 
+		#     can force a winning fork if this is done before a corner is
+		#     taken!
 		
 		# for now: simple AI that just adds a mark on the board
 		for offset in range(len(board)):
@@ -268,7 +309,7 @@ def start_game():
 
 def end_game():
 	# end game
-	render_board()
+	# render_board()
 	if winner() == 'X':
 		print 'See? I told you I was awesome.'
 	elif winner() == 'O':
