@@ -1,6 +1,6 @@
 # Tic Tac Toe
 # -- classic game :)
-from random import shuffle
+from random import shuffle, randint
 
 board = ['-'] * 9
 
@@ -149,32 +149,10 @@ def find_wins(char):
 	if num_marks == 2 and blank >= 0:
 		x, y = get_coords(blank)
 		win_coords.append([x, y])
-	# no winning situations were found :(
+	# no winning situations were found =\
 	if len(win_coords) == 0:
 		return None
 	return win_coords
-
-def ai_take_win():
-	'''
-	Finds and returns the FIRST winning position's coordinates.
-	False if the computer's AI can not win.
-	'''
-	# Step 1: find winning position and take it!
-	coord = find_wins('X')
-	if coord:
-		return coord[0]
-	return False
-
-def ai_block_win():
-	'''
-	Finds and returns the first coordinates to block the opponents win.
-	Hopefully there are no more than 1 way for the opponent to win :(
-	False if opponent cannot win.
-	'''
-	coord = find_wins('O')
-	if coord:
-		return coord[0]	
-	return False
 
 def find_fork(char):
 	'''
@@ -239,26 +217,6 @@ def setup_fork(char):
 		# return the board to current state so we can test next offset.
 		board = memorize[:]
 	return None
-
-def ai_take_fork():
-	'''
-	Returns coordinates to setup a fork to guarantee the next move is a win!
-	Returns False if there are no fork opportunities.
-	'''
-	coords = find_fork('X')
-	if coords == None:
-		return False
-	return coords
-
-def ai_block_fork():
-	'''
-	Returns the coordinates to blocks an opponents fork opportunity.
-	False if the opponent has no chance. 
-	'''
-	coords = find_fork('O')
-	if coords == None:
-		return False
-	return coords
 
 def computer_move():
 	'''
@@ -342,28 +300,37 @@ def intro_game():
 	'''Game introduction -- and any possible setup needed :)'''
 	print '''
 	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
-	playing you a game of tic-tac-toe and never losing a single game! I'll 
-	make the first move though.
+	playing you a game of tic-tac-toe and never losing a single game!
 	'''
 
 def start_game():
 	'''
 	Starts the game and begins the main engine loop.
 	'''
+	players = {'X': '', 'O': ''}
+	# flip a coin to see which player goes first!
+	if randint(0, 1):
+		players['X'] = 'ai'
+		players['O'] = 'human'
+	else:
+		players['X'] = 'human'
+		players['O'] = 'ai'
+	
+	turn = 'X'
 	while winner() == None:
-		coord = computer_move()
-		place_mark('X', coord[0], coord[1])
-		render_board()
-		# break loop if the computer had the winning move (or tie)
-		if winner('X') or winner('T'):
-			break
-		print 'Your Turn!'
-		coord = human_move()
-		place_mark('O', coord[0], coord[1])
+		if players[turn] == 'ai':
+			coord = computer_move()
+		else:
+			render_board()
+			print 'Your Turn!'
+			coord = human_move()
+		place_mark(turn, coord[0], coord[1])
+		# move to the next turn
+		turn = 'O' if turn == 'X' else 'X'
 
 def end_game():
-	global board
-	# render_board()
+	'''Displays the end-game results.'''
+	render_board()
 	if winner() == 'X':
 		print 'See? I told you I was awesome.'
 	elif winner() == 'O':
