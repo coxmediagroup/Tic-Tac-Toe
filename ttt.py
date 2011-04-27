@@ -210,30 +210,34 @@ def setup_fork(char):
 	# blanks = find_blanks()
 	memorize = board[:]
 	opponent = 'O' if char == 'X' else 'X'
-	print "opponent is:", opponent
-	print "initial blanks:", find_blanks()
 	for offset in find_blanks():
 		board[offset] = char
-		print "testing offset %d, blanks are now: %s" % (offset, str(find_blanks()))
 		winning_coord = find_wins(char)
 		if winning_coord:
 			# STEP 2: if opponent will be forced to defend (due to an upcoming
 			# win), mark that spot for the opponent.
 			x, y = winning_coord[0]
 			place_mark(opponent, x, y)
-			print "	this will setup a win:", winning_coord[0]
-			# STEP 3: does the force defend create an opportunities for a
+			# STEP 4: does the force defend create an opportunities for a
 			# fork setup? if this opportunity exists, then we found the 
 			# coordinates to setup a fork!
 			fork_coord = find_fork(char)
 			if fork_coord:
-				print "		this move creates a fork at:", fork_coord
+				# STEP 5: however, if opponent's forced move brings him into a 
+				# position where we must block their win on the next turn, then 
+				# disregard this offset as a good choice. (move onto next offset)
+				block = find_wins(opponent)
+				if block and block[0] != fork_coord:
+					print "** whoa! that block doesnt setup a fork! go to next offset **"
+					board = memorize[:]
+					continue
+				
+				# this is a genuine opportunity to setup a fork! return the 
+				# coordinates of the mark's offset.
 				board = memorize[:]
-				return winning_coord[0]
-			else:
-				print fork_coord, "		did not create a fork :("
+				# return the coordinates for the successful fork setup offset!
+				return get_coords(offset)
 		# return the board to current state so we can test next offset.
-		print "	resetting board..."
 		board = memorize[:]
 	return None
 
@@ -301,11 +305,12 @@ def computer_move():
 		# above conditions are true? In situations where the computer 
 		# does not go first, we'll have to consider those moves as well.
 		
-		# ? - Grab the center (if available)
+		# ? - Grab the center (if available) -- YES, best defense if human
+		#     gets the first move!!
 		# 1 - Play in a corner (which one? adjacent corner? opposite corner?)
-		# 2 - Mark one of the side squares (adjacent? opposite?) -- player 
+		# 2 - Mark one of the side squares (adjacent? opposite?) -- human 
 		#     can force a winning fork if this is done before a corner is
-		#     taken!
+		#     taken! better safe to play a corner before a side square
 		
 		# for now: simple AI that just adds a mark on the board
 		print 'gunna return some way generic shiz:'
