@@ -2,8 +2,6 @@
 # -- classic game :)
 from random import shuffle, randint
 
-board = ['-'] * 9
-
 def render_board():
 	'''
 	Renders the Tic Tac Toe game board to the screen.
@@ -239,9 +237,42 @@ def computer_move(mark):
 	# 3 - create a fork opportunity (to force a win!)
 	coord = find_fork(mark)
 	if coord: return coord
+	
 	# 4 - prevent human player from setting up a fork
 	coord = find_fork(opponent)
-	if coord: return coord
+	if coord:
+		# since it is possible that the opponent could create another fork 
+		# after 'coord' is marked by AI, this makes blocking 1 of 2 forks at 
+		# 'coord' useless.
+		memorize = board[:]
+		place_mark(mark, coord[0], coord[1])
+		if find_fork(opponent):
+			# if there is another fork, block both forks by forcing the 
+			# opponent to defend INSTEAD of creating an advantageous fork 
+			# for themselves.
+			#
+			# STEP 1: find possible moves on the board (note: this will 
+			# exclude the current 'coord', since this is a bad move anyways 
+			# that allows the opponent to create another fork!)
+			possibles = find_blanks()
+			board = memorize[:]
+			# STEP 2: find a move that forces the opponent to defend. this 
+			# forced defense MUST NOT create another fork!
+			for i in possibles:
+				board[i] = mark
+				force_coord = find_wins(mark)
+				if find_wins(mark):
+					fork_coord = find_fork(opponent)
+					if force_coord != fork_coord:
+						# awesome! we found a good offense to counter a fork!
+						coord = get_coords(i)
+						break
+				# reset board and continue
+				board = memorize[:]
+		# set the board back to normal, as if there were no pre-moves :)
+		board = memorize[:]
+		return coord
+	
 	# 5 - if we can't fork right away, can we setup a fork?
 	coord = setup_fork(mark)
 	if coord: return coord
@@ -254,6 +285,7 @@ def computer_move(mark):
 	#     gets the first move!!
 	if opponent in board and get_mark(1, 1) == '-':
 		return (1, 1)
+		
 	# 7 - Play in a corner (which one? adjacent corner? opposite corner?)
 	if mark not in board:
 		corners = []
@@ -304,20 +336,26 @@ def intro_game():
 	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
 	playing you a game of tic-tac-toe and never losing a single game!
 	'''
-
-def start_game():
-	'''
-	Starts the game and begins the main engine loop.
-	'''
+	
+	# STEP 1: initialize a new game
+	global players
+	global board
 	players = {'X': '', 'O': ''}
-	# flip a coin to see which player goes first!
+	board = ['-'] * 9
+	
+	# STEP 2: flip a coin to see which player goes first!
 	if randint(0, 1):
 		players['X'] = 'ai'
 		players['O'] = 'human'
 	else:
 		players['X'] = 'human'
 		players['O'] = 'ai'
-	
+
+def start_game():
+	'''
+	Starts the game and begins the main engine loop.
+	'''
+	global players
 	turn = 'X'
 	while winner() == None:
 		if players[turn] == 'ai':
@@ -332,13 +370,14 @@ def start_game():
 
 def end_game():
 	'''Displays the end-game results.'''
+	global players
 	render_board()
-	if winner() == 'X':
-		print 'See? I told you I was awesome.'
-	elif winner() == 'O':
-		print 'What?! Impossible! Robert needs to make me perfect.'
-	else:
+	if winner() == 'T':
 		print 'Not bad, so we tied.'
+	elif players[winner()] == 'ai':
+		print 'See? I told you I was awesome.'
+	else:
+		print 'What?! Impossible! Robert needs to make me perfect.'
 
 intro_game()
 start_game()
