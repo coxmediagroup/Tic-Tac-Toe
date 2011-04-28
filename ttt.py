@@ -124,29 +124,24 @@ def find_wins(mark):
 			win_coords.append(blank[0])
 	# STEP 3: search the game board's 2 diagonals for a win
 	global board
-	num_marks = 0
-	blank = -1
-	diag_offsets = (0, 4, 8)
-	for i in diag_offsets:
-		if board[i] == mark:
-			num_marks += 1
-		elif board[i] == '-':
-			blank = i
-	if num_marks == 2 and blank >= 0:
-		x, y = get_coords(blank)
-		win_coords.append([x, y])
-	# test the next diagonal
-	num_marks = 0
-	blank = -1
-	diag_offsets = (2, 4, 6)
-	for i in diag_offsets:
-		if board[i] == mark:
-			num_marks += 1
-		elif board[i] == '-':
-			blank = i
-	if num_marks == 2 and blank >= 0:
-		x, y = get_coords(blank)
-		win_coords.append([x, y])
+	# each diagonal includes a tuple set of diagonal offsets
+	diagonals = ((0, 4, 8), (2, 4, 6))
+	for diag_offsets in diagonals:
+		num_marks = 0
+		# blank = -1
+		found_blank = False
+		# diag_offsets = (0, 4, 8)
+		for i in diag_offsets:
+			if board[i] == mark:
+				num_marks += 1
+			elif board[i] == '-':
+				# blank = i
+				found_blank = True
+		# if num_marks == 2 and blank >= 0:
+		if num_marks == 2 and found_blank:
+			x, y = get_coords(found_blank)
+			win_coords.append([x, y])
+	
 	# no winning situations were found =\
 	if len(win_coords) == 0:
 		return None
