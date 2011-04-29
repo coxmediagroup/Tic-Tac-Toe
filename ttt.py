@@ -122,24 +122,22 @@ def find_wins(mark):
 				blank.append([x, y])
 		if len(marks) == 2 and len(blank) == 1:
 			win_coords.append(blank[0])
+	
 	# STEP 3: search the game board's 2 diagonals for a win
 	global board
 	# each diagonal includes a tuple set of diagonal offsets
 	diagonals = ((0, 4, 8), (2, 4, 6))
 	for diag_offsets in diagonals:
 		num_marks = 0
-		# blank = -1
-		found_blank = False
-		# diag_offsets = (0, 4, 8)
+		blank_found = False
 		for i in diag_offsets:
 			if board[i] == mark:
 				num_marks += 1
 			elif board[i] == '-':
-				# blank = i
-				found_blank = True
-		# if num_marks == 2 and blank >= 0:
-		if num_marks == 2 and found_blank:
-			x, y = get_coords(found_blank)
+				blank_found = True
+				break
+		if num_marks == 2 and blank_found:
+			x, y = get_coords(i)
 			win_coords.append([x, y])
 	
 	# no winning situations were found =\
@@ -302,11 +300,11 @@ def computer_move(mark):
 			return get_coords(offset)
 	return None
 
-def human_move():
+def human_move(mark):
 	'''
 	Get the human player's move.
 	'''
-	coord = raw_input('What are the coordinates of your move? (ie: "0 2") ')
+	coord = raw_input('What coordinates will you mark as "%s"? (ie: "0 2") ' % mark)
 	x, y = coord.split()
 	# make sure these values are proper integers
 	try:
@@ -314,15 +312,15 @@ def human_move():
 		y = int(y)
 	except ValueError:
 		print 'Your coordinates are off. Please only input 2 numbers separated by a space.'
-		return human_move()
+		return human_move(mark)
 	# hmm, we should also make sure these values are within range
 	if x < 0 or x > 2 or y < 0 or y > 2:
 		print 'Your coordinates are out of range. Valid ranges are from "0 0" to "2 2".'
-		return human_move()
+		return human_move(mark)
 	# is the space already occupied by another mark?
 	if get_mark(x, y) != '-':
 		print 'Cannot mark that space because it is already marked!'
-		return human_move()
+		return human_move(mark)
 	return (x, y)
 
 def intro_game():
@@ -358,7 +356,7 @@ def start_game():
 		else:
 			render_board()
 			print 'Your Turn!'
-			coord = human_move()
+			coord = human_move(turn)
 		place_mark(turn, coord[0], coord[1])
 		# move to the next turn
 		turn = 'O' if turn == 'X' else 'X'
