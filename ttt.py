@@ -129,15 +129,14 @@ def find_wins(mark):
 	diagonals = ((0, 4, 8), (2, 4, 6))
 	for diag_offsets in diagonals:
 		num_marks = 0
-		blank_found = False
+		blank_offset = -1
 		for i in diag_offsets:
 			if board[i] == mark:
 				num_marks += 1
 			elif board[i] == '-':
-				blank_found = True
-				break
-		if num_marks == 2 and blank_found:
-			x, y = get_coords(i)
+				blank_offset = i
+		if num_marks == 2 and blank_offset >= 0:
+			x, y = get_coords(blank_offset)
 			win_coords.append([x, y])
 	
 	# no winning situations were found =\
