@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
 
+import random
+
 def startgame():
     #create empty board
     board = [['-','-','-'],
@@ -12,33 +14,47 @@ def startgame():
 
 def displayhelp():
     print('- Each field on the board is assigned to a number (see below):')
-    print('7|8|9')
-    print('4|5|6')
-    print('1|2|3')
+    print('                7|8|9')
+    print('                4|5|6')
+    print('                1|2|3')
     print('- You can only occupy unmarked spaces.')
     print('- The computer will win as soon as he got 3 marks in any row, column or diagonal.')
     print('- It is impossible for you to win (best possible result is a tie).')
     print('- It is easiest to use your NumPad to play the game.\nGood luck!\n')
     
 def playerletter():
-    #ask for player letter
-    human = ''
+    #return two letters, first one for human player
+    #and second one for computer player
+    letter = ''
     print('Would you like to use X or O?')
-    human = raw_input().upper()
-    while not (human == 'X' or human == 'O'):   
+    letter = raw_input().upper()
+    while not (letter == 'X' or letter == 'O'):
         print('Please enter either X or O!')
-        human = raw_input().upper()
-    return human
+        letter = raw_input().upper()
 
-def whofirst():
-    #ask who should go first
+    if letter == 'X':
+        human = 'X'
+        cpu = 'O'
+    else:
+        human = 'O'
+        cpu = 'X'
+
+    return human, cpu
+
+def humanfirst():
+    #ask who should go first and return True if human goes first
+    #and False if computer goes first
     first = ''
     print('Who should go first: (h) Human or (c) Computer?')
     first = raw_input().lower()
     while not (first == 'h' or first == 'c'):
-        print('Please enter either h for Human or c for Computer!')
+        print('Please enter either "h" for Human or "c" for Computer!')
         first = raw_input().lower()
-    return first
+
+    if first == 'h':
+        return True
+    else:
+        return False
 
 def drawboard():
     #draw the current board
@@ -66,15 +82,39 @@ def getplayermove(board):
         #test if chosen move is valid
             
 
-def AImove():
+def AImove(board):
     #get AI move
     print('AI')
 
-def win_or_tie():
-    #check win/tie conditions
-    print('WIN')
+def win_or_tie(board):
+    #check win/tie conditions and print status message
+    #return True if no more moves are left or someone won
+    #return False if not
+    print('not won yet')
+    return False
 
 #main
-game = startgame()
-pletter = playerletter()
-first = whofirst()
+while game: #game loop until not play again
+    game = True
+    tie_or_win = False
+    board = startgame()
+    letters = playerletter()
+    first = humanfirst()
+    if first:
+        turn = 'human'
+    else:
+        turn = 'cpu'
+        
+    while not tie_or_win: #loop until win/tie is True
+        if turn == 'human':
+            getplayermove()
+            turn = 'cpu'
+        else:
+            getAImove()
+            turn = 'human'
+        tie_or_win = win_or_tie(board)
+
+    print('Do you want to play again? (y/n)')
+    answer = raw_input().lower()
+    if answer not == 'y' or answer not == 'yes':
+        game = False
