@@ -111,8 +111,8 @@ def makeAImove(board, token):
 
 def win_or_tie(board):
     #check win/tie conditions and print status message
-    #return True if no more moves are left or someone won
-    #return False if not
+    #return True if no more moves are left or if someone won
+    #return False if open moves are left and no one has won
     if board[2][0] == board[2][1] == board[2][2] and board[2][0] is not '-':
         drawboard(board)
         print(board[2][0] + ' wins!')
@@ -146,11 +146,12 @@ def win_or_tie(board):
         print(board[2][2] + ' wins!')
         return True
     else:
-        for a in range(0,2):
-            for b in range(0,2):
+        #check if moves are left and return True if not
+        for a in range(0,3):
+            for b in range(0,3):
+                print(str(a) + ' ' + str(b) + ' ' + board[a][b])
                 if board[a][b] == '-':
                     return False
-        print('the game is a tie!')
         return True
 
 #main
