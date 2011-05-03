@@ -113,8 +113,45 @@ def win_or_tie(board):
     #check win/tie conditions and print status message
     #return True if no more moves are left or someone won
     #return False if not
-    print('not won yet')
-    return False
+    if board[2][0] == board[2][1] == board[2][2] and board[2][0] is not '-':
+        drawboard(board)
+        print(board[2][0] + ' wins!')
+        return True
+    elif board[1][0] == board[1][1] == board[1][2] and board[1][0] is not '-':
+        drawboard(board)
+        print(board[1][0] + ' wins!')
+        return True
+    elif board[0][0] == board[0][1] == board[0][2] and board[0][0] is not '-':
+        drawboard(board)
+        print(board[0][0] + ' wins!')
+        return True
+    elif board[2][0] == board[1][0] == board[0][0] and board[2][0] is not '-':
+        drawboard(board)
+        print(board[2][0] + ' wins!')
+        return True
+    elif board[2][1] == board[1][1] == board[0][1] and board[2][1] is not '-':
+        drawboard(board)
+        print(board[2][1] + ' wins!')
+        return True
+    elif board[2][2] == board[1][2] == board[0][2] and board[2][2] is not '-':
+        drawboard(board)
+        print(board[2][2] + ' wins!')
+        return True
+    elif board[2][0] == board[1][1] == board[0][2] and board[2][0] is not '-':
+        drawboard(board)
+        print(board[2][0] + ' wins!')
+        return True
+    elif board[2][2] == board[1][1] == board[0][0] and board[2][2] is not '-':
+        drawboard(board)
+        print(board[2][2] + ' wins!')
+        return True
+    else:
+        for a in range(0,2):
+            for b in range(0,2):
+                if board[a][b] == '-':
+                    return False
+        print('the game is a tie!')
+        return True
 
 #main
 game = True
@@ -131,14 +168,16 @@ while game: #game loop until not play again
     while not tie_or_win: #loop until win/tie is True
         if turn == 'human':
             drawboard(board)
-            makeplayermove(board, letters[0])
+            board = makeplayermove(board, letters[0])
             turn = 'cpu'
         else:
-            makeAImove(board, letters[1])
+            board = makeAImove(board, letters[1])
             turn = 'human'
         tie_or_win = win_or_tie(board)
 
     print('Do you want to play again? (y/n)')
     answer = raw_input().lower()
-    if answer is not 'y' or answer is not 'yes':
+    if answer == 'y' or answer == 'yes':
+        game = True
+    else:
         game = False
