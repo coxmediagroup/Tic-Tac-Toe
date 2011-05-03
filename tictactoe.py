@@ -69,6 +69,28 @@ def isUnoccupied(board,move):
     else:
         return False
 
+def getUnoccupiedSpaces(board):
+    spaces = []
+    if board[2][0] =='-':
+        spaces.append('1')
+    if board[2][1] =='-':
+        spaces.append('2')
+    if board[2][2] =='-':
+        spaces.append('3')
+    if board[1][0] =='-':
+        spaces.append('4')
+    if board[1][1] =='-':
+        spaces.append('5')
+    if board[1][2] =='-':
+        spaces.append('6')
+    if board[0][0] =='-':
+        spaces.append('7')
+    if board[0][1] =='-':
+        spaces.append('8')
+    if board[0][2] =='-':
+        spaces.append('9')
+    return spaces
+
 def makemove(board, move, token):
     #function to edit the board accoirding to last move
     if move == '1':
@@ -95,17 +117,21 @@ def makeplayermove(board, token):
     #make players move
     print('Your turn. Where to go next? (enter number for unoccupied space or (h) for help!')
     move = raw_input()
-    while move not in '1 2 3 4 5 6 7 8 9'.split():
+    free = getUnoccupiedSpaces(board)
+    while move not in '1 2 3 4 5 6 7 8 9'.split() or move not in free:
         if move == 'h' or move == 'help':
             displayhelp()
-        print('Please enter a number 1-9 for your next move.')
+        print('Please enter one of the following numbers for your next move:')
+        print(free)
         move = raw_input()
     newboard = makemove(board, move, token)
     return newboard
 
 def makeAImove(board, token):
     #make random move
-    move = str(random.randint(1,9))
+    free = getUnoccupiedSpaces(board)
+    from random import choice
+    move = choice(free)
     newboard = makemove(board, move, token)
     return newboard
 
@@ -151,8 +177,8 @@ def win_or_tie(board):
             for b in range(0,3):
                 if board[a][b] == '-':
                     return False
-        print('the game ended in a tie!')
         drawboard(board)
+        print('the game ended in a tie!')
         return True
 
 #main
