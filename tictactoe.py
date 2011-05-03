@@ -56,11 +56,11 @@ def humanfirst():
     else:
         return False
 
-def drawboard():
+def drawboard(board):
     #draw the current board
-    print(board[0][0] + '|' + board[0][1] + '|' + board[0][2])
-    print(board[1][0] + '|' + board[1][1] + '|' + board[1][2])
-    print(board[2][0] + '|' + board[2][1] + '|' + board[2][2])
+    print('          ' + board[0][0] + '|' + board[0][1] + '|' + board[0][2])
+    print('          ' + board[1][0] + '|' + board[1][1] + '|' + board[1][2])
+    print('          ' + board[2][0] + '|' + board[2][1] + '|' + board[2][2])
 
 def isUnoccupied(board,move):
     #test if move was made to unoccupied space
@@ -69,22 +69,45 @@ def isUnoccupied(board,move):
     else:
         return False
 
-def getplayermove(board):
-    #get players move
+def makemove(board, move, token):
+    #function to edit the board accoirding to last move
+    if move == '1':
+        board[2][0] = token
+    if move == '2':
+        board[2][1] = token
+    if move == '3':
+        board[2][2] = token
+    if move == '4':
+        board[1][0] = token
+    if move == '5':
+        board[1][1] = token
+    if move == '6':
+        board[1][2] = token
+    if move == '7':
+        board[0][0] = token
+    if move == '8':
+        board[0][1] = token
+    if move == '9':
+        board[0][2] = token
+    return board
+    
+def makeplayermove(board, token):
+    #make players move
     print('Your turn. Where to go next? (enter number for unoccupied space or (h) for help!')
-    move = input()
+    move = raw_input()
     while move not in '1 2 3 4 5 6 7 8 9'.split():
-        print('Not a number. Please enter a number 1-9 for your next move.')
-        move = input()
-        #test if user requested help
-    #if (move == 'h') or (move =='help'):
-     #       displayhelp()
-        #test if chosen move is valid
-            
+        if move == 'h' or move == 'help':
+            displayhelp()
+        print('Please enter a number 1-9 for your next move.')
+        move = raw_input()
+    newboard = makemove(board, move, token)
+    return newboard
 
-def AImove(board):
-    #get AI move
-    print('AI')
+def makeAImove(board, token):
+    #make random move
+    move = str(random.randint(1,9))
+    newboard = makemove(board, move, token)
+    return newboard
 
 def win_or_tie(board):
     #check win/tie conditions and print status message
@@ -94,8 +117,8 @@ def win_or_tie(board):
     return False
 
 #main
+game = True
 while game: #game loop until not play again
-    game = True
     tie_or_win = False
     board = startgame()
     letters = playerletter()
@@ -107,14 +130,15 @@ while game: #game loop until not play again
         
     while not tie_or_win: #loop until win/tie is True
         if turn == 'human':
-            getplayermove()
+            drawboard(board)
+            makeplayermove(board, letters[0])
             turn = 'cpu'
         else:
-            getAImove()
+            makeAImove(board, letters[1])
             turn = 'human'
         tie_or_win = win_or_tie(board)
 
     print('Do you want to play again? (y/n)')
     answer = raw_input().lower()
-    if answer not == 'y' or answer not == 'yes':
+    if answer is not 'y' or answer is not 'yes':
         game = False
