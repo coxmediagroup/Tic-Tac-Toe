@@ -149,9 +149,10 @@ def win_or_tie(board):
         #check if moves are left and return True if not
         for a in range(0,3):
             for b in range(0,3):
-                print(str(a) + ' ' + str(b) + ' ' + board[a][b])
                 if board[a][b] == '-':
                     return False
+        print('the game ended in a tie!')
+        drawboard(board)
         return True
 
 #main
