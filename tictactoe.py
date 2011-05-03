@@ -91,31 +91,31 @@ def getUnoccupiedSpaces(board):
         spaces.append('9')
     return spaces
 
-def makemove(board, move, token):
-    #function to edit the board accoirding to last move
+def makemove(b, move, token):
+    #function to edit the board according to last move
     if move == '1':
-        board[2][0] = token
+        b[2][0] = token
     if move == '2':
-        board[2][1] = token
+        b[2][1] = token
     if move == '3':
-        board[2][2] = token
+        b[2][2] = token
     if move == '4':
-        board[1][0] = token
+        b[1][0] = token
     if move == '5':
-        board[1][1] = token
+        b[1][1] = token
     if move == '6':
-        board[1][2] = token
+        b[1][2] = token
     if move == '7':
-        board[0][0] = token
+        b[0][0] = token
     if move == '8':
-        board[0][1] = token
+        b[0][1] = token
     if move == '9':
-        board[0][2] = token
-    return board
+        b[0][2] = token
+    return b
     
 def makeplayermove(board, token):
     #make players move
-    print('Your turn. Where to go next? (enter number for unoccupied space or (h) for help!')
+    print('Your turn. Where to go next? (enter number for unoccupied space or (h) for help!)')
     move = raw_input()
     free = getUnoccupiedSpaces(board)
     while move not in '1 2 3 4 5 6 7 8 9'.split() or move not in free:
@@ -127,9 +127,34 @@ def makeplayermove(board, token):
     newboard = makemove(board, move, token)
     return newboard
 
+def getBoardCopy(board):
+    from copy import copy
+    copBoard = copy(board)
+    print(board)
+    copBoard[2][0] = 'A'
+    print(board)
+    print(copBoard)
+
+    return copBoard
+
 def makeAImove(board, token):
-    #make random move
+    #make AI move based on following priority list:
+    #1) make winning move
+    #2) block human winning move
+    #3) get middle space if first move
+    #4) get free corner
+    #5) get free side
+    
     free = getUnoccupiedSpaces(board)
+
+    #1) make winning move if possible
+    for space in free:
+        copBoard = getBoardCopy(board)
+        copBoard = makemove(copBoard, space, token)
+        #check if made move triggers win (or tie?) and return if True
+        drawboard(copBoard)
+
+        
     from random import choice
     move = choice(free)
     newboard = makemove(board, move, token)
