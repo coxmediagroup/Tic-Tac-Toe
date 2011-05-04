@@ -17,6 +17,9 @@ class Board:
 	'''The Tic Tac Toe playing board, data, and member functions!'''
 	blank = '-'
 	squares = [blank] * 9
+	# a string of play history. each character is the numeric offset of where
+	# the player placed their mark. 'X' always comes first.
+	history = ''
 	
 	def render(self):
 		'''
@@ -34,6 +37,7 @@ class Board:
 		'''
 		offset = y * 3 + x
 		self.squares[offset] = mark[0]
+		self.history += str(offset)
 		
 	def get(self, x, y):
 		'''
@@ -74,7 +78,20 @@ class Board:
 				if num_marks == 3:
 					return mark
 		return None
-		
+	def generate(self, history):
+		'''
+		Sets up a board based on the board history. Note: in this game of Tic
+		Tac Toe, 'X' will always go first!
+		'''
+		# print 'inside generate(%s)' % history
+		turn = 'X'
+		self.history = ''
+		# print '	clearing history: %s' % self.history
+		self.squares = [self.blank] * 9
+		for offset in history:
+			self.squares[int(offset)] = turn
+			self.history += offset
+			turn = 'O' if turn == 'X' else 'X'
 
 
 def get_coords(offset):
@@ -191,7 +208,7 @@ def computer_move(mark):
 	if coord: return coord[0]
 	# 3 - create a fork opportunity (to force a win!)
 	coord = find_fork(mark)
-	if coord: print 'creating fork opportunity!'; return coord
+	if coord: return coord
 		
 	# coord = setup_fork(opponent)
 	# if coord: print 'oh shiz, opponent is trying to setup a fork!'; return coord
@@ -344,61 +361,135 @@ def end_game():
 	else:
 		print 'What?! Impossible! Robert needs to make me perfect.'
 
-def proof():
+
+def do_proof():
 	'''
 	Tests if the computer's AI is perfect or not. If it is, then this will 
 	give you proof that the computer AI will never lose!
 	'''
 	# Proof data
-	game_history = []
+	game_outcomes = {'': None}
 	random_threshold = 10
+	plays_exhausted = False
 	# STEP 1: setup game environment
 	global players
 	global board
 	board = Board()
 	players = {'X': 'ai', 'O': 'human'}
-	turn = 'X'
-	# loop until all play history is exhausted
 		
-	# STEP 1:
-	# for each response in the game_history where there is no winner, tie,
-	# or flag to indicate that the history item has been exhausted, find ALL
-	# possible computer AI responses.
-	if players[turn] == 'ai':
-		print "it's the AI's turn!"
-		memorize = board.squares[:]
-		# STEP 2:
-		# Find the AI algorithm's official move.
-		#
-		# While the AI algorithm may choose the same move every time, it is 
-		# also possible that the algorithm will randomly select one of many 
-		# coordinates.
-		coords = []
-		for i in range(random_threshold):
-			move = computer_move(turn)
-			if move not in coords:
-				coords.append(move)
-		# in the case where there are more than 1 unique set of coordinates, 
-		# perform a more vigorous test to determine all possible moves.
-		if len(coords) > 1:
-			coords = []
-			for i in range(random_threshold * 9):
-				move = computer_move(turn)
-				if move not in coords:
-					coords.append(move)
-		# all_coords_same = all(coords[0] == i for i in coords)
-		# if not all_coords_same:
-		# 	# in the case where not all coordinates are the same, do a more 
+	# loop until all game outcomes have been exhausted
+	coords = []
+	count = 0
+	# new_history stores dictionary keys for game_outcomes where the game is 
+	# incomplete (has a value of None)
+	new_history = ['']
+	while len(new_history) > 0:
+		for turn in players:
+			for game_history in new_history:
+				# print 'turn is now:', turn
+				# STEP 1:
+				# play the game history to create a game board in a playable state
+				# print 'game_history is: ', game_history
+				# current_board = Board()
+				# memorize = board.squares[:]
+				board.generate(game_history)
+				# board.render()
+				# STEP 1:
+				# for each response in the game_outcomes where there is no winner, tie,
+				# or flag to indicate that the history item has been exhausted, find ALL
+				# possible computer AI responses.
+				# for history in game_outcomes:
+				if players[turn] == 'ai':
+					# print "it's the AI's turn!"
+					# memorize = board.squares[:]
+					# STEP 2:
+					# Find the AI algorithm's official move.
+					#
+					# While the AI algorithm may choose the same move every time, it is 
+					# also possible that the algorithm will randomly select one of many 
+					# coordinates.
+					for i in range(random_threshold):
+						move = computer_move(turn)
+						if move not in coords:
+							coords.append(move)
+					# in the case where there are more than 1 unique set of coordinates, 
+					# perform a more vigorous test to determine all possible moves.
+					if len(coords) > 1:
+						coords = []
+						for i in range(random_threshold * 9):
+							move = computer_move(turn)
+							if move not in coords:
+								coords.append(move)
+					offsets = [y*3+x for x, y in coords]
+					# all_coords_same = all(coords[0] == i for i in coords)
+					# if not all_coords_same:
+					# 	# in the case where not all coordinates are the same, do a more 
+				else:
+					# it is the human's turn! since the human is free to select any 
+					# blank space on the tic tac toe board, consider every blank space
+					# as a possible play against the computer AI!
+					# print "it's the human's turn!"
+					offsets = board.blanks()
+					# coords = [get_coords(offset) for offset in board.blanks()]
 		
-		# STEP 3:
-		# save the game history and outcome
-		for mark_coord in coords:
-			x, y = mark_coord
-			board.place(turn, x, y)
-			game_history.append([mark_coord, board.winner()])
-			board.squares = memorize[:]
-			
-	print 'game_history =', game_history
+				# STEP 3:
+				# save the game history and outcome. The game history will be a string 
+				# of offsets
+				for offset in offsets:
+					# print 'inside the offset loop:'
+					x, y = get_coords(offset)
+					board.place(turn, x, y)
+					# print '	just placed %s at offset %d' % (turn, offset)
+					# print 'board history is:', board.history
+					game_outcomes[board.history] = board.winner()
+					# reset game history on the board
+					board.generate(game_history)
+					# board.squares = memorize[:]
+		
+				# STEP 4:
+				# finally, since we exhausted all playable possibilities for this 
+				# game state, mark this game history state as exhausted.
+				# Exhaustion will be notated with an 'E'
+				game_outcomes[game_history] = 'E'
+			if '' in game_outcomes: del(game_outcomes[''])
+			# is None: game_outcomes[''] = board.blank
+			# print 'game_outcomes is now:', game_outcomes
+			# grab the next available (and unplayed) history for the next player
+			new_history = [key for key in game_outcomes if game_outcomes[key] is None]
+			if len(new_history) == 0:
+				break;
+		# grab the next available (and unplayed) history for the next player
+		# new_history = [key for key in game_outcomes if game_outcomes[key] is None]
+		count += 1
+		print 'History Depth Level has reached %d ...' % count
+		# if count >= 5: break;
+		
+	# print
+	# print '====================================='
+	# print ' Game Outcomes - nice and organized!'
+	# print '====================================='
+	# print
+	# key_count = 0
+	# for key in game_outcomes:
+	# 	key_count += 1
+	# 	print str(key_count) + ':', 'history:', key, ' -  outcome:', game_outcomes[key]
+	# print 'there were %d items in the dictionary.' % len(game_outcomes)
+	print
+	print '============='
+	print '   Results'
+	print '============='
+	print
+	print 'Total outcomes: ', len(game_outcomes)
+	exhausted = [k for k in game_outcomes if game_outcomes[k] is 'E']
+	print 'exhausted move sets: ', len(exhausted)
+	ties = [k for k in game_outcomes if game_outcomes[k] is 'T']
+	print 'Ties: ', len(ties)
+	x_wins = [k for k in game_outcomes if game_outcomes[k] is 'X']
+	print 'X wins: ', len(x_wins)
+	o_wins = [k for k in game_outcomes if game_outcomes[k] is 'O']
+	print 'O wins: ', len(o_wins)
+	none = [k for k in game_outcomes if game_outcomes[k] is None]
+	print 'move sets that still need to be exhausted: ', len(none)
 
 
 # possible game modes:
@@ -408,8 +499,7 @@ def proof():
 #    any other mode will just play the game.
 mode = 'proof'
 if mode == 'proof':
-	print 'hai. yew in testing mode.'
-	proof()
+	do_proof()
 elif mode == 'watch':
 	print 'nothing done yet.'
 else:
