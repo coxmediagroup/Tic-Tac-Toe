@@ -371,6 +371,26 @@ def end_game():
 	else:
 		print 'What?! Impossible! Robert needs to make me perfect.'
 
-intro_game()
-start_game()
-end_game()
+def proof():
+	'''
+	Tests if the computer's AI is perfect or not. If it is, then this will 
+	give you proof that the computer AI will never lose!
+	'''
+	global board
+	
+
+# possible game modes:
+#    'play' - play the game :)
+#    'proof' - prove that the AI will never lose.
+#    'watch' - watch a game history
+#    any other mode will just play the game.
+mode = 'proof'
+if mode == 'proof':
+	print 'hai. yew in testing mode.'
+	proof()
+elif mode == 'watch':
+	print 'nothing done yet.'
+else:
+	intro_game()
+	start_game()
+	end_game()
