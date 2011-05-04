@@ -121,80 +121,88 @@ def makeplayermove(board, token):
     while move not in '1 2 3 4 5 6 7 8 9'.split() or move not in free:
         if move == 'h' or move == 'help':
             displayhelp()
-        print('Please enter one of the following numbers for your next move:')
-        print(free)
+        print('Please enter one of the following numbers for your next move: %s' % free)
         move = raw_input()
     newboard = makemove(board, move, token)
     return newboard
 
 def getBoardCopy(board):
-    from copy import copy
-    copBoard = copy(board)
-    print(board)
-    copBoard[2][0] = 'A'
-    print(board)
-    print(copBoard)
-
+    import copy
+    copBoard = copy.deepcopy(board)
     return copBoard
 
-def makeAImove(board, token):
+def makeAImove(board, letters):
     #make AI move based on following priority list:
     #1) make winning move
     #2) block human winning move
-    #3) get middle space if first move
-    #4) get free corner
-    #5) get free side
+    #3) get free corner
+    #4) get free side
+    # TODO: This does not yet guarantee a tie, need to add forkhandling for example
     
     free = getUnoccupiedSpaces(board)
 
     #1) make winning move if possible
     for space in free:
         copBoard = getBoardCopy(board)
-        copBoard = makemove(copBoard, space, token)
-        #check if made move triggers win (or tie?) and return if True
-        drawboard(copBoard)
+        copBoard = makemove(copBoard, space, letters[1])
+        winmove = is_win_or_tie(copBoard)
+        if winmove:
+            move = space
+            newboard = makemove(board, move, letters[1])
+            return newboard
 
-        
-    from random import choice
+    #2) block human winning move
+    for space in free:
+        copBoard = getBoardCopy(board)
+        copBoard = makemove(copBoard, space, letters[0])
+        winmove = is_win_or_tie(copBoard)
+        if winmove:
+            print('blockmove bitches')
+            move = space
+            newboard = makemove(board, move, letters[1])
+            return newboard
+
+    #3) get free corner (random)
+    templist = []
+    for space in free:
+        if space == '1':
+            templist.append(space)
+        if space == '3':
+            templist.append(space)
+        if space == '7':
+            templist.append(space)
+        if space == '9':
+            templist.append(space)
+    if templist:
+        print('cornermove bitches')
+        from random import choice
+        cornermove = choice(templist)
+        newboard = makemove(board, cornermove, letters[1])
+        return newboard
+            
     move = choice(free)
-    newboard = makemove(board, move, token)
+    newboard = makemove(board, move, letters[1])
     return newboard
 
-def win_or_tie(board):
-    #check win/tie conditions and print status message
+def is_win_or_tie(board):
+    #check win/tie conditions
     #return True if no more moves are left or if someone won
     #return False if open moves are left and no one has won
     if board[2][0] == board[2][1] == board[2][2] and board[2][0] is not '-':
-        drawboard(board)
-        print(board[2][0] + ' wins!')
         return True
     elif board[1][0] == board[1][1] == board[1][2] and board[1][0] is not '-':
-        drawboard(board)
-        print(board[1][0] + ' wins!')
         return True
     elif board[0][0] == board[0][1] == board[0][2] and board[0][0] is not '-':
-        drawboard(board)
-        print(board[0][0] + ' wins!')
         return True
     elif board[2][0] == board[1][0] == board[0][0] and board[2][0] is not '-':
-        drawboard(board)
-        print(board[2][0] + ' wins!')
         return True
     elif board[2][1] == board[1][1] == board[0][1] and board[2][1] is not '-':
-        drawboard(board)
-        print(board[2][1] + ' wins!')
         return True
     elif board[2][2] == board[1][2] == board[0][2] and board[2][2] is not '-':
-        drawboard(board)
-        print(board[2][2] + ' wins!')
         return True
     elif board[2][0] == board[1][1] == board[0][2] and board[2][0] is not '-':
-        drawboard(board)
-        print(board[2][0] + ' wins!')
         return True
     elif board[2][2] == board[1][1] == board[0][0] and board[2][2] is not '-':
-        drawboard(board)
-        print(board[2][2] + ' wins!')
         return True
     else:
         #check if moves are left and return True if not
@@ -202,8 +210,6 @@ def win_or_tie(board):
             for b in range(0,3):
                 if board[a][b] == '-':
                     return False
-        drawboard(board)
-        print('the game ended in a tie!')
         return True
 
 #main
@@ -222,11 +228,15 @@ while game: #game loop until not play again
         if turn == 'human':
             drawboard(board)
             board = makeplayermove(board, letters[0])
+            tie_or_win = is_win_or_tie(board)
             turn = 'cpu'
         else:
-            board = makeAImove(board, letters[1])
+            board = makeAImove(board, letters)
+            tie_or_win = is_win_or_tie(board)
             turn = 'human'
-        tie_or_win = win_or_tie(board)
+
+    drawboard(board)
+    print('The game has ended and you did not win!\n')
 
     print('Do you want to play again? (y/n)')
     answer = raw_input().lower()
