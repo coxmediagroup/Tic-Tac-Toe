@@ -62,14 +62,29 @@ def drawboard(board):
     print('          ' + board[1][0] + '|' + board[1][1] + '|' + board[1][2])
     print('          ' + board[2][0] + '|' + board[2][1] + '|' + board[2][2])
 
-def isUnoccupied(board,move):
-    #test if move was made to unoccupied space
-    if (move =='1' and board[2][0] == '-') or (move =='2' and board[2][1] == '-') or (move =='3' and board[2][2] == '-') or (move =='4' and board[1][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or(move =='1' and board[2][0] == '-') or (move =='5' and board[1][1] == '-') or (move =='6' and board[1][2] == '-') or (move =='7' and board[0][0] == '-') or (move =='8' and board[0][1] == '-') or (move =='9' and board[0][2] == '-'):
-        return True
-    else:
-        return False
+def get_token(board, space):
+    #return content of board at space
+    if space == 1:
+        return board[2][0]
+    if space == 2:
+        return board[2][1]
+    if space == 3:
+        return board[2][2]
+    if space == 4:
+        return board[1][0]
+    if space == 5:
+        return board[1][1]
+    if space == 6:
+        return board[1][2]
+    if space == 7:
+        return board[0][0]
+    if space == 8:
+        return board[0][1]
+    if space == 9:
+        return board[0][2]
 
 def getUnoccupiedSpaces(board):
+    #return list containing all empty spaces (all possible moves)
     spaces = []
     if board[2][0] =='-':
         spaces.append('1')
@@ -131,13 +146,56 @@ def getBoardCopy(board):
     copBoard = copy.deepcopy(board)
     return copBoard
 
+def getForkList(board, mytoken, optoken):
+    #create a board to replace mytoken with 1, optoken with 2 and empty spaces with 0
+    #find paths on that board where the sum = 1, meaning that these are paths with
+    #1 mytoken and 2 empty spaces (one move taken, unblocked by opponent).
+    #finally: create one list out of these paths.
+    path_list = []
+    fork_list = []
+    tf = [[0,0,0],[0,0,0],[0,0,0]]
+    for row in range(0,3):
+        for col in range(0,3):
+            if board[row][col] == mytoken:
+                tf[row][col] = 1
+            elif board[row][col] == optoken:
+                tf[row][col] = 2
+            #else:
+                #continue
+
+    if tf[2][0] + tf[2][1] + tf[2][2] == 1:
+        path_list.append([1,2,3])
+    if tf[1][0] + tf[1][1] + tf[1][2] == 1:
+        path_list.append([4,5,6])
+    if tf[0][0] + tf[0][1] + tf[0][2] == 1:
+        path_list.append([7,8,9])
+    if tf[2][0] + tf[1][0] + tf[0][0] == 1:
+        path_list.append([1,4,7])
+    if tf[2][1] + tf[1][1] + tf[0][1] == 1:
+        path_list.append([2,5,8])
+    if tf[2][2] + tf[1][2] + tf[0][2] == 1:
+        path_list.append([3,6,9])
+    if tf[2][0] + tf[1][1] + tf[0][2] == 1:
+        path_list.append([1,5,9])
+    if tf[2][2] + tf[1][1] + tf[0][0] == 1:
+        path_list.append([3,5,7])
+
+    for path in path_list:
+        for space in path:
+            fork_list.append(space)
+    
+    return fork_list
+    
 def makeAImove(board, letters):
     #make AI move based on following priority list:
     #1) make winning move
     #2) block human winning move
-    #3) get free corner
-    #4) get free side
-    # TODO: This does not yet guarantee a tie, need to add forkhandling for example
+    #3) create fork
+    #4) block opposing fork
+    #5) take center
+    #6) get opposing corner
+    #7) take any empty corner
+    #8) take any side
     
     free = getUnoccupiedSpaces(board)
 
@@ -147,6 +205,7 @@ def makeAImove(board, letters):
         copBoard = makemove(copBoard, space, letters[1])
         winmove = is_win_or_tie(copBoard)
         if winmove:
+            print('winmove yay')
             move = space
             newboard = makemove(board, move, letters[1])
             return newboard
@@ -157,12 +216,54 @@ def makeAImove(board, letters):
         copBoard = makemove(copBoard, space, letters[0])
         winmove = is_win_or_tie(copBoard)
         if winmove:
-            print('blockmove bitches')
+            print('blockmove yay')
             move = space
             newboard = makemove(board, move, letters[1])
             return newboard
 
-    #3) get free corner (random)
+    #3) make best possible fork move
+    fork_list = getForkList(board, letters[1], letters[0])
+    spaces = {}
+    for space in fork_list:
+        if space not in spaces.keys():
+            if letters[1] == get_token(board,space):
+                continue
+            spaces[space] = 0
+        else:
+            spaces[space] += 1
+    
+    best = 0
+    for number in spaces.keys():
+        if spaces[number] > best:
+            best = spaces[number]
+
+    if best > 0:
+        for move, number in spaces.iteritems():
+            if number == best:
+                newboard = makemove(board, str(move), letters[1])
+                print('fork move yay')
+                return newboard
+
+    #4) block opposing fork move
+    opfork_list = getForkList(board, letters[0], letters[1])
+    print(opfork_list)
+
+    #5) take center if open
+    if get_token(board, 5) == '-':
+        print('mid move yay')
+        newboard = makemove(board, '5', letters[1])
+        return newboard
+
+    #6) take opposite corner
+    for corner, opcorner in {'1': 9, '3': 7, '7': 3, '9': 1}.iteritems():
+        if get_token(board, int(corner)) == letters[0]:
+            if get_token(board, opcorner) == '-':
+                print('opcorner move yay')
+                newboard = makemove(board, str(opcorner), letters[1])
+                return newboard
+
+    
+    #7) get free corner
     templist = []
     for space in free:
         if space == '1':
@@ -174,7 +275,25 @@ def makeAImove(board, letters):
         if space == '9':
             templist.append(space)
     if templist:
-        print('cornermove bitches')
+        print('cornermove yay')
+        from random import choice
+        cornermove = choice(templist)
+        newboard = makemove(board, cornermove, letters[1])
+        return newboard
+
+    #8) get free side
+    templist = []
+    for space in free:
+        if space == '2':
+            templist.append(space)
+        if space == '4':
+            templist.append(space)
+        if space == '6':
+            templist.append(space)
+        if space == '8':
+            templist.append(space)
+    if templist:
+        print('sidemove yay')
         from random import choice
         cornermove = choice(templist)
         newboard = makemove(board, cornermove, letters[1])
