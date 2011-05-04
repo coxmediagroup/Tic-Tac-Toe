@@ -2,6 +2,17 @@
 # -- classic game :)
 from random import shuffle, randint
 
+# all sets of winning possibilities--all values represent a group of 
+# offsets that must be the same mark in order for a win to take place.
+wins = (
+	# horizontal wins
+	(0, 1, 2), (3, 4, 5), (6, 7, 8),
+	# vertical wins
+	(0, 3, 6), (1, 4, 7), (2, 5, 8),
+	# diagonal wins
+	(0, 4, 8), (2, 4, 6)
+)
+
 class Board:
 	'''The Tic Tac Toe playing board, data, and member functions!'''
 	blank = '-'
@@ -54,25 +65,14 @@ class Board:
 			if self.winner('O') == 'O': return 'O'
 		else:
 			ref = self.squares
-			# did someone win horizontally?
-			if ref[0] == ref[1] == ref[2] == mark:
-				return mark
-			if ref[3] == ref[4] == ref[5] == mark:
-				return mark
-			if ref[6] == ref[7] == ref[8] == mark:
-				return mark
-			# can we find a vertical winner?
-			if ref[0] == ref[3] == ref[6] == mark:
-				return mark
-			if ref[1] == ref[4] == ref[7] == mark:
-				return mark
-			if ref[2] == ref[5] == ref[8] == mark:
-				return mark
-			# did a diagonal player win?
-			if ref[0] == ref[4] == ref[8] == mark:
-				return mark
-			if ref[2] == ref[4] == ref[6] == mark:
-				return mark
+			global wins
+			for win_offsets in wins:
+				num_marks = 0
+				for i in win_offsets:
+					if board.squares[i] == mark:
+						num_marks += 1
+				if num_marks == 3:
+					return mark
 		return None
 		
 
@@ -91,48 +91,20 @@ def find_wins(mark):
 	Lists the winning coordinates to where the player can mark on their next 
 	move! 'mark' is the character mark to look for.
 	'''
+	global wins
 	global board
 	win_coords = []
-	# STEP 1: search for horizontal wins
-	for y in range(3):
-		marks = []
-		blank = []
-		for x in range(3):
-			if board.get(x, y) == mark:
-				marks.append([x, y])
-			elif board.get(x, y) is board.blank:
-				blank.append([x, y])
-		# if there were 2 character marks and 1 blank mark, then there's a
-		# winning opportunity!
-		if len(marks) == 2 and len(blank) == 1:
-			win_coords.append(blank[0])
-	# STEP 2: search for vertical wins
-	for x in range(3):
-		marks = []
-		blank = []
-		for y in range(3):
-			if board.get(x, y) == mark:
-				marks.append([x, y])
-			elif board.get(x, y) is board.blank:
-				blank.append([x, y])
-		if len(marks) == 2 and len(blank) == 1:
-			win_coords.append(blank[0])
-	
-	# STEP 3: search the game board's 2 diagonals for a win
-	# each diagonal includes a tuple set of diagonal offsets
-	diagonals = ((0, 4, 8), (2, 4, 6))
-	for diag_offsets in diagonals:
+	for win_offsets in wins:
 		num_marks = 0
 		blank_offset = -1
-		for i in diag_offsets:
+		for i in win_offsets:
 			if board.squares[i] == mark:
 				num_marks += 1
-			elif board.squares[i] == '-':
+			elif board.squares[i] is board.blank:
 				blank_offset = i
 		if num_marks == 2 and blank_offset >= 0:
 			x, y = get_coords(blank_offset)
 			win_coords.append([x, y])
-	
 	# no winning situations were found =\
 	if len(win_coords) == 0:
 		return None
