@@ -349,15 +349,64 @@ def proof():
 	Tests if the computer's AI is perfect or not. If it is, then this will 
 	give you proof that the computer AI will never lose!
 	'''
+	# Proof data
+	game_history = []
+	random_threshold = 10
+	# STEP 1: setup game environment
+	global players
 	global board
-	
+	board = Board()
+	players = {'X': 'ai', 'O': 'human'}
+	turn = 'X'
+	# loop until all play history is exhausted
+		
+	# STEP 1:
+	# for each response in the game_history where there is no winner, tie,
+	# or flag to indicate that the history item has been exhausted, find ALL
+	# possible computer AI responses.
+	if players[turn] == 'ai':
+		print "it's the AI's turn!"
+		memorize = board.squares[:]
+		# STEP 2:
+		# Find the AI algorithm's official move.
+		#
+		# While the AI algorithm may choose the same move every time, it is 
+		# also possible that the algorithm will randomly select one of many 
+		# coordinates.
+		coords = []
+		for i in range(random_threshold):
+			move = computer_move(turn)
+			if move not in coords:
+				coords.append(move)
+		# in the case where there are more than 1 unique set of coordinates, 
+		# perform a more vigorous test to determine all possible moves.
+		if len(coords) > 1:
+			coords = []
+			for i in range(random_threshold * 9):
+				move = computer_move(turn)
+				if move not in coords:
+					coords.append(move)
+		# all_coords_same = all(coords[0] == i for i in coords)
+		# if not all_coords_same:
+		# 	# in the case where not all coordinates are the same, do a more 
+		
+		# STEP 3:
+		# save the game history and outcome
+		for mark_coord in coords:
+			x, y = mark_coord
+			board.place(turn, x, y)
+			game_history.append([mark_coord, board.winner()])
+			board.squares = memorize[:]
+			
+	print 'game_history =', game_history
+
 
 # possible game modes:
 #    'play' - play the game :)
 #    'proof' - prove that the AI will never lose.
 #    'watch' - watch a game history
 #    any other mode will just play the game.
-mode = ''
+mode = 'proof'
 if mode == 'proof':
 	print 'hai. yew in testing mode.'
 	proof()
