@@ -185,6 +185,37 @@ def getForkList(board, mytoken, optoken):
             fork_list.append(space)
     
     return fork_list
+
+def forkmove(board, mytoken, optoken, bestmove):
+    #return best possible move that will create a fork
+    #or return list of all possible fork moves (depending
+    #on whether bestmove is True or False)
+    fork_list = getForkList(board, mytoken, optoken)
+    spaces = {}
+    for space in fork_list:
+        if space not in spaces.keys():
+            if mytoken == get_token(board,space):
+                continue
+            spaces[space] = 0
+        else:
+            spaces[space] += 1
+    
+    best = 0
+    for number in spaces.keys():
+        if spaces[number] > best:
+            best = spaces[number]
+
+    forkmove_list = []
+    if best > 0:
+        for move, number in spaces.iteritems():
+            if number == best:
+                if bestmove:
+                    return str(move)
+                elif not bestmove:
+                    forkmove_list.append(str(move))
+    if not bestmove:
+        return forkmove_list
+    return None
     
 def makeAImove(board, letters):
     #make AI move based on following priority list:
@@ -222,31 +253,22 @@ def makeAImove(board, letters):
             return newboard
 
     #3) make best possible fork move
-    fork_list = getForkList(board, letters[1], letters[0])
-    spaces = {}
-    for space in fork_list:
-        if space not in spaces.keys():
-            if letters[1] == get_token(board,space):
-                continue
-            spaces[space] = 0
-        else:
-            spaces[space] += 1
-    
-    best = 0
-    for number in spaces.keys():
-        if spaces[number] > best:
-            best = spaces[number]
-
-    if best > 0:
-        for move, number in spaces.iteritems():
-            if number == best:
-                newboard = makemove(board, str(move), letters[1])
-                print('fork move yay')
-                return newboard
+    move = forkmove(board, letters[1], letters[0], True)
+    if move:
+        newboard = makemove(board, move, letters[1])
+        print('fork move yay')
+        return newboard
 
     #4) block opposing fork move
-    opfork_list = getForkList(board, letters[0], letters[1])
-    print(opfork_list)
+    opfork_list = forkmove(board, letters[0], letters[1], False)
+    forkcount = len(opfork_list)
+    if forkcount == 1:
+        newboard = makemove(board, opfork_list[0], letters[1])
+        print('block single fork move yay')
+        return newboard
+    elif forkcount > 1:
+        print('here i got to add handling of forcing moves')
+#    copBoard = getBoardCopy(board)
 
     #5) take center if open
     if get_token(board, 5) == '-':
