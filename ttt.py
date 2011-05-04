@@ -180,7 +180,8 @@ def computer_move(mark):
 	'''
 	global board
 	opponent = 'O' if mark == 'X' else 'X'
-	
+	# print 'board blanks left: %d' % len(board.blanks())
+		
 	# strategic priority:
 	# 1 - go for winning move
 	coord = find_wins(mark)
@@ -190,11 +191,16 @@ def computer_move(mark):
 	if coord: return coord[0]
 	# 3 - create a fork opportunity (to force a win!)
 	coord = find_fork(mark)
-	if coord: return coord
-	
-	# 4 - prevent human player from setting up a fork
+	if coord: print 'creating fork opportunity!'; return coord
+		
+	# coord = setup_fork(opponent)
+	# if coord: print 'oh shiz, opponent is trying to setup a fork!'; return coord
+		
+	# 4 - prevent human player from setting up a fork--this only needs to be 
+	# at a stage where 5 moves are remaining in the game.
 	coord = find_fork(opponent)
-	if coord:
+	if coord and len(board.blanks()) <= 5:
+		print 'i am doubting you will EVER need me... but ya never know.'
 		# since it is possible that the opponent could create another fork 
 		# after 'coord' is marked by AI, this makes blocking 1 of 2 forks at 
 		# 'coord' useless.
@@ -227,10 +233,14 @@ def computer_move(mark):
 		board.squares = memorize[:]
 		return coord
 	
-	# 5 - if we can't fork right away, can we setup a fork?
-	coord = setup_fork(mark)
-	if coord: return coord
-	
+	# 5 - if we can't fork right away, can we setup a fork? this check is 
+	# only useful after each player has made their first mark.
+	if len(board.blanks()) < 7:
+		coord = setup_fork(mark)
+		if coord:
+			print 'hmm, apparently setup_fork is useful in the universe of tic-tac-toe.'
+			return coord
+		
 	# what are the strongest moves, respectively, when none of the 
 	# above conditions are true? In situations where the computer 
 	# does not go first, we'll have to consider these moves as well...
@@ -240,8 +250,8 @@ def computer_move(mark):
 	if opponent in board.squares and board.get(1, 1) is board.blank:
 		return (1, 1)
 		
-	# 7 - Play in a corner (which one? adjacent corner? opposite corner?)
-	if mark not in board.squares:
+	# 7 - Play in a corner if there are more than 5 blanks available.
+	if len(board.blanks()) > 5:
 		corners = []
 		ref = board.squares
 		if ref[0] is board.blank: corners += [0]
