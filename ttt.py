@@ -2,35 +2,79 @@
 # -- classic game :)
 from random import shuffle, randint
 
-def render_board():
-	'''
-	Renders the Tic Tac Toe game board to the screen.
-	'''
-	global board
-	print board[0], board[1], board[2]
-	print board[3], board[4], board[5]
-	print board[6], board[7], board[8]
-
-
-def place_mark(mark, x, y):
-	'''
-	Place a mark on the game board. minimum to maximum coordinates range from 
-	(0, 0) to (2, 2)
-	'''
-	global board
-	offset = y * 3 + x
-	board[offset] = mark[0]
-
-
-def get_mark(x, y):
-	'''
-	Returns the mark at (x, y) on our game board. If (x, y) is out of range 
-	then return None.
-	'''
-	global board
-	if x < 0 or x > 2 or y < 0 or y > 2:
+class Board:
+	'''The Tic Tac Toe playing board, data, and member functions!'''
+	blank = '-'
+	squares = [blank] * 9
+	
+	def render(self):
+		'''
+		Renders the Tic Tac Toe game board to the screen.
+		'''
+		ref = self.squares
+		print ref[0], ref[1], ref[2]
+		print ref[3], ref[4], ref[5]
+		print ref[6], ref[7], ref[8]
+		
+	def place(self, mark, x, y):
+		'''
+		Place a mark on the game board. minimum to maximum coordinates range from 
+		(0, 0) to (2, 2)
+		'''
+		offset = y * 3 + x
+		self.squares[offset] = mark[0]
+		
+	def get(self, x, y):
+		'''
+		Returns the mark at (x, y) on our game board. If (x, y) is out of range 
+		then return None.
+		'''
+		if x < 0 or x > 2 or y < 0 or y > 2:
+			return None
+		return self.squares[y * 3 + x]
+		
+	def blanks(self):
+		'''Returns a list of all offset positions that can take a new mark.'''
+		blanks = []
+		for i in range(len(self.squares)):
+			if self.squares[i] is self.blank:
+				blanks.append(i)
+		return blanks
+		
+	def winner(self, mark = ''):
+		'''
+		Determines if someone won Tic Tac Toe :D
+		Returns 'X' if the X player won; 'O' if O player won.
+		Returns 'T' if there was a tie
+		'''
+		if self.blank not in self.squares: return 'T'
+		if mark == '':
+			# if no mark was specified, check if X won, then check if O won
+			if self.winner('X') == 'X': return 'X'
+			if self.winner('O') == 'O': return 'O'
+		else:
+			ref = self.squares
+			# did someone win horizontally?
+			if ref[0] == ref[1] == ref[2] == mark:
+				return mark
+			if ref[3] == ref[4] == ref[5] == mark:
+				return mark
+			if ref[6] == ref[7] == ref[8] == mark:
+				return mark
+			# can we find a vertical winner?
+			if ref[0] == ref[3] == ref[6] == mark:
+				return mark
+			if ref[1] == ref[4] == ref[7] == mark:
+				return mark
+			if ref[2] == ref[5] == ref[8] == mark:
+				return mark
+			# did a diagonal player win?
+			if ref[0] == ref[4] == ref[8] == mark:
+				return mark
+			if ref[2] == ref[4] == ref[6] == mark:
+				return mark
 		return None
-	return board[y * 3 + x]
+		
 
 
 def get_coords(offset):
@@ -42,70 +86,21 @@ def get_coords(offset):
 	'''
 	return (offset % 3, offset / 3)
 
-
-def winner(mark = ''):
-	'''
-	Determines if someone won Tic Tac Toe :D
-	Returns X if the X player won; O if O player won.
-	'''
-	global board
-	
-	# what if there was a tie? this is always possible. return 'T'.
-	if '-' not in board: return 'T'
-	
-	if mark == '':
-		# if no mark was specified, check if X won, then check if O won
-		if winner('X') == 'X': return 'X'
-		if winner('O') == 'O': return 'O'
-	else:
-		# did someone win horizontally?
-		if board[0] == board[1] == board[2] == mark:
-			return mark
-		if board[3] == board[4] == board[5] == mark:
-			return mark
-		if board[6] == board[7] == board[8] == mark:
-			return mark
-		
-		# can we find a vertical winner?
-		if board[0] == board[3] == board[6] == mark:
-			return mark
-		if board[1] == board[4] == board[7] == mark:
-			return mark
-		if board[2] == board[5] == board[8] == mark:
-			return mark
-		
-		# did a diagonal player win?
-		if board[0] == board[4] == board[8] == mark:
-			return mark
-		if board[2] == board[4] == board[6] == mark:
-			return mark
-		
-	return None
-
-
-def find_blanks():
-	'''Returns a list of all offset positions that can take a new mark.'''
-	global board
-	blanks = []
-	for i in range(len(board)):
-		if board[i] == '-':
-			blanks.append(i)
-	return blanks
-
 def find_wins(mark):
 	'''
 	Lists the winning coordinates to where the player can mark on their next 
 	move! 'mark' is the character mark to look for.
 	'''
+	global board
 	win_coords = []
 	# STEP 1: search for horizontal wins
 	for y in range(3):
 		marks = []
 		blank = []
 		for x in range(3):
-			if get_mark(x, y) == mark:
+			if board.get(x, y) == mark:
 				marks.append([x, y])
-			elif get_mark(x, y) == '-':
+			elif board.get(x, y) is board.blank:
 				blank.append([x, y])
 		# if there were 2 character marks and 1 blank mark, then there's a
 		# winning opportunity!
@@ -116,24 +111,23 @@ def find_wins(mark):
 		marks = []
 		blank = []
 		for y in range(3):
-			if get_mark(x, y) == mark:
+			if board.get(x, y) == mark:
 				marks.append([x, y])
-			elif get_mark(x, y) == '-':
+			elif board.get(x, y) is board.blank:
 				blank.append([x, y])
 		if len(marks) == 2 and len(blank) == 1:
 			win_coords.append(blank[0])
 	
 	# STEP 3: search the game board's 2 diagonals for a win
-	global board
 	# each diagonal includes a tuple set of diagonal offsets
 	diagonals = ((0, 4, 8), (2, 4, 6))
 	for diag_offsets in diagonals:
 		num_marks = 0
 		blank_offset = -1
 		for i in diag_offsets:
-			if board[i] == mark:
+			if board.squares[i] == mark:
 				num_marks += 1
-			elif board[i] == '-':
+			elif board.squares[i] == '-':
 				blank_offset = i
 		if num_marks == 2 and blank_offset >= 0:
 			x, y = get_coords(blank_offset)
@@ -151,18 +145,15 @@ def find_fork(mark):
 	'''
 	global board
 	# STEP 1: find the offset of all spaces that can be marked
-	blanks = []
-	for i in range(len(board)):
-		if board[i] == '-':
-			blanks.append(i)
+	blanks = board.blanks()
 	# STEP 2: test each blank position to see if it is a fork :D
-	memorize = board[:]
+	memorize = board.squares[:]
 	for offset in blanks:
-		board[offset] = mark
+		board.squares[offset] = mark
 		# STEP 3: when placing the char mark on this area of the board, 
 		# is it a fork? if so, return the offset's coordinates :D
 		winning_coords = find_wins(mark)
-		board = memorize[:]
+		board.squares = memorize[:]
 		if winning_coords != None and len(winning_coords) > 1:
 			return get_coords(offset)
 	# at this point we have found no forks =\
@@ -175,17 +166,16 @@ def setup_fork(mark):
 	'''
 	global board
 	# STEP 1: test each blank position to see if they force opponent to defend
-	# blanks = find_blanks()
-	memorize = board[:]
+	memorize = board.squares[:]
 	opponent = 'O' if mark == 'X' else 'X'
-	for offset in find_blanks():
-		board[offset] = mark
+	for offset in board.blanks():
+		board.squares[offset] = mark
 		winning_coord = find_wins(mark)
 		if winning_coord:
 			# STEP 2: if opponent will be forced to defend (due to an upcoming
 			# win), mark that spot for the opponent.
 			x, y = winning_coord[0]
-			place_mark(opponent, x, y)
+			board.place(opponent, x, y)
 			# STEP 4: does the force defend create an opportunities for a
 			# fork setup? if this opportunity exists, then we found the 
 			# coordinates to setup a fork!
@@ -196,16 +186,16 @@ def setup_fork(mark):
 				# disregard this offset as a good choice. (move onto next offset)
 				block = find_wins(opponent)
 				if block and block[0] != fork_coord:
-					board = memorize[:]
+					board.squares = memorize[:]
 					continue
 				
 				# this is a genuine opportunity to setup a fork! return the 
 				# coordinates of the mark's offset.
-				board = memorize[:]
+				board.squares = memorize[:]
 				# return the coordinates for the successful fork setup offset!
 				return get_coords(offset)
 		# return the board to current state so we can test next offset.
-		board = memorize[:]
+		board.squares = memorize[:]
 	return None
 
 def computer_move(mark):
@@ -236,8 +226,8 @@ def computer_move(mark):
 		# since it is possible that the opponent could create another fork 
 		# after 'coord' is marked by AI, this makes blocking 1 of 2 forks at 
 		# 'coord' useless.
-		memorize = board[:]
-		place_mark(mark, coord[0], coord[1])
+		memorize = board.squares[:]
+		board.place(mark, coord[0], coord[1])
 		if find_fork(opponent):
 			# if there is another fork, block both forks by forcing the 
 			# opponent to defend INSTEAD of creating an advantageous fork 
@@ -246,12 +236,12 @@ def computer_move(mark):
 			# STEP 1: find possible moves on the board (note: this will 
 			# exclude the current 'coord', since this is a bad move anyways 
 			# that allows the opponent to create another fork!)
-			possibles = find_blanks()
-			board = memorize[:]
+			possibles = board.blanks()
+			board.squares = memorize[:]
 			# STEP 2: find a move that forces the opponent to defend. this 
 			# forced defense MUST NOT create another fork!
 			for i in possibles:
-				board[i] = mark
+				board.squares[i] = mark
 				force_coord = find_wins(mark)
 				if find_wins(mark):
 					fork_coord = find_fork(opponent)
@@ -260,9 +250,9 @@ def computer_move(mark):
 						coord = get_coords(i)
 						break
 				# reset board and continue
-				board = memorize[:]
+				board.squares = memorize[:]
 		# set the board back to normal, as if there were no pre-moves :)
-		board = memorize[:]
+		board.squares = memorize[:]
 		return coord
 	
 	# 5 - if we can't fork right away, can we setup a fork?
@@ -275,16 +265,17 @@ def computer_move(mark):
 	
 	# 6 - Grab the center (if available) -- YES, best defense if human
 	#     gets the first move!!
-	if opponent in board and get_mark(1, 1) == '-':
+	if opponent in board.squares and board.get(1, 1) is board.blank:
 		return (1, 1)
 		
 	# 7 - Play in a corner (which one? adjacent corner? opposite corner?)
-	if mark not in board:
+	if mark not in board.squares:
 		corners = []
-		if board[0] == '-': corners += [0]
-		if board[2] == '-': corners += [2]
-		if board[6] == '-': corners += [6]
-		if board[8] == '-': corners += [8]
+		ref = board.squares
+		if ref[0] is board.blank: corners += [0]
+		if ref[2] is board.blank: corners += [2]
+		if ref[6] is board.blank: corners += [6]
+		if ref[8] is board.blank: corners += [8]
 		if len(corners) > 1: shuffle(corners)
 		if len(corners) > 0: return get_coords(corners[0])
 
@@ -292,17 +283,15 @@ def computer_move(mark):
 	#     can force a winning fork if this is done before a corner is
 	#     taken! better safe to play a corner before a side square
 	# at this point in the AI, there will be no corner squares remaining,
-	# so just select whatever space is remaining.
-	for offset in range(len(board)):
-		# if this is an open mark on the tic-tac-toe bard, release its coordinates!
-		if board[offset] == '-':
-			return get_coords(offset)
-	return None
+	# so just play on the first available square remaining on the board.
+	blanks = board.blanks()
+	return get_coords(blanks[0])
 
 def human_move(mark):
 	'''
 	Get the human player's move.
 	'''
+	global board
 	coord = raw_input('What coordinates will you mark as "%s"? (ie: "0 2") ' % mark)
 	x, y = coord.split()
 	# make sure these values are proper integers
@@ -317,7 +306,7 @@ def human_move(mark):
 		print 'Your coordinates are out of range. Valid ranges are from "0 0" to "2 2".'
 		return human_move(mark)
 	# is the space already occupied by another mark?
-	if get_mark(x, y) != '-':
+	if board.get(x, y) is not board.blank:
 		print 'Cannot mark that space because it is already marked!'
 		return human_move(mark)
 	return (x, y)
@@ -333,8 +322,7 @@ def intro_game():
 	global players
 	global board
 	players = {'X': '', 'O': ''}
-	board = ['-'] * 9
-	
+	board = Board()
 	# STEP 2: flip a coin to see which player goes first!
 	if randint(0, 1):
 		players['X'] = 'ai'
@@ -348,25 +336,28 @@ def start_game():
 	Starts the game and begins the main engine loop.
 	'''
 	global players
+	global board
 	turn = 'X'
-	while winner() == None:
+	while board.winner() == None:
 		if players[turn] == 'ai':
 			coord = computer_move(turn)
 		else:
-			render_board()
+			board.render()
 			print 'Your Turn!'
 			coord = human_move(turn)
-		place_mark(turn, coord[0], coord[1])
+		board.place(turn, coord[0], coord[1])
 		# move to the next turn
 		turn = 'O' if turn == 'X' else 'X'
 
 def end_game():
 	'''Displays the end-game results.'''
 	global players
-	render_board()
-	if winner() == 'T':
+	global board
+	board.render()
+	winner = board.winner()
+	if winner == 'T':
 		print 'Not bad, so we tied.'
-	elif players[winner()] == 'ai':
+	elif players[winner] == 'ai':
 		print 'See? I told you I was awesome.'
 	else:
 		print 'What?! Impossible! Robert needs to make me perfect.'
@@ -384,7 +375,7 @@ def proof():
 #    'proof' - prove that the AI will never lose.
 #    'watch' - watch a game history
 #    any other mode will just play the game.
-mode = 'proof'
+mode = ''
 if mode == 'proof':
 	print 'hai. yew in testing mode.'
 	proof()
