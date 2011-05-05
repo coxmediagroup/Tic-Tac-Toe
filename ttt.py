@@ -83,10 +83,8 @@ class Board:
 		Sets up a board based on the board history. Note: in this game of Tic
 		Tac Toe, 'X' will always go first!
 		'''
-		# print 'inside generate(%s)' % history
 		turn = 'X'
 		self.history = ''
-		# print '	clearing history: %s' % self.history
 		self.squares = [self.blank] * 9
 		for offset in history:
 			self.squares[int(offset)] = turn
@@ -136,13 +134,13 @@ def find_fork(mark):
 	# STEP 1: find the offset of all spaces that can be marked
 	blanks = board.blanks()
 	# STEP 2: test each blank position to see if it is a fork :D
-	memorize = board.squares[:]
+	init_state = board.history
 	for offset in blanks:
 		board.squares[offset] = mark
 		# STEP 3: when placing the char mark on this area of the board, 
 		# is it a fork? if so, return the offset's coordinates :D
 		winning_coords = find_wins(mark)
-		board.squares = memorize[:]
+		board.generate(init_state)
 		if winning_coords != None and len(winning_coords) > 1:
 			return get_coords(offset)
 	# at this point we have found no forks =\
@@ -155,7 +153,7 @@ def setup_fork(mark):
 	'''
 	global board
 	# STEP 1: test each blank position to see if they force opponent to defend
-	memorize = board.squares[:]
+	init_state = board.history
 	opponent = 'O' if mark == 'X' else 'X'
 	for offset in board.blanks():
 		board.squares[offset] = mark
@@ -175,16 +173,16 @@ def setup_fork(mark):
 				# disregard this offset as a good choice. (move onto next offset)
 				block = find_wins(opponent)
 				if block and block[0] != fork_coord:
-					board.squares = memorize[:]
+					board.generate(init_state)
 					continue
 				
 				# this is a genuine opportunity to setup a fork! return the 
 				# coordinates of the mark's offset.
-				board.squares = memorize[:]
+				board.generate(init_state)
 				# return the coordinates for the successful fork setup offset!
 				return get_coords(offset)
 		# return the board to current state so we can test next offset.
-		board.squares = memorize[:]
+		board.generate(init_state)
 	return None
 
 def computer_move(mark):
@@ -197,7 +195,6 @@ def computer_move(mark):
 	'''
 	global board
 	opponent = 'O' if mark == 'X' else 'X'
-	# print 'board blanks left: %d' % len(board.blanks())
 		
 	# strategic priority:
 	# 1 - go for winning move
@@ -210,18 +207,18 @@ def computer_move(mark):
 	coord = find_fork(mark)
 	if coord: return coord
 		
+	# will the AI need this tweek?
 	# coord = setup_fork(opponent)
-	# if coord: print 'oh shiz, opponent is trying to setup a fork!'; return coord
+	# if coord: print 'opponent is trying to setup a fork!'; return coord
 		
 	# 4 - prevent human player from setting up a fork--this only needs to be 
 	# at a stage where 5 moves are remaining in the game.
 	coord = find_fork(opponent)
 	if coord and len(board.blanks()) <= 5:
-		print 'i am doubting you will EVER need me... but ya never know.'
 		# since it is possible that the opponent could create another fork 
 		# after 'coord' is marked by AI, this makes blocking 1 of 2 forks at 
 		# 'coord' useless.
-		memorize = board.squares[:]
+		init_state = board.history
 		board.place(mark, coord[0], coord[1])
 		if find_fork(opponent):
 			# if there is another fork, block both forks by forcing the 
@@ -232,7 +229,7 @@ def computer_move(mark):
 			# exclude the current 'coord', since this is a bad move anyways 
 			# that allows the opponent to create another fork!)
 			possibles = board.blanks()
-			board.squares = memorize[:]
+			board.generate(init_state)
 			# STEP 2: find a move that forces the opponent to defend. this 
 			# forced defense MUST NOT create another fork!
 			for i in possibles:
@@ -245,18 +242,16 @@ def computer_move(mark):
 						coord = get_coords(i)
 						break
 				# reset board and continue
-				board.squares = memorize[:]
+				board.generate(init_state)
 		# set the board back to normal, as if there were no pre-moves :)
-		board.squares = memorize[:]
+		board.generate(init_state)
 		return coord
-	
+		
 	# 5 - if we can't fork right away, can we setup a fork? this check is 
 	# only useful after each player has made their first mark.
 	if len(board.blanks()) < 7:
 		coord = setup_fork(mark)
-		if coord:
-			print 'hmm, apparently setup_fork is useful in the universe of tic-tac-toe.'
-			return coord
+		if coord: return coord
 		
 	# what are the strongest moves, respectively, when none of the 
 	# above conditions are true? In situations where the computer 
@@ -375,39 +370,34 @@ def do_proof():
 	global players
 	global board
 	board = Board()
-	players = {'X': 'ai', 'O': 'human'}
+	players = {'X': 'human', 'O': 'ai'}
 		
+	# STEP 2:
 	# loop until all game outcomes have been exhausted
-	coords = []
-	count = 0
 	# new_history stores dictionary keys for game_outcomes where the game is 
 	# incomplete (has a value of None)
 	new_history = ['']
+	depth = 0
 	while len(new_history) > 0:
 		for turn in players:
 			for game_history in new_history:
-				# print 'turn is now:', turn
-				# STEP 1:
+				# STEP 3:
 				# play the game history to create a game board in a playable state
-				# print 'game_history is: ', game_history
-				# current_board = Board()
-				# memorize = board.squares[:]
 				board.generate(game_history)
-				# board.render()
-				# STEP 1:
+				
+				# STEP 4:
 				# for each response in the game_outcomes where there is no winner, tie,
 				# or flag to indicate that the history item has been exhausted, find ALL
 				# possible computer AI responses.
 				# for history in game_outcomes:
 				if players[turn] == 'ai':
-					# print "it's the AI's turn!"
-					# memorize = board.squares[:]
-					# STEP 2:
+					# STEP 5:
 					# Find the AI algorithm's official move.
 					#
 					# While the AI algorithm may choose the same move every time, it is 
 					# also possible that the algorithm will randomly select one of many 
 					# coordinates.
+					coords = []
 					for i in range(random_threshold):
 						move = computer_move(turn)
 						if move not in coords:
@@ -421,63 +411,40 @@ def do_proof():
 							if move not in coords:
 								coords.append(move)
 					offsets = [y*3+x for x, y in coords]
-					# all_coords_same = all(coords[0] == i for i in coords)
-					# if not all_coords_same:
-					# 	# in the case where not all coordinates are the same, do a more 
 				else:
 					# it is the human's turn! since the human is free to select any 
 					# blank space on the tic tac toe board, consider every blank space
 					# as a possible play against the computer AI!
-					# print "it's the human's turn!"
 					offsets = board.blanks()
-					# coords = [get_coords(offset) for offset in board.blanks()]
 		
-				# STEP 3:
+				# STEP 6:
 				# save the game history and outcome. The game history will be a string 
 				# of offsets
 				for offset in offsets:
-					# print 'inside the offset loop:'
 					x, y = get_coords(offset)
 					board.place(turn, x, y)
-					# print '	just placed %s at offset %d' % (turn, offset)
-					# print 'board history is:', board.history
 					game_outcomes[board.history] = board.winner()
 					# reset game history on the board
 					board.generate(game_history)
-					# board.squares = memorize[:]
 		
-				# STEP 4:
+				# STEP 7:
 				# finally, since we exhausted all playable possibilities for this 
 				# game state, mark this game history state as exhausted.
 				# Exhaustion will be notated with an 'E'
 				game_outcomes[game_history] = 'E'
 			if '' in game_outcomes: del(game_outcomes[''])
-			# is None: game_outcomes[''] = board.blank
-			# print 'game_outcomes is now:', game_outcomes
 			# grab the next available (and unplayed) history for the next player
 			new_history = [key for key in game_outcomes if game_outcomes[key] is None]
 			if len(new_history) == 0:
 				break;
-		# grab the next available (and unplayed) history for the next player
-		# new_history = [key for key in game_outcomes if game_outcomes[key] is None]
-		count += 1
-		print 'History Depth Level has reached %d ...' % count
+		depth += 1
+		print 'History Depth Level has reached %d ...' % depth
 		# if count >= 5: break;
 		
-	# print
-	# print '====================================='
-	# print ' Game Outcomes - nice and organized!'
-	# print '====================================='
-	# print
-	# key_count = 0
-	# for key in game_outcomes:
-	# 	key_count += 1
-	# 	print str(key_count) + ':', 'history:', key, ' -  outcome:', game_outcomes[key]
-	# print 'there were %d items in the dictionary.' % len(game_outcomes)
 	print
-	print '============='
-	print '   Results'
-	print '============='
+	print '========================================='
+	print '   Results when %s begins the game:' % players['X']
+	print '========================================='
 	print
 	print 'Total outcomes: ', len(game_outcomes)
 	exhausted = [k for k in game_outcomes if game_outcomes[k] is 'E']
@@ -489,7 +456,19 @@ def do_proof():
 	o_wins = [k for k in game_outcomes if game_outcomes[k] is 'O']
 	print 'O wins: ', len(o_wins)
 	none = [k for k in game_outcomes if game_outcomes[k] is None]
-	print 'move sets that still need to be exhausted: ', len(none)
+	print 'Still need exhaustion: ', len(none)
+	print
+	print '======================================'
+	print ' Game Outcomes - where the human won!'
+	print '======================================'
+	print
+	key_count = 0
+	human_mark = 'O' if players['X'] == 'ai' else 'X'
+	human_wins = [k for k in game_outcomes if game_outcomes[k] is human_mark]
+	for key in human_wins:
+		key_count += 1
+		print str(key_count) + ':', 'history:', key, ' -  outcome:', game_outcomes[key]
+	print 'there were %d items in the dictionary.' % len(game_outcomes)
 
 
 # possible game modes:
@@ -501,7 +480,7 @@ mode = 'proof'
 if mode == 'proof':
 	do_proof()
 elif mode == 'watch':
-	print 'nothing done yet.'
+	print 'hmm, maybe i wont implement this.'
 else:
 	intro_game()
 	start_game()
