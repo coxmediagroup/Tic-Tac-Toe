@@ -246,7 +246,6 @@ def makeAImove(board, letters):
         copBoard = makemove(copBoard, space, letters[1])
         winmove = is_win_or_tie(copBoard)
         if winmove:
-            print('winmove yay')
             move = space
             newboard = makemove(board, move, letters[1])
             return newboard
@@ -257,7 +256,6 @@ def makeAImove(board, letters):
         copBoard = makemove(copBoard, space, letters[0])
         winmove = is_win_or_tie(copBoard)
         if winmove:
-            print('blockmove yay')
             move = space
             newboard = makemove(board, move, letters[1])
             return newboard
@@ -266,7 +264,6 @@ def makeAImove(board, letters):
     move = forkmove(board, letters[1], letters[0], True)
     if move:
         newboard = makemove(board, move, letters[1])
-        print('fork move yay')
         return newboard
 
     #4) block opposing fork move
@@ -274,10 +271,8 @@ def makeAImove(board, letters):
     forkcount = len(opfork_list)
     if forkcount == 1:
         newboard = makemove(board, opfork_list[0], letters[1])
-        print('block single fork move yay')
         return newboard
     elif forkcount > 1:
-        print('forcing move')
         blockforkmoves = []
         forcemoves = getForceMoves(board, letters[1], letters[0])
         for move in forcemoves:
@@ -289,18 +284,15 @@ def makeAImove(board, letters):
                     continue
             if str(move) not in opfork_list:
                 blockforkmoves.append(move)
-        print(blockforkmoves)
         
         if blockforkmoves:
             from random import choice
             move = choice(blockforkmoves)
             newboard = makemove(board, str(move), letters[1])
-            print('block fork move yay')
             return newboard
 
     #5) take center if open
     if get_token(board, 5) == '-':
-        print('mid move yay')
         newboard = makemove(board, '5', letters[1])
         return newboard
 
@@ -308,7 +300,6 @@ def makeAImove(board, letters):
     for corner, opcorner in {'1': 9, '3': 7, '7': 3, '9': 1}.iteritems():
         if get_token(board, int(corner)) == letters[0]:
             if get_token(board, opcorner) == '-':
-                print('opcorner move yay')
                 newboard = makemove(board, str(opcorner), letters[1])
                 return newboard
 
@@ -325,7 +316,6 @@ def makeAImove(board, letters):
         if space == '9':
             templist.append(space)
     if templist:
-        print('cornermove yay')
         from random import choice
         cornermove = choice(templist)
         newboard = makemove(board, cornermove, letters[1])
@@ -343,7 +333,6 @@ def makeAImove(board, letters):
         if space == '8':
             templist.append(space)
     if templist:
-        print('sidemove yay')
         from random import choice
         cornermove = choice(templist)
         newboard = makemove(board, cornermove, letters[1])
