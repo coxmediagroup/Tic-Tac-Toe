@@ -217,6 +217,16 @@ def forkmove(board, mytoken, optoken, bestmove):
         return forkmove_list
     return None
     
+def getForceMoves(board, mytoken, optoken):
+    #return all possible moves that would force the opponent
+    #to block computer win, thus keeping him from making a fork move
+    forklist = getForkList(board, mytoken, optoken)
+    forcemoves = []
+    for space in forklist:
+        if get_token(board, space) != mytoken:
+            forcemoves.append(space)
+    return forcemoves
+
 def makeAImove(board, letters):
     #make AI move based on following priority list:
     #1) make winning move
@@ -267,8 +277,26 @@ def makeAImove(board, letters):
         print('block single fork move yay')
         return newboard
     elif forkcount > 1:
-        print('here i got to add handling of forcing moves')
-#    copBoard = getBoardCopy(board)
+        print('forcing move')
+        blockforkmoves = []
+        forcemoves = getForceMoves(board, letters[1], letters[0])
+        for move in forcemoves:
+            copBoard = getBoardCopy(board)
+            copBoard = makemove(copBoard, move, letters[1])
+            test_opfork_list = forkmove(copBoard, letters[0], letters[1], False)
+            for fork in test_opfork_list:
+                if fork not in opfork_list:
+                    continue
+            if str(move) not in opfork_list:
+                blockforkmoves.append(move)
+        print(blockforkmoves)
+        
+        if blockforkmoves:
+            from random import choice
+            move = choice(blockforkmoves)
+            newboard = makemove(board, str(move), letters[1])
+            print('block fork move yay')
+            return newboard
 
     #5) take center if open
     if get_token(board, 5) == '-':
