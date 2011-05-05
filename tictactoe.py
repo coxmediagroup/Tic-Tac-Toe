@@ -7,7 +7,7 @@ def startgame():
     board = [['-','-','-'],
              ['-','-','-'],
              ['-','-','-']]
-    #display welcome message and help at start of each game
+    #display welcome message and helpmenu help at start of each game
     print('\nWelcome! I challenge you to a game of Tic-Tac-Toe.')
     displayhelp()
     return board
@@ -107,7 +107,7 @@ def getUnoccupiedSpaces(board):
     return spaces
 
 def makemove(b, move, token):
-    #function to edit the board according to last move
+    #add token into the board at move (space)
     if move == '1':
         b[2][0] = token
     if move == '2':
@@ -129,7 +129,7 @@ def makemove(b, move, token):
     return b
     
 def makeplayermove(board, token):
-    #make players move
+    #ask for humans next turn and make move
     print('Your turn. Where to go next? (enter number for unoccupied space or (h) for help!)')
     move = raw_input()
     free = getUnoccupiedSpaces(board)
