@@ -1,6 +1,49 @@
 {% extends "base.html" %}
 {% block title %}Tic-Tac-Toe Demo using Ajax{% endblock %}
 {% block script %}
+
+var initializeTextToScroll = function(element){
+    element.waiting     = false;
+    
+    element.spellString = function (str) {
+ 	if (element.waiting == false) {
+  		element.index = 0;
+  		element.waiting = true;
+  		element.innerHTML = '';
+  		element.textHolder = str.split('');
+  		element.sendToPrint();
+ 	}
+    }
+    element.sendToPrint = function () {
+ 	if (element.index<element.textHolder.length) {
+ 		 element.printing = window.setTimeout(
+                     function () {   element.getLetter(); },	1);
+ 	} else {
+ 		 element.waiting = false;
+ 	}
+    }
+    element.getLetter = function () {
+ 	letter = document.createTextNode(element.textHolder[element.index]);
+ 	if (letter.value == '\\'){ letter.value = ''; }
+ 	element.printLetter(letter);
+    }
+
+    element.printLetter = function (letter) {
+ 	 element.appendChild(letter);
+	 window.clearTimeout(element.printing);
+	 element.index++;
+	 element.sendToPrint();
+    }
+
+
+}
+
+
+
+
+
+
+
 var greeting1 = "GREETINGS PROFESSOR FALKEN";
 var greeting2 = "SHALL WE PLAY A GAME?";
 {% endblock %}
@@ -17,14 +60,30 @@ var greeting2 = "SHALL WE PLAY A GAME?";
 #menu1{
   margin-left: 2em;
 }
+#greeting1{
+   
+}
+#greeting2{
+   
+}
 {% endblock %}
 {% block ready %}
-   dojo.byId("greeting1").innerHTML = greeting1;
-   dojo.byId("greeting2").innerHTML = greeting2;
+    initializeTextToScroll(dojo.byId("greeting1"));
+    initializeTextToScroll(dojo.byId("greeting2"));
+    dojo.byId("greeting1").spellString(greeting1);
 
-   var menu1 = dojo.byId("menu1");
-   dojo.create('li',{innerHTML: 'TIC-TAC-TOE'},menu1);
-   dojo.create('li',{innerHTML: 'GLOBAL THERMONUCLEAR WAR'},menu1);
+    setTimeout(function(){ dojo.byId("greeting2").spellString(greeting2); }, 1000);
+    setTimeout(function(){
+        var li1 = dojo.create('li',{innerHTML: ''},menu1);
+        initializeTextToScroll(li1);
+        li1.spellString('TIC-TAC-TOE');
+        },1500);
+    
+    setTimeout(function(){
+        var li2 = dojo.create('li',{innerHTML: ''},menu1);
+        initializeTextToScroll(li2);
+        li2.spellString('GLOBAL THERMONUCLEAR WAR');
+        },2000);
    
 {% endblock %}
 {% block content %}
