@@ -5,5 +5,5 @@ from django.conf.urls.defaults import *
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'coxmedia.apps.tictactoe.views.greetings'),
+    (r'^$', 'Tic-Tac-Toe.apps.tictactoe.views.greetings'),
 )

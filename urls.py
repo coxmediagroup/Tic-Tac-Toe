@@ -5,6 +5,7 @@ from django.conf.urls.defaults import *
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    (r'^tictactoe/', include('Tic-Tac-Toe.apps.tictactoe.urls')),
     # Example:
     # (r'^coxmedia/', include('coxmedia.foo.urls')),
 

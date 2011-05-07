@@ -1,1 +1,37 @@
+{% extends "base.html" %}
 {% block title %}Tic-Tac-Toe Demo using Ajax{% endblock %}
+{% block script %}
+var greeting1 = "GREETINGS PROFESSOR FALKEN";
+var greeting2 = "SHALL WE PLAY A GAME?";
+{% endblock %}
+{% block styles %}
+#main{
+  font-family: monospace;
+  font-weight: bold;
+  font-size:   24pt;
+  margin-top:  2em;
+  margin-left: 4em;
+  color:       #009;
+  
+}
+#menu1{
+  margin-left: 2em;
+}
+{% endblock %}
+{% block ready %}
+   dojo.byId("greeting1").innerHTML = greeting1;
+   dojo.byId("greeting2").innerHTML = greeting2;
+
+   var menu1 = dojo.byId("menu1");
+   dojo.create('li',{innerHTML: 'TIC-TAC-TOE'},menu1);
+   dojo.create('li',{innerHTML: 'GLOBAL THERMONUCLEAR WAR'},menu1);
+   
+{% endblock %}
+{% block content %}
+<div id="main">
+<div id="greeting1"></div>
+<div id="greeting2"></div>
+<ol id="menu1"></ol>
+
+</div>
+{% endblock %}

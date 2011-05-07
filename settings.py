@@ -75,7 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'coxmedia.urls'
+ROOT_URLCONF = 'Tic-Tac-Toe.urls'
 
 TEMPLATE_DIRS = (
     "C:/Documents and Settings/Matt/djangoplex/coxmedia/Tic-Tac-Toe/templates",
