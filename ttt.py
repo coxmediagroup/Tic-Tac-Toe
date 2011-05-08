@@ -291,12 +291,7 @@ def human_move(mark):
 	return (x, y)
 
 def intro_game():
-	'''Game introduction -- and any possible setup needed :)'''
-	print '''
-	Hi. I'm a computer. I'm going to demonstrate to you how AWESOME I am by 
-	playing you a game of tic-tac-toe and never losing a single game!
-	'''
-	
+	'''Game introduction -- and any possible setup needed :)'''	
 	# STEP 1: initialize a new game
 	global players
 	global board
@@ -317,9 +312,37 @@ def start_game():
 	global players
 	global board
 	turn = 'X'
+	print '''
+	Tic Tac Toe - by Robert Genito!
+		
+	Difficulty levels verse the computer:
+		A - Easy
+		B - Medium
+		C - Hard
+		D - Impossible (warning: you will NEVER win!)
+	'''
+	# dictionary of AI chances per difficulty level
+	ai_chance = {
+		'a': 30, 
+		'b': 60, 
+		'c': 90, 
+		'd': 100
+		}
+	difficulty = '1'
+	while not ('a' <= difficulty.lower()[0] <= 'd'):
+		difficulty = raw_input('Select your difficulty level [A, B, C, or D]: ')
+		if len(difficulty) == 0:
+			difficulty = '1'
+	difficulty = difficulty[0]
+		
 	while board.winner() == None:
 		if players[turn] == 'ai':
-			coord = computer_move(turn)
+			if randint(0, 100) <= ai_chance[difficulty]:
+				coord = computer_move(turn)
+			else:
+				moves = board.blanks()
+				shuffle(moves)
+				coord = get_coords(moves[0])
 		else:
 			board.render()
 			print 'Your Turn!'
@@ -339,7 +362,7 @@ def end_game():
 	elif players[winner] == 'ai':
 		print 'See? I told you I was awesome.'
 	else:
-		print 'What?! Impossible! Robert needs to make me perfect.'
+		print 'Awww man you beat me :('
 
 
 def do_proof():
@@ -476,7 +499,6 @@ def do_proof():
 mode = sys.argv[1] if len(sys.argv) > 1 else ''
 if mode != 'proof' and mode != 'watch': mode = ''
 
-# board = Board()
 if mode == 'proof':
 	do_proof()
 elif mode == 'watch':
@@ -484,7 +506,6 @@ elif mode == 'watch':
 	board = Board()
 	turn = 'X'
 	for move_offset in history:
-		# print 'move_offset =', move_offset
 		x, y = get_coords(int(move_offset))
 		board.place(turn, x, y)
 		board.render()

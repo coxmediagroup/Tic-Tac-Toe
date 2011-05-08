@@ -1,0 +1,15 @@
+# Tic Tac Toe
+
+	A Simple demonstration by Robert Genito
+
+## to play tic tac toe:
+
+$ python ttt.py
+
+## to see the test results on how efficient the computer AI is:
+
+$ python ttt.py proof
+
+## if you have the "offset" history of a game, you can watch and analyze the game:
+
+$ python ttt.py watch
