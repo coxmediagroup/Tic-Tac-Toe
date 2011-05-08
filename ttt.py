@@ -476,11 +476,21 @@ def do_proof():
 #    'proof' - prove that the AI will never lose.
 #    'watch' - watch a game history
 #    any other mode will just play the game.
-mode = 'proof'
+mode = 'watch'
 if mode == 'proof':
 	do_proof()
 elif mode == 'watch':
-	print 'hmm, maybe i wont implement this.'
+	history = raw_input('input the game history to analyze: ')
+	board = Board()
+	turn = 'X'
+	for move_offset in history:
+		# print 'move_offset =', move_offset
+		x, y = get_coords(int(move_offset))
+		board.place(turn, x, y)
+		board.render()
+		turn = 'O' if turn == 'X' else 'X'
+		raw_input('hit ENTER to continue...')
+	print board.winner(), 'won!'
 else:
 	intro_game()
 	start_game()
