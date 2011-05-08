@@ -1,5 +1,6 @@
 # Tic Tac Toe
 # -- classic game :)
+import sys
 from random import shuffle, randint
 
 # all sets of winning possibilities--all values represent a group of 
@@ -56,18 +57,14 @@ class Board:
 				blanks.append(i)
 		return blanks
 		
-	def winner(self, mark = ''):
+	def winner(self):
 		'''
 		Determines if someone won Tic Tac Toe :D
 		Returns 'X' if the X player won; 'O' if O player won.
 		Returns 'T' if there was a tie
 		'''
-		if self.blank not in self.squares: return 'T'
-		if mark == '':
-			# if no mark was specified, check if X won, then check if O won
-			if self.winner('X') == 'X': return 'X'
-			if self.winner('O') == 'O': return 'O'
-		else:
+		marks = ['X', 'O']
+		for mark in marks:
 			ref = self.squares
 			global wins
 			for win_offsets in wins:
@@ -77,7 +74,11 @@ class Board:
 						num_marks += 1
 				if num_marks == 3:
 					return mark
-		return None
+		# if no winning marks were found, test for a tie
+		if self.blank not in self.squares:
+			return 'T'
+		else:
+			return None
 	def generate(self, history):
 		'''
 		Sets up a board based on the board history. Note: in this game of Tic
@@ -207,44 +208,28 @@ def computer_move(mark):
 	coord = find_fork(mark)
 	if coord: return coord
 		
-	# will the AI need this tweek?
-	# coord = setup_fork(opponent)
-	# if coord: print 'opponent is trying to setup a fork!'; return coord
-		
 	# 4 - prevent human player from setting up a fork--this only needs to be 
-	# at a stage where 5 moves are remaining in the game.
+	# at a stage where at least 6 moves are remaining in the game.
 	coord = find_fork(opponent)
-	if coord and len(board.blanks()) <= 5:
-		# since it is possible that the opponent could create another fork 
-		# after 'coord' is marked by AI, this makes blocking 1 of 2 forks at 
-		# 'coord' useless.
+	if coord and len(board.blanks()) <= 6:
 		init_state = board.history
 		board.place(mark, coord[0], coord[1])
-		if find_fork(opponent):
-			# if there is another fork, block both forks by forcing the 
-			# opponent to defend INSTEAD of creating an advantageous fork 
-			# for themselves.
-			#
-			# STEP 1: find possible moves on the board (note: this will 
-			# exclude the current 'coord', since this is a bad move anyways 
-			# that allows the opponent to create another fork!)
-			possibles = board.blanks()
-			board.generate(init_state)
-			# STEP 2: find a move that forces the opponent to defend. this 
-			# forced defense MUST NOT create another fork!
-			for i in possibles:
-				board.squares[i] = mark
-				force_coord = find_wins(mark)
-				if find_wins(mark):
-					fork_coord = find_fork(opponent)
-					if force_coord != fork_coord:
-						# awesome! we found a good offense to counter a fork!
-						coord = get_coords(i)
-						break
-				# reset board and continue
-				board.generate(init_state)
-		# set the board back to normal, as if there were no pre-moves :)
 		board.generate(init_state)
+		# STEP 2: find a move that forces the opponent to defend. this 
+		# forced defense MUST NOT create another fork for the opponent!
+		for i in board.blanks():
+			board.squares[i] = mark
+			force_coord = find_wins(mark)
+			if force_coord:
+				# this forced defense MUST NOT allow opponent to fork on defense
+				force_coord = tuple(force_coord[0])
+				fork_coord = find_fork(opponent)
+				if force_coord != fork_coord:
+					# awesome! we found a good offense to counter a fork!
+					coord = get_coords(i)
+					break
+			# reset board and continue
+			board.generate(init_state)
 		return coord
 		
 	# 5 - if we can't fork right away, can we setup a fork? this check is 
@@ -370,9 +355,20 @@ def do_proof():
 	global players
 	global board
 	board = Board()
-	players = {'X': 'human', 'O': 'ai'}
+	players = {'X': '', 'O': ''}
+	# STEP 2: will the computer go first in this proof?
+	choice = 'x'
+	while choice.lower()[0] != 'y' and choice.lower()[0] != 'n':
+		choice = raw_input('will the computer go first? yes/no: ')
 		
-	# STEP 2:
+	if choice.lower()[0] == 'y':
+		players['X'] = 'ai'
+		players['O'] = 'human'
+	else:
+		players['X'] = 'human'
+		players['O'] = 'ai'
+		
+	# STEP 3:
 	# loop until all game outcomes have been exhausted
 	# new_history stores dictionary keys for game_outcomes where the game is 
 	# incomplete (has a value of None)
@@ -381,17 +377,17 @@ def do_proof():
 	while len(new_history) > 0:
 		for turn in players:
 			for game_history in new_history:
-				# STEP 3:
+				# PART 1:
 				# play the game history to create a game board in a playable state
 				board.generate(game_history)
 				
-				# STEP 4:
+				# PART 2:
 				# for each response in the game_outcomes where there is no winner, tie,
 				# or flag to indicate that the history item has been exhausted, find ALL
 				# possible computer AI responses.
 				# for history in game_outcomes:
 				if players[turn] == 'ai':
-					# STEP 5:
+					# PART 3:
 					# Find the AI algorithm's official move.
 					#
 					# While the AI algorithm may choose the same move every time, it is 
@@ -417,7 +413,7 @@ def do_proof():
 					# as a possible play against the computer AI!
 					offsets = board.blanks()
 		
-				# STEP 6:
+				# PART 4:
 				# save the game history and outcome. The game history will be a string 
 				# of offsets
 				for offset in offsets:
@@ -427,7 +423,7 @@ def do_proof():
 					# reset game history on the board
 					board.generate(game_history)
 		
-				# STEP 7:
+				# PART 5:
 				# finally, since we exhausted all playable possibilities for this 
 				# game state, mark this game history state as exhausted.
 				# Exhaustion will be notated with an 'E'
@@ -439,14 +435,13 @@ def do_proof():
 				break;
 		depth += 1
 		print 'History Depth Level has reached %d ...' % depth
-		# if count >= 5: break;
 		
 	print
 	print '========================================='
 	print '   Results when %s begins the game:' % players['X']
 	print '========================================='
 	print
-	print 'Total outcomes: ', len(game_outcomes)
+	print 'Total game positions: ', len(game_outcomes)
 	exhausted = [k for k in game_outcomes if game_outcomes[k] is 'E']
 	print 'exhausted move sets: ', len(exhausted)
 	ties = [k for k in game_outcomes if game_outcomes[k] is 'T']
@@ -468,7 +463,9 @@ def do_proof():
 	for key in human_wins:
 		key_count += 1
 		print str(key_count) + ':', 'history:', key, ' -  outcome:', game_outcomes[key]
-	print 'there were %d items in the dictionary.' % len(game_outcomes)
+	if len(human_wins) == 0:
+		print 'Well it looks like the human NEVER won :)'
+		print
 
 
 # possible game modes:
@@ -476,7 +473,10 @@ def do_proof():
 #    'proof' - prove that the AI will never lose.
 #    'watch' - watch a game history
 #    any other mode will just play the game.
-mode = 'watch'
+mode = sys.argv[1] if len(sys.argv) > 1 else ''
+if mode != 'proof' and mode != 'watch': mode = ''
+
+# board = Board()
 if mode == 'proof':
 	do_proof()
 elif mode == 'watch':
