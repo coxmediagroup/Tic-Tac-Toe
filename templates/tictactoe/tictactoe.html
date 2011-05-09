@@ -34,6 +34,7 @@ var opt2         = null;
 var menu1        = null;
 var li1          = null;
 var li2          = null;
+var selectone    = null;
 
 var gamemods          = {
         "gtw" :
@@ -42,8 +43,29 @@ var gamemods          = {
                 var _result = dojo.byId("result-gtw");
                 initializeScrollingElement(_result,alert1,interCharDelay);
                 gamenames['gtw'].onEnd(_result.scrollText,700);
+
+                var _return = dojo.byId("return-gtw");
+                initializeScrollingElement(_return,"RETURN",interCharDelay);
+                _result.onEnd(_return.scrollText,500);
+
+                dojo.connect(_return,"onclick",
+                             function(){
+                                    
+                                    removeGame("gtw");
+                                    showGreeting();
+                                    greetProfessorFalken();
+                                    
+                                });
+
                 
-            }
+                
+            },
+            'resetGame':function(){
+                            gamenames['gtw'].innerHTML = '';
+                            dojo.byId('result-gtw').innerHTML='';
+                            dojo.byId('return-gtw').innerHTML='';
+                            
+                }
             
             
             },
@@ -63,6 +85,7 @@ var wipeGreeting   = function(){
     greeting2.innerHTML = '';
     opt1.innerHTML      = '';
     opt2.innerHTML      = '';
+    selectone.innerHTML = '';
     try{
     menu1.removeChild(li1);
     menu1.removeChild(li2);
@@ -70,10 +93,13 @@ var wipeGreeting   = function(){
 }
     
 var showGreeting   = function(){
-    dojo.fadeIn({ node: "greeting" }).play();
     try{
+        
         main.appendChild(greeting);
-    }catch(e){}
+        dojo.fadeIn({node:"greeting"}).play();
+    }catch(e){
+            //window.alert(e.message);
+        }
 }
 var removeGreeting = function(){
     
@@ -88,6 +114,7 @@ var removeGreeting = function(){
 var showGame = function(game){
     //window.alert("showing game "+game);
     try{
+
         main.appendChild(games[game]);
         gamenames[game].scrollText();
         
@@ -98,8 +125,10 @@ var showGame = function(game){
 var removeGame = function(game,fade){
     if(fade){
         dojo.fadeOut({ node: games[game] });
+        
     }
     try{
+        gamemods[game].resetGame();
         main.removeChild(games[game]);
     }catch(e){}
 }
@@ -109,7 +138,9 @@ var removeBothGames = function(){
 }
 
 var greetProfessorFalken = function(){
+    
     greeting1.scrollText();
+   
 }
 
 
@@ -165,6 +196,7 @@ var initializeScrollingElement = function(element,txt,cdelay){
 var initializeElements = function(){
     main     = dojo.byId("main");
     greeting = dojo.byId("greeting");
+   
 
     games["gtw"]           = dojo.byId("gtw");
     games["tictactoe"]     = dojo.byId("tictactoe");
@@ -198,11 +230,13 @@ var initializeElements = function(){
             });
     li1 = dojo.create('li',{});
     li2 = dojo.create('li',{});
+    selectone = dojo.byId("selectone");
     
     initializeScrollingElement(greeting1,txtgreeting1,interCharDelay);
     initializeScrollingElement(greeting2,txtgreeting2,interCharDelay);
     initializeScrollingElement(opt1,txtoption1,interCharDelay);
     initializeScrollingElement(opt2,txtoption2,interCharDelay);
+    initializeScrollingElement(selectone,"SELECT ONE",interCharDelay);
 
  
     greeting1.onEnd(greeting2.scrollText,betweenEl);
@@ -219,6 +253,8 @@ var initializeElements = function(){
                         opt2.scrollText();
                         },betweenEl);   
 
+    opt2.onEnd(selectone.scrollText,betweenEl);
+                        
 
 }
 
@@ -257,7 +293,9 @@ a:hover{
 a:active{
         color: #ff0;
 }
-
+.return{
+    margin-top: 2em;
+}
 {% endblock %}
 {% block ready %}
     initializeElements();
@@ -270,15 +308,18 @@ a:active{
 <div id="greeting1"></div>
 <div id="greeting2"></div>
 <ol id="menu1"></ol>
+<div id="selectone"></div>
 </div>
 <div id="gtw">
 <div id="gamename-gtw"></div>
 <div id="result-gtw"></div>
+<div class="return"><a id="return-gtw" href="#"></a></div>
 </div>
 <div id="tictactoe">
 <div id="gamename-tictactoe"></div>
 <div id="yourmove-tictactoe"></div>
 <div id="result-tictactoe"></div>
+<div class="return"><a id="return-tictactoe" href="#"></a></div>
 </div>
 </div>
 {% endblock %}
