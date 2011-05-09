@@ -2,9 +2,7 @@
 {% block title %}Tic-Tac-Toe Demo{% endblock %}
 {% block script %}
 
-var imgtictactoe_x = "{{MEDIA_URL}}images/x.jpg";
-var imgtictactoe_o = "{{MEDIA_URL}}images/o.jpg";
-var imgtictactoe_b = "{{MEDIA_URL}}images/blank.jpg";
+
 
 var interCharDelay = 20;
 var betweenEl      = 600;
@@ -279,10 +277,58 @@ var initializeElements = function(){
 
 }
 
+var imgtictactoe_x = "{{MEDIA_URL}}images/x.jpg";
+var imgtictactoe_o = "{{MEDIA_URL}}images/o.jpg";
+var imgtictactoe_b = "{{MEDIA_URL}}images/blank.jpg";
+
+var tttpause = 0;
+var tttall   = 0;
 
 
+var a = 0;
+var b = 0;
+var c = 0;
+var d = 0;
+var e = 0;
+var f = 0;
+var g = 0;
+var h = 0;
+var i = 0;
+
+var ttttemp="";
+var tttok = 0;
+var tttcf = 0;
+var tttchoice=9;
+var tttaRandomNumber = 0;
+var tttcomp = 0; 
+var tttt = 0;
+var tttwn = 0;
+var tttls = 0;
+var tttts = 0;
 
 
+function tttChoice(chName) {
+    try{
+    tttpause = 0;
+    if (tttall!=0){
+        tttended();
+    }
+    if (tttall==0) {
+        tttcf = 0;
+        tttok = 0;
+        ttttemp= chName;
+        tttcheckSpace();
+        if (tttok==1) {
+        document.images['ttt'+chName].src = imgtictactoe_x;
+    }
+    if (tttok==0)ttttaken();
+        tttprocess();
+        if ((tttall==0)&&(tttpause==0)) tttChoice();
+    }
+    }catch(e){
+        window.alert(e.message);
+    }
+}
 
 
 {% endblock %}
@@ -385,19 +431,19 @@ a:active{
 
 <table border=0 cellspacing="0">
 <tr>
-<td class="tictactoe-tl"><a href="javascript:yourChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=A alt="Top-Left"></a></td>
-<td class="tictactoe-tm"><a href="javascript:yourChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=B alt="Top-Center"></a></td>
-<td class="tictactoe-tr"><a href="javascript:yourChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=C alt="Top-Right"></a></td>
+<td class="tictactoe-tl"><a href="javascript:tttChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttA alt="Top-Left"></a></td>
+<td class="tictactoe-tm"><a href="javascript:tttChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttB alt="Top-Center"></a></td>
+<td class="tictactoe-tr"><a href="javascript:tttChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttC alt="Top-Right"></a></td>
 </tr>
 <tr>
-<td class="tictactoe-ml"><a href="javascript:yourChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=D alt="Middle-Left"></a></td>
-<td class="tictactoe-mm"><a href="javascript:yourChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=E alt="Middle-Center"></a></td>
-<td class="tictactoe-mr"><a href="javascript:yourChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=F alt="Middle-Right"></a></td>
+<td class="tictactoe-ml"><a href="javascript:tttChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttD alt="Middle-Left"></a></td>
+<td class="tictactoe-mm"><a href="javascript:tttChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttE alt="Middle-Center"></a></td>
+<td class="tictactoe-mr"><a href="javascript:tttChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttF alt="Middle-Right"></a></td>
 </tr>
 <tr>
-<td class="tictactoe-ll"><a href="javascript:yourChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=G alt="Bottom-Left"></a></td>
-<td class="tictactoe-lm"><a href="javascript:yourChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=H alt="Bottom-Center"></a></td>
-<td class="tictactoe-lr"><a href="javascript:yourChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100  name=I alt="Bottom-Right"></a></td>
+<td class="tictactoe-ll"><a href="javascript:tttChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttG alt="Bottom-Left"></a></td>
+<td class="tictactoe-lm"><a href="javascript:tttChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=tttH alt="Bottom-Center"></a></td>
+<td class="tictactoe-lr"><a href="javascript:tttChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100  name=tttI alt="Bottom-Right"></a></td>
 </tr>
 </table>
 
