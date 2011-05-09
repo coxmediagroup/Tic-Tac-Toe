@@ -33,3 +33,7 @@ class Storage:
         self._player_one = None
         self._player_two = None
         self._game_instance = None
+
+def indexes(lst, val):
+    """ return all indexes value occupies in a list """
+    return [ind for ind, item in enumerate(lst) if item == val] 
