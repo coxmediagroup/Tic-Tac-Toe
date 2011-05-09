@@ -1,4 +1,4 @@
-from common import Storage, NOUGHT, CROSS, EMPTY
+from common import Storage, NOUGHT, CROSS, EMPTY, shape_map
 from participants import Ai, ThreeByThreeLocalHuman
 from random import choice
 class Board():
@@ -45,9 +45,9 @@ class Board():
         for row in self.board:
             if not board_text == "":
                 board_text += "-----------\n"
-            board_text += " %s | %s | %s \n" % (shape_map[row[0]], shape_map[row[1]], shape_map[row[2]])
-            
+            board_text += " %s | %s | %s \n" % (shape_map[row[0]], shape_map[row[1]], shape_map[row[2]]) 
         return board_text
+
 class Game:
     """ Class to control the game logic """
     def __init__(self):
@@ -83,11 +83,21 @@ class Game:
     
     def checkGameOver(self):
         """ Check to see if the game is a draw or someone has won """
-        pass
+        board, v, nw, sw = Storage()._game_board.winLists()
+        for row in board + v + [nw] + [sw]:
+            row_set = set(row)
+            if len(row_set) == 1 and not 0 in row:
+                print shape_map[row[0]], " won!"
+                self.running = False
+                break
+        
+        if self.running and self.move_count >= 9:
+            print "Draw!"
+            self.running = False
 
 if __name__ == "__main__":
     Storage()._game_board = Board()
     Storage()._player_one = Ai()
-    Storage()._player_two = ThreeByThreeLocalHuman()
+    Storage()._player_two = Ai() #ThreeByThreeLocalHuman()
     Storage()._game_instance = Game()
     Storage()._game_instance.run()
