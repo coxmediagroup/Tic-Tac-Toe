@@ -306,6 +306,126 @@ var tttwn = 0;
 var tttls = 0;
 var tttts = 0;
 
+function tttlogicOne() {
+if ((a==1)&&(b==1)&&(c==1)) tttall=1;
+if ((a==1)&&(d==1)&&(g==1)) tttall=1;
+if ((a==1)&&(e==1)&&(i==1)) tttall=1;
+if ((b==1)&&(e==1)&&(h==1)) tttall=1;
+if ((d==1)&&(e==1)&&(f==1)) tttall=1;
+if ((g==1)&&(h==1)&&(i==1)) tttall=1;
+if ((c==1)&&(f==1)&&(i==1)) tttall=1;
+if ((g==1)&&(e==1)&&(c==1)) tttall=1;
+if ((a==2)&&(b==2)&&(c==2)) tttall=2;
+if ((a==2)&&(d==2)&&(g==2)) tttall=2;
+if ((a==2)&&(e==2)&&(i==2)) tttall=2;
+if ((b==2)&&(e==2)&&(h==2)) tttall=2;
+if ((d==2)&&(e==2)&&(f==2)) tttall=2;
+if ((g==2)&&(h==2)&&(i==2)) tttall=2;
+if ((c==2)&&(f==2)&&(i==2)) tttall=2;
+if ((g==2)&&(e==2)&&(c==2)) tttall=2;
+if ((a != 0)&&(b != 0)&&(c != 0)&&(d != 0) &&(e != 0)&&(f != 0)&&(g != 0)&&(h != 0)&&(i != 0)&&(tttall == 0)) tttall = 3;
+} 
+function tttlogicTwo() {
+if ((a==2)&&(b==2)&&(c==0)&&(ttttemp=="")) ttttemp="C";
+if ((a==2)&&(b==0)&&(c==2)&&(ttttemp=="")) ttttemp="B";
+if ((a==0)&&(b==2)&&(c==2)&&(ttttemp=="")) ttttemp="A";
+if ((a==2)&&(d==2)&&(g==0)&&(ttttemp=="")) ttttemp="G";
+if ((a==2)&&(d==0)&&(g==2)&&(ttttemp=="")) ttttemp="D";
+if ((a==0)&&(d==2)&&(g==2)&&(ttttemp=="")) ttttemp="A";
+if ((a==2)&&(e==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((a==2)&&(e==0)&&(i==2)&&(ttttemp=="")) ttttemp="E";
+if ((a==0)&&(e==2)&&(i==2)&&(ttttemp=="")) ttttemp="A";
+if ((b==2)&&(e==2)&&(h==0)&&(ttttemp=="")) ttttemp="H";
+if ((b==2)&&(e==0)&&(h==2)&&(ttttemp=="")) ttttemp="E";
+if ((b==0)&&(e==2)&&(h==2)&&(ttttemp=="")) ttttemp="B";
+if ((d==2)&&(e==2)&&(f==0)&&(ttttemp=="")) ttttemp="F";
+if ((d==2)&&(e==0)&&(f==2)&&(ttttemp=="")) ttttemp="E";
+if ((d==0)&&(e==2)&&(f==2)&&(ttttemp=="")) ttttemp="D";
+if ((g==2)&&(h==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((g==2)&&(h==0)&&(i==2)&&(ttttemp=="")) ttttemp="H";
+if ((g==0)&&(h==2)&&(i==2)&&(ttttemp=="")) ttttemp="G";
+if ((c==2)&&(f==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((c==2)&&(f==0)&&(i==2)&&(ttttemp=="")) ttttemp="F";
+if ((c==0)&&(f==2)&&(i==2)&&(ttttemp=="")) ttttemp="C";
+if ((g==2)&&(e==2)&&(c==0)&&(ttttemp=="")) ttttemp="C";
+if ((g==2)&&(e==0)&&(c==2)&&(ttttemp=="")) ttttemp="E";
+if ((g==0)&&(e==2)&&(c==2)&&(ttttemp=="")) ttttemp="G";
+}
+function tttlogicThree() {
+if ((a==1)&&(b==1)&&(c==0)&&(ttttemp=="")) ttttemp="C";
+if ((a==1)&&(b==0)&&(c==1)&&(ttttemp=="")) ttttemp="B";
+if ((a==0)&&(b==1)&&(c==1)&&(ttttemp=="")) ttttemp="A";
+if ((a==1)&&(d==1)&&(g==0)&&(ttttemp=="")) ttttemp="G";
+if ((a==1)&&(d==0)&&(g==1)&&(ttttemp=="")) ttttemp="D";
+if ((a==0)&&(d==1)&&(g==1)&&(ttttemp=="")) ttttemp="A";
+if ((a==1)&&(e==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((a==1)&&(e==0)&&(i==1)&&(ttttemp=="")) ttttemp="E";
+if ((a==0)&&(e==1)&&(i==1)&&(ttttemp=="")) ttttemp="A";
+if ((b==1)&&(e==1)&&(h==0)&&(ttttemp=="")) ttttemp="H";
+if ((b==1)&&(e==0)&&(h==1)&&(ttttemp=="")) ttttemp="E";
+if ((b==0)&&(e==1)&&(h==1)&&(ttttemp=="")) ttttemp="B";
+if ((d==1)&&(e==1)&&(f==0)&&(ttttemp=="")) ttttemp="F";
+if ((d==1)&&(e==0)&&(f==1)&&(ttttemp=="")) ttttemp="E";
+if ((d==0)&&(e==1)&&(f==1)&&(ttttemp=="")) ttttemp="D";
+if ((g==1)&&(h==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((g==1)&&(h==0)&&(i==1)&&(ttttemp=="")) ttttemp="H";
+if ((g==0)&&(h==1)&&(i==1)&&(ttttemp=="")) ttttemp="G";
+if ((c==1)&&(f==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
+if ((c==1)&&(f==0)&&(i==1)&&(ttttemp=="")) ttttemp="F";
+if ((c==0)&&(f==1)&&(i==1)&&(ttttemp=="")) ttttemp="C";
+if ((g==1)&&(e==1)&&(c==0)&&(ttttemp=="")) ttttemp="C";
+if ((g==1)&&(e==0)&&(c==1)&&(ttttemp=="")) ttttemp="E";
+if ((g==0)&&(e==1)&&(c==1)&&(ttttemp=="")) ttttemp="G";
+}
+
+function tttcheckSpace() {
+    if ((ttttemp=="A")&&(a==0)) {
+        tttok=1;
+        if (tttcf==0) a=1;
+        if (tttcf==1) a=2;
+    }
+    if ((ttttemp=="B")&&(b==0)) {
+        tttok=1;
+        if (tttcf==0) b=1;
+        if (tttcf==1) b=2;
+    }
+    if ((ttttemp=="C")&&(c==0)) {
+        tttok=1;
+        if (tttcf==0) c=1;
+        if (tttcf==1) c=2;
+    }
+    if ((ttttemp=="D")&&(d==0)) {
+        tttok=1;
+        if (tttcf==0) d=1;
+        if (tttcf==1) d=2;
+    }
+    if ((ttttemp=="E")&&(e==0)) {
+        tttok=1;
+        if (tttcf==0) e=1;
+        if (tttcf==1) e=2;
+    }
+    if ((ttttemp=="F")&&(f==0)) {
+        tttok=1
+        if (tttcf==0) f=1;
+        if (tttcf==1) f=2;
+    }
+    if ((ttttemp=="G")&&(g==0)) {
+        tttok=1
+        if (tttcf==0) g=1;
+        if (tttcf==1) g=2;
+    }
+    if ((ttttemp=="H")&&(h==0)) {
+        tttok=1;
+        if (tttcf==0) h=1;
+        if (tttcf==1) h=2;
+    }
+    if ((ttttemp=="I")&&(i==0)) {
+        tttok=1;
+        if (tttcf==0) i=1; 
+        if (tttcf==1) i=2; 
+    }
+}
+
 
 function tttChoice(chName) {
     try{
@@ -319,11 +439,11 @@ function tttChoice(chName) {
         ttttemp= chName;
         tttcheckSpace();
         if (tttok==1) {
-        document.images['ttt'+chName].src = imgtictactoe_x;
-    }
-    if (tttok==0)ttttaken();
+            document.images['ttt'+chName].src = imgtictactoe_x;
+        }
+        if (tttok==0)ttttaken();
         tttprocess();
-        if ((tttall==0)&&(tttpause==0)) tttChoice();
+        if ((tttall==0)&&(tttpause==0)) tttMyChoice();
     }
     }catch(e){
         window.alert(e.message);
