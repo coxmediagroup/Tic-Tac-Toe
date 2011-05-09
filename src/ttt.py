@@ -1,26 +1,53 @@
 from common import Storage, NOUGHT, CROSS, EMPTY
-from participants import Ai, LocalHuman
+from participants import Ai, ThreeByThreeLocalHuman
 from random import choice
 class Board():
     """ Game board class that has basic game board utility functions """
-    def __init__(self):
-        pass
+    def __init__(self, size=3):
+        self.board = []
+        if size > 0 and size % 2 == 0:
+            print "size cannot be an even number, defaulting to 3"
+            size = 3
+        for i in range(0, size):
+            self.board.append([0]*size)
+    
+    
     
     def winLists(self):
         """ Returns lists in all directions. This
         method should allow the board to be an arbitrary size
-        as long as it maintains an odd count, 1:1 row to column ratio
+        as long as it maintains an odd count, 1:1 row to column ratio 
         """
-        pass
+        vert_set = [[],[],[]]
+        nw_set = []
+        sw_set = []
+        iteration = -1
+        for row in self.board:
+            iteration += 1
+            for i in range(0, len(row)):
+                vert_set[i].append(row[i])
+            # print "vert set is ", vert_set 
+            nw_set.append(row[iteration])
+            sw_set.append(row[(iteration - (len(self.board) - 1)) * -1])
+        return (self.board, vert_set, nw_set, sw_set)
 
     def place(self, shape, index_list):
         """ Attempt to place a piece on the board """
-        pass
-
+        if self.board[index_list[0]][index_list[1]]:
+            return False
+        else:
+            self.board[index_list[0]][index_list[1]] = shape
+            return True
+    
     def drawBoard(self):
         """ Basic draw board function for debugging """
-        pass
-           
+        board_text = ""
+        for row in self.board:
+            if not board_text == "":
+                board_text += "-----------\n"
+            board_text += " %s | %s | %s \n" % (shape_map[row[0]], shape_map[row[1]], shape_map[row[2]])
+            
+        return board_text
 class Game:
     """ Class to control the game logic """
     def __init__(self):
@@ -61,6 +88,6 @@ class Game:
 if __name__ == "__main__":
     Storage()._game_board = Board()
     Storage()._player_one = Ai()
-    Storage()._player_two = LocalHuman()
+    Storage()._player_two = ThreeByThreeLocalHuman()
     Storage()._game_instance = Game()
     Storage()._game_instance.run()
