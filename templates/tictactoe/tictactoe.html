@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Tic-Tac-Toe Demo using Ajax{% endblock %}
+{% block title %}Tic-Tac-Toe Demo{% endblock %}
 {% block script %}
+
+var imgtictactoe_x = "{{MEDIA_URL}}images/x.jpg";
+var imgtictactoe_o = "{{MEDIA_URL}}images/o.jpg";
+var imgtictactoe_b = "{{MEDIA_URL}}images/blank.jpg";
 
 var interCharDelay = 20;
 var betweenEl      = 600;
@@ -48,6 +52,8 @@ var gamemods          = {
                 initializeScrollingElement(_return,"RETURN",interCharDelay);
                 _result.onEnd(_return.scrollText,500);
 
+            
+
                 dojo.connect(_return,"onclick",
                              function(){
                                     
@@ -69,6 +75,7 @@ var gamemods          = {
             
             
             },
+            
         
         "tictactoe" :
             {
@@ -76,6 +83,14 @@ var gamemods          = {
                 var _yourmove = dojo.byId("yourmove-tictactoe");
                 initializeScrollingElement(_yourmove,alert2,interCharDelay);
                 gamenames['tictactoe'].onEnd(_yourmove.scrollText,betweenEl);
+                dojo.fadeOut({node:'board-tictactoe'}).play();
+                
+                _yourmove.onEnd(function(){
+                      dojo.fadeIn({node:'board-tictactoe',duration:1000}).play();
+                });
+            },
+            'resetGame'    : function(){
+                dojo.fadeOut({node:'board-tictactoe'});
             }
             }
 };
@@ -117,6 +132,10 @@ var showGame = function(game){
 
         main.appendChild(games[game]);
         gamenames[game].scrollText();
+
+        try{
+            //gamemods[game].startGame();
+        }catch(e){}
         
     }catch(e){
             window.alert("error showing game ["+game+"] :"+e.message);
@@ -130,7 +149,9 @@ var removeGame = function(game,fade){
     try{
         gamemods[game].resetGame();
         main.removeChild(games[game]);
-    }catch(e){}
+    }catch(e){
+            window.alert(e.message);
+        }
 }
 var removeBothGames = function(){
     removeGame("gtw",false);
@@ -296,6 +317,46 @@ a:active{
 .return{
     margin-top: 2em;
 }
+
+.tictactoe-tl{
+    border-bottom: 2px solid #009;
+    border-right:  2px solid #009;
+}
+.tictactoe-tm{
+    border-bottom: 2px solid #009;
+    border-right:  2px solid #009;
+    border-left:   2px solid #009;
+}
+.tictactoe-tr{
+    border-bottom: 2px solid #009;
+    border-left:   2px solid #009;
+}
+.tictactoe-ml{
+    border-right:  2px solid #009;
+    border-top:    2px solid #009;
+    border-bottom: 2px solid #009;
+}
+.tictactoe-mm{
+    border: 2px solid #009;
+}
+.tictactoe-mr{
+    border-left:  2px solid #009;
+    border-top:    2px solid #009;
+    border-bottom: 2px solid #009;
+}
+.tictactoe-ll{
+    border-top: 2px solid #009;
+    border-right:  2px solid #009;
+}
+.tictactoe-lm{
+    border-top: 2px solid #009;
+    border-right:  2px solid #009;
+    border-left:   2px solid #009;
+}
+.tictactoe-lr{
+    border-top:   2px solid #009;
+    border-left:   2px solid #009;
+}
 {% endblock %}
 {% block ready %}
     initializeElements();
@@ -315,11 +376,41 @@ a:active{
 <div id="result-gtw"></div>
 <div class="return"><a id="return-gtw" href="#"></a></div>
 </div>
+
 <div id="tictactoe">
 <div id="gamename-tictactoe"></div>
 <div id="yourmove-tictactoe"></div>
+
+<div id="board-tictactoe">
+
+<table border=0 cellspacing="0">
+<tr>
+<td class="tictactoe-tl"><a href="javascript:yourChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=A alt="Top-Left"></a></td>
+<td class="tictactoe-tm"><a href="javascript:yourChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=B alt="Top-Center"></a></td>
+<td class="tictactoe-tr"><a href="javascript:yourChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=C alt="Top-Right"></a></td>
+</tr>
+<tr>
+<td class="tictactoe-ml"><a href="javascript:yourChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=D alt="Middle-Left"></a></td>
+<td class="tictactoe-mm"><a href="javascript:yourChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=E alt="Middle-Center"></a></td>
+<td class="tictactoe-mr"><a href="javascript:yourChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=F alt="Middle-Right"></a></td>
+</tr>
+<tr>
+<td class="tictactoe-ll"><a href="javascript:yourChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=G alt="Bottom-Left"></a></td>
+<td class="tictactoe-lm"><a href="javascript:yourChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100 name=H alt="Bottom-Center"></a></td>
+<td class="tictactoe-lr"><a href="javascript:yourChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height=100 width=100  name=I alt="Bottom-Right"></a></td>
+</tr>
+</table>
+
+
+</div>
+
 <div id="result-tictactoe"></div>
 <div class="return"><a id="return-tictactoe" href="#"></a></div>
 </div>
+
 </div>
+
+<!--
+
+-->
 {% endblock %}
