@@ -13,7 +13,7 @@ var txtoption1   = "GLOBAL THERMONUCLEAR WAR";
 var alert1       = "WINNER: NONE";
 
 var txtoption2   = "TIC-TAC-TOE";
-var alert2       = "OK: Your move";
+var alert2       = "YOUR MOVE";
 
 
 var txtgamenames = {
@@ -41,22 +41,20 @@ var gamemods          = {
             'initGame'    : function(){
                 var _result = dojo.byId("result-gtw");
                 initializeScrollingElement(_result,alert1,interCharDelay);
-            },
-            'restartGame' : function(){
-                                    try{
-                                        _result = dojo.byId("result-gtw");
-                                        setTimeout(_result.scrollText,2000);
-                                        
-                                    }catch(e){ window.alert(e.message); }
-
+                gamenames['gtw'].onEnd(_result.scrollText,700);
+                
             }
+            
             
             },
         
         "tictactoe" :
             {
-            'initGame'     : function(){},
-            'restartGame'  : function(){ window.alert("x-tictactoe"); }
+            'initGame'     : function(){
+                var _yourmove = dojo.byId("yourmove-tictactoe");
+                initializeScrollingElement(_yourmove,alert2,interCharDelay);
+                gamenames['tictactoe'].onEnd(_yourmove.scrollText,betweenEl);
+            }
             }
 };
 
@@ -92,7 +90,7 @@ var showGame = function(game){
     try{
         main.appendChild(games[game]);
         gamenames[game].scrollText();
-        gamemods[game].restartGame();
+        
     }catch(e){
             window.alert("error showing game ["+game+"] :"+e.message);
     }
@@ -174,7 +172,10 @@ var initializeElements = function(){
     gamenames["gtw"]       = dojo.byId("gamename-gtw");
     gamenames["tictactoe"] = dojo.byId("gamename-tictactoe");
     
+    initializeScrollingElement(gamenames["gtw"],txtgamenames["gtw"],interCharDelay);
+    initializeScrollingElement(gamenames["tictactoe"],txtgamenames["tictactoe"],interCharDelay);
 
+    
     gamemods["gtw"].initGame();
     gamemods["tictactoe"].initGame();
 
@@ -203,9 +204,7 @@ var initializeElements = function(){
     initializeScrollingElement(opt1,txtoption1,interCharDelay);
     initializeScrollingElement(opt2,txtoption2,interCharDelay);
 
-    initializeScrollingElement(gamenames["gtw"],txtgamenames["gtw"],interCharDelay);
-    initializeScrollingElement(gamenames["tictactoe"],txtgamenames["tictactoe"],interCharDelay);
-    
+ 
     greeting1.onEnd(greeting2.scrollText,betweenEl);
     greeting2.onEnd(function(){
                         
@@ -278,6 +277,7 @@ a:active{
 </div>
 <div id="tictactoe">
 <div id="gamename-tictactoe"></div>
+<div id="yourmove-tictactoe"></div>
 <div id="result-tictactoe"></div>
 </div>
 </div>
