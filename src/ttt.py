@@ -1,3 +1,6 @@
+from common import Storage, NOUGHT, CROSS, EMPTY
+from participants import Ai, LocalHuman
+from random import choice
 class Board():
     """ Game board class that has basic game board utility functions """
     def __init__(self):
@@ -30,13 +33,21 @@ class Game:
     
     def run(self):
         """ Cheesy main loop"""
-        pass
-    
+        while self.running :
+            next_move = self.active_player.turn()
+            if Storage()._game_board.place(self.active_player.shape,next_move):
+                self.move_count += 1
+                self.turnComplete()
+
     def turnComplete(self):
         """ Swap the active players, check to see if there was
         a gameover event, and perform any required cleanup """
-        pass
-
+        ap = self.active_player
+        self.active_player = self.idle_player
+        self.idle_player = ap
+        self.idle_player.turnComplete()
+        self.checkGameOver()
+    
     def randStart(self):
         """ Randomly choose who gets to go first """
         ap = self.players[choice((0,1))]

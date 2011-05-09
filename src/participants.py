@@ -1,4 +1,5 @@
 class Participant(object):
+    """ Base class for game participants."""
     def __init__(self):
         self.shape = EMPTY
         self.opponent_shape = EMPTY
@@ -7,6 +8,12 @@ class Participant(object):
         """ Set the shape we are using """
         self.opponent_shape = 1 if shape == 2 else 2
         self.shape = shape 
+   
+    def turn(self, *args):
+        """ Override me in subclasses
+        returns the move we want to make as (row, column)
+        """
+        pass
 
 class LocalHuman(Participant):
     """ Console player for a game """
