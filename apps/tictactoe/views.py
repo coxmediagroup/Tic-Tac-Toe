@@ -4,4 +4,4 @@ from django.template import RequestContext, loader
 
 def greetings(request):
     t = loader.get_template("tictactoe/tictactoe.html")
-    return HttpResponse(t.render(RequestContext(request,{})))
+    return HttpResponse(t.render(RequestContext(request,{'gridwidth':50})))
