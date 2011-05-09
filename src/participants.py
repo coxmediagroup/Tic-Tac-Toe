@@ -14,8 +14,12 @@ class Participant(object):
         returns the move we want to make as (row, column)
         """
         pass
+    
+    def turnComplete(self, *args):
+        """ After we've made our move, draw the board """
+        print Storage()._game_board.drawBoard()
 
-class LocalHuman(Participant):
+class ThreeByThreeLocalHuman(Participant):
     """ Console player for a game """
     def __init__(self):
         pass
