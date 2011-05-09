@@ -2,38 +2,104 @@
 {% block title %}Tic-Tac-Toe Demo using Ajax{% endblock %}
 {% block script %}
 
-var initializeTextToScroll = function(element){
-    element.waiting     = false;
+var interCharDelay = 20;
+var betweenEl      = 600;
+
+var txtgreeting1 = "GREETINGS PROFESSOR FALKEN";
+var txtgreeting2 = "SHALL WE PLAY A GAME?";
+
+var txtoption1   = "GLOBAL THERMONUCLEAR WAR";
+var alert1       = "Winner: None";
+
+var txtoption2   = "TIC-TAC-TOE";
+var alert2       = "OK: Your move";
+
+var greetProfessorFalken = function(){
+    var greeting1 = dojo.byId("greeting1");
+    var greeting2 = dojo.byId("greeting2");
+    var menu1     = dojo.byId("menu1");
+    var opt1      = dojo.create('a',{
+                href: '#',
+                onclick: function(){
+                        window.alert("option1");
+                }
+            });
+    var opt2      = dojo.create('a',{
+                href: '#',
+                onclick: function(){
+                        window.alert("option2");
+                }
+            });
     
-    element.spellString = function (str) {
- 	if (element.waiting == false) {
-  		element.index = 0;
-  		element.waiting = true;
-  		element.innerHTML = '';
-  		element.textHolder = str.split('');
-  		element.sendToPrint();
- 	}
-    }
-    element.sendToPrint = function () {
- 	if (element.index<element.textHolder.length) {
- 		 element.printing = window.setTimeout(
-                     function () {   element.getLetter(); },	1);
- 	} else {
- 		 element.waiting = false;
- 	}
-    }
-    element.getLetter = function () {
- 	letter = document.createTextNode(element.textHolder[element.index]);
- 	if (letter.value == '\\'){ letter.value = ''; }
- 	element.printLetter(letter);
+    initializeScrollingElement(greeting1,txtgreeting1,interCharDelay);
+    initializeScrollingElement(greeting2,txtgreeting2,interCharDelay);
+    initializeScrollingElement(opt1,txtoption1,interCharDelay);
+    initializeScrollingElement(opt2,txtoption2,interCharDelay);
+    
+    greeting1.onEnd(greeting2.scrollText,betweenEl);
+    greeting2.onEnd(function(){
+                        li1 = dojo.create('li',{});
+                        dojo.place(opt1,li1);
+                        dojo.place(li1,menu1);
+                        opt1.scrollText();
+                        },betweenEl);
+ 
+    opt1.onEnd(function(){
+                        li2 = dojo.create('li',{});
+                        dojo.place(opt2,li2);
+                        dojo.place(li2,menu1);
+                        opt2.scrollText();
+                        },betweenEl);   
+    greeting1.scrollText();
+}
+
+
+var initializeScrollingElement = function(element,txt,cdelay){
+    element.hasfinished    = false;
+    element.scrolldelay    = cdelay;
+    element.inprogress     = false;
+    element.currentindex   = 0;
+    element.currenttext    = txt;
+    element.currentchars   = txt.split('');
+
+    element._onEnd          = null;
+
+    element.onEnd = function(f,delay){
+        element._onEnd    = f;
+        element._endDelay = delay;
     }
 
-    element.printLetter = function (letter) {
- 	 element.appendChild(letter);
-	 window.clearTimeout(element.printing);
-	 element.index++;
-	 element.sendToPrint();
+
+    element.scrollText = function () {
+        element.currentindex = 0;
+        element.inprogress   = true;
+        element.innerHTML    = '';
+        element.scrollNextLetter();
+ 	
     }
+    element.scrollNextLetter = function(){
+       if (element.currentindex<element.currentchars.length) {
+ 		 element.scrolling = setTimeout(
+                     function () {
+
+                        letter = document.createTextNode(element.currentchars[element.currentindex]);
+ 	                if (letter.value == '\\'){ letter.value = ''; }
+                        element.appendChild(letter);
+                        clearTimeout(element.scrolling);
+                        element.currentindex++;
+                        element.scrollNextLetter();
+
+                     },	element.scrolldelay);
+ 	} else {
+                 element.hasfinished = true;
+ 		 element.inprogress = false;
+                 if(element._onEnd){
+                    setTimeout( element._onEnd, element._endDelay);
+                 }
+ 	}
+
+    }
+
 
 
 }
@@ -44,8 +110,8 @@ var initializeTextToScroll = function(element){
 
 
 
-var greeting1 = "GREETINGS PROFESSOR FALKEN";
-var greeting2 = "SHALL WE PLAY A GAME?";
+
+
 {% endblock %}
 {% block styles %}
 #main{
@@ -60,31 +126,27 @@ var greeting2 = "SHALL WE PLAY A GAME?";
 #menu1{
   margin-left: 2em;
 }
-#greeting1{
-   
+a{
+    text-decoration: none;
 }
-#greeting2{
-   
+a:link{
+        color: #009;
 }
+a:visited{
+        color: #009;
+}
+a:hover{
+        color: #f00;
+}
+a:active{
+        color: #ff0;
+}
+
+
 {% endblock %}
 {% block ready %}
-    initializeTextToScroll(dojo.byId("greeting1"));
-    initializeTextToScroll(dojo.byId("greeting2"));
-    dojo.byId("greeting1").spellString(greeting1);
-
-    setTimeout(function(){ dojo.byId("greeting2").spellString(greeting2); }, 1000);
-    setTimeout(function(){
-        var li1 = dojo.create('li',{innerHTML: ''},menu1);
-        initializeTextToScroll(li1);
-        li1.spellString('TIC-TAC-TOE');
-        },1500);
-    
-    setTimeout(function(){
-        var li2 = dojo.create('li',{innerHTML: ''},menu1);
-        initializeTextToScroll(li2);
-        li2.spellString('GLOBAL THERMONUCLEAR WAR');
-        },2000);
-   
+    greetProfessorFalken();
+       
 {% endblock %}
 {% block content %}
 <div id="main">
