@@ -144,21 +144,6 @@ class TelnetHuman(ThreeByThreeLocalHuman):
     def exit_command(self):
         self.protocol.transport.loseConnection()
 
-class TelnetAi(Ai):
-    def __init__(self, protocol):
-        self.protocol = protocol
-        Ai.__init__(self)
-    
-    def turn(self, *args):
-        next_move = None
-        board, vert_list, nw_list, sw_list = Storage(self.protocol.identifier)._game_board.winLists()
-        for f in (self.checkWinning, self.checkForking, self.randMove):
-            next_move = f(Storage(self.protocol.identifier)._game_board.board, 
-                        vert_list, nw_list, sw_list)
-            if next_move: 
-                break
-        return next_move
-
 class Ai(Participant):
     def __init__(self):
         Participant.__init__(self)
@@ -279,3 +264,18 @@ class Ai(Participant):
             if board[k][l] == EMPTY:
                 res = (k, l)
         return res 
+
+class TelnetAi(Ai):
+    def __init__(self, protocol):
+        self.protocol = protocol
+        Ai.__init__(self)
+    
+    def turn(self, *args):
+        next_move = None
+        board, vert_list, nw_list, sw_list = Storage(self.protocol.identifier)._game_board.winLists()
+        for f in (self.checkWinning, self.checkForking, self.randMove):
+            next_move = f(Storage(self.protocol.identifier)._game_board.board, 
+                        vert_list, nw_list, sw_list)
+            if next_move: 
+                break
+        return next_move
