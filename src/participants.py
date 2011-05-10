@@ -168,7 +168,7 @@ class Ai(Participant):
             coord = None
             iterations += 1
             row_set = set(row)
-            if len(row_set) == 2 and 0 in row_set and len(indexes(row, 0)) == 1:
+            if len(row_set) == 2 and EMPTY in row_set and len(indexes(row, EMPTY)) == 1:
                 ## This sucks but whatever
                 if row in board and iterations < 3:
                     coord = (iterations,row.index(0))
@@ -176,8 +176,8 @@ class Ai(Participant):
                     coord =  (row.index(0), v.index(row))
                 elif row == nw and iterations == 7:
                     coord = (row.index(0), row.index(0))
-                elif row == sw and iterations > 7:
-                    coord = (row.index(0), (row.index(0) - len(board[0]) -1) * -1)
+                elif row == sw:
+                    coord = (row.index(0), (row.index(0) - (len(board) -1)) * -1)
                 if coord:
                     if board[coord[0]][coord[1]]:
                         coord = None
