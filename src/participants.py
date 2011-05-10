@@ -187,12 +187,10 @@ class Ai(Participant):
         if len(my_forks):
             for i in my_forks:
                 for j in i:
-                    print j
                     return j
         elif len(their_forks):
             for i in their_forks:
                 for j in i:
-                    print j
                     return j
         else:
             return None

@@ -105,7 +105,7 @@ class Game:
             self.running = False
 
 if __name__ == "__main__":
-    Storage()._game_board = Board(size=7)
+    Storage()._game_board = Board(size=3)
     Storage()._player_one = Ai()
     Storage()._player_two = ThreeByThreeLocalHuman()
     Storage()._game_instance = Game()
