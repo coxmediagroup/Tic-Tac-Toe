@@ -32,6 +32,13 @@ class ThreeByThreeLocalHuman(Participant):
     def __init__(self):
         Participant.__init__(self)
         self.displayMsg("Welcome to tic-tac-toe")
+        self._buildKeymap()
+
+    def _buildKeymap(self):
+        """ Method to build the keymap list attribute
+            Not in __init__ as Storage() call corrupts
+            subclass initializations.
+        """
         board = Storage()._game_board.board
         self.keymap = []
         
@@ -102,13 +109,24 @@ class TelnetHuman(ThreeByThreeLocalHuman):
     def __init__(self, protocol):
         self.protocol = protocol
         ThreeByThreeLocalHuman.__init__(self)
-
+    
+    def _buildKeymap(self):
+        board = Storage(self.protocol.identifier)._game_board.board
+        self.keymap = []
+        
+        ## Put arrays into the keymap array
+        for i in range(0, len(board)):
+            self.keymap.append([])
+        
+        ## Assign numbers to the places
+        for j in range(0, len(board)*len(board)):
+            self.keymap[j/len(board)].append(j+1)
     def turn(self):
         """ Called to start the players turn """
         self.displayMsg("Your turn, enter space to occupy, or \"help\" for help:")
 
     def dataReceivedHandler(self, data):
-        if Storage()._game_instance.active_player == self:
+        if Storage(self.protocol.identifier)._game_instance.active_player == self:
             move = self.handleInput(data)
             if move :
                 pass
@@ -118,13 +136,28 @@ class TelnetHuman(ThreeByThreeLocalHuman):
             self.displayMsg("Wait your turn!")
 
     def turnComplete(self):
-        self.diplayMsg(Storage().game_board.drawBoard())
+        self.diplayMsg(Storage(self.protocol.identifier).game_board.drawBoard())
 
     def displayMsg(self, msg):
         self.protocol.sendData(msg)
     
     def exit_command(self):
         self.protocol.transport.loseConnection()
+
+class TelnetAi(Ai):
+    def __init__(self, protocol):
+        self.protocol = protocol
+        Ai.__init__(self)
+    
+    def turn(self, *args):
+        next_move = None
+        board, vert_list, nw_list, sw_list = Storage(self.protocol.identifier)._game_board.winLists()
+        for f in (self.checkWinning, self.checkForking, self.randMove):
+            next_move = f(Storage(self.protocol.identifier)._game_board.board, 
+                        vert_list, nw_list, sw_list)
+            if next_move: 
+                break
+        return next_move
 
 class Ai(Participant):
     def __init__(self):
@@ -161,7 +194,7 @@ class Ai(Participant):
                 elif row == sw and iterations > 7:
                     coord = (row.index(0), (row.index(0) - len(board[0]) -1) * -1)
                 if coord:
-                    if Storage()._game_board.board[coord[0]][coord[1]]:
+                    if board[coord[0]][coord[1]]:
                         coord = None
                     elif not self.shape in row:
                         losses.append(coord)
