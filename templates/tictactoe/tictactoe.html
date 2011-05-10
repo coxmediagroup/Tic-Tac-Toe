@@ -437,6 +437,19 @@ function tttcheckSpace() {
     }
 }
 
+
+function tttSendResultToServer(rslt){
+        var urlget      = "result?rslt=" + rslt;
+        dojo.xhrGet({
+            url: urlget,
+            load: function(result){
+                    window.alert(result);
+                },
+            error: function(e){
+                    window.alert("error: "+e);
+               }});
+}
+
 function tttMyChoice() {
 ttttemp="";
 tttok = 0;
@@ -462,6 +475,8 @@ document.images[ttttemp].src= imgtictactoe_o;
 tttprocess();
 }
 
+
+
 function tttprocess() {
 tttwinner = '';
 tttlogicOne();
@@ -475,6 +490,11 @@ if (tttall==3){
         tttwinner = "NONE";
     }
 if (tttall!=0) {
+
+            tttSendResultToServer(tttall);
+
+
+    
             dojo.byId("yourmove-tictactoe").onEnd(null);
             dojo.byId("yourmove-tictactoe").setTextToScroll("WINNER: "+tttwinner);
             dojo.byId("yourmove-tictactoe").scrollText();
