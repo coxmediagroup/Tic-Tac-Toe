@@ -8,15 +8,15 @@ NOUGHT  = 1
 CROSS   = 2
 DRAW    = 3
 DEBUG   = True
-shape_map = {0: " ", 1 : 0, 2 : "x"}
+shape_map = {0: " ", 1 : "0", 2 : "X"}
 
 def singleton(cls):
     """ Enforce single instance of decorated class """
     instances = {}
-    def getInstance():
-        if not cls in instances.keys():
-            instances[cls] = cls()
-        return instances[cls]
+    def getInstance(name="main"):
+        if not name in instances.keys():
+            instances[name] = cls()
+        return instances[name]
     return getInstance
 
 def debug(f):
