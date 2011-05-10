@@ -38,6 +38,8 @@ var li1          = null;
 var li2          = null;
 var selectone    = null;
 
+_temp              = '';
+
 var gamemods          = {
         "gtw" :
             {
@@ -172,6 +174,11 @@ var initializeScrollingElement = function(element,txt,cdelay){
 
     element._onEnd          = null;
 
+    element.setTextToScroll = function(_txt){
+        element.currenttext  = _txt;
+        element.currentchars = _txt.split('');
+    }
+
     element.onEnd = function(f,delay){
         element._onEnd    = f;
         element._endDelay = delay;
@@ -181,7 +188,7 @@ var initializeScrollingElement = function(element,txt,cdelay){
     element.scrollText = function () {
         element.currentindex = 0;
         element.inprogress   = true;
-        element.innerHTML    = '';
+        element.innerHTML    = '&nbsp;';
         element.scrollNextLetter();
  	
     }
@@ -326,108 +333,201 @@ if ((g==2)&&(e==2)&&(c==2)) tttall=2;
 if ((a != 0)&&(b != 0)&&(c != 0)&&(d != 0) &&(e != 0)&&(f != 0)&&(g != 0)&&(h != 0)&&(i != 0)&&(tttall == 0)) tttall = 3;
 } 
 function tttlogicTwo() {
-if ((a==2)&&(b==2)&&(c==0)&&(ttttemp=="")) ttttemp="C";
-if ((a==2)&&(b==0)&&(c==2)&&(ttttemp=="")) ttttemp="B";
-if ((a==0)&&(b==2)&&(c==2)&&(ttttemp=="")) ttttemp="A";
-if ((a==2)&&(d==2)&&(g==0)&&(ttttemp=="")) ttttemp="G";
-if ((a==2)&&(d==0)&&(g==2)&&(ttttemp=="")) ttttemp="D";
-if ((a==0)&&(d==2)&&(g==2)&&(ttttemp=="")) ttttemp="A";
-if ((a==2)&&(e==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((a==2)&&(e==0)&&(i==2)&&(ttttemp=="")) ttttemp="E";
-if ((a==0)&&(e==2)&&(i==2)&&(ttttemp=="")) ttttemp="A";
-if ((b==2)&&(e==2)&&(h==0)&&(ttttemp=="")) ttttemp="H";
-if ((b==2)&&(e==0)&&(h==2)&&(ttttemp=="")) ttttemp="E";
-if ((b==0)&&(e==2)&&(h==2)&&(ttttemp=="")) ttttemp="B";
-if ((d==2)&&(e==2)&&(f==0)&&(ttttemp=="")) ttttemp="F";
-if ((d==2)&&(e==0)&&(f==2)&&(ttttemp=="")) ttttemp="E";
-if ((d==0)&&(e==2)&&(f==2)&&(ttttemp=="")) ttttemp="D";
-if ((g==2)&&(h==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((g==2)&&(h==0)&&(i==2)&&(ttttemp=="")) ttttemp="H";
-if ((g==0)&&(h==2)&&(i==2)&&(ttttemp=="")) ttttemp="G";
-if ((c==2)&&(f==2)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((c==2)&&(f==0)&&(i==2)&&(ttttemp=="")) ttttemp="F";
-if ((c==0)&&(f==2)&&(i==2)&&(ttttemp=="")) ttttemp="C";
-if ((g==2)&&(e==2)&&(c==0)&&(ttttemp=="")) ttttemp="C";
-if ((g==2)&&(e==0)&&(c==2)&&(ttttemp=="")) ttttemp="E";
-if ((g==0)&&(e==2)&&(c==2)&&(ttttemp=="")) ttttemp="G";
+if ((a==2)&&(b==2)&&(c==0)&&(ttttemp=="")) _temp="C";
+if ((a==2)&&(b==0)&&(c==2)&&(ttttemp=="")) _temp="B";
+if ((a==0)&&(b==2)&&(c==2)&&(ttttemp=="")) _temp="A";
+if ((a==2)&&(d==2)&&(g==0)&&(ttttemp=="")) _temp="G";
+if ((a==2)&&(d==0)&&(g==2)&&(ttttemp=="")) _temp="D";
+if ((a==0)&&(d==2)&&(g==2)&&(ttttemp=="")) _temp="A";
+if ((a==2)&&(e==2)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((a==2)&&(e==0)&&(i==2)&&(ttttemp=="")) _temp="E";
+if ((a==0)&&(e==2)&&(i==2)&&(ttttemp=="")) _temp="A";
+if ((b==2)&&(e==2)&&(h==0)&&(ttttemp=="")) _temp="H";
+if ((b==2)&&(e==0)&&(h==2)&&(ttttemp=="")) _temp="E";
+if ((b==0)&&(e==2)&&(h==2)&&(ttttemp=="")) _temp="B";
+if ((d==2)&&(e==2)&&(f==0)&&(ttttemp=="")) _temp="F";
+if ((d==2)&&(e==0)&&(f==2)&&(ttttemp=="")) _temp="E";
+if ((d==0)&&(e==2)&&(f==2)&&(ttttemp=="")) _temp="D";
+if ((g==2)&&(h==2)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((g==2)&&(h==0)&&(i==2)&&(ttttemp=="")) _temp="H";
+if ((g==0)&&(h==2)&&(i==2)&&(ttttemp=="")) _temp="G";
+if ((c==2)&&(f==2)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((c==2)&&(f==0)&&(i==2)&&(ttttemp=="")) _temp="F";
+if ((c==0)&&(f==2)&&(i==2)&&(ttttemp=="")) _temp="C";
+if ((g==2)&&(e==2)&&(c==0)&&(ttttemp=="")) _temp="C";
+if ((g==2)&&(e==0)&&(c==2)&&(ttttemp=="")) _temp="E";
+if ((g==0)&&(e==2)&&(c==2)&&(ttttemp=="")) _temp="G";
+ttttemp = "ttt"+_temp
 }
 function tttlogicThree() {
-if ((a==1)&&(b==1)&&(c==0)&&(ttttemp=="")) ttttemp="C";
-if ((a==1)&&(b==0)&&(c==1)&&(ttttemp=="")) ttttemp="B";
-if ((a==0)&&(b==1)&&(c==1)&&(ttttemp=="")) ttttemp="A";
-if ((a==1)&&(d==1)&&(g==0)&&(ttttemp=="")) ttttemp="G";
-if ((a==1)&&(d==0)&&(g==1)&&(ttttemp=="")) ttttemp="D";
-if ((a==0)&&(d==1)&&(g==1)&&(ttttemp=="")) ttttemp="A";
-if ((a==1)&&(e==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((a==1)&&(e==0)&&(i==1)&&(ttttemp=="")) ttttemp="E";
-if ((a==0)&&(e==1)&&(i==1)&&(ttttemp=="")) ttttemp="A";
-if ((b==1)&&(e==1)&&(h==0)&&(ttttemp=="")) ttttemp="H";
-if ((b==1)&&(e==0)&&(h==1)&&(ttttemp=="")) ttttemp="E";
-if ((b==0)&&(e==1)&&(h==1)&&(ttttemp=="")) ttttemp="B";
-if ((d==1)&&(e==1)&&(f==0)&&(ttttemp=="")) ttttemp="F";
-if ((d==1)&&(e==0)&&(f==1)&&(ttttemp=="")) ttttemp="E";
-if ((d==0)&&(e==1)&&(f==1)&&(ttttemp=="")) ttttemp="D";
-if ((g==1)&&(h==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((g==1)&&(h==0)&&(i==1)&&(ttttemp=="")) ttttemp="H";
-if ((g==0)&&(h==1)&&(i==1)&&(ttttemp=="")) ttttemp="G";
-if ((c==1)&&(f==1)&&(i==0)&&(ttttemp=="")) ttttemp="I";
-if ((c==1)&&(f==0)&&(i==1)&&(ttttemp=="")) ttttemp="F";
-if ((c==0)&&(f==1)&&(i==1)&&(ttttemp=="")) ttttemp="C";
-if ((g==1)&&(e==1)&&(c==0)&&(ttttemp=="")) ttttemp="C";
-if ((g==1)&&(e==0)&&(c==1)&&(ttttemp=="")) ttttemp="E";
-if ((g==0)&&(e==1)&&(c==1)&&(ttttemp=="")) ttttemp="G";
+if ((a==1)&&(b==1)&&(c==0)&&(ttttemp=="")) _temp="C";
+if ((a==1)&&(b==0)&&(c==1)&&(ttttemp=="")) _temp="B";
+if ((a==0)&&(b==1)&&(c==1)&&(ttttemp=="")) _temp="A";
+if ((a==1)&&(d==1)&&(g==0)&&(ttttemp=="")) _temp="G";
+if ((a==1)&&(d==0)&&(g==1)&&(ttttemp=="")) _temp="D";
+if ((a==0)&&(d==1)&&(g==1)&&(ttttemp=="")) _temp="A";
+if ((a==1)&&(e==1)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((a==1)&&(e==0)&&(i==1)&&(ttttemp=="")) _temp="E";
+if ((a==0)&&(e==1)&&(i==1)&&(ttttemp=="")) _temp="A";
+if ((b==1)&&(e==1)&&(h==0)&&(ttttemp=="")) _temp="H";
+if ((b==1)&&(e==0)&&(h==1)&&(ttttemp=="")) _temp="E";
+if ((b==0)&&(e==1)&&(h==1)&&(ttttemp=="")) _temp="B";
+if ((d==1)&&(e==1)&&(f==0)&&(ttttemp=="")) _temp="F";
+if ((d==1)&&(e==0)&&(f==1)&&(ttttemp=="")) _temp="E";
+if ((d==0)&&(e==1)&&(f==1)&&(ttttemp=="")) _temp="D";
+if ((g==1)&&(h==1)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((g==1)&&(h==0)&&(i==1)&&(ttttemp=="")) _temp="H";
+if ((g==0)&&(h==1)&&(i==1)&&(ttttemp=="")) _temp="G";
+if ((c==1)&&(f==1)&&(i==0)&&(ttttemp=="")) _temp="I";
+if ((c==1)&&(f==0)&&(i==1)&&(ttttemp=="")) _temp="F";
+if ((c==0)&&(f==1)&&(i==1)&&(ttttemp=="")) _temp="C";
+if ((g==1)&&(e==1)&&(c==0)&&(ttttemp=="")) _temp="C";
+if ((g==1)&&(e==0)&&(c==1)&&(ttttemp=="")) _temp="E";
+if ((g==0)&&(e==1)&&(c==1)&&(ttttemp=="")) _temp="G";
+
+ttttemp = "ttt"+_temp;
 }
 
 function tttcheckSpace() {
-    if ((ttttemp=="A")&&(a==0)) {
+    //window.alert(tttcf+":"+ttttemp+":"+a+","+b+","+c+","+d+","+e+","+f+","+g+","+h+","+i);
+    if ((ttttemp=="tttA")&&(a==0)) {
         tttok=1;
         if (tttcf==0) a=1;
         if (tttcf==1) a=2;
     }
-    if ((ttttemp=="B")&&(b==0)) {
+    if ((ttttemp=="tttB")&&(b==0)) {
         tttok=1;
         if (tttcf==0) b=1;
         if (tttcf==1) b=2;
     }
-    if ((ttttemp=="C")&&(c==0)) {
+    if ((ttttemp=="tttC")&&(c==0)) {
         tttok=1;
         if (tttcf==0) c=1;
         if (tttcf==1) c=2;
     }
-    if ((ttttemp=="D")&&(d==0)) {
+    if ((ttttemp=="tttD")&&(d==0)) {
         tttok=1;
         if (tttcf==0) d=1;
         if (tttcf==1) d=2;
     }
-    if ((ttttemp=="E")&&(e==0)) {
+    if ((ttttemp=="tttE")&&(e==0)) {
         tttok=1;
         if (tttcf==0) e=1;
         if (tttcf==1) e=2;
     }
-    if ((ttttemp=="F")&&(f==0)) {
+    if ((ttttemp=="tttF")&&(f==0)) {
         tttok=1
         if (tttcf==0) f=1;
         if (tttcf==1) f=2;
     }
-    if ((ttttemp=="G")&&(g==0)) {
+    if ((ttttemp=="tttG")&&(g==0)) {
         tttok=1
         if (tttcf==0) g=1;
         if (tttcf==1) g=2;
     }
-    if ((ttttemp=="H")&&(h==0)) {
+    if ((ttttemp=="tttH")&&(h==0)) {
         tttok=1;
         if (tttcf==0) h=1;
         if (tttcf==1) h=2;
     }
-    if ((ttttemp=="I")&&(i==0)) {
+    if ((ttttemp=="tttI")&&(i==0)) {
         tttok=1;
         if (tttcf==0) i=1; 
         if (tttcf==1) i=2; 
     }
 }
 
+function tttMyChoice() {
+ttttemp="";
+tttok = 0;
+tttcf=1;
+tttlogicTwo();
+tttlogicThree();
+tttcheckSpace();
+while(tttok==0) {
+tttaRandomNumber=Math.random()
+tttcomp=Math.round((tttchoice-1)*tttaRandomNumber)+1;
+if (tttcomp==1) ttttemp="tttA";
+if (tttcomp==2) ttttemp="tttB";
+if (tttcomp==3) ttttemp="tttC";
+if (tttcomp==4) ttttemp="tttD";
+if (tttcomp==5) ttttemp="tttE";
+if (tttcomp==6) ttttemp="tttF";
+if (tttcomp==7) ttttemp="tttG";
+if (tttcomp==8) ttttemp="tttH";
+if (tttcomp==9) ttttemp="tttI";
+tttcheckSpace();
+}
+document.images[ttttemp].src= imgtictactoe_o;
+tttprocess();
+}
 
-function tttChoice(chName) {
+function tttprocess() {
+tttwinner = '';
+tttlogicOne();
+if (tttall==1){
+            tttwinner = "YOU";
+    }
+if (tttall==2){
+        tttwinner = "ME";
+}
+if (tttall==3){
+        tttwinner = "NONE";
+    }
+if (tttall!=0) {
+            dojo.byId("yourmove-tictactoe").onEnd(null);
+            dojo.byId("yourmove-tictactoe").setTextToScroll("WINNER: "+tttwinner);
+            dojo.byId("yourmove-tictactoe").scrollText();
+
+            _result = dojo.byId("result-tictactoe");
+
+            _playagain = dojo.create('span',{});
+            initializeScrollingElement(_playagain,"PLAY AGAIN? ",interCharDelay);
+
+            _playagain_yes = dojo.create('a',{href:"#",
+                                              onclick:function(){
+
+                                                    tttreset();
+
+                                                    _result.removeChild(_playagain);
+                                                    _result.removeChild(_playagain_yes);
+                                                    _result.removeChild(_playagain_no);
+                                                }
+                                              });
+            initializeScrollingElement(_playagain_yes,"YES ",interCharDelay);
+
+            _playagain_no  = dojo.create('a',{href:"#",
+
+
+                                            onclick:function(){
+
+                                                tttreset();
+                                    _result.removeChild(_playagain);
+                                                    _result.removeChild(_playagain_yes);
+                                                    _result.removeChild(_playagain_no);
+                                             
+                                    removeGame("tictactoe");
+                                    showGreeting();
+                                    greetProfessorFalken();}
+                                              });
+            initializeScrollingElement(_playagain_no,"NO",interCharDelay);
+
+            _playagain.onEnd(_playagain_yes.scrollText);
+            _playagain_yes.onEnd(_playagain_no.scrollText);
+
+            _result.appendChild(_playagain);
+            _result.appendChild(_playagain_yes);
+            _result.appendChild(_playagain_no);
+            _playagain.scrollText();
+   }else{
+            dojo.byId("yourmove-tictactoe").onEnd(null);         
+            dojo.byId("yourmove-tictactoe").setTextToScroll("YOUR MOVE");
+            dojo.byId("yourmove-tictactoe").scrollText();
+
+}
+}
+function tttended(){}
+function tttYourChoice(chName) {
     try{
     tttpause = 0;
     if (tttall!=0){
@@ -436,20 +536,64 @@ function tttChoice(chName) {
     if (tttall==0) {
         tttcf = 0;
         tttok = 0;
-        ttttemp= chName;
+        ttttemp= "ttt"+chName;
         tttcheckSpace();
+        //window.alert(tttok);
         if (tttok==1) {
+          
             document.images['ttt'+chName].src = imgtictactoe_x;
         }
         if (tttok==0)ttttaken();
         tttprocess();
-        if ((tttall==0)&&(tttpause==0)) tttMyChoice();
+        if ((tttall==0)&&(tttpause==0)){
+
+            dojo.byId("yourmove-tictactoe").onEnd(tttMyChoice,2000);
+            dojo.byId("yourmove-tictactoe").setTextToScroll("MY MOVE");
+            dojo.byId("yourmove-tictactoe").scrollText();
+        }
     }
     }catch(e){
         window.alert(e.message);
     }
 }
+function tttreset(){
 
+tttall = 0;
+a = 0;
+b = 0;
+c = 0;
+d = 0;
+e = 0;
+f = 0;
+g = 0;
+h = 0;
+i = 0;
+ttttemp="";
+tttok = 0;
+tttcf = 0;
+tttchoice=9;
+tttaRandomNumber = 0;
+tttcomp = 0; 
+document.images.tttA.src= imgtictactoe_b;
+document.images.tttB.src= imgtictactoe_b;
+document.images.tttC.src= imgtictactoe_b;
+document.images.tttD.src= imgtictactoe_b;
+document.images.tttE.src= imgtictactoe_b;
+document.images.tttF.src= imgtictactoe_b;
+document.images.tttG.src= imgtictactoe_b;
+document.images.tttH.src= imgtictactoe_b;
+document.images.tttI.src= imgtictactoe_b;
+if (tttt==0) { tttt=2; tttMyChoice(); }else{
+    dojo.byId("yourmove-tictactoe").setTextToScroll("YOUR MOVE");
+    dojo.byId("yourmove-tictactoe").scrollText();
+
+}
+tttt--;
+}
+function ttttaken() {
+//alert("That square is already occupied.  Please select another square.")
+tttpause=1;
+}
 
 {% endblock %}
 {% block styles %}
@@ -551,19 +695,19 @@ a:active{
 
 <table border=0 cellspacing="0">
 <tr>
-<td class="tictactoe-tl"><a href="javascript:tttChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttA alt="Top-Left"></a></td>
-<td class="tictactoe-tm"><a href="javascript:tttChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttB alt="Top-Center"></a></td>
-<td class="tictactoe-tr"><a href="javascript:tttChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttC alt="Top-Right"></a></td>
+<td class="tictactoe-tl"><a href="javascript:tttYourChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttA alt="Top-Left"></a></td>
+<td class="tictactoe-tm"><a href="javascript:tttYourChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttB alt="Top-Center"></a></td>
+<td class="tictactoe-tr"><a href="javascript:tttYourChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttC alt="Top-Right"></a></td>
 </tr>
 <tr>
-<td class="tictactoe-ml"><a href="javascript:tttChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttD alt="Middle-Left"></a></td>
-<td class="tictactoe-mm"><a href="javascript:tttChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttE alt="Middle-Center"></a></td>
-<td class="tictactoe-mr"><a href="javascript:tttChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttF alt="Middle-Right"></a></td>
+<td class="tictactoe-ml"><a href="javascript:tttYourChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttD alt="Middle-Left"></a></td>
+<td class="tictactoe-mm"><a href="javascript:tttYourChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttE alt="Middle-Center"></a></td>
+<td class="tictactoe-mr"><a href="javascript:tttYourChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttF alt="Middle-Right"></a></td>
 </tr>
 <tr>
-<td class="tictactoe-ll"><a href="javascript:tttChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttG alt="Bottom-Left"></a></td>
-<td class="tictactoe-lm"><a href="javascript:tttChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttH alt="Bottom-Center"></a></td>
-<td class="tictactoe-lr"><a href="javascript:tttChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}"  name=tttI alt="Bottom-Right"></a></td>
+<td class="tictactoe-ll"><a href="javascript:tttYourChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttG alt="Bottom-Left"></a></td>
+<td class="tictactoe-lm"><a href="javascript:tttYourChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttH alt="Bottom-Center"></a></td>
+<td class="tictactoe-lr"><a href="javascript:tttYourChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttI alt="Bottom-Right"></a></td>
 </tr>
 </table>
 
