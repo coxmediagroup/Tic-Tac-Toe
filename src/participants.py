@@ -21,13 +21,17 @@ class Participant(object):
     
     def turnComplete(self, *args):
         """ After we've made our move, draw the board """
-        print Storage()._game_board.drawBoard()
+        self.displayMsg(Storage()._game_board.drawBoard())
+
+    def displayMsg(self, msg):
+        """ Method for displaying text on the users screen """
+        print msg
 
 class ThreeByThreeLocalHuman(Participant):
     """ Console player for a game """
     def __init__(self):
         Participant.__init__(self)
-        print "Welcome to tic-tac-toe"
+        self.displayMsg("Welcome to tic-tac-toe")
         board = Storage()._game_board.board
         self.keymap = []
         
@@ -57,7 +61,7 @@ class ThreeByThreeLocalHuman(Participant):
         try: 
             inp = int(inp)
             if inp in range(1,(len(board)*len(board)+1)):
-                print "\n"
+                self.displayMsg("\n")
                 return inp
             else:
                 raise ValueError("Space index out of range")
@@ -65,12 +69,12 @@ class ThreeByThreeLocalHuman(Participant):
             if hasattr(self, "%s_command" % inp):
                 getattr(self, "%s_command" % inp)()
             else:
-                print "Sorry, command not recognized\n"
+                self.displayMsg("Sorry, command not recognized\n")
         return False
     
     def help_command(self):
-        print """command list:\n\thelp: This help\n\tboard: show the current board
-        exit: Exit the program\n\n board keybindings:"""
+        self.displayMsg("""command list:\n\thelp: This help\n\tboard: show the current board
+        exit: Exit the program\n\n board keybindings:""")
         
         board_text = ""
         for row in self.keymap:
@@ -84,14 +88,18 @@ class ThreeByThreeLocalHuman(Participant):
                     first = False
                 board_text += "  %s  " % item 
             board_text += "\n"
-        print board_text
+        self.displayMsg(board_text)
 
     def board_command(self):
-        print Storage()._game_board.drawBoard()
+        self.displayText(Storage()._game_board.drawBoard())
     
     def exit_command(self):
         sys.exit(0)
-                   
+    
+class TelnetHuman(ThreeByThreeLocalHuman):
+    def __init__(self):
+        ThreeByThreeLocalHuman.__init__(self)
+
 class Ai(Participant):
     def __init__(self):
         Participant.__init__(self)
