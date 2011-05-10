@@ -11,7 +11,6 @@ class Board():
             size = 3
         for i in range(0, size):
             self.board.append([0]*size)
-        print self.board
     
     def winLists(self):
         """ Returns lists in all directions. This
@@ -28,7 +27,6 @@ class Board():
             iteration += 1
             for i in range(0, len(row)):
                 vert_set[i].append(row[i])
-            # print "vert set is ", vert_set 
             nw_set.append(row[iteration])
             sw_set.append(row[(iteration - (len(self.board) - 1)) * -1])
         return (self.board, vert_set, nw_set, sw_set)
@@ -96,13 +94,29 @@ class Game:
         for row in board + v + [nw] + [sw]:
             row_set = set(row)
             if len(row_set) == 1 and not 0 in row:
-                print shape_map[row[0]], " won!"
+                self.displayMsg(shape_map[row[0]] + " won!")
                 self.running = False
                 break
         
         if self.running and self.move_count >= (len(board) * len(board)):
-            print "Draw!"
+            self.displayMsg("Draw!")
             self.running = False
+    
+    def displayMsg(self, msg):
+        print msg
+
+class TelnetGame(Game):
+    def __init__(self):
+        Game.__init__(self)
+    
+    def run(self):
+        """ Run method to work with twisted reactor """
+        from twisted internet import reactor
+        next_move = self.active_player.turn()
+        if Storage()._game_board.place(self.active_player.shape,next_move):
+            self.move_count += 1
+            self.turnComplete()
+        reactor.callLater(0.2, self.run)
 
 if __name__ == "__main__":
     Storage()._game_board = Board(size=3)
