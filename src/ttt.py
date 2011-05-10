@@ -58,12 +58,15 @@ class Board():
 class Game:
     """ Class to control the game logic """
     def __init__(self):
+        self._initPlayers()
+        self.move_count = 0
+        self.running = True
+    
+    def _initPlayers(self):
         self.players = [Storage()._player_one, Storage()._player_two]
         self.active_player,self.idle_player = self.randStart()
         self.active_player.setShape(NOUGHT)
-        self.idle_player.setShape(CROSS)
-        self.move_count = 0
-        self.running = True
+        self.idle_player.setShape(CROSS)    
     
     def run(self):
         """ Cheesy main loop"""
@@ -104,24 +107,6 @@ class Game:
     
     def displayMsg(self, msg):
         print msg
-
-class TelnetGame(Game):
-    def __init__(self, protocol):
-        self.protocol = protocol
-        Game.__init__(self)
-    
-    def run(self):
-        """ Run method to work with twisted reactor """
-        from twisted.internet import reactor
-        next_move = self.active_player.turn()
-        if Storage()._game_board.place(self.active_player.shape,next_move):
-            self.move_count += 1
-            self.turnComplete()
-        if self.running:
-            reactor.callLater(0.2, self.run)
-    
-    def displayText(self, msg):
-        self.protocol.sendData(msg)
 
 if __name__ == "__main__":
     Storage()._game_board = Board(size=3)

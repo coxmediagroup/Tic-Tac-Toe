@@ -39,20 +39,20 @@ class ThreeByThreeLocalHuman(Participant):
             Not in __init__ as Storage() call corrupts
             subclass initializations.
         """
-        board = Storage()._game_board.board
+        self.game_board = Storage()._game_board
+        self.board = self.game_board.board
         self.keymap = []
         
         ## Put arrays into the keymap array
-        for i in range(0, len(board)):
+        for i in range(0, len(self.board)):
             self.keymap.append([])
         
         ## Assign numbers to the places
-        for j in range(0, len(board)*len(board)):
-            self.keymap[j/len(board)].append(j+1)
+        for j in range(0, len(self.board)*len(self.board)):
+            self.keymap[j/len(self.board)].append(j+1)
 
     def turn(self):
         """ Called to start the players turn """
-        board = Storage()._game_board.board
         moved = False
         prompt = "Your turn, enter space to occupy, or \"help\" for help: "
         while not moved:
@@ -64,12 +64,11 @@ class ThreeByThreeLocalHuman(Participant):
         moved = False
     
     def handleInput(self, inp):
-        board = Storage()._game_board.board
         commands = ["help", "board"]
         inp = inp.strip()
         try: 
             inp = int(inp)
-            if inp in range(1,(len(board)*len(board)+1)):
+            if inp in range(1,(len(self.board)*len(self.board)+1)):
                 self.displayMsg("\n")
                 return inp
             else:
@@ -100,49 +99,11 @@ class ThreeByThreeLocalHuman(Participant):
         self.displayMsg(board_text)
 
     def board_command(self):
-        self.displayMsg(Storage()._game_board.drawBoard())
+        self.displayMsg(self.game_board.drawBoard())
     
     def exit_command(self):
         sys.exit(0)
     
-class TelnetHuman(ThreeByThreeLocalHuman):
-    def __init__(self, protocol):
-        self.protocol = protocol
-        ThreeByThreeLocalHuman.__init__(self)
-    
-    def _buildKeymap(self):
-        board = Storage(self.protocol.identifier)._game_board.board
-        self.keymap = []
-        
-        ## Put arrays into the keymap array
-        for i in range(0, len(board)):
-            self.keymap.append([])
-        
-        ## Assign numbers to the places
-        for j in range(0, len(board)*len(board)):
-            self.keymap[j/len(board)].append(j+1)
-    def turn(self):
-        """ Called to start the players turn """
-        self.displayMsg("Your turn, enter space to occupy, or \"help\" for help:")
-
-    def dataReceivedHandler(self, data):
-        if Storage(self.protocol.identifier)._game_instance.active_player == self:
-            move = self.handleInput(data)
-            if move :
-                pass
-            else:
-                self.turn()
-        else:
-            self.displayMsg("Wait your turn!")
-
-    def turnComplete(self):
-        self.diplayMsg(Storage(self.protocol.identifier).game_board.drawBoard())
-
-    def displayMsg(self, msg):
-        self.protocol.sendData(msg)
-    
-    def exit_command(self):
-        self.protocol.transport.loseConnection()
 
 class Ai(Participant):
     def __init__(self):
@@ -265,17 +226,4 @@ class Ai(Participant):
                 res = (k, l)
         return res 
 
-class TelnetAi(Ai):
-    def __init__(self, protocol):
-        self.protocol = protocol
-        Ai.__init__(self)
-    
-    def turn(self, *args):
-        next_move = None
-        board, vert_list, nw_list, sw_list = Storage(self.protocol.identifier)._game_board.winLists()
-        for f in (self.checkWinning, self.checkForking, self.randMove):
-            next_move = f(Storage(self.protocol.identifier)._game_board.board, 
-                        vert_list, nw_list, sw_list)
-            if next_move: 
-                break
-        return next_move
+
