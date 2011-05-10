@@ -81,7 +81,50 @@ class Ai(Participant):
     def checkForking(self, board, v, nw, sw):
         """ Check the playing board for possible forks and return the solution
         ai forks are priority, blocking forks after that """
-        pass
+        h           = {1 : [], 2 : [], "sets" : []}
+        v_dict      = {1 : [], 2 : [], "sets" : []}
+        nw_dict     = {1 : [], 2 : [], "sets" : []}
+        sw_dict     = {1 : [], 2 : [], "sets" : []}
+        my_forks    = []
+        thier_forks = []
+
+        for row in board + v + [nw]  +[sw]:
+            row_set = set(row)
+            if len(row_set) == 2 and 0 in row_set and len(indexes(row, 0)) == len(row) -1:
+                for ind in indexes(row, 0):
+                    row_set = list(row_set) #FIXME: dirty boy,, dirty dirty dirty
+                    plyr = 1 if 1 in row_set else 2
+                    if row in board:
+                        h[plyr].append((board.index(row), ind))
+                    elif row in v:
+                        v_dict[plyr].append((ind, v.index(row)))
+                    elif row == nw:
+                        nw_dict[plyr].append([[],[]])
+                    elif row == sw:
+                        sw_dict[plyr].append((ind ,(ind - len(board - 1)) * -1)) 
+            
+        for dic in [h, v_dict, nw_dict, sw_dict]:
+            for i in [1,2]:
+                dic["sets"].append(set(dic[i]))
+        
+        # I don't think I'm scoring points for clarity
+        for i in [1,2]:
+            if i == self.shape:
+                ar = my_forks
+            else:
+                ar = thier_forks
+            ar.append(h["sets"][i -1]       & v_dict["sets"][ i -1])
+            ar.append(h["sets"][i -1]       & nw_dict["sets"][i -1])
+            ar.append(h["sets"][i -1]       & sw_dict["sets"][i -1])
+            ar.append(v_dict["sets"][i -1]  & nw_dict["sets"][i -1])
+            ar.append(v_dict["sets"][i -1]  & sw_dict["sets"][i -1])
+       
+        if len(my_forks):
+            return my_forks[0]
+        elif len(thier_forks):
+            return thier_forks[0]
+        else:
+            return None
 
     def randMove(self,board, *args):
         """ Move to any spot on the board that's open, starting with center,
