@@ -103,7 +103,6 @@ class Ai(Participant):
             next_move = f(Storage()._game_board.board, 
                         vert_list, nw_list, sw_list)
             if next_move: 
-                print f.func_name
                 break
         return next_move
     
