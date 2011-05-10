@@ -44,10 +44,12 @@ class ThreeByThreeLocalHuman(Participant):
             self.keymap[j/len(board)].append(j+1)
 
     def turn(self):
+        """ Called to start the players turn """
         board = Storage()._game_board.board
         moved = False
+        prompt = "Your turn, enter space to occupy, or \"help\" for help: "
         while not moved:
-            inp = raw_input("Your turn, enter space to occupy, or \"help\" for help:")
+            inp = raw_input(prompt)
             moved = self.handleInput(inp)
         for row in self.keymap:
             if moved in row:
@@ -74,7 +76,7 @@ class ThreeByThreeLocalHuman(Participant):
     
     def help_command(self):
         self.displayMsg("""command list:\n\thelp: This help\n\tboard: show the current board
-        exit: Exit the program\n\n board keybindings:""")
+        exit: Exit the program\n\n board keybindings:\n""")
         
         board_text = ""
         for row in self.keymap:
@@ -97,8 +99,32 @@ class ThreeByThreeLocalHuman(Participant):
         sys.exit(0)
     
 class TelnetHuman(ThreeByThreeLocalHuman):
-    def __init__(self):
+    def __init__(self, protocol):
+        self.protocol = protocol
         ThreeByThreeLocalHuman.__init__(self)
+
+    def turn(self):
+        """ Called to start the players turn """
+        self.displayMsg("Your turn, enter space to occupy, or \"help\" for help:")
+
+    def dataReceivedHandler(self, data):
+        if Storage()._game_instance.active_player == self:
+            move = self.handleInput(data)
+            if move :
+                pass
+            else:
+                self.turn()
+        else:
+            self.displayMsg("Wait your turn!")
+
+    def turnComplete(self):
+        self.diplayMsg(Storage().game_board.drawBoard())
+
+    def displayMsg(self, msg):
+        self.protocol.sendData(msg)
+    
+    def exit_command(self):
+        self.protocol.transport.loseConnection()
 
 class Ai(Participant):
     def __init__(self):

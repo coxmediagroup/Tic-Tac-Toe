@@ -106,17 +106,22 @@ class Game:
         print msg
 
 class TelnetGame(Game):
-    def __init__(self):
+    def __init__(self, protocol):
+        self.protocol = protocol
         Game.__init__(self)
     
     def run(self):
         """ Run method to work with twisted reactor """
-        from twisted internet import reactor
+        from twisted.internet import reactor
         next_move = self.active_player.turn()
         if Storage()._game_board.place(self.active_player.shape,next_move):
             self.move_count += 1
             self.turnComplete()
-        reactor.callLater(0.2, self.run)
+        if self.running:
+            reactor.callLater(0.2, self.run)
+    
+    def displayText(self, msg):
+        self.protocol.sendData(msg)
 
 if __name__ == "__main__":
     Storage()._game_board = Board(size=3)
