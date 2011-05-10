@@ -11,15 +11,16 @@ class Board():
             size = 3
         for i in range(0, size):
             self.board.append([0]*size)
-    
-    
+        print self.board
     
     def winLists(self):
         """ Returns lists in all directions. This
         method should allow the board to be an arbitrary size
         as long as it maintains an odd count, 1:1 row to column ratio 
         """
-        vert_set = [[],[],[]]
+        vert_set = []
+        for i in range(0, len(self.board)):
+            vert_set.append([])
         nw_set = []
         sw_set = []
         iteration = -1
@@ -44,9 +45,16 @@ class Board():
         """ Basic draw board function for debugging """
         board_text = ""
         for row in self.board:
+            first = True
             if not board_text == "":
-                board_text += "-----------\n"
-            board_text += " %s | %s | %s \n" % (shape_map[row[0]], shape_map[row[1]], shape_map[row[2]]) 
+                board_text += ("----"*len(self.board)) + "\n"
+            for item in row:
+                if not first:
+                    board_text += "|"
+                else:
+                    first = False
+                board_text += " %s " % (shape_map[item]) 
+            board_text += "\n"
         return board_text
 
 class Game:
@@ -92,12 +100,12 @@ class Game:
                 self.running = False
                 break
         
-        if self.running and self.move_count >= 9:
+        if self.running and self.move_count >= (len(board) * len(board)):
             print "Draw!"
             self.running = False
 
 if __name__ == "__main__":
-    Storage()._game_board = Board()
+    Storage()._game_board = Board(size=7)
     Storage()._player_one = Ai()
     Storage()._player_two = ThreeByThreeLocalHuman()
     Storage()._game_instance = Game()

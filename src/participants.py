@@ -28,24 +28,35 @@ class ThreeByThreeLocalHuman(Participant):
     def __init__(self):
         Participant.__init__(self)
         print "Welcome to tic-tac-toe"
-    
+        board = Storage()._game_board.board
+        self.keymap = []
+        
+        ## Put arrays into the keymap array
+        for i in range(0, len(board)):
+            self.keymap.append([])
+        
+        ## Assign numbers to the places
+        for j in range(0, len(board)*len(board)):
+            self.keymap[j/len(board)].append(j+1)
+
     def turn(self):
-        keymap = [[1,2,3],[4,5,6],[7,8,9]]
+        board = Storage()._game_board.board
         moved = False
         while not moved:
             inp = raw_input("Your turn, enter space to occupy, or \"help\" for help:")
             moved = self.handleInput(inp)
-        for row in keymap:
+        for row in self.keymap:
             if moved in row:
-                return (keymap.index(row), row.index(moved))
+                return (self.keymap.index(row), row.index(moved))
         moved = False
     
     def handleInput(self, inp):
+        board = Storage()._game_board.board
         commands = ["help", "board"]
         inp = inp.strip()
         try: 
             inp = int(inp)
-            if inp in range(1,10):
+            if inp in range(1,(len(board)*len(board)+1)):
                 print "\n"
                 return inp
             else:
@@ -58,13 +69,23 @@ class ThreeByThreeLocalHuman(Participant):
         return False
     
     def help_command(self):
-        print """command list:\n\thelp: This help\n\tboard: show the current board\n\texit: Exit the program\n\n board keybindings:"""
-        print "1|2|3"
-        print "-----"
-        print "4|5|6"
-        print "-----"
-        print "7|8|9\n\n"
-    
+        print """command list:\n\thelp: This help\n\tboard: show the current board
+        exit: Exit the program\n\n board keybindings:"""
+        
+        board_text = ""
+        for row in self.keymap:
+            first = True
+            if not board_text == "":
+                board_text += ("-------"*len(self.keymap)) + "\n"
+            for item in row:
+                if not first:
+                    board_text += "|"
+                else:
+                    first = False
+                board_text += "  %s  " % item 
+            board_text += "\n"
+        print board_text
+
     def board_command(self):
         print Storage()._game_board.drawBoard()
     
@@ -82,6 +103,7 @@ class Ai(Participant):
             next_move = f(Storage()._game_board.board, 
                         vert_list, nw_list, sw_list)
             if next_move: 
+                print f.func_name
                 break
         return next_move
     
@@ -120,12 +142,16 @@ class Ai(Participant):
     def checkForking(self, board, v, nw, sw):
         """ Check the playing board for possible forks and return the solution
         ai forks are priority, blocking forks after that """
+        # TODO: It would be great to intercept all these loops
+        # and test for intersections so we could avoid some overhead
+        # but i haven't the time right now to do that. 
+
         h           = {1 : [], 2 : [], "sets" : []}
         v_dict      = {1 : [], 2 : [], "sets" : []}
         nw_dict     = {1 : [], 2 : [], "sets" : []}
         sw_dict     = {1 : [], 2 : [], "sets" : []}
         my_forks    = []
-        thier_forks = []
+        their_forks = []
 
         for row in board + v + [nw]  +[sw]:
             row_set = set(row)
@@ -151,7 +177,7 @@ class Ai(Participant):
             if i == self.shape:
                 ar = my_forks
             else:
-                ar = thier_forks
+                ar = their_forks
             ar.append(h["sets"][i -1]       & v_dict["sets"][ i -1])
             ar.append(h["sets"][i -1]       & nw_dict["sets"][i -1])
             ar.append(h["sets"][i -1]       & sw_dict["sets"][i -1])
@@ -159,9 +185,15 @@ class Ai(Participant):
             ar.append(v_dict["sets"][i -1]  & sw_dict["sets"][i -1])
        
         if len(my_forks):
-            return my_forks[0]
-        elif len(thier_forks):
-            return thier_forks[0]
+            for i in my_forks:
+                for j in i:
+                    print j
+                    return j
+        elif len(their_forks):
+            for i in their_forks:
+                for j in i:
+                    print j
+                    return j
         else:
             return None
 
