@@ -91,7 +91,7 @@ class ThreeByThreeLocalHuman(Participant):
         self.displayMsg(board_text)
 
     def board_command(self):
-        self.displayText(Storage()._game_board.drawBoard())
+        self.displayMsg(Storage()._game_board.drawBoard())
     
     def exit_command(self):
         sys.exit(0)
