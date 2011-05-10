@@ -1,5 +1,6 @@
 from common import Storage, EMPTY, NOUGHT, CROSS, debug, indexes
 from random import choice
+import sys
 
 class Participant(object):
     """ Base class for game participants."""
@@ -25,8 +26,51 @@ class Participant(object):
 class ThreeByThreeLocalHuman(Participant):
     """ Console player for a game """
     def __init__(self):
-        pass
-        
+        Participant.__init__(self)
+        print "Welcome to tic-tac-toe"
+    
+    def turn(self):
+        keymap = [[1,2,3],[4,5,6],[7,8,9]]
+        moved = False
+        while not moved:
+            inp = raw_input("Your turn, enter space to occupy, or \"help\" for help:")
+            moved = self.handleInput(inp)
+        for row in keymap:
+            if moved in row:
+                return (keymap.index(row), row.index(moved))
+        moved = False
+    
+    def handleInput(self, inp):
+        commands = ["help", "board"]
+        inp = inp.strip()
+        try: 
+            inp = int(inp)
+            if inp in range(1,10):
+                print "\n"
+                return inp
+            else:
+                raise ValueError("Space index out of range")
+        except ValueError:
+            if hasattr(self, "%s_command" % inp):
+                getattr(self, "%s_command" % inp)()
+            else:
+                print "Sorry, command not recognized\n"
+        return False
+    
+    def help_command(self):
+        print """command list:\n\thelp: This help\n\tboard: show the current board\n\texit: Exit the program\n\n board keybindings:"""
+        print "1|2|3"
+        print "-----"
+        print "4|5|6"
+        print "-----"
+        print "7|8|9\n\n"
+    
+    def board_command(self):
+        print Storage()._game_board.drawBoard()
+    
+    def exit_command(self):
+        sys.exit(0)
+                   
 class Ai(Participant):
     def __init__(self):
         Participant.__init__(self)
@@ -37,10 +81,8 @@ class Ai(Participant):
         for f in (self.checkWinning, self.checkForking, self.randMove):
             next_move = f(Storage()._game_board.board, 
                         vert_list, nw_list, sw_list)
-            # print '%s has next_move as %s'% (f.func_name, next_move)
             if next_move: 
                 break
-        # print 'returning ', next_move
         return next_move
     
     def checkWinning(self, board, v, nw, sw):
@@ -50,12 +92,9 @@ class Ai(Participant):
         losses = []
         iterations = -1
         for row in board + v + [nw] + [sw]:
-            # print row
             coord = None
             iterations += 1
             row_set = set(row)
-            #print "v is",  v
-            #print row, row_set, indexes(row, 0)
             if len(row_set) == 2 and 0 in row_set and len(indexes(row, 0)) == 1:
                 ## This sucks but whatever
                 if row in board and iterations < 3:
@@ -132,7 +171,6 @@ class Ai(Participant):
         res = None
         center = [(len(board)/2 )]*2
         if board[center[0]][center[1]] == EMPTY:
-            # print 'returning center ', center
             res = center
         if not res:
             for i in (0, len(board) - 1):

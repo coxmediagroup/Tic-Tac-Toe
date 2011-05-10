@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from common import Storage, NOUGHT, CROSS, EMPTY, shape_map
 from participants import Ai, ThreeByThreeLocalHuman
 from random import choice
@@ -98,6 +99,6 @@ class Game:
 if __name__ == "__main__":
     Storage()._game_board = Board()
     Storage()._player_one = Ai()
-    Storage()._player_two = Ai() #ThreeByThreeLocalHuman()
+    Storage()._player_two = ThreeByThreeLocalHuman()
     Storage()._game_instance = Game()
     Storage()._game_instance.run()
