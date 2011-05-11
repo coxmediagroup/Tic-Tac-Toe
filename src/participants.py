@@ -176,7 +176,7 @@ class Ai(Participant):
                         h[plyr].append((board.index(row), ind))
                     elif row in v and iterations in range(len(board), len(board)*2):
                         v_dict[plyr].append((ind, v.index(row)))
-                    elif row == nw and iteractions == len(board)*2:
+                    elif row == nw and iterations == len(board)*2:
                         nw_dict[plyr].append([[],[]])
                     elif row == sw:
                         sw_dict[plyr].append((ind ,(ind - len(board - 1)) * -1)) 
