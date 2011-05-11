@@ -131,11 +131,11 @@ class Ai(Participant):
             row_set = set(row)
             if len(row_set) == 2 and EMPTY in row_set and len(indexes(row, EMPTY)) == 1:
                 ## This sucks but whatever
-                if row in board and iterations < 3:
+                if row in board and iterations < len(board):
                     coord = (iterations,row.index(0))
-                elif row in v:
+                elif row in v and iterations in range(len(board), len(board)*2:
                     coord =  (row.index(0), v.index(row))
-                elif row == nw and iterations == 7:
+                elif row == nw and iterations len(board) * 2:
                     coord = (row.index(0), row.index(0))
                 elif row == sw:
                     coord = (row.index(0), (row.index(0) - (len(board) -1)) * -1)
@@ -164,18 +164,19 @@ class Ai(Participant):
         sw_dict     = {1 : [], 2 : [], "sets" : []}
         my_forks    = []
         their_forks = []
-
+        iterations = -1
         for row in board + v + [nw]  +[sw]:
+            iterations += 1
             row_set = set(row)
             if len(row_set) == 2 and 0 in row_set and len(indexes(row, 0)) == len(row) -1:
                 for ind in indexes(row, 0):
                     row_set = list(row_set) #FIXME: dirty boy,, dirty dirty dirty
                     plyr = 1 if 1 in row_set else 2
-                    if row in board:
+                    if row in board and iterations < len(board):
                         h[plyr].append((board.index(row), ind))
-                    elif row in v:
+                    elif row in v and iterations in range(len(board), len(board)*2:
                         v_dict[plyr].append((ind, v.index(row)))
-                    elif row == nw:
+                    elif row == nw and iteractions == len(board)*2:
                         nw_dict[plyr].append([[],[]])
                     elif row == sw:
                         sw_dict[plyr].append((ind ,(ind - len(board - 1)) * -1)) 
