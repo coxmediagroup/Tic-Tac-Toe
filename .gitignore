@@ -3,3 +3,5 @@ develop-eggs
 parts
 *.pyc
 *.db
+.installed.cfg
+*.egg-info

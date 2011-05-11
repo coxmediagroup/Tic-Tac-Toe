@@ -46,10 +46,8 @@ ROOT_URLCONF = 'tictactoe.urls'
 
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.admin',
     'tickytack',
 )
 

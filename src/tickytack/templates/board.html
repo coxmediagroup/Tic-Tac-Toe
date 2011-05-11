@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Tic-Tac-Toe!</title>
+    <style>
+      body {
+          background-color: #333;
+          text-align: center;
+          padding-top: 5em;
+          height: 100%;
+      }
+      div#board {
+          margin: auto;
+          background-color: #eee;
+          display: inline-block;
+      }
+      #board table {
+          border-collapse: collapse;
+          text-align: center;
+          vertical-align: middle;
+      }
+      #board table tr td {
+          width: 100px;
+          height: 100px;
+          background-color: #ccc;
+      }
+      #board table tr td.top,
+      #board table tr td.bottom,
+      #board table tr td.left,
+      #board table tr td.right {
+          border: none;
+      }
+      #board table tr td.center {
+          border-left: 5px solid #333;
+          border-right: 5px solid #333;
+      }
+      #board table tr td.middle {
+          border-top: 5px solid #333;
+          border-bottom: 5px solid #333;
+      }
+      a.cell_link {
+          display: block;
+          font-size: 200%;
+          font-color: black;
+          text-decoration: none;
+          background: #eee url('/media/img/empty.png') no-repeat 5px 5px;
+          height: 100px;
+      }
+      a.cell_link.X,
+      a.cell_link.X:hover {
+          background-image: url('/media/img/x.png');
+          cursor: default;
+      }
+      a.cell_link.O,
+      a.cell_link.O:hover {
+          background-image: url('/media/img/o.png');
+          cursor: default;
+      }
+      a.cell_link.empty.x:hover {
+          background-image: url('/media/img/x_hover.png');
+      }
+      a.cell_link.empty.o:hover {
+          background-image: url('/media/img/o_hover.png');
+      }
+      #feedback {
+          width: 200px;
+          margin: auto;
+          text-align: center;
+          font-size: 125%;
+          padding: 1em;
+          background-color: #eee;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js">
+    </script>
+    <script>
+        var player;
+        player = 'x'
+        human = 'x';
+        function toggle_player() {
+            if (player == 'x') {
+                player = 'o';
+            } else {
+                player = 'x';
+            }
+        }
+        function set_cell_hover() {
+            $('a.empty').addClass(player);
+        }
+        function is_valid_click(target) {
+            if (target.hasClass('X') || target.hasClass('O')) {
+                return false;
+            }
+            return true;
+        }
+        function handle_play(event) {
+            var target;
+            event.preventDefault();
+            console.log('bar');
+            target = $(event.target)
+            if (target.is('a')) {
+                if (is_valid_click(target)) {
+                    console.log('valid click');
+                    $('#feedback p').text("Good play!");
+                } else {
+                    $('#feedback p').text("Sorry, someone's already picked that square");
+                }
+            }
+        }
+        $(document).ready(function() {
+            console.log('foo')
+            set_cell_hover();
+            $("#board table").click(handle_play)
+        })
+    </script>
+    </head>
+    <body>
+        <div id="board">
+            <table>
+                <tr>
+                {% for row in board %}
+                    {% for cell_label, value in row  %}
+                    <td class="{{ cell_label }}" id="{{ forloop.parentloop.counter0 }}">
+                      <a class="cell_link {% if value == '-' %}empty{% else %}{{ value }}{% endif %}" href=".">&nbsp;</a>
+                    </td>
+                    {% endfor %}
+                {% if forloop.last %}
+                </tr>
+                {% else %}
+                </tr>
+                <tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div id="feedback">
+            <p>You go first</p>
+        </div>
+    </body>
+</html>
