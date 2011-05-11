@@ -1,0 +1,5 @@
+bin
+develop-eggs
+parts
+*.pyc
+*.db

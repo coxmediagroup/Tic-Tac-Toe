@@ -1,0 +1,2 @@
+
+from tictactoe.settings import *
