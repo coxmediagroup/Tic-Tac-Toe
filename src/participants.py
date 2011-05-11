@@ -135,7 +135,7 @@ class Ai(Participant):
                     coord = (iterations,row.index(0))
                 elif row in v and iterations in range(len(board), len(board)*2):
                     coord =  (row.index(0), v.index(row))
-                elif row == nw and iterations len(board) * 2:
+                elif row == nw and iterations == len(board) * 2:
                     coord = (row.index(0), row.index(0))
                 elif row == sw:
                     coord = (row.index(0), (row.index(0) - (len(board) -1)) * -1)
