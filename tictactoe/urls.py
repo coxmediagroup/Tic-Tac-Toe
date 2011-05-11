@@ -9,8 +9,6 @@ handler500 # Pyflakes
 urlpatterns = patterns(
     '',
     (r'^$', include('tickytack.urls')),
-    (r'^admin/', include(admin.site.urls)),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
 )
 
 if settings.DEBUG:

@@ -13,7 +13,7 @@ def cell_list():
 
 def board(request):
     # board_list = [str(val) for val in range(1,10)]
-    board_list = ['X','-','-','-','O','-','-','-','-']
+    board_list = ['x','','','','o','','','','']
     cells = cell_list()
     my_board = [zip(cells[:3], board_list[:3]),
                 zip(cells[3:6], board_list[3:6]),

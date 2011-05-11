@@ -46,26 +46,29 @@
           background: #eee url('/media/img/empty.png') no-repeat 5px 5px;
           height: 100px;
       }
-      a.cell_link.X,
-      a.cell_link.X:hover {
+      a.cell_link.x,
+      a.cell_link.x:hover {
           background-image: url('/media/img/x.png');
           cursor: default;
       }
-      a.cell_link.O,
-      a.cell_link.O:hover {
+      a.cell_link.o,
+      a.cell_link.o:hover {
           background-image: url('/media/img/o.png');
           cursor: default;
       }
-      a.cell_link.empty.x:hover {
+      a.cell_link.empty.x_turn:hover {
           background-image: url('/media/img/x_hover.png');
       }
-      a.cell_link.empty.o:hover {
+      a.cell_link.empty.o_turn:hover {
           background-image: url('/media/img/o_hover.png');
       }
       #feedback {
           width: 200px;
           margin: auto;
           text-align: center;
+      }
+      #feedback p {
+          margin-top: 1em;
           font-size: 125%;
           padding: 1em;
           background-color: #eee;
@@ -85,30 +88,46 @@
             }
         }
         function set_cell_hover() {
-            $('a.empty').addClass(player);
+            $('a.empty').addClass(player + '_turn');
         }
         function is_valid_click(target) {
-            if (target.hasClass('X') || target.hasClass('O')) {
+            if (!target.hasClass('empty')) {
                 return false;
             }
             return true;
         }
+        function select_cell(target, play) {
+            target.removeClass('empty');
+            target.slideUp(50, function () {
+                target.addClass(play);
+                target.slideDown(50);
+            });
+        }
+        function djangos_turn() {
+            console.log('computer takes a turn');
+        }
         function handle_play(event) {
-            var target;
+            var target, container, clicked_id;
             event.preventDefault();
-            console.log('bar');
             target = $(event.target)
             if (target.is('a')) {
                 if (is_valid_click(target)) {
-                    console.log('valid click');
-                    $('#feedback p').text("Good play!");
+                    if (player == human) {
+                        // it's the player's turn.
+                        select_cell(target, human);
+                        toggle_player();
+                        set_cell_hover();
+                        djangos_turn();
+                    } else {
+                        $('#feedback p').text("It's not your turn.  Be patient!");
+                    }
                 } else {
                     $('#feedback p').text("Sorry, someone's already picked that square");
                 }
             }
         }
         $(document).ready(function() {
-            console.log('foo')
+            console.log('about to set cell hover');
             set_cell_hover();
             $("#board table").click(handle_play)
         })
@@ -121,7 +140,7 @@
                 {% for row in board %}
                     {% for cell_label, value in row  %}
                     <td class="{{ cell_label }}" id="{{ forloop.parentloop.counter0 }}">
-                      <a class="cell_link {% if value == '-' %}empty{% else %}{{ value }}{% endif %}" href=".">&nbsp;</a>
+                      <a class="cell_link {% if value == '' %}empty{% else %}{{ value }}{% endif %}" href=".">&nbsp;</a>
                     </td>
                     {% endfor %}
                 {% if forloop.last %}
