@@ -158,10 +158,10 @@ class Ai(Participant):
         # and test for intersections so we could avoid some overhead
         # but i haven't the time right now to do that. 
 
-        h           = {1 : [], 2 : [], "sets" : []}
-        v_dict      = {1 : [], 2 : [], "sets" : []}
-        nw_dict     = {1 : [], 2 : [], "sets" : []}
-        sw_dict     = {1 : [], 2 : [], "sets" : []}
+        h           = {1 : [], 2 : [], "sets" : {1:[], 2:[]}}
+        v_dict      = {1 : [], 2 : [], "sets" : {1:[], 2:[]}}
+        nw_dict     = {1 : [], 2 : [], "sets" : {1:[], 2:[]}}
+        sw_dict     = {1 : [], 2 : [], "sets" : {1:[], 2:[]}}
         my_forks    = []
         their_forks = []
         iterations = -1
@@ -177,13 +177,14 @@ class Ai(Participant):
                     elif row in v and iterations in range(len(board), len(board)*2):
                         v_dict[plyr].append((ind, v.index(row)))
                     elif row == nw and iterations == len(board)*2:
-                        nw_dict[plyr].append([[],[]])
+                        nw_dict[plyr].append((ind, ind))
                     elif row == sw:
-                        sw_dict[plyr].append((ind ,(ind - len(board - 1)) * -1)) 
+                        sw_dict[plyr].append((ind ,(ind - len(board) -1) * -1)) 
             
         for dic in [h, v_dict, nw_dict, sw_dict]:
             for i in [1,2]:
-                dic["sets"].append(set(dic[i]))
+                print dic[i]
+                dic["sets"][i].append(set(dic[i]))
         
         # I don't think I'm scoring points for clarity
         for i in [1,2]:
@@ -191,20 +192,18 @@ class Ai(Participant):
                 ar = my_forks
             else:
                 ar = their_forks
-            ar.append(h["sets"][i -1]       & v_dict["sets"][ i -1])
-            ar.append(h["sets"][i -1]       & nw_dict["sets"][i -1])
-            ar.append(h["sets"][i -1]       & sw_dict["sets"][i -1])
-            ar.append(v_dict["sets"][i -1]  & nw_dict["sets"][i -1])
-            ar.append(v_dict["sets"][i -1]  & sw_dict["sets"][i -1])
+            ar.append(h["sets"][i][0]       & v_dict["sets"][i][0])
+            ar.append(h["sets"][i][0]       & nw_dict["sets"][i][0])
+            ar.append(h["sets"][i][0]       & sw_dict["sets"][i][0])
+            ar.append(v_dict["sets"][i][0]  & nw_dict["sets"][i][0])
+            ar.append(v_dict["sets"][i][0]  & sw_dict["sets"][i][0])
        
         if len(my_forks):
             for i in my_forks:
-                for j in i:
-                    return j
+                return i
         elif len(their_forks):
             for i in their_forks:
-                for j in i:
-                    return j
+                return i
         else:
             return None
 
