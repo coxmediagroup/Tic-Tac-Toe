@@ -133,7 +133,7 @@ class Ai(Participant):
                 ## This sucks but whatever
                 if row in board and iterations < len(board):
                     coord = (iterations,row.index(0))
-                elif row in v and iterations in range(len(board), len(board)*2:
+                elif row in v and iterations in range(len(board), len(board)*2):
                     coord =  (row.index(0), v.index(row))
                 elif row == nw and iterations len(board) * 2:
                     coord = (row.index(0), row.index(0))
@@ -174,7 +174,7 @@ class Ai(Participant):
                     plyr = 1 if 1 in row_set else 2
                     if row in board and iterations < len(board):
                         h[plyr].append((board.index(row), ind))
-                    elif row in v and iterations in range(len(board), len(board)*2:
+                    elif row in v and iterations in range(len(board), len(board)*2):
                         v_dict[plyr].append((ind, v.index(row)))
                     elif row == nw and iteractions == len(board)*2:
                         nw_dict[plyr].append([[],[]])
