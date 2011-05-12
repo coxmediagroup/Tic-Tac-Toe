@@ -1,169 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Tic-Tac-Toe Demo{% endblock %}
+{% block title %}Joshua---a Djangoplex demo site{% endblock %}
 {% block script %}
 
-
-
 var interCharDelay = 20;
-var betweenEl      = 600;
+var interLineDelay = 600;
 
-var txtgreeting1 = "GREETINGS PROFESSOR FALKEN";
-var txtgreeting2 = "SHALL WE PLAY A GAME?";
-
-
-var txtoption1   = "GLOBAL THERMONUCLEAR WAR";
-var alert1       = "WINNER: NONE";
-
-var txtoption2   = "TIC-TAC-TOE";
-var alert2       = "YOUR MOVE";
-
-
-var txtgamenames = {
-                        "gtw" :       txtoption1,
-                        "tictactoe" : txtoption2
-                    };
-
-
-var main         = null;
-var greeting     = null;
-var games        = {};
-var gamenames    = {};
-
-var greeting1    = null;
-var greeting2    = null;
-var opt1         = null;
-var opt2         = null;
-var menu1        = null;
-var li1          = null;
-var li2          = null;
-var selectone    = null;
-
-_temp              = '';
-
-var gamemods          = {
-        "gtw" :
-            {
-            'initGame'    : function(){
-                var _result = dojo.byId("result-gtw");
-                initializeScrollingElement(_result,alert1,interCharDelay);
-                gamenames['gtw'].onEnd(_result.scrollText,700);
-
-                var _return = dojo.byId("return-gtw");
-                initializeScrollingElement(_return,"RETURN",interCharDelay);
-                _result.onEnd(_return.scrollText,500);
-
-            
-
-                dojo.connect(_return,"onclick",
-                             function(){
-                                    
-                                    removeGame("gtw");
-                                    showGreeting();
-                                    greetProfessorFalken();
-                                    
-                                });
-
-                
-                
-            },
-            'resetGame':function(){
-                            gamenames['gtw'].innerHTML = '';
-                            dojo.byId('result-gtw').innerHTML='';
-                            dojo.byId('return-gtw').innerHTML='';
-                            
-                }
-            
-            
-            },
-            
-        
-        "tictactoe" :
-            {
-            'initGame'     : function(){
-                var _yourmove = dojo.byId("yourmove-tictactoe");
-                initializeScrollingElement(_yourmove,alert2,interCharDelay);
-                gamenames['tictactoe'].onEnd(_yourmove.scrollText,betweenEl);
-                dojo.fadeOut({node:'board-tictactoe'}).play();
-                
-                _yourmove.onEnd(function(){
-                      dojo.fadeIn({node:'board-tictactoe',duration:1000}).play();
-                });
-            },
-            'resetGame'    : function(){
-                dojo.fadeOut({node:'board-tictactoe'});
-            }
-            }
-};
-
-var wipeGreeting   = function(){
-    greeting1.innerHTML = '';
-    greeting2.innerHTML = '';
-    opt1.innerHTML      = '';
-    opt2.innerHTML      = '';
-    selectone.innerHTML = '';
-    try{
-    menu1.removeChild(li1);
-    menu1.removeChild(li2);
-    }catch(e){}
-}
-    
-var showGreeting   = function(){
-    try{
-        
-        main.appendChild(greeting);
-        dojo.fadeIn({node:"greeting"}).play();
-    }catch(e){
-            //window.alert(e.message);
-        }
-}
-var removeGreeting = function(){
-    
-    dojo.fadeOut({node:"greeting" }).play();
-    wipeGreeting();
-    try{
-        main.removeChild(greeting);
-    }catch(e){
-        window.alert("error removing greeting "+e.message);
-    }
-}
-var showGame = function(game){
-    //window.alert("showing game "+game);
-    try{
-
-        main.appendChild(games[game]);
-        gamenames[game].scrollText();
-
-        try{
-            //gamemods[game].startGame();
-        }catch(e){}
-        
-    }catch(e){
-            window.alert("error showing game ["+game+"] :"+e.message);
-    }
-}
-var removeGame = function(game,fade){
-    if(fade){
-        dojo.fadeOut({ node: games[game] });
-        
-    }
-    try{
-        gamemods[game].resetGame();
-        main.removeChild(games[game]);
-    }catch(e){
-            window.alert(e.message);
-        }
-}
-var removeBothGames = function(){
-    removeGame("gtw",false);
-    removeGame("tictactoe",false);
-}
-
-var greetProfessorFalken = function(){
-    
-    greeting1.scrollText();
-   
-}
-
+/**
+    SCROLLING
+**/
 
 var initializeScrollingElement = function(element,txt,cdelay){
     element.scrolldelay    = cdelay;
@@ -211,409 +55,621 @@ var initializeScrollingElement = function(element,txt,cdelay){
                     setTimeout( element._onEnd, element._endDelay);
                  }
  	}
-
-    }
-
-
-
-}
-
-
-var initializeElements = function(){
-    main     = dojo.byId("main");
-    greeting = dojo.byId("greeting");
-   
-
-    games["gtw"]           = dojo.byId("gtw");
-    games["tictactoe"]     = dojo.byId("tictactoe");
-
-    gamenames["gtw"]       = dojo.byId("gamename-gtw");
-    gamenames["tictactoe"] = dojo.byId("gamename-tictactoe");
-    
-    initializeScrollingElement(gamenames["gtw"],txtgamenames["gtw"],interCharDelay);
-    initializeScrollingElement(gamenames["tictactoe"],txtgamenames["tictactoe"],interCharDelay);
-
-    
-    gamemods["gtw"].initGame();
-    gamemods["tictactoe"].initGame();
-
-    greeting1 = dojo.byId("greeting1");
-    greeting2 = dojo.byId("greeting2");
-    menu1     = dojo.byId("menu1");
-    opt1      = dojo.create('a',{
-                href: '#',
-                onclick: function(){
-                        removeGreeting();
-                        showGame("gtw");
-                }
-            });
-    opt2      = dojo.create('a',{
-                href: '#',
-                onclick: function(){
-                       removeGreeting();
-                       showGame("tictactoe");
-                }
-            });
-    li1 = dojo.create('li',{});
-    li2 = dojo.create('li',{});
-    selectone = dojo.byId("selectone");
-    
-    initializeScrollingElement(greeting1,txtgreeting1,interCharDelay);
-    initializeScrollingElement(greeting2,txtgreeting2,interCharDelay);
-    initializeScrollingElement(opt1,txtoption1,interCharDelay);
-    initializeScrollingElement(opt2,txtoption2,interCharDelay);
-    initializeScrollingElement(selectone,"SELECT ONE",interCharDelay);
-
- 
-    greeting1.onEnd(greeting2.scrollText,betweenEl);
-    greeting2.onEnd(function(){
-                        
-                        dojo.place(opt1,li1);
-                        dojo.place(li1,menu1);
-                        opt1.scrollText();
-                        },betweenEl);
- 
-    opt1.onEnd(function(){
-                        dojo.place(opt2,li2);
-                        dojo.place(li2,menu1);
-                        opt2.scrollText();
-                        },betweenEl);   
-
-    opt2.onEnd(selectone.scrollText,betweenEl);
-                        
-
-}
-
-var imgtictactoe_x = "{{MEDIA_URL}}images/x.jpg";
-var imgtictactoe_o = "{{MEDIA_URL}}images/o.jpg";
-var imgtictactoe_b = "{{MEDIA_URL}}images/blank.jpg";
-
-var tttpause = 0;
-var tttall   = 0;
-
-
-var a = 0;
-var b = 0;
-var c = 0;
-var d = 0;
-var e = 0;
-var f = 0;
-var g = 0;
-var h = 0;
-var i = 0;
-
-var ttttemp="";
-var tttok = 0;
-var tttcf = 0;
-var tttchoice=9;
-var tttaRandomNumber = 0;
-var tttcomp = 0; 
-var tttt = 0;
-var tttwn = 0;
-var tttls = 0;
-var tttts = 0;
-
-function tttlogicOne() {
-if ((a==1)&&(b==1)&&(c==1)) tttall=1;
-if ((a==1)&&(d==1)&&(g==1)) tttall=1;
-if ((a==1)&&(e==1)&&(i==1)) tttall=1;
-if ((b==1)&&(e==1)&&(h==1)) tttall=1;
-if ((d==1)&&(e==1)&&(f==1)) tttall=1;
-if ((g==1)&&(h==1)&&(i==1)) tttall=1;
-if ((c==1)&&(f==1)&&(i==1)) tttall=1;
-if ((g==1)&&(e==1)&&(c==1)) tttall=1;
-if ((a==2)&&(b==2)&&(c==2)) tttall=2;
-if ((a==2)&&(d==2)&&(g==2)) tttall=2;
-if ((a==2)&&(e==2)&&(i==2)) tttall=2;
-if ((b==2)&&(e==2)&&(h==2)) tttall=2;
-if ((d==2)&&(e==2)&&(f==2)) tttall=2;
-if ((g==2)&&(h==2)&&(i==2)) tttall=2;
-if ((c==2)&&(f==2)&&(i==2)) tttall=2;
-if ((g==2)&&(e==2)&&(c==2)) tttall=2;
-if ((a != 0)&&(b != 0)&&(c != 0)&&(d != 0) &&(e != 0)&&(f != 0)&&(g != 0)&&(h != 0)&&(i != 0)&&(tttall == 0)) tttall = 3;
-} 
-function tttlogicTwo() {
-if ((a==2)&&(b==2)&&(c==0)&&(ttttemp=="")) _temp="C";
-if ((a==2)&&(b==0)&&(c==2)&&(ttttemp=="")) _temp="B";
-if ((a==0)&&(b==2)&&(c==2)&&(ttttemp=="")) _temp="A";
-if ((a==2)&&(d==2)&&(g==0)&&(ttttemp=="")) _temp="G";
-if ((a==2)&&(d==0)&&(g==2)&&(ttttemp=="")) _temp="D";
-if ((a==0)&&(d==2)&&(g==2)&&(ttttemp=="")) _temp="A";
-if ((a==2)&&(e==2)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((a==2)&&(e==0)&&(i==2)&&(ttttemp=="")) _temp="E";
-if ((a==0)&&(e==2)&&(i==2)&&(ttttemp=="")) _temp="A";
-if ((b==2)&&(e==2)&&(h==0)&&(ttttemp=="")) _temp="H";
-if ((b==2)&&(e==0)&&(h==2)&&(ttttemp=="")) _temp="E";
-if ((b==0)&&(e==2)&&(h==2)&&(ttttemp=="")) _temp="B";
-if ((d==2)&&(e==2)&&(f==0)&&(ttttemp=="")) _temp="F";
-if ((d==2)&&(e==0)&&(f==2)&&(ttttemp=="")) _temp="E";
-if ((d==0)&&(e==2)&&(f==2)&&(ttttemp=="")) _temp="D";
-if ((g==2)&&(h==2)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((g==2)&&(h==0)&&(i==2)&&(ttttemp=="")) _temp="H";
-if ((g==0)&&(h==2)&&(i==2)&&(ttttemp=="")) _temp="G";
-if ((c==2)&&(f==2)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((c==2)&&(f==0)&&(i==2)&&(ttttemp=="")) _temp="F";
-if ((c==0)&&(f==2)&&(i==2)&&(ttttemp=="")) _temp="C";
-if ((g==2)&&(e==2)&&(c==0)&&(ttttemp=="")) _temp="C";
-if ((g==2)&&(e==0)&&(c==2)&&(ttttemp=="")) _temp="E";
-if ((g==0)&&(e==2)&&(c==2)&&(ttttemp=="")) _temp="G";
-ttttemp = "ttt"+_temp
-}
-function tttlogicThree() {
-if ((a==1)&&(b==1)&&(c==0)&&(ttttemp=="")) _temp="C";
-if ((a==1)&&(b==0)&&(c==1)&&(ttttemp=="")) _temp="B";
-if ((a==0)&&(b==1)&&(c==1)&&(ttttemp=="")) _temp="A";
-if ((a==1)&&(d==1)&&(g==0)&&(ttttemp=="")) _temp="G";
-if ((a==1)&&(d==0)&&(g==1)&&(ttttemp=="")) _temp="D";
-if ((a==0)&&(d==1)&&(g==1)&&(ttttemp=="")) _temp="A";
-if ((a==1)&&(e==1)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((a==1)&&(e==0)&&(i==1)&&(ttttemp=="")) _temp="E";
-if ((a==0)&&(e==1)&&(i==1)&&(ttttemp=="")) _temp="A";
-if ((b==1)&&(e==1)&&(h==0)&&(ttttemp=="")) _temp="H";
-if ((b==1)&&(e==0)&&(h==1)&&(ttttemp=="")) _temp="E";
-if ((b==0)&&(e==1)&&(h==1)&&(ttttemp=="")) _temp="B";
-if ((d==1)&&(e==1)&&(f==0)&&(ttttemp=="")) _temp="F";
-if ((d==1)&&(e==0)&&(f==1)&&(ttttemp=="")) _temp="E";
-if ((d==0)&&(e==1)&&(f==1)&&(ttttemp=="")) _temp="D";
-if ((g==1)&&(h==1)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((g==1)&&(h==0)&&(i==1)&&(ttttemp=="")) _temp="H";
-if ((g==0)&&(h==1)&&(i==1)&&(ttttemp=="")) _temp="G";
-if ((c==1)&&(f==1)&&(i==0)&&(ttttemp=="")) _temp="I";
-if ((c==1)&&(f==0)&&(i==1)&&(ttttemp=="")) _temp="F";
-if ((c==0)&&(f==1)&&(i==1)&&(ttttemp=="")) _temp="C";
-if ((g==1)&&(e==1)&&(c==0)&&(ttttemp=="")) _temp="C";
-if ((g==1)&&(e==0)&&(c==1)&&(ttttemp=="")) _temp="E";
-if ((g==0)&&(e==1)&&(c==1)&&(ttttemp=="")) _temp="G";
-
-ttttemp = "ttt"+_temp;
-}
-
-function tttcheckSpace() {
-    //window.alert(tttcf+":"+ttttemp+":"+a+","+b+","+c+","+d+","+e+","+f+","+g+","+h+","+i);
-    if ((ttttemp=="tttA")&&(a==0)) {
-        tttok=1;
-        if (tttcf==0) a=1;
-        if (tttcf==1) a=2;
-    }
-    if ((ttttemp=="tttB")&&(b==0)) {
-        tttok=1;
-        if (tttcf==0) b=1;
-        if (tttcf==1) b=2;
-    }
-    if ((ttttemp=="tttC")&&(c==0)) {
-        tttok=1;
-        if (tttcf==0) c=1;
-        if (tttcf==1) c=2;
-    }
-    if ((ttttemp=="tttD")&&(d==0)) {
-        tttok=1;
-        if (tttcf==0) d=1;
-        if (tttcf==1) d=2;
-    }
-    if ((ttttemp=="tttE")&&(e==0)) {
-        tttok=1;
-        if (tttcf==0) e=1;
-        if (tttcf==1) e=2;
-    }
-    if ((ttttemp=="tttF")&&(f==0)) {
-        tttok=1
-        if (tttcf==0) f=1;
-        if (tttcf==1) f=2;
-    }
-    if ((ttttemp=="tttG")&&(g==0)) {
-        tttok=1
-        if (tttcf==0) g=1;
-        if (tttcf==1) g=2;
-    }
-    if ((ttttemp=="tttH")&&(h==0)) {
-        tttok=1;
-        if (tttcf==0) h=1;
-        if (tttcf==1) h=2;
-    }
-    if ((ttttemp=="tttI")&&(i==0)) {
-        tttok=1;
-        if (tttcf==0) i=1; 
-        if (tttcf==1) i=2; 
     }
 }
 
+/**
+  GAMES
+**/
 
-function tttSendResultToServer(rslt){
-        var urlget      = "result?rslt=" + rslt;
-        dojo.xhrGet({
-            url: urlget,
-            load: function(result){
-                    //window.alert(result);
-                },
-            error: function(e){
-                    window.alert("error: "+e);
-               }});
-}
+var gamemods          = {
+        "gtw" :
+            {
+            'initGame'    : function(main){
+                
+                var _thismod = gamemods['gtw'];
+                _thismod.game         = dojo.byId("gtw");
+                _thismod.gamename     = dojo.byId("gamename-gtw");
+                _thismod.resultnotice = dojo.byId("resultnotice-gtw");
+                _thismod.returnlink   = dojo.byId("returnlink-gtw");
+                dojo.connect(_thismod.returnlink,'onclick',
+                   function(){
+                            main.removeGame("gtw",1000);
+                            main.showGreeting();
+                            main.greeting.greetProfessorFalken();
+                        });
+                initializeScrollingElement(_thismod.gamename,
+                                           "GLOBAL THERMONUCLEAR WAR",
+                                           interCharDelay);
+                initializeScrollingElement(_thismod.resultnotice,
+                                           "WINNER: NONE",
+                                           interCharDelay);
+                initializeScrollingElement(_thismod.returnlink,
+                                           "RETURN",interCharDelay);
+                
+                _thismod.gamename.onEnd(_thismod.resultnotice.scrollText,
+                                        600);                        
+                _thismod.resultnotice.onEnd(_thismod.returnlink.scrollText,500);
+                           
+                
+            },
+            'startGame':function(){
+                    var _thismod = gamemods['gtw'];
+                    _thismod.gamename.scrollText();
+            },
+            'resetGame':function(){
+                            var _thismod = gamemods['gtw'];
+                            _thismod.gamename.innerHTML = '&nbsp;';
+                            _thismod.resultnotice.innerHTML='&nbsp;';
+                            _thismod.returnlink.innerHTML='&nbsp;';             
+            } 
+        },
+       
+        "tictactoe" :
+            {
+            'onendmoveprompt': new Array(null,function(){
 
-function tttMyChoice() {
-ttttemp="";
-tttok = 0;
-tttcf=1;
-tttlogicTwo();
-tttlogicThree();
-tttcheckSpace();
-while(tttok==0) {
-tttaRandomNumber=Math.random()
-tttcomp=Math.round((tttchoice-1)*tttaRandomNumber)+1;
-if (tttcomp==1) ttttemp="tttA";
-if (tttcomp==2) ttttemp="tttB";
-if (tttcomp==3) ttttemp="tttC";
-if (tttcomp==4) ttttemp="tttD";
-if (tttcomp==5) ttttemp="tttE";
-if (tttcomp==6) ttttemp="tttF";
-if (tttcomp==7) ttttemp="tttG";
-if (tttcomp==8) ttttemp="tttH";
-if (tttcomp==9) ttttemp="tttI";
-tttcheckSpace();
-}
-document.images[ttttemp].src= imgtictactoe_o;
-tttprocess();
-}
+                                                gamemods['tictactoe'].tictactoe.makeMyMove();
+                                                         }),
+            'textmoveprompt' : new Array('YOUR MOVE','MY MOVE'),
+            'textwinner'     : new Array('YOU','ME','NONE'),
+            'initGame'     : function(main){
+                var _thismod         = gamemods['tictactoe'];
+                _thismod.configs     = {
+                        'cellwidth' : 50,
+                        'border'    : '2px solid blue',
+                        'images'    : {
+                            'b' : '{{MEDIA_URL}}images/blank.png',
+                            'x' : '{{MEDIA_URL}}images/x.png',
+                            'o' : '{{MEDIA_URL}}images/o.png'
+                        }
+                };
+                _thismod.game        = dojo.byId("tictactoe");
+                _thismod.gamename    = dojo.byId("gamename-tictactoe");
+                _thismod.moveprompt  = dojo.byId("moveprompt-tictactoe");
+                _thismod.againprompt = dojo.byId("againprompt-tictactoe");
+                //_thismod.tictactoe   = _thismod.getNewGame(0);
 
+                _thismod.uploadnotice = dojo.byId("uploadnotice-tictactoe");
+                
+                
+                initializeScrollingElement(_thismod.gamename,
+                                           "TIC-TAC-TOE",
+                                           interCharDelay);
+                initializeScrollingElement(_thismod.moveprompt,
+                                           _thismod.textmoveprompt[0],
+                                           interCharDelay);
+                
+                _thismod.gamename.onEnd(_thismod.moveprompt.scrollText,
+                                           interLineDelay);
+                _thismod.moveprompt.onEnd(function(){
+                    
+                              
+                    dojo.style('board-tictactoe','opacity','0');
+                   
+                    dojo.byId("board-tictactoe").appendChild(_thismod.tictactoe.board);
+                             
+                    dojo.fadeIn({node:'board-tictactoe',
+                                           duration:3000}).play();
+                    
+                        });
 
-
-function tttprocess() {
-tttwinner = '';
-tttlogicOne();
-if (tttall==1){
-            tttwinner = "YOU";
-    }
-if (tttall==2){
-        tttwinner = "ME";
-}
-if (tttall==3){
-        tttwinner = "NONE";
-    }
-if (tttall!=0) {
-
-            tttSendResultToServer(tttall);
-
-
-    
-            dojo.byId("yourmove-tictactoe").onEnd(null);
-            dojo.byId("yourmove-tictactoe").setTextToScroll("WINNER: "+tttwinner);
-            dojo.byId("yourmove-tictactoe").scrollText();
-
-            _result = dojo.byId("result-tictactoe");
-
-            _playagain = dojo.create('span',{});
+            initializeScrollingElement(_thismod.uploadnotice,"UPLOADING RESULTS...",
+                                       interCharDelay);
+                
+            var _playagain     = dojo.create('span',{});
             initializeScrollingElement(_playagain,"PLAY AGAIN? ",interCharDelay);
 
-            _playagain_yes = dojo.create('a',{href:"#",
+            var _playagain_yes = dojo.create('a',{href:"#",
                                               onclick:function(){
-
-                                                    tttreset();
-
-                                                    _result.removeChild(_playagain);
-                                                    _result.removeChild(_playagain_yes);
-                                                    _result.removeChild(_playagain_no);
+                              
+                              _thismod.resetGame();
+                              _thismod.tictactoe.resetBoard();
+                              _thismod.promptNextMove(0);
+                             
+                                                    
                                                 }
                                               });
             initializeScrollingElement(_playagain_yes,"YES ",interCharDelay);
 
-            _playagain_no  = dojo.create('a',{href:"#",
+            var _playagain_no  = dojo.create('a',{href:"#",
 
 
                                             onclick:function(){
+                                              _thismod.resetGame();
+                                              _thismod.tictactoe.resetBoard();
+                                              _thismod.moveprompt.innerHTML = '&nbsp;';
+                                              _thismod.moveprompt.setTextToScroll("YOUR MOVE");
+                                                //dojo.fadeOut({node:'board-tictactoe',
+                                                              //duration:800,
+                                                              //onEnd:function(){
+                                                                  //_thismod.resetGame();
+                                                                  //_thismod.moveprompt.setScrollingText("YOUR MOVE");
+                                                                  //window.alert("a");
+                                                                  main.removeGame("tictactoe",1000);
+                                                                  //window.alert("b");
+                                                                  main.showGreeting();
+                                                                  //window.alert("c");
+                                                                  main.greeting.greetProfessorFalken();
+                                                                  //window.alert("d");
 
-                                                tttreset();
-                                    _result.removeChild(_playagain);
-                                                    _result.removeChild(_playagain_yes);
-                                                    _result.removeChild(_playagain_no);
+                                                                  //}}).play();
+                                                    //window.alert('not playing again');
+
+                                                    //tttreset();
+                                                    //_result.removeChild(_playagain);
+                                                    //_result.removeChild(_playagain_yes);
+                                                    //_result.removeChild(_playagain_no);
                                              
-                                    removeGame("tictactoe");
-                                    showGreeting();
-                                    greetProfessorFalken();}
+                                                    //removeGame("tictactoe");
+                                                    //showGreeting();
+                                                    //greetProfessorFalken();
+                         
+                                            }
                                               });
             initializeScrollingElement(_playagain_no,"NO",interCharDelay);
 
             _playagain.onEnd(_playagain_yes.scrollText);
             _playagain_yes.onEnd(_playagain_no.scrollText);
 
-            _result.appendChild(_playagain);
-            _result.appendChild(_playagain_yes);
-            _result.appendChild(_playagain_no);
-            _playagain.scrollText();
-   }else{
-            dojo.byId("yourmove-tictactoe").onEnd(null);         
-            dojo.byId("yourmove-tictactoe").setTextToScroll("YOUR MOVE");
-            dojo.byId("yourmove-tictactoe").scrollText();
+            _thismod.againprompt.appendChild(_playagain);
+            _thismod.againprompt.appendChild(_playagain_yes);
+            _thismod.againprompt.appendChild(_playagain_no);
 
-}
-}
-function tttended(){}
-function tttYourChoice(chName) {
-    try{
-    tttpause = 0;
-    if (tttall!=0){
-        tttended();
-    }
-    if (tttall==0) {
-        tttcf = 0;
-        tttok = 0;
-        ttttemp= "ttt"+chName;
-        tttcheckSpace();
-        //window.alert(tttok);
-        if (tttok==1) {
-          
-            document.images['ttt'+chName].src = imgtictactoe_x;
+            
+            
+
+            _thismod.playagain = _playagain;
+            _thismod.playagain_yes = _playagain_yes;
+            _thismod.playagain_no  = _playagain_no;
+
+            _thismod.uploadnotice.onEnd(function(){
+                        _thismod.uploadnotice.innerHTML = '';
+                        _thismod.playagain.scrollText();
+                },1500);
+                
+            _thismod.resetGame();
+            },
+            'resetGame'    : function(){
+                 var _thismod = gamemods['tictactoe'];
+                
+                 //dojo.fadeOut({node:'board-tictactoe',duration:1000}).play();
+                 
+                _thismod.tictactoe   = _thismod.getNewGame(0);
+                //_thismod.tictactoe.resetBoard();
+                 try{
+                    _thismod.playagain.innerHTML     = '';
+                    _thismod.playagain_yes.innerHTML = '';
+                    _thismod.playagain_no.innerHTML  = '';
+                }catch(e){}
+                //dojo.fadeIn({node:'board-tictactoe',duration:1000}).play();
+            },
+            'startGame':    function(){
+                var _thismod = gamemods['tictactoe'];
+                _thismod.gamename.scrollText();
+            },
+            'getNewGame':function(_player){
+                var _thismod = gamemods['tictactoe'];
+                _thegame = {};
+                _thegame.isover      = false;
+                _thegame['player']   = _player;
+                _thegame['squares']  = new Array(9);
+                for(_b=0;_b<9;_b++){
+                    _thegame['squares'][_b] = 'b';
+                }
+                _thegame['moves']    = new Array();
+                _thegame['round']    = 0;
+
+                _thegame.resetBoard        = function(){
+                    var _i =0;
+                    for(_i=0;_i<9;_i++){
+                        document.images['tictactoe_'+_i].src= _thismod.configs.images['b'];
+                    }
+
+                }
+                _thegame.getMandatoryMove  = function(_x){
+                    var _s = '';
+                        for(_v=0;_v<9;_v++){
+                           _s += _thegame.squares[_v];
+                           
+                        }
+                        //window.alert(_s);
+                    
+                    _q = _thegame['squares'];
+                    var _j = 0;
+                    var _f = 0;
+                    for(_f=0;_f<3;_f++){
+                    _j = _f*3;
+                    //if(_thegame.round==5) window.alert("row:"+_f+":"+_q[_j]+_q[_j+1]+_q[_j+2]);
+                    if(_q[_j]==_x  && _q[_j+1]==_x  && _q[_j+2]=='b')  return 2+_j;
+                    if(_q[_j]==_x  && _q[_j+1]=='b' && _q[_j+2]==_x )  return 1+_j;
+                    if(_q[_j]=='b' && _q[_j+1]==_x  && _q[_j+2]==_x )  return _j;
+                    }
+                    for(_j=0;_j<3;_j++){
+                    //if(_thegame.round==5)window.alert("col "+_j+":"+_q[_j]+_q[_j+3]+_q[_j+6]);
+                    if(_q[_j]==_x && _q[_j+3]==_x  && _q[_j+6]=='b') return _j+6;
+                    if(_q[_j]==_x && _q[_j+3]=='b' && _q[_j+6]==_x) return _j+3;
+                    if(_q[_j]=='b' && _q[_j+3]==_x && _q[_j+6]==_x) return _j;
+                    }
+                    if(_q[0]==_x && _q[4]==_x && _q[8]=='b') return 8;
+                    if(_q[0]==_x && _q[4]=='b' && _q[8]==_x) return 4;
+                    if(_q[0]=='b' && _q[4]==_x && _q[8]==_x) return 0;
+                    if(_q[2]==_x && _q[4]==_x && _q[6]=='b') return 6;
+                    if(_q[2]==_x && _q[4]=='b' && _q[6]==_x) return 4;
+                    if(_q[2]=='b' && _q[4]==_x && _q[6]==_x) return 2;
+                    return -1;
+                }
+                _thegame.isCornerMove     = function(_n){
+                    _move = _thegame.moves[_n];
+                    return(_move==0 || _move==2 || _move==6 || _move==8);
+                }
+                _thegame.isSideMove       = function(_n){
+                    _move = _thegame.moves[_n];
+                    return(_move==1 || _move==3 || _move==5 || _move==7);
+                }
+                _thegame.isCenterMove     = function(_n){
+                    return _thegame.moves[_n] == 4;
+                }
+                _thegame.checkForVictory        = function(_x){
+                    _s=_thegame.squares;
+                    if(   (_s[0]==_x && _s[1]==_x && _s[2]==_x)
+                       || (_s[3]==_x && _s[4]==_x && _s[5]==_x)
+                       || (_s[6]==_x && _s[7]==_x && _s[8]==_x)
+                       || (_s[0]==_x && _s[3]==_x && _s[6]==_x)
+                       || (_s[1]==_x && _s[4]==_x && _s[7]==_x)
+                       || (_s[2]==_x && _s[5]==_x && _s[8]==_x)
+                       || (_s[0]==_x && _s[4]==_x && _s[8]==_x)
+                       || (_s[2]==_x && _s[4]==_x && _s[6]==_x)){ return 1; }
+                    return 0;
+
+                }
+                _thegame.getSideSideCounterMove = function(_m1,_m2){
+                    if((_m1==1 && _m2==3) || (_m1==3 && _m2==1)) return 0;
+                    if((_m1==1 && _m2==5) || (_m1==5 && _m2==1)) return 2;
+                    if((_m1==3 && _m2==7) || (_m1==7 && _m2==3)) return 6;
+                    if((_m1==5 && _m2==7) || (_m1==7 && _m2==5)) return 8;
+                }
+                    
+                _thegame.getQuincunxMove  = function(_m1,_m2){
+                        //window.alert("testing quincunx move "+_m1+","+_m2);
+                        //window.alert((_m1==1 && _m2==6))
+                        if((_m1==0 && _m2==7) || (_m1==7 && _m2==0)) return 3;
+                        if((_m1==0 && _m2==5) || (_m1==5 && _m2==0)) return 1;
+                        if((_m1==1 && _m2==6) || (_m1==6 && _m2==1)) return 3;
+                        if((_m1==1 && _m2==8) || (_m1==8 && _m2==1)) return 5;
+                        if((_m1==2 && _m2==7) || (_m1==7 && _m2==2)) return 5;
+                        if((_m1==2 && _m2==3) || (_m1==3 && _m2==2)) return 1;
+                        if((_m1==3 && _m2==8) || (_m1==8 && _m2==3)) return 7;
+                        if((_m1==5 && _m2==6) || (_m1==6 && _m2==5)) return 7;
+                }
+                _thegame.declareVictory   = function(_x){
+                                    _thegame.isover = true;
+                                    var _winner = '';
+                                    if(_x=='x'){ _winner='YOU'; }
+                                    if(_x=='o'){ _winner='ME'; }
+                                    if(_x==0)  { _winner='NONE'; }
+                                    _thismod.moveprompt.setTextToScroll("WINNER: "+_winner);
+                                    _thismod.moveprompt.onEnd(_thismod.againprompt.scrollText,interCharDelay);
+                                    _thismod.moveprompt.scrollText();
+                                    _thismod.uploadResults(_x);//only report victor for now
+                                    setTimeout(_thismod.uploadnotice.scrollText,800);
+                                    
+                                    
+                                    
+
+                };
+                _thegame.makeMyMove       = function(){
+                        
+                        
+                        var _myplay = -1;
+                        if(_thegame.round==1){
+                            if(_thegame.isCenterMove(0)){
+                                _myplay = 0;
+                            }else if(_thegame.isSideMove(0)){
+                                _myplay = 4;
+                            }else if(_thegame.isCornerMove(0)){
+                                _myplay = 4;
+                            }
+                        }else if(_thegame.round>=3){
+                          _myplay=_thegame.getMandatoryMove('o');
+                           if(_myplay==-1){
+                                _myplay = _thegame.getMandatoryMove('x');
+                           }
+
+                           if(_myplay==-1){
+                           
+                           if(_thegame.round==3){
+                                if(_thegame.isCenterMove(0)){
+                                    //implies first o was at 0 and second x was at 8
+                                    _myplay = 3;
+                                }else if(_thegame.isCornerMove(0)){
+                                    //implies first 0 was at 4
+                                     if((_thegame.moves[0]+_thegame.moves[2])==8){
+                                        //implies second x was at opposite corner
+                                        _myplay = 3;
+                                     }else{
+                                        //implies quincunx
+                                        _myplay = _thegame.getQuincunxMove(_thegame.moves[0],_thegame.moves[2]);
+                                        //window.alert("found quincunx move from corner move as "+_myplay)
+
+                                     }
+                                }else if(_thegame.isSideMove(0)){
+                                     if((_thegame.moves[0]+_thegame.moves[2])==8){
+                                         //implies first o was 4 and second x opposite side
+                                        _myplay = 0;
+                                     }else if(_thegame.isSideMove(2)){
+                                        
+                                         //implies moves at neighboring corners
+                                         _myplay  = _thegame.getSideSideCounterMove(_thegame.moves[0],_thegame.moves[2]);
+                                     }else{
+                                        _myplay = _thegame.getQuincunxMove(_thegame.moves[0],_thegame.moves[2]);
+                                     }
+                                }
+                                
+                    
+                          }else if(_thegame.round==5){
+                              //at this point, if no mandatory moves, look for open corner and play it
+                              if(_thegame.squares[0]=='b') _myplay=0;
+                              if(_thegame.squares[2]=='b') _myplay=2;
+                              if(_thegame.squares[6]=='b') _myplay=6;
+                              if(_thegame.squares[8]=='b') _myplay=8;
+
+                          }else if(_thegame.round==7){
+                              //if no mandatory moves at this point, game is a tie
+                                _thegame.declareVictory(0);
+                          }
+                          }
+                        }
+                        if(_myplay!=-1){
+                                _thegame.squares[_myplay]='o';
+                                _thegame.moves.push(_myplay);
+                                 document.images['tictactoe_'+_myplay].src= _thismod.configs.images['o'];
+                                if(_thegame.checkForVictory('o')){
+                                   _thegame.declareVictory('o');
+                                }else if(_thegame.round==7){
+                                    _thegame.declareVictory(0);
+                                }else{
+                                   _thegame.round++;
+                                   _thismod.promptNextMove(0);
+                                }
+                                
+                                
+
+                        }else{
+                            //window.alert("error: could not determine next move for o");
+                        }
+                }
+                
+                _thegame.getMoveFunction  = function(_x,_i){
+                   
+                    return function(){
+                         if(_thegame.isover){
+                             //window.alert("the game is already over");
+                         }else{
+                             if(_thegame.squares[_i]=='b'){  
+                                _thegame.squares[_i]=_x;
+                                _thegame.moves.push(_i);
+                               
+                                
+                                document.images['tictactoe_'+_i].src= _thismod.configs.images[_x];
+
+                                if(_thegame.checkForVictory('x')){
+                                    //this should NEVER happen
+                                    _thegame.declareVictory('x');
+                                }else{
+                                    _thegame.round++;
+                                    _thismod.promptNextMove(1);
+                                }
+                                 
+                             }else{
+                                 //window.alert(_i+" is already played");
+                             }
+                         }
+                    }
+                    
+                }
+
+                _thegame.reinitializeBoard = function(){
+                    var _table = dojo.create("table",{cellspacing: '0', border: '1'});
+
+                    var _i; var _j; var _k;
+                    for(_j=0;_j<3;_j++){
+                        var _tr = dojo.create('tr',{},_table);
+                        for(_k=0;_k<3;_k++){
+                            _i        = (_j*3)+_k;
+
+                            var _borderleft   = _k<2 ? _thismod.configs['border'] : '0px';
+                            var _borderright  = _k>0 ? _thismod.configs['border'] : '0px';
+                            var _bordertop    = _j>0 ? _thismod.configs['border'] : '0px';
+                            var _borderbottom = _j<2 ? _thismod.configs['border'] : '0px';
+    
+                            
+                            var _td   = dojo.create('td',{});
+                            dojo.style(_td,'margin','2px');
+                            
+                            var _img  = dojo.create("img",{
+                                            'name'   : 'tictactoe_'+_i,
+                                            'border' : '0',
+                                            'src'    : _thismod.configs.images['b'],
+                                            'height' : _thismod.configs['cellwidth'],
+                                            'width'  : _thismod.configs['cellwidth'],
+                                            });
+                            var _a    = dojo.create('a',{
+                                            'href'   : '#',
+                                            'onclick': _thegame.getMoveFunction('x',_i)
+                                            });
+                           
+                            _a.appendChild(_img);
+                            _td.appendChild(_a);
+                            _tr.appendChild(_td);
+                            _thegame.board = _table;
+                        }
+                    }
+                
+                                            
+            
+                }
+                _thegame.reinitializeBoard();
+                return _thegame;
+            },
+            'promptNextMove':function(_player){
+                var _thismod = gamemods['tictactoe'];
+                _thismod.moveprompt.setTextToScroll(_thismod.textmoveprompt[_player]);
+                _thismod.moveprompt.onEnd(_thismod.onendmoveprompt[_player]);
+                _thismod.moveprompt.scrollText();
+            },
+            'uploadResults':function(rslt){
+                var urlget      = "result?rslt=" + rslt;
+                dojo.xhrGet({
+                    url: urlget,
+                    load: function(result){
+                    },
+                    error: function(e){
+                    window.alert("error: "+e);
+                    }
+                });
+            }
+
+            
         }
-        if (tttok==0)ttttaken();
-        tttprocess();
-        if ((tttall==0)&&(tttpause==0)){
+};
 
-            dojo.byId("yourmove-tictactoe").onEnd(tttMyChoice,2000);
-            dojo.byId("yourmove-tictactoe").setTextToScroll("MY MOVE");
-            dojo.byId("yourmove-tictactoe").scrollText();
+
+
+/**
+  GREETING
+**/
+
+var initializeGreeting = function(main){
+   
+    greeting  = dojo.byId("greeting");
+    greeting1 = dojo.byId("greeting1");
+    greeting2 = dojo.byId("greeting2");
+    menu1     = dojo.byId("menu1");
+
+    
+    opt1      = dojo.create('a',{
+                href: '#',
+                onclick: function(){
+                        main.removeGreeting();
+                        main.showGame("gtw");
+                }
+            });
+    opt2      = dojo.create('a',{
+                href: '#',
+                onclick: function(){
+                       main.removeGreeting();
+                       main.showGame("tictactoe");
+                }
+            });
+    li1 = dojo.create('li',{});
+    li2 = dojo.create('li',{});
+    selectone = dojo.byId("selectone");
+    
+    initializeScrollingElement(greeting1,"GREETINGS PROFESSOR FALKEN",interCharDelay);
+    initializeScrollingElement(greeting2,"SHALL WE PLAY A GAME?",interCharDelay);
+    initializeScrollingElement(opt1,"GLOBAL THERMONUCLEAR WAR",interCharDelay);
+    initializeScrollingElement(opt2,"TIC-TAC-TOE",interCharDelay);
+    initializeScrollingElement(selectone,"SELECT ONE",interCharDelay);
+
+ 
+    greeting1.onEnd(greeting2.scrollText,interLineDelay);
+    greeting2.onEnd(function(){
+                        dojo.place(opt1,li1);
+                        dojo.place(li1,menu1);
+                        opt1.scrollText();
+                        },interLineDelay);
+ 
+    opt1.onEnd(function(){
+                        dojo.place(opt2,li2);
+                        dojo.place(li2,menu1);
+                        opt2.scrollText();
+                        },interLineDelay);   
+
+    opt2.onEnd(selectone.scrollText,interLineDelay);
+
+    greeting.wipeGreeting = function(){
+        greeting1.innerHTML = '';
+        greeting2.innerHTML = '';
+        opt1.innerHTML      = '';
+        opt2.innerHTML      = '';
+        selectone.innerHTML = '';
+        try{
+            menu1.removeChild(li1);
+            menu1.removeChild(li2);
+        }catch(e){}
+    }
+    greeting.greetProfessorFalken = function(){
+        greeting1.scrollText();
+    }
+  
+    return greeting;
+    
+}
+
+
+
+var initializeMain = function(_id){
+    var _main      = dojo.byId(_id);
+    
+    _main.greeting = initializeGreeting(_main);
+    _main.gamemods = gamemods;
+    
+    _main.gamemods["gtw"].initGame(_main);
+    _main.gamemods["tictactoe"].initGame(_main);
+    
+
+    _main.showGreeting = function(){
+        try{
+            _main.appendChild(greeting);
+            dojo.fadeIn({node:"greeting"}).play();
+        }catch(e){
+            window.alert("error showing greeting "+e.message);
         }
     }
-    }catch(e){
-        window.alert(e.message);
+    _main.removeGreeting = function(){
+        dojo.fadeOut({node:"greeting" }).play();
+        greeting.wipeGreeting();
+        try{
+            _main.removeChild(greeting);
+        }catch(e){
+            window.alert("error removing greeting: "+e.message);
+        }
     }
-}
-function tttreset(){
 
-tttall = 0;
-a = 0;
-b = 0;
-c = 0;
-d = 0;
-e = 0;
-f = 0;
-g = 0;
-h = 0;
-i = 0;
-ttttemp="";
-tttok = 0;
-tttcf = 0;
-tttchoice=9;
-tttaRandomNumber = 0;
-tttcomp = 0; 
-document.images.tttA.src= imgtictactoe_b;
-document.images.tttB.src= imgtictactoe_b;
-document.images.tttC.src= imgtictactoe_b;
-document.images.tttD.src= imgtictactoe_b;
-document.images.tttE.src= imgtictactoe_b;
-document.images.tttF.src= imgtictactoe_b;
-document.images.tttG.src= imgtictactoe_b;
-document.images.tttH.src= imgtictactoe_b;
-document.images.tttI.src= imgtictactoe_b;
-if (tttt==0) { tttt=2; tttMyChoice(); }else{
-    dojo.byId("yourmove-tictactoe").setTextToScroll("YOUR MOVE");
-    dojo.byId("yourmove-tictactoe").scrollText();
+    _main.showGame = function(game){
+        try{
+            _main.appendChild(gamemods[game].game);
+            try{
+                gamemods[game].startGame();
+            }catch(e){
+                window.alert("error starting game ["+game+"]: "+e.message);
+            }
+        }catch(e){
+            window.alert("error showing game ["+game+"] :"+e.message);
+        }
+    }
+    _main.removeGame = function(game,fade){
+        
+        if(fade){   dojo.fadeOut({ node: gamemods[game].game });  }
+        try{
+            
+            gamemods[game].resetGame();
+        }catch(e){
+            window.alert("error reseting game ["+game+"] :"+e.message);
+        }
+        try{
+            //window.alert(dojo.byId(game));
+            _main.removeChild(dojo.byId(game));
+        }catch(e){
+            
+            window.alert("error removing game ["+game+"]: "+e.message);
+        }
+    }
+    _main.removeGame("tictactoe",false);
+    _main.removeGame("gtw",false);
+}
 
-}
-tttt--;
-}
-function ttttaken() {
-//alert("That square is already occupied.  Please select another square.")
-tttpause=1;
-}
 
 {% endblock %}
 {% block styles %}
@@ -624,6 +680,7 @@ tttpause=1;
   margin-top:  2em;
   margin-left: 4em;
   color:       #009;
+  height:      500px;
   
 }
 #menu1{
@@ -644,103 +701,47 @@ a:hover{
 a:active{
         color: #ff0;
 }
-.return{
+#returnprompt-gtw{
     margin-top: 2em;
 }
-
-.tictactoe-tl{
-    border-bottom: 2px solid #009;
-    border-right:  2px solid #009;
-}
-.tictactoe-tm{
-    border-bottom: 2px solid #009;
-    border-right:  2px solid #009;
-    border-left:   2px solid #009;
-}
-.tictactoe-tr{
-    border-bottom: 2px solid #009;
-    border-left:   2px solid #009;
-}
-.tictactoe-ml{
-    border-right:  2px solid #009;
-    border-top:    2px solid #009;
-    border-bottom: 2px solid #009;
-}
-.tictactoe-mm{
-    border: 2px solid #009;
-}
-.tictactoe-mr{
-    border-left:  2px solid #009;
-    border-top:    2px solid #009;
-    border-bottom: 2px solid #009;
-}
-.tictactoe-ll{
-    border-top: 2px solid #009;
-    border-right:  2px solid #009;
-}
-.tictactoe-lm{
-    border-top: 2px solid #009;
-    border-right:  2px solid #009;
-    border-left:   2px solid #009;
-}
-.tictactoe-lr{
-    border-top:   2px solid #009;
-    border-left:   2px solid #009;
+#board-tictactoe{
+    margin-left: 1em;
 }
 {% endblock %}
 {% block ready %}
-    initializeElements();
-    removeBothGames();
-    greetProfessorFalken();
+    initializeMain("main");
+    dojo.byId("main").greeting.greetProfessorFalken();
 {% endblock %}
 {% block content %}
+
 <div id="main">
+
 <div id="greeting">
-<div id="greeting1"></div>
-<div id="greeting2"></div>
-<ol id="menu1"></ol>
-<div id="selectone"></div>
+  <div id="greeting1"></div>
+  <div id="greeting2"></div>
+  <ol id="menu1"></ol>
+  <div id="selectone"></div>
 </div>
+
 <div id="gtw">
-<div id="gamename-gtw"></div>
-<div id="result-gtw"></div>
-<div class="return"><a id="return-gtw" href="#"></a></div>
+   <div id="gamename-gtw"></div>
+   <div id="resultnotice-gtw"></div>
+   <div id="returnprompt-gtw"><a href="#" id="returnlink-gtw"></a></div>
 </div>
 
 <div id="tictactoe">
-<div id="gamename-tictactoe"></div>
-<div id="yourmove-tictactoe"></div>
+  <div id="gamename-tictactoe"></div>
+  <div id="moveprompt-tictactoe"></div>
+  <div id="board-tictactoe"></div>
+  <div id="return-tictactoe"></div>
+  <div id="againprompt-tictactoe"><span id="uploadnotice-tictactoe"></span></div>
+</div>
 
-<div id="board-tictactoe">
 
-<table border=0 cellspacing="0">
-<tr>
-<td class="tictactoe-tl"><a href="javascript:tttYourChoice('A')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttA alt="Top-Left"></a></td>
-<td class="tictactoe-tm"><a href="javascript:tttYourChoice('B')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttB alt="Top-Center"></a></td>
-<td class="tictactoe-tr"><a href="javascript:tttYourChoice('C')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttC alt="Top-Right"></a></td>
-</tr>
-<tr>
-<td class="tictactoe-ml"><a href="javascript:tttYourChoice('D')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttD alt="Middle-Left"></a></td>
-<td class="tictactoe-mm"><a href="javascript:tttYourChoice('E')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttE alt="Middle-Center"></a></td>
-<td class="tictactoe-mr"><a href="javascript:tttYourChoice('F')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttF alt="Middle-Right"></a></td>
-</tr>
-<tr>
-<td class="tictactoe-ll"><a href="javascript:tttYourChoice('G')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttG alt="Bottom-Left"></a></td>
-<td class="tictactoe-lm"><a href="javascript:tttYourChoice('H')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttH alt="Bottom-Center"></a></td>
-<td class="tictactoe-lr"><a href="javascript:tttYourChoice('I')"><img src="{{MEDIA_URL}}images/blank.jpg" border=0 height="{{ gridwidth }}" width="{{ gridwidth }}" name=tttI alt="Bottom-Right"></a></td>
-</tr>
-</table>
+
 
 
 </div>
 
-<div id="result-tictactoe"></div>
-<div class="return"><a id="return-tictactoe" href="#"></a></div>
-</div>
 
-</div>
-
-<!--
-
--->
 {% endblock %}
