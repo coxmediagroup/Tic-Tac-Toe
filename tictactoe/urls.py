@@ -6,9 +6,8 @@ admin.autodiscover()
 
 handler500 # Pyflakes
 
-urlpatterns = patterns(
-    '',
-    (r'^$', include('tickytack.urls')),
+urlpatterns = patterns('',
+    (r'^', include('tickytack.urls')),
 )
 
 if settings.DEBUG:
