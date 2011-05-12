@@ -77,9 +77,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js">
     </script>
     <script>
-        var player;
+        var player, human;
         player = 'x'
         human = 'x';
+        server = (human=='x')? 'o' : 'x';
         function toggle_player() {
             if (player == 'x') {
                 player = 'o';
@@ -88,6 +89,7 @@
             }
         }
         function set_cell_hover() {
+            $('a.cell_link').removeClass('x_turn').removeClass('o_turn');
             $('a.empty').addClass(player + '_turn');
         }
         function is_valid_click(target) {
@@ -104,7 +106,51 @@
             });
         }
         function djangos_turn() {
-            console.log('computer takes a turn');
+            $('#feedback p').text("Let me see...");
+            $.getJSON(
+                '{% url server_move %}',
+                {
+                    player: server
+                },
+                function(json) {
+                    if (json.status == 'over') {
+                        $('#feedback p').text("game over");
+                        player = 'x';
+                        human = 'x';
+                    } else if (json.status == 'error') {
+                        $('#feedback p').text("ooops, I did something bad");
+                    } else {
+                        cell_id = json.value;
+                        target = $('td#' + cell_id).children('a.cell_link');
+                        select_cell(target, server);
+                        toggle_player();
+                        set_cell_hover();
+                        $('#feedback p').text("Take that, you dirty rat!");
+                    }
+                }
+            );
+        }
+        function players_turn(target) {
+            var clicked_id;
+            clicked_id = target.parent('td').attr('id');
+            $.getJSON(
+                '{% url user_move %}',
+                {
+                    cell_id: clicked_id,
+                    player: human
+                },
+                function(json) {
+                    if (json.status != 'OK') {
+                        $('#feedback p').text("That move is not legal. Try again");
+                    } else {
+                        select_cell(target, human);
+                        toggle_player();
+                        set_cell_hover();
+                        $('#feedback p').text("Nice move, but not nice enough!");
+                        djangos_turn();
+                    }
+                }
+            );
         }
         function handle_play(event) {
             var target, container, clicked_id;
@@ -113,11 +159,7 @@
             if (target.is('a')) {
                 if (is_valid_click(target)) {
                     if (player == human) {
-                        // it's the player's turn.
-                        select_cell(target, human);
-                        toggle_player();
-                        set_cell_hover();
-                        djangos_turn();
+                        players_turn(target);
                     } else {
                         $('#feedback p').text("It's not your turn.  Be patient!");
                     }
@@ -126,10 +168,28 @@
                 }
             }
         }
+        function clear_board(event) {
+            event.preventDefault();
+            $.getJSON(
+                '{% url clear_board %}',
+                {},
+                function(json) {
+                    if (json.status != 'OK') {
+                        $('#feedback p').text("Oh damn.  There's been an error")
+                    } else {
+                        $('a.cell_link').removeClass('x')
+                                        .removeClass('o')
+                                        .addClass('empty');
+                        set_cell_hover();
+                        player = 'x';
+                    }
+                }
+            );
+        }
         $(document).ready(function() {
-            console.log('about to set cell hover');
             set_cell_hover();
-            $("#board table").click(handle_play)
+            $("#board table").click(handle_play);
+            $("#buttons a#clear").click(clear_board);
         })
     </script>
     </head>
@@ -138,8 +198,8 @@
             <table>
                 <tr>
                 {% for row in board %}
-                    {% for cell_label, value in row  %}
-                    <td class="{{ cell_label }}" id="{{ forloop.parentloop.counter0 }}">
+                    {% for cell_label, value, cell_id in row  %}
+                    <td class="{{ cell_label }}" id="{{ cell_id }}">
                       <a class="cell_link {% if value == '' %}empty{% else %}{{ value }}{% endif %}" href=".">&nbsp;</a>
                     </td>
                     {% endfor %}
@@ -155,5 +215,7 @@
         <div id="feedback">
             <p>You go first</p>
         </div>
+        <div id="buttons">
+            <a href="." id="clear">Clear the Board!</a>
     </body>
 </html>
