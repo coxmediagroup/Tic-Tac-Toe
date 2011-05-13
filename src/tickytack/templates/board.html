@@ -73,123 +73,257 @@
           padding: 1em;
           background-color: #eee;
       }
+      #buttons {
+          margin-top: 2em;
+      }
+      #buttons a {
+          padding: 1em;
+          font-size: 125%;
+          background-color: #eee;
+          color: #333;
+      }
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js">
     </script>
     <script>
-        var player, human;
-        player = 'x'
-        human = 'x';
-        server = (human=='x')? 'o' : 'x';
-        function toggle_player() {
-            if (player == 'x') {
-                player = 'o';
-            } else {
-                player = 'x';
-            }
-        }
-        function set_cell_hover() {
-            $('a.cell_link').removeClass('x_turn').removeClass('o_turn');
-            $('a.empty').addClass(player + '_turn');
-        }
-        function is_valid_click(target) {
-            if (!target.hasClass('empty')) {
-                return false;
-            }
-            return true;
-        }
-        function select_cell(target, play) {
-            target.removeClass('empty');
-            target.slideUp(50, function () {
-                target.addClass(play);
-                target.slideDown(50);
-            });
-        }
-        function djangos_turn() {
-            $('#feedback p').text("Let me see...");
-            $.getJSON(
-                '{% url server_move %}',
-                {
-                    player: server
-                },
-                function(json) {
-                    if (json.status == 'over') {
-                        $('#feedback p').text("game over");
-                        player = 'x';
-                        human = 'x';
-                    } else if (json.status == 'error') {
-                        $('#feedback p').text("ooops, I did something bad");
-                    } else {
-                        cell_id = json.value;
-                        target = $('td#' + cell_id).children('a.cell_link');
-                        select_cell(target, server);
-                        toggle_player();
-                        set_cell_hover();
-                        $('#feedback p').text("Take that, you dirty rat!");
-                    }
-                }
-            );
-        }
-        function players_turn(target) {
-            var clicked_id;
-            clicked_id = target.parent('td').attr('id');
-            $.getJSON(
-                '{% url user_move %}',
-                {
-                    cell_id: clicked_id,
-                    player: human
-                },
-                function(json) {
-                    if (json.status != 'OK') {
-                        $('#feedback p').text("That move is not legal. Try again");
-                    } else {
-                        select_cell(target, human);
-                        toggle_player();
-                        set_cell_hover();
-                        $('#feedback p').text("Nice move, but not nice enough!");
-                        djangos_turn();
-                    }
-                }
-            );
-        }
-        function handle_play(event) {
-            var target, container, clicked_id;
-            event.preventDefault();
-            target = $(event.target)
-            if (target.is('a')) {
-                if (is_valid_click(target)) {
-                    if (player == human) {
-                        players_turn(target);
-                    } else {
-                        $('#feedback p').text("It's not your turn.  Be patient!");
-                    }
+        function Game() {
+            this.active = false,
+            this.current_player = 'x';
+            this.players = {'x': 'human', 'o': 'server'};
+            this.board = $('#board table');
+            this.feedback = $('#feedback p');
+            this.buttons = $('#buttons');
+            
+            // ajax methods and callbacks
+            
+            this.init = function(first) {
+                var game;
+                instance = this;
+                if (this.active) {
+                    // we need to clear the existing game and start over
                 } else {
-                    $('#feedback p').text("Sorry, someone's already picked that square");
+                    $.getJSON(
+                        '{% url init_game %}',
+                        {},
+                        function (json) {
+                            instance.board.unbind('click', instance.handle_disabled);
+                            instance.board.bind('click', {game: instance }, instance.handle_play);
+                            instance.init_callback(json, first);
+                        });
                 }
-            }
-        }
-        function clear_board(event) {
-            event.preventDefault();
-            $.getJSON(
-                '{% url clear_board %}',
-                {},
-                function(json) {
-                    if (json.status != 'OK') {
-                        $('#feedback p').text("Oh damn.  There's been an error")
+            };
+            this.init_callback = function (json, first) {
+                if (json.status != 'ok') {
+                    this.send_feedback('There is a problem with the server.  Try again later');
+                    // unbind click events so the board is 'dead'
+                    // this.board.unbind('click', this.handle_play);
+                    // this.buttons.unbind('click', this.handle_buttons);
+                } else {
+                    if (first == 'server') {
+                        this.players['x'] = 'server';
+                        this.players['o'] = 'human';
+                    }
+                    // start the game
+                    this.active = true;
+                    if (this.players[this.current_player] == 'server') {
+                        // the server is first, take a turn:
+                        this.take_turn();
                     } else {
-                        $('a.cell_link').removeClass('x')
-                                        .removeClass('o')
-                                        .addClass('empty');
-                        set_cell_hover();
-                        player = 'x';
+                        // prompt user gently :)
+                        this.send_feedback(
+                            'Okay, your move...'
+                            );
                     }
                 }
-            );
+            };
+            this.take_turn = function (square) {
+                var data, game;
+                data = {player: this.current_player};
+                is_human = this.players[this.current_player] == 'human';
+                this.toggle_player();
+                game = this;
+                if (square != null) {
+                    // a human has taken this turn.
+                    // set the value for the square they chose
+                    data.cell_id = square;
+                }
+                // call 'move'
+                $.getJSON(
+                    '{% url move %}',
+                    data,
+                    function (json) {
+                        game.take_turn_callback(json, is_human);
+                    });
+            };
+            this.take_turn_callback = function (json, is_human) {
+                var is_human, chosen, msg, display_reset;
+                end_stage = false;
+                msg = '';
+                if (json.status == 'ok') {
+                    // a move is completed.  mark the returned square, 
+                    // flip player and message
+                    this.select_cell(json);
+                    if (is_human) {
+                        msg = 'Nice move.  Watch this!';
+                        this.take_turn();
+                    } else {
+                        msg = "Take that!";
+                    }
+                } else if (json.status == 'win') {
+                    // the current player has won.  mark, report and disable board
+                    this.select_cell(json);
+                    if (is_human) {
+                        msg = "You win!  Try again?";
+                    } else {
+                        msg = "You lost. Try your luck again?";
+                    }
+                    end_stage = true;
+                    // TODO: set up the play again/quit buttons
+                } else if (json.status == 'tie') {
+                    // the current player has brought the game to a tie
+                    // report and disable board
+                    msg = "A tie, good effort. Another go?";
+                    end_stage = true;
+                } else {
+                    msg = "The computer has freaked out.  Try again later";
+                    end_stage = true;
+                }
+                this.send_feedback(msg);
+                if (end_stage) {
+                    this.board.unbind('click', this.handle_play);
+                    this.board.bind('click', this.handle_disabled);
+                    this.replace_buttons(this.restart_button_set);
+                }
+            };
+            this.quit = function () {
+                var all_cells;
+                console.log('quit the game');
+                this.board.unbind('click', this.handle_play);
+                this.board.bind('click', this.handle_disabled);
+                all_cells = this.board.find('a.cell_link');
+                all_cells.removeClass('x').removeClass('o')
+                    .removeClass('o_turn').removeClass('x_turn')
+                    .addClass('empty');
+                this.active = false,
+                this.current_player = 'x';
+                this.players = {'x': 'human', 'o': 'server'};
+                this.replace_buttons(this.init_button_set);
+                this.send_feedback('Who should go first this time?')
+            };
+            
+            // utility methods
+            
+            this.send_feedback = function (msg) {
+                this.feedback.text(msg);
+            };
+            this.find_cell = function(idx) {
+                var selector, cell;
+                selector = 'td#' + idx;
+                cell = this.board.find(selector).children('a.cell_link');
+                return cell;
+            };
+            this.select_cell = function(json) {
+                var target, game;
+                idx = json.value;
+                player = json.player;
+                target = this.find_cell(idx);
+                target.removeClass('empty');
+                game = this;
+                target.slideUp(50, function () {
+                    game.select_cell_callback(target, player);
+                });
+            };
+            this.select_cell_callback = function (target, player) {
+                target.addClass(player);
+                target.slideDown(50);
+            };
+            this.is_valid_click = function (target) {
+                if (!target.hasClass('empty')) {
+                    return false;
+                }
+                return true;
+            }
+            this.toggle_player = function () {
+                var all_cells, empty_cells;
+                if (this.current_player == 'x') {
+                    this.current_player = 'o';
+                } else {
+                    this.current_player = 'x';
+                }
+                all_cells = this.board.find('a.cell_link');
+                all_cells.removeClass('x_turn').removeClass('o_turn');
+                empty_cells = this.board.find('a.empty');
+                empty_cells.addClass(this.current_player + '_turn');
+            }
+            this.replace_buttons = function(button_set) {
+                this.buttons.fadeOut(50, function() {
+                    $(this).empty();
+                    $(this).append(button_set);
+                    $(this).fadeIn(50);
+                });
+            }
+            
+            // UI action handlers
+            
+            this.handle_disabled = function(event) {
+                event.preventDefault();
+            };
+            this.handle_play = function(event) {
+                var target, instance, cell_id;
+                event.preventDefault();
+                target = $(event.target);
+                instance = event.data.game;
+                if (!instance.is_valid_click(target)) {
+                    msg = "Someone chose that square already.  Try again";
+                    instance.send_feedback(msg);
+                    return null;
+                }
+                if (instance.players[instance.current_player] != 'human') {
+                    msg = "Hey! It's not your turn.  Cool it!";
+                    instance.send_feedback(msg);
+                }
+                cell_id = target.parent('td.cell').attr('id');
+                instance.take_turn(cell_id);
+            };
+            this.handle_buttons = function(event) {
+                var target, first, instance;
+                event.preventDefault();
+                target = $(event.target);
+                instance = event.data.game;
+                if (target.is('a')) {
+                    if (target.hasClass('init_game')) {
+                        // set up the game
+                        first = target.attr('id');
+                        // first will be 'human' or 'server'
+                        instance.init(first);
+                        instance.replace_buttons(instance.playing_button_set);
+                    }
+                    if (target.hasClass('end_game')) {
+                        // quit.  clear the board and display original buttons
+                        instance.quit();
+                    }
+                }
+                console.log('called handle buttons from inside game object');
+            };
+            
+            // buttons 
+            this.init_button_set = $('<a href="." class="init_game" id="human">Player</a>')
+                .add('<a href="." class="init_game" id="server">Server</a>');
+            this.playing_button_set = $('<a href="." class="end_game" id="end">Quit</a>');
+            this.restart_button_set = $('<a href="x" class="end_game" id="restart">Play Again</a>')
+            
+            // set up UI
+            this.replace_buttons(this.init_button_set);
+            // bind ui handlers
+            this.buttons.bind('click', {game: this }, this.handle_buttons);
+            // the board should start out dead until we initialize
+            this.board.bind('click', {game: this }, this.handle_disabled);
         }
+        
+        var this_game;
+        this_game = null;
         $(document).ready(function() {
-            set_cell_hover();
-            $("#board table").click(handle_play);
-            $("#buttons a#clear").click(clear_board);
+            this_game = new Game();
         })
     </script>
     </head>
@@ -199,7 +333,7 @@
                 <tr>
                 {% for row in board %}
                     {% for cell_label, value, cell_id in row  %}
-                    <td class="{{ cell_label }}" id="{{ cell_id }}">
+                    <td class="cell {{ cell_label }}" id="{{ cell_id }}">
                       <a class="cell_link {% if value == '' %}empty{% else %}{{ value }}{% endif %}" href=".">&nbsp;</a>
                     </td>
                     {% endfor %}
@@ -213,9 +347,9 @@
             </table>
         </div>
         <div id="feedback">
-            <p>You go first</p>
+            <p>Who should go first?</p>
         </div>
         <div id="buttons">
-            <a href="." id="clear">Clear the Board!</a>
+        </div>
     </body>
 </html>
