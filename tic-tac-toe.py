@@ -10,3 +10,6 @@ class Player(object):
 class ComputerPlayer(Player):
   pass
 
+class Game(object):
+  pass
+
