@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 
-from tickytack.engines import random_choice as engine
+from tickytack.engines import MinMax
 
 _marker = object()
 
@@ -76,21 +76,27 @@ def move(request):
     if cell_id == _marker:
         # the computer did this one.  Make a move
         time.sleep(0.25)
-        cell = engine.choose(board)
+        engine = MinMax(board, player)
+        score, cell = engine.choose(8, -999999, 999999)
+        board[cell] = player
     else:
         # the human did it, check the incoming value
         try:
             cell = int(cell_id)
         except ValueError:
             return json_response('error')
+        else:
+            # make a new engine with the player's choice and get the score
+            board[cell] = player
 
-    if cell < 0:
-        return json_response('tie', player=player)
-
-    board[cell] = player
     request.session['board'] = board
+    engine = MinMax(board, player)
+    score = engine.score
 
-    if engine.is_win(board):
-        return json_response('win', value=cell, player=player)
+    if engine.is_terminal:
+        if abs(score) > 200:
+            return json_response('win', value=cell, player=player)
+        else:
+            return json_response('tie', value=cell, player=player)
 
     return json_response(value=cell, player=player)
