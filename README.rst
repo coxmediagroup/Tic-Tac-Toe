@@ -59,7 +59,7 @@ A Word of Explanation:
 ----------------------
 
 I've implemented the engine for the game play using the `alpha-beta
-algorithm`_, a variant on the minmax algorithm. I cribbed the majority of the
+algorithm`_, a variant on the `minmax algorithm`_. I cribbed the majority of the
 specific implementation from a nifty C# example I found here_. The translation
 from C# to Python was tons of fun.
 
