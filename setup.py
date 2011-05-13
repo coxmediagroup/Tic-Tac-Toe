@@ -11,10 +11,14 @@ setup(
     packages = find_packages('src'),
     package_dir = {'': 'src'},
     description="A simple tic-tac-toe game.  You won't win",
-    long_description=open("README").read(),
+    long_description=open("README.rst").read(),
+    install_requires=[
+        'setuptools',
+    ],
     classifiers=[
         'Framework :: Django',
         'Natural Language :: English',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
     ],
 )
