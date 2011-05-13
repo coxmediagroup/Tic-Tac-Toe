@@ -45,8 +45,8 @@ with::
     bin/django syncdb
     bin/django runserver
 
-The database isn't really used for anything, but it's nice to know it's there,
-don't you think?
+Once django is up, point your browser at http://localhost:8000/ and you'll be
+ready to go. The game should be pretty much self-explanatory from there.
 
 You can run the minimal unit tests included with::
 
@@ -54,3 +54,15 @@ You can run the minimal unit tests included with::
 
 .. _setuptools: http://pypi.python.org/pypi/setuptools
 .. _distribute: http://pypi.python.org/pypi/distribute
+
+A Word of Explanation:
+----------------------
+
+I've implemented the engine for the game play using the `alpha-beta
+algorithm`_, a variant on the minmax algorithm. I cribbed the majority of the
+specific implementation from a nifty C# example I found here_. The translation
+from C# to Python was tons of fun.
+
+.. _alpha-beta algorithm: http://www.ocf.berkeley.edu/~yosenl/extras/alphabeta/alphabeta.html
+.. _minmax algorithm: http://en.wikipedia.org/wiki/Minimax
+.. _here: http://www.codeproject.com/KB/game/TicTacToeByMinMax.aspx
