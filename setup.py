@@ -13,7 +13,7 @@ setup(
     description="A simple tic-tac-toe game.  You won't win",
     long_description=open("README.rst").read(),
     install_requires=[
-        'setuptools',
+        'distribute',
     ],
     classifiers=[
         'Framework :: Django',
