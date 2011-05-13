@@ -156,7 +156,7 @@
                     });
             };
             this.take_turn_callback = function (json, is_human) {
-                var is_human, chosen, msg, display_reset;
+                var chosen, msg, display_reset;
                 end_stage = false;
                 msg = '';
                 if (json.status == 'ok') {
@@ -182,6 +182,9 @@
                 } else if (json.status == 'tie') {
                     // the current player has brought the game to a tie
                     // report and disable board
+                    if (is_human) {
+                        this.select_cell(json);
+                    }
                     msg = "A tie, good effort. Another go?";
                     end_stage = true;
                 } else {
