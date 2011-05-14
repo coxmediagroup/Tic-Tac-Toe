@@ -1,4 +1,5 @@
 import unittest
+import pdb
 from tic_tac_toe import Board, BoardError
 
 class BoardTest(unittest.TestCase):
@@ -18,8 +19,10 @@ class BoardTest(unittest.TestCase):
 
     def test_check_board_incomplete(self):
         marker = "O"
+        self.board.clear()
         self.board.take_cell(0,marker)
-        assert self.board.check_board() == false
+        pdb.set_trace()
+        assert self.board.check_board() == False
 
     def test_check_board_horizontal(self):
         marker = "O"
