@@ -73,7 +73,18 @@ class Board(object):
         return result
 
 class Player(object):
-    pass
+
+    def __init__(self, marker = None):
+        self.__marker = marker
+
+    @property
+    def marker(self):
+        return self.__marker
+
+    @marker.setter
+    def marker(self, value):
+        self.__marker = value
+
 
 
 class ComputerPlayer(Player):
