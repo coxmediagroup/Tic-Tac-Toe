@@ -70,6 +70,16 @@ class BoardTest(unittest.TestCase):
         self.board.take_cell(6,marker)
         assert self.board.check_board()
 
+class PersonTest(unittest.TestCase):
+
+    def setUp(self):
+        self.player = Player()
+
+    def test_marker(self):
+        assert self.player.marker == None
+        self.player.marker = "X"
+        assert self.player.marker == "X"
+
 
 if __name__ == "__main__":
     unittest.main()
