@@ -74,8 +74,10 @@ class Board(object):
 
 class Player(object):
 
-    def __init__(self, marker = None):
+    def __init__(self, marker = None, board = None, name = None):
         self.__marker = marker
+        self.__board = board
+        self.__name = name
 
     @property
     def marker(self):
@@ -84,6 +86,14 @@ class Player(object):
     @marker.setter
     def marker(self, value):
         self.__marker = value
+
+    @property
+    def board(self):
+        return self.__board
+    @board.setter
+    def board(self,value):
+        self.__board = value
+
 
 
 

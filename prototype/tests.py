@@ -85,6 +85,12 @@ class PersonTest(unittest.TestCase):
         self.player.board = Board()
         assert self.player.board != None
 
+    def test_name(self):
+        assert self.player.name == None
+        self.player.board = "Allan"
+        assert self.player.board == "Allan"
+
+
 
 if __name__ == "__main__":
     unittest.main()
