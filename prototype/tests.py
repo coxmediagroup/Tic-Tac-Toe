@@ -89,7 +89,11 @@ class PersonTest(unittest.TestCase):
         assert self.player.name == None
         self.player.board = "Allan"
         assert self.player.board == "Allan"
-
+    def test_place_marker(self):
+        board = Board()
+        self.player = Player("X",board, "Allan")
+        self.player.place_marker(4)
+        assert board.get_cell(4) == "X"
 
 
 if __name__ == "__main__":
