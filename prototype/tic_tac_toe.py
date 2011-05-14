@@ -93,7 +93,12 @@ class Player(object):
     @board.setter
     def board(self,value):
         self.__board = value
-
+    @property
+    def name(self):
+        return self.__name
+    @name.setter
+    def name(self, value):
+        self.__name = value
 
 
 
