@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 
+class BoardError(Exception): pass
 class Board(object):
 
     BOARD_SIZE = 9
@@ -14,10 +15,20 @@ class Board(object):
         return len(self.__board)
 
     def take_cell(self, index, claim):
-        self.__board[index] = claim
+        if index < self.BOARD_SIZE:
+            if self.__board[index] == None:
+                self.__board[index] = claim
+            else:
+                raise BoardError, "{0} already taken".format(index)
+        else:
+            raise BoardError, "{0} off board".format(index)
+
 
     def get_cell(self, index):
-        return self.__board[index]
+        if index < self.BOARD_SIZE:
+            return self.__board[index]
+        else:
+            raise BoardError, "{0} off board".format(index)
 
 
 
