@@ -1,7 +1,7 @@
 import unittest
 from tic_tac_toe import Board, BoardError
 
-class Board_test(unittest.TestCase):
+class BoardTest(unittest.TestCase):
     def setUp(self):
         self.board = Board()
 
@@ -37,6 +37,36 @@ class Board_test(unittest.TestCase):
         self.board.take_cell(7,marker)
         self.board.take_cell(8,marker)
         assert self.board.check_board()
+
+    def test_check_board_vertical(self):
+        marker = "O"
+        self.board.take_cell(0,marker)
+        self.board.take_cell(3,marker)
+        self.board.take_cell(6,marker)
+        assert self.board.check_board()
+        self.board.clear()
+        self.board.take_cell(1,marker)
+        self.board.take_cell(4,marker)
+        self.board.take_cell(7,marker)
+        assert self.board.check_board()
+        self.board.clear()
+        self.board.take_cell(2,marker)
+        self.board.take_cell(5,marker)
+        self.board.take_cell(8,marker)
+        assert self.board.check_board()
+
+    def test_check_board_diagonal(self):
+        marker = "O"
+        self.board.take_cell(0,marker)
+        self.board.take_cell(4,marker)
+        self.board.take_cell(8,marker)
+        assert self.board.check_board()
+        self.board.clear()
+        self.board.take_cell(2,marker)
+        self.board.take_cell(4,marker)
+        self.board.take_cell(6,marker)
+        assert self.board.check_board()
+
 
 if __name__ == "__main__":
     unittest.main()
