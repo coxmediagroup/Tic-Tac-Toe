@@ -1,5 +1,6 @@
 #! /usr/bin/env python
-import pdb
+#import pdb
+import re
 
 class BoardError(Exception): pass
 class Board(object):
@@ -20,6 +21,10 @@ class Board(object):
     def last_cell(self):
         return self.__last_cell
 
+    @property
+    def grid(self):
+        return self.__board
+
     def take_cell(self, index, claim):
         if index < self.BOARD_SIZE:
             if self.__board[index] == None:
@@ -35,6 +40,9 @@ class Board(object):
             return self.__board[index]
         else:
             raise BoardError, "{0} off board".format(index)
+
+    def declare_cat(self):
+        self.__winner = "cat"
 
     def clear(self):
         self.__board = []
@@ -144,6 +152,8 @@ class ComputerPlayer(Player):
         for index in pattern:
             if self.board.get_cell(index) == None:
                 prob_count += 1
+            if self.board.get_cell(index) == self.marker:
+                return 0
         return prob_count
 
     def __investigate_board(self):
@@ -155,18 +165,80 @@ class ComputerPlayer(Player):
                 if prob > 0 and prob < current_probability:
                     current_pattern = pattern
                     current_probability = prob
+        if current_probability == 3:
+            self.board.declare_cat()
+            return -1
         for index in current_pattern:
             if self.board.get_cell(index) == None:
                 return index
 
     def place_marker(self, cell_index = -1):
         index = self.__investigate_board()
-        Player.place_marker(self, index)
-
-
-
-
+        if index == -1:
+            self.board.declare_cat()
+        else:
+            Player.place_marker(self, index)
 
 
 class Game(object):
-    pass
+
+    def __init__(self):
+        pass
+
+    def setup(self):
+        self.board = Board()
+        print "Welcome to Tic-Tac-Toe"
+        name = raw_input("What is your Name: ")
+        marker = raw_input("which marker do you want X or O: ")
+        while marker not in ["X", "O"]:
+            marker = raw_input("Come on pick one of the two X or O: ")
+        if marker.upper() == "X":
+            computer_marker = "O"
+        else:
+            computer_marker = "X"
+        self.player = Player(marker, self.board, name)
+        self.computer = ComputerPlayer(computer_marker, self.board)
+
+    def draw(self):
+        str = "+---+---+---+\n"
+        counter = 0
+        for ele in self.board.grid:
+            body = ele
+            if body == None:
+                body = "{0}".format(counter +1)
+            str += "| {0} ".format(body)
+            counter += 1
+            if counter % 3 == 0:
+                str +="|\n+---+---+---+\n"
+        print str
+
+
+    def update(self):
+        choice = raw_input("Selet where you want to place your marker(1-9) or Q to quit the game:")
+        while re.match("[1-9qQ]", choice) == None:
+            choice = raw_input("Please enter a valid option(1-9 or Q): ")
+        if choice.isdigit():
+            self.player.place_marker(int(choice)-1)
+            if self.board.winner == None:
+                self.computer.place_marker()
+        else:
+            self.board.declare_cat()
+
+
+    def game_loop(self):
+        print "Please Go First\n"
+        while self.board.winner == None:
+            self.draw()
+            self.update()
+        self.draw()
+        print "The winner is {0}".format(self.board.winner)
+        if re.match("[yY]", raw_input("Do you wish to play again(y/n):")) != None:
+            self.board.clear()
+            self.game_loop()
+
+    def start_game(self):
+        self.setup()
+        self.game_loop()
+
+if __name__ == "__main__":
+    Game().start_game()
