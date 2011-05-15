@@ -1,6 +1,6 @@
 import unittest
 import pdb
-from tic_tac_toe import Board, BoardError, Player
+from tic_tac_toe import Board, BoardError, Player, ComputerPlayer
 
 class BoardTest(unittest.TestCase):
     def setUp(self):
@@ -96,14 +96,25 @@ class PersonTest(unittest.TestCase):
 
     def test_name(self):
         assert self.player.name == None
-        self.player.board = "Allan"
-        assert self.player.board == "Allan"
+        self.player.name = "Allan"
+        assert self.player.name == "Allan"
     def test_place_marker(self):
         board = Board()
         self.player = Player("X",board, "Allan")
         self.player.place_marker(4)
         assert board.get_cell(4) == "X"
 
+class ComputerPlayerTest(unittest.TestCase):
+
+    def setUp(self):
+        self.board = Board()
+        self.player = Player("X", self.board, "Allan")
+        self.computer = ComputerPlayer("O",self.board )
+
+    def test_place_marker(self):
+        self.player.place_marker(4)
+        self.computer.place_marker()
+        assert self.board.last_cell != 4
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,10 +12,19 @@ class Board(object):
     def size(self):
         return len(self.__board)
 
+    @property
+    def winner(self):
+        return self.__winner
+
+    @property
+    def last_cell(self):
+        return self.__last_cell
+
     def take_cell(self, index, claim):
         if index < self.BOARD_SIZE:
             if self.__board[index] == None:
                 self.__board[index] = claim
+                self.__last_cell = index
             else:
                 raise BoardError, "{0} already taken".format(index)
         else:
@@ -30,6 +39,7 @@ class Board(object):
     def clear(self):
         self.__board = []
         self.__winner = None
+        self.__last_cell = None
         for i in range(Board.BOARD_SIZE):
             self.__board.append(None)
 
@@ -42,9 +52,7 @@ class Board(object):
             self.__winner = a
         return result
 
-    @property
-    def winner(self):
-        return self.__winner
+
 
     def __check_rows(self):
         result = False
@@ -113,11 +121,51 @@ class Player(object):
 
     def place_marker(self, cell_index):
         self.__board.take_cell(cell_index, self.__marker)
+        self.__board.check_board()
 
 
 
 class ComputerPlayer(Player):
-    pass
+    PATTERNS = (
+        (0,1,2),
+        (3,4,5),
+        (6,7,8),
+        (0,3,6),
+        (1,4,7),
+        (2,5,8),
+        (2,4,6),
+        (0,4,8),
+        )
+    def __init__(self, marker = None, board = None, name = "Computer"):
+        Player.__init__(self, marker, board, name)
+
+    def __check_probability_pattern(self, pattern):
+        prob_count = 0
+        for index in pattern:
+            if self.board.get_cell(index) == None:
+                prob_count += 1
+        return prob_count
+
+    def __investigate_board(self):
+        current_pattern = None
+        current_probability = 3
+        for pattern in self.PATTERNS:
+            if self.board.last_cell in pattern:
+                prob = self.__check_probability_pattern(pattern)
+                if prob > 0 and prob < current_probability:
+                    current_pattern = pattern
+                    current_probability = prob
+        for index in current_pattern:
+            if self.board.get_cell(index) == None:
+                return index
+
+    def place_marker(self, cell_index = -1):
+        index = self.__investigate_board()
+        Player.place_marker(self, index)
+
+
+
+
 
 
 class Game(object):
