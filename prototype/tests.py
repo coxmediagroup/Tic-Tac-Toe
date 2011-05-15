@@ -23,6 +23,7 @@ class BoardTest(unittest.TestCase):
         self.board.take_cell(0,marker)
         # pdb.set_trace()
         assert self.board.check_board() == False
+        assert self.board.winner != marker
 
     def test_check_board_horizontal(self):
         marker = "O"
@@ -30,16 +31,19 @@ class BoardTest(unittest.TestCase):
         self.board.take_cell(1,marker)
         self.board.take_cell(2,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
         self.board.clear()
         self.board.take_cell(3,marker)
         self.board.take_cell(4,marker)
         self.board.take_cell(5,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
         self.board.clear()
         self.board.take_cell(6,marker)
         self.board.take_cell(7,marker)
         self.board.take_cell(8,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
 
     def test_check_board_vertical(self):
         marker = "O"
@@ -47,16 +51,19 @@ class BoardTest(unittest.TestCase):
         self.board.take_cell(3,marker)
         self.board.take_cell(6,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
         self.board.clear()
         self.board.take_cell(1,marker)
         self.board.take_cell(4,marker)
         self.board.take_cell(7,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
         self.board.clear()
         self.board.take_cell(2,marker)
         self.board.take_cell(5,marker)
         self.board.take_cell(8,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
 
     def test_check_board_diagonal(self):
         marker = "O"
@@ -64,11 +71,13 @@ class BoardTest(unittest.TestCase):
         self.board.take_cell(4,marker)
         self.board.take_cell(8,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
         self.board.clear()
         self.board.take_cell(2,marker)
         self.board.take_cell(4,marker)
         self.board.take_cell(6,marker)
         assert self.board.check_board()
+        assert self.board.winner == marker
 
 class PersonTest(unittest.TestCase):
 

@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-
+import pdb
 
 class BoardError(Exception): pass
 class Board(object):
@@ -37,13 +37,14 @@ class Board(object):
         a,b,c = self.get_cell(index1), self.get_cell(index2), self.get_cell(index3)
         if a == None and b == None and c == None:
             return False
-        result = a == b and a == c
+        result = (a == b and a == c)
         if result:
             self.__winner = a
         return result
 
-    def get_winner(self):
-        self.__winner
+    @property
+    def winner(self):
+        return self.__winner
 
     def __check_rows(self):
         result = False
