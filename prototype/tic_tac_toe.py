@@ -29,6 +29,7 @@ class Board(object):
 
     def clear(self):
         self.__board = []
+        self.__winner = None
         for i in range(Board.BOARD_SIZE):
             self.__board.append(None)
 
@@ -36,7 +37,13 @@ class Board(object):
         a,b,c = self.get_cell(index1), self.get_cell(index2), self.get_cell(index3)
         if a == None and b == None and c == None:
             return False
-        return a == b and a == c
+        result = a == b and a == c
+        if result:
+            self.__winner = a
+        return result
+
+    def get_winner(self):
+        self.__winner
 
     def __check_rows(self):
         result = False
@@ -90,15 +97,21 @@ class Player(object):
     @property
     def board(self):
         return self.__board
+
     @board.setter
     def board(self,value):
         self.__board = value
+
     @property
     def name(self):
         return self.__name
+
     @name.setter
     def name(self, value):
         self.__name = value
+
+    def place_marker(self, cell_index):
+        self.__board.take_cell(cell_index, self.__marker)
 
 
 
