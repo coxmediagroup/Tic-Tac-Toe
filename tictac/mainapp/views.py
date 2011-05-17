@@ -1,7 +1,7 @@
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from tictac.mainapp.game_rules import test_valid_move
+#from tictac.mainapp.game_rules import test_valid_move
 
 board = ["_","_","_","_","_","_","_","_","_"]
 
@@ -22,12 +22,8 @@ def paint_board(request):
     
 def process_move(request):
     move = request.GET.get('button')
-    # todo: might wanna test for exception.. 
     m = int(move)  
-    if test_valid_move(board,m) :
-       board[m] = "X" # it is a player move
-       return HttpResponse("you pressed button "+move)     
-    else :
-       return HttpResponse("your move "+move+" is invalid")
-
+    board[m] = "X" # it is a player move
+    return HttpResponseRedirect('/board') 
+       
 
