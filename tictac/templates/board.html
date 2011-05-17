@@ -5,51 +5,60 @@ Alex Ferrer's Tic-Tac-Toe<br>
 <table BORDER=3 class="board" cellspacing="1" summary="Tic-Tac-Toe Board">
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="0">
+    <button type="submit" name="button" value="0"
+      {% if b0 > 0 %} disabled="disabled" {% endif %}>
       {{ b0 }}
     </button>
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="1">
-      {{ b1 }}
+     <button type="submit" name="button" value="1" 
+     {% if b1 > 0 %} disabled="disabled" {% endif %} >
+     {{ b1 }}
     </button>
 </td>
  <td class="box" width="25%">
-      <button type="submit" name="button" value="2">
+      <button type="submit" name="button" value="2"
+      {% if b2 > 0 %} disabled="disabled" {% endif %} >
       {{ b2 }}
     </button>
  </td>
 </tr>
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="3">
+    <button type="submit" name="button" value="3"
+      {% if b3 > 0 %} disabled="disabled" {% endif %}>
       {{ b3 }}
     </button>
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="4">
+     <button type="submit" name="button" value="4"
+      {% if b4 > 0 %} disabled="disabled" {% endif %}>
       {{ b4 }}
     </button>
 </td>
  <td class="box" width="25%">
-      <button type="submit" name="button" value="5">
+      <button type="submit" name="button" value="5"
+      {% if b5 > 0 %} disabled="disabled" {% endif %}>
       {{ b5 }}
     </button>
  </td>
 </tr>
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="6">
+    <button type="submit" name="button" value="6"
+      {% if b6 > 0 %} disabled="disabled" {% endif %}>
       {{ b6 }}
     </button>
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="7">
+     <button type="submit" name="button" value="7"
+      {% if b7 > 0 %} disabled="disabled" {% endif %}>
       {{ b7 }}
     </button>
 </td>
  <td class="box" width="25%">
-      <button type="submit" name="button" value="8">
+      <button type="submit" name="button" value="8"
+      {% if b8 > 0 %} disabled="disabled" {% endif %}>
       {{ b8 }}
     </button>
  </td>
