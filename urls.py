@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'tic_tac_toe.game.views.index', name='home'),
     url(r'^board$', 'tic_tac_toe.game.views.board', name='board'),
+    url(r'^again$', 'tic_tac_toe.game.views.play_again', name='again'),
     # url(r'^tic_tac_toe/', include('tic_tac_toe.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

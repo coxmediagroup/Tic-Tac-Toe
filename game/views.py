@@ -61,3 +61,9 @@ def board(request):
     params["board"] = board
     params["form"] = form
     return render(request, "board.html", params)
+    
+def play_again(request):
+    board = request.session["board"]
+    board.clear()
+    request.session["board"] = board
+    return redirect("board")
