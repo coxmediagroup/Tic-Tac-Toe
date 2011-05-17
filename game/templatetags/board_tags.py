@@ -1,4 +1,7 @@
 from django import template
+from django.conf import settings
+
+url = settings.STATIC_URL
 
 register = template.Library()
 
@@ -13,7 +16,7 @@ def render_board(board):
         body = ele
         if body == None:
             body = "blank"
-        str += "<td><img src='/static/{0}.jpg' width='150px' /></td>".format(body)
+        str += "<td><img src='{0}{1}.jpg' width='150px' /></td>".format(url, body)
         counter += 1
         if counter % 3 == 0:
             str +="</tr><tr>"
