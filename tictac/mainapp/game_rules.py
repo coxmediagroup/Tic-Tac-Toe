@@ -18,7 +18,7 @@ def  calc_game_over(board):
 def  calc_computer_move(board):
        # brute force  for all posible moves :
        #if next move makes *me* win, take it.
-       for x in range(0,8):
+       for x in range(0,9):
           if board[x] == "_" :
              temp = list(board)
              temp[x] = "0"
@@ -27,7 +27,7 @@ def  calc_computer_move(board):
        
        # brute force  for all posible moves :
        #if next move makes him win take it
-       for x in range(0,8):
+       for x in range(0,9):
           if board[x] == "_" :
              temp = list(board)
              temp[x] = "X"
@@ -40,7 +40,7 @@ def  calc_computer_move(board):
 
      #otherwise, randomly take first open space
        while True:
-          i = random.randrange(0,8)
+          i = random.randrange(0,9)
           if board[i] == "_" :
              return i 
      

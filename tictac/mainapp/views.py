@@ -40,12 +40,11 @@ def process_move(request):
     return HttpResponseRedirect('/board') 
        
 def reset(request):
-    for x in range(0,8):
+    for x in range(0,9):
         board[x] = "_"
 
-    b0 = b1 = b3 = b4 = b5 = b6 = b7 = b8 = "_"
+    b0 = b1 = b2 = b3 = b4 = b5 = b6 = b7 = b8 = "_"
     user_message = "Welcome to a new Game!! "
     game_over = False
  
-    #return HttpResponseRedirect('/board') 
     return render_to_response('board.html', locals())
