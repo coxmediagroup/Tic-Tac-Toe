@@ -1,5 +1,6 @@
 import unittest
 import pdb
+import random 
 from tic_tac_toe import Board, BoardError, Player, ComputerPlayer
 
 class BoardTest(unittest.TestCase):
@@ -116,5 +117,23 @@ class ComputerPlayerTest(unittest.TestCase):
         self.computer.place_marker()
         assert self.board.last_cell != 4
 
+class GameTest(unittest.TestCase):
+    def setUp(self):
+        self.board = Board()
+        self.player = Player("X", self.board, "Sys")
+        self.computer = ComputerPlayer("O",self.board)
+    def test_one_game(self):
+        sys_moves = []
+        while self.board.winner == None:
+            choice_made = False
+            while not choice_made:
+                choice = random.randrange(0, 9, 1)
+                if choice not in sys_moves and self.board.get_cell(choice) == None:
+                    sys_moves.append(choice)
+                    choice_made = True
+                    self.player.place_marker(choice)
+                    if self.board.winner == None:
+                        self.computer.place_marker()
+        print "\n{0} is the winner with moves of {1} on board {2}\n".format(self.board.winner, sys_moves, self.board.grid )
 if __name__ == "__main__":
     unittest.main()
