@@ -8,7 +8,10 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^hello$', 'tictac.mainapp.views.hello'),
 
+    url(r'^board$', 'tictac.mainapp.views.paint_board'),
      
+    url(r'^your_move$', 'tictac.mainapp.views.process_move'),    
+    
     
     # url(r'^tictac/', include('tictac.foo.urls')),
 
