@@ -5,9 +5,6 @@ from tictac.mainapp.game_rules import calc_computer_move, calc_game_over
 
 board = ["_","_","_","_","_","_","_","_","_"]
 
-def hello(request):
-    return HttpResponse("hello world")
-
 def paint_board(request):
     b0 = board[0]
     b1 = board[1]
@@ -28,10 +25,10 @@ def paint_board(request):
 def process_move(request):
     move = request.GET.get('button')
     m = int(move)  
-    board[m] = "X" # it is a player move
-    #call func to calculate computer move
-    c = calc_computer_move(board)
-    board[c] = "0"
+    board[m] = "X" # X is a player move
+    
+    c = calc_computer_move(board) 
+    board[c] = "0" # 0 is a computer move
 
     return HttpResponseRedirect('/board') 
        
