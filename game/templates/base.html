@@ -1,11 +1,20 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
 <html>
     <head>
         <title>Tic-Tac-Toe</title>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}reset.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}text.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}960.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}game.css" />
         {% block head %}
         {% endblock %}
     </head>
     <body>
+        <div class="container_16">
         {% block content %}
         {% endblock %}
+        </div>
     </body>
 </html>

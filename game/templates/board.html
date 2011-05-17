@@ -3,9 +3,14 @@
 {% block head %}
 {% endblock %}
 {% block content %}
-    {% render_board board  %}
-    <form action="#" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
+    <div class="grid_15" >
+        {% render_board board  %}
+    </div>
+    <div class="clear" ></div>
+    <div class="grid_15">
+        <form action="#" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
 {% endblock %}
