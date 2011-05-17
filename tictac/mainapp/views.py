@@ -1,7 +1,7 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-#from tictac.mainapp.game_rules import test_valid_move
+from tictac.mainapp.game_rules import calc_computer_move, calc_game_over
 
 board = ["_","_","_","_","_","_","_","_","_"]
 
@@ -18,12 +18,21 @@ def paint_board(request):
     b6 = board[6]
     b7 = board[7]
     b8 = board[8]
+    user_message = "Make your move"
+    
+    if calc_game_over(board):
+       user_message = "game over !!! "
+       
     return render_to_response('board.html', locals())
     
 def process_move(request):
     move = request.GET.get('button')
     m = int(move)  
     board[m] = "X" # it is a player move
+    #call func to calculate computer move
+    c = calc_computer_move(board)
+    board[c] = "0"
+
     return HttpResponseRedirect('/board') 
        
 
