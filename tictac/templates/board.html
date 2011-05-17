@@ -5,65 +5,83 @@ Alex Ferrer's Tic-Tac-Toe<br>
 <table BORDER=3 class="board" cellspacing="1" summary="Tic-Tac-Toe Board">
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="0"
-      {% if b0 != "_" %} disabled="disabled" {% endif %}>
-      {{ b0 }}
-    </button>
+  {% if b0 != "_" %}
+     {{ b0 }}
+  {% else %}
+    <button type="submit" name="button" value="0"> {{ b0 }} </button>
+  {% endif %}
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="1" 
-     {% if b1 != "_" %} disabled="disabled" {% endif %} >
+  {% if b1 != "_" %}
      {{ b1 }}
-    </button>
-</td>
- <td class="box" width="25%">
-      <button type="submit" name="button" value="2"
-      {% if b2 != "_" %} disabled="disabled" {% endif %} >
-      {{ b2 }}
-    </button>
+  {% else %}
+    <button type="submit" name="button" value="1"> {{ b1 }} </button>
+  {% endif %}
  </td>
-</tr>
+ <td class="box" width="25%">
+  {% if b2 != "_" %}
+     {{ b2 }}
+  {% else %}
+    <button type="submit" name="button" value="2"> {{ b2 }} </button>
+  {% endif %}
+ </td>
+<tr>
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="3"
-      {% if b3 != "_" %} disabled="disabled" {% endif %}>
-      {{ b3 }}
-    </button>
+  {% if b3 != "_" %}
+     {{ b3 }}
+  {% else %}
+    <button type="submit" name="button" value="3"> {{ b3 }} </button>
+  {% endif %}
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="4"
-      {% if b4 != "_" %} disabled="disabled" {% endif %}>
-      {{ b4 }}
-    </button>
-</td>
- <td class="box" width="25%">
-      <button type="submit" name="button" value="5"
-      {% if b5 != "_" %} disabled="disabled" {% endif %}>
-      {{ b5 }}
-    </button>
+  {% if b4 != "_" %}
+     {{ b4 }}
+  {% else %}
+    <button type="submit" name="button" value="4"> {{ b4 }} </button>
+  {% endif %}
  </td>
-</tr>
+ <td class="box" width="25%">
+  {% if b5 != "_" %}
+     {{ b5 }}
+  {% else %}
+    <button type="submit" name="button" value="5"> {{ b5 }} </button>
+  {% endif %}
+ </td>
+<tr>
 <tr>
  <td class="box" width="25%">
-    <button type="submit" name="button" value="6"
-      {% if b6 != "_" %} disabled="disabled" {% endif %}>
-      {{ b6 }}
-    </button>
+  {% if b6 != "_" %}
+     {{ b6 }}
+  {% else %}
+    <button type="submit" name="button" value="6"> {{ b6 }} </button>
+  {% endif %}
  </td>
  <td class="box" width="25%">
-     <button type="submit" name="button" value="7"
-      {% if b7 != "_" %} disabled="disabled" {% endif %}>
-      {{ b7 }}
-    </button>
-</td>
- <td class="box" width="25%">
-      <button type="submit" name="button" value="8"
-      {% if b8 != "_" %} disabled="disabled" {% endif %}>
-      {{ b8 }}
-    </button>
+  {% if b7 != "_" %}
+     {{ b7 }}
+  {% else %}
+    <button type="submit" name="button" value="7"> {{ b7 }} </button>
+  {% endif %}
  </td>
-</tr>
+ <td class="box" width="25%">
+  {% if b8 != "_" %}
+     {{ b8 }}
+  {% else %}
+    <button type="submit" name="button" value="8"> {{ b8 }} </button>
+  {% endif %}
+ </td>
+<tr>
+
 </table>
 </form>
 <br>
-{{ user_message }}
+{{ user_message }} <br><br>
+
+{% if game_over %}
+<form action="play_again">
+  <button type="submit" name="play_again" value="play"> Play Again? </button>
+</form>
+{% endif %}
+
+
