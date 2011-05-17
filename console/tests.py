@@ -124,6 +124,7 @@ class GameTest(unittest.TestCase):
         self.computer = ComputerPlayer("O",self.board)
     def test_one_game(self):
         sys_moves = []
+        print "Testing Player First"
         while self.board.winner == None:
             choice_made = False
             while not choice_made:
@@ -134,6 +135,22 @@ class GameTest(unittest.TestCase):
                     self.player.place_marker(choice)
                     if self.board.winner == None:
                         self.computer.place_marker()
+        print "\n{0} is the winner with moves of {1} on board {2}\n".format(self.board.winner, sys_moves, self.board.grid )
+        
+    def test_one_game_computer_first(self):
+        sys_moves = []
+        print "Testing computer First"
+        while self.board.winner == None:
+            choice_made = False
+            self.computer.place_marker()
+            while not choice_made:
+                choice = random.randrange(0, 9, 1)
+                if choice not in sys_moves and self.board.get_cell(choice) == None:
+                    sys_moves.append(choice)
+                    choice_made = True
+                    self.player.place_marker(choice)
+                    #if self.board.winner == None:
+                        
         print "\n{0} is the winner with moves of {1} on board {2}\n".format(self.board.winner, sys_moves, self.board.grid )
         
 

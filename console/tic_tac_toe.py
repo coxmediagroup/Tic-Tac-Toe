@@ -173,7 +173,10 @@ class ComputerPlayer(Player):
                 return index
 
     def place_marker(self, cell_index = -1):
-        index = self.__investigate_board()
+        if self.board.last_cell == None:
+            index = 4
+        else:
+            index = self.__investigate_board()
         if index == -1:
             self.board.declare_cat()
         else:
