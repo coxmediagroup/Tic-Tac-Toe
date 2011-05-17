@@ -2,6 +2,7 @@
 import os
 
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
+APP_NAME = PROJECT_DIR.split("/")[-1]
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -146,3 +147,7 @@ LOGGING = {
         },
     }
 }
+try:
+    from local_settings import *
+except ImportError:
+    pass

@@ -1,14 +1,17 @@
 from django.conf.urls.defaults import patterns, include, url
-
+from django.conf import settings
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
+
+app_name = settings.APP_NAME
+
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'tic_tac_toe.game.views.index', name='home'),
-    url(r'^board$', 'tic_tac_toe.game.views.board', name='board'),
-    url(r'^again$', 'tic_tac_toe.game.views.play_again', name='again'),
+    url(r'^$', "{0}.game.views.index".format(app_name), name='home'),
+    url(r'^board$', "{0}.game.views.board".format(app_name), name='board'),
+    url(r'^again$', "{0}.game.views.play_again".format(app_name), name='again'),
     # url(r'^tic_tac_toe/', include('tic_tac_toe.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
