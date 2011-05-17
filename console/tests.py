@@ -135,5 +135,48 @@ class GameTest(unittest.TestCase):
                     if self.board.winner == None:
                         self.computer.place_marker()
         print "\n{0} is the winner with moves of {1} on board {2}\n".format(self.board.winner, sys_moves, self.board.grid )
+        
+
+class GameLoadTest(unittest.TestCase):
+    GAME_COUNT = 1000
+    def setUp(self):
+        self.board = Board()
+        self.player = Player("X", self.board, "Sys")
+        self.computer = ComputerPlayer("O",self.board)
+        self.winners = {}
+        self.moves = {}
+        
+    def play_game(self):
+        sys_moves = []
+        while self.board.winner == None:
+            choice_made = False
+            while not choice_made:
+                choice = random.randrange(0, 9, 1)
+                if choice not in sys_moves and self.board.get_cell(choice) == None:
+                    sys_moves.append(choice)
+                    choice_made = True
+                    self.player.place_marker(choice)
+                    if self.board.winner == None:
+                        self.computer.place_marker()
+        
+        winner = self.board.winner
+        if winner in self.winners.keys():
+            self.winners[winner] = self.winners[winner] + 1
+        else:
+            self.winners[winner] = 1
+        if winner == "X":
+            move = sys_moves.__str__()
+            if move in self.moves.keys():
+                self.moves[move] = self.moves[move] + 1
+            else:
+                self.moves[move] = 1
+            
+    def test_game(self):
+        for count in range(self.GAME_COUNT):
+            self.play_game()
+            self.board.clear()
+        print "\n{0}".format(self.winners)
+        print "\n{0}".format(self.moves)
+
 if __name__ == "__main__":
     unittest.main()
