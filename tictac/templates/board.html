@@ -6,19 +6,19 @@ Alex Ferrer's Tic-Tac-Toe<br>
 <tr>
  <td class="box" width="25%">
     <button type="submit" name="button" value="0"
-      {% if b0 > 0 %} disabled="disabled" {% endif %}>
+      {% if b0 != "_" %} disabled="disabled" {% endif %}>
       {{ b0 }}
     </button>
  </td>
  <td class="box" width="25%">
      <button type="submit" name="button" value="1" 
-     {% if b1 > 0 %} disabled="disabled" {% endif %} >
+     {% if b1 != "_" %} disabled="disabled" {% endif %} >
      {{ b1 }}
     </button>
 </td>
  <td class="box" width="25%">
       <button type="submit" name="button" value="2"
-      {% if b2 > 0 %} disabled="disabled" {% endif %} >
+      {% if b2 != "_" %} disabled="disabled" {% endif %} >
       {{ b2 }}
     </button>
  </td>
@@ -26,19 +26,19 @@ Alex Ferrer's Tic-Tac-Toe<br>
 <tr>
  <td class="box" width="25%">
     <button type="submit" name="button" value="3"
-      {% if b3 > 0 %} disabled="disabled" {% endif %}>
+      {% if b3 != "_" %} disabled="disabled" {% endif %}>
       {{ b3 }}
     </button>
  </td>
  <td class="box" width="25%">
      <button type="submit" name="button" value="4"
-      {% if b4 > 0 %} disabled="disabled" {% endif %}>
+      {% if b4 != "_" %} disabled="disabled" {% endif %}>
       {{ b4 }}
     </button>
 </td>
  <td class="box" width="25%">
       <button type="submit" name="button" value="5"
-      {% if b5 > 0 %} disabled="disabled" {% endif %}>
+      {% if b5 != "_" %} disabled="disabled" {% endif %}>
       {{ b5 }}
     </button>
  </td>
@@ -46,19 +46,19 @@ Alex Ferrer's Tic-Tac-Toe<br>
 <tr>
  <td class="box" width="25%">
     <button type="submit" name="button" value="6"
-      {% if b6 > 0 %} disabled="disabled" {% endif %}>
+      {% if b6 != "_" %} disabled="disabled" {% endif %}>
       {{ b6 }}
     </button>
  </td>
  <td class="box" width="25%">
      <button type="submit" name="button" value="7"
-      {% if b7 > 0 %} disabled="disabled" {% endif %}>
+      {% if b7 != "_" %} disabled="disabled" {% endif %}>
       {{ b7 }}
     </button>
 </td>
  <td class="box" width="25%">
       <button type="submit" name="button" value="8"
-      {% if b8 > 0 %} disabled="disabled" {% endif %}>
+      {% if b8 != "_" %} disabled="disabled" {% endif %}>
       {{ b8 }}
     </button>
  </td>
