@@ -226,13 +226,14 @@ class Game(object):
 
 
     def update(self):
+        
         choice = raw_input("Selet where you want to place your marker(1-9) or Q to quit the game:")
         while re.match("[1-9qQ]", choice) == None:
             choice = raw_input("Please enter a valid option(1-9 or Q): ")
         if choice.isdigit():
             self.player.place_marker(int(choice)-1)
-            if self.board.winner == None:
-                self.computer.place_marker()
+            #if self.board.winner == None:
+                
         else:
             self.board.declare_cat()
 
@@ -240,6 +241,7 @@ class Game(object):
     def game_loop(self):
         print "Please Go First\n"
         while self.board.winner == None:
+            self.computer.place_marker()
             self.draw()
             self.update()
         self.draw()
