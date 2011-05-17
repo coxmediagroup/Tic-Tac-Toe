@@ -24,7 +24,16 @@ class Board(object):
     @property
     def grid(self):
         return self.__board
-
+    
+    @property
+    def full(self):
+        result = True
+        for ele in self.__board:
+            if ele == None:
+                result = False
+                break
+        return result
+    
     def take_cell(self, index, claim):
         if index < self.BOARD_SIZE:
             if self.__board[index] == None:
