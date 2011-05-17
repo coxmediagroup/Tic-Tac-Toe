@@ -23,31 +23,24 @@ def  calc_computer_move(board):
              temp = list(board)
              temp[x] = "0"
              if calc_game_over(temp):
-               print "rule win"
                return x     
        
        # brute force  for all posible moves :
        #if next move makes him win take it
        for x in range(0,8):
-          print "(",x,")",
           if board[x] == "_" :
              temp = list(board)
              temp[x] = "X"
-             print x,temp
              if calc_game_over(temp):
-               print "rule not loose"
                return x
-          print "skip"
           
        #if center not taken, take it.
        if board[4] == "_":
-          print "rule center if not taken"
           return 4    
 
      #otherwise, randomly take first open space
        while True:
           i = random.randrange(0,8)
           if board[i] == "_" :
-             print "rule random"
              return i 
      

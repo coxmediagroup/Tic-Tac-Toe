@@ -16,20 +16,36 @@ def paint_board(request):
     b7 = board[7]
     b8 = board[8]
     user_message = "Make your move"
+    game_over = False
+    
+    if "_" not in board:
+       user_message = "it is a tie !!! "
+       game_over = True
     
     if calc_game_over(board):
        user_message = "game over !!! "
+       game_over = True
        
     return render_to_response('board.html', locals())
     
 def process_move(request):
     move = request.GET.get('button')
     m = int(move)  
-    board[m] = "X" # X is a player move
+    board[m] = "X" # X is a player move 
     
-    c = calc_computer_move(board) 
-    board[c] = "0" # 0 is a computer move
+    if "_" in board: # if last space is played, skip computers turn
+      c = calc_computer_move(board) 
+      board[c] = "0" 
 
     return HttpResponseRedirect('/board') 
        
+def reset(request):
+    for x in range(0,8):
+        board[x] = "_"
 
+    b0 = b1 = b3 = b4 = b5 = b6 = b7 = b8 = "_"
+    user_message = "Welcome to a new Game!! "
+    game_over = False
+ 
+    #return HttpResponseRedirect('/board') 
+    return render_to_response('board.html', locals())
