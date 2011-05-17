@@ -75,7 +75,7 @@ def main():
             print 'Thinking...'
             cell = board.find_move(current_player)
             print 'Selecting cell', cell
-            board.record(cell, current_player)
+            assert board.is_cell_blank(cell)
         else:
             board.output()
             while True:
