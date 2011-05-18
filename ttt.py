@@ -85,6 +85,7 @@ class Board:
 
         Selects a move for the specified player.
         """
+        # XXX need to replace with a tree search
         return self._board.index(None)
 
     def is_cell_blank(self, cell):
