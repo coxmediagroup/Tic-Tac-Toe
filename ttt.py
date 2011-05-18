@@ -7,6 +7,15 @@ import sys
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
+def other_player(player):
+    """(str): str
+
+    Given the constant for one player, returns the other one.
+    """
+    return (PLAYER_1
+            if (player == PLAYER_2)
+            else PLAYER_2)
+
 class Board:
     """Class representing a game state.
 
@@ -152,9 +161,8 @@ def main():
 
         # Record the move and switch to the other player.
         board.record(cell, current_player)
-        current_player = (PLAYER_1
-                          if (current_player == PLAYER_2)
-                          else PLAYER_2)
+        current_player = other_player(current_player)
+
     winner = board.get_winner()
     if winner == computer_player:
         print 'Yay!  I won!'
