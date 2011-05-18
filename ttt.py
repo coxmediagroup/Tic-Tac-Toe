@@ -2,6 +2,8 @@
 
 """
 
+import sys
+
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
@@ -58,8 +60,25 @@ class Board:
         assert player in (PLAYER_1, PLAYER_2)
         self._board[cell] = player
 
-    def output(self):
-        """Prints out an ASCII representation of the board."""
+    def output(self, stream=None):
+        """(file): None
+
+        Prints out an ASCII representation of the board.  Defaults
+        to standard output if no file-like object is supplied.
+        """
+        if stream is None:
+            stream = sys.stdout
+
+        for y in range(3):
+            for x in range(3):
+                cell = y*3 + x
+                value = self._board[cell]
+                if value is None:
+                    value = str(cell+1)
+                stream.write(' ' + value + ' ')
+                stream.write('|')
+            stream.write('\n')
+            stream.write((3*4)*'=' + '\n')
 
     def find_move(self, player):
         """(): int

@@ -3,6 +3,7 @@ Tests for basic board operations.
 """
 
 import unittest
+import StringIO
 import ttt
 
 class TestBoardBasic(unittest.TestCase):
@@ -26,6 +27,16 @@ class TestBoardBasic(unittest.TestCase):
             b.record(i, ttt.PLAYER_1)
             self.assertFalse(b.is_cell_blank(i))
 
+    def test_output(self):
+        # This test will exercise the output() method for several cases
+        # and captures the output, but only verifies that the method
+        # doesn't raise an exception.
+        for board in ('---------', 'XOXOXOOXO'):
+            b = self.make_board(board)
+            out = StringIO.StringIO()
+            b.output(out)
+            ##print out.getvalue()
+                
     def test_winner(self):
         for (expected, board) in [
             (None, '---------'), # Empty board
