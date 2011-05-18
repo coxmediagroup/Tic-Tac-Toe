@@ -85,3 +85,19 @@ div.computer-selected {
 form {
 	display: none;
 }
+
+#start-again {
+	position: absolute;
+	top: 550px;
+	left: 480px;
+	font-size: 25px;
+	text-decoration: none;
+	color: #33451a;
+	font-family: Comic Sans MS, cursive, verdana;
+	padding: 3px;
+}
+
+#start-again:hover {
+	color: white;
+	background: #33451a;
+}
