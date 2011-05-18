@@ -5,11 +5,7 @@ from tictac.mainapp.game_rules import calc_computer_move, calc_game_over
 
 def paint_board(request):
     ''' Paint the game state into the board gui (board.html) 
-        X = Human player
-        O = Computer player
-        _ = empty space
-        The game ends with a tie when there are no empty spaces left to play 
-        or when somebody wins (calc_game_over = True ). 
+. 
     '''
     if "game_board" not in request.session:
         request.session["game_board"] = ["_","_","_","_","_","_","_","_","_"]
