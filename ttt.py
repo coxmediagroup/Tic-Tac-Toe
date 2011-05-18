@@ -95,6 +95,13 @@ class Board:
         assert 0 <= cell < 9
         return (self._board[cell] is None)
 
+    def is_full(self):
+        """(): bool
+
+        Returns true if the board is full and no further moves can be made.
+        """
+        return (None not in self._board)
+
 def main():
     while True:
         print "Would you like the first move? (Y/N)",
@@ -111,7 +118,7 @@ def main():
 
     board = Board()
     current_player = PLAYER_1
-    while not board.get_winner():
+    while not (board.get_winner() or board.is_full()):
         if computer_player == current_player:
             print 'Thinking...'
             cell = board.find_move(current_player)
@@ -141,5 +148,9 @@ def main():
     winner = board.get_winner()
     if winner == computer_player:
         print 'Yay!  I won!'
-    else:
+    elif winner is not None:
         print 'Congratulations!  You won!'
+    else:
+        assert board.is_full()
+        print 'Draw -- the board is full.'
+

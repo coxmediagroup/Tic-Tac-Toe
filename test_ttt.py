@@ -27,6 +27,14 @@ class TestBoardBasic(unittest.TestCase):
             b.record(i, ttt.PLAYER_1)
             self.assertFalse(b.is_cell_blank(i))
 
+    def test_full(self):
+        b = self.make_board('---------')
+        self.assertFalse(b.is_full())
+        b = self.make_board('XOXOXOXO-')
+        self.assertFalse(b.is_full())
+        b = self.make_board('XOXOXOXOX')
+        self.assertTrue(b.is_full())
+            
     def test_output(self):
         # This test will exercise the output() method for several cases
         # and captures the output, but only verifies that the method
