@@ -81,3 +81,7 @@ div.computer-selected {
 	left: 428px;
 	top: 350px;
 }
+
+form {
+	display: none;
+}

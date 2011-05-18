@@ -1,0 +1,1 @@
+$(document).ready(function(){	$('#main-grid div').click(function() {		if ($(this).hasClass('not-selected')) {			// set the value of the input to the last character of the clicked cell's ID.			id = $(this).attr('id')			$('#input-selected-cell').val(id.substring(id.length - 1))						// submit the form			$('#main-form').submit()		}	});});
