@@ -7,7 +7,7 @@ body {
 	background: white url('../images/empty_grid.png') no-repeat;
 	width: 634px;
 	height: 514px;
-	position: fixed;
+	position: relative;
 }
 
 #main-grid div {
