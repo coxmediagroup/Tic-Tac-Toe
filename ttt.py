@@ -141,7 +141,7 @@ def main():
         if computer_player == current_player:
             print 'Thinking...'
             cell = board.find_move(current_player)
-            print 'Selecting cell', cell
+            print 'Selecting cell', cell+1
             assert board.is_cell_blank(cell)
         else:
             board.output()
