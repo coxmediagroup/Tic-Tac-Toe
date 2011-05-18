@@ -6,17 +6,17 @@ import random
 import pickle
 
 
-def allEqual(list):
+def winningArray(list):
     """returns True if all the elements in a list are equal, or if the list is empty. This is used to determine if a player has 'line' of 3 in a row"""
     return not list or list == [list[0]] * len(list)
 
 
 
-Empty = ' '
-Player_X = 'x'
-Player_O = 'o'
+EmptyBoardSpace = ' '
+Player_x = 'x'
+Player_o = 'o'
 
-class Board:
+class TicTacToeBoard:
     """This class represents a tic tac toe board state."""
     def __init__(self):
         """Initialize all members."""
@@ -25,9 +25,9 @@ class Board:
         # - | - | -
         # - | - | -
         # - | - | -
-        ## where '-' is represented by ' ' from Empty variable
+        ## where '-' is represented by ' ' from EmptyBoardSpace variable
         
-        self.pieces = [Empty]*9
+        self.board_space = [EmptyBoardSpace]*9
         # the idea here is to make field names understandable by people where as arrays normally start with 0 instead of 1
         # so when needed you chop up string: ie self.field_names[0] would be the equivalent of the first character of the string which is '1'
         self.field_names = '123456789'
@@ -35,33 +35,33 @@ class Board:
     
     def output(self):
         """Display the board on screen."""
-        ## this is just a list of the pieces array split out by the lines
+        ## this is just a list of the board_space array split out by the lines
         ## then joining each of the items in the subarrays with ' | '
         ## the print function when called automatically adds the newline feed to each line so you get your text board
         #  |  | 
         #  |  | 
         #  |  |         
-        for line in [self.pieces[0:3], self.pieces[3:6], self.pieces[6:9]]:
+        for line in [self.board_space[0:3], self.board_space[3:6], self.board_space[6:9]]:
             print(' | '.join(line))
 
 
     def winner(self):
-        """Determine if one player has won the game. Returns Player_X, Player_O or None"""
+        """Determine if one player has won the game. Returns Player_x, Player_o or None"""
         winning_rows = [[0,1,2],[3,4,5],[6,7,8], # vertical
                         [0,3,6],[1,4,7],[2,5,8], # horizontal
                         [0,4,8],[2,4,6]]         # diagonal
         for row in winning_rows:
-            if self.pieces[row[0]] != Empty and allEqual([self.pieces[i] for i in row]):
+            if self.board_space[row[0]] != EmptyBoardSpace and winningArray([self.board_space[i] for i in row]):
                 # return the first item of the winning row
                 # a short cut of returning which player has won as the first char of a winning row will be 'x' or 'o'
-                return self.pieces[row[0]]
+                return self.board_space[row[0]]
 
     def getValidMoves(self):
         """Returns a list of valid moves. A move can be passed to getMoveName to 
         retrieve a human-readable name or to makeMove/undoMove to play it.
-        Pieces that contain a ' ' have not yet been played.
+        board_space that contain a ' ' have not yet been played.
         """
-        return [pos for pos in range(9) if self.pieces[pos] == Empty]
+        return [pos for pos in range(9) if self.board_space[pos] == EmptyBoardSpace]
 
     def gameOver(self):
         """Returns true if one player has won or if there are no valid moves left (empty list)."""
@@ -72,15 +72,15 @@ class Board:
         """Returns a human-readable name for a move"""
         return self.field_names[move]
     def save(self, filename):
-        #save game board object to file to allow for separate calls to the same game
-        #typically used for web interface
-        # move count or player tracking would be needed to find who moves next
+        """save game board object to file to allow for separate calls to the same game
+        typically used for web interface
+         move count or player tracking would be needed to find who moves next"""
         pickle.dump(self,open(filename, "wb"))
     
     def load(self, filename):
-        #load gamesave check if game is complete
+        """load gamesave check if game is complete"""
         lastgame = pickle.load(filename)
-        self.pieces = lastgame.pieces
+        self.board_space = lastgame.board_space
         self.field_names = lastgame.field_names
         if self.gameOver:
             self.output()
@@ -91,11 +91,11 @@ class Board:
         
         """Plays a move by setting that item of the list to either 'x' or 'o' which is the value of each player.
         Note: this doesn't check if the move is legal!"""
-        self.pieces[move] = player
+        self.board_space[move] = player
     
     def undoMove(self, move):
         """Undoes a move/removes a piece of the board by setting that list item to ' ' character"""
-        self.makeMove(move, Empty)
+        self.makeMove(move, EmptyBoardSpace)
 
 def humanPlayer(board, player):
     """Function for the human player"""
@@ -117,7 +117,7 @@ def computerPlayer(board, player):
     board.output()
     # a dictionary object to be used in recursive algorithm to eval opponents game play thru
     # effectively alternating players thru each recursion
-    opponent = { Player_O : Player_X, Player_X : Player_O }
+    opponent = { Player_o : Player_x, Player_x : Player_o }
     
 
     def judge(winner):
@@ -177,15 +177,15 @@ def computerPlayer(board, player):
 
 def game():
     """The game function"""
-    b = Board()
+    b = TicTacToeBoard()
     turn = 1
     while True:
         print "%i. turn" % turn
 
-        humanPlayer(b, Player_O)
+        humanPlayer(b, Player_o)
         if b.gameOver(): 
             break
-        computerPlayer(b, Player_X)
+        computerPlayer(b, Player_x)
 
         if b.gameOver(): 
             break
