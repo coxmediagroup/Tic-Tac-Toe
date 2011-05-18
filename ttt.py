@@ -20,6 +20,50 @@ class Board:
     def __init__(self):
         self._board = [None] * 9
 
+    def is_cell_blank(self, cell):
+        """(int): bool
+
+        Returns true if the cell is blank.
+        """
+        assert 0 <= cell < 9
+        return (self._board[cell] is None)
+
+    def is_full(self):
+        """(): bool
+
+        Returns true if the board is full and no further moves can be made.
+        """
+        return (None not in self._board)
+
+    def record(self, cell, player):
+        """(int, str)
+
+        Record a move.
+        """
+        assert 0 <= cell < 9
+        assert player in (PLAYER_1, PLAYER_2)
+        self._board[cell] = player
+
+    def output(self, stream=None):
+        """(file): None
+
+        Prints out an ASCII representation of the board.  Defaults
+        to standard output if no file-like object is supplied.
+        """
+        if stream is None:
+            stream = sys.stdout
+
+        for y in range(3):
+            for x in range(3):
+                cell = y*3 + x
+                value = self._board[cell]
+                if value is None:
+                    value = str(cell+1)
+                stream.write(' ' + value + ' ')
+                stream.write('|')
+            stream.write('\n')
+            stream.write((3*4)*'=' + '\n')
+
     def get_winner(self):
         """(): str
 
@@ -51,35 +95,6 @@ class Board:
 
         return None
 
-    def record(self, cell, player):
-        """(int, str)
-
-        Record a move.
-        """
-        assert 0 <= cell < 9
-        assert player in (PLAYER_1, PLAYER_2)
-        self._board[cell] = player
-
-    def output(self, stream=None):
-        """(file): None
-
-        Prints out an ASCII representation of the board.  Defaults
-        to standard output if no file-like object is supplied.
-        """
-        if stream is None:
-            stream = sys.stdout
-
-        for y in range(3):
-            for x in range(3):
-                cell = y*3 + x
-                value = self._board[cell]
-                if value is None:
-                    value = str(cell+1)
-                stream.write(' ' + value + ' ')
-                stream.write('|')
-            stream.write('\n')
-            stream.write((3*4)*'=' + '\n')
-
     def find_move(self, player):
         """(): int
 
@@ -87,21 +102,6 @@ class Board:
         """
         # XXX need to replace with a tree search
         return self._board.index(None)
-
-    def is_cell_blank(self, cell):
-        """(int): bool
-
-        Returns true if the cell is blank.
-        """
-        assert 0 <= cell < 9
-        return (self._board[cell] is None)
-
-    def is_full(self):
-        """(): bool
-
-        Returns true if the board is full and no further moves can be made.
-        """
-        return (None not in self._board)
 
 def main():
     while True:
