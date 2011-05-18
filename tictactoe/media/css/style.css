@@ -1,0 +1,10 @@
+body {
+}
+
+#main-grid {
+	margin: 0;
+	padding: 0;
+	background: white url('../images/empty_grid.png') no-repeat;
+	width: 634px;
+	height: 514px;
+}
