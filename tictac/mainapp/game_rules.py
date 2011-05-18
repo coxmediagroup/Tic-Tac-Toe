@@ -37,8 +37,13 @@ def  calc_computer_move(board):
        #if center not taken, take it.
        if board[4] == "_":
           return 4    
-
-     #otherwise, randomly take first open space
+          
+       #if corners not taken, take one
+       for x in [0,2,6,8]:
+          if board[x] == "_":
+             return x
+             
+       #otherwise, randomly take first open space
        while True:
           i = random.randrange(0,9)
           if board[i] == "_" :
