@@ -7,4 +7,77 @@ body {
 	background: white url('../images/empty_grid.png') no-repeat;
 	width: 634px;
 	height: 514px;
+	position: fixed;
+}
+
+#main-grid div {
+	width: 155px;
+	height: 125px;
+}
+
+div.not-selected:hover {
+	background: white url('../images/o.png') center no-repeat;	
+	cursor: hand;
+}
+
+div.user-selected {
+	background: white url('../images/o.png') center no-repeat;	
+}
+
+div.computer-selected {
+	background: white url('../images/x.png') center no-repeat;	
+}
+
+#cell_1 {
+	position: absolute;
+	left: 15px;
+	top: 12px;
+}
+
+#cell_2 {
+	position: absolute;
+	left: 219px;
+	top: 12px;
+}
+
+#cell_3 {
+	position: absolute;
+	left: 413px;
+	top: 12px;
+}
+
+#cell_4 {
+	position: absolute;
+	left: 15px;
+	top: 175px;
+}
+
+#cell_5 {
+	position: absolute;
+	left: 219px;
+	top: 175px;
+}
+
+#cell_6 {
+	position: absolute;
+	left: 413px;
+	top: 175px;
+}
+
+#cell_7 {
+	position: absolute;
+	left: 15px;
+	top: 340px;
+}
+
+#cell_8 {
+	position: absolute;
+	left: 219px;
+	top: 340px;
+}
+
+#cell_9 {
+	position: absolute;
+	left: 428px;
+	top: 350px;
 }
