@@ -2,9 +2,6 @@ from django.template import Context, loader
 from django.http import HttpResponse
 
 def start(request):
-    if request.method == 'GET':
-        print request.GET.keys()
-        
     EMPTY = 'not-selected'
     USER = 'user-selected'
     COMPUTER = 'computer-selected'
