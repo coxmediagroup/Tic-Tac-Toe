@@ -38,7 +38,7 @@ def  calc_computer_move(board):
        if board[4] == "_":
           return 4    
        
-       #if oposite corners, pick an edge
+       #if opposite corners, pick an edge
        if (board[0] == board[8] == "X") or (board[2] == board[6] == "X"):
           for x in [1,3,5,7]:
              if board[x] == "_":
