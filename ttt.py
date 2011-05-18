@@ -53,6 +53,15 @@ class Board:
         """
         return (None not in self._board)
 
+    def legal_moves(self):
+        """(): [int]
+
+        Yields a list of indexes where a move can be made.
+        """
+        for i in range(9):
+            if self.is_cell_blank(i):
+                yield i
+        
     def record(self, cell, player):
         """(int, str)
 
@@ -113,13 +122,73 @@ class Board:
 
         return None
 
+    def score(self):
+        """(str): int
+
+        Returns the score of the position, from the point of view
+        of the specified player.  Player 1 winning is +<very large>,
+        and player 2 winning is -<very large>.  Non-winning positions are 0.
+        """
+        winner = self.get_winner()
+        if winner == PLAYER_1:
+            return sys.maxint
+        elif winner == PLAYER_2:
+            return -sys.maxint
+        else:
+            return 0
+
     def find_move(self, player):
         """(): int
 
         Selects a move for the specified player.
         """
-        # XXX need to replace with a tree search
-        return self._board.index(None)
+        best_score = 0
+        best_move = None
+        for cell in self.legal_moves():
+            child = self.copy() ; child.record(cell, player)
+            score = child._minimax(other_player(player), depth=3)
+            if player == PLAYER_1:
+                if score > best_score:
+                    best_score = score
+                    best_move = cell
+            else:
+                if score < best_score:
+                    best_score = score
+                    best_move = cell
+
+        if best_move is None:
+            # Pick an arbitrary cell.
+            # XXX should probably take the middle first, then a corner,
+            # then pick randomly.
+            best_move = self._board.index(None)
+        return best_move
+
+    def _minimax(self, player, depth):
+        """(str, int): int
+
+        Do a mini-max search of the game tree, based upon the implementation
+        described in http://en.wikipedia.org/wiki/Minimax.
+        """
+        if depth <= 0:
+            return self.score()
+        if self.is_full():
+            return self.score()
+
+        if player == PLAYER_1:
+            best_score = -sys.maxint
+        else:
+            best_score = sys.maxint
+        best_move = None
+
+        for move in self.legal_moves():
+            child = self.copy() ; child.record(move, player)
+            move_score = child._minimax(other_player(player), depth-1)
+            if player == PLAYER_1:
+                best_score = max(best_score, move_score)
+            else:
+                best_score = min(best_score, move_score)
+
+        return best_score
 
 def main():
     while True:
