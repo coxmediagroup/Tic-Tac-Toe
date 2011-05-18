@@ -27,6 +27,14 @@ class TestBoardBasic(unittest.TestCase):
             b.record(i, ttt.PLAYER_1)
             self.assertFalse(b.is_cell_blank(i))
 
+    def test_copy(self):
+        b = self.make_board('---------')
+        copy = b.copy()
+        # Require the two internal lists have the same contents...
+        self.assertEquals(b._board, copy._board)
+        # ...but that they are different objects.
+        self.assertTrue(b._board is not copy._board)
+
     def test_full(self):
         b = self.make_board('---------')
         self.assertFalse(b.is_full())

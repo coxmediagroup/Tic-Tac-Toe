@@ -20,6 +20,15 @@ class Board:
     def __init__(self):
         self._board = [None] * 9
 
+    def copy(self):
+        """(): Board
+
+        Make a copy of this Board instance and return it.
+        """
+        b = Board()
+        b._board = self._board[:]
+        return b
+
     def is_cell_blank(self, cell):
         """(int): bool
 
