@@ -21,11 +21,33 @@ class Board:
     def get_winner(self):
         """(): str
 
-        If someone has won, returns the PLAYER_1/PLAYER_2 constant of 
+        If someone has won, returns the PLAYER_1/PLAYER_2 constant of
         that player.
 
         If no one has won, returns None.
         """
+        def generate_indexes():
+            """(): [(int, int, int)]
+
+            Internal function that yields 3-tuples containing the cell
+            indexes for the rows, columns, diagonals, etc.
+            """
+
+            for i in range(3):
+                yield (i*3, i*3+1, i*3+2)  # Rows
+                yield (i, 3+i, 6+i)        # Columns
+
+            yield (0, 4, 8)                # Diagonal, top left to lower right
+            yield (2, 4, 6)                # Diagonal, upper right to lower left
+
+        for indexes in generate_indexes():
+            contents = [self._board[i] for i in indexes]
+            if contents.count(PLAYER_1) == 3:
+                return PLAYER_1
+            elif contents.count(PLAYER_2) == 3:
+                return PLAYER_2
+
+        return None
 
     def record(self, cell, player):
         """(int, str)
@@ -38,7 +60,7 @@ class Board:
 
     def output(self):
         """Prints out an ASCII representation of the board."""
-        
+
     def find_move(self, player):
         """(): int
 
@@ -91,7 +113,7 @@ def main():
                     continue
 
                 break
-        
+
         # Record the move and switch to the other player.
         board.record(cell, current_player)
         current_player = (PLAYER_1

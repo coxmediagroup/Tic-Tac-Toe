@@ -26,5 +26,24 @@ class TestBoardBasic(unittest.TestCase):
             b.record(i, ttt.PLAYER_1)
             self.assertFalse(b.is_cell_blank(i))
 
+    def test_winner(self):
+        for (expected, board) in [
+            (None, '---------'), # Empty board
+            (None, 'XOXOXOOXO'), # Randomly full board
+            # Horizontals
+            ('X', 'XXX------'),
+            ('X', '---XXX---'),
+            ('X', '------XXX'),
+            # Verticals
+            ('O', 'O--O--O--'),
+            ('O', '-O--O--O-'),
+            ('O', '--O--O--O'),
+            # Diagonals
+            ('O', 'O---O---O'),
+            ('X', '--X-X-X--'),
+            ]:
+            b = self.make_board(board)
+            self.assertEquals(b.get_winner(), expected)
+
 if __name__ == '__main__':
     unittest.main()
