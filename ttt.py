@@ -50,6 +50,13 @@ class Board:
         assert 0 <= cell < 9
         return (self._board[cell] is None)
 
+    def is_empty(self):
+        """(): bool
+
+        Returns true if the board is empty; therefore, this is the first move.
+        """
+        return (PLAYER_1 not in self._board and PLAYER_2 not in self._board)
+
     def is_full(self):
         """(): bool
 
@@ -148,12 +155,17 @@ class Board:
         """
         if DEBUG:
             print '\n\n\n' + '='*60
-        best_move, score = self._minimax(player, depth=3)
-        if best_move is None:
-            # Pick an arbitrary cell.
-            # XXX should probably take the middle first, then a corner,
-            # then pick randomly.
-            best_move = self._board.index(None)
+
+        if self.is_empty():
+            # On an empty board, take the middle square.
+            best_move = 4
+        else:
+            best_move, score = self._minimax(player, depth=3)
+            if best_move is None:
+                # Pick an arbitrary cell.
+                # XXX should probably take the middle first, then a corner,
+                # then pick randomly.
+                best_move = self._board.index(None)
         return best_move
 
     def _minimax(self, player, depth):

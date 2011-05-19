@@ -35,6 +35,14 @@ class TestBoardBasic(unittest.TestCase):
         # ...but that they are different objects.
         self.assertTrue(b._board is not copy._board)
 
+    def test_empty(self):
+        b = self.make_board('---------')
+        self.assertTrue(b.is_empty())
+        b = self.make_board('X--------')
+        self.assertFalse(b.is_empty())
+        b = self.make_board('XOXOXOXOX')
+        self.assertFalse(b.is_empty())
+
     def test_full(self):
         b = self.make_board('---------')
         self.assertFalse(b.is_full())
@@ -71,6 +79,11 @@ class TestBoardBasic(unittest.TestCase):
             ]:
             b = self.make_board(board)
             self.assertEquals(b.get_winner(), expected)
+
+    def test_minimax_first_move(self):
+        # Test that the search will pick the middle square on an empty board.
+        b = self.make_board('---------')
+        self.assertEquals(b.find_move(ttt.PLAYER_1), 4)
 
     def test_minimax_pick_winner(self):
         # Test that the search will notice a winning opportunity for 'X'
