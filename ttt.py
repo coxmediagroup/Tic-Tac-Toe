@@ -4,6 +4,7 @@
 
 import sys
 
+# Constants for the two players
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
