@@ -16,16 +16,16 @@ body {
 }
 
 div.not-selected:hover {
-	background: white url('../images/o.png') center no-repeat;	
+	background: white url('../images/x.png') center no-repeat;	
 	cursor: hand;
 }
 
 div.user-selected {
-	background: white url('../images/o.png') center no-repeat;	
+	background: white url('../images/x.png') center no-repeat;	
 }
 
 div.computer-selected {
-	background: white url('../images/x.png') center no-repeat;	
+	background: white url('../images/o.png') center no-repeat;	
 }
 
 #cell_0 {

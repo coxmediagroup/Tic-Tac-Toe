@@ -24,6 +24,34 @@ def is_board_full(board, EMPTY):
     return true
         
 def get_computer_move(board, USER, COMPUTER, EMPTY):
+    # logic for counter to opening move
+    user_moves = 0
+    
+    for i in range(9):
+        if board[i] == USER:
+            user_moves += 1
+
+    if user_moves == 1:
+        # special strategy to counter opening move
+        if board[0] == USER or board[2] == USER or \
+            board[6] == USER or board[8] == USER: 
+            # opening move was a corner
+            return 4
+        elif board[4] == USER:
+            # opening move was the center
+            return choice([0, 2, 6, 8])
+        else: # it was an edge opening
+            if board[1] == USER:
+                return choice([4, 2, 0, 7])
+            elif board[3] == USER:
+                return choice([4, 6, 0, 5])
+            elif board[5] == USER:
+                return choice([4, 8, 2, 3])
+            else: # board[7]
+                return choice([4, 8, 6, 1])
+                
+    # the remaining logic is for non-opening move counter... (i.e. the user has
+    # made at least two moves)
     # see if a winning move is possible
     for i in range(9):
         board_copy = board[:]
