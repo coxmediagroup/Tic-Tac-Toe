@@ -9,7 +9,7 @@ PLAYER_2 = 'O'
 
 # Set to true to get debugging output about the tree search.
 DEBUG = False
-##DEBUG = True
+DEBUG = True
 
 def other_player(player):
     """(str): str
@@ -148,7 +148,7 @@ class Board:
         """
         if DEBUG:
             print '\n\n\n' + '='*60
-        best_move, score = self._minimax(other_player(player), depth=3)
+        best_move, score = self._minimax(player, depth=3)
         if best_move is None:
             # Pick an arbitrary cell.
             # XXX should probably take the middle first, then a corner,
