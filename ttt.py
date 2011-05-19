@@ -31,6 +31,10 @@ CORNERS_NEXT = {
 DEBUG = False
 ##DEBUG = True
 
+# Set to true to make the computer play itself.
+PLAYING_SELF = False
+##PLAYING_SELF = True
+
 def other_player(player):
     """(str): str
 
@@ -114,11 +118,11 @@ class Board:
         def preference(cell):
             # The middle square gets the highest score.
             if cell == MIDDLE_SQUARE:
-                return 10
+                return 0
 
             # The middle of the edges get a low score.
             elif cell in (UP_SQUARE, LEFT_SQUARE, RIGHT_SQUARE, DOWN_SQUARE):
-                return 0
+                return -1
 
             # For corners, we'll count
             else:
@@ -268,26 +272,27 @@ class Board:
         return (best_move, best_score)
 
 def main():
-    while True:
-        print "Would you like the first move? (Y/N)",
-        resp = raw_input()
-        resp = resp.strip()
-        resp = resp.lower()
-        if resp.startswith(('y', 'n')):
-            break
+    if not PLAYING_SELF:
+        while True:
+            print "Would you like the first move? (Y/N)",
+            resp = raw_input()
+            resp = resp.strip()
+            resp = resp.lower()
+            if resp.startswith(('y', 'n')):
+                break
 
-    if resp.startswith('y'):
-        computer_player = PLAYER_2
-    else:
-        computer_player = PLAYER_1
+        if resp.startswith('y'):
+            computer_player = PLAYER_2
+        else:
+            computer_player = PLAYER_1
 
     board = Board()
     current_player = PLAYER_1
     while not (board.get_winner() or board.is_full()):
-        if computer_player == current_player:
+        if PLAYING_SELF or computer_player == current_player:
             print 'Thinking...'
             cell = board.find_move(current_player)
-            print 'Selecting cell', cell+1
+            print '%s selects cell %i' % (current_player, cell+1)
             assert board.is_cell_blank(cell)
         else:
             board.output()
@@ -307,13 +312,13 @@ def main():
 
         # Record the move and switch to the other player.
         board.record(cell, current_player)
+        if PLAYING_SELF:
+            board.output()
         current_player = other_player(current_player)
 
     winner = board.get_winner()
-    if winner == computer_player:
-        print 'Yay!  I won!'
-    elif winner is not None:
-        print 'Congratulations!  You won!'
+    if winner:
+        print 'Yay!  The %s player won!' % winner
     else:
         assert board.is_full()
         print 'Draw -- the board is full.'
