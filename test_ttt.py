@@ -85,11 +85,23 @@ class TestBoardBasic(unittest.TestCase):
         b = self.make_board('---------')
         self.assertEquals(b.find_move(ttt.PLAYER_1), 4)
 
+    def test_minimax_first_move(self):
+        # Test that the search will pick the middle square on an empty board.
+        b = self.make_board('---------')
+        self.assertEquals(b.find_move(ttt.PLAYER_1), 4)
+
     def test_minimax_pick_winner(self):
         # Test that the search will notice a winning opportunity for 'X'
         # by taking cell 3.
         b = self.make_board('XX--O-O--')
         self.assertEquals(b.find_move(ttt.PLAYER_1), 2)
+
+    def test_minimax_prefer_corner(self):
+        # Check that the search will prefer a corner square.
+        b = self.make_board('----X----')
+        self.assertIn(b.find_move(ttt.PLAYER_2), 
+                      [ttt.UL_SQUARE, ttt.UR_SQUARE,
+                       ttt.LL_SQUARE, ttt.LR_SQUARE])
 
     def test_minimax_prevent_loss(self):
         # Test that the minimax search will notice a loss for 'X' when

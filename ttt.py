@@ -7,6 +7,18 @@ import sys
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
+# Constants for various coordinates on the board.
+UL_SQUARE = 0                   # Cell no. for upper left
+UP_SQUARE = 1                   # Cell no. for upper middle
+UR_SQUARE = 2                   # Cell no. for upper right
+LEFT_SQUARE = 3                 # Cell no. for left middle
+MIDDLE_SQUARE = 4               # Cell no. for the middle
+RIGHT_SQUARE = 5                # Cell no. for right middle
+LL_SQUARE = 6                   # Cell no. for lower left
+DOWN_SQUARE = 7                 # Cell no. for lower middle
+LR_SQUARE = 8                   # Cell no. for lower right
+CORNERS = ()
+
 # Set to true to get debugging output about the tree search.
 DEBUG = False
 ##DEBUG = True
@@ -69,7 +81,11 @@ class Board:
 
         Yields a list of indexes where a move can be made.
         """
-        for i in range(9):
+        # Preferred ordering for squares: the middle square, then
+        # the corners, then the middle of the sides.
+        for i in (MIDDLE_SQUARE,
+                  UL_SQUARE, UR_SQUARE, LL_SQUARE, LR_SQUARE,
+                  UP_SQUARE, LEFT_SQUARE, RIGHT_SQUARE, DOWN_SQUARE):
             if self.is_cell_blank(i):
                 yield i
         
@@ -158,13 +174,13 @@ class Board:
 
         if self.is_empty():
             # On an empty board, take the middle square.
-            best_move = 4
+            best_move = MIDDLE_SQUARE
         else:
             best_move, score = self._minimax(player, depth=3)
             if best_move is None:
                 # Pick an arbitrary cell.
-                # XXX should probably take the middle first, then a corner,
-                # then pick randomly.
+                # Probably not invoked, unless _minimax() is buggy or depth
+                # was zero.
                 best_move = self._board.index(None)
         return best_move
 
