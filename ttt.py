@@ -168,6 +168,14 @@ class Board:
                 print 'Depth <= 0; score=', self.score()
                 self.output()
             return (None, self.score())
+        # No need to search more deeply when someone has won.
+        winner = self.get_winner() 
+        if winner is not None:
+            if DEBUG:
+                print ('Found a winner for player %s; score=%i'%
+                       (winner, self.score()))
+                self.output()
+            return (None, self.score())
         if self.is_full():
             if DEBUG:
                 print 'Board is full; score=', self.score()
