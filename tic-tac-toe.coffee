@@ -175,3 +175,29 @@ class Vectors
                   [ [2,0], [1,1], [0,2] ]
                 ]
 
+
+#
+# Main program logic
+#
+board = new Board
+board.on 'mark error',(position) ->
+    puts "Attempt to mark cell #{position} which is already taken."
+    setup_player_input() # Start the loop over to avoid giving computer another turn.
+board.on 'wins', (player) ->
+    puts ""
+    puts "Player #{player} wins."
+    puts board.to_string()
+    process.exit()
+board.on 'board full', ->
+    puts "Board full.  This must be a draw."
+    process.exit()
+
+X = new Player "X", board
+O = new Player "O", board
+
+# Simple test has the computer play itself.
+while true # Until the end of game
+    X.move
+    puts @board.to_string
+    O.Move
+    puts @board.to_string
