@@ -33,5 +33,19 @@ class Board extends events.EventEmitter
         return string
     emit: (signal, argument) ->
         "Just here for debugging so that we can see when events are emitted."
-        # puts "Emitting signal #{signal} with argument #{argument}" unless signal is "newListener"
+        puts "Emitting signal #{signal} with argument #{argument}" unless signal is "newListener"
         super signal, argument
+
+
+class Player
+    "Simple container for player information."
+    constructor: (@me, @board) -> # Put these into instance vars.
+        @vectors = new Vectors
+        @rules = new Rules @me, @board
+        @them = if @me is "X" then "O" else "X" # The VERY funky Coffeescript conditional assignment.
+        # puts "I am #{@me}. Opponent is #{@them}."
+    move: ->
+        for rule in @rules.list
+            break if rule(@me, @board) # Stop after a rule makes a move
+    manual_move: (position) ->
+        @board.mark(position, @me)
