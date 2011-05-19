@@ -18,7 +18,14 @@ RIGHT_SQUARE = 5                # Cell no. for right middle
 LL_SQUARE = 6                   # Cell no. for lower left
 DOWN_SQUARE = 7                 # Cell no. for lower middle
 LR_SQUARE = 8                   # Cell no. for lower right
-CORNERS = ()
+
+# Dictionary mapping each corner cell no. to the two closest corners.
+CORNERS_NEXT = {
+    UL_SQUARE: (UR_SQUARE, LL_SQUARE),
+    UR_SQUARE: (UL_SQUARE, LR_SQUARE),
+    LL_SQUARE: (UL_SQUARE, LR_SQUARE),
+    LR_SQUARE: (LL_SQUARE, UR_SQUARE)
+}
 
 # Set to true to get debugging output about the tree search.
 DEBUG = False
@@ -101,11 +108,26 @@ class Board:
 
         Yields a list of indexes where a move can be made.
         """
-        # Preferred ordering for squares: the middle square, then
-        # the corners, then the middle of the sides.
-        for i in (MIDDLE_SQUARE,
-                  UL_SQUARE, UR_SQUARE, LL_SQUARE, LR_SQUARE,
-                  UP_SQUARE, LEFT_SQUARE, RIGHT_SQUARE, DOWN_SQUARE):
+        # The  preferred ordering for squares: the middle square, then
+        # the corners, then the middle of the sides.  For the corners,
+        # we prefer ones with two empty neighbors.
+        def preference(cell):
+            # The middle square gets the highest score.
+            if cell == MIDDLE_SQUARE:
+                return 10
+
+            # The middle of the edges get a low score.
+            elif cell in (UP_SQUARE, LEFT_SQUARE, RIGHT_SQUARE, DOWN_SQUARE):
+                return 0
+
+            # For corners, we'll count
+            else:
+                c1, c2 = CORNERS_NEXT[cell]
+                return (int(self.is_cell_blank(c1)) +
+                        int(self.is_cell_blank(c2)))
+
+        cell_list = sorted(range(9), key=preference, reverse=True)
+        for i in cell_list:
             if self.is_cell_blank(i):
                 yield i
         

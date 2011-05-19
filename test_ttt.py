@@ -103,6 +103,12 @@ class TestBoardBasic(unittest.TestCase):
                       [ttt.UL_SQUARE, ttt.UR_SQUARE,
                        ttt.LL_SQUARE, ttt.LR_SQUARE])
 
+    def test_minimax_prefer_opposite_corner(self):
+        # Check that the search will prefer a corner square with two
+        # empty neighbors.
+        b = self.make_board('--O-X----')
+        self.assertEquals(b.find_move(ttt.PLAYER_1), ttt.LL_SQUARE)
+
     def test_minimax_prevent_loss(self):
         # Test that the minimax search will notice a loss for 'X' when
         # 'O' takes cell 7 on the next move, and take that cell to
