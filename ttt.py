@@ -161,7 +161,7 @@ class Board:
 
         Do a mini-max search of the game tree, based upon the implementation
         described in http://en.wikipedia.org/wiki/Minimax.  Returns
-        the best cell to take, 
+        the best cell to take and the resulting score for the node.
         """
         if depth <= 0:
             if DEBUG:
