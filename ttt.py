@@ -44,8 +44,10 @@ def generate_indexes():
         yield (i*3, i*3+1, i*3+2)  # Rows
         yield (i, 3+i, 6+i)        # Columns
 
-    yield (0, 4, 8)                # Diagonal, top left to lower right
-    yield (2, 4, 6)                # Diagonal, upper right to lower left
+    # Diagonal, top left to lower right
+    yield (UL_SQUARE, MIDDLE_SQUARE, LR_SQUARE)
+    # Diagonal, upper right to lower left
+    yield (UR_SQUARE, MIDDLE_SQUARE, LL_SQUARE)
 
 # Precompute list of indexes, since it doesn't change over time.
 WINNER_INDEXES = list(generate_indexes())
