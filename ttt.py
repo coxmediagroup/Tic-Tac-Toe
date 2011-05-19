@@ -204,7 +204,7 @@ class Board:
             if DEBUG:
                 print ('Found a winning position for player %s' % winner)
             
-        if self.is_full():
+        elif self.is_full():
             do_score = True
             if DEBUG:
                 print 'Board is full'
