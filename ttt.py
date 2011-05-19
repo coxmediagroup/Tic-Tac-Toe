@@ -7,6 +7,10 @@ import sys
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
+# Set to true to get debugging output about the tree search.
+DEBUG = False
+##DEBUG = True
+
 def other_player(player):
     """(str): str
 
@@ -158,8 +162,14 @@ class Board:
         the best cell to take, 
         """
         if depth <= 0:
+            if DEBUG:
+                print 'Depth <= 0; score=', self.score()
+                self.output()
             return (None, self.score())
         if self.is_full():
+            if DEBUG:
+                print 'Board is full; score=', self.score()
+                self.output()
             return (None, self.score())
 
         if player == PLAYER_1:
@@ -171,6 +181,8 @@ class Board:
         for move in self.legal_moves():
             child = self.copy() ; child.record(move, player)
             _, move_score = child._minimax(other_player(player), depth-1)
+            if DEBUG:
+                print 'Scoring node %i for move %i' % (move_score, move+1)
             if player == PLAYER_1:
                 if move_score > best_score:
                     best_score = move_score
