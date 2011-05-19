@@ -142,20 +142,7 @@ class Board:
 
         Selects a move for the specified player.
         """
-        best_score = 0
-        best_move = None
-        for cell in self.legal_moves():
-            child = self.copy() ; child.record(cell, player)
-            score = child._minimax(other_player(player), depth=3)
-            if player == PLAYER_1:
-                if score > best_score:
-                    best_score = score
-                    best_move = cell
-            else:
-                if score < best_score:
-                    best_score = score
-                    best_move = cell
-
+        best_move, score = self._minimax(other_player(player), depth=3)
         if best_move is None:
             # Pick an arbitrary cell.
             # XXX should probably take the middle first, then a corner,
@@ -164,15 +151,16 @@ class Board:
         return best_move
 
     def _minimax(self, player, depth):
-        """(str, int): int
+        """(str, int): (int, int)
 
         Do a mini-max search of the game tree, based upon the implementation
-        described in http://en.wikipedia.org/wiki/Minimax.
+        described in http://en.wikipedia.org/wiki/Minimax.  Returns
+        the best cell to take, 
         """
         if depth <= 0:
-            return self.score()
+            return (None, self.score())
         if self.is_full():
-            return self.score()
+            return (None, self.score())
 
         if player == PLAYER_1:
             best_score = -sys.maxint
@@ -182,13 +170,17 @@ class Board:
 
         for move in self.legal_moves():
             child = self.copy() ; child.record(move, player)
-            move_score = child._minimax(other_player(player), depth-1)
+            _, move_score = child._minimax(other_player(player), depth-1)
             if player == PLAYER_1:
-                best_score = max(best_score, move_score)
+                if move_score > best_score:
+                    best_score = move_score
+                    best_move = move
             else:
-                best_score = min(best_score, move_score)
+                if move_score < best_score:
+                    best_score = move_score
+                    best_move = move
 
-        return best_score
+        return (best_move, best_score)
 
 def main():
     while True:
