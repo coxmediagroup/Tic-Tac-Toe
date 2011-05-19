@@ -72,5 +72,18 @@ class TestBoardBasic(unittest.TestCase):
             b = self.make_board(board)
             self.assertEquals(b.get_winner(), expected)
 
+    def test_minimax_pick_winner(self):
+        # Test that the search will notice a winning opportunity for 'X'
+        # by taking cell 3.
+        b = self.make_board('XX--O-O--')
+        self.assertEquals(b.find_move(ttt.PLAYER_1), 2)
+
+    def test_minimax_prevent_loss(self):
+        # Test that the minimax search will notice a loss for 'X' when
+        # 'O' takes cell 7 on the next move, and take that cell to
+        # prevent it.
+        b = self.make_board('XXO-O----')
+        self.assertEquals(b.find_move(ttt.PLAYER_1), 6)
+
 if __name__ == '__main__':
     unittest.main()
