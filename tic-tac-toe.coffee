@@ -8,6 +8,7 @@ events = require 'events'
 # I have eschewed "premature" optimization, too. :-)  Heck, I saw an inplementation
 # in regex, of all things.
 
+
 class Board extends events.EventEmitter
     "Create the traditional 3X3 tic-tac-toe board, populated with empty cells."
     constructor: ->
@@ -33,9 +34,8 @@ class Board extends events.EventEmitter
         return string
     emit: (signal, argument) ->
         "Just here for debugging so that we can see when events are emitted."
-        puts "Emitting signal #{signal} with argument #{argument}" unless signal is "newListener"
+        # puts "Emitting signal #{signal} with argument #{argument}" unless signal is "newListener"
         super signal, argument
-
 
 class Player
     "Simple container for player information."
@@ -176,6 +176,38 @@ class Vectors
                 ]
 
 
+setup_player_input = ->
+    readline = require 'readline'
+    stdin = process.openStdin()
+    stdout = process.stdout
+
+    get_input = (buffer) ->
+        puts "buffer: #{buffer}"
+
+    if readline.createInterface.length < 3
+        repl = readline.createInterface stdin
+        stdin.on 'data', (buffer) -> repl.write buffer
+    else
+        repl = readline.createInterface stdin, stdout
+
+    repl.setPrompt 'Your move: '
+    repl.on  'close',  -> stdin.destroy()
+    repl.on  'line', (buffer) -> user_moves(buffer) # This is the callback when you hit return.
+    return repl
+
+
+# This is effectively the main loop.  It has to be a callback like this
+# because of the async nature of NodeJS.
+user_moves = (input) ->
+    coordinates = input.split ","
+    X.manual_move coordinates
+    puts board.to_string()
+    O.move()
+    puts ""
+    puts "The board is now:"
+    puts board.to_string()
+    repl.prompt()
+
 #
 # Main program logic
 #
@@ -195,11 +227,12 @@ board.on 'board full', ->
 X = new Player "X", board
 O = new Player "O", board
 
-# Simple test has the computer play itself.
-while true # Until the end of game
-    X.move()
-    puts board.to_string()
-    O.move()
-    puts
-    puts board.to_string()
+repl = setup_player_input()
 
+puts """Tic Tac Toe: Computer is O, you are X.
+    Make your move by specifying a cell as X, Y.
+    A valid move is 1,1.
+    The upper left cell is 0,0."""
+
+
+repl.prompt()
