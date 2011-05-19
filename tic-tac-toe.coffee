@@ -197,9 +197,9 @@ O = new Player "O", board
 
 # Simple test has the computer play itself.
 while true # Until the end of game
-    X.move
+    X.move()
     puts board.to_string()
-    O.Move
+    O.move()
     puts
     puts board.to_string()
 
