@@ -146,6 +146,8 @@ class Board:
 
         Selects a move for the specified player.
         """
+        if DEBUG:
+            print '\n\n\n' + '='*60
         best_move, score = self._minimax(other_player(player), depth=3)
         if best_move is None:
             # Pick an arbitrary cell.
@@ -182,7 +184,8 @@ class Board:
             child = self.copy() ; child.record(move, player)
             _, move_score = child._minimax(other_player(player), depth-1)
             if DEBUG:
-                print 'Scoring node %i for move %i' % (move_score, move+1)
+                print ('Node score = %i for move %i at depth %i' % 
+                       (move_score, move+1, depth))
             if player == PLAYER_1:
                 if move_score > best_score:
                     best_score = move_score
