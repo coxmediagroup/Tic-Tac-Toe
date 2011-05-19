@@ -254,6 +254,8 @@ class Board:
             best_score = sys.maxint
         best_move = None
 
+        # Try all possible moves, and look for the largest score for
+        # player 1 (smallest for player 2).
         for move in self.legal_moves():
             child = self.copy() ; child.record(move, player)
             _, move_score = child._minimax(other_player(player), depth-1)
@@ -273,6 +275,7 @@ class Board:
 
 def main():
     if not PLAYING_SELF:
+        # Ask user whether they want the first move.
         while True:
             print "Would you like the first move? (Y/N)",
             resp = raw_input()
@@ -288,6 +291,9 @@ def main():
 
     board = Board()
     current_player = PLAYER_1
+
+    # Game loop: for each player, either prompt the user or generate
+    # a computer move.
     while not (board.get_winner() or board.is_full()):
         if PLAYING_SELF or computer_player == current_player:
             print 'Thinking...'
@@ -316,6 +322,7 @@ def main():
             board.output()
         current_player = other_player(current_player)
 
+    # Display the game outcome.
     winner = board.get_winner()
     if winner:
         print 'Yay!  The %s player won!' % winner
