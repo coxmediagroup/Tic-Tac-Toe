@@ -205,8 +205,8 @@ class Board:
             print '\n\n\n' + '='*60
 
         if self.is_empty():
-            # On an empty board, take the middle square.
-            best_move = MIDDLE_SQUARE
+            # On an empty board, take a corner square.
+            best_move = UL_SQUARE
         else:
             best_move, score = self._minimax(player, depth=9)
             if best_move is None:
