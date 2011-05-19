@@ -9,7 +9,7 @@ PLAYER_2 = 'O'
 
 # Set to true to get debugging output about the tree search.
 DEBUG = False
-DEBUG = True
+##DEBUG = True
 
 def other_player(player):
     """(str): str
@@ -163,24 +163,30 @@ class Board:
         described in http://en.wikipedia.org/wiki/Minimax.  Returns
         the best cell to take and the resulting score for the node.
         """
+        do_score = False
         if depth <= 0:
+            do_score = True
             if DEBUG:
-                print 'Depth <= 0; score=', self.score()
-                self.output()
-            return (None, self.score())
+                print 'Depth <= 0'
+
         # No need to search more deeply when someone has won.
         winner = self.get_winner() 
         if winner is not None:
+            do_score = True
             if DEBUG:
-                print ('Found a winner for player %s; score=%i'%
-                       (winner, self.score()))
-                self.output()
-            return (None, self.score())
+                print ('Found a winning position for player %s' % winner)
+            
         if self.is_full():
+            do_score = True
             if DEBUG:
-                print 'Board is full; score=', self.score()
+                print 'Board is full'
+
+        if do_score:
+            score = self.score()
+            if DEBUG:
+                print '\tScore=%i' % score
                 self.output()
-            return (None, self.score())
+            return (None, score)
 
         if player == PLAYER_1:
             best_score = -sys.maxint
