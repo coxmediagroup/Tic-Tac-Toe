@@ -204,7 +204,7 @@ class Board:
             # On an empty board, take the middle square.
             best_move = MIDDLE_SQUARE
         else:
-            best_move, score = self._minimax(player, depth=3)
+            best_move, score = self._minimax(player, depth=9)
             if best_move is None:
                 # Pick an arbitrary cell.
                 # Probably not invoked, unless _minimax() is buggy or depth
