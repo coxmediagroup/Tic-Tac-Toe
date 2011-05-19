@@ -49,3 +49,14 @@ class Player
             break if rule(@me, @board) # Stop after a rule makes a move
     manual_move: (position) ->
         @board.mark(position, @me)
+
+
+class Rules extends events.EventEmitter
+    """Just a place to keep the strategy steps that I'm calling rules.
+    Methods listed in @list are the strategy steps to take, in proper order.
+    The other methods in this class are just helpers."""
+    constructor: (@me, @board) -> # Put these into instance vars.
+        @blank = "-"
+        @them = if @me is "X" then "O" else "X"
+        @vectors = new Vectors
+        @list = [@win, @block_opponent,] # These are the strategy steps.  Order is critical.
