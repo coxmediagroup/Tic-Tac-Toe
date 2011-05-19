@@ -1,9 +1,13 @@
-Intructions:
-1. Fork this repo on GitHub.
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+To play the game, run 'python play-tic-tac-toe' or './play-tic-tac-toe'.
 
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+Written using Python 2.7, but it might well work with earlier 2.x
+versions.
+
+Regards,
+
+
+A.M. Kuchling 
+amk@amk.ca
+
+
