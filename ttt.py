@@ -33,6 +33,23 @@ def other_player(player):
             if (player == PLAYER_2)
             else PLAYER_2)
 
+def generate_indexes():
+    """(): [(int, int, int)]
+
+    Internal function that yields 3-tuples containing the cell
+    indexes for the rows, columns, diagonals, etc.
+    """
+
+    for i in range(3):
+        yield (i*3, i*3+1, i*3+2)  # Rows
+        yield (i, 3+i, 6+i)        # Columns
+
+    yield (0, 4, 8)                # Diagonal, top left to lower right
+    yield (2, 4, 6)                # Diagonal, upper right to lower left
+
+# Precompute list of indexes, since it doesn't change over time.
+WINNER_INDEXES = list(generate_indexes())
+
 class Board:
     """Class representing a game state.
 
@@ -127,21 +144,7 @@ class Board:
 
         If no one has won, returns None.
         """
-        def generate_indexes():
-            """(): [(int, int, int)]
-
-            Internal function that yields 3-tuples containing the cell
-            indexes for the rows, columns, diagonals, etc.
-            """
-
-            for i in range(3):
-                yield (i*3, i*3+1, i*3+2)  # Rows
-                yield (i, 3+i, 6+i)        # Columns
-
-            yield (0, 4, 8)                # Diagonal, top left to lower right
-            yield (2, 4, 6)                # Diagonal, upper right to lower left
-
-        for indexes in generate_indexes():
+        for indexes in WINNER_INDEXES:
             contents = [self._board[i] for i in indexes]
             if contents.count(PLAYER_1) == 3:
                 return PLAYER_1
