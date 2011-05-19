@@ -112,8 +112,8 @@ class Board:
 
         Yields a list of indexes where a move can be made.
         """
-        # The  preferred ordering for squares: the middle square, then
-        # the corners, then the middle of the sides.  For the corners,
+        # The  preferred ordering for squares: corners, then the middle,
+        # then the middle of the sides.  For the corners,
         # we prefer ones with two empty neighbors.
         def preference(cell):
             # The middle square gets the highest score.
@@ -124,7 +124,7 @@ class Board:
             elif cell in (UP_SQUARE, LEFT_SQUARE, RIGHT_SQUARE, DOWN_SQUARE):
                 return -1
 
-            # For corners, we'll count
+            # For corners, we'll count the number of empty neighbors.
             else:
                 c1, c2 = CORNERS_NEXT[cell]
                 return (int(self.is_cell_blank(c1)) +
