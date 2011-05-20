@@ -79,7 +79,7 @@ class Computer:
                 best_result = result
                 best_move = m
 
-        return best_move, best_result        
+        return best_move, best_result
         
     def get_result(self, board_instance):
         if board_instance.is_game_over():
@@ -197,7 +197,6 @@ def start(request):
       
     # store the board in cache
     cache.set('board', board_instance.board)
-    print winner
     
     t = loader.get_template('home.html')
     c = Context({

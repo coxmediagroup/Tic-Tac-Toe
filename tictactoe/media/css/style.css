@@ -15,17 +15,17 @@ body {
 	height: 125px;
 }
 
-div.not-selected:hover {
-	background: white url('../images/x.png') center no-repeat;	
-	cursor: hand;
+.cell-hover {
+	background: white url('../images/x.png') no-repeat center;	
+	cursor: pointer;
 }
 
 div.user-selected {
-	background: white url('../images/x.png') center no-repeat;	
+	background: white url('../images/x.png') no-repeat center;	
 }
 
 div.computer-selected {
-	background: white url('../images/o.png') center no-repeat;	
+	background: white url('../images/o.png') no-repeat center;	
 }
 
 #cell_0 {
