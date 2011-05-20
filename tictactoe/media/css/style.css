@@ -101,3 +101,14 @@ form {
 	color: white;
 	background: #33451a;
 }
+
+div.game-over {
+	position: absolute;
+	top: 550px;
+	left: 40px;
+	color: white;
+	background: #33451a;
+	font-family: Comic Sans MS, cursive, verdana;
+	font-size: 25px;
+	padding: 3px;
+}

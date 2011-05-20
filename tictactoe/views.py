@@ -95,6 +95,10 @@ class Board:
     USER = 'user-selected'
     COMPUTER = 'computer-selected'
     
+    WINNER_USER = 'winner-user'
+    WINNER_COMPUTER = 'winner-computer'
+    WINNER_DRAW = 'winner-draw'
+    
     EMPTY_BOARD = [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]    
 
     def __init__(self, board = None):
@@ -156,6 +160,7 @@ def start(request):
     computer = Computer()
     selected_cell = request.GET.get('selected_cell', None)
     current_board = cache.get('board')
+    winner = ''
     
     if current_board and selected_cell:
         board_instance = Board(current_board)
@@ -163,19 +168,41 @@ def start(request):
         board_instance = Board()        
 
     if request.method == 'GET' and selected_cell:
-        # ensure the value is not already set (i.e. refresh button was pressed
+        # ensure the value is not already set (e.g. refresh button was pressed
         # with the GET value in the URL)        
         if not board_instance.board[int(selected_cell)] in (Board.USER, Board.COMPUTER):
-            #update the current board with the user's move and a follow-up move from the computer
+            # update the current board with the user's move
             board_instance.set_mark(int(selected_cell), Board.USER)
-            computer.make_move(board_instance)
+            
+            # check for victory
+            if board_instance.is_game_over():
+                if board_instance.winner == Board.USER:
+                    winner = Board.WINNER_USER
+                elif board_instance.winner == Board.COMPUTER:
+                    winner = Board.WINNER_COMPUTER
+                else:
+                    winner = Board.WINNER_DRAW
+            else:    
+                # follow-up with a move from the computer
+                computer.make_move(board_instance)
+                
+                # check for victory
+                if board_instance.is_game_over():
+                    if board_instance.winner == Board.USER:
+                        winner = Board.WINNER_USER
+                    elif board_instance.winner == Board.COMPUTER:
+                        winner = Board.WINNER_COMPUTER
+                    else:
+                        winner = Board.DRAW                
       
     # store the board in cache
     cache.set('board', board_instance.board)
+    print winner
     
     t = loader.get_template('home.html')
     c = Context({
         'board': board_instance.board,
+        'winner': winner,
     })
     
     return HttpResponse(t.render(c))

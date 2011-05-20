@@ -13,14 +13,34 @@
 </head>
 
 <body>
+	{% ifequal winner "winner-user" %}
+	<div class="game-over">
+		Congrats! You have won.
+	</div>
+	{% endifequal %}
+	
+	{% ifequal winner "winner-computer" %}
+	<div class="game-over">
+		I'm sorry. You have lost.
+	</div>
+	{% endifequal %}
+	
+	{% ifequal winner "winner-draw" %}
+	<div class="game-over">
+		It's a draw.
+	</div>
+	{% endifequal %}
+	
 	<div id="main-grid">
 	{% for cell in board %}
 		<div id="cell_{{ forloop.counter0 }}" class="{{ cell }}"></div>
 	{% endfor %}
 	</div>
+	
 	<form action="./" method="get" id="main-form">
 		<input type="hidden" name="selected_cell" id="input-selected-cell" />
 	</form>
+	
 	<a href="./" id="start-again">Start Again</a>
 </body>
 
