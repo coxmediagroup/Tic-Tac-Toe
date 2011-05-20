@@ -155,6 +155,7 @@ class Board:
     def revert_last_move(self):
         self.board[self.moves.pop()] = Board.EMPTY
         self.winner = None
+        self.winning_spot = None
     
     def get_open_spaces(self):
         open_spaces = []
