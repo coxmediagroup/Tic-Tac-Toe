@@ -8,8 +8,38 @@ class Computer:
     MIN = 'MIN'
     
     def make_move(self, board_instance):
-        move_pos, result = self.max_move(board_instance)
-        board_instance.set_mark(move_pos, Board.COMPUTER)
+        # logic for counter to opening move, hard-coded to save CPU
+        user_moves = 0
+        
+        for i in range(9):
+            if board_instance.board[i] == Board.USER:
+                user_moves += 1
+
+        if user_moves == 1:
+            # special strategy to counter opening move
+            if board_instance.board[0] == Board.USER \
+                or board_instance.board[2] == Board.USER \
+                or board_instance.board[6] == Board.USER  \
+                or board_instance.board[8] == Board.USER: 
+                # opening move was a corner
+                board_instance.set_mark(4, Board.COMPUTER)
+            elif board_instance.board[4] == Board.USER:
+                # opening move was the center
+                board_instance.set_mark(choice([0, 2, 6, 8]), Board.COMPUTER)
+            else: # it was an edge opening
+                if board_instance.board[1] == Board.USER:
+                    board_instance.set_mark(choice([4, 2, 0, 7]), Board.COMPUTER)
+                elif board_instance.board[3] == Board.USER:
+                    board_instance.set_mark(choice([4, 6, 0, 5]), Board.COMPUTER)
+                elif board_instance.board[5] == Board.USER:
+                    board_instance.set_mark(choice([4, 8, 2, 3]), Board.COMPUTER)
+                else: # board[7]
+                    board_instance.set_mark(choice([4, 8, 6, 1]), Board.COMPUTER)
+        else:
+            # the remaining logic is for a non-opening move counter... (i.e. the
+            # user has made at least two moves)
+            move_pos, result = self.max_move(board_instance)
+            board_instance.set_mark(move_pos, Board.COMPUTER)
 
     def max_move(self, board_instance):
         best_result = None
