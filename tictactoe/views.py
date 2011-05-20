@@ -95,12 +95,22 @@ class Board:
     USER = 'user-selected'
     COMPUTER = 'computer-selected'
     
+    EMPTY_BOARD = [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]    
+    
     WINNER_USER = 'winner-user'
     WINNER_COMPUTER = 'winner-computer'
-    WINNER_DRAW = 'winner-draw'
+    WINNER_DRAW = 'winner-draw'    
     
-    EMPTY_BOARD = [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]    
-
+    WINNING_SPOT_TOP_ROW = 'cross-line-top-row'    
+    WINNING_SPOT_MID_ROW = 'cross-line-mid-row'    
+    WINNING_SPOT_BOT_ROW = 'cross-line-bot-row'    
+    WINNING_SPOT_LEFT_COL = 'cross-line-left-col'    
+    WINNING_SPOT_MID_COL = 'cross-line-mid-col'    
+    WINNING_SPOT_RIGHT_COL = 'cross-line-right-col'    
+    WINNING_SPOT_DIAG_LEFT = 'cross-line-diag-left'
+    WINNING_SPOT_DIAG_RIGHT = 'cross-line-diag-right'    
+ 
+    
     def __init__(self, board = None):
         if board:
             self.board = board
@@ -109,6 +119,7 @@ class Board:
             
         self.moves = []
         self.winner = None
+        self.winning_spot = None
 
     def set_mark(self, position, user):
         self.board[position] = user
@@ -118,20 +129,28 @@ class Board:
         
         if (b[0] == b[1] == b[2] and not b[0] == self.EMPTY):
             self.winner = b[0]
+            self.winning_spot = Board.WINNING_SPOT_TOP_ROW
         elif (b[3] == b[4] == b[5] and not b[3] == self.EMPTY):
             self.winner = b[3]
+            self.winning_spot = Board.WINNING_SPOT_MID_ROW
         elif (b[6] == b[7] == b[8] and not b[6] == self.EMPTY):
-            self.winner = b[6]            
+            self.winner = b[6]
+            self.winning_spot = Board.WINNING_SPOT_BOT_ROW
         elif (b[0] == b[3] == b[6] and not b[0] == self.EMPTY):
-             self.winner = b[0]            
+             self.winner = b[0]
+             self.winning_spot = Board.WINNING_SPOT_LEFT_COL
         elif (b[1] == b[4] == b[7] and not b[1] == self.EMPTY):
-             self.winner = b[1]            
+             self.winner = b[1]
+             self.winning_spot = Board.WINNING_SPOT_MID_COL
         elif (b[2] == b[5] == b[8] and not b[2] == self.EMPTY):
-             self.winner = b[2]            
+             self.winner = b[2]
+             self.winning_spot = Board.WINNING_SPOT_RIGHT_COL
         elif (b[0] == b[4] == b[8] and not b[0] == self.EMPTY):
-             self.winner = b[0]            
+             self.winner = b[0]
+             self.winning_spot = Board.WINNING_SPOT_DIAG_LEFT
         elif (b[2] == b[4] == b[6] and not b[2] == self.EMPTY):
-             self.winner = b[2]                        
+             self.winner = b[2]
+             self.winning_spot = Board.WINNING_SPOT_DIAG_RIGHT
         
     def revert_last_move(self):
         self.board[self.moves.pop()] = Board.EMPTY
@@ -154,16 +173,17 @@ class Board:
                 if self.board[i] == Board.EMPTY:
                     return False
         
-        return True     
-
+        return True
+        
 def start(request):
     computer = Computer()
     selected_cell = request.GET.get('selected_cell', None)
     current_board = cache.get('board')
     winner = ''
+    winning_spot = ''
     
     if current_board and selected_cell:
-        board_instance = Board(current_board)
+        board_instance = current_board
     else:
         board_instance = Board()        
 
@@ -176,6 +196,7 @@ def start(request):
             
             # check for victory
             if board_instance.is_game_over():
+                winning_spot = board_instance.winning_spot
                 if board_instance.winner == Board.USER:
                     winner = Board.WINNER_USER
                 elif board_instance.winner == Board.COMPUTER:
@@ -186,22 +207,24 @@ def start(request):
                 # follow-up with a move from the computer
                 computer.make_move(board_instance)
                 
-                # check for victory
-                if board_instance.is_game_over():
-                    if board_instance.winner == Board.USER:
-                        winner = Board.WINNER_USER
-                    elif board_instance.winner == Board.COMPUTER:
-                        winner = Board.WINNER_COMPUTER
-                    else:
-                        winner = Board.DRAW                
+    # check for victory
+    if board_instance.is_game_over():
+        winning_spot = board_instance.winning_spot
+        if board_instance.winner == Board.USER:
+            winner = Board.WINNER_USER
+        elif board_instance.winner == Board.COMPUTER:
+            winner = Board.WINNER_COMPUTER
+        else:
+            winner = Board.WINNER_DRAW                
       
     # store the board in cache
-    cache.set('board', board_instance.board)
+    cache.set('board', board_instance)
     
     t = loader.get_template('home.html')
     c = Context({
         'board': board_instance.board,
         'winner': winner,
+        'winning_spot': winning_spot,
     })
     
     return HttpResponse(t.render(c))

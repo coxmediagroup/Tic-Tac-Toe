@@ -13,6 +13,12 @@
 </head>
 
 <body>
+	{% ifnotequal winning_spot "None" %}
+	<div id="cross-line-container">
+		<div class="{{ winning_spot }}"></div>
+	</div>
+	{% endifnotequal %}
+	
 	{% ifequal winner "winner-user" %}
 	<div class="game-over">
 		Congrats! You have won.
