@@ -1,0 +1,25 @@
+<canvas width="100%" height="100%">
+    
+    <!-- convenience class to make a full sized view -->
+    <class name="fullview" width="100%" height="100%"/>
+    
+    <!-- gameboard -->
+    <view name="board" width="300" height="300" align="center" valign="middle" bgcolor="0x666666">
+        
+        <!-- credits on top and bottom -->
+        <text align="center" y="-30" text="Tic Tac Toe" fontsize="20"/>
+        <text align="center" y="${parent.height}" text="By James Robey" fontsize="20"/>
+        
+        <!-- lines for the board (vertical) -->
+        <fullview name="vertbars">
+            <view x="${parent.width/3}" width="1" height="100%" bgcolor="white"/>
+            <view x="${parent.width-parent.width/3}" width="1" height="100%" bgcolor="white"/>
+        </fullview>
+        
+        <!-- lines for the board (horizontal) -->
+        <fullview name="horizbars">
+            <view y="${parent.height/3}" width="100%" height="1" bgcolor="white"/>
+            <view y="${parent.height-parent.height/3}" width="100%" height="1" bgcolor="white"/>
+        </fullview>
+    </view>
+</canvas>
