@@ -1,10 +1,35 @@
-<canvas width="100%" height="100%">
+<canvas width="100%" height="100%" debug="true">
     
     <!-- convenience class to make a full sized view -->
     <class name="fullview" width="100%" height="100%"/>
     
     <!-- gameboard -->
-    <view name="board" width="300" height="300" align="center" valign="middle" bgcolor="0x666666">
+    <view name="board" width="${parent.width-100}" height="${parent.height-100}" align="center" valign="middle" bgcolor="0xccccdd">
+        
+        <handler name="onmouseup">
+            Debug.write(this.getRelativeBoardPositionFromClick());
+        </handler>
+        
+        <method name="getRelativeBoardPositionFromClick">
+            <![CDATA[
+                //Get a *relative* x,y position of the last mouse position on the board. due the 3x3 nature 
+                //of the board, the below math will always return the x and y of the event as 
+                //(0, 1) for instance, not pixels such as (23, 154)
+                
+                var ax = this.width/this.getMouse("x");
+                var ay = this.height/this.getMouse("y");
+            
+                if(ax <= 1.5)       var bx = 2;
+                else if(ax <= 3)    var bx = 1;
+                else                var bx = 0;
+                
+                if(ay <= 1.5)       var by = 2;
+                else if(ay <= 3)    var by = 1;
+                else                var by = 0;
+            
+                return [bx, by];
+            ]]>
+        </method>
         
         <!-- credits on top and bottom -->
         <text align="center" y="-30" text="Tic Tac Toe" fontsize="20"/>
