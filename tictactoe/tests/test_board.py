@@ -29,6 +29,25 @@ class TestBoard(unittest.TestCase):
         with self.assertRaises(ValueError):
             Board().add_move(Board.x, 15)
 
+    def test_get_winner_returns_player_for_win(self):
+        board = Board(state=[x for x in 'xoo x   x'])
+        self.assertEquals(board.get_winner(), board.x,
+                          'Incorrect winner determined')
+
+    def test_get_winner_returns_none_for_draw(self):
+        board = Board(state=[x for x in 'xoooxxxoo'])
+        self.assertEquals(board.get_winner(), None,
+                          'Winner incorrectly determined')
+
+    def test_get_winner_returns_none_for_unfinished_game(self):
+        board = Board(state=[x for x in 'x         '])
+        self.assertEquals(board.get_winner(), None,
+                          'Winner incorrectly determined')
+
+    def test_is_game_over_returns_true_for_no_more_moves(self):
+        board = Board(state=['x'] * 9)
+        self.assertTrue(board.is_game_over(), 'Game should be over')
+
     def test_iter_rows(self):
         board = Board()
         board.add_move(board.x, 0)
@@ -55,4 +74,3 @@ class TestBoard(unittest.TestCase):
         board.add_move(board.x, 0)
         self.assertEqual(list(xrange(9))[1:], board.valid_moves,
                          'Incorrect moves for non-empty board')
-

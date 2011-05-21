@@ -1,5 +1,8 @@
 
 
+__all__ = ['Board']
+
+
 class Board(object):
     """This class defines a 3x3 tic-tac-toe board."""
 
@@ -42,11 +45,20 @@ class Board(object):
         return [x for x, y in enumerate(self.state) if y == self.empty]
 
     def add_move(self, player, position):
+        """Add a move to the board for the given player and position.
+        If the given position is not a valid move, an exception will
+        be raised.
+
+        """
         self.check_move(player, position)
         self.state[position] = player
         self.last_player = player
 
     def check_move(self, player, position):
+        """Check that the given move is valid, raising an exception
+        for any problem.
+
+        """
         if player not in self.players:
             raise ValueError('Player must be one of %s' % self.players)
         if player == self.last_player:
@@ -55,11 +67,41 @@ class Board(object):
             raise ValueError('Position %s is not a valid move' % str(position))
 
     def get_board_for_move(self, player, position):
+        """Retrieve a new board with the given move added.
+
+        """
         self.check_move(player, position)
         state = self.state[:]
         state[position] = player
         return Board(state=state, last_player=player)
 
+    def get_opponent(self, player):
+        """Retrieve the opponent of the given player.
+
+        """
+        return {Board.x: Board.o, Board.o: Board.x}[player]
+
+    def get_winner(self):
+        """Retrieve the name of the winning player if there is one, or
+        None otherwise.
+
+        """
+        for row in self.iter_rows():
+            is_winning_row = (row[0] != self.empty and
+                              row == [row[0]] * len(row))
+            if is_winning_row:
+                return row[0]
+
+    def is_game_over(self):
+        """Indicate whether the game has been won or lacks valid moves.
+
+        """
+        return self.get_winner() or not self.valid_moves
+
     def iter_rows(self):
+        """Iterate over the rows (vertical, horizontal and diagonal)
+        in the state matrix.
+
+        """
         for state_indexes in self.row_definitions:
             yield [self.state[x] for x in state_indexes]
