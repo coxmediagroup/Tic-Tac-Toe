@@ -1,26 +1,35 @@
 Participant: James Robey, jrobey.services@gmail.com
 
-The goal is to create an interactive game of Tic Tac Toe with one human and a computer based player. There are no other guidelines enforced by the challenge so the following structure will be created to create the game.
+The goal is to create an 3D interactive game of Tic Tac Toe with one human and a computer based player. 
+There are no other guidelines enforced by the challenge so the following structure will be created to create the game.
 
 ######################################################################
 
-1) All operation is meant to take place on localhost, that is, all on the same computer.
+1) All operation is meant to take place on localhost, that is, 
+    all on the same computer.
 
-    a) The entire game is a client/server pattern with a python script as the server and a HTML page derived from openlaszlo
+    a) The entire game is a client/server pattern with a python script as the 
+        server and a HTML page derived from openlaszlo
 
     b) The python script is started
     
-    c) the openlaszlo-based html page is opened in a web-browser on the same machine the script is started on.
+    c) the openlaszlo-based html page is opened in a web-browser on the same 
+        machine the script is started on.
     
 ######################################################################
 
-2) Python script (server running on port 9090 using a simple XML protocol on top of ajax requests)
+2) Python script (server running on port 9090 using a simple XML protocol on 
+    top of ajax requests)
 
-    a) The backend is python script that will respond to http requests on localhost until terminated (on port 9090)
+    a) The backend is python script that will respond to http requests on 
+        localhost until terminated (on port 9090)
          
-    b) it will use a simple and insecure python-based http server to respond to the client update of game state
+    b) it will use a simple and insecure python-based http server to respond to 
+        the client update of game state
         
-    c) It is stateless. It will only return the next move when it receives a given board's state (as discussed in point 4), along with a success flag indicating which player won, if the game has ended.
+    c) It is stateless. It will only return the next move when it receives a given 
+        board's state (as discussed in point 4), along with a success flag indicating 
+        which player won, if the game has ended.
     
 ######################################################################
         
@@ -28,37 +37,70 @@ The goal is to create an interactive game of Tic Tac Toe with one human and a co
 
     a) A HTML page that displays a tic-tac-toe board graphically.  
     
-    b) The human will always go first. Although it's pretty easy to do both (the logic is copied at the bottom of this page) since one infers the other, we'll just code one path for this challenge.
+    b) The human will always go first. Although it's pretty easy to do both 
+        since one infers the other, we'll just code one path for this challenge.
     
     c) a reset button is provided to reset gameplay at any point
     
     d) on each move the state of the board is sent to the server
     
-    e) the client recieves the next state from the server, displaying it. If a success flag is set, the client displays the winning status (whether human or computer) and shows a button to reset the game.
+    e) the client recieves the next state from the server, displaying it. If 
+        a success flag is set, the client displays the winning status (whether 
+        human or computer) and the reset button can restart the game.
     
 ######################################################################
     
 4) XML Protocol used between the client and server
 
-    a) the board is represented by XML sent to and from the client to the server to the client, etc.
+    a) the board is represented by XML sent to and from the client 
+        to the server to the client, etc.
     
-    b) it is composed of a structure like so:
+    b) it is composed of a structure shown here:
     
-        <board> <!-- the 'won' attribute would be 'x' or 'o' if either had won i.e. won="x" -->
-            <space x="0" y="0" has="x"/>
-            <space x="1" y="0" has="o"/>
-            <space x="2" y="0" has="x"/>
-            <!-- (and so on, for each space filled, if filled. This is a game in progress, started by x, on o's turn) -->
-        </board>
+        <field won="false">
+            <board>
+                <mark x="0" y="0" value="-1"/>
+                <mark x="1" y="0" type="1"/>
+                <mark x="2" y="0" type="-1"/>
+                <mark x="2" y="1" type="1"/>
+            
+                <!-- ...and so on, for each mark made. This is a game in 
+                     progress, started by x, with the last move by o 
+                -->
+            </board>
+            
+            <board>
+                <!-- empty board -->
+            </board>
+            
+            <board>
+                <!-- empty board -->
+            </board>
+        </field>
+        
+        We'll capture information where it is available the easiest and pass 
+        it around, so:
+        
+        - the "won" flag on the field element lets the client easily know game is over
     
-    c) a reset merely returns this structure to an empty board tag.
+    c) a reset merely returns this structure to an empty board tag and resets the UI.
     
-This is the envisioned structure. This document will be updated as necessary to reflect changes.
-
 ######################################################################
 
 5) Tic Tac Toe strategy
 
-    See the file "gameplay.rtf" for the rules of the game, as will be implemented. The human will always go first.
+    The realization is:
+        -that if you represent a 3D plane as a three dimensional array
+            and fill it with zeros, so that when the computer goes
+            it's a 1 if the human goes it's a -1
+        -that each possible winning vector through the 3d space of the "field"
+            is evaluated by summing the values in the vector
+        -that the computer must go anywhere in a vector where equal -2 to prevent a win 
+        -that the computer must go anywhere in a vector where equal -2 to obtain a win
+        -that the computer will try to go anywhere it can make the vector 1 and ignore 0's 
+        
+    Then a perfect tic-tac-toe game will be played. That's the conjecture.
 
+######################################################################
 
+This is the envisioned structure. This document will be updated as necessary to reflect changes.
