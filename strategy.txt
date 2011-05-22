@@ -50,38 +50,35 @@ There are no other guidelines enforced by the challenge so the following structu
     
 ######################################################################
     
-4) XML Protocol used between the client and server
+4) JSON Protocol used between the client and server
 
-    a) the board is represented by XML sent to and from the client 
-        to the server to the client, etc.
+    a) the board is represented by JSON sent to and from the client 
+        to the server to the client, etc. until the game is won.
     
-    b) it is composed of a structure shown here:
+    b) it is composed of a structure like the one shown here:
     
-        <field won="false">
-            <board>
-                <mark x="0" y="0" value="-1"/>
-                <mark x="1" y="0" type="1"/>
-                <mark x="2" y="0" type="-1"/>
-                <mark x="2" y="1" type="1"/>
+        { 
+            'field':[
+                        [1,0,0],
+                        [0,0,0],
+                        [0,0,0],
+                        
+                        [1,0,0],
+                        [0,-1,0],
+                        [0,0,0],
+                        
+                        [-1,0,0],
+                        [0,0,0],
+                        [0,0,0],
+                    ],
+         
+            'won':0
+        }
+
+        - "field" is the grid of three tic tac toe boards displayed, where 1 is a
+            computer move and -1 is a human move.
             
-                <!-- ...and so on, for each mark made. This is a game in 
-                     progress, started by x, with the last move by o 
-                -->
-            </board>
-            
-            <board>
-                <!-- empty board -->
-            </board>
-            
-            <board>
-                <!-- empty board -->
-            </board>
-        </field>
-        
-        We'll capture information where it is available the easiest and pass 
-        it around, so:
-        
-        - the "won" flag on the field element lets the client easily know game is over
+        - "won" entry on the json lets the client easily know game is over
     
     c) a reset merely returns this structure to an empty board tag and resets the UI.
     
@@ -97,9 +94,10 @@ There are no other guidelines enforced by the challenge so the following structu
             is evaluated by summing the values in the vector
         -that the computer must go anywhere in a vector where equal -2 to prevent a win 
         -that the computer must go anywhere in a vector where equal -2 to obtain a win
-        -that the computer will try to go anywhere it can make the vector 1 and ignore 0's 
+        -that the computer will try to go anywhere it can make the vector 1 
+        -such that it tries center moves before others
         
-    Then a perfect tic-tac-toe game will be played. That's the conjecture.
+    Then (hopefully, proven TBD) a perfect tic-tac-toe game will be played. That's the conjecture.
 
 ######################################################################
 
