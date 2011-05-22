@@ -104,7 +104,27 @@ class Field:
     )
     
     def __init__(self, field):
-        self.field = field
+        #self.field = field
+        
+        self.field = [
+                        [
+                            [1,1,0],
+                            [0,0,0],
+                            [0,0,0],
+                        ],
+                        
+                        [
+                            [0,0,0],
+                            [0,0,0],
+                            [0,0,0],
+                        ],
+                        
+                        [
+                            [0,0,0],
+                            [0,0,0],
+                            [0,0,0],
+                        ],
+        ]
                      
     def determineMove(self):
         """ This implements the decision method to enact a computer player at 
@@ -113,7 +133,7 @@ class Field:
             looking first for vectors that add up to either 2 or -2 (indicative of 
             wins or almost losing situations). If we find those we have our move.
             If we don't find them, make a move the first place we can make a 
-            two, or a one if there are no ones.
+            two, or a2 one if there are no ones.
         """
         
         score_of_ones = []
@@ -141,10 +161,24 @@ class Field:
                 
 
         #finally, analyze result of search and make move based on it.
+        print "score_of_ones"
+        print score_of_ones
+        print
+        print "score_of_neg_ones"
+        print score_of_neg_ones
+        print
+        print "score_of_twos"
+        print score_of_twos
+        print
+        print "score_of_neg_twos"
+        print score_of_neg_twos
+        print
         
         return moveToMake
 
 if __name__ == "__main__":
-    Field()
+    f = Field()
+    f.determineMove()
+    
     
     
