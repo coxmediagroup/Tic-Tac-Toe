@@ -10,7 +10,7 @@
 
 
 
-class Field:
+class TicTacToe3DField:
     """ I store a "field" (three tic tac toe boards) that along with
         tables indicating all possible winning moves will be 
         used to determine the move the computer should make next.
@@ -198,7 +198,7 @@ class Field:
         return moveToMake
 
 if __name__ == "__main__":
-    f = Field()
+    f = TicTacToe3DField()
     print f.determineMove()
     
     
