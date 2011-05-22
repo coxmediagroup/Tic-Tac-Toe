@@ -103,28 +103,29 @@ class Field:
         ((0, 2, 2), (1, 1, 1), (2, 0, 2)),
     )
     
-    def __init__(self, field):
+    def __init__(self, field=None):
         #self.field = field
         
-        self.field = [
-                        [
-                            [1,1,0],
-                            [0,0,0],
-                            [0,0,0],
-                        ],
+        if not field:
+            self.field = [
+                            [
+                                [-1,0,0],
+                                [1,0,0],
+                                [1,1,0],
+                            ],
                         
-                        [
-                            [0,0,0],
-                            [0,0,0],
-                            [0,0,0],
-                        ],
+                            [
+                                [0,0,0],
+                                [0,0,0],
+                                [0,0,-1],
+                            ],
                         
-                        [
-                            [0,0,0],
-                            [0,0,0],
-                            [0,0,0],
-                        ],
-        ]
+                            [
+                                [0,0,0],
+                                [0,0,0],
+                                [0,0,0],
+                            ],
+            ]
                      
     def determineMove(self):
         """ This implements the decision method to enact a computer player at 
@@ -141,7 +142,8 @@ class Field:
         score_of_neg_twos = []
         score_of_neg_ones = []
         for vector in self.vectors_to_check:
-            score = sum([self.field[point[0]][point[1]][point[2]] for point in vector])
+            #note that the array is [board, y, x] while vectors are x, y, board
+            score = sum([self.field[point[2]][point[1]][point[0]] for point in vector])
             
             #if we have a winnning move
             if score == 2:      
@@ -160,25 +162,44 @@ class Field:
                 score_of_neg_ones.append(vector)        
                 
 
-        #finally, analyze result of search and make move based on it.
-        print "score_of_ones"
-        print score_of_ones
-        print
-        print "score_of_neg_ones"
-        print score_of_neg_ones
-        print
-        print "score_of_twos"
-        print score_of_twos
-        print
-        print "score_of_neg_twos"
-        print score_of_neg_twos
-        print
+        #analyze the scores of each vector evaluated, looking for the "highest" match
         
+        if score_of_neg_twos:
+            vector_to_evaluate = score_of_neg_twos[0]
+        elif score_of_twos:
+            vector_to_evaluate = score_of_twos[0]
+        elif score_of_neg_ones:
+            vector_to_evaluate = score_of_neg_ones[0]
+        elif score_of_ones:
+            vector_to_evaluate = score_of_ones[0]
+        else:
+            vector_to_evaluate = None
+            
+        #given we have the "best" vector, now determine in which spot in the 
+        #vector we must go.
+            
+        moveToMake = (1, 1, 1)
+        #if we have detected a good move
+        if vector_to_evaluate:
+            for i, point in enumerate(vector_to_evaluate):
+                if self.field[point[2]][point[1]][point[0]] == 0:
+                    moveToMake = point
+                    
+        #if there are none, pick a good one (move to center, or move to some open place)
+        else:
+            if self.field[1][1][1] == 0:    moveToMake = (1, 1, 1)
+            elif self.field[0][1][1] == 0:  moveToMake = (1, 1, 0)
+            elif self.field[2][1][1] == 0:  moveToMake = (1, 1, 2)
+            else:
+                for z in self.field:
+                    for y in z:
+                        for x in y:
+                            if y[x] == 0: moveToMake = (x, y, z)
         return moveToMake
 
 if __name__ == "__main__":
     f = Field()
-    f.determineMove()
+    print f.determineMove()
     
     
     
