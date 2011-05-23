@@ -1,4 +1,4 @@
-<canvas width="100%" height="100%" debug="true">
+<canvas width="100%" height="100%" bgcolor="black" debug="true">
     
     <script src="json.js"/>
     
@@ -107,6 +107,8 @@
                 //change text into array via JSON
                 var gamedata = JSON.parse(jsontext);
                 
+                Debug.write('gamedata', gamedata);
+                
                 //set gamedata to the gamedata returned. 
                 parent.gamedata = gamedata;
                 
@@ -129,13 +131,12 @@
             //set the space in the gamedata according to move
             this.gamedata[move[2]][move[1]][move[0]] = -1;
             
-            //var cell = this.subviews[move[2]].subviews[move[1]].subviews[move[0]];
-            //cell.markX();
-            
             //send the gamedata as JSON back to the server
             var obj = Object();
             obj.game = JSON.stringify(this.gamedata);
             this.gameserver.send(obj, null, null);
+            
+            Debug.write("obj.game", obj.game);
         </method>
         
         <method name="refreshBoard">
@@ -157,16 +158,18 @@
         <board/>
     </class>
     
-    <handler name="oninit">
-        this.gameboard.animate('opacity', 1, 7000);
-    </handler>
+    <!-- Make Three Tic Tac Toe games -->
     
-    <!-- Game Text -->
-        
-    <text text="Client-Server 3D Tic Tac Toe By James Robey - refresh to reset" align="center" y="${canvas.gameboard.y-30}"/>    
+    <text fgcolor="white" fontsize="15" text="Demonstration of 3D Tic Tac Toe by jrobey.service@gmail.com. A back-end server plays against you in 3D. Reload to reset."/>
     
-    <!-- The Game Board -->
-    
-    <game opacity="0" name="gameboard" valign="middle" align="center"/>
+    <!-- a nice window to hold the game -->
+    <window resizable="true" title="3d Tic-Tac-Toe" x="100" y="50" width="300" height="550">    
+        <!-- The Game Board -->    
+        <game opacity="0" name="gameboard" valign="middle" align="center">
+            <handler name="oninit">
+                this.animate('opacity', 1, 3000);
+            </handler>
+        </game>
+    </window>
         
 </canvas>
