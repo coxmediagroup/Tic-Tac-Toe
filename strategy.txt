@@ -1,7 +1,11 @@
 Participant: James Robey, jrobey.services@gmail.com
 
-The goal is to create an 3D interactive game of Tic Tac Toe with one human and a computer based player. 
-There are no other guidelines enforced by the challenge so the following structure will be created to create the game.
+The goal is to create an 3D interactive game of Tic Tac Toe with one human and 
+a computer based player. There are no other guidelines enforced by the challenge 
+so the following structure will be created to create the game.
+
+Please note while it is perfect when playing on any given board, 3D tic tac toe 
+is winnable by the first player if they go in the center square!
 
 ######################################################################
 
@@ -18,11 +22,11 @@ There are no other guidelines enforced by the challenge so the following structu
     
 ######################################################################
 
-2) Python script (server running on port 9090 using a simple XML protocol on 
+2) Python script (server running on port 2020 using a simple XML protocol on 
     top of ajax requests)
 
     a) The backend is python script that will respond to http requests on 
-        localhost until terminated (on port 9090)
+        localhost until terminated (on port 2020)
          
     b) it will use a simple and insecure python-based http server to respond to 
         the client update of game state
@@ -83,13 +87,15 @@ There are no other guidelines enforced by the challenge so the following structu
             and fill it with zeros, so that when the computer goes
             it's a 1 if the human goes it's a -1
         -that each possible winning vector through the 3d space of the "field"
-            is evaluated by summing the values in the vector
+            is evaluated by summing the values in the vector to some value
         -that the computer must go anywhere in a vector where equal -2 to prevent a win 
         -that the computer must go anywhere in a vector where equal -2 to obtain a win
-        -that the computer will try to go anywhere it can make the vector 1 
-        -such that it tries center moves before others
+        -that the computer will try to go anywhere it can make the vector 2 
+        -that the computer will try to go anywhere it can prevent the vector becoming -2
         
     Then (hopefully, proven TBD) a perfect tic-tac-toe game will be played. That's the conjecture.
+    In truth, 3D tic tac toe is winnable by the first player if they play the center square first.
+    There goes a fun childhood game :)
 
 ######################################################################
 
