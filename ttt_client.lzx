@@ -100,10 +100,18 @@
         
         <senddata name="gameserver" src="http://127.0.0.1:2020">
             <handler name="ondata">
-                Debug.write('data received', this);
+                //retrieve the text 
                 var dp = this.getPointer();
                 var jsontext = dp.xpathQuery('data/text()');
-                Debug.write("jsontext", jsontext);
+
+                //change text into array via JSON
+                var gamedata = JSON.parse(jsontext);
+                
+                //set gamedata to the gamedata returned. 
+                parent.gamedata = gamedata;
+                
+                //loop over that gamedata, setting each cell indicated to the result. Play continues.
+                parent.refreshBoard();
             </handler>
         </senddata>
         
@@ -121,13 +129,25 @@
             //set the space in the gamedata according to move
             this.gamedata[move[2]][move[1]][move[0]] = -1;
             
-            var cell = this.subviews[move[2]].subviews[move[1]].subviews[move[0]];
-            cell.markX();
+            //var cell = this.subviews[move[2]].subviews[move[1]].subviews[move[0]];
+            //cell.markX();
             
             //send the gamedata as JSON back to the server
             var obj = Object();
             obj.game = JSON.stringify(this.gamedata);
             this.gameserver.send(obj, null, null);
+        </method>
+        
+        <method name="refreshBoard">
+            <![CDATA[
+                for(var z = 0 ; z < this.gamedata.length ; z ++)
+                    for(var y = 0 ; y < this.gamedata.length ; y ++)
+                        for(var x = 0 ; x < this.gamedata.length ; x ++){
+                            var cell = this.subviews[z].subviews[y].subviews[x];
+                            if(this.gamedata[z][y][x] == 1) cell.markO();
+                            else if(this.gamedata[z][y][x] == -1) cell.markX();
+                        }
+            ]]>
         </method>
         
         <!-- this is the view hierarchy of the board in question -->
@@ -143,7 +163,7 @@
     
     <!-- Game Text -->
         
-    <text text="Client-Server 3D Tic Tac Toe By James Robey" align="center" y="${canvas.gameboard.y-30}"/>    
+    <text text="Client-Server 3D Tic Tac Toe By James Robey - refresh to reset" align="center" y="${canvas.gameboard.y-30}"/>    
     
     <!-- The Game Board -->
     
