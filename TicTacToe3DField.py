@@ -16,6 +16,26 @@ class TicTacToe3DField:
         used to determine the move the computer should make next.
     """
     
+    #set up for a default game
+    default_game = [
+        [
+            [0,0,0],
+            [0,0,0],
+            [0,0,0],
+        ],
+        [
+            [0,0,0],
+            [0,0,0],
+            [0,0,0],
+        ],
+        [
+            [0,0,0],
+            [0,0,0],
+            [0,0,0],
+        ],
+    ]
+    
+    #a list of all possible winning vectors through the 3x3x3 cube
     vectors_to_check = (
         #2D vectors ------------
 
@@ -103,30 +123,13 @@ class TicTacToe3DField:
         ((0, 2, 2), (1, 1, 1), (2, 0, 2)),
     )
     
-    def __init__(self, field=None):
-        #self.field = field
-        
-        if not field:
-            self.field = [
-                            [
-                                [-1,0,0],
-                                [1,0,0],
-                                [1,1,0],
-                            ],
-                        
-                            [
-                                [0,0,0],
-                                [0,0,0],
-                                [0,0,-1],
-                            ],
-                        
-                            [
-                                [0,0,0],
-                                [0,0,0],
-                                [0,0,0],
-                            ],
-            ]
-                     
+    def __init__(self, game=None):
+        """ initialize from the incoming structure, or use a default """
+        if game:
+            self.game = game
+        else:
+            self.game = self.default_game
+            
     def determineMove(self):
         """ This implements the decision method to enact a computer player at 
             3D Tic Tac Toe. Using the vectors_to_check list of lists, iterate 
@@ -143,7 +146,7 @@ class TicTacToe3DField:
         score_of_neg_ones = []
         for vector in self.vectors_to_check:
             #note that the array is [board, y, x] while vectors are x, y, board
-            score = sum([self.field[point[2]][point[1]][point[0]] for point in vector])
+            score = sum([self.game[point[2]][point[1]][point[0]] for point in vector])
             
             #if we have a winnning move
             if score == 2:      
@@ -160,9 +163,8 @@ class TicTacToe3DField:
             #if we find somewhere beneficial for us to go
             elif score == -1:    
                 score_of_neg_ones.append(vector)        
-                
 
-        #analyze the scores of each vector evaluated, looking for the "highest" match
+        #analyze the scores of each vector evaluated, looking for the best match
         
         if score_of_neg_twos:
             vector_to_evaluate = score_of_neg_twos[0]
@@ -182,24 +184,34 @@ class TicTacToe3DField:
         #if we have detected a good move
         if vector_to_evaluate:
             for i, point in enumerate(vector_to_evaluate):
-                if self.field[point[2]][point[1]][point[0]] == 0:
+                if self.game[point[2]][point[1]][point[0]] == 0:
                     moveToMake = point
                     
         #if there are none, pick a good one (move to center, or move to some open place)
         else:
-            if self.field[1][1][1] == 0:    moveToMake = (1, 1, 1)
-            elif self.field[0][1][1] == 0:  moveToMake = (1, 1, 0)
-            elif self.field[2][1][1] == 0:  moveToMake = (1, 1, 2)
+            #center of middle board open?
+            if self.game[1][1][1] == 0:    moveToMake = (1, 1, 1)
+            
+            #center of top board open?
+            elif self.game[0][1][1] == 0:  moveToMake = (1, 1, 0)
+            
+            #center of bottom board open?
+            elif self.game[2][1][1] == 0:  moveToMake = (1, 1, 2)
+            
+            #make the first open move we find. Apparently, we're not having any fun yet
             else:
-                for z in self.field:
+                for z in self.game:
                     for y in z:
                         for x in y:
                             if y[x] == 0: moveToMake = (x, y, z)
-        return moveToMake
+                            
+        
+        self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
+        return self.game
 
 if __name__ == "__main__":
-    f = TicTacToe3DField()
-    print f.determineMove()
+    ttt = TicTacToe3DField()
+    print ttt.determineMove()
     
     
     

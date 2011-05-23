@@ -11,8 +11,8 @@ from TicTacToe3DField import TicTacToe3DField
 class TicTacToeServer(BaseHTTPRequestHandler):
     """This is a class that functions both an HTTP server and hosts the logic
        needed to win or draw at 3D tic tac toe. It accepts a URL encoded JSON string
-       via the path and is the entire input, foregoing any query
-       strings or other interception of paths as they are not required for this demo
+       via any query string argument and presumes there is only one (splitting on the "=" sign)
+       no other mechanisms are required for this demo.
        
        To use this class, initialize it with "TicTacToeServer.serve_forever(PORT_NUMBER)"
        and then pass board states to it. It will return to the client the next board state the 
@@ -34,7 +34,6 @@ class TicTacToeServer(BaseHTTPRequestHandler):
         
         #extract the XML representation of the board & process it
         jsonOfBoard = urllib.unquote(self.path.split('=')[1])
-        print "jsonOfBoard", jsonOfBoard
         response = self.processMove(jsonOfBoard)
         
         #and return the new board state to the client
