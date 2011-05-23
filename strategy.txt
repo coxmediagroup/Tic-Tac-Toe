@@ -88,8 +88,9 @@ is winnable by the first player if they go in the center square!
             it's a 1 if the human goes it's a -1
         -that each possible winning vector through the 3d space of the "field"
             is evaluated by summing the values in the vector to some value
+        -that the computer must go anywhere in a vector where equal 2 to obtain a win
         -that the computer must go anywhere in a vector where equal -2 to prevent a win 
-        -that the computer must go anywhere in a vector where equal -2 to obtain a win
+        
         -that the computer will try to go anywhere it can make the vector 2 
         -that the computer will try to go anywhere it can prevent the vector becoming -2
         
