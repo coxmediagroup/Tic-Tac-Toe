@@ -71,7 +71,7 @@ class TicTacToe3DField:
         ((0, 0, 0), (1, 1, 1), (2, 2, 2)),
         ((2, 0, 0), (1, 1, 1), (2, 0, 2)),
         ((0, 0, 2), (1, 1, 1), (2, 2, 0)),
-        ((0, 2, 0), (1, 1, 1), (0, 2, 2)),
+        ((2, 0, 0), (1, 1, 1), (0, 2, 2)),
         
         #2D vectors flat ------------
 
@@ -177,6 +177,7 @@ class TicTacToe3DField:
         
         #any wins?
         if score_of_twos:
+            print "score_of_twos", score_of_twos
             vector_to_evaluate = score_of_twos[0]
             
         #are they about to win?
@@ -191,10 +192,13 @@ class TicTacToe3DField:
         elif score_of_neg_ones:
             vector_to_evaluate = score_of_neg_ones[0]
 
-        #if we have detected a good move
+        print "vector_to_evaluate", vector_to_evaluate
+
+        #we have detected a good move
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
                 moveToMake = point     
+                print "moveToMake", moveToMake
                             
         #make the move decided upon
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
