@@ -7,11 +7,14 @@ Tested on OSX 10.6 and Safari.
 
 QUICKSTART:
 
-1) From the project directory, run "python ./ttt_server.py" to start the server.
+1) From the project directory, cd into the "server" directory. 
 
-2) In your browser open "http://127.0.0.1:22222/index.html", which is all that is needed 
+2) run "python ./ttt_server.py" to start the server (on port 22222)
 
-3) You may have as many windows playing the game open at once as you like. Reload to reset. Have fun!
+3) In your browser open "http://127.0.0.1:22222/index.html". 
+
+4) That's it, you should be up. You may have as many windows playing the game 
+    open at once as you like. Reload to reset. Have fun!
 
 *** Please read strategy.txt for in-depth information about the implementation ***
 
