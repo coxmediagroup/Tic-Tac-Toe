@@ -37,7 +37,7 @@ class TicTacToe3DField:
     
     #a list of all possible winning vectors through the 3x3x3 cube, in specific order! (diagonals first)
     vectors_to_check = (
-        #2D vectors ------------
+        #2D vectors diagonals ------------
         
         #diagonals_board_0_2d
         ((0, 0, 0), (1, 1, 0), (2, 2, 0)),
@@ -50,6 +50,34 @@ class TicTacToe3DField:
         #diagonals_board_2_2d
         ((0, 0, 2), (1, 1, 2), (2, 2, 2)),
         ((0, 2, 2), (1, 1, 2), (2, 0, 2)),
+        
+        #3D Vectors diagonal ------------
+        
+        #up_to_down_diagonal_top_to_bottom_3d
+        ((0, 0, 0), (0, 1, 1), (0, 2, 2)),
+        ((1, 0, 0), (1, 1, 1), (1, 2, 2)),
+        ((2, 0, 0), (2, 1, 1), (2, 2, 2)),
+
+        #up_to_down_diagonal_bottom_to_top_3d
+        ((0, 2, 0), (0, 2, 1), (0, 0, 2)),
+        ((1, 2, 0), (1, 1, 1), (1, 0, 2)),
+        ((2, 2, 0), (2, 1, 1), (2, 0, 2)),
+
+        #up_to_down_diagonal_left_to_right_3d
+        ((0, 0, 0), (1, 0, 1), (2, 0, 2)),
+        ((0, 1, 0), (1, 1, 1), (2, 1, 2)),
+        ((0, 2, 0), (1, 2, 1), (2, 2, 2)),
+
+        #up_to_down_diagonal_right_to_left_3d
+        ((2, 0, 0), (1, 0, 1), (0, 0, 2)),
+        ((2, 1, 0), (1, 1, 1), (0, 1, 2)),
+        ((2, 2, 0), (1, 2, 1), (0, 2, 2)),
+
+        #up_to_down_diagonal_cross_center_3d
+        ((0, 0, 0), (1, 1, 1), (2, 2, 2)),
+        ((0, 2, 2), (1, 1, 1), (2, 0, 2)),
+        
+        #2D vectors flat ------------
 
         #left_to_right_board_0_2d
         ((0, 0, 0), (1, 0, 0), (2, 0, 0)),
@@ -81,31 +109,7 @@ class TicTacToe3DField:
         ((1, 0, 2), (1, 1, 2), (1, 2, 2)),
         ((2, 0, 2), (2, 1, 2), (2, 2, 2)),
 
-        #3D Vectors ------------
-        
-        #up_to_down_diagonal_top_to_bottom_3d
-        ((0, 0, 0), (0, 1, 1), (0, 2, 2)),
-        ((1, 0, 0), (1, 1, 1), (1, 2, 2)),
-        ((2, 0, 0), (2, 1, 1), (2, 2, 2)),
-
-        #up_to_down_diagonal_bottom_to_top_3d
-        ((0, 2, 0), (0, 2, 1), (0, 0, 2)),
-        ((1, 2, 0), (1, 1, 1), (1, 0, 2)),
-        ((2, 2, 0), (2, 1, 1), (2, 0, 2)),
-
-        #up_to_down_diagonal_left_to_right_3d
-        ((0, 0, 0), (1, 0, 1), (2, 0, 2)),
-        ((0, 1, 0), (1, 1, 1), (2, 1, 2)),
-        ((0, 2, 0), (1, 2, 1), (2, 2, 2)),
-
-        #up_to_down_diagonal_right_to_left_3d
-        ((2, 0, 0), (1, 0, 1), (0, 0, 2)),
-        ((2, 1, 0), (1, 1, 1), (0, 1, 2)),
-        ((2, 2, 0), (1, 2, 1), (0, 2, 2)),
-
-        #up_to_down_diagonal_cross_center_3d
-        ((0, 0, 0), (1, 1, 1), (2, 2, 2)),
-        ((0, 2, 2), (1, 1, 1), (2, 0, 2)),
+        #3D Vectors flat ------------
 
         #up_to_down_left_to_right_top_3d
         ((0, 0, 0), (0, 0, 1), (0, 0, 2)),
@@ -174,7 +178,6 @@ class TicTacToe3DField:
 
         #analyze the scores of each vector evaluated, looking for the best match
         vector_to_evaluate = None
-        moveToMake = None
         
         #any wins?
         if score_of_twos:
@@ -184,39 +187,22 @@ class TicTacToe3DField:
         elif score_of_neg_twos:
             vector_to_evaluate = score_of_neg_twos[0]
             
-        #are they about to win?
-        elif score_of_neg_ones:
-            vector_to_evaluate = score_of_neg_ones[0]
-            
-        #are they about to win?
+        #can we help our selves?
         elif score_of_ones:
             vector_to_evaluate = score_of_ones[0]
-        
-        #make the first open move we find. Apparently, we're not having any fun yet
-        else:
-            #center of middle board open?
-            if self.game[1][1][1] == 0:    moveToMake = (1, 1, 1)
+                
+        #can we stop them?
+        elif score_of_neg_ones:
+            vector_to_evaluate = score_of_neg_ones[0]
 
-            #center of top board open?
-            elif self.game[0][1][1] == 0:  moveToMake = (1, 1, 0)
-
-            #center of bottom board open?
-            elif self.game[2][1][1] == 0:  moveToMake = (1, 1, 2)
-            
-            #we have nothing to go on, so pick the first open spot dictacted
-            #by the optimized set of vectors to check. simple!
-            else:
-                for vector in self.vectors_to_check:
-                    if self.game[vector[2]][vector[1]][vector[0]] == 0:
-                        moveToMake = (vector[0], vector[1], vector[2])
-                    
         #if we have detected a good move
-        if not moveToMake and vector_to_evaluate:
-            for i, point in enumerate(vector_to_evaluate):
-                if self.game[point[2]][point[1]][point[0]] == 0:
-                    moveToMake = point     
+        for point in vector_to_evaluate:
+            if self.game[point[2]][point[1]][point[0]] == 0:
+                moveToMake = point     
                             
+        #make the move decided upon
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
+                
         return self.game
 
 if __name__ == "__main__":
