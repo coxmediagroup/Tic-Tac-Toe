@@ -140,14 +140,16 @@ class TicTacToe3DField:
             two, or a2 one if there are no ones.
         """
         
-        score_of_ones = []
-        score_of_twos = []
+        #arrays to hold the vector that might be a good move
         score_of_neg_twos = []
+        score_of_twos = []
         score_of_neg_ones = []
+        score_of_ones = []
+        
         for vector in self.vectors_to_check:
             #note that the array is [board, y, x] while vectors are x, y, board
             
-            #if the row is filled (there are no zeros) then continue
+            #if the row is filled (with 1 or -1, i.e. are no zeros) then skip the row
             if not [1 for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
                 continue
            
@@ -176,27 +178,22 @@ class TicTacToe3DField:
         
         #any wins?
         if score_of_twos:
-            print "score_of_twos"
             vector_to_evaluate = score_of_twos[0]
             
         #are they about to win?
         elif score_of_neg_twos:
-            print "score_of_neg_twos"
             vector_to_evaluate = score_of_neg_twos[0]
             
         #are they about to win?
         elif score_of_neg_ones:
-            print "score_of_neg_ones"
             vector_to_evaluate = score_of_neg_ones[0]
             
         #are they about to win?
         elif score_of_ones:
-            print "score_of_ones"
             vector_to_evaluate = score_of_ones[0]
         
         #make the first open move we find. Apparently, we're not having any fun yet
         else:
-            print "center and misc logic"
             #center of middle board open?
             if self.game[1][1][1] == 0:    moveToMake = (1, 1, 1)
 
@@ -206,19 +203,18 @@ class TicTacToe3DField:
             #center of bottom board open?
             elif self.game[2][1][1] == 0:  moveToMake = (1, 1, 2)
             
+            #we have nothing to go on, so pick the first open spot dictacted
+            #by the optimized set of vectors to check. simple!
             else:
-                for a, z in enumerate(self.game):
-                    for b, y in enumerate(z):
-                        for c, x in enumerate(y):
-                            if y[x] == 0: moveToMake = (a, b, c)
+                for vector in self.vectors_to_check:
+                    if self.game[vector[2]][vector[1]][vector[0]] == 0:
+                        moveToMake = (vector[0], vector[1], vector[2])
                     
         #if we have detected a good move
         if not moveToMake and vector_to_evaluate:
             for i, point in enumerate(vector_to_evaluate):
                 if self.game[point[2]][point[1]][point[0]] == 0:
                     moveToMake = point     
-            
-        print "vector_to_evaluate, moveToMake", vector_to_evaluate, moveToMake
                             
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
         return self.game
