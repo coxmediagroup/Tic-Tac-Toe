@@ -159,6 +159,7 @@ class TicTacToe3DField:
             #if we have a winnning move
             if score == 2:    
                 score_of_twos.append(vector)
+                break
                 
             #if we find they can make a winning move next
             elif score == -2:   
