@@ -140,29 +140,35 @@ class TicTacToe3DField:
             two, or a2 one if there are no ones.
         """
         
-        score_of_neg_twos = []
-        score_of_twos = []
         score_of_ones = []
+        score_of_twos = []
+        score_of_neg_twos = []
         score_of_neg_ones = []
         for vector in self.vectors_to_check:
             #note that the array is [board, y, x] while vectors are x, y, board
+            
+            #if the row is filled (there are no zeros) then continue
+            if not [1 for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
+                continue
+           
+            #if the row is not filled, (has an open zero) then determine it's score
             score = sum([self.game[point[2]][point[1]][point[0]] for point in vector])
             
             #if we have a winnning move
-            if score == 2:      
+            if score == 2:    
                 score_of_twos.append(vector)
                 
             #if we find they can make a winning move next
             elif score == -2:   
                 score_of_neg_twos.append(vector)
-             
+                
             #if we find somewhere beneficial for us to block opponent
             elif score == -1:    
-                score_of_neg_ones.append(vector)   
-                
+                score_of_neg_ones.append(vector)
+            
             #if we find somewhere beneficial for us to go
             elif score == 1:    
-                score_of_ones.append(vector)
+                score_of_ones.append(vector)        
 
         #analyze the scores of each vector evaluated, looking for the best match
         vector_to_evaluate = None
@@ -178,14 +184,16 @@ class TicTacToe3DField:
             print "score_of_neg_twos"
             vector_to_evaluate = score_of_neg_twos[0]
             
+        #are they about to win?
         elif score_of_neg_ones:
-            print "score_of_neg_twos"
-            vector_to_evaluate = score_of_neg_twos[0]
+            print "score_of_neg_ones"
+            vector_to_evaluate = score_of_neg_ones[0]
             
-        elif score_of_one:
-            print "score_of_neg_twos"
-            vector_to_evaluate = score_of_one[0]
-            
+        #are they about to win?
+        elif score_of_ones:
+            print "score_of_ones"
+            vector_to_evaluate = score_of_ones[0]
+        
         #make the first open move we find. Apparently, we're not having any fun yet
         else:
             print "center and misc logic"
@@ -199,12 +207,11 @@ class TicTacToe3DField:
             elif self.game[2][1][1] == 0:  moveToMake = (1, 1, 2)
             
             else:
-                for z, a in enumerate(self.game):
-                    for y, b in enumerate(b):
-                        for x, c in enumerate(c):
-                            if c == 0: moveToMake = (x, y, z)
+                for a, z in enumerate(self.game):
+                    for b, y in enumerate(z):
+                        for c, x in enumerate(y):
+                            if y[x] == 0: moveToMake = (a, b, c)
                     
-    
         #if we have detected a good move
         if not moveToMake and vector_to_evaluate:
             for i, point in enumerate(vector_to_evaluate):
