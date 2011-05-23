@@ -4,19 +4,19 @@
 ### only modules from the standard distribution, for ease of install.
 
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import tostring
-import urllib
+import urllib, json
+
+from TicTacToe3DField import TicTacToe3DField
 
 class TicTacToeServer(BaseHTTPRequestHandler):
     """This is a class that functions both an HTTP server and hosts the logic
-       needed to win or draw at tic tac toe. It accepts a URL encoded XML string
-       on the path and, indeed, the path is the entire input foregoing any query
-       strings or other interception of paths as they are not required per spec.
+       needed to win or draw at 3D tic tac toe. It accepts a URL encoded JSON string
+       via the path and is the entire input, foregoing any query
+       strings or other interception of paths as they are not required for this demo
        
        To use this class, initialize it with "TicTacToeServer.serve_forever(PORT_NUMBER)"
-       and then pass board states to it to recieve the next board state the computer would
-       make.
+       and then pass board states to it. It will return to the client the next board state the 
+       computer would then make, playing any number of games simultanously
        
        Please see the strategy.txt document for more information about board state, which
        is used both here and in the front-end (client).
@@ -32,9 +32,12 @@ class TicTacToeServer(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
         
-        #extract xml Representation Of Board, process it, and return that xml chunk to the requestor.
-        xmlRepresentationOfBoard = urllib.unquote(self.path[1:])
-        response = self.processMove(xmlRepresentationOfBoard)
+        #extract the XML representation of the board & process it
+        jsonOfBoard = urllib.unquote(self.path.split('=')[1])
+        print "jsonOfBoard", jsonOfBoard
+        response = self.processMove(jsonOfBoard)
+        
+        #and return the new board state to the client
         self.wfile.write(response);
 
     @staticmethod
@@ -43,25 +46,26 @@ class TicTacToeServer(BaseHTTPRequestHandler):
         
         HTTPServer(('', port), TicTacToeServer).serve_forever()
         
-    def processMove(self, xmlRepresentationOfBoard):
+    def processMove(self, game):
         """given a representation of the board in XML, return the representation
            that corresponds to the move the computer ("o") would make next.
            This algorithm presumes the human always goes first.
         """
         
-        #try to DOM the XML representing the board, If corrupt merely reset the 
-        #game, nothing fancier for now.
+        #jsonify the input, use it to init the TTT3D field, 
+        #determine the next move, and return the board. Tada.
+        
         try:
-            root = ET.XML(xmlRepresentationOfBoard)
+            ttt = TicTacToe3DField(json.loads(game))
         except:
-            return """<board></board>"""
+            ttt = TicTacToe3DField()
             
-        #get the board positions and store them. 
-        for node in root:
-            print node
-            
-        return xmlRepresentationOfBoard
+        ttt.determineMove()
+        response = "<data>%s</data>"%json.dumps(ttt.game)
+        print response
+        return response
 
 #kick off a server for use by any number of front ends playing tic tac toe.
 if __name__ == "__main__":
     TicTacToeServer.serve_forever(2020)
+    
