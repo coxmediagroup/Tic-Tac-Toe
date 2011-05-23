@@ -13,7 +13,7 @@ is winnable by the first player if they go in the center square!
     all on the same computer.
 
     a) The entire game is a client/server pattern with a python script as the 
-        server and a HTML page derived from openlaszlo
+        server and a SWF derived from openlaszlo
 
     b) The python script is started
     
@@ -36,9 +36,9 @@ is winnable by the first player if they go in the center square!
     
 ######################################################################
         
-3) Open-Laszlo client (HTML page compiled from openlaszlo source)
+3) Open-Laszlo client (SWF compiled from openlaszlo source)
 
-    a) A HTML page that displays a tic-tac-toe board graphically.  
+    a) A SWF that displays a tic-tac-toe board graphically.  
     
     b) The human will always go first. Although it's pretty easy to do both 
         since one infers the other, we'll just code one path for this challenge.
