@@ -61,7 +61,6 @@ class TicTacToeServer(BaseHTTPRequestHandler):
             
         ttt.determineMove()
         response = "<data>%s</data>"%json.dumps(ttt.game)
-        print response
         return response
 
 #kick off a server for use by any number of front ends playing tic tac toe.
