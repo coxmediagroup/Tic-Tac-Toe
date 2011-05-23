@@ -4,12 +4,6 @@
 #A "field" is the complete grid, while a "board" is a given 2D
 #tic-tac-toe game inside of the field.
 
-#vectors_to_check is an exhaustive list of the 
-#vector which may be a part of 
-# The format of the below is (x, y, z (board #))
-
-
-
 class TicTacToe3DField:
     """ I store a "field" (three tic tac toe boards) that along with
         tables indicating all possible winning moves will be 
