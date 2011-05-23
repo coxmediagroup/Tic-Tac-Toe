@@ -1,50 +1,152 @@
 <canvas width="100%" height="100%" debug="true">
     
+    <script src="json.js"/>
+    
+    <!-- initialize the starting game -->
+    <script>
+        //please note the board is stored [z][y][x] (board, col, row)
+        //and moves are specified (x, y, z)
+        canvas.default_game_data = [ 
+            [ 
+                [0,0,0], [0,0,0], [0,0,0] 
+            ], 
+            [
+                [0,0,0], [0,0,0], [0,0,0] 
+            ], 
+            [ 
+                [0,0,0], [0,0,0], [0,0,0] 
+            ] 
+        ];
+    </script>
+    
+    <class name="senddata" extends="dataset" type="http" request="false">
+        <!-- when data is sent turn on the data icon and save the response before requesting data -->
+        <method name="send" args="obj, delegate, funcname">
+            if(!obj) obj = new Object();
+            this.setQueryString(null);
+            this.setQueryString(obj);
+            this.response = delegate ? new lz.Delegate(delegate, funcname) : false;
+            this.doRequest();
+        </method>
+    </class>
+
     <!-- convenience class to make a full sized view -->
     <class name="fullview" width="100%" height="100%"/>
     
-    <!-- gameboard -->
-    <view name="board" width="${parent.width-100}" height="${parent.height-100}" align="center" valign="middle" bgcolor="0xccccdd">
-        
+    <!-- a single cell of the 3D tic tac toe game -->
+    <class name="cell" width="50" height="50" bgcolor="0xccccdd">
+    
+        <!-- make a move -->
         <handler name="onmouseup">
-            Debug.write(this.getRelativeBoardPositionFromClick());
+            parent.parent.parent.makeMove(this.getXYZ())
         </handler>
         
-        <method name="getRelativeBoardPositionFromClick">
-            <![CDATA[
-                //Get a *relative* x,y position of the last mouse position on the board. due the 3x3 nature 
-                //of the board, the below math will always return the x and y of the event as 
-                //(0, 1) for instance, not pixels such as (23, 154)
-                
-                var ax = this.width/this.getMouse("x");
-                var ay = this.height/this.getMouse("y");
-            
-                if(ax <= 1.5)       var bx = 2;
-                else if(ax <= 3)    var bx = 1;
-                else                var bx = 0;
-                
-                if(ay <= 1.5)       var by = 2;
-                else if(ay <= 3)    var by = 1;
-                else                var by = 0;
-            
-                return [bx, by];
-            ]]>
+        <!-- highlite for cell -->
+        <handler name="onmouseover">
+            this.setAttribute('bgcolor', 0xddddff);
+        </handler>
+        
+        <!-- unhighlite for cell -->
+        <handler name="onmouseout">
+            this.setAttribute('bgcolor', 0xccccdd);
+        </handler>
+        
+        <!-- get the X, Y, Z of this cell, knowing we have a X, Y, Z structure -->
+        <method name="getXYZ">
+            var x = parent.subviews.indexOf(this);
+            var y = parent.parent.subviews.indexOf(parent);
+            var z = parent.parent.parent.subviews.indexOf(parent.parent);
+            return [x, y, z];
         </method>
         
-        <!-- credits on top and bottom -->
-        <text align="center" y="-30" text="Tic Tac Toe" fontsize="20"/>
-        <text align="center" y="${parent.height}" text="By James Robey" fontsize="20"/>
+        <!-- mark the cell as an X -->
+        <method name="markX">
+            this.label.setAttribute('text', "X");
+        </method>
         
-        <!-- lines for the board (vertical) -->
-        <fullview name="vertbars">
-            <view x="${parent.width/3}" width="1" height="100%" bgcolor="white"/>
-            <view x="${parent.width-parent.width/3}" width="1" height="100%" bgcolor="white"/>
-        </fullview>
+        <!-- mark the cell as an O -->
+        <method name="markO">
+            this.label.setAttribute('text', "O");
+        </method>
         
-        <!-- lines for the board (horizontal) -->
-        <fullview name="horizbars">
-            <view y="${parent.height/3}" width="100%" height="1" bgcolor="white"/>
-            <view y="${parent.height-parent.height/3}" width="100%" height="1" bgcolor="white"/>
-        </fullview>
-    </view>
+        <text name="label" align="center" valign="middle"/>
+    </class>
+    
+    <!-- one board of the 3D tic tac toe game -->
+    <class name="board">
+        <simplelayout axis="y" spacing="1"/>
+        <view>
+            <simplelayout axis="x" spacing="1"/>
+            <cell/>
+            <cell/>
+            <cell/>
+        </view>
+        <view>
+            <simplelayout axis="x" spacing="1"/>
+            <cell/>
+            <cell/>
+            <cell/>
+        </view>
+        <view>
+            <simplelayout axis="x" spacing="1"/>
+            <cell/>
+            <cell/>
+            <cell/>
+        </view>
+    </class>
+    
+    <!-- Three boards making the whole 3D tic tac toe game -->
+    <class name="game">
+        
+        <senddata name="gameserver" src="http://127.0.0.1:2020">
+            <handler name="ondata">
+                Debug.write('data received', this);
+                var dp = this.getPointer();
+                var jsontext = dp.xpathQuery('data/text()');
+                Debug.write("jsontext", jsontext);
+            </handler>
+        </senddata>
+        
+        <!-- on start initialize a new game -->
+        <handler name="oninit">
+            this.gamedata = canvas.default_game_data;
+        </handler>
+        
+        <!-- when a subcell reports a move made it calls this -->
+        <method name="makeMove" args="move">
+            //only move if the space is empty.
+            if(this.gamedata[move[2]][move[1]][move[0]] != 0)
+                return;
+                
+            //set the space in the gamedata according to move
+            this.gamedata[move[2]][move[1]][move[0]] = -1;
+            
+            var cell = this.subviews[move[2]].subviews[move[1]].subviews[move[0]];
+            cell.markX();
+            
+            //send the gamedata as JSON back to the server
+            var obj = Object();
+            obj.game = JSON.stringify(this.gamedata);
+            this.gameserver.send(obj, null, null);
+        </method>
+        
+        <!-- this is the view hierarchy of the board in question -->
+        <simplelayout axis="y" spacing="5"/>
+        <board/>
+        <board/>
+        <board/>
+    </class>
+    
+    <handler name="oninit">
+        this.gameboard.animate('opacity', 1, 7000);
+    </handler>
+    
+    <!-- Game Text -->
+        
+    <text text="Client-Server 3D Tic Tac Toe By James Robey" align="center" y="${canvas.gameboard.y-30}"/>    
+    
+    <!-- The Game Board -->
+    
+    <game opacity="0" name="gameboard" valign="middle" align="center"/>
+        
 </canvas>
