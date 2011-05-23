@@ -29,7 +29,8 @@ class TicTacToe3DField:
         ],
     ]
     
-    #a list of all possible winning vectors through the 3x3x3 cube, in specific order! (diagonals first)
+    #a list of all possible winning vectors through the 3x3x3 cube, in specific order! 
+    #(that is, diagonals must be evaluated first)
     vectors_to_check = (
         #2D vectors diagonals ------------
         
@@ -125,10 +126,8 @@ class TicTacToe3DField:
     
     def __init__(self, game=None):
         """ initialize from the incoming structure, or use a default """
-        if game:
-            self.game = game
-        else:
-            self.game = self.default_game
+        if game:    self.game = game
+        else:       self.game = self.default_game
             
     def determineMove(self):
         """ This implements the decision method to enact a computer player at 
@@ -150,7 +149,7 @@ class TicTacToe3DField:
             #note that the array is [board, y, x] while vectors are x, y, board
             
             #if the row is filled (with 1 or -1, i.e. are no zeros) then skip the row
-            if not [1 for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
+            if not [True for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
                 continue
            
             #if the row is not filled, (has an open zero) then determine it's score
@@ -178,7 +177,6 @@ class TicTacToe3DField:
         
         #any wins?
         if score_of_twos:
-            print "score_of_twos", score_of_twos
             vector_to_evaluate = score_of_twos[0]
             
         #are they about to win?
@@ -193,13 +191,10 @@ class TicTacToe3DField:
         elif score_of_neg_ones:
             vector_to_evaluate = score_of_neg_ones[0]
 
-        print "vector_to_evaluate", vector_to_evaluate
-
         #we have detected a good move
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
                 moveToMake = point     
-                print "moveToMake", moveToMake
                             
         #make the move decided upon
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
