@@ -1,9 +1,13 @@
 Tic Tac Toe 3D, by James Robey, jrobey.services@gmail.com
+To run, you need python 2.6+ and Flash installed (SWF derived from OpenLaszlo Source)
 
-Please read strategy.txt for indepth information about the implemenation
+QUICKSTART:
 
-To run, you need python 2.6+
+1) From the project directory, run "python ./ttt_server.py" to start the server
 
-from the project directory, run "python ./ttt_server.py"
+2) In your browser open "http://127.0.0.1:22222/index.html", which is all that is needed 
 
-and open ttt_client.html in your 
+3) Reload to reset. Have fun!
+
+*** Please read strategy.txt for indepth information about the implementation ***
+
