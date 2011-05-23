@@ -57,30 +57,29 @@ There are no other guidelines enforced by the challenge so the following structu
     
     b) it is composed of a structure like the one shown here:
     
-        { 
-            'field':[
-                        [1,0,0],
-                        [0,0,0],
-                        [0,0,0],
-                        
-                        [1,0,0],
-                        [0,-1,0],
-                        [0,0,0],
-                        
-                        [-1,0,0],
-                        [0,0,0],
-                        [0,0,0],
-                    ],
-         
-            'won':0
-        }
-
-        - "field" is the grid of three tic tac toe boards displayed, where 1 is a
-            computer move and -1 is a human move.
+        game = [
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+        ]
             
-        - "won" entry on the json lets the client easily know game is over
-    
     c) a reset merely returns this structure to an empty board tag and resets the UI.
+    
+    d) if the game is won, the json array is merely replaced with a string that is displayed
+        to indicate the game is over. The client identifies a string (as opposed to an array)
+        as the game over state.
     
 ######################################################################
 
