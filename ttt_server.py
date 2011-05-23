@@ -29,15 +29,20 @@ class TicTacToeServer(BaseHTTPRequestHandler):
         
         #setup the scaffolding for returning XML
         self.send_response(200, 'OK')
-        self.send_header('Content-type', 'text/plain')
-        self.end_headers()
         
         #extract the XML representation of the board & process it
-        jsonOfBoard = urllib.unquote(self.path.split('=')[1])
-        response = self.processMove(jsonOfBoard)
-        
-        #and return the new board state to the client
-        self.wfile.write(response);
+        if self.path.startswith("/turn"):
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            queryString = self.path.split("=")[1]
+            jsonOfBoard = urllib.unquote(queryString.split('&')[0])
+            response = self.processMove(jsonOfBoard)
+            self.wfile.write(response);
+        else:
+            self.send_header('Content-type', 'text/html')
+            self.send_header('Access-Control-Allow-Origin', 'http://localhost:2020')
+            self.end_headers()
+            self.wfile.write(file(self.path[1:].split("?")[0]).read())    
 
     @staticmethod
     def serve_forever(port):
@@ -61,9 +66,10 @@ class TicTacToeServer(BaseHTTPRequestHandler):
             
         ttt.determineMove()
         response = "<data>%s</data>"%json.dumps(ttt.game)
+        print response
         return response
 
 #kick off a server for use by any number of front ends playing tic tac toe.
 if __name__ == "__main__":
-    TicTacToeServer.serve_forever(2020)
+    TicTacToeServer.serve_forever(22222)
     
