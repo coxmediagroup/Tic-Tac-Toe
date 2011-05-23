@@ -1,4 +1,4 @@
-<canvas width="100%" height="100%" bgcolor="black" debug="true">
+<canvas width="100%" height="100%" bgcolor="black">
     
     <script src="json.js"/>
     
