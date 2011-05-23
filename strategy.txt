@@ -28,8 +28,7 @@ There are no other guidelines enforced by the challenge so the following structu
         the client update of game state
         
     c) It is stateless. It will only return the next move when it receives a given 
-        board's state (as discussed in point 4), along with a success flag indicating 
-        which player won, if the game has ended.
+        board's state (as discussed in point 4)
     
 ######################################################################
         
@@ -40,13 +39,9 @@ There are no other guidelines enforced by the challenge so the following structu
     b) The human will always go first. Although it's pretty easy to do both 
         since one infers the other, we'll just code one path for this challenge.
     
-    c) a reset button is provided to reset gameplay at any point
+    c) on each move the state of the board is sent to the server
     
-    d) on each move the state of the board is sent to the server
-    
-    e) the client recieves the next state from the server, displaying it. If 
-        a success flag is set, the client displays the winning status (whether 
-        human or computer) and the reset button can restart the game.
+    d) the client recieves the next state from the server, displaying it.
     
 ######################################################################
     
@@ -75,9 +70,7 @@ There are no other guidelines enforced by the challenge so the following structu
             ],
         ]
             
-    c) a reset merely returns this structure to an empty board tag and resets the UI.
-    
-    d) if the game is won, the json array is merely replaced with a string that is displayed
+    c) if the game is won, the json array is merely replaced with a string that is displayed
         to indicate the game is over. The client identifies a string (as opposed to an array)
         as the game over state.
     
