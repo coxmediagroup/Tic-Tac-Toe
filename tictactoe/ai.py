@@ -20,6 +20,8 @@ def get_move_scores(board, player):
     move_scores = [
         (move, minimax(board.get_board_for_move(player, move), player))
          for move in board.valid_moves]
+    # Re-order scores to provide a semblance of non-deterministic behaviour
+    random.shuffle(move_scores)
     move_scores.sort(key=lambda(move, score): score)
     return move_scores
 
