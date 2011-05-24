@@ -28,6 +28,13 @@ class Board(object):
 %s | %s | %s
 """.strip()
 
+    @classmethod
+    def get_opponent(cls, player):
+        """Retrieve the opponent of the given player.
+
+        """
+        return {cls.x: cls.o, cls.o: cls.x}[player]
+
     def __init__(self, state=None, last_player=None):
         if not state:
             state = [self.empty] * 9
@@ -74,12 +81,6 @@ class Board(object):
         state = self.state[:]
         state[position] = player
         return Board(state=state, last_player=player)
-
-    def get_opponent(self, player):
-        """Retrieve the opponent of the given player.
-
-        """
-        return {Board.x: Board.o, Board.o: Board.x}[player]
 
     def get_winner(self):
         """Retrieve the name of the winning player if there is one, or

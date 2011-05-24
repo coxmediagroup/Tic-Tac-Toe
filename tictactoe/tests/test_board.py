@@ -29,6 +29,9 @@ class TestBoard(unittest.TestCase):
         with self.assertRaises(ValueError):
             Board().add_move(Board.x, 15)
 
+    def test_get_opponent(self):
+        self.assertEqual(Board.get_opponent(Board.x), Board.o, 'Wrong opponent')
+
     def test_get_winner_returns_player_for_win(self):
         board = Board(state=[x for x in 'xoo x   x'])
         self.assertEquals(board.get_winner(), board.x,
