@@ -28,18 +28,20 @@ def compute_score(board, player):
     return -1
 
 
-def minimax(board, player, max_player=None):
+def minimax(board, player, min_player=None):
     """Brute-force minimax implementation."""
-    if not max_player:
-        max_player = player
+    if not min_player:
+        min_player = player
     if board.is_game_over():
-        return compute_score(board, max_player)
+        return compute_score(board, min_player)
     opponent = board.get_opponent(player)
-    scores = [minimax(board.get_board_for_move(opponent, move),
-                      opponent,
-                      max_player=max_player)
-              for move in board.valid_moves]
-    if player == max_player:
-        return max(scores)
-    else:
+    scores = []
+    for move in board.valid_moves:
+        move_board = board.get_board_for_move(opponent, move)
+        score = minimax(move_board, opponent, min_player=min_player)
+        scores.append(score)
+    is_min_turn = (player == min_player)
+    if is_min_turn:
         return min(scores)
+    else:
+        return max(scores)
