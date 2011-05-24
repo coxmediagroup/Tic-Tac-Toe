@@ -1,3 +1,4 @@
+import random
 
 
 __all__ = ['get_move_position']
@@ -7,6 +8,10 @@ def get_move_position(board, player):
     """Retrieve the optimal move position for the given board and player.
 
     """
+    is_empty_board = len(board.valid_moves) == 9
+    # A corner is always the optimal move position for an empty board
+    if is_empty_board:
+        return random.choice([0, 2, 6, 8])
     move_scores = get_move_scores(board, player)
     return move_scores[-1][0]
 
