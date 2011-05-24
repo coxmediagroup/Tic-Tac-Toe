@@ -20,7 +20,7 @@ class TestAi(unittest.TestCase):
         move = ai.get_move_position(board, board.x)
         self.assertEqual(move, 4, 'Incorrect move position')
 
-    def test_minimax(self):
+    def test_get_move_position_for_obvious_play(self):
         board = Board(state=[x for x in 'xx      o'])
         move = ai.get_move_position(board, board.o)
         self.assertEqual(move, 2, 'Incorrect move position')

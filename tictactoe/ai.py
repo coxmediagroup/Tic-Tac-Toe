@@ -4,6 +4,9 @@ import random
 __all__ = ['get_move_position']
 
 
+infinity = 1.0e400
+
+
 def get_move_position(board, player):
     """Retrieve the optimal move position for the given board and player.
 
@@ -17,9 +20,11 @@ def get_move_position(board, player):
 
 
 def get_move_scores(board, player):
-    move_scores = [
-        (move, minimax(board.get_board_for_move(player, move), player))
-         for move in board.valid_moves]
+    move_scores = []
+    for move in board.valid_moves:
+        move_board = board.get_board_for_move(player, move)
+        score = minimax(move_board, player, -infinity, infinity)
+        move_scores.append((move, score))
     # Re-order scores to provide a semblance of non-deterministic behaviour
     random.shuffle(move_scores)
     move_scores.sort(key=lambda(move, score): score)
@@ -35,20 +40,34 @@ def compute_score(board, player):
     return -1
 
 
-def minimax(board, player, min_player=None):
-    """Brute-force minimax implementation."""
-    if not min_player:
-        min_player = player
+def minimax(board, player, alpha, beta, max_player=None):
+    """Brute-force minimax with alpha-beta pruning.
+
+    See: http://en.wikipedia.org/wiki/Alpha-beta_pruning
+
+    """
+    if not max_player:
+        max_player = player
     if board.is_game_over():
-        return compute_score(board, min_player)
+        return compute_score(board, max_player)
     opponent = board.get_opponent(player)
-    scores = []
-    for move in board.valid_moves:
-        move_board = board.get_board_for_move(opponent, move)
-        score = minimax(move_board, opponent, min_player=min_player)
-        scores.append(score)
-    is_min_turn = (player == min_player)
-    if is_min_turn:
-        return min(scores)
+    move_boards = (
+        board.get_board_for_move(opponent, x) for x in board.valid_moves
+        )
+    is_max_turn = (opponent == max_player)
+    if is_max_turn:
+        for move_board in move_boards:
+            score = minimax(move_board, opponent, alpha,
+                            beta, max_player=max_player)
+            alpha = max(alpha, score)
+            if beta <= alpha:
+                break
+        return alpha
     else:
-        return max(scores)
+        for move_board in move_boards:
+            score = minimax(move_board, opponent, alpha,
+                            beta, max_player=max_player)
+            beta = min(beta, score)
+            if beta <= alpha:
+                break
+        return beta
