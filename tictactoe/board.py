@@ -45,7 +45,7 @@ class Board(object):
 
     @property
     def printable_state(self):
-        return self.board_template % tuple(self.state)
+        return self.board_template % tuple(x.upper() for x in self.state)
 
     @property
     def valid_moves(self):

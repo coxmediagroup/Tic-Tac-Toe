@@ -68,7 +68,7 @@ class TestBoard(unittest.TestCase):
     def test_printable_state(self):
         board = Board()
         board.add_move(board.x, 8)
-        expected = board.board_template % tuple([' '] * 8 + ['x'])
+        expected = board.board_template % tuple([' '] * 8 + ['X'])
         self.assertEqual(expected, board.printable_state,
                          'Printable state not as expected')
 
