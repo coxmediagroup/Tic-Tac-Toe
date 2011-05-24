@@ -1,1 +1,3 @@
 Simple Implementation of Tic-Tac-Toe using the Minimax algorithm as AI.
+
+Run with: python tictactoe.py
