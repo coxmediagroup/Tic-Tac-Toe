@@ -97,7 +97,7 @@ class Board(object):
         """Indicate whether the game has been won or lacks valid moves.
 
         """
-        return self.get_winner() or not self.valid_moves
+        return bool(self.get_winner()) or not self.valid_moves
 
     def iter_rows(self):
         """Iterate over the rows (vertical, horizontal and diagonal)

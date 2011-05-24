@@ -47,8 +47,12 @@ class TestBoard(unittest.TestCase):
         self.assertEquals(board.get_winner(), None,
                           'Winner incorrectly determined')
 
+    def test_is_game_over_returns_false_for_unwon_game(self):
+        board = Board(state=[x for x in 'x  o  x  '])
+        self.assertFalse(board.is_game_over(), 'Game should not be over')
+
     def test_is_game_over_returns_true_for_no_more_moves(self):
-        board = Board(state=['x'] * 9)
+        board = Board(state=[x for x in 'xxoooxxxo'])
         self.assertTrue(board.is_game_over(), 'Game should be over')
 
     def test_iter_rows(self):
