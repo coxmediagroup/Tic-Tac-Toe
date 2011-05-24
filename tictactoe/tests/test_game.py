@@ -21,6 +21,15 @@ class TestGame(mocker.MockerTestCase, unittest.TestCase):
         player = game.get_player_choice_for_human()
         self.assertEqual(player, expected_player, 'Invalid player returned')
 
+    def test_ask_yes_no_question(self):
+        mock_input = self.mocker.replace(raw_input)
+        mock_input(mocker.ANY)
+        expected_choice = ''
+        self.mocker.result(expected_choice)
+        self.mocker.replay()
+
+        self.assertTrue(game.ask_yes_no_question(''), 'Invalid result')
+
     def test_human_moves_first_succeeds(self):
         mock_input = self.mocker.replace(raw_input)
         mock_input(mocker.ANY)

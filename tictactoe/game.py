@@ -21,22 +21,30 @@ def get_player_choice_for_human():
     return player.lower()
 
 
+def ask_yes_no_question(question):
+    """Ask a yes/no question and return whether the answer was yes.
+
+    """
+    print
+    answer = None
+    prompt = '%s [Yn]  ->' % question
+    while True:
+        answer = raw_input(prompt)
+        if not answer:
+            answer = 'y'
+        if answer.lower() in ['y', 'n']:
+            return (answer == 'y')
+        print "Invalid answer - please choose one of 'y' or 'n'"
+
+
 def human_moves_first():
     """Ask the human whether they want to move first.
 
     """
-    move_first = None
-    print
-    while True:
-        move_first = raw_input('Do you want to go first? [Yn]  -> ')
-        if not move_first:
-            move_first = 'y'
-        if move_first.lower() in ['y', 'n']:
-            ordinal = {'y': 'first', 'n': 'second'}[move_first]
-            print "You have chosen to go %s." % ordinal
-            break
-        print "Invalid answer - please choose one of 'y' or 'n'"
-    return (move_first == 'y')
+    move_first = ask_yes_no_question('Do you want to go first?')
+    ordinal = {True: 'first', False: 'second'}[move_first]
+    print "You have chosen to go %s." % ordinal
+    return move_first
 
 
 get_display_position = lambda x: x + 1
@@ -99,26 +107,30 @@ def play_game():
 
     """
     print "Let's play tic-tac-toe!"
-    human_player = get_player_choice_for_human()
-    opponent = Board.get_opponent(human_player)
-    player_configs = [
-        PlayerConfig(human_player, 'You', get_move_position_for_human),
-        PlayerConfig(opponent, 'The computer', ai.get_move_position),
-        ]
-    if not human_moves_first():
-        player_configs.reverse()
-    print '\n%s\n' % get_instruction_message()
-    board = Board()
-    for player_config in itertools.cycle(player_configs):
-        position = player_config.get_move_position(board)
-        board.add_move(player_config.letter, position)
-        print '%s moved to position %d\n%s\n' % (
-            player_config.name,
-            get_display_position(position),
-            board.printable_state)
-        if board.is_game_over():
+    while True:
+        human_player = get_player_choice_for_human()
+        opponent = Board.get_opponent(human_player)
+        player_configs = [
+            PlayerConfig(human_player, 'You', get_move_position_for_human),
+            PlayerConfig(opponent, 'The computer', ai.get_move_position),
+            ]
+        if not human_moves_first():
+            player_configs.reverse()
+        print '\n%s\n' % get_instruction_message()
+        board = Board()
+        for player_config in itertools.cycle(player_configs):
+            position = player_config.get_move_position(board)
+            board.add_move(player_config.letter, position)
+            print '%s moved to position %d\n%s\n' % (
+                player_config.name,
+                get_display_position(position),
+                board.printable_state)
+            if board.is_game_over():
+                break
+        print '%s\n' % get_winner_message(board.get_winner(), player_configs)
+        if not ask_yes_no_question('Do you want to play again?'):
+            print 'Thank you for playing!'
             break
-    print get_winner_message(board.get_winner(), player_configs)
 
 
 if __name__ == '__main__':
