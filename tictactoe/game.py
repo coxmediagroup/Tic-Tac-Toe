@@ -1,7 +1,7 @@
 import itertools
 
-from board import Board
-import ai
+from tictactoe.board import Board
+from tictactoe import ai
 
 
 def get_player_choice_for_human():
@@ -131,7 +131,3 @@ def play_game():
         if not ask_yes_no_question('Do you want to play again?'):
             print 'Thank you for playing!'
             break
-
-
-if __name__ == '__main__':
-    play_game()

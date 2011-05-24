@@ -3,7 +3,7 @@ Usage
 
 From the root of the project, execute the following:
 
-    python tictactoe/game.py
+    python tictactoe.py
 
 
 Implementation Errata
