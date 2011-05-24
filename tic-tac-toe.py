@@ -6,6 +6,7 @@ import random
 import pickle
 
 
+
 def winningArray(list):
     """returns True if all the elements in a list are equal, or if the list is empty. This is used to determine if a player has 'line' of 3 in a row"""
     return not list or list == [list[0]] * len(list)
@@ -13,8 +14,8 @@ def winningArray(list):
 
 
 EmptyBoardSpace = ' '
-Player_x = 'x'
-Player_o = 'o'
+Player_x = 'X'
+Player_o = 'O'
 
 class TicTacToeBoard:
     """This class represents a tic tac toe board state."""
@@ -31,6 +32,7 @@ class TicTacToeBoard:
         # the idea here is to make field names understandable by people where as arrays normally start with 0 instead of 1
         # so when needed you chop up string: ie self.field_names[0] would be the equivalent of the first character of the string which is '1'
         self.field_names = '123456789'
+        self.optmoves = None
         
     
     def output(self):
@@ -71,7 +73,7 @@ class TicTacToeBoard:
     def getMoveName(self, move):
         """Returns a human-readable name for a move"""
         return self.field_names[move]
-    def save(self, filename):
+    def save(self, filename, toStr=False):
         """save game board object to file to allow for separate calls to the same game
         typically used for web interface
          move count or player tracking would be needed to find who moves next"""
@@ -114,7 +116,7 @@ def humanPlayer(board, player):
 def computerPlayer(board, player):
     """Function for the computer player"""
 
-    board.output()
+    #board.output()
     # a dictionary object to be used in recursive algorithm to eval opponents game play thru
     # effectively alternating players thru each recursion
     opponent = { Player_o : Player_x, Player_x : Player_o }
@@ -169,6 +171,7 @@ def computerPlayer(board, player):
     random.shuffle(moves)
     
     moves.sort(key = lambda (move, winner): winner)
+    board.optmoves = moves
     
     # sort and make move with last tuple in list and first item of that tuple
     #[(6, -1), (3, -1), (8, -1), (5, -1), (7, 0), (0, 0), (4, 0), (2, 0)]

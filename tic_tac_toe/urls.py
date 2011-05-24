@@ -5,13 +5,18 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'tic_tac_toe.views.home', name='home'),
-    # url(r'^tic_tac_toe/', include('tic_tac_toe.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-     url(r'^admin/', include(admin.site.urls)),
+                       
+                    # Examples:
+                    url(r'^game/(?P<game_id>\d+)/$', 'main.views.game'),
+                    url(r'^webMove/(?P<game_id>\d+)/(?P<move>\d+)/$', 'main.views.reqMove'),
+                    url(r'^newgame/$', 'main.views.reqNewGame', ),
+                    # url(r'^tic_tac_toe/', include('tic_tac_toe.foo.urls')),
+                
+                    # Uncomment the admin/doc line below to enable admin documentation:
+                     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+                
+                    # Uncomment the next line to enable the admin:
+                     url(r'^admin/', include(admin.site.urls)),
 )
+
+
