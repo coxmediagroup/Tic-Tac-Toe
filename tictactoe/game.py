@@ -55,6 +55,9 @@ def get_move_position_for_human(board, player):
 
     """
     valid_positions = [get_display_position(x) for x in board.valid_moves]
+    if len(valid_positions) == 1:
+        print 'Only one possible move remains.'
+        return get_internal_position(valid_positions[0])
     while True:
         position = raw_input(
             'Where do you want to move? %s  -> ' % valid_positions)
