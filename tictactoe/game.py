@@ -45,11 +45,6 @@ get_display_position = lambda x: x + 1
 get_internal_position = lambda x: x - 1
 
 
-def get_move_position_for_computer(board, player):
-    print 'Computer is thinking...'
-    return ai.get_move_position(board, player)
-
-
 def get_move_position_for_human(board, player):
     """Ask the human for a valid position for their next move.
 
@@ -108,7 +103,7 @@ def play_game():
     opponent = Board.get_opponent(human_player)
     player_configs = [
         PlayerConfig(human_player, 'You', get_move_position_for_human),
-        PlayerConfig(opponent, 'The computer', get_move_position_for_computer),
+        PlayerConfig(opponent, 'The computer', ai.get_move_position),
         ]
     if not human_moves_first():
         player_configs.reverse()
