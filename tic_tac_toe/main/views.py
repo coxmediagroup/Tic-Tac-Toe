@@ -24,7 +24,7 @@ def game(request, game_id=1):
     spaces = pickle.loads(str(gameSession.board.spaceStateList))
     
     #send board space states and game id to user
-    game_context = Context({'rows': spaces, 'winner': "none", 'game_session_id': gameSession.id, })
+    game_context = Context({'rows': spaces, 'winner': "none", 'game_session_id': gameSession.id, 'host': host})
     
     return HttpResponse(game_template.render(game_context))
     
