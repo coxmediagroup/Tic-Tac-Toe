@@ -11,12 +11,11 @@ from TicTacToe3DField import TicTacToe3DField
 class TicTacToeServer(BaseHTTPRequestHandler):
     """This is a class that functions both an HTTP server and hosts the logic
        needed to win or draw at 3D tic tac toe. It accepts a URL encoded JSON string
-       via any query string argument and presumes there is only one (splitting on the "=" sign)
-       no other mechanisms are required for this demo.
+       via the /turn?game=... path, and any other path returns the document so pointed
+       at relative to the current dir (from the server's folder)
        
-       To use this class, initialize it with "TicTacToeServer.serve_forever(PORT_NUMBER)"
-       and then pass board states to it. It will return to the client the next board state the 
-       computer would then make, playing any number of games simultanously
+       In a nutshell it will serve the SWF client and then the client will communicate 
+       board state back and forth, playing any number of client instances simultanously.
        
        Please see the strategy.txt document for more information about board state, which
        is used both here and in the front-end (client).
@@ -36,6 +35,7 @@ class TicTacToeServer(BaseHTTPRequestHandler):
             self.end_headers()
             queryString = self.path.split("=")[1]
             jsonOfBoard = urllib.unquote(queryString.split('&')[0])
+            print "jsonOfBoard", jsonOfBoard
             response = self.processMove(jsonOfBoard)
             self.wfile.write(response);
         else:
@@ -64,8 +64,7 @@ class TicTacToeServer(BaseHTTPRequestHandler):
         except:
             ttt = TicTacToe3DField()
             
-        ttt.determineMove()
-        response = "<data>%s</data>"%json.dumps(ttt.game)
+        response = "<data>%s</data>"%json.dumps(ttt.determineMove())
         print response
         return response
 
