@@ -33,7 +33,7 @@ Running Tests
 
 The included unit tests have the following dependencies:
 
- - nosetests
+ - nose
  - mocker
  - unittest2
 
