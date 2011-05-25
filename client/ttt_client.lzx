@@ -1,34 +1,8 @@
-<canvas width="100%" height="100%" bgcolor="black">
+<!-- Written By James Robey - a 3D Tic Tac Toe client that talks to a back-end to play against you -->
+
+<canvas width="100%" height="100%" bgcolor="black" proxied="false">
     
     <script src="json.js"/>
-    
-    <!-- initialize the starting game -->
-    <script>
-        //please note the board is stored [z][y][x] (board, col, row)
-        //and moves are specified (x, y, z)
-        canvas.default_game_data = [ 
-            [ 
-                [0,0,0], [0,0,0], [0,0,0] 
-            ], 
-            [
-                [0,0,0], [0,0,0], [0,0,0] 
-            ], 
-            [ 
-                [0,0,0], [0,0,0], [0,0,0] 
-            ] 
-        ];
-    </script>
-    
-    <class name="senddata" extends="dataset" type="http" request="false">
-        <!-- when data is sent turn on the data icon and save the response before requesting data -->
-        <method name="send" args="obj, delegate, funcname">
-            if(!obj) obj = new Object();
-            this.setQueryString(null);
-            this.setQueryString(obj);
-            this.response = delegate ? new lz.Delegate(delegate, funcname) : false;
-            this.doRequest();
-        </method>
-    </class>
 
     <!-- convenience class to make a full sized view -->
     <class name="fullview" width="100%" height="100%"/>
@@ -38,17 +12,21 @@
     
         <!-- make a move -->
         <handler name="onmouseup">
-            parent.parent.parent.makeMove(this.getXYZ())
+            //if the game is over, stop playing. They have to reset.
+            if(!canvas.won)
+                parent.parent.parent.makeMove(this.getXYZ())
         </handler>
         
         <!-- highlite for cell -->
         <handler name="onmouseover">
-            this.setAttribute('bgcolor', 0xddddff);
+            if(!canvas.won)
+                this.setAttribute('bgcolor', 0xddddff);
         </handler>
         
         <!-- unhighlite for cell -->
         <handler name="onmouseout">
-            this.setAttribute('bgcolor', 0xccccdd);
+            if(!canvas.won)
+                this.setAttribute('bgcolor', 0xccccdd);
         </handler>
         
         <!-- get the X, Y, Z of this cell, knowing we have a X, Y, Z structure -->
@@ -95,81 +73,109 @@
         </view>
     </class>
     
-    <!-- Three boards making the whole 3D tic tac toe game -->
-    <class name="game">
-        
-        <senddata name="gameserver" src="http://127.0.0.1:2020">
-            <handler name="ondata">
-                //retrieve the text 
-                var dp = this.getPointer();
-                var jsontext = dp.xpathQuery('data/text()');
-
-                //change text into array via JSON
-                var gamedata = JSON.parse(jsontext);
-                
-                Debug.write('gamedata', gamedata);
-                
-                //set gamedata to the gamedata returned. 
-                parent.gamedata = gamedata;
-                
-                //loop over that gamedata, setting each cell indicated to the result. Play continues.
-                parent.refreshBoard();
-            </handler>
-        </senddata>
-        
-        <!-- on start initialize a new game -->
-        <handler name="oninit">
-            this.gamedata = canvas.default_game_data;
-        </handler>
-        
-        <!-- when a subcell reports a move made it calls this -->
-        <method name="makeMove" args="move">
-            //only move if the space is empty.
-            if(this.gamedata[move[2]][move[1]][move[0]] != 0)
-                return;
-                
-            //set the space in the gamedata according to move
-            this.gamedata[move[2]][move[1]][move[0]] = -1;
-            
-            //send the gamedata as JSON back to the server
-            var obj = Object();
-            obj.game = JSON.stringify(this.gamedata);
-            this.gameserver.send(obj, null, null);
-            
-            Debug.write("obj.game", obj.game);
-        </method>
-        
-        <method name="refreshBoard">
-            <![CDATA[
-                for(var z = 0 ; z < this.gamedata.length ; z ++)
-                    for(var y = 0 ; y < this.gamedata.length ; y ++)
-                        for(var x = 0 ; x < this.gamedata.length ; x ++){
-                            var cell = this.subviews[z].subviews[y].subviews[x];
-                            if(this.gamedata[z][y][x] == 1) cell.markO();
-                            else if(this.gamedata[z][y][x] == -1) cell.markX();
-                        }
-            ]]>
-        </method>
-        
-        <!-- this is the view hierarchy of the board in question -->
-        <simplelayout axis="y" spacing="5"/>
-        <board/>
-        <board/>
-        <board/>
-    </class>
+    <!-- when this is set to true the game is over and components will stop making moves -->
+    <attribute name="won" type="boolean" value="false"/>
     
-    <!-- Make Three Tic Tac Toe games -->
+    <!-- the main dataset, it stores the game state as returned by the server -->
+    <dataset name="gameserver" src="http://127.0.0.1:22222/turn" type="http" request="false"/>
     
+    <!-- this returns a new game field for initialization -->
+    <method name="returnNewGameField">
+        //please note the board is stored [z][y][x] (board, col, row)
+        //and moves are specified (x, y, z)
+        return [ 
+            [ 
+                [0,0,0], [0,0,0], [0,0,0] 
+            ], 
+            [
+                [0,0,0], [0,0,0], [0,0,0] 
+            ], 
+            [ 
+                [0,0,0], [0,0,0], [0,0,0] 
+            ],
+            []
+        ];
+    </method>
+    
+    <!-- explanatory text at the top of the screen -->
     <text fgcolor="white" fontsize="15" text="Demonstration of 3D Tic Tac Toe by jrobey.service@gmail.com. A back-end server plays against you in 3D. Reload to reset."/>
     
     <!-- a nice window to hold the game -->
-    <window resizable="true" title="3d Tic-Tac-Toe" x="100" y="50" width="300" height="550">    
-        <!-- The Game Board -->    
-        <game opacity="0" name="gameboard" valign="middle" align="center">
+    <window resizable="true" title="3d Tic-Tac-Toe" x="100" y="50" width="300" height="600">    
+        <!-- The Game Field -->    
+        
+        <!-- Three boards making the whole 3D tic tac toe game -->
+        <view name="gameboard" opacity="0" valign="middle" align="center">        
+            <!-- on start initialize a new game -->
             <handler name="oninit">
+                this.gamedata = canvas.returnNewGameField();
                 this.animate('opacity', 1, 3000);
             </handler>
-        </game>
+
+            <handler name="ondata" reference="canvas.datasets.gameserver">
+                //retrieve the text 
+                var dp = canvas.gameserver.getPointer();
+                var jsontext = dp.xpathQuery('data/text()');
+
+                //change text into array via JSON
+                var data = JSON.parse(jsontext);
+
+                //set gamedata to the gamedata returned. 
+                this.gamedata = data;
+
+                //loop over that gamedata, setting each cell indicated to the result. Play continues.
+                this.refreshBoard();
+            </handler>
+
+            <!-- when a subcell reports a move made it calls this -->
+            <method name="makeMove" args="move">
+                //only move if the space is empty.
+                if(this.gamedata[move[2]][move[1]][move[0]] != 0)
+                    return;
+
+                //set the space in the gamedata according to move
+                this.gamedata[move[2]][move[1]][move[0]] = -1;
+
+                //send the gamedata as JSON back to the server
+                var obj = Object;
+                obj.game = JSON.stringify(this.gamedata);
+
+                canvas.gameserver.setQueryString(obj);
+                canvas.gameserver.doRequest();
+            </method>
+
+            <method name="refreshBoard">
+                <![CDATA[
+                    //if the fourth entry is not empty then a win occurred. A "win" state 
+                    //looks like: [ [0,0,0], [1,1,1], [2,2,2] ];
+                    if(this.gamedata[3].length){
+                        //Call out the win and invite the user to reset the game.
+                        for(var i = 0 ; i < this.gamedata[3].length ; i ++){
+                            var xyz = this.gamedata[3][i];
+                            var cell = this.subviews[xyz[2]].subviews[xyz[1]].subviews[xyz[0]];
+                            canvas.setAttribute('won', true);
+                            cell.setAttribute('bgcolor', 0xff0000);
+                        }
+                    }
+
+                    //Otherwise we have received the most recent game state. Draw it.
+                    for(var z = 0 ; z < 3 ; z ++)
+                        for(var y = 0 ; y < 3 ; y ++)
+                            for(var x = 0 ; x < 3 ; x ++){
+                                var cell = this.subviews[z].subviews[y].subviews[x];
+                                if(this.gamedata[z][y][x] == 1) cell.markO();
+                                else if(this.gamedata[z][y][x] == -1) cell.markX();
+                            }
+                ]]>
+            </method>
+
+            <!-- this is the view hierarchy of the board in question -->
+            <simplelayout axis="y" spacing="5"/>
+            <board/>
+            <board/>
+            <board/>
+        </view>
+        
     </window>
         
 </canvas>
