@@ -57,9 +57,9 @@ class TicTacToe3DField:
         ((2, 0, 0), (2, 1, 1), (2, 2, 2)),
 
         #up_to_down_diagonal_bottom_to_top_3d
-        ((0, 2, 0), (0, 2, 1), (0, 0, 2)),
+        ((0, 2, 0), (0, 1, 1), (0, 0, 2)),
         ((1, 2, 0), (1, 1, 1), (1, 0, 2)),
-        ((2, 2, 0), (2, 1, 1), (2, 0, 2)),
+        ((2, 2, 0), (2, 2, 1), (2, 0, 2)),
 
         #up_to_down_diagonal_left_to_right_3d
         ((0, 0, 0), (1, 0, 1), (2, 0, 2)),
@@ -212,6 +212,9 @@ class TicTacToe3DField:
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
                 moveToMake = point     
+                
+        print "vector_to_evaluate", vector_to_evaluate
+        print "moveToMake", moveToMake
                             
         #make the move decided upon
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
