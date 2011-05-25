@@ -4,6 +4,8 @@
 #A "field" is the complete grid, while a "board" is a given 2D
 #tic-tac-toe game inside of the field.
 
+import copy
+
 class TicTacToe3DField:
     """ I store a "field" (three tic tac toe boards) that along with
         tables indicating all possible winning moves will be 
@@ -27,6 +29,7 @@ class TicTacToe3DField:
             [0,0,0],
             [0,0,0],
         ],
+        []
     ]
     
     #a list of all possible winning vectors through the 3x3x3 cube, in specific order! 
@@ -148,17 +151,26 @@ class TicTacToe3DField:
         for vector in self.vectors_to_check:
             #note that the array is [board, y, x] while vectors are x, y, board
             
-            #if the row is filled (with 1 or -1, i.e. are no zeros) then skip the row
-            if not [True for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
-                continue
-           
-            #if the row is not filled, (has an open zero) then determine it's score
+            #determine the score for the row. We do this whether the row is full or not
+            #so we can detect a win condition...
             score = sum([self.game[point[2]][point[1]][point[0]] for point in vector])
+            
+            #a user win was detected! set up the win field and return (we dont need to compute our next move)
+            if score == -3:
+                #a winstate (the fourth item in the game array looks 
+                #like [ [ [0,0,0], [1,1,1], [2,2,2] ] ]
+                vector_to_reverse = copy.deepcopy(vector)
+                [list(entry).reverse() for entry in vector_to_reverse]
+                [self.game[3].append(entry) for entry in vector_to_reverse]
+                return self.game
+            
+            #if the row is filled (with 1 or -1, i.e. are no zeros) then skip the row
+            elif not [True for point in vector if self.game[point[2]][point[1]][point[0]] == 0]:
+                continue
             
             #if we have a winnning move
             if score == 2:    
                 score_of_twos.append(vector)
-                break
                 
             #if we find they can make a winning move next
             elif score == -2:   
@@ -175,8 +187,13 @@ class TicTacToe3DField:
         #analyze the scores of each vector evaluated, looking for the best match
         vector_to_evaluate = None
         
-        #any wins?
+        #The computer wins
         if score_of_twos:
+            #a winstate (the fourth item in the game array looks 
+            #like [ [ [0,0,0], [1,1,1], [2,2,2] ] ]
+            vector_to_reverse = copy.deepcopy(score_of_twos[0])
+            [list(entry).reverse() for entry in vector_to_reverse]
+            [self.game[3].append(entry) for entry in vector_to_reverse]
             vector_to_evaluate = score_of_twos[0]
             
         #are they about to win?
@@ -191,7 +208,7 @@ class TicTacToe3DField:
         elif score_of_neg_ones:
             vector_to_evaluate = score_of_neg_ones[0]
 
-        #we have detected a good move
+        #we have detected a good vector, but which place to move?
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
                 moveToMake = point     
