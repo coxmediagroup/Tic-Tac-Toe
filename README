@@ -11,6 +11,12 @@ Implementation Errata
  
  - A cli interface was chosen for simplicity of implementation.
 
+ - The computer will never lose, but does not always choose an optimal
+   strategy.  This is a known defect in the simple maximin+alpha-beta
+   pruning strategy that it uses.  I chose not to correct this defect
+   due to my presumption that a perfect solution and the effort
+   involved fell outside of the scope of this project.
+
  - Code was developed against Python 2.6.  Usage on other versions of
    Python remains untested and may not work.
 
