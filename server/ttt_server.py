@@ -35,7 +35,6 @@ class TicTacToeServer(BaseHTTPRequestHandler):
             self.end_headers()
             queryString = self.path.split("=")[1]
             jsonOfBoard = urllib.unquote(queryString.split('&')[0])
-            print "jsonOfBoard", jsonOfBoard
             response = self.processMove(jsonOfBoard)
             self.wfile.write(response);
         else:
