@@ -4,34 +4,68 @@ class Board(object):
     if a player has not played it yet.
     """
     def __init__(self):
-        self.cells = []
+        self._move_cache = None
+        self._cells = []
         for i in range(0, 3):
-            self.cells.append([None]*3)
+            self._cells.append([None]*3)
         
 
     def output(self):
-        for row in self.cells:
+        for row in self._cells:
             for cell in row:
-                print cell, ' ', 
+                if cell is None: 
+                    print '%02s'%'-',
+                else:
+                    print '%02s'%cell,
             print '\n'
 
     def get_val(self, x, y):
-        return self.cells[y][x]
+        return self._cells[y][x]
 
     def set_val(self, x, y, val):
-        self.cells[y][x] = val
+        self._move_cache = None
+        self._cells[y][x] = val
+
+    def get_valid_moves(self):
+        """
+        Returns a list of valid moves left (without an X or an O in them)
+        Will not compute itself twice without a set_val
+        """
+        if self._move_cache:
+            return self._move_cache
+
+        out = []
+        for y, row in enumerate(self._cells):
+            for x, cell in enumerate(row):
+                if cell == None:
+                    out.append((x, y))
+        self._move_cache = out
+        return out
 
 class Player(object):
     """
     Base class for either human or computer based player.
     """
-    def __init__(self, board):
+    def __init__(self, board, avatar=None):
         self.board = board
+        self.avatar = avatar
 
     def get_move(self):
-        """Returns a tuple of board coordinates (x,y)"""
-        pass
+        """
+        Returns a tuple of board coordinates (x,y)
+        This is a very simple implementation to be overwritten by child classes
+        """
+        print "Please enter coordinates for a move in form of (x, y) for %s"%self.avatar
+        try:
+            move = eval(raw_input())
+        except:
+            print "Invalid input"
+            return get_move()
 
+        if move not in self.board.get_valid_moves() or not isinstance(move, tuple):
+            print "Invalid move"
+            return self.get_move()
+        return move
 
 class Game(object):
     """ 
@@ -95,12 +129,29 @@ class Game(object):
                 return (number, win)
         return False
 
+    def start(self):
+        while True:
+            self.board.output()
+            p = self.p1 if self.turn == 1 else self.p2
+            avatar = 'X' if self.turn == 1 else 'O'
+            move = p.get_move()
+            self.board.set_val(move[0], move[1], avatar)
+            win = self.check_for_win()
+            if win:
+                print "Player %d (%s's) won on row %d!"%(self.turn, avatar, win[0])
+                return win
+            if not self.board.get_valid_moves():
+                print "Tie."
+                return None
+
+            self.turn = 2 if self.turn == 1 else 1
+
 def main():
     b = Board()
     p1 = None
     p2 = None
-    g = Game(b, p1, p2)
-    print g._build_row_ranges()
+    g = Game(b, Player(b, 'X'), Player(b, 'O'))
+    g.start()
     
 
 if __name__ == '__main__':
