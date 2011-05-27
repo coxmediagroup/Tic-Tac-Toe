@@ -49,34 +49,6 @@ class TicTacToe3DField:
         ((0, 0, 2), (1, 1, 2), (2, 2, 2)),
         ((0, 2, 2), (1, 1, 2), (2, 0, 2)),
         
-        #3D Vectors diagonal ------------
-        
-        #up_to_down_diagonal_top_to_bottom_3d
-        ((0, 0, 0), (0, 1, 1), (0, 2, 2)),
-        ((1, 0, 0), (1, 1, 1), (1, 2, 2)),
-        ((2, 0, 0), (2, 1, 1), (2, 2, 2)),
-
-        #up_to_down_diagonal_bottom_to_top_3d
-        ((0, 2, 0), (0, 1, 1), (0, 0, 2)),
-        ((1, 2, 0), (1, 1, 1), (1, 0, 2)),
-        ((2, 2, 0), (2, 1, 1), (2, 0, 2)),
-
-        #up_to_down_diagonal_left_to_right_3d
-        ((0, 0, 0), (1, 0, 1), (2, 0, 2)),
-        ((0, 1, 0), (1, 1, 1), (2, 1, 2)),
-        ((0, 2, 0), (1, 2, 1), (2, 2, 2)),
-
-        #up_to_down_diagonal_right_to_left_3d
-        ((2, 0, 0), (1, 0, 1), (0, 0, 2)),
-        ((2, 1, 0), (1, 1, 1), (0, 1, 2)),
-        ((2, 2, 0), (1, 2, 1), (0, 2, 2)),
-
-        #up_to_down_diagonal_cross_center_3d
-        ((0, 0, 0), (1, 1, 1), (2, 2, 2)),
-        ((0, 2, 0), (1, 1, 1), (2, 0, 2)),
-        ((0, 0, 2), (1, 1, 1), (2, 2, 0)),
-        ((2, 0, 0), (1, 1, 1), (0, 2, 2)),
-        
         #2D vectors flat ------------
 
         #left_to_right_board_0_2d
@@ -108,7 +80,36 @@ class TicTacToe3DField:
         ((0, 0, 2), (0, 1, 2), (0, 2, 2)),
         ((1, 0, 2), (1, 1, 2), (1, 2, 2)),
         ((2, 0, 2), (2, 1, 2), (2, 2, 2)),
+        
+        #3D Vectors diagonal ------------
+        
+        #up_to_down_diagonal_top_to_bottom_3d
+        ((0, 0, 0), (0, 1, 1), (0, 2, 2)),
+        ((1, 0, 0), (1, 1, 1), (1, 2, 2)),
+        ((2, 0, 0), (2, 1, 1), (2, 2, 2)),
 
+        #up_to_down_diagonal_bottom_to_top_3d
+        ((0, 2, 0), (0, 1, 1), (0, 0, 2)),
+        ((1, 2, 0), (1, 1, 1), (1, 0, 2)),
+        ((2, 2, 0), (2, 1, 1), (2, 0, 2)),
+
+        #up_to_down_diagonal_left_to_right_3d
+        ((0, 0, 0), (1, 0, 1), (2, 0, 2)),
+        ((0, 1, 0), (1, 1, 1), (2, 1, 2)),
+        ((0, 2, 0), (1, 2, 1), (2, 2, 2)),
+
+        #up_to_down_diagonal_right_to_left_3d
+        ((2, 0, 0), (1, 0, 1), (0, 0, 2)),
+        ((2, 1, 0), (1, 1, 1), (0, 1, 2)),
+        ((2, 2, 0), (1, 2, 1), (0, 2, 2)),
+
+        #up_to_down_diagonal_cross_center_3d
+        ((0, 0, 0), (1, 1, 1), (2, 2, 2)),
+        ((0, 2, 0), (1, 1, 1), (2, 0, 2)),
+        ((0, 0, 2), (1, 1, 1), (2, 2, 0)),
+        ((2, 0, 0), (1, 1, 1), (0, 2, 2)),
+        
+        
         #3D Vectors flat ------------
 
         #up_to_down_left_to_right_top_3d
@@ -131,6 +132,17 @@ class TicTacToe3DField:
         """ initialize from the incoming structure, or use a default """
         if game:    self.game = game
         else:       self.game = self.default_game
+        
+    def setWinState(self, vector):
+        """ set the vector on the fourth element of the field (field has three elements, one for each 
+            board, plus this one for a win state) that will show up in red when the client repaints,
+            which is used to show a win condition
+        """
+        #a winstate (the fourth item in the game array looks 
+        #like [ [ [0,0,0], [1,1,1], [2,2,2] ] ]
+        vector_to_reverse = copy.deepcopy(vector)
+        [list(entry).reverse() for entry in vector_to_reverse]
+        [self.game[3].append(entry) for entry in vector_to_reverse]
             
     def determineMove(self):
         """ This implements the decision method to enact a computer player at 
@@ -157,11 +169,7 @@ class TicTacToe3DField:
             
             #a user win was detected! set up the win field and return (we dont need to compute our next move)
             if score == -3:
-                #a winstate (the fourth item in the game array looks 
-                #like [ [ [0,0,0], [1,1,1], [2,2,2] ] ]
-                vector_to_reverse = copy.deepcopy(vector)
-                [list(entry).reverse() for entry in vector_to_reverse]
-                [self.game[3].append(entry) for entry in vector_to_reverse]
+                self.setWinState(vector)
                 return self.game
             
             #if the row is filled (with 1 or -1, i.e. are no zeros) then skip the row
@@ -186,36 +194,26 @@ class TicTacToe3DField:
 
         #analyze the scores of each vector evaluated, looking for the best match
         vector_to_evaluate = None
-        
+
         #The computer wins
         if score_of_twos:
-            #a winstate (the fourth item in the game array looks 
-            #like [ [ [0,0,0], [1,1,1], [2,2,2] ] ]
-            vector_to_reverse = copy.deepcopy(score_of_twos[0])
-            [list(entry).reverse() for entry in vector_to_reverse]
-            [self.game[3].append(entry) for entry in vector_to_reverse]
+            self.setWinState(score_of_twos[0])
             vector_to_evaluate = score_of_twos[0]
             
-        #are they about to win?
-        elif score_of_neg_twos:
-            vector_to_evaluate = score_of_neg_twos[0]
-            
-        #can we help our selves?
-        elif score_of_ones:
-            vector_to_evaluate = score_of_ones[0]
+        #the computer hasn't won, and will compute the best mmove
+        else: 
+            #for each type of move, evaluate the fisrt one we have moves for then break.
+            for vector_list_to_evaluate in [score_of_neg_twos, score_of_neg_ones, score_of_ones]:
+                if vector_list_to_evaluate:
+                    vector_to_evaluate = vector_list_to_evaluate[0]
+                    break
                 
-        #can we stop them?
-        elif score_of_neg_ones:
-            vector_to_evaluate = score_of_neg_ones[0]
-
-        #we have detected a good vector, but which place to move?
+        #We HAVE found a vector to move to but... which space? We should fill edges first
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
-                moveToMake = point     
-                
-        print "vector_to_evaluate", vector_to_evaluate
-        print "moveToMake", moveToMake
-                            
+                moveToMake = point
+                break
+
         #make the move decided upon
         self.game[moveToMake[2]][moveToMake[1]][moveToMake[0]] = 1
                 
