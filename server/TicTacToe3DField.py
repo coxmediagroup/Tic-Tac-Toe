@@ -201,14 +201,23 @@ class TicTacToe3DField:
             vector_to_evaluate = score_of_twos[0]
             
         #the computer hasn't won, and will compute the best mmove
-        else: 
-            #for each type of move, evaluate the fisrt one we have moves for then break.
-            for vector_list_to_evaluate in [score_of_neg_twos, score_of_neg_ones, score_of_ones]:
-                if vector_list_to_evaluate:
-                    vector_to_evaluate = vector_list_to_evaluate[0]
-                    break
+        elif score_of_neg_twos:
+            vector_to_evaluate = score_of_neg_twos[0]
+          
+        elif score_of_neg_ones:
+            #if center squre of the z of the first of the score_of_ones is open take it else compute as normal
+            z = score_of_neg_ones[0][1][2]
+            print "z", z
+            if self.game[z][1][1] == 0:
+                vector_to_evaluate = ((1, 1, z),(1, 1, z), (1, 1, z))
+            else:
+                vector_to_evaluate = score_of_neg_ones[0]  
+            
+        elif score_of_ones:
+            vector_list_to_evaluate = score_of_ones[0]
                 
-        #We HAVE found a vector to move to but... which space? We should fill edges first
+        
+        #We HAVE found a vector to move to but... which space?
         for point in vector_to_evaluate:
             if self.game[point[2]][point[1]][point[0]] == 0:
                 moveToMake = point
@@ -221,7 +230,11 @@ class TicTacToe3DField:
 
 if __name__ == "__main__":
     ttt = TicTacToe3DField()
+    
+    print ttt 
+    
     print ttt.determineMove()
+    
     
     
     
