@@ -1,3 +1,5 @@
+import random
+
 class Grid(object):
     """
     A simple class for playing X's & O's (tic tac toe).
@@ -110,24 +112,24 @@ class Grid(object):
         """
         Completes a move for the given mark automatically.
         """
-        # take the first open position
-        for r in range(self.size):
-            for c in range(self.size):
-                if not self.grid[r][c]:
-                    self.grid[r][c] = mark
-                    return
+        # take a random open position
+        while True:
+            r = random.randrange(self.size)
+            c = random.randrange(self.size)
+            if not self.grid[r][c]:
+                self.grid[r][c] = mark
+                return
     
     def autoplay(self):
         players = ('X', 'O')
         over = self.game_over()
-        print(self._get_pretty_print_grid())
         while not over:
             for p in players:
                 self.move(self.marks[p])
                 over = self.game_over()
                 if over:
                     break
-        print("The game is over. %s won!" % self.winner)
+        print("%s won!" % self.winner)
         print(self._get_pretty_print_grid())
     
     def play(self):
