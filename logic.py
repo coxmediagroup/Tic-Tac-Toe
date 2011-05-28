@@ -362,11 +362,11 @@ class Game(object):
     2 X | X | X
     """
 
-    def __init__(self, board, p1, p2):
+    def __init__(self, board, p1, p2, turn=1):
         self.board = board
         self.p1 = p1(self, 1)
         self.p2 = p2(self, 2)
-        self.turn = 1
+        self.turn = turn
         self.ranges = self._build_row_ranges()
 
     def get_row(self, row_number):
