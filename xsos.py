@@ -28,14 +28,25 @@ class Grid(object):
             grid.append(row)
         self.grid = grid
     
-    def _rotate_grid(self):
+    def _get_rotated_grid(self):
         """
-        Rotates self.grid 90 degrees so columns become rows
+        Returns self.grid rotated 90 degrees so columns become rows.
         
         See http://mail.python.org/pipermail/tutor/2006-November/051039.html
         """
         size = self.size
-        return [[self.grid[col][size - row - 1] for col in range(size)] for row in range(size)]
+        return [[self.grid[col][size-row-1] for col in range(size)] for row in range(size)]
+    
+    def _get_diagonal_rows(self):
+        size = self.size
+        rng = range(size)
+        return [[self.grid[x][x] for x in rng], [self.grid[x][size-x-1] for x in rng]]
+    
+    def _get_all_rows(self):
+        """
+        Returns the grid with the addition of columns and diagonals as rows.
+        """
+        return self.grid + self._get_rotated_grid() + self._get_diagonal_rows()
     
     def game_over(self):
         """
@@ -43,16 +54,11 @@ class Grid(object):
         
         Returns a boolean.
         """
-        # check rows
-        for r in self.grid:
+        size = self.size
+        
+        for r in self._get_all_rows():
             # only check rows that are full
-            if 0 not in r and not sum(r)%self.size:
+            if 0 not in r and not sum(r)%size:
                     return True
-        # check cols
-        for r in self._rotate_grid():
-            # only check rows that are full
-            if 0 not in r and not sum(r)%self.size:
-                    return True
-        # check diags
         return False
     
