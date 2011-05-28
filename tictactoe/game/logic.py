@@ -20,8 +20,6 @@ class Board(object):
         else:
             self._cells = cells
         
-    def dump_state(self):
-        return (self._cells, self.history)
 
     def output(self):
         for row in self._cells:
@@ -41,6 +39,7 @@ class Board(object):
             #only set/keey history if the cell has changed.
             self._cells[y][x] = val
             self.history.append(((x, y), val))
+
 
     def get_valid_moves(self):
         """
@@ -137,7 +136,9 @@ DECISIONS = {
         "chose_edge": {
             "_action": "choose_center",
             "threatens": "block_and_draw",
-            "default": "choose_corner_not_bordered"
+            #todo - broken here
+            "chose_edge": "choose_corner_not_bordered",
+            "default": "block_and_draw",
         }
     },
     "wentsecond": {
@@ -200,6 +201,7 @@ class Computer(Player):
             rotation += 1
             coords[0] = rotate_cell(coords[0])
             coords[1] = rotate_cell(coords[1])
+            coords.sort()
         return rotate_cell((0,0), 4-rotation)
 
     def get_move(self):
@@ -249,7 +251,7 @@ class Computer(Player):
             edges = [coord for coord in opponent_coordinates if coord in self.edges]
             if len(edges) != 2:
                 return False
-            return not(self.is_diagonal(edges[0], edges[1]))
+            return not(self._is_diagonal(edges[0], edges[1]))
 
         """
         Action functions
@@ -296,7 +298,6 @@ class Computer(Player):
         If a result is a dictionary, _action is taken and the new strategy is set. Otherwise, it is checked
         for a coordinate then for a string (that translates to a function in this scope).
         """
-
         new_strategy = None
         if isinstance(self.strategy, dict):
             for f_name in [f_name for f_name in self.strategy if not f_name.startswith('_') and f_name != 'default']:
@@ -315,8 +316,11 @@ class Computer(Player):
             action = self.strategy.get('_action', 'block_and_draw')
         else:
             action = self.strategy
-
-        move = eval(action)()
+        action = eval(action)
+        if isinstance(action, tuple):
+            move = action
+        else:
+            move = action()
 
         block = threatens()
         if block and block != move:

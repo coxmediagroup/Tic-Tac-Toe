@@ -1,0 +1,63 @@
+Player X's move
+ -  -  - 
+
+ -  -  - 
+
+ -  -  - 
+
+
+Player O's move
+ -  -  X 
+
+ -  -  - 
+
+ -  -  - 
+
+
+Please enter coordinates for a move in form of (x, y) for O
+(1,1)
+Player X's move
+ -  -  X 
+
+ -  O  - 
+
+ -  -  - 
+
+
+Player O's move
+ -  -  X 
+
+ -  O  - 
+
+ X  -  - 
+
+
+Please enter coordinates for a move in form of (x, y) for O
+(2,2)
+Player X's move
+ -  -  X 
+
+ -  O  - 
+
+ X  -  O 
+
+
+Problem in current logic, other player will win without block. Blocking.
+Player O's move
+ -  -  X 
+
+ -  O  - 
+
+ X  -  O 
+
+
+Please enter coordinates for a move in form of (x, y) for O
+(0,0)
+Player 2 (O's) won on row 6!
+ O  -  X 
+
+ -  O  - 
+
+ X  -  O 
+
+None
