@@ -5,9 +5,19 @@ class Grid(object):
     # marks as constants
     X = 1
     O = 2
+    # marks as dict
+    marks = {
+        'X':'1',
+        'O':'2',
+        '1':'X',
+        '2':'O'
+    }
+    cat = 'Cat'
     grid = []
     # size of the grid
     size = None
+    # str representation of the winner. Will be X, O, or Cat
+    winner = ''
     
     def __init__(self, size=3):
         """
@@ -61,11 +71,17 @@ class Grid(object):
         Returns a boolean.
         """
         size = self.size
-        
-        for r in self._get_all_rows():
+        all_rows = self._get_all_rows()
+        if '0' not in str(all_rows):
+            self.winner = self.cat
+            return True
+        for r in all_rows:
             # only check rows that are full
-            if 0 not in r and not sum(r)%size:
-                    return True
+            s = sum(r)
+            if 0 not in r and not s%size:
+                self.winner = self.marks[str(s/size)]
+                return True
+        self.winner = ''
         return False
     
     def play(self):
@@ -102,5 +118,7 @@ class Grid(object):
                     valid_cell = not self.grid[r][c]
                 self.grid[r][c] = getattr(self, p)
                 over = self.game_over()
-        print "The game is over."
+                if over:
+                    break
+        print("The game is over. %s won!" % self.winner)
     
