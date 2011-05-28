@@ -4,8 +4,9 @@ import logic
 
 class TestGame(unittest.TestCase):
     def test_row_ranges(self):
-        g = logic.Game(None, None, None)
-        assert(g._ranges == {0: [(0, 0), (1, 0), (2, 0)],
+        p = lambda *args, **kwargs: None
+        g = logic.Game(None, p, p)
+        assert(g.ranges == {0: [(0, 0), (1, 0), (2, 0)],
                                        1: [(0, 1), (1, 1), (2, 1)], 
                                        2: [(0, 2), (1, 2), (2, 2)], 
                                        3: [(0, 0), (0, 1), (0, 2)], 
@@ -23,7 +24,8 @@ class TestGame(unittest.TestCase):
             for x, cell in enumerate(row):
                 b.set_val(x, y, cell)
 
-        g = logic.Game(b, None, None)
+        p = lambda *args, **kwargs: None
+        g = logic.Game(b, p, p)
         assert(g.check_for_win() == (0, 'X'))
 
         b.set_val(1, 0, None)
@@ -41,6 +43,17 @@ class TestGame(unittest.TestCase):
         #no win again
         b.set_val(1, 1, None)
         assert(g.check_for_win() == False)
+
+class TransformTest(unittest.TestCase):
+    def test_board_transform(self):
+        board = logic.Board(cells = [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        new_board = logic.rotate(board)
+        assert(new_board._cells == [[7, 4, 1], [8, 5, 2], [9, 6, 3]])
+
+    def test_cell_transform(self):
+        assert(logic.rotate_cell((0, 0)) == (2, 0))
+        assert(logic.rotate_cell((1, 1)) == (1, 1))
+        assert(logic.rotate_cell((0, 2)) == (0, 0))
 
 if __name__ == '__main__':
         unittest.main()
