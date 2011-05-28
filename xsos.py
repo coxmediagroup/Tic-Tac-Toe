@@ -64,6 +64,28 @@ class Grid(object):
         """
         return self.grid + self._get_rotated_grid() + self._get_diagonal_rows()
     
+    def _get_pretty_print_grid(self):
+        """
+        Returns a string representing the current playing grid.
+        """
+        s = ''
+        size = self.size
+        rng = range(size)
+        for i in rng:
+            r = self.grid[i]
+            for c in rng:
+                if r[c]:
+                    s += " %s " % self.marks[str(r[c])]
+                else:
+                    s += "   "
+                if c+1 < size:
+                    s += "|"
+            if i+1 < size:
+                s += "\n"
+                s += "---+" * (size-1)
+                s += "---\n"
+        return s
+    
     def game_over(self):
         """
         Checks to see if the game is over.
@@ -94,8 +116,8 @@ class Grid(object):
         while not over:
             for p in players:
                 print("Player %s is up!" % p)
-                print("Current Board:")
-                print(self.grid)
+                print("Current Grid:")
+                print(self._get_pretty_print_grid())
                 valid_cell = False
                 while not valid_cell:
                     print "Please choose an open cell to place your mark"
@@ -121,4 +143,5 @@ class Grid(object):
                 if over:
                     break
         print("The game is over. %s won!" % self.winner)
+        print(self._get_pretty_print_grid())
     
