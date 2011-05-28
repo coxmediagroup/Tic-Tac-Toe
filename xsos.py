@@ -7,8 +7,8 @@ class Grid(object):
     O = 2
     # marks as dict
     marks = {
-        'X':'1',
-        'O':'2',
+        'X':1,
+        'O':2,
         '1':'X',
         '2':'O'
     }
@@ -105,6 +105,30 @@ class Grid(object):
                 return True
         self.winner = ''
         return False
+    
+    def move(self, mark):
+        """
+        Completes a move for the given mark automatically.
+        """
+        # take the first open position
+        for r in range(self.size):
+            for c in range(self.size):
+                if not self.grid[r][c]:
+                    self.grid[r][c] = mark
+                    return
+    
+    def autoplay(self):
+        players = ('X', 'O')
+        over = self.game_over()
+        print(self._get_pretty_print_grid())
+        while not over:
+            for p in players:
+                self.move(self.marks[p])
+                over = self.game_over()
+                if over:
+                    break
+        print("The game is over. %s won!" % self.winner)
+        print(self._get_pretty_print_grid())
     
     def play(self):
         """
