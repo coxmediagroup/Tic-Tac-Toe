@@ -46,14 +46,12 @@ class Grid(object):
         # check rows
         for r in self.grid:
             # only check rows that are full
-            if 0 not in r:
-                if not sum(r)%self.size:
+            if 0 not in r and not sum(r)%self.size:
                     return True
         # check cols
         for r in self._rotate_grid():
             # only check rows that are full
-            if 0 not in r:
-                if not sum(r)%self.size:
+            if 0 not in r and not sum(r)%self.size:
                     return True
         # check diags
         return False
