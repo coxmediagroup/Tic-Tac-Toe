@@ -1,6 +1,6 @@
 class Grid(object):
     """
-    The grid for playing X's & O's (tic tac toe)
+    A simple class for playing X's & O's (tic tac toe).
     """
     # marks as constants
     X = 1
@@ -10,6 +10,9 @@ class Grid(object):
     size = None
     
     def __init__(self, size=3):
+        """
+        Constructs a square grid of the given size (3 by default).
+        """
         self.size = size
         self._create_grid()
     
@@ -38,6 +41,9 @@ class Grid(object):
         return [[self.grid[col][size-row-1] for col in range(size)] for row in range(size)]
     
     def _get_diagonal_rows(self):
+        """
+        Returns the 2 diagonals 
+        """
         size = self.size
         rng = range(size)
         return [[self.grid[x][x] for x in rng], [self.grid[x][size-x-1] for x in rng]]
@@ -61,4 +67,40 @@ class Grid(object):
             if 0 not in r and not sum(r)%size:
                     return True
         return False
+    
+    def play(self):
+        """
+        Plays the game of tic tac toe
+        """
+        players = ('X', 'O')
+        over = self.game_over()
+        rng = range(self.size)
+        while not over:
+            for p in players:
+                print("Player %s is up!" % p)
+                print("Current Board:")
+                print(self.grid)
+                valid_cell = False
+                while not valid_cell:
+                    print "Please choose an open cell to place your mark"
+                    r = -1
+                    while r not in rng:
+                        i = raw_input("Please select a row (1-%s): " % str(self.size))
+                        try:
+                            r = int(i) - 1
+                        except:
+                            print "Please enter a valid choice."
+                            continue
+                    c = -1
+                    while c not in rng:
+                        i = raw_input("Please select a column (1-%s): " % str(self.size))
+                        try:
+                            c = int(i) - 1
+                        except:
+                            print "Please enter a valid choice."
+                            continue
+                    valid_cell = not self.grid[r][c]
+                self.grid[r][c] = getattr(self, p)
+                over = self.game_over()
+        print "The game is over."
     
