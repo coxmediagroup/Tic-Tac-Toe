@@ -90,17 +90,3 @@ def test_no_win():
         [1,2,0],
         [1,0,0],
     ])
-
-def test_cat():
-    assert detect_cat([
-        [1,1,2],
-        [2,2,1],
-        [1,1,2],
-    ])
-
-def test_no_cat():
-    assert not detect_cat([
-        [1,1,2],
-        [2,0,1],
-        [1,2,2],
-    ])
