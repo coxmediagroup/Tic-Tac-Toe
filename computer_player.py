@@ -63,4 +63,4 @@ def loopyblar(board, turn_number, player_number):
         raise Exception('there are no legal moves to make')
     return decisions
 
-build_scenario_map([[0,0,0],[0,0,0],[0,0,0]], 1, 1)
+build_scenario_map([[0,0,0],[0,0,0],[0,0,0]], 0, 1)
