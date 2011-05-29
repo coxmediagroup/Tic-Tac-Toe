@@ -72,6 +72,14 @@ class Grid(object):
         """
         return self.grid + self._get_rotated_grid() + self._get_diagonal_rows()
     
+    def _get_moves(self):
+        l = []
+        rng = range(self.size)
+        for r in rng:
+            for c in rng:
+                l.append((r,c))
+        return l
+    
     def _get_pretty_print_grid(self):
         """
         Returns a string representing the current playing grid.
@@ -186,9 +194,9 @@ class Grid(object):
                 self.grid[r][c] = mark
                 return
         # take a random open position
-        while True:
-            r = random.randrange(self.size)
-            c = random.randrange(self.size)
+        moves = self._get_moves()
+        while moves:
+            r, c = moves.pop(random.randrange(len(moves)))
             if not self.grid[r][c]:
                 self.grid[r][c] = mark
                 return
