@@ -167,6 +167,13 @@ class Grid(object):
         print("%s won!" % self.winner)
         print(self._get_pretty_print_grid())
     
+    def reset(self):
+        """
+        Resets the current winner and grid
+        """
+        self.winner = ''
+        self._create_grid()
+    
     def play(self):
         """
         Plays the game of tic tac toe
