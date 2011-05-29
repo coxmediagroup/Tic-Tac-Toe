@@ -142,8 +142,16 @@ class Grid(object):
         """
         Completes a move for the given mark automatically.
         """
+        def find_side(r,c):
+            sides = ((r-1,c-1),(r+1,c+1),(r-1,c+1),(r+1,c-1),)
+            for sr,sc in sides:
+                if not self.grid[sr][sc]:
+                    return (sr, sc)
+            return None
         opmark = 1 if mark == 2 else 2
         size = self.size
+        s = size - 1
+        corners = ((0,0),(s,s),(0,s),(s,0))
         # see if we need to block
         block = self._find_major_row(opmark)
         if block:
@@ -160,9 +168,17 @@ class Grid(object):
             if not self.grid[mid][mid]:
                 self.grid[mid][mid] = mark
                 return
+        # watch the sides next to taken corners tho
+        for r,c in corners:
+            corner = self.grid[r][c]
+            if corner:
+                if corner == opmark:
+                    side = find_side(r, c)
+                    if side:
+                        self.grid[side[0]][side[1]] = mark
+                        return
         # corners are a good defense
-        s = size - 1
-        for r,c in ((0,0),(0,s),(s,0),(s,s)):
+        for r,c in corners:
             if not self.grid[r][c]:
                 self.grid[r][c] = mark
                 return
