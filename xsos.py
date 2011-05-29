@@ -54,7 +54,8 @@ class Grid(object):
     
     def _get_diagonal_rows(self):
         """
-        Returns the 2 diagonals 
+        Returns the 2 diagonal rows in a list with the top left to bottom right
+        first.
         """
         size = self.size
         rng = range(size)
@@ -88,6 +89,30 @@ class Grid(object):
                 s += "---\n"
         return s
     
+    def _find_major_row(self, mark):
+        """
+        Looks for self.size-1 (two in a row for standard tic tac toe) of the
+        given mark in a row and returns the grid position of the open space as
+        a tuple (row, col)
+        """
+        size = self.size
+        rng = range(size)
+        rgrid = self._get_rotated_grid()
+        diags = self._get_diagonal_rows()
+        for r in rng:
+            if self.grid[r].count(mark) >= size-1:
+                return (r, self.grid[r].index(0))
+            if rgrid[r].count(mark) >= size-1:
+                return (rgrid[r].index(0), size-1-r)
+        for r in range(len(diags)):
+            # backwards diag first
+            if diags[r].count(mark) >= size-1:
+                idx = diags[r].index(0)
+                if not r:
+                    return (idx, idx)
+                else:
+                    return (idx, size-1-idx)
+    
     def game_over(self):
         """
         Checks to see if the game is over.
@@ -112,6 +137,16 @@ class Grid(object):
         """
         Completes a move for the given mark automatically.
         """
+        # see if we need to block:
+        opmark = 1 if mark == 2 else 2
+        block = self._find_major_row(opmark)
+        if block:
+            self.grid[block[0]][block[1]] = mark
+            return
+        best = self._find_major_row(mark)
+        if best:
+            self.grid[best[0]][best[1]] = mark
+            return
         # take a random open position
         while True:
             r = random.randrange(self.size)
