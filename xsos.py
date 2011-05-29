@@ -16,6 +16,7 @@ class Grid(object):
         '1':'X',
         '2':'O'
     }
+    players = ('X', 'O')
     cat = 'Cat'
     grid = []
     # size of the grid
@@ -132,7 +133,7 @@ class Grid(object):
             # only check rows that are full
             s = sum(r)
             if 0 not in r and not s%size:
-                self.winner = self.marks[str(s/size)]
+                self.winner = self.marks[str(int(s/size))]
                 return True
         self.winner = ''
         return False
@@ -174,10 +175,9 @@ class Grid(object):
                 return
     
     def autoplay(self):
-        players = ('X', 'O')
         over = self.game_over()
         while not over:
-            for p in players:
+            for p in self.players:
                 self.move(self.marks[p])
                 over = self.game_over()
                 if over:
@@ -195,11 +195,10 @@ class Grid(object):
         """
         Plays the game of tic tac toe.
         """
-        players = ('X', 'O')
         over = self.game_over()
         rng = range(self.size)
         while not over:
-            for p in players:
+            for p in self.players:
                 mark = getattr(self, p)
                 print("Player %s is up!" % p)
                 print("Current Grid:")
@@ -234,12 +233,13 @@ class Grid(object):
         print("The game is over. %s won!" % self.winner)
         print(self._get_pretty_print_grid())
     
-    def start_game(self):
+    def start_game(self, welcome=True):
         """
         Resets and then sets up the players for a new game.
         """
         self.reset()
-        print("Welcome to X's & O's!")
+        if welcome:
+            print("Welcome to X's & O's!")
         cx = ''
         while not cx:
             cx = raw_input("Do you want the computer to play for X? [y or n] ")
@@ -251,4 +251,14 @@ class Grid(object):
         if co.lower().startswith('y'):
             self.comp_players.append('O')
         self.play()
+        again = raw_input("Would you like to play again? [y or n] ")
+        if not again.startswith('y'):
+            print("Good bye!")
+        else:
+            self.start_game(welcome=False)
+
+if __name__ == '__main__':
+    g = Grid()
+    g.start_game()
+    
     
