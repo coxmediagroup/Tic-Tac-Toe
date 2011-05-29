@@ -1,6 +1,20 @@
 from __future__ import division
 import math
 import random
+import pdb
+"""
+http://chessprogramming.wikispaces.com/Negamax
+int negaMax( int depth ) {
+    if ( depth == 0 ) return evaluate();
+    int max = -oo;
+    for ( all moves)  {
+        score = -negaMax( depth - 1 );
+        if( score > max )
+            max = score;
+    }
+    return max;
+}
+"""
 
 class Grid(object):
     """
@@ -48,29 +62,32 @@ class Grid(object):
             grid.append(row)
         self.grid = grid
     
-    def _get_rotated_grid(self):
+    def _get_rotated_grid(self, grid=None):
         """
         Returns self.grid rotated 90 degrees so columns become rows.
         
         See http://mail.python.org/pipermail/tutor/2006-November/051039.html
         """
+        if not grid: grid = self.grid
         size = self.size
-        return [[self.grid[col][size-row-1] for col in range(size)] for row in range(size)]
+        return [[grid[col][size-row-1] for col in range(size)] for row in range(size)]
     
-    def _get_diagonal_rows(self):
+    def _get_diagonal_rows(self, grid=None):
         """
         Returns the 2 diagonal rows in a list with the top left to bottom right
         first.
         """
+        if not grid: grid = self.grid
         size = self.size
         rng = range(size)
-        return [[self.grid[x][x] for x in rng], [self.grid[x][size-x-1] for x in rng]]
+        return [[grid[x][x] for x in rng], [grid[x][size-x-1] for x in rng]]
     
-    def _get_all_rows(self):
+    def _get_all_rows(self, grid=None):
         """
         Returns the grid with the addition of columns and diagonals as rows.
         """
-        return self.grid + self._get_rotated_grid() + self._get_diagonal_rows()
+        if not grid: grid = self.grid
+        return grid + self._get_rotated_grid(grid=grid) + self._get_diagonal_rows(grid=grid)
     
     def _get_moves(self):
         l = []
@@ -80,15 +97,16 @@ class Grid(object):
                 l.append((r,c))
         return l
     
-    def _get_pretty_print_grid(self):
+    def _get_pretty_print_grid(self, grid=None):
         """
         Returns a string representing the current playing grid.
         """
+        if not grid: grid = self.grid
         s = ''
         size = self.size
         rng = range(size)
         for i in rng:
-            r = self.grid[i]
+            r = grid[i]
             for c in rng:
                 if r[c]:
                     s += " %s " % self.marks[str(r[c])]
@@ -125,26 +143,118 @@ class Grid(object):
                     return (idx, idx)
                 else:
                     return (idx, size-1-idx)
+
+    def boardvalue(board, move, player, alpha=1, beta=-1):
+        """
+        Returns the value of board and move according to player. board
+        must be a list (edited and reverted). move is the id of the move
+        the player is supposed to perform, alpha and beta are for internal
+        use.
+        """
+        board[move] = player # make the move
+        win = winning(board, move)
+        if 0 not in board or win:
+            board[move] = 0 # reverts the move
+            return win * player # subjective to player
+        else:
+            for foe_move in range(9):
+                if board[foe_move]: continue # the cell is not free
+                # NegaMax magic... :)
+                movevalue = -boardvalue(board, foe_move, -player, -beta, -alpha)
+                if movevalue < alpha: # expecting the worst
+                    alpha = movevalue
+                    if movevalue <= beta: break # alpha-beta cutoff
+            board[move] = 0 # reverts the move
+            return alpha
     
-    def game_over(self):
+    def _check_grid(self, grid, row, col, mark, alpha=1, beta=-1):
+        """
+        Checks a series of positions and returns their "score".
+        """
+        rng = range(self.size)
+        #print grid.append
+        print grid.append
+        print self.grid.append
+        grid[row][col] = mark
+        print grid
+        print self.grid
+        print grid.append
+        print self.grid.append
+        go, winner = self.game_over(grid=grid, set_winner=False)
+        print go, winner
+        if go and winner != self.cat and self.marks[winner] == mark:
+            #grid[row][col] = 0
+            return 1
+        else:
+            for r in rng:
+                for c in rng:
+                    print "checking grid",r,c
+                    if not grid[r][c]:
+                        score = -self._check_grid(grid, r, c, -1, -beta, -alpha)
+                        print "score, alpha, beta", score, alpha, beta
+                        if score < alpha:
+                            alpha = score
+                            if score <= beta:
+                                break
+            #grid[row][col] = 0
+            return alpha
+
+    def _negamax(self, mark):
+        """
+        Returns an optimized move.
+        """
+        # deep copy...
+        grid = [list(x) for x in self.grid]
+        value = -1
+        moves = []
+        rng = range(self.size)
+        for r in rng:
+            for c in rng:
+                print "checking pos",r,c
+                print grid[r][c]
+                if not grid[r][c]:
+                    print "pos good"
+                    print "scoring..."
+                    score = self._check_grid(grid,r,c,1)
+                    print "score, value",score, value
+                    if score > value:
+                        value = score
+                        moves = [(r,c)]
+                    elif score == value:
+                        moves.append((r,c))
+        return random.choice(moves)
+    
+    def game_over(self, grid=None, set_winner=True):
         """
         Checks to see if the game is over.
         
         Returns a boolean.
         """
+        if not grid: grid = self.grid
+        print grid.append
+        winner = ''
         size = self.size
-        all_rows = self._get_all_rows()
+        all_rows = self._get_all_rows(grid=grid)
         if '0' not in str(all_rows):
-            self.winner = self.cat
-            return True
+            winner = self.cat
+            if set_winner:
+                self.winner = winner
+            return True, winner
         for r in all_rows:
             # only check rows that are full
             s = sum(r)
             if 0 not in r and not s%size:
-                self.winner = self.marks[str(int(s/size))]
-                return True
-        self.winner = ''
-        return False
+                winner = self.marks[str(int(s/size))]
+                if set_winner:
+                    self.winner = winner
+                return True, winner
+        if set_winner:
+            self.winner = winner
+        return False, winner
+    
+    def move_nmax(self, mark):
+        r,c = self._negamax(mark)
+        self.grid[r][c] = mark
     
     def move(self, mark):
         """
@@ -222,7 +332,7 @@ class Grid(object):
         """
         Plays the game of tic tac toe.
         """
-        over = self.game_over()
+        over, winner = self.game_over()
         rng = range(self.size)
         while not over:
             for p in self.players:
@@ -253,8 +363,8 @@ class Grid(object):
                         valid_cell = not self.grid[r][c]
                     self.grid[r][c] = mark
                 else:
-                    self.move(mark)
-                over = self.game_over()
+                    self.move_nmax(mark)
+                over, winner = self.game_over()
                 if over:
                     break
         print("The game is over. %s won!" % self.winner)
