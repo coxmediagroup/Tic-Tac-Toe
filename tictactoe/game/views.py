@@ -54,12 +54,19 @@ def new_game(request):
 
 @get_game
 def render_board(request, game):
+    """
+    Returns the board with javascript. Can resume the current game in session
+    """
     f = forms.NewGameForm()
     avatar = 'X' if game.player_id == 1 else 'O'
     return render_to_response('base.html', dict(game=game, form=f, avatar=avatar))
 
 @get_game
 def set_move(request, game):
+    """
+    This is an ajax function that sets the move, checks for a tie or win,
+    then has the computer make a move and returns the result to the javascript.
+    """
     f = forms.MoveForm(request.POST)
     if not f.is_valid():
         return HttpResponse(sj.dumps(dict(condition='error',

@@ -168,6 +168,9 @@ DECISIONS = {
 }
         
 class Computer(Player):
+    """
+    Rule based computer player that uses the rules above
+    """
     def __init__(self, *args, **kwargs):
         self.corners = [(0, 0), (2, 0), (0, 2), (2, 2)]
         self.edges = [(0, 1), (1, 2), (2, 1), (1, 0)]
