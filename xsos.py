@@ -1,3 +1,5 @@
+from __future__ import division
+import math
 import random
 
 class Grid(object):
@@ -100,13 +102,13 @@ class Grid(object):
         rgrid = self._get_rotated_grid()
         diags = self._get_diagonal_rows()
         for r in rng:
-            if self.grid[r].count(mark) >= size-1:
+            if self.grid[r].count(mark) >= size-1 and 0 in self.grid[r]:
                 return (r, self.grid[r].index(0))
-            if rgrid[r].count(mark) >= size-1:
+            if rgrid[r].count(mark) >= size-1 and 0 in rgrid[r]:
                 return (rgrid[r].index(0), size-1-r)
         for r in range(len(diags)):
             # backwards diag first
-            if diags[r].count(mark) >= size-1:
+            if diags[r].count(mark) >= size-1 and 0 in diags[r]:
                 idx = diags[r].index(0)
                 if not r:
                     return (idx, idx)
@@ -137,16 +139,30 @@ class Grid(object):
         """
         Completes a move for the given mark automatically.
         """
-        # see if we need to block:
         opmark = 1 if mark == 2 else 2
+        size = self.size
+        # see if we need to block
         block = self._find_major_row(opmark)
         if block:
             self.grid[block[0]][block[1]] = mark
             return
+        # see if we have 2 in a row to complete
         best = self._find_major_row(mark)
         if best:
             self.grid[best[0]][best[1]] = mark
             return
+        # center is a great place to start
+        if size % 2:
+            mid = int(math.ceil(self.size/2)-1)
+            if not self.grid[mid][mid]:
+                self.grid[mid][mid] = mark
+                return
+        # corners are a good defense
+        s = size - 1
+        for r,c in ((0,0),(0,s),(s,0),(s,s)):
+            if not self.grid[r][c]:
+                self.grid[r][c] = mark
+                return
         # take a random open position
         while True:
             r = random.randrange(self.size)
