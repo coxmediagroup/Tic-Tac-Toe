@@ -2,24 +2,14 @@ from __future__ import division
 import math
 import random
 import pdb
-"""
-http://chessprogramming.wikispaces.com/Negamax
-int negaMax( int depth ) {
-    if ( depth == 0 ) return evaluate();
-    int max = -oo;
-    for ( all moves)  {
-        score = -negaMax( depth - 1 );
-        if( score > max )
-            max = score;
-    }
-    return max;
-}
-"""
 
 class Grid(object):
     """
     A simple class for playing X's & O's (tic tac toe).
     """
+    # infinity constants
+    oo = float("inf")
+    noo = -float("inf")
     # marks as constants
     X = 1
     O = 2
@@ -40,24 +30,25 @@ class Grid(object):
     # list of players the computer should play for
     comp_players = []
     
-    def _swap(self, value):
+    def _op(self, value):
         """
-        Swaps a given mark with the nmax value. ie 2 = -1
+        Returns the opposite value.
+        1 -> 2
+        2 -> 1
+        0 -> 0
         """
-        if value == -1: value = 2
-        elif value == 2: value = -1
-        return value
+        if value == 1:
+            return 2
+        elif value == 2:
+            return 1
+        else:
+            return value
     
-    def _swap_grid(self, grid):
+    def _op_grid(self, grid):
         """
-        Returns a copy of grid with values swapped by self._swap.
+        Returns a copy of grid with opposite values as evaluated by self._op.
         """
-        print "swapping grid"
-        print grid
-        swapped = [map(self._swap, grid[r]) for r in range(self.size)]
-        print swapped
-        return swapped
-    
+        return [map(self._op, r) for r in grid]
     
     def __init__(self, size=3):
         """
@@ -162,62 +153,53 @@ class Grid(object):
                     return (idx, idx)
                 else:
                     return (idx, size-1-idx)
-    
-    def _check_grid(self, grid, row, col, mark, alpha=1, beta=-1):
-        """
-        Checks a series of positions and returns their "score".
-        """
-        rng = range(self.size)
-        grid[row][col] = mark
-        check_grid = self._swap_grid(grid)
-        go, winner = self.game_over(grid=check_grid, set_winner=False)
-        if not winner or winner == self.cat:
-            winner = 0
-        else:
-            winner = self.marks[winner]
-        winner = self._swap(winner)
-        print "winner, mark",winner,mark
-        if go and winner == mark:
-            #grid[row][col] = 0
-            #return mark
-            return self._swap(winner)
-        else:
-            for r in rng:
-                for c in rng:
-                    if not grid[r][c]:
-                        score = -self._check_grid(grid, r, c, mark, -beta, -alpha)
-                        print "score, alpha, beta", score, alpha, beta
-                        if score < alpha:
-                            alpha = score
-                            if score <= beta:
-                                break
-            #grid[row][col] = 0
-            return alpha
 
-    def _negamax(self, mark):
+    def _negamax(self, grid, mark, row, col, depth, alpha, beta, max_depth=5):
         """
-        Returns an optimized move.
+        Negamax algorithm to explore best game moves.
         """
-        # deep copy...
-        grid = [list(x) for x in self.grid]
-        value = -1
-        moves = []
-        rng = range(self.size)
-        for r in rng:
-            for c in rng:
-                if not grid[r][c]:
-                    score = self._check_grid(self._swap_grid(grid),r,c,self._swap(mark))
-                    print "score, value",score, value
-                    if score > value:
-                        value = score
-                        moves = [(r,c)]
-                        print "found a good move!"
-                        print moves
-                    elif score == value:
-                        print "found a move!"
-                        moves.append((r,c))
-                        print moves
-        return random.choice(moves)
+        max = None
+        pair = None
+        # deep copy
+        grid2 = [list(x) for x in grid]
+        # is the move being analyzed legal?
+        if not grid2[row][col]:
+            grid2[row][col] = mark
+            go, winner = self.game_over(grid=grid2, set_winner=False)
+            # is the game over?
+            if go:
+                # who won?
+                if winner == self.cat:
+                    return 0, (row,col)
+                else:
+                    winner = self.marks[winner]
+                if winner == mark:
+                    return self.oo, (row,col)
+                else:
+                    return self.noo, (row,col)
+            else:
+                # better try some other permutations
+                max = self.noo
+                rr, rc = row, col
+                rng = range(self.size)
+                for r in rng:
+                    for c in rng:
+                        opmark = self._op(mark)
+                        opgrid = self._op_grid(grid2)
+                        x, pair = self._negamax(opgrid, opmark, r, c, depth+1, -beta, -alpha, max_depth=max_depth)
+                        if x is None and pair is None: continue
+                        x = -x
+                        if x > max:
+                            max = x
+                        if x > alpha:
+                            alpha = x
+                        if alpha >= beta:
+                            return alpha, pair
+            # are we too deep?
+            if depth > max_depth:
+                if not winner or winner == self.cat:
+                    return 0, (row,col)
+        return max, pair
     
     def game_over(self, grid=None, set_winner=True):
         """
@@ -247,7 +229,22 @@ class Grid(object):
         return False, winner
     
     def move_nmax(self, mark):
-        r,c = self._negamax(mark)
+        max = self.noo
+        pairs = []
+        rng = range(self.size)
+        for r in rng:
+            for c in rng:
+                nmax, pair = self._negamax(self.grid, mark, r, c, 0, self.oo, self.noo)
+                print "Found move to",pair,"with score",nmax
+                if nmax > max:
+                    max = nmax
+                    pairs = [pair]
+                    continue
+                if nmax == max:
+                    pairs.append(pair)
+        # if this is ever empty we have a problem
+        print "possible moves are",pairs
+        r, c = pairs[0]
         self.grid[r][c] = mark
     
     def move(self, mark):
@@ -360,7 +357,7 @@ class Grid(object):
                         valid_cell = not self.grid[r][c]
                     self.grid[r][c] = mark
                 else:
-                    self.move(mark)
+                    self.move_nmax(mark)
                 over, winner = self.game_over()
                 if over:
                     break
