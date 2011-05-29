@@ -143,29 +143,6 @@ class Grid(object):
                     return (idx, idx)
                 else:
                     return (idx, size-1-idx)
-
-    def boardvalue(board, move, player, alpha=1, beta=-1):
-        """
-        Returns the value of board and move according to player. board
-        must be a list (edited and reverted). move is the id of the move
-        the player is supposed to perform, alpha and beta are for internal
-        use.
-        """
-        board[move] = player # make the move
-        win = winning(board, move)
-        if 0 not in board or win:
-            board[move] = 0 # reverts the move
-            return win * player # subjective to player
-        else:
-            for foe_move in range(9):
-                if board[foe_move]: continue # the cell is not free
-                # NegaMax magic... :)
-                movevalue = -boardvalue(board, foe_move, -player, -beta, -alpha)
-                if movevalue < alpha: # expecting the worst
-                    alpha = movevalue
-                    if movevalue <= beta: break # alpha-beta cutoff
-            board[move] = 0 # reverts the move
-            return alpha
     
     def _check_grid(self, grid, row, col, mark, alpha=1, beta=-1):
         """
@@ -199,7 +176,7 @@ class Grid(object):
             #grid[row][col] = 0
             return alpha
 
-    def _negamax(self, mark):
+    def _negamax(self):
         """
         Returns an optimized move.
         """
@@ -253,7 +230,7 @@ class Grid(object):
         return False, winner
     
     def move_nmax(self, mark):
-        r,c = self._negamax(mark)
+        r,c = self._negamax()
         self.grid[r][c] = mark
     
     def move(self, mark):
