@@ -145,8 +145,11 @@ class Grid(object):
         def find_side(r,c):
             sides = ((r-1,c-1),(r+1,c+1),(r-1,c+1),(r+1,c-1),)
             for sr,sc in sides:
-                if not self.grid[sr][sc]:
-                    return (sr, sc)
+                try:
+                    if not self.grid[sr][sc]:
+                        return (sr, sc)
+                except IndexError:
+                    pass
             return None
         opmark = 1 if mark == 2 else 2
         size = self.size
