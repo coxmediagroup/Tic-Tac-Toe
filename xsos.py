@@ -22,6 +22,8 @@ class Grid(object):
     size = None
     # str representation of the winner. Will be X, O, or Cat
     winner = ''
+    # list of players the computer should play for
+    comp_players = []
     
     def __init__(self, size=3):
         """
@@ -180,52 +182,73 @@ class Grid(object):
                 over = self.game_over()
                 if over:
                     break
-        print("%s won!" % self.winner)
-        print(self._get_pretty_print_grid())
     
     def reset(self):
         """
-        Resets the current winner and grid
+        Resets the current winner, computer players & the grid.
         """
+        self.comp_players = []
         self.winner = ''
         self._create_grid()
     
     def play(self):
         """
-        Plays the game of tic tac toe
+        Plays the game of tic tac toe.
         """
         players = ('X', 'O')
         over = self.game_over()
         rng = range(self.size)
         while not over:
             for p in players:
+                mark = getattr(self, p)
                 print("Player %s is up!" % p)
                 print("Current Grid:")
                 print(self._get_pretty_print_grid())
-                valid_cell = False
-                while not valid_cell:
-                    print "Please choose an open cell to place your mark"
-                    r = -1
-                    while r not in rng:
-                        i = raw_input("Please select a row (1-%s): " % str(self.size))
-                        try:
-                            r = int(i) - 1
-                        except:
-                            print "Please enter a valid choice."
-                            continue
-                    c = -1
-                    while c not in rng:
-                        i = raw_input("Please select a column (1-%s): " % str(self.size))
-                        try:
-                            c = int(i) - 1
-                        except:
-                            print "Please enter a valid choice."
-                            continue
-                    valid_cell = not self.grid[r][c]
-                self.grid[r][c] = getattr(self, p)
+                if p not in self.comp_players:
+                    valid_cell = False
+                    while not valid_cell:
+                        print "Please choose an open cell to place your mark"
+                        r = -1
+                        while r not in rng:
+                            i = raw_input("Please select a row (1-%s): " % str(self.size))
+                            try:
+                                r = int(i) - 1
+                            except:
+                                print "Please enter a valid choice."
+                                continue
+                        c = -1
+                        while c not in rng:
+                            i = raw_input("Please select a column (1-%s): " % str(self.size))
+                            try:
+                                c = int(i) - 1
+                            except:
+                                print "Please enter a valid choice."
+                                continue
+                        valid_cell = not self.grid[r][c]
+                    self.grid[r][c] = mark
+                else:
+                    self.move(mark)
                 over = self.game_over()
                 if over:
                     break
         print("The game is over. %s won!" % self.winner)
         print(self._get_pretty_print_grid())
+    
+    def start_game(self):
+        """
+        Resets and then sets up the players for a new game.
+        """
+        self.reset()
+        print("Welcome to X's & O's!")
+        cx = ''
+        while not cx:
+            cx = raw_input("Do you want the computer to play for X? [y or n] ")
+        if cx.lower().startswith('y'):
+            self.comp_players.append('X')
+        co = ''
+        while not co:
+            co = raw_input("Do you want the computer to play for O? [y or n] ")
+        if co.lower().startswith('y'):
+            self.comp_players.append('O')
+        self.play()
     
