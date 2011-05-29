@@ -1,0 +1,20 @@
+td {
+    min-width: 70px;
+    min-height: 70px;
+    height: 70px;
+    padding-top:10px;
+    text-align: center;
+    vertical-align: center;
+}
+td.not_first_x {
+    border-left: 2px solid;
+}
+td.not_last_x {
+    border-right: 2px solid;
+}
+td.not_first_y {
+    border-top: 2px solid;
+}
+td.not_last_y {
+    border-bottom: 2px solid;
+}

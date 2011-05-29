@@ -56,7 +56,7 @@ class TransformTest(unittest.TestCase):
     def test_board_transform(self):
         board = logic.Board(cells = [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         new_board = logic.rotate(board)
-        assert(new_board._cells == [[7, 4, 1], [8, 5, 2], [9, 6, 3]])
+        assert(new_board.cells == [[7, 4, 1], [8, 5, 2], [9, 6, 3]])
 
     def test_cell_transform(self):
         assert(logic.rotate_cell((0, 0)) == (2, 0))
@@ -75,7 +75,7 @@ class ComputerTest(unittest.TestCase):
         return newgame
 
     def test_computer_us_first(self):
-        #for random_seed in range(1, 60):
+        for random_seed in range(1, 60):
             count = 0
             random_seed = 1
             games_to_test = []
@@ -104,7 +104,7 @@ class ComputerTest(unittest.TestCase):
                     games_to_test.append(self.game_permutation(g, (move[0], move[1], 'X')))
 
     def test_computer_first(self):
-        #for random_seed in range(1,60):
+        for random_seed in range(1,60):
             random_seed = 1
             board = logic.Board()
             g = logic.Game(board, logic.Computer, logic.Player)

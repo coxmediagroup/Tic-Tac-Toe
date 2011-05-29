@@ -14,15 +14,15 @@ class Board(object):
         self.history = [] if history is None else history
 
         if cells is None:
-            self._cells = []
+            self.cells = []
             for i in range(0, 3):
-                self._cells.append([None]*3)
+                self.cells.append([None]*3)
         else:
-            self._cells = cells
+            self.cells = cells
         
 
     def output(self):
-        for row in self._cells:
+        for row in self.cells:
             for cell in row:
                 if cell is None: 
                     print '%02s'%'-',
@@ -31,13 +31,13 @@ class Board(object):
             print '\n'
 
     def get_val(self, x, y):
-        return self._cells[y][x]
+        return self.cells[y][x]
 
     def set_val(self, x, y, val):
         self._move_cache = None
-        if self._cells[y][x] != val:
+        if self.cells[y][x] != val:
             #only set/keey history if the cell has changed.
-            self._cells[y][x] = val
+            self.cells[y][x] = val
             self.history.append(((x, y), val))
 
 
@@ -50,7 +50,7 @@ class Board(object):
             return self._move_cache
 
         out = []
-        for y, row in enumerate(self._cells):
+        for y, row in enumerate(self.cells):
             for x, cell in enumerate(row):
                 if cell == None:
                     out.append((x, y))
@@ -62,7 +62,7 @@ class Board(object):
         Returns all coordinates that hold value val
         """
         locations = []
-        for y, row in enumerate(self._cells):
+        for y, row in enumerate(self.cells):
             for x, cell in enumerate(row):
                 if val == cell:
                     locations.append((x, y))
@@ -77,7 +77,7 @@ def rotate(board, turns=1):
     if turns == 0:
         return board
     newboard = Board()
-    for y, row in enumerate(board._cells):
+    for y, row in enumerate(board.cells):
         for x, cell in enumerate(row):
             xtrans = X_TRANSFORM[y][x]
             ytrans = Y_TRANSFORM[y][x]
@@ -238,15 +238,22 @@ class Computer(Player):
         chose_center = lambda: last_move == (1,1)
         chose_corner = lambda: last_move in self.corners
         chose_edge = lambda: last_move in self.edges
-        threatens = lambda: self._check_for_win(opponent_avatar)
         default = lambda: True
         two_corners = lambda: len([coord for coord in opponent_coordinates if coord in self.corners]) == 2
         block = lambda: threatens()
+
+        def threatens():
+            win = self._check_for_win(opponent_avatar)
+            if win and self.rotation:
+                return rotate_cell(win, self.rotation)
+            return win
+
         def edge_borders_corner():
             edges = [coord for coord in opponent_coordinates if coord in self.edges]
             if len(edges) != 2:
                 return False
             return self._is_diagonal(edges[0], edges[1])
+
         def edge_doesnt_border_corner():
             edges = [coord for coord in opponent_coordinates if coord in self.edges]
             if len(edges) != 2:
@@ -324,6 +331,8 @@ class Computer(Player):
 
         block = threatens()
         if block and block != move:
+            import pdb
+            pdb.set_trace()
             print "Problem in current logic, other player will win without block. Blocking."
             move = block
 
@@ -413,25 +422,61 @@ class Game(object):
                 return (number, win)
         return False
 
+    def set_move(self, move=None):
+        """
+        Sets the move either by the player or the computer
+        """
+
+        p = self.p1 if self.turn == 1 else self.p2
+        avatar = 'X' if self.turn == 1 else 'O'
+        comp_move = False
+        if move is None:
+            comp_move = True
+            if not isinstance(p, Computer):
+                raise Exception("Must specify a move for human players.")
+            move = p.get_move()
+        else:
+            if move not in self.board.get_valid_moves():
+                raise Exception("Invalid move.")
+
+        self.board.set_val(move[0], move[1], avatar)
+        self.turn = 1 if self.turn == 2 else 2
+
+        #check ending conditions
+        win = self.check_for_win()
+
+        if not comp_move:
+            move = None
+        if win:
+            return {'condition':'Win', 'row':win[0], 'avatar': win[1], 'move':move}
+        if not self.board.get_valid_moves():
+            return {'condition': 'Tie', 'move':move, 'avatar':avatar}
+        return {'condition': None, 'move':move, 'avatar':avatar}
+
+
     def start(self):
         while True:
             p = self.p1 if self.turn == 1 else self.p2
             avatar = 'X' if self.turn == 1 else 'O'
             print "Player %s's move"%avatar
-            self.board.output()
-            print
+            if not isinstance(p, Computer):
+                self.board.output()
+                print '\n'
             move = p.get_move()
+            if isinstance(p, Computer):
+                self.board.output()
+                print
             self.board.set_val(move[0], move[1], avatar)
             win = self.check_for_win()
             if win:
                 print "Player %d (%s's) won on row %d!"%(self.turn, avatar, win[0])
                 print self.board.output()
-                print
+                print '\n'
                 return win
             if not self.board.get_valid_moves():
                 print "Tie."
                 print self.board.output()
-                print
+                print '\n'
                 return None
 
             self.turn = 2 if self.turn == 1 else 1
