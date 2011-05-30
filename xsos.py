@@ -223,13 +223,15 @@ class Grid(object):
                     opmark = self._op(mark)
                     grid2[r][c] = opmark
                     opgrid = self._op_grid(grid2)
-                    x = -self._negamax2(grid2, mark, depth+1, -beta, -alpha, max_depth=max_depth)
+                    x = -self._negamax2(grid2, opmark, depth+1, -beta, -alpha, max_depth=max_depth)
+                    grid2[r][c] = 0
                     if x > max:
                         max = x
-                    if x > alpha:
-                        alpha = x
-                    if alpha >= beta:
-                        max = alpha
+                    #if x > alpha:
+                    #    max = x
+                    #if alpha >= beta:
+                    #    max = beta
+        if max == -10: return 0
         return max
     
     
@@ -244,11 +246,6 @@ class Grid(object):
         winner = ''
         size = self.size
         all_rows = self._get_all_rows(grid=grid)
-        if '0' not in str(all_rows):
-            winner = self.cat
-            if set_winner:
-                self.winner = winner
-            return True, winner
         for r in all_rows:
             # only check rows that are full
             s = sum(r)
@@ -257,6 +254,11 @@ class Grid(object):
                 if set_winner:
                     self.winner = winner
                 return True, winner
+        if '0' not in str(all_rows):
+            winner = self.cat
+            if set_winner:
+                self.winner = winner
+            return True, winner
         if set_winner:
             self.winner = winner
         return False, winner
@@ -269,16 +271,16 @@ class Grid(object):
             for c in rng:
                 if not self.grid[r][c]:
                     self.grid[r][c] = mark
-                    print "scoring", self._get_pretty_print_grid()
+                    #print "scoring", self._get_pretty_print_grid()
                     score = self._negamax2(self.grid,mark,0,1,-1)
-                    print score, max
+                    #print score, max
                     if score > max:
                         max = score
                         pairs = [(r,c)]
                     elif score == max:
                         pairs.append((r,c))
                     self.grid[r][c] = 0
-        print pairs
+        #print pairs
         pair = random.choice(pairs)
         self.grid[pair[0]][pair[1]] = mark
     
@@ -399,7 +401,7 @@ class Grid(object):
                         valid_cell = not self.grid[r][c]
                     self.grid[r][c] = mark
                 else:
-                    self.move(mark)
+                    self.move_nmax(mark)
                 over, winner = self.game_over()
                 if over:
                     break
