@@ -199,6 +199,39 @@ class Grid(object):
                             return alpha, pair
         return max, pair
     
+    def _negamax2(self, grid, mark, depth, alpha, beta, max_depth=10):
+        """
+        Negamax algorithm to explore best game moves.
+        """
+        # deep copy
+        grid2 = [list(x) for x in grid]
+        go, winner = self.game_over(grid=grid2, set_winner=False)
+        if go or depth > max_depth:
+            if winner == self.cat:
+                return 0
+            winner = self.marks[winner]
+            if winner == mark:
+                return 1
+            else:
+                return -1
+        # better try some other permutations
+        max = -10
+        rng = range(self.size)
+        for r in rng:
+            for c in rng:
+                if not grid2[r][c]:
+                    opmark = self._op(mark)
+                    grid2[r][c] = opmark
+                    opgrid = self._op_grid(grid2)
+                    x = -self._negamax2(grid2, mark, depth+1, -beta, -alpha, max_depth=max_depth)
+                    if x > max:
+                        max = x
+                    if x > alpha:
+                        alpha = x
+                    if alpha >= beta:
+                        max = alpha
+        return max
+    
     
     
     def game_over(self, grid=None, set_winner=True):
@@ -234,46 +267,48 @@ class Grid(object):
         rng = range(self.size)
         for r in rng:
             for c in rng:
-                nmax, pair = self._negamax(self.grid, mark, r, c, 0, 1, -1, 100)
-                print "Found move to",pair,"with score",nmax
-                if nmax > max:
-                    max = nmax
-                    pairs = [(max,pair)]
-                    continue
-                if nmax == max:
-                    pairs.append((max,pair))
-        # if this is ever empty we have a problem
-        pairs.sort(key=lambda x:x[0], reverse=True)
-        print "possible moves are",pairs
-        r, c = pairs[0][1]
-        self.grid[r][c] = mark
+                if not self.grid[r][c]:
+                    self.grid[r][c] = mark
+                    print "scoring", self._get_pretty_print_grid()
+                    score = self._negamax2(self.grid,mark,0,1,-1)
+                    print score, max
+                    if score > max:
+                        max = score
+                        pairs = [(r,c)]
+                    elif score == max:
+                        pairs.append((r,c))
+                    self.grid[r][c] = 0
+        print pairs
+        pair = random.choice(pairs)
+        self.grid[pair[0]][pair[1]] = mark
     
     def move(self, mark):
         """
         Completes a move for the given mark automatically.
         """
         def find_side(r,c):
-            sides = ((r-1,c-1),(r+1,c+1),(r-1,c+1),(r+1,c-1),)
+            sides = ((r-1,c),(r+1,c),(r,c+1),(r,c-1),)
             for sr,sc in sides:
+                if sr < 0 or sc < 0: continue
                 try:
                     if not self.grid[sr][sc]:
                         return (sr, sc)
                 except IndexError:
-                    pass
+                    continue
             return None
-        opmark = 1 if mark == 2 else 2
+        opmark = self._op(mark)
         size = self.size
         s = size - 1
         corners = ((0,0),(s,s),(0,s),(s,0))
-        # see if we need to block
-        block = self._find_major_row(opmark)
-        if block:
-            self.grid[block[0]][block[1]] = mark
-            return
         # see if we have 2 in a row to complete
         best = self._find_major_row(mark)
         if best:
             self.grid[best[0]][best[1]] = mark
+            return
+        # see if we need to block
+        block = self._find_major_row(opmark)
+        if block:
+            self.grid[block[0]][block[1]] = mark
             return
         # center is a great place to start
         if size % 2:
@@ -291,6 +326,13 @@ class Grid(object):
                         self.grid[side[0]][side[1]] = mark
                         return
         # corners are a good defense
+        # check for corners that could be forks...
+        for r,c in corners:
+            if not self.grid[r][c]:
+                side = find_side(r,c)
+                if not side:
+                    self.grid[r][c] = mark
+                    return
         for r,c in corners:
             if not self.grid[r][c]:
                 self.grid[r][c] = mark
@@ -302,8 +344,7 @@ class Grid(object):
         #    if not self.grid[r][c]:
         #        self.grid[r][c] = mark
         #        return
-        r,c = self._negamax(mark)
-        self.grid[r][c] = mark
+        self.move_nmax(mark)
         return
     
     def autoplay(self):
@@ -358,7 +399,7 @@ class Grid(object):
                         valid_cell = not self.grid[r][c]
                     self.grid[r][c] = mark
                 else:
-                    self.move_nmax(mark)
+                    self.move(mark)
                 over, winner = self.game_over()
                 if over:
                     break
