@@ -154,7 +154,7 @@ class Grid(object):
                 else:
                     return (idx, size-1-idx)
 
-    def _negamax(self, grid, mark, row, col, depth, alpha, beta, max_depth=5):
+    def _negamax(self, grid, mark, row, col, depth, alpha, beta, max_depth=10):
         """
         Negamax algorithm to explore best game moves.
         """
@@ -167,19 +167,21 @@ class Grid(object):
             grid2[row][col] = mark
             go, winner = self.game_over(grid=grid2, set_winner=False)
             # is the game over?
-            if go:
+            if go or depth > max_depth:
                 # who won?
+                if not winner:
+                    return -1, (row,col)
                 if winner == self.cat:
                     return 0, (row,col)
                 else:
                     winner = self.marks[winner]
                 if winner == mark:
-                    return self.oo, (row,col)
+                    return 1, (row,col)
                 else:
-                    return self.noo, (row,col)
+                    return 0, (row,col)
             else:
                 # better try some other permutations
-                max = self.noo
+                max = -1
                 rr, rc = row, col
                 rng = range(self.size)
                 for r in rng:
@@ -195,11 +197,9 @@ class Grid(object):
                             alpha = x
                         if alpha >= beta:
                             return alpha, pair
-            # are we too deep?
-            if depth > max_depth:
-                if not winner or winner == self.cat:
-                    return 0, (row,col)
         return max, pair
+    
+    
     
     def game_over(self, grid=None, set_winner=True):
         """
@@ -229,22 +229,23 @@ class Grid(object):
         return False, winner
     
     def move_nmax(self, mark):
-        max = self.noo
+        max = -1
         pairs = []
         rng = range(self.size)
         for r in rng:
             for c in rng:
-                nmax, pair = self._negamax(self.grid, mark, r, c, 0, self.oo, self.noo)
+                nmax, pair = self._negamax(self.grid, mark, r, c, 0, 1, -1, 100)
                 print "Found move to",pair,"with score",nmax
                 if nmax > max:
                     max = nmax
-                    pairs = [pair]
+                    pairs = [(max,pair)]
                     continue
                 if nmax == max:
-                    pairs.append(pair)
+                    pairs.append((max,pair))
         # if this is ever empty we have a problem
+        pairs.sort(key=lambda x:x[0], reverse=True)
         print "possible moves are",pairs
-        r, c = pairs[0]
+        r, c = pairs[0][1]
         self.grid[r][c] = mark
     
     def move(self, mark):
