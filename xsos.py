@@ -227,10 +227,11 @@ class Grid(object):
                     grid2[r][c] = 0
                     if x > max:
                         max = x
-                    #if x > alpha:
-                    #    max = x
-                    #if alpha >= beta:
-                    #    max = beta
+                    if x > alpha:
+                        max = x
+                    if alpha >= beta:
+                        max = beta
+                        #return beta
         if max == -10: return 0
         return max
     
@@ -318,6 +319,8 @@ class Grid(object):
             if not self.grid[mid][mid]:
                 self.grid[mid][mid] = mark
                 return
+        self.move_nmax(mark)
+        return
         # watch the sides next to taken corners tho
         for r,c in corners:
             corner = self.grid[r][c]
