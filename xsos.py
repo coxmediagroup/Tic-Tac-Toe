@@ -134,15 +134,15 @@ class Grid(object):
         """
         size = self.size
         all_rows = self._get_all_rows()
-        if '0' not in str(all_rows):
-            self.winner = self.cat
-            return True
         for r in all_rows:
             # only check rows that are full
             s = sum(r)
             if 0 not in r and not s%size:
                 self.winner = self.marks[str(int(s/size))]
                 return True
+        if '0' not in str(all_rows):
+            self.winner = self.cat
+            return True
         self.winner = ''
         return False
     
