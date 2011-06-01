@@ -91,7 +91,8 @@ class Grid(object):
         """
         if not grid: grid = self.grid
         size = self.size
-        return [[grid[col][size-row-1] for col in range(size)] for row in range(size)]
+        return [[grid[col][size-row-1] for col in range(size)] for row in \
+            range(size)]
     
     def _get_diagonal_rows(self, grid=None):
         """
@@ -108,14 +109,37 @@ class Grid(object):
         Returns the grid with the addition of columns and diagonals as rows.
         """
         if not grid: grid = self.grid
-        return grid + self._get_rotated_grid(grid=grid) + self._get_diagonal_rows(grid=grid)
+        return grid + self._get_rotated_grid(grid=grid) + \
+        self._get_diagonal_rows(grid=grid)
+    
+    def _get_elles(self, grid=None):
+        """
+        Returns the border of the grid in groups of L's.
+        """
+        if not grid: grid = self.grid
+        rows = grid
+        cols = self._get_rotated_grid(grid=grid)
+        max = self.size - 1
+        corners = (
+            ((rows[0], cols[0]), (0, 0)),
+            ((rows[0], cols[max]), (0, max)),
+            ((rows[max], cols[0]), (max, 0)),
+            ((rows[max], cols[max]), (max, max)),
+        )
+        elles = []
+        # prune
+        for pair in corners:
+            if pair[0][0] == pair[0][1]: continue
+            if pair[0][0] == pair[0][1][::-1]: continue
+            elles.append(pair)
+        return elles
     
     def _get_moves(self):
         l = []
         rng = range(self.size)
         for r in rng:
             for c in rng:
-                l.append((r,c))
+                l.append((r, c))
         return l
     
     def _get_pretty_print_grid(self, grid=None):
@@ -165,6 +189,20 @@ class Grid(object):
                     return (idx, idx)
                 else:
                     return (idx, size-1-idx)
+    
+    def _find_minor_rows_count(self, mark, grid=None):
+        """
+        Counts the number of full rows that the given mark has a minor position.
+        Essentially a block.
+        """
+        grid = self.grid if not grid else grid
+        opmark = self._op(mark)
+        count = 0
+        rows = self._get_all_rows(grid=grid)
+        for r in rows:
+            if r.count(opmark) >= self.size-1 and mark in r:
+                count += 1
+        return count
 
     def _negamax(self, grid, mark, row, col, depth, alpha, beta, max_depth=10):
         """
@@ -182,15 +220,15 @@ class Grid(object):
             if go or depth > max_depth:
                 # who won?
                 if not winner:
-                    return -1, (row,col)
+                    return -1, (row, col)
                 if winner == self.cat:
-                    return 0, (row,col)
+                    return 0, (row, col)
                 else:
                     winner = self.marks[winner]
                 if winner == mark:
-                    return 1, (row,col)
+                    return 1, (row, col)
                 else:
-                    return 0, (row,col)
+                    return 0, (row, col)
             else:
                 # better try some other permutations
                 max = -1
@@ -200,7 +238,8 @@ class Grid(object):
                     for c in rng:
                         opmark = self._op(mark)
                         opgrid = self._op_grid(grid2)
-                        x, pair = self._negamax(opgrid, opmark, r, c, depth+1, -beta, -alpha, max_depth=max_depth)
+                        x, pair = self._negamax(opgrid, opmark, r, c, depth+1,
+                                            -beta, -alpha, max_depth=max_depth)
                         if x is None and pair is None: continue
                         x = -x
                         if x > max:
@@ -218,7 +257,7 @@ class Grid(object):
         # deep copy
         grid2 = [list(x) for x in grid]
         go, winner = self.game_over(grid=grid2, set_winner=False)
-        if go or depth > max_depth:
+        if go:
             if winner == self.cat:
                 return 0
             winner = self.marks[winner]
@@ -226,8 +265,15 @@ class Grid(object):
                 return 1
             else:
                 return -1
+        if depth > max_depth:
+            winning = self.winning(mark, grid=grid2)
+            if winning is not None:
+                if winning:
+                    return 1
+                return -1
+            return 0
+            
         # better try some other permutations
-        max = -10
         rng = range(self.size)
         for r in rng:
             for c in rng:
@@ -235,17 +281,13 @@ class Grid(object):
                     opmark = self._op(mark)
                     grid2[r][c] = opmark
                     opgrid = self._op_grid(grid2)
-                    x = -self._negamax2(grid2, opmark, depth+1, -beta, -alpha, max_depth=max_depth)
+                    x = -self._negamax2(grid2, opmark, depth+1, -beta, -alpha,
+                                        max_depth=max_depth)
                     grid2[r][c] = 0
-                    if x > max:
-                        max = x
-                    if x > alpha:
-                        max = x
-                    if alpha >= beta:
-                        max = beta
-                        #return beta
-        if max == -10: return 0
-        return max
+                    if x < alpha:
+                        alpha = x
+                        if x <= beta: break
+        return alpha
     
     def winning(self, mark, grid=None):
         """
@@ -268,8 +310,17 @@ class Grid(object):
         else:
             # check patterns
             # 2 in a row
-            result = True if self._find_major_row(mark, grid=grid) else result
-            result = False if self._find_major_row(opmark, grid=grid) else result
+            mrow = self._find_major_row(mark, grid=grid)
+            oprow = self._find_major_row(opmark, grid=grid)
+            result = True if mrow and not oprow else None
+            result = False if oprow else None
+            if result is None:
+                mcount = self._find_minor_rows_count(mark, grid=grid)
+                opcount = self._find_minor_rows_count(opmark, grid=grid)
+                if mcount > opcount:
+                    result = True
+                elif opcount > mcount:
+                    result = False
             # TODO there's probably a lot more I could do here with corner
             # strategy...
         return result
@@ -309,16 +360,13 @@ class Grid(object):
             for c in rng:
                 if not self.grid[r][c]:
                     self.grid[r][c] = mark
-                    #print "scoring", self._get_pretty_print_grid()
-                    score = self._negamax2(self.grid,mark,0,1,-1)
-                    #print score, max
+                    score = self._negamax2(self.grid, mark, 0, 1, 1, -1)
                     if score > max:
                         max = score
-                        pairs = [(r,c)]
+                        pairs = [(r, c)]
                     elif score == max:
-                        pairs.append((r,c))
+                        pairs.append((r, c))
                     self.grid[r][c] = 0
-        #print pairs
         pair = random.choice(pairs)
         self.grid[pair[0]][pair[1]] = mark
     
@@ -326,9 +374,9 @@ class Grid(object):
         """
         Completes a move for the given mark automatically.
         """
-        def find_side(r,c):
-            sides = ((r-1,c),(r+1,c),(r,c+1),(r,c-1),)
-            for sr,sc in sides:
+        def find_side(r, c):
+            sides = ((r-1, c), (r+1, c), (r, c+1), (r, c-1), )
+            for sr, sc in sides:
                 if sr < 0 or sc < 0: continue
                 try:
                     if not self.grid[sr][sc]:
@@ -339,7 +387,13 @@ class Grid(object):
         opmark = self._op(mark)
         size = self.size
         s = size - 1
-        corners = ((0,0),(s,s),(0,s),(s,0))
+        corners = ((0, 0), (s, s), (0, s), (s, 0))
+        # center is a great place to start
+        if size % 2:
+            mid = int(math.ceil(self.size/2)-1)
+            if not self.grid[mid][mid]:
+                self.grid[mid][mid] = mark
+                return
         # see if we have 2 in a row to complete
         best = self._find_major_row(mark)
         if best:
@@ -350,42 +404,42 @@ class Grid(object):
         if block:
             self.grid[block[0]][block[1]] = mark
             return
-        # center is a great place to start
-        if size % 2:
-            mid = int(math.ceil(self.size/2)-1)
-            if not self.grid[mid][mid]:
-                self.grid[mid][mid] = mark
-                return
-        self.move_nmax(mark)
-        return
         # watch the sides next to taken corners tho
-        for r,c in corners:
-            corner = self.grid[r][c]
-            if corner:
-                if corner == opmark:
-                    side = find_side(r, c)
-                    if side:
-                        self.grid[side[0]][side[1]] = mark
-                        return
+        c1 = self.grid[corners[0][0]][corners[0][1]]
+        c2 = self.grid[corners[1][0]][corners[1][1]]
+        c3 = self.grid[corners[2][0]][corners[2][1]]
+        c4 = self.grid[corners[3][0]][corners[3][1]]
+        if (c1 == c2 and c1 != 0) or (c3 == c4 and c3 != 0):
+            for r, c in corners:
+                corner = self.grid[r][c]
+                if corner:
+                    if corner == opmark:
+                        side = find_side(r, c)
+                        if side:
+                            self.grid[side[0]][side[1]] = mark
+                            return
+        # check L's (fork prevention)
+        els = self._get_elles()
+        for pair, idxs in els:
+            row = pair[0]
+            col = pair[1]
+            if row.count(0) == 2 and col.count(0) == 2:
+                if opmark in row and opmark in col:
+                    c = row.index(0)
+                    self.grid[idxs[0]][c] = mark
+                    return
         # corners are a good defense
         # check for corners that could be forks...
-        for r,c in corners:
+        for r, c in corners:
             if not self.grid[r][c]:
-                side = find_side(r,c)
+                side = find_side(r, c)
                 if not side:
                     self.grid[r][c] = mark
                     return
-        for r,c in corners:
+        for r, c in corners:
             if not self.grid[r][c]:
                 self.grid[r][c] = mark
                 return
-        # take a random open position
-        #moves = self._get_moves()
-        #while moves:
-        #    r, c = moves.pop(random.randrange(len(moves)))
-        #    if not self.grid[r][c]:
-        #        self.grid[r][c] = mark
-        #        return
         self.move_nmax(mark)
         return
     
@@ -424,7 +478,8 @@ class Grid(object):
                         print "Please choose an open cell to place your mark"
                         r = -1
                         while r not in rng:
-                            i = raw_input("Please select a row (1-%s): " % str(self.size))
+                            i = raw_input("Please select a row (1-%s): " \
+                                          % str(self.size))
                             try:
                                 r = int(i) - 1
                             except:
@@ -432,7 +487,8 @@ class Grid(object):
                                 continue
                         c = -1
                         while c not in rng:
-                            i = raw_input("Please select a column (1-%s): " % str(self.size))
+                            i = raw_input("Please select a column (1-%s): " \
+                                          % str(self.size))
                             try:
                                 c = int(i) - 1
                             except:
@@ -441,7 +497,7 @@ class Grid(object):
                         valid_cell = not self.grid[r][c]
                     self.grid[r][c] = mark
                 else:
-                    self.move_nmax(mark)
+                    self.move(mark)
                 over, winner = self.game_over()
                 if over:
                     break
