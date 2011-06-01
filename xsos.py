@@ -1,6 +1,7 @@
 from __future__ import division
 import math
 import random
+import pdb
 
 class Grid(object):
     """
@@ -13,8 +14,8 @@ class Grid(object):
     marks = {
         'X':1,
         'O':2,
-        '1':'X',
-        '2':'O'
+        1:'X',
+        2:'O'
     }
     players = ('X', 'O')
     cat = 'Cat'
@@ -48,158 +49,351 @@ class Grid(object):
             grid.append(row)
         self.grid = grid
     
-    def _get_rotated_grid(self):
+    def _op(self, value):
+        """
+        Returns the opposite value.
+        1 -> 2
+        2 -> 1
+        0 -> 0
+        """
+        if value == 1:
+            return 2
+        elif value == 2:
+            return 1
+        else:
+            return value
+    
+    def _op_grid(self, grid):
+        """
+        Returns a copy of grid with opposite values as evaluated by self._op.
+        """
+        return [map(self._op, r) for r in grid]
+    
+    def _center(self, grid=None):
+        """
+        Returns the value of the center cell if one exists or None.
+        """
+        if not grid: grid = self.grid
+        center = None
+        if size % 2:
+            mid = int(math.ceil(self.size/2)-1)
+            center = grid[mid][mid]
+        return center
+    
+    def _get_rotated_grid(self, grid=None):
         """
         Returns self.grid rotated 90 degrees so columns become rows.
         
         See http://mail.python.org/pipermail/tutor/2006-November/051039.html
         """
+        if not grid: grid = self.grid
         size = self.size
-        return [[self.grid[col][size-row-1] for col in range(size)] for row in range(size)]
+        return [[grid[col][size-row-1] for col in range(size)] for row in \
+            range(size)]
     
-    def _get_diagonal_rows(self):
+    def _get_diagonal_rows(self, grid=None):
         """
         Returns the 2 diagonal rows in a list with the top left to bottom right
         first.
         """
+        if not grid: grid = self.grid
         size = self.size
         rng = range(size)
-        return [[self.grid[x][x] for x in rng], [self.grid[x][size-x-1] for x in rng]]
+        return [[grid[x][x] for x in rng], [grid[x][size-x-1] for x in rng]]
     
-    def _get_all_rows(self):
+    def _get_all_rows(self, grid=None):
         """
         Returns the grid with the addition of columns and diagonals as rows.
         """
-        return self.grid + self._get_rotated_grid() + self._get_diagonal_rows()
+        if not grid: grid = self.grid
+        return grid + self._get_rotated_grid(grid=grid) + \
+        self._get_diagonal_rows(grid=grid)
+    
+    def _get_elles(self, grid=None):
+        """
+        Returns the border of the grid in groups of L's.
+        """
+        if not grid: grid = self.grid
+        rows = grid
+        cols = self._get_rotated_grid(grid=grid)
+        max = self.size - 1
+        corners = (
+            ((rows[0], cols[0]), (0, 0)),
+            ((rows[0], cols[max]), (0, max)),
+            ((rows[max], cols[0]), (max, 0)),
+            ((rows[max], cols[max]), (max, max)),
+        )
+        elles = []
+        # prune
+        for pair in corners:
+            if pair[0][0] == pair[0][1]: continue
+            if pair[0][0] == pair[0][1][::-1]: continue
+            elles.append(pair)
+        return elles
     
     def _get_moves(self):
-        l = []
+        lst = []
         rng = range(self.size)
-        for r in rng:
-            for c in rng:
-                l.append((r,c))
-        return l
+        for row in rng:
+            for col in rng:
+                lst.append((row, col))
+        return lst
     
-    def _get_pretty_print_grid(self):
+    def _get_pretty_print_grid(self, grid=None):
         """
         Returns a string representing the current playing grid.
         """
-        s = ''
+        if not grid: grid = self.grid
+        ret = ''
         size = self.size
         rng = range(size)
         for i in rng:
-            r = self.grid[i]
-            for c in rng:
-                if r[c]:
-                    s += " %s " % self.marks[str(r[c])]
+            row = grid[i]
+            for col in rng:
+                if row[col]:
+                    ret += " %s " % self.marks[row[col]]
                 else:
-                    s += "   "
-                if c+1 < size:
-                    s += "|"
+                    ret += "   "
+                if col+1 < size:
+                    ret += "|"
             if i+1 < size:
-                s += "\n"
-                s += "---+" * (size-1)
-                s += "---\n"
-        return s
+                ret += "\n"
+                ret += "---+" * (size-1)
+                ret += "---\n"
+        return ret
     
-    def _find_major_row(self, mark):
+    def _find_major_row(self, mark, grid=None):
         """
         Looks for self.size-1 (two in a row for standard tic tac toe) of the
         given mark in a row and returns the grid position of the open space as
         a tuple (row, col)
         """
+        grid = self.grid if not grid else grid
         size = self.size
         rng = range(size)
-        rgrid = self._get_rotated_grid()
-        diags = self._get_diagonal_rows()
-        for r in rng:
-            if self.grid[r].count(mark) >= size-1 and 0 in self.grid[r]:
-                return (r, self.grid[r].index(0))
-            if rgrid[r].count(mark) >= size-1 and 0 in rgrid[r]:
-                return (rgrid[r].index(0), size-1-r)
-        for r in range(len(diags)):
+        rgrid = self._get_rotated_grid(grid=grid)
+        diags = self._get_diagonal_rows(grid=grid)
+        for row in rng:
+            if grid[row].count(mark) >= size-1 and 0 in grid[row]:
+                return (row, self.grid[row].index(0))
+            if rgrid[row].count(mark) >= size-1 and 0 in rgrid[row]:
+                return (rgrid[row].index(0), size-1-row)
+        for row in range(len(diags)):
             # backwards diag first
-            if diags[r].count(mark) >= size-1 and 0 in diags[r]:
-                idx = diags[r].index(0)
-                if not r:
+            if diags[row].count(mark) >= size-1 and 0 in diags[row]:
+                idx = diags[row].index(0)
+                if not row:
                     return (idx, idx)
                 else:
                     return (idx, size-1-idx)
     
-    def game_over(self):
+    def _find_minor_rows_count(self, mark, grid=None):
+        """
+        Counts the number of full rows that the given mark has a minor position.
+        Essentially a block.
+        """
+        grid = self.grid if not grid else grid
+        opmark = self._op(mark)
+        count = 0
+        rows = self._get_all_rows(grid=grid)
+        for r in rows:
+            if r.count(opmark) >= self.size-1 and mark in r:
+                count += 1
+        return count
+    
+    def _negamax2(self, grid, mark, depth, alpha, beta, max_depth=10):
+        """
+        Negamax algorithm to explore best game moves.
+        """
+        # deep copy
+        grid2 = [list(x) for x in grid]
+        go, winner = self.game_over(grid=grid2, set_winner=False)
+        if go:
+            if winner == self.cat:
+                return 0
+            winner = self.marks[winner]
+            if winner == mark:
+                return 1
+            else:
+                return -1
+        if depth > max_depth:
+            winning = self.winning(mark, grid=grid2)
+            if winning is not None:
+                if winning:
+                    return 1
+                return -1
+            return 0
+            
+        # better try some other permutations
+        rng = range(self.size)
+        for row in rng:
+            for col in rng:
+                if not grid2[row][col]:
+                    opmark = self._op(mark)
+                    grid2[row][col] = opmark
+                    opgrid = self._op_grid(grid2)
+                    x = -self._negamax2(grid2, opmark, depth+1, -beta, -alpha,
+                                        max_depth=max_depth)
+                    grid2[row][col] = 0
+                    if x < alpha:
+                        alpha = x
+                        if x <= beta: break
+        return alpha
+    
+    def winning(self, mark, grid=None):
+        """
+        Examines the grid and attempts to analyze if a mark is winning based on
+        patterns. This assumes that the grid is current so that if both marks
+        have 2 in a row the mark opposite the provided mark will be winning
+        other wise the cat will be winning.
+        
+        Returns a boolean for the given mark or None if the cat is winning
+        """
+        grid = self.grid if not grid else grid
+        opmark = self._op(mark)
+        # the default result is cat
+        result = None
+        # make sure the game isn't over
+        go, winner = self.game_over(grid=grid, set_winner=False)
+        if go:
+            if winner != self.cat:
+                result = self.marks[winner] == mark
+        else:
+            # check patterns
+            # 2 in a row
+            mrow = self._find_major_row(mark, grid=grid)
+            oprow = self._find_major_row(opmark, grid=grid)
+            result = True if mrow and not oprow else None
+            result = False if oprow else None
+            if result is None:
+                mcount = self._find_minor_rows_count(mark, grid=grid)
+                opcount = self._find_minor_rows_count(opmark, grid=grid)
+                if mcount > opcount:
+                    result = True
+                elif opcount > mcount:
+                    result = False
+            # TODO there's probably a lot more I could do here with corner
+            # strategy...
+        return result
+    
+    def game_over(self, grid=None, set_winner=True):
         """
         Checks to see if the game is over.
         
         Returns a boolean.
         """
+        if not grid: grid = self.grid
+        winner = ''
         size = self.size
-        all_rows = self._get_all_rows()
-        for r in all_rows:
+        all_rows = self._get_all_rows(grid=grid)
+        for row in all_rows:
             # only check rows that are full
-            s = sum(r)
-            if 0 not in r and not s%size:
-                self.winner = self.marks[str(int(s/size))]
-                return True
+            s = sum(row)
+            if 0 not in row and not s%size:
+                winner = self.marks[int(s/size)]
+                if set_winner:
+                    self.winner = winner
+                return True, winner
         if '0' not in str(all_rows):
-            self.winner = self.cat
-            return True
-        self.winner = ''
-        return False
+            winner = self.cat
+            if set_winner:
+                self.winner = winner
+            return True, winner
+        if set_winner:
+            self.winner = winner
+        return False, winner
+    
+    def move_nmax(self, mark):
+        max = -1
+        pairs = []
+        rng = range(self.size)
+        for row in rng:
+            for col in rng:
+                if not self.grid[row][col]:
+                    self.grid[row][col] = mark
+                    score = self._negamax2(self.grid, mark, 0, 1, 1, -1)
+                    if score > max:
+                        max = score
+                        pairs = [(row, col)]
+                    elif score == max:
+                        pairs.append((row, col))
+                    self.grid[row][col] = 0
+        pair = random.choice(pairs)
+        self.grid[pair[0]][pair[1]] = mark
     
     def move(self, mark):
         """
         Completes a move for the given mark automatically.
         """
-        def find_side(r,c):
-            sides = ((r-1,c-1),(r+1,c+1),(r-1,c+1),(r+1,c-1),)
-            for sr,sc in sides:
+        def find_side(row, col):
+            sides = ((row-1, col), (row+1, col), (row, col+1), (row, col-1), )
+            for siderow, sidecol in sides:
+                if siderow < 0 or sidecol < 0: continue
                 try:
-                    if not self.grid[sr][sc]:
-                        return (sr, sc)
+                    if not self.grid[siderow][sidecol]:
+                        return (siderow, sidecol)
                 except IndexError:
-                    pass
+                    continue
             return None
-        opmark = 1 if mark == 2 else 2
+        
+        opmark = self._op(mark)
         size = self.size
         s = size - 1
-        corners = ((0,0),(s,s),(0,s),(s,0))
-        # see if we need to block
-        block = self._find_major_row(opmark)
-        if block:
-            self.grid[block[0]][block[1]] = mark
-            return
-        # see if we have 2 in a row to complete
-        best = self._find_major_row(mark)
-        if best:
-            self.grid[best[0]][best[1]] = mark
-            return
+        corners = ((0, 0), (s, s), (0, s), (s, 0))
         # center is a great place to start
         if size % 2:
             mid = int(math.ceil(self.size/2)-1)
             if not self.grid[mid][mid]:
                 self.grid[mid][mid] = mark
                 return
+        # see if we have 2 in a row to complete
+        best = self._find_major_row(mark)
+        if best:
+            self.grid[best[0]][best[1]] = mark
+            return
+        # see if we need to block
+        block = self._find_major_row(opmark)
+        if block:
+            self.grid[block[0]][block[1]] = mark
+            return
         # watch the sides next to taken corners tho
-        for r,c in corners:
-            corner = self.grid[r][c]
-            if corner:
-                if corner == opmark:
-                    side = find_side(r, c)
-                    if side:
-                        self.grid[side[0]][side[1]] = mark
-                        return
+        cnr1 = self.grid[corners[0][0]][corners[0][1]]
+        cnr2 = self.grid[corners[1][0]][corners[1][1]]
+        cnr3 = self.grid[corners[2][0]][corners[2][1]]
+        cnr4 = self.grid[corners[3][0]][corners[3][1]]
+        if (cnr1 == cnr2 and cnr1 != 0) or (cnr3 == cnr4 and cnr3 != 0):
+            for row, col in corners:
+                corner = self.grid[row][col]
+                if corner:
+                    if corner == opmark:
+                        side = find_side(row, col)
+                        if side:
+                            self.grid[side[0]][side[1]] = mark
+                            return
+        # check L's (fork prevention)
+        els = self._get_elles()
+        for pair, idxs in els:
+            row = pair[0]
+            col = pair[1]
+            if row.count(0) == 2 and col.count(0) == 2:
+                if opmark in row and opmark in col:
+                    rowcol = row.index(0)
+                    self.grid[idxs[0]][rowcol] = mark
+                    return
         # corners are a good defense
-        for r,c in corners:
-            if not self.grid[r][c]:
-                self.grid[r][c] = mark
+        # check for corners that could be forks...
+        for row, col in corners:
+            if not self.grid[row][col]:
+                side = find_side(row, col)
+                if not side:
+                    self.grid[row][col] = mark
+                    return
+        for row, col in corners:
+            if not self.grid[row][col]:
+                self.grid[row][col] = mark
                 return
-        # take a random open position
-        moves = self._get_moves()
-        while moves:
-            r, c = moves.pop(random.randrange(len(moves)))
-            if not self.grid[r][c]:
-                self.grid[r][c] = mark
-                return
+        self.move_nmax(mark)
+        return
     
     def autoplay(self):
         over = self.game_over()
@@ -222,39 +416,41 @@ class Grid(object):
         """
         Plays the game of tic tac toe.
         """
-        over = self.game_over()
+        over, winner = self.game_over()
         rng = range(self.size)
         while not over:
-            for p in self.players:
-                mark = getattr(self, p)
-                print("Player %s is up!" % p)
+            for plyr in self.players:
+                mark = getattr(self, plyr)
+                print("Player %s is up!" % plyr)
                 print("Current Grid:")
                 print(self._get_pretty_print_grid())
-                if p not in self.comp_players:
+                if plyr not in self.comp_players:
                     valid_cell = False
                     while not valid_cell:
                         print "Please choose an open cell to place your mark"
-                        r = -1
+                        row = -1
                         while r not in rng:
-                            i = raw_input("Please select a row (1-%s): " % str(self.size))
+                            inpt = raw_input("Please select a row (1-%s): " \
+                                          % str(self.size))
                             try:
-                                r = int(i) - 1
+                                row = int(inpt) - 1
                             except:
                                 print "Please enter a valid choice."
                                 continue
-                        c = -1
-                        while c not in rng:
-                            i = raw_input("Please select a column (1-%s): " % str(self.size))
+                        col = -1
+                        while col not in rng:
+                            inpt = raw_input("Please select a column (1-%s): " \
+                                          % str(self.size))
                             try:
-                                c = int(i) - 1
+                                col = int(inpt) - 1
                             except:
                                 print "Please enter a valid choice."
                                 continue
-                        valid_cell = not self.grid[r][c]
-                    self.grid[r][c] = mark
+                        valid_cell = not self.grid[row][col]
+                    self.grid[row][col] = mark
                 else:
                     self.move(mark)
-                over = self.game_over()
+                over, winner = self.game_over()
                 if over:
                     break
         print("The game is over. %s won!" % self.winner)
@@ -267,15 +463,15 @@ class Grid(object):
         self.reset()
         if welcome:
             print("Welcome to X's & O's!")
-        cx = ''
-        while not cx:
-            cx = raw_input("Do you want the computer to play for X? [y or n] ")
-        if cx.lower().startswith('y'):
+        compx = ''
+        while not compx:
+            compx = raw_input("Do you want the computer to play for X? [y or n] ")
+        if compx.lower().startswith('y'):
             self.comp_players.append('X')
-        co = ''
-        while not co:
-            co = raw_input("Do you want the computer to play for O? [y or n] ")
-        if co.lower().startswith('y'):
+        compo = ''
+        while not compo:
+            compo = raw_input("Do you want the computer to play for O? [y or n] ")
+        if compo.lower().startswith('y'):
             self.comp_players.append('O')
         self.play()
         again = raw_input("Would you like to play again? [y or n] ")
@@ -285,7 +481,7 @@ class Grid(object):
             self.start_game(welcome=False)
 
 if __name__ == '__main__':
-    g = Grid()
-    g.start_game()
+    grid = Grid()
+    grid.start_game()
     
     
