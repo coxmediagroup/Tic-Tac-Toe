@@ -17,8 +17,8 @@ class Grid(object):
     marks = {
         'X':1,
         'O':2,
-        '1':'X',
-        '2':'O'
+        1:'X',
+        2:'O'
     }
     players = ('X', 'O')
     cat = 'Cat'
@@ -29,26 +29,6 @@ class Grid(object):
     winner = ''
     # list of players the computer should play for
     comp_players = []
-    
-    def _op(self, value):
-        """
-        Returns the opposite value.
-        1 -> 2
-        2 -> 1
-        0 -> 0
-        """
-        if value == 1:
-            return 2
-        elif value == 2:
-            return 1
-        else:
-            return value
-    
-    def _op_grid(self, grid):
-        """
-        Returns a copy of grid with opposite values as evaluated by self._op.
-        """
-        return [map(self._op, r) for r in grid]
     
     def __init__(self, size=3):
         """
@@ -71,6 +51,37 @@ class Grid(object):
             row = [0]*size
             grid.append(row)
         self.grid = grid
+    
+    def _op(self, value):
+        """
+        Returns the opposite value.
+        1 -> 2
+        2 -> 1
+        0 -> 0
+        """
+        if value == 1:
+            return 2
+        elif value == 2:
+            return 1
+        else:
+            return value
+    
+    def _op_grid(self, grid):
+        """
+        Returns a copy of grid with opposite values as evaluated by self._op.
+        """
+        return [map(self._op, r) for r in grid]
+    
+    def _center(self, grid=None):
+        """
+        Returns the value of the center cell if one exists or None.
+        """
+        if not grid: grid = self.grid
+        center = None
+        if size % 2:
+            mid = int(math.ceil(self.size/2)-1)
+            center = grid[mid][mid]
+        return center
     
     def _get_rotated_grid(self, grid=None):
         """
@@ -119,7 +130,7 @@ class Grid(object):
             r = grid[i]
             for c in rng:
                 if r[c]:
-                    s += " %s " % self.marks[str(r[c])]
+                    s += " %s " % self.marks[r[c]]
                 else:
                     s += "   "
                 if c+1 < size:
@@ -130,18 +141,19 @@ class Grid(object):
                 s += "---\n"
         return s
     
-    def _find_major_row(self, mark):
+    def _find_major_row(self, mark, grid=None):
         """
         Looks for self.size-1 (two in a row for standard tic tac toe) of the
         given mark in a row and returns the grid position of the open space as
         a tuple (row, col)
         """
+        grid = self.grid if not grid else grid
         size = self.size
         rng = range(size)
-        rgrid = self._get_rotated_grid()
-        diags = self._get_diagonal_rows()
+        rgrid = self._get_rotated_grid(grid=grid)
+        diags = self._get_diagonal_rows(grid=grid)
         for r in rng:
-            if self.grid[r].count(mark) >= size-1 and 0 in self.grid[r]:
+            if grid[r].count(mark) >= size-1 and 0 in grid[r]:
                 return (r, self.grid[r].index(0))
             if rgrid[r].count(mark) >= size-1 and 0 in rgrid[r]:
                 return (rgrid[r].index(0), size-1-r)
@@ -235,7 +247,32 @@ class Grid(object):
         if max == -10: return 0
         return max
     
-    
+    def winning(self, mark, grid=None):
+        """
+        Examines the grid and attempts to analyze if a mark is winning based on
+        patterns. This assumes that the grid is current so that if both marks
+        have 2 in a row the mark opposite the provided mark will be winning
+        other wise the cat will be winning.
+        
+        Returns a boolean for the given mark or None if the cat is winning
+        """
+        grid = self.grid if not grid else grid
+        opmark = self._op(mark)
+        # the default result is cat
+        result = None
+        # make sure the game isn't over
+        go, winner = self.game_over(grid=grid, set_winner=False)
+        if go:
+            if winner != self.cat:
+                result = self.marks[winner] == mark
+        else:
+            # check patterns
+            # 2 in a row
+            result = True if self._find_major_row(mark, grid=grid) else result
+            result = False if self._find_major_row(opmark, grid=grid) else result
+            # TODO there's probably a lot more I could do here with corner
+            # strategy...
+        return result
     
     def game_over(self, grid=None, set_winner=True):
         """
@@ -251,7 +288,7 @@ class Grid(object):
             # only check rows that are full
             s = sum(r)
             if 0 not in r and not s%size:
-                winner = self.marks[str(int(s/size))]
+                winner = self.marks[int(s/size)]
                 if set_winner:
                     self.winner = winner
                 return True, winner
