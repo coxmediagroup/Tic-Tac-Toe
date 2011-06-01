@@ -14,6 +14,9 @@ class Grid:
             if value != ' ':
                 try:
                     self.moves.remove(index);
+                    if len(self.moves) == 0:
+                        print 'there was no winner for this game'
+                        sys.exit()
                 except ValueError:
                     continue
         
@@ -79,7 +82,7 @@ class Grid:
                 print 'computer wins!'
                 sys.exit()
             if count['player'] == 2 and self.moved == False:
-                print 'found 2 x\'s in this row %s ' % row
+                #print 'found 2 x\'s in this row %s ' % row
                 #prevent player from winning the row only if turn hasn't been taken
                 self.FillRow(row)
         #if computer still hasn't gone, make a move
