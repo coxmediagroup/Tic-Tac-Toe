@@ -7,9 +7,6 @@ class Grid(object):
     """
     A simple class for playing X's & O's (tic tac toe).
     """
-    # infinity constants
-    oo = float("inf")
-    noo = -float("inf")
     # marks as constants
     X = 1
     O = 2
