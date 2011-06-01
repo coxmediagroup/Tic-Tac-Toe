@@ -429,7 +429,7 @@ class Grid(object):
                     while not valid_cell:
                         print "Please choose an open cell to place your mark"
                         row = -1
-                        while r not in rng:
+                        while row not in rng:
                             inpt = raw_input("Please select a row (1-%s): " \
                                           % str(self.size))
                             try:
