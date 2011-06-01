@@ -5,16 +5,12 @@ import views
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('views',
     # Example:
     # (r'^tictactoe/', include('tictactoe.foo.urls')),
 	
-	url(r'^$', views.game, name='gameUrl'),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+	url(r'^$', 'start_game', name='startGameUrl'),
+	url(r'^move/(\d+)$', 'make_move', name='makeMoveUrl'),
+	
+	
 )
