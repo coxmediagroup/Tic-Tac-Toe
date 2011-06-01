@@ -1,3 +1,10 @@
+X's & O's (Tic Tac Toe)
+
+The Python module xsos.py contains an interactive version of X's and O's where
+the player can choose which mark (X or O) the computer controls.
+
+The computer will never lose.
+
 Intructions:
 1. Fork this repo on GitHub.
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.

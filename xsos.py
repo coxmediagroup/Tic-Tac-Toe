@@ -30,6 +30,12 @@ class Grid(object):
     def __init__(self, size=3):
         """
         Constructs a square grid of the given size (3 by default).
+        
+        >>> g = Grid(3)
+        >>> g.size
+        3
+        >>> g.grid == [[0,0,0],[0,0,0],[0,0,0]]
+        True
         """
         self.size = size
         self._create_grid()
@@ -40,6 +46,12 @@ class Grid(object):
         an existing grid.
         
         Returns None.
+        
+        >>> g = Grid()
+        >>> g.grid = [1,2,3]
+        >>> g._create_grid()
+        >>> g.grid == [[0,0,0],[0,0,0],[0,0,0]]
+        True
         """
         grid = []
         size = self.size
@@ -52,9 +64,14 @@ class Grid(object):
     def _op(self, value):
         """
         Returns the opposite value.
-        1 -> 2
-        2 -> 1
-        0 -> 0
+        
+        >>> g = Grid()
+        >>> g._op(1)
+        2
+        >>> g._op(2)
+        1
+        >>> g._op(0)
+        0
         """
         if value == 1:
             return 2
@@ -63,19 +80,22 @@ class Grid(object):
         else:
             return value
     
-    def _op_grid(self, grid):
-        """
-        Returns a copy of grid with opposite values as evaluated by self._op.
-        """
-        return [map(self._op, r) for r in grid]
-    
     def _center(self, grid=None):
         """
         Returns the value of the center cell if one exists or None.
+        
+        >>> g = Grid()
+        >>> mid = g._center([[0,0,0],[0,1,0],[0,0,0]])
+        >>> mid
+        1
+        >>> g.size = 2
+        >>> mid = g._center([[0,0],[0,1],[0,0]])
+        >>> mid is None
+        True
         """
         if not grid: grid = self.grid
         center = None
-        if size % 2:
+        if self.size % 2:
             mid = int(math.ceil(self.size/2)-1)
             center = grid[mid][mid]
         return center
@@ -85,6 +105,11 @@ class Grid(object):
         Returns self.grid rotated 90 degrees so columns become rows.
         
         See http://mail.python.org/pipermail/tutor/2006-November/051039.html
+        
+        >>> g = Grid()
+        >>> g.grid = [[1,2,3],[4,5,6],[7,8,9]]
+        >>> g._get_rotated_grid() == [[3,6,9],[2,5,8],[1,4,7]]
+        True
         """
         if not grid: grid = self.grid
         size = self.size
@@ -95,6 +120,11 @@ class Grid(object):
         """
         Returns the 2 diagonal rows in a list with the top left to bottom right
         first.
+        
+        >>> g = Grid()
+        >>> g.grid = [[1,2,3],[4,5,6],[7,8,9]]
+        >>> g._get_diagonal_rows() == [[1,5,9],[3,5,7]]
+        True
         """
         if not grid: grid = self.grid
         size = self.size
@@ -104,6 +134,15 @@ class Grid(object):
     def _get_all_rows(self, grid=None):
         """
         Returns the grid with the addition of columns and diagonals as rows.
+        
+        >>> g = Grid()
+        >>> g.grid = [[1,2,3],[4,5,6],[7,8,9]]
+        >>> g._get_all_rows() == [\
+            [1,2,3],[4,5,6],[7,8,9],\
+            [3,6,9],[2,5,8],[1,4,7],\
+            [1,5,9],[3,5,7]\
+        ]
+        True
         """
         if not grid: grid = self.grid
         return grid + self._get_rotated_grid(grid=grid) + \
@@ -112,6 +151,21 @@ class Grid(object):
     def _get_elles(self, grid=None):
         """
         Returns the border of the grid in groups of L's.
+        
+        >>> g = Grid()
+        >>> g.grid = [[1,2,3],[4,5,6],[7,8,9]]
+        >>> g._get_elles() == [\
+            (([1,2,3],[3,6,9]),(0,0)),\
+            (([1,2,3],[1,4,7]),(0,2)),\
+            (([7,8,9],[3,6,9]),(2,0)),\
+            (([7,8,9],[1,4,7]),(2,2)),\
+        ]
+        True
+        >>> g._get_elles([]) == []
+        False
+        >>> g.grid = [[1,0,1],[0,0,0],[1,0,1]]
+        >>> g._get_elles() == []
+        True
         """
         if not grid: grid = self.grid
         rows = grid
@@ -132,6 +186,24 @@ class Grid(object):
         return elles
     
     def _get_moves(self):
+        """
+        Returns a list of all cell locations as a list of pairs of indexes:
+        (row,col).
+        
+        >>> g = Grid()
+        >>> g._get_moves() == [\
+            (0,0),\
+            (0,1),\
+            (0,2),\
+            (1,0),\
+            (1,1),\
+            (1,2),\
+            (2,0),\
+            (2,1),\
+            (2,2),\
+        ]
+        True
+        """
         lst = []
         rng = range(self.size)
         for row in rng:
@@ -142,6 +214,12 @@ class Grid(object):
     def _get_pretty_print_grid(self, grid=None):
         """
         Returns a string representing the current playing grid.
+        
+        >>> g = Grid()
+        >>> g._get_pretty_print_grid()
+        '   |   |   \\n---+---+---\\n   |   |   \\n---+---+---\\n   |   |   '
+        >>> g._get_pretty_print_grid([[1,0,0],[0,2,0],[0,0,1]])
+        ' X |   |   \\n---+---+---\\n   | O |   \\n---+---+---\\n   |   | X '
         """
         if not grid: grid = self.grid
         ret = ''
@@ -166,7 +244,13 @@ class Grid(object):
         """
         Looks for self.size-1 (two in a row for standard tic tac toe) of the
         given mark in a row and returns the grid position of the open space as
-        a tuple (row, col)
+        a tuple (row, col).
+        
+        >>> g = Grid()
+        >>> g._find_major_row(1, [[0,2,2],[0,1,2],[0,0,1]])
+        (0, 0)
+        >>> g._find_major_row(2, [[0,2,2],[0,1,2],[0,0,1]])
+        (0, 0)
         """
         grid = self.grid if not grid else grid
         size = self.size
@@ -190,7 +274,13 @@ class Grid(object):
     def _find_minor_rows_count(self, mark, grid=None):
         """
         Counts the number of full rows that the given mark has a minor position.
-        Essentially a block.
+        Essentially a block that has happened.
+        
+        >>> g = Grid()
+        >>> g._find_minor_rows_count(1, [[1,2,2],[0,1,2],[0,0,2]])
+        1
+        >>> g._find_minor_rows_count(2, [[1,2,2],[0,1,2],[0,0,2]])
+        1
         """
         grid = self.grid if not grid else grid
         opmark = self._op(mark)
@@ -201,9 +291,15 @@ class Grid(object):
                 count += 1
         return count
     
-    def _negamax2(self, grid, mark, depth, alpha, beta, max_depth=10):
+    def _negamax(self, grid, mark, depth, alpha, beta, max_depth=10):
         """
         Negamax algorithm to explore best game moves.
+        
+        >>> g = Grid()
+        >>> g._negamax([[0,2,2],[1,1,1],[0,0,0]], 1, 0, -1, 1)
+        1
+        >>> g._negamax([[2,2,2],[0,1,1],[0,0,0]], 1, 0, -1, 1)
+        -1
         """
         # deep copy
         grid2 = [list(x) for x in grid]
@@ -231,8 +327,7 @@ class Grid(object):
                 if not grid2[row][col]:
                     opmark = self._op(mark)
                     grid2[row][col] = opmark
-                    opgrid = self._op_grid(grid2)
-                    x = -self._negamax2(grid2, opmark, depth+1, -beta, -alpha,
+                    x = -self._negamax(grid2, opmark, depth+1, -beta, -alpha,
                                         max_depth=max_depth)
                     grid2[row][col] = 0
                     if x < alpha:
@@ -247,7 +342,15 @@ class Grid(object):
         have 2 in a row the mark opposite the provided mark will be winning
         other wise the cat will be winning.
         
-        Returns a boolean for the given mark or None if the cat is winning
+        Returns a boolean for the given mark or None if the cat is winning.
+        
+        >>> g = Grid()
+        >>> g.winning(1, [[0,0,0],[0,0,0],[0,0,0]]) == None
+        True
+        >>> g.winning(1, [[1,1,0],[0,0,0],[0,0,0]])
+        True
+        >>> g.winning(1, [[1,1,0],[2,2,0],[0,0,0]])
+        False
         """
         grid = self.grid if not grid else grid
         opmark = self._op(mark)
@@ -263,8 +366,8 @@ class Grid(object):
             # 2 in a row
             mrow = self._find_major_row(mark, grid=grid)
             oprow = self._find_major_row(opmark, grid=grid)
-            result = True if mrow and not oprow else None
-            result = False if oprow else None
+            result = True if mrow else None
+            result = False if oprow else result    
             if result is None:
                 mcount = self._find_minor_rows_count(mark, grid=grid)
                 opcount = self._find_minor_rows_count(opmark, grid=grid)
@@ -280,7 +383,15 @@ class Grid(object):
         """
         Checks to see if the game is over.
         
-        Returns a boolean.
+        Returns a boolean and winner pair.
+        
+        >>> g = Grid()
+        >>> g.game_over([[0,0,0],[0,0,0],[0,0,0]])
+        (False, '')
+        >>> g.game_over([[1,1,1],[0,0,0],[0,0,0]])
+        (True, 'X')
+        >>> g.game_over([[2,2,2],[0,0,0],[0,0,0]])
+        (True, 'O')
         """
         if not grid: grid = self.grid
         winner = ''
@@ -304,6 +415,9 @@ class Grid(object):
         return False, winner
     
     def move_nmax(self, mark):
+        """
+        Completes a move for the given mark using negamax.
+        """
         max = -1
         pairs = []
         rng = range(self.size)
@@ -311,7 +425,7 @@ class Grid(object):
             for col in rng:
                 if not self.grid[row][col]:
                     self.grid[row][col] = mark
-                    score = self._negamax2(self.grid, mark, 0, 1, 1, -1)
+                    score = self._negamax(self.grid, mark, 0, 1, 1)
                     if score > max:
                         max = score
                         pairs = [(row, col)]
@@ -323,7 +437,16 @@ class Grid(object):
     
     def move(self, mark):
         """
-        Completes a move for the given mark automatically.
+        Completes a move for the given mark automatically by analyzing a set of
+        patterns.
+        
+        >>> g = Grid()
+        >>> g.move(1)
+        >>> g.grid
+        [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
+        >>> g.move(2)
+        >>> g.grid
+        [[2, 0, 0], [0, 1, 0], [0, 0, 0]]
         """
         def find_side(row, col):
             sides = ((row-1, col), (row+1, col), (row, col+1), (row, col-1), )
@@ -396,17 +519,30 @@ class Grid(object):
         return
     
     def autoplay(self):
-        over = self.game_over()
+        """
+        Simple loop to autoplay a game.
+        """
+        over, winner = self.game_over()
         while not over:
             for p in self.players:
                 self.move(self.marks[p])
-                over = self.game_over()
+                over, winner = self.game_over()
                 if over:
                     break
     
     def reset(self):
         """
         Resets the current winner, computer players & the grid.
+        
+        >>> g = Grid()
+        >>> g.autoplay()
+        >>> g.winner
+        'Cat'
+        >>> g.reset()
+        >>> g.grid
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        >>> g.winner
+        ''
         """
         self.comp_players = []
         self.winner = ''
@@ -414,16 +550,17 @@ class Grid(object):
     
     def play(self):
         """
-        Plays the game of tic tac toe.
+        Plays the game of tic tac toe interactively on the command line
         """
         over, winner = self.game_over()
         rng = range(self.size)
         while not over:
             for plyr in self.players:
                 mark = getattr(self, plyr)
-                print("Player %s is up!" % plyr)
+                print("\nPlayer %s is up!" % plyr)
                 print("Current Grid:")
                 print(self._get_pretty_print_grid())
+                print("\n")
                 if plyr not in self.comp_players:
                     valid_cell = False
                     while not valid_cell:
@@ -458,7 +595,7 @@ class Grid(object):
     
     def start_game(self, welcome=True):
         """
-        Resets and then sets up the players for a new game.
+        Resets and then sets up the players for a new interactive game.
         """
         self.reset()
         if welcome:
