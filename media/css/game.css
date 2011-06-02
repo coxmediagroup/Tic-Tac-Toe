@@ -1,0 +1,6 @@
+.row div{
+	display: inline-block;
+	border: solid 1px #000;
+	width:150px;
+	height:150px;
+}

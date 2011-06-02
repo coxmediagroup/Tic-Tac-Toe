@@ -1,5 +1,7 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, HttpResponse
 from django.utils import simplejson
+from models import *
+import sys
 
 def start_game(request):
 	request.session['game_state'] = 'start'
@@ -12,13 +14,13 @@ def pick_order(request, play_order):
 	game_state = request.session['game_state']
 	game_board = request.session['game_board']
 	if game_state == 'start':
-		if play_order == 2:
+		if play_order == '2':
 			board = Board(game_board)
-			new_board, computer_move = turn(board, 'X')
+			new_board, computer_move = turn(board, '2')
 			request.session['game_board'] = new_board.board_state
 			data.update({'computer_move':computer_move})
-		elif play_order != 1:
-			data.update({'message':'invalid command'})
+		elif play_order != '1':
+			data.update({'message':'invalid_command'})
 		request.session['game_state'] = 'wait'
 		
 		data.update({'message':'game_started'})
@@ -29,20 +31,23 @@ def make_move(request, move):
 	game_board = request.session['game_board']
 	data = {}
 	if game_state == 'wait':
+		data.update({'message':'game_started'})
 		board = Board(game_board)
-		board.update_state(move, 'O')
+		if not int(move) in board.get_valid_moves():
+			data.update({'message':'invalid_move'})
+			return HttpResponse(simplejson.dumps(data), mimetype = 'application/json')
+		board.update_state(move, '1')
 		game_board = board.board_state
 		request.session['game_board'] = game_board
 		
-		new_board, computer_move = turn(board, 'X')
+		new_board, computer_move = turn(board, '2')
 		if new_board.game_over():
 			data.update({'message':'game_over'})
 			if new_board.winner():
 				data.update({'winner':new_board.winner()})
-		else:
-			data.update({'message':'game_started'})
+		request.session['game_board'] = new_board.board_state
 		data.update({'computer_move':computer_move})
-		
+	#print(new_board.board_state)
 	return HttpResponse(simplejson.dumps(data), mimetype = 'application/json')
 				
 
@@ -88,4 +93,6 @@ def turn(board, player):
 	moves = [(move, evaluate_move(move)) for move in board.get_valid_moves()]
 	random.shuffle(moves)
 	moves.sort(key = lambda (move, winner): winner)
-	import ipdb; ipdb.set_trace()
+	computer_move = moves[-1][0]
+	board.execute_move(computer_move, '2')
+	return board, computer_move

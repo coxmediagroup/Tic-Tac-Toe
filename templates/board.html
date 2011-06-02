@@ -1,14 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+
 <html>
+	<head>
+		<script type="text/javascript" src="tictactoe/media/js/jquery-1.6.1.min.js"></script>
+		<script type="text/javascript" src="tictactoe/media/js/game.js"></script>
+		<link rel="stylesheet" type="text/css" href="tictactoe/media/css/game.css" />
+	</head>
 	<body>
 		<div>
-			<div>
-				<div id="block_0"></div><div id="block_1"></div><div id="block_2"></div>
+			<div class="first_move" order="1">Human Plays First</div>
+			<div class="first_move" order="2">Computer Plays First</div>
+		</div>
+		<div id="board">
+			<div class="row">
+				<div index="0"></div><div index="1"></div><div index="2"></div>
 			</div>
-			<div>
-				<div id="block_3"></div><div id="block_4"></div><div id="block_5"></div>
+			<div class="row">
+				<div index="3"></div><div index="4"></div><div index="5"></div>
 			</div>
-			<div>
-				<div id="block_6"></div><div id="block_7"></div><div id="block_8"></div>
+			<div class="row">
+				<div index="6"></div><div index="7"></div><div index="8"></div>
 			</div>
 		</div>
 	</body>

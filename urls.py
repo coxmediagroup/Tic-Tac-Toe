@@ -10,7 +10,8 @@ urlpatterns = patterns('views',
     # (r'^tictactoe/', include('tictactoe.foo.urls')),
 	
 	url(r'^$', 'start_game', name='startGameUrl'),
-	url(r'^move/(\d+)$', 'make_move', name='makeMoveUrl'),
+	url(r'^move/([0-8])$', 'make_move', name='makeMoveUrl'),
+	url(r'^pick/([12])$', 'pick_order', name='pickOrderUrl'),
 	
 	
 )

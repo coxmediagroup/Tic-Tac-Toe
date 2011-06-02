@@ -8,6 +8,7 @@ class Board:
 		self.board_state = board_state #9 digit base 3 string 0 = empty, 1 = X, 2 = O
 		
 	def update_state(self, index, symbol):
+		index = int(index)
 		state_list = list(self.board_state)
 		state_list[index] = symbol
 		self.board_state = ''.join(state_list)
