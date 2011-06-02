@@ -1,0 +1,5 @@
+This is a web-based AJAX powered tic-tac-toe game that utilizes the minimax algorithm. 
+
+It is designed so that it will not lose to a human player.
+
+The game can be played at 70.184.4.26/tictactoe

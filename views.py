@@ -4,17 +4,20 @@ from models import *
 import sys
 
 def start_game(request):
+	# when the page loads set session variables to their initial state
 	request.session['game_state'] = 'start'
 	request.session['game_board'] = '000000000'
 	
 	return render_to_response('board.html')
 	
 def pick_order(request, play_order):
+	#after the page has loaded, the player choses who goes first
 	data = {}
 	game_state = request.session['game_state']
 	game_board = request.session['game_board']
 	if game_state == 'start':
 		if play_order == '2':
+			# if the player picks the computer to go first, a move is made and a json response sent back
 			board = Board(game_board)
 			new_board, computer_move = turn(board, '2')
 			request.session['game_board'] = new_board.board_state
@@ -27,6 +30,7 @@ def pick_order(request, play_order):
 	return HttpResponse(simplejson.dumps(data), mimetype = 'application/json')
 	
 def make_move(request, move):
+	# exeute the human player's move, then compute the computer's move and send back the results.
 	game_state = request.session['game_state']
 	game_board = request.session['game_board']
 	data = {}
@@ -39,19 +43,24 @@ def make_move(request, move):
 		board.update_state(move, '1')
 		game_board = board.board_state
 		request.session['game_board'] = game_board
-		
-		new_board, computer_move = turn(board, '2')
-		if new_board.game_over():
+		if board.game_over():
 			data.update({'message':'game_over'})
-			if new_board.winner():
-				data.update({'winner':new_board.winner()})
-		request.session['game_board'] = new_board.board_state
-		data.update({'computer_move':computer_move})
-	#print(new_board.board_state)
+			if board.winner():
+				data.update({'winner':board.winner()})
+		else:
+			new_board, computer_move = turn(board, '2')
+			if new_board.game_over():
+				data.update({'message':'game_over'})
+				if new_board.winner():
+					data.update({'winner':new_board.winner()})
+			request.session['game_board'] = new_board.board_state
+			data.update({'computer_move':computer_move})
+			
 	return HttpResponse(simplejson.dumps(data), mimetype = 'application/json')
 				
 
 def turn(board, player):
+	"""the minimax ai function"""
 	opponent = {computer:human, human:computer}
 		
 	def judge(winner):
@@ -59,12 +68,12 @@ def turn(board, player):
 		if not winner:
 			return 0
 		if winner == player:
-			return +1
+			return +10
 		return -1
 		
 		
 	def evaluate_move(move, p=player):
-		"""evaluate the outcome of a particular move"""
+		"""evaluate all the outcome of a particular move recursively"""
 		try:
 			board.execute_move(move, p)
 			if board.game_over():
@@ -77,7 +86,7 @@ def turn(board, player):
 				for o in outcomes:
 					if o == -1:
 						return o
-					min_element = min(o,min_element)
+					min_element = min(o,min_element) #minimax logic
 				return min_element
 			else:
 				max_element = -1
@@ -91,8 +100,7 @@ def turn(board, player):
 			board.reverse_move(move)
 			
 	moves = [(move, evaluate_move(move)) for move in board.get_valid_moves()]
-	random.shuffle(moves)
-	moves.sort(key = lambda (move, winner): winner)
-	computer_move = moves[-1][0]
-	board.execute_move(computer_move, '2')
+	moves.sort(key = lambda (move, winner): winner) # sort the moves by the highest outcome value
+	computer_move = moves[-1][0] # chose the last move
+	board.execute_move(computer_move, '2') # execute it
 	return board, computer_move

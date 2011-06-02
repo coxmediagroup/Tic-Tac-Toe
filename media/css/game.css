@@ -4,3 +4,23 @@
 	width:150px;
 	height:150px;
 }
+
+#waiting{
+	width: 16px;
+	height: 16px;
+	background-image: url(/tictactoe/media/images/waiting.gif);
+	position:absolute;
+}
+
+#game_over{
+	display:none;
+	position:absolute;
+}
+
+#board{
+	margin-top:20px;
+}
+
+.first_move{
+	cursor:pointer;
+}
