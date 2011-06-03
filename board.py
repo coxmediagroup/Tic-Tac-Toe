@@ -16,6 +16,11 @@ wins = (
     (2, 4, 6),
 )
 
+def _reduce_win(x, y):
+    if x == y:
+        return x
+    return False
+
 class Board(object):
     def __init__(self):
         self.spaces = range(9)
@@ -37,5 +42,10 @@ class Board(object):
 
     def move(self, index, player):
         raise NotImplementedError('Implement the ability for a player to move.')
-    def isWon(self):
-        raise NotImplementedError('Implement test for end of game.')
+    def winner(self):
+        for win in wins:
+            winner = reduce(_reduce_win, map(self.spaces.__getitem__, win))
+            if winner:
+                return winner
+        return None
+
