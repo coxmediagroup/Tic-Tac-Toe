@@ -1,6 +1,9 @@
 {% extends "tictactoe/base.html" %}
 {% block content %}
+    <p>Please select an open position to place your mark:</p>
     {{ grid|safe }}
+    <br />
+    <a href="{% url default %}?reset=1">Reset</a>
     <hr />
     {{ game.grid }}
 {% endblock %}

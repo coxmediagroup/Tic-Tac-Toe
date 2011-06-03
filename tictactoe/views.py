@@ -8,15 +8,22 @@ def default(request):
     if 'xsos_game' not in request.session:
         request.session['xsos_game'] = xsos.Grid()
     g = request.session['xsos_game']
-    if 'player_mark' not in request.session:
-        pass
+    if 'reset' in request.GET:
+        g.reset()
+        request.session['xsos_game'] = g
+    if 'set_mark' in request.GET and g.grid == [[0]*3]*3:
+        m = int(request.GET['set_mark'])
+        if m in g.marks:
+            request.session["player_mark"] = m
+    if 'player_mark' in request.session:
+        return HttpResponseRedirect(reverse("play"))
     return TemplateResponse(request, 'tictactoe/base.html', {'game':g})
 
 def play(request):
     if 'xsos_game' not in request.session:
-        request.session['xsos_game'] = xsos.Grid()
+        return HttpResponseRedirect(reverse("default"))
     g = request.session['xsos_game']
-    mark = 1
+    mark = request.session["player_mark"]
     grid = '<table>'
     size = g.size
     for r in range(size):
