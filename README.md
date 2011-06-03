@@ -19,6 +19,9 @@ A simple Django application is included in the package `tictactoe`. It uses Djan
 
 It currently only supports playing against the computer but the user may choose to play as either X or O.
 
+### Demo
+A demo can be played at http://www.engineignite.com:8001/
+
 ### Requirements
  + Django >= 1.3
  + The X's & O's module (xsos.py)
