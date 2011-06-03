@@ -17,6 +17,9 @@ wins = (
 )
 
 def _reduce_win(x, y):
+    '''A win occurs when all three spaces in a possible win configuration
+    are equal.'''
+
     if x == y:
         return x
     return False
