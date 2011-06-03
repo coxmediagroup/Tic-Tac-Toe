@@ -1,7 +1,7 @@
 # X's & O's (Tic-Tac-Toe) Django App
 
 ### Installation
- + Ensure that the X's & O's module (xsos.py) is on your PYTHONPATH.
+ + Ensure that the X's & O's module (xsos.py) and the tictactoe app (this package) are on your PYTHONPATH.
  + Ensure that `'django.contrib.sessions',` is in your installed apps.
  + Add `'tictactoe',` to your installed apps.
  + Add a route for tictactoe to your default urlconf.
