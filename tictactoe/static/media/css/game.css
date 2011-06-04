@@ -4,6 +4,12 @@ body {
 #reset {
   display: none;
 }
+#progress {
+  height: 16px
+}
+#progress img {
+  display: none;
+}
 #board {
   padding: 2em;
 }

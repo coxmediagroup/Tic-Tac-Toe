@@ -31,44 +31,41 @@
       if (human_turn && $(this).html() == " ") {
         human_turn = false;
         $(this).html(next_marker);
+        $("#spinner").show() // show progress indicator
         
-        $.ajax({
-          url: '{% url game-human-move %}',
-          data: buildArray(next_marker),
-          success: function(data, textStatus, jqXHR) {
-            if (data.is_winner) {
-              gameOver("You Win!");
-            } else {
-              next_marker = next_marker == "X" ? "O" : "X";
-              computerTurn();
-            }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
-          },
+        ajaxRequest('{% url game-human-move %}', function(data, textStatus, jqXHR) {
+          if (data.is_winner) {
+            gameOver("You Win!");
+          } else {
+            next_marker = next_marker == "X" ? "O" : "X";
+            computerTurn();
+          }
         });
       }
     });
     
     // Computer player turn
     function computerTurn() {
-      // show progress indicator
-
+      ajaxRequest('{% url game-computer-move %}', function(data, textStatus, jqXHR) {
+        $("#spinner").hide() // hide progress indicator
+        $("td").eq(data.position).html(next_marker);
+        if (data.is_draw)
+          gameOver("Draw!");
+        else if (data.is_winner)
+          gameOver("Computer Wins!");
+        else {
+          human_turn = true;
+          next_marker = next_marker == "X" ? "O" : "X";
+        }
+      });
+    }
+    
+    // Make AJAX request to url and execute callback on success
+    function ajaxRequest(url, callback) {
       $.ajax({
-        url: '{% url game-computer-move %}',
+        url: url,
         data: buildArray(next_marker),
-        success: function(data, textStatus, jqXHR) {
-          // hide progress indicator
-          $("td").eq(data.position).html(next_marker);
-          if (data.is_draw)
-            gameOver("Draw!");
-          else if (data.is_winner)
-            gameOver("Computer Wins!");
-          else {
-            human_turn = true;
-            next_marker = next_marker == "X" ? "O" : "X";
-          }
-        },
+        success: callback,
         error: function(jqXHR, textStatus, errorThrown) {
           alert(errorThrown);
         },
@@ -89,21 +86,25 @@
       return board;
     }
     
+    // Show game over message and reset button
     function gameOver(message) {
       alert(message);
       $("#reset").show();
     }
-    
   });
 {% endblock %}
 
 {% block content %}
   <div id="first_player">
-    <input type="button" value="I Will Go First" name="human" class="player" />
-    <input type="button" value="Computer Will Go First" name="computer" class="player" />
+    Choose First Player:<br />
+    <input type="button" value="Human" name="human" class="player" />
+    <input type="button" value="Computer" name="computer" class="player" />
   </div>
   <div id="reset">
     <input type="button" value="Play Again" name="reset" />
+  </div>
+  <div id="progress">
+    <img id ="spinner" src="{{ MEDIA_URL }}images/spinner.gif" />
   </div>
   <div id="board">
     <table>

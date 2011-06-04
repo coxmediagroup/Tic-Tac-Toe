@@ -1,5 +1,10 @@
 """
 Tic-Tac-Toe game logic
+
+This is the game logic for Tic-Tac-Toe that allows a computer player
+to always win or draw a game. In keeping with the spirit of the Zen of
+Python, the logic is kept fairly simple instead of using complex techniques
+such as minimax algorithms and decision trees.
 """
 from random import choice
 
