@@ -31,26 +31,37 @@
       if (human_turn && $(this).html() == " ") {
         human_turn = false;
         $(this).html(next_marker);
-        next_marker = next_marker == "X" ? "O" : "X";
-        computerTurn();
+        
+        $.ajax({
+          url: '{% url game-human-move %}',
+          data: buildArray(next_marker),
+          success: function(data, textStatus, jqXHR) {
+            if (data.is_winner) {
+              gameOver("You Win!");
+            } else {
+              next_marker = next_marker == "X" ? "O" : "X";
+              computerTurn();
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+          },
+        });
       }
     });
     
     // Computer player turn
     function computerTurn() {
       // show progress indicator
-      var board = buildArray();
-      board['mark'] = next_marker;
 
       $.ajax({
         url: '{% url game-computer-move %}',
-        data: board,
+        data: buildArray(next_marker),
         success: function(data, textStatus, jqXHR) {
           // hide progress indicator
-          //alert(data.position);
           $("td").eq(data.position).html(next_marker);
           if (data.is_winner) {
-            gameOver("Computer Wins!")
+            gameOver("Computer Wins!");
           } else {
             human_turn = true;
             next_marker = next_marker == "X" ? "O" : "X";
@@ -63,7 +74,7 @@
     }
     
     // Build array from game board
-    function buildArray() {
+    function buildArray(marker) {
       var arr = new Array();
       var board = {};
       $("#board").find('td').each(function() {
@@ -72,6 +83,7 @@
       $.each(arr, function(index, value) {
         board[index] = value;
       });
+      board['mark'] = marker;
       return board;
     }
     
