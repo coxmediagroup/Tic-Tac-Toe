@@ -1,6 +1,7 @@
 """
 Tic-Tac-Toe game logic
 """
+from random import choice
 
 __author__ = "Nick Schwane"
 
@@ -17,11 +18,12 @@ WINNERS = [
     [0, 4, 8],
     [2, 4, 6]
 ]
+EMPTY = ' '
 
 
 def check_for_win(board, mark):
     """
-    Check to see if their is a winning condition for the specified mark
+    Check to see if there is a winning condition for the specified mark
     """    
     for winner in WINNERS:
         if board[winner[0]] == mark and board[winner[1]] == mark and board[winner[2]] == mark:
@@ -35,7 +37,7 @@ def construct_board(request):
     """
     board = []
     for i in range(0, 9):
-        board.append(request.GET.get(str(i), ' '))
+        board.append(request.GET.get(str(i), EMPTY))
     mark = request.GET.get('mark')
     return board, mark
 
@@ -51,9 +53,9 @@ def determine_computer_move(board, mark):
     
     # check for winner
     for possible in range(0, 9):
-        if board[possible] == ' ':        
+        if board[possible] == EMPTY:        
             for winner in WINNERS:
-                winner = winner[:]
+                winner = list(winner)
                 if possible in winner:
                     winner.remove(possible)
                     if board[winner[0]] == mark and board[winner[1]] == mark:
@@ -62,17 +64,30 @@ def determine_computer_move(board, mark):
     # check for block
     opp_mark = "O" if mark == "X" else "X"
     for possible in range(0, 9):
-        if board[possible] == ' ':        
+        if board[possible] == EMPTY:        
             for winner in WINNERS:
-                winner = winner[:]
+                winner = list(winner)
                 if possible in winner:
                     winner.remove(possible)
                     if board[winner[0]] == opp_mark and board[winner[1]] == opp_mark:
                         return possible, NO_WIN
     
-    # check for empty cell
-    for possible in range(0, 9):
-        if board[possible] == ' ':
+    # if first move, place mark in corner
+    if 'X' not in board and 'O' not in board:
+        return choice(CORNERS), NO_WIN
+    
+    # check for empty center cell
+    if board[CENTER] == EMPTY:
+        return CENTER, NO_WIN
+    
+    # check for empty corner
+    for possible in CORNERS:
+        if board[possible] == EMPTY:
+            return possible, NO_WIN
+        
+    # check for remaining empty cell
+    for possible in EDGES:
+        if board[possible] == EMPTY:
             return possible, NO_WIN
     
     # no possible move

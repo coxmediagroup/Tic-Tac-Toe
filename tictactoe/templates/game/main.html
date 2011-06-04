@@ -60,9 +60,11 @@
         success: function(data, textStatus, jqXHR) {
           // hide progress indicator
           $("td").eq(data.position).html(next_marker);
-          if (data.is_winner) {
+          if (data.is_draw)
+            gameOver("Draw!");
+          else if (data.is_winner)
             gameOver("Computer Wins!");
-          } else {
+          else {
             human_turn = true;
             next_marker = next_marker == "X" ? "O" : "X";
           }
