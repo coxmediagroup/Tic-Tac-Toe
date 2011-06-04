@@ -40,9 +40,6 @@ class Board(object):
     def __unicode__(self):
         return unicode(self.__repr__())
 
-    def isEmpty(self, index):
-        raise NotImplementedError('Implement test for an empty square.')
-
     def move(self, index, player):
         raise NotImplementedError('Implement the ability for a player to move.')
     def winner(self):
