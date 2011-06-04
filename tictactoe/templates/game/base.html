@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>{% block title %}Tic-Tac-Toe{% endblock %}</title>
+  <!--[if lt IE 9]>
+    <script src="{{ MEDIA_URL }}js/html5.js"></script>
+  <![endif]-->
+  <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}css/game.css" />
+  {% block css %}{% endblock %}
+  {{ form.media }}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.1.min.js"></script>
+  {% block js %}{% endblock %}
+  <script type="text/javascript">                                         
+    {% block javascript %}
+    {% endblock %}                                  
+  </script> 
+  {% block head %}{% endblock %}
+</head>
+<body>
+<div id="vertical_container">
+  <header>
+    <h1>Tic-Tac-Toe</h1>
+  </header>
+  <section id="main">
+    {% block content %}{% endblock %}
+  </section>
+</div>
+</body>
+</html>
