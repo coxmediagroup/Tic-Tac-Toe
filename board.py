@@ -46,9 +46,15 @@ class Board(object):
     def move(self, index, player):
         raise NotImplementedError('Implement the ability for a player to move.')
     def winner(self):
+        '''Return who the winner is, if any.'''
         for win in wins:
             winner = reduce(_reduce_win, map(self.spaces.__getitem__, win))
             if winner:
                 return winner
         return None
 
+    def available_moves(self):
+        '''Return available moves.'''
+
+        # A move is available if it's still an integer
+        return filter(lambda x: isinstance(x, int), self.spaces)
