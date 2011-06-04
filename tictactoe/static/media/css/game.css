@@ -24,9 +24,15 @@ body {
 #board table {
   border-collapse: collapse;
 }
-.row1, .row2 {
+td:first-child {
+  border-right: solid 1px black;
+}
+td:last-child {
+  border-left: solid 1px black;
+}
+tr:first-child {
   border-bottom: solid 1px black;
 }
-.col1, .col2 {
-  border-right: solid 1px black;
+tr:last-child {
+  border-top: solid 1px black;
 }

@@ -41,7 +41,7 @@ def construct_board(request):
     Construct game board from request object
     """
     board = []
-    for i in range(0, 9):
+    for i in range(9):
         board.append(request.GET.get(str(i), EMPTY))
     mark = request.GET.get('mark')
     return board, mark
@@ -57,7 +57,7 @@ def determine_computer_move(board, mark):
     NO_WIN = False
     
     # check for winner
-    for possible in range(0, 9):
+    for possible in range(9):
         if board[possible] == EMPTY:        
             for winner in WINNERS:
                 winner = list(winner)
@@ -68,7 +68,7 @@ def determine_computer_move(board, mark):
             
     # check for block
     opp_mark = "O" if mark == "X" else "X"
-    for possible in range(0, 9):
+    for possible in range(9):
         if board[possible] == EMPTY:        
             for winner in WINNERS:
                 winner = list(winner)

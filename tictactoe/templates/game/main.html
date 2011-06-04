@@ -4,24 +4,20 @@
   $(document).ready(function() {
     var human_turn = false;
     var next_marker = "X";
+    $("td").html(" ");
     
     // Human player clicks on button to choose first player
     $("input.player").click(function() {
       human_turn = ($(this).attr('name') == "human");
       $("#first_player").hide();
-      
-      if (!human_turn) {
-        // computer goes first
+      if (!human_turn) // computer goes first
         computerTurn();
-      }
     });
     
     // Reset button clicked
     $("input[name='reset']").click(function() {
       next_marker = "X";
-      $("#board").find('td').each(function() {
-        $(this).html(" ");
-      });
+      $("td").html(" ");
       $("#first_player").show();
       $("#reset").hide();
     });
@@ -74,13 +70,9 @@
     
     // Build array from game board
     function buildArray(marker) {
-      var arr = new Array();
       var board = {};
-      $("#board").find('td').each(function() {
-        arr.push($(this).html());
-      });
-      $.each(arr, function(index, value) {
-        board[index] = value;
+      $("#board").find('td').each(function(index, element) {
+        board[index] = element.firstChild.nodeValue;
       });
       board['mark'] = marker;
       return board;
@@ -108,20 +100,20 @@
   </div>
   <div id="board">
     <table>
-      <tr class="row1">
-        <td class="col1"> </td>
-        <td class="col2"> </td>
-        <td class="col3"> </td>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
-      <tr class="row2">
-        <td class="col1"> </td>
-        <td class="col2"> </td>
-        <td class="col3"> </td>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
-      <tr class="row3">
-        <td class="col1"> </td>
-        <td class="col2"> </td>
-        <td class="col3"> </td>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </table>
   </div>

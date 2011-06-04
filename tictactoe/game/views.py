@@ -49,5 +49,3 @@ def human_move(request):
     board, mark = logic.construct_board(request)
     win = logic.check_for_win(board, mark)
     return json_response(json.dumps({'is_winner': win}))
-
-
