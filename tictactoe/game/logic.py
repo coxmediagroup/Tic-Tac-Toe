@@ -47,7 +47,7 @@ def _search_winners(board, mark):
                 winner = list(winner)
                 if possible in winner:
                     winner.remove(possible)
-                    if board[winner[0]] == mark and board[winner[1]] == mark:
+                    if all(board[pos] == mark for pos in winner):
                         return possible
     return False
 
@@ -57,13 +57,9 @@ def _should_place_edge(board, mark, opp_mark):
     If human goes first and this is computer's 2nd move and
     edge spaces are all empty, place mark on edge.
     """
-    if board.count(opp_mark) == 2 and board.count(mark) == 1:
-        for edge in EDGES:
-            if board[edge] != EMPTY:
-                return False
-        return True
-    else:
-        return False
+    return (board.count(opp_mark) == 2 and
+            board.count(mark) == 1 and 
+            all(board[edge] == EMPTY for edge in EDGES))
 
 
 def check_for_win(board, mark):
@@ -71,7 +67,7 @@ def check_for_win(board, mark):
     Check to see if there is a winning condition for the specified mark
     """    
     for winner in WINNERS:
-        if board[winner[0]] == mark and board[winner[1]] == mark and board[winner[2]] == mark:
+        if all(board[pos] == mark for pos in winner):
             return True
     return False
 
@@ -80,9 +76,7 @@ def construct_board(request):
     """
     Construct game board from request object
     """
-    board = []
-    for i in range(9):
-        board.append(request.GET.get(str(i), EMPTY))
+    board = [request.GET.get(str(i), EMPTY) for i in range(9)]
     mark = request.GET.get('mark')
     return board, mark
 
@@ -95,6 +89,7 @@ def determine_computer_move(board, mark):
     """
     WIN = True
     NO_WIN = False
+    opp_mark = "O" if mark == "X" else "X"
     
     # check for winner
     possible = _search_winners(board, mark)
@@ -102,7 +97,6 @@ def determine_computer_move(board, mark):
         return possible, WIN
             
     # check for block
-    opp_mark = "O" if mark == "X" else "X"
     possible = _search_winners(board, opp_mark)
     if possible:
         return possible, NO_WIN
@@ -111,6 +105,7 @@ def determine_computer_move(board, mark):
     if 'X' not in board and 'O' not in board:
         return choice(CORNERS), NO_WIN
     
+    # check to see if computer should place mark on edge
     if _should_place_edge(board, mark, opp_mark):
         return choice(EDGES), NO_WIN
     
