@@ -10,10 +10,10 @@ from random import choice
 
 __author__ = "Nick Schwane"
 
-CORNERS = [0, 2, 6, 8]
-EDGES = [1, 3, 5, 7]
-CENTER = 4
-WINNERS = [
+CORNERS = [0, 2, 6, 8]  # indexes of corner cells
+EDGES = [1, 3, 5, 7]  # indexes of remaining edge cells
+CENTER = [4]  # index of center cell
+WINNERS = [  # all possible winning combinations
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -23,8 +23,33 @@ WINNERS = [
     [0, 4, 8],
     [2, 4, 6]
 ]
-EMPTY = ' '
+EMPTY = ' '  # an empty cell contains a space
 
+
+def _search_cells(board, lists):
+    """
+    Search for next available cell
+    
+    Iterates through a list of lists to find the next available spot
+    for the computer to place its mark in.
+    """
+    for l in lists:
+        for possible in l:
+            if board[possible] == EMPTY:
+                return possible
+    return -1
+
+
+def _search_winners(board, mark):
+    for possible in range(9):
+        if board[possible] == EMPTY:        
+            for winner in WINNERS:
+                winner = list(winner)
+                if possible in winner:
+                    winner.remove(possible)
+                    if board[winner[0]] == mark and board[winner[1]] == mark:
+                        return possible
+    return False
 
 def check_for_win(board, mark):
     """
@@ -57,44 +82,20 @@ def determine_computer_move(board, mark):
     NO_WIN = False
     
     # check for winner
-    for possible in range(9):
-        if board[possible] == EMPTY:        
-            for winner in WINNERS:
-                winner = list(winner)
-                if possible in winner:
-                    winner.remove(possible)
-                    if board[winner[0]] == mark and board[winner[1]] == mark:
-                        return possible, WIN
+    possible = _search_winners(board, mark)
+    if possible:
+        return possible, WIN
             
     # check for block
     opp_mark = "O" if mark == "X" else "X"
-    for possible in range(9):
-        if board[possible] == EMPTY:        
-            for winner in WINNERS:
-                winner = list(winner)
-                if possible in winner:
-                    winner.remove(possible)
-                    if board[winner[0]] == opp_mark and board[winner[1]] == opp_mark:
-                        return possible, NO_WIN
+    possible = _search_winners(board, opp_mark)
+    if possible:
+        return possible, NO_WIN
     
     # if first move, place mark in corner
     if 'X' not in board and 'O' not in board:
         return choice(CORNERS), NO_WIN
     
-    # check for empty center cell
-    if board[CENTER] == EMPTY:
-        return CENTER, NO_WIN
-    
-    # check for empty corner
-    for possible in CORNERS:
-        if board[possible] == EMPTY:
-            return possible, NO_WIN
-        
-    # check for remaining empty cell
-    for possible in EDGES:
-        if board[possible] == EMPTY:
-            return possible, NO_WIN
-    
-    # no possible move
-    return -1, NO_WIN
+    # Search remaining cells in order of center, corners, and edges
+    return _search_cells(board, [CENTER, CORNERS, EDGES]), NO_WIN
 

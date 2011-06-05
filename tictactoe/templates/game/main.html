@@ -2,9 +2,10 @@
 
 {% block javascript %}
   $(document).ready(function() {
+    var EMPTY = " ";
     var human_turn = false;
-    var next_marker = "X";
-    $("td").html(" ");
+    var next_marker;
+    resetGame();
     
     // Human player clicks on button to choose first player
     $("input.player").click(function() {
@@ -16,15 +17,12 @@
     
     // Reset button clicked
     $("input[name='reset']").click(function() {
-      next_marker = "X";
-      $("td").html(" ");
-      $("#first_player").show();
-      $("#reset").hide();
+      resetGame();
     });
     
     // Human player clicks on cell
     $("td").click(function() {     
-      if (human_turn && $(this).html() == " ") {
+      if (human_turn && $(this).html() == EMPTY) {
         human_turn = false;
         $(this).html(next_marker);
         $("#spinner").show() // show progress indicator
@@ -82,6 +80,15 @@
     function gameOver(message) {
       alert(message);
       $("#reset").show();
+    }
+    
+    // Reset game to initial state
+    function resetGame() {
+      next_marker = "X";
+      $("td").html(EMPTY);
+      $("#first_player").show();
+      $("#reset").hide();
+      $("#spinner").hide()
     }
   });
 {% endblock %}
