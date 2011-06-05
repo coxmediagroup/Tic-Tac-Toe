@@ -8,16 +8,18 @@ LOSE = -1
 DRAW = 0
 
 def main():
-    import os, sys
     b = board.Board()
     players = board.players
     player_number = 0
     winner = None
-    movers = (
+    movers = [
         get_human_move,
         get_computer_move,
-    )
+    ]
     possible_moves = b.available_moves()
+    computer_first = raw_input('Should the computer go first (y/n)?')
+    if computer_first.lower().startswith('y'):
+        movers.reverse()
     while possible_moves and not winner:
         player = players[player_number]
         current_move = movers[player_number](b, player_number, possible_moves)
