@@ -51,6 +51,21 @@ def _search_winners(board, mark):
                         return possible
     return False
 
+
+def _should_place_edge(board, mark, opp_mark):
+    """
+    If human goes first and this is computer's 2nd move and
+    edge spaces are all empty, place mark on edge.
+    """
+    if board.count(opp_mark) == 2 and board.count(mark) == 1:
+        for edge in EDGES:
+            if board[edge] != EMPTY:
+                return False
+        return True
+    else:
+        return False
+
+
 def check_for_win(board, mark):
     """
     Check to see if there is a winning condition for the specified mark
@@ -95,6 +110,9 @@ def determine_computer_move(board, mark):
     # if first move, place mark in corner
     if 'X' not in board and 'O' not in board:
         return choice(CORNERS), NO_WIN
+    
+    if _should_place_edge(board, mark, opp_mark):
+        return choice(EDGES), NO_WIN
     
     # Search remaining cells in order of center, corners, and edges
     return _search_cells(board, [CENTER, CORNERS, EDGES]), NO_WIN
