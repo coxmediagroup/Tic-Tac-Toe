@@ -2,6 +2,10 @@
 
 import board
 
+WIN = 1
+LOSE = -1
+DRAW = 0
+
 def main():
     import os, sys
     b = board.Board()
@@ -30,7 +34,9 @@ def get_human_move(current_board, player, possible_moves):
     while True:
         print current_board
         try:
-            move = int(raw_input('Please enter your move %s: ' % possible_moves))
+            move = int(
+                raw_input('Please enter your move %s: ' % possible_moves)
+            )
         except ValueError:
             print 'Please enter a number for your move.'
             continue
@@ -41,6 +47,27 @@ def get_human_move(current_board, player, possible_moves):
 
 def get_computer_move(current_board, player, possible_moves):
     raise NotImplementedError('Please implement get_computer_move().')
+
+def analyze_board(subject_board, player_number):
+    '''Find the possible outcomes for each move.'''
+    spaces = subject_board.available_moves()
+    results = [None] * 9
+    for space in spaces:
+        temp_board = subject_board.copy()
+        temp_board.move(board.players[player_number], space)
+        if temp_board.winner():
+            results[space] = WIN
+        elif not temp_board.available_moves():
+            results[space] = DRAW
+        else:
+            # If the other player can force a win, this is a losing
+            # possibility for us.  If the other player can force a draw,
+            # this branch is also a draw for us.  Otherwise, we can force
+            # a win.
+            other_player = (player_number + 1) % 2
+            union = set(analyze_board(temp_board, other_player))
+            results[space] = -max(union)
+    return results
 
 if __name__ == '__main__':
     main()
