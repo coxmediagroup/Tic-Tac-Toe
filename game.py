@@ -26,9 +26,9 @@ def main():
     else:
         print 'There was no winner.'
 
-def get_human_move(board, player, possible_moves):
+def get_human_move(current_board, player, possible_moves):
     while True:
-        print board
+        print current_board
         try:
             move = int(raw_input('Please enter your move %s: ' % possible_moves))
         except ValueError:
@@ -39,7 +39,7 @@ def get_human_move(board, player, possible_moves):
             continue
         return move
 
-def get_computer_move():
+def get_computer_move(current_board, player, possible_moves):
     raise NotImplementedError('Please implement get_computer_move().')
 
 if __name__ == '__main__':
