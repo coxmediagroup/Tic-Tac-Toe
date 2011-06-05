@@ -63,3 +63,8 @@ class Board(object):
 
         # A move is available if it's still an integer
         return filter(lambda x: isinstance(x, int), self.spaces)
+
+    def copy(self):
+        board = Board()
+        board.spaces = list(self.spaces)
+        return board
