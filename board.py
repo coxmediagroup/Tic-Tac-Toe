@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+class InvalidMoveError(IndexError): pass
+class InvalidPlayerError(ValueError): pass
+
 players = ('X', 'O')
 
 wins = (
@@ -40,8 +43,13 @@ class Board(object):
     def __unicode__(self):
         return unicode(self.__repr__())
 
-    def move(self, index, player):
-        raise NotImplementedError('Implement the ability for a player to move.')
+    def move(self, player, index):
+        if index not in self.available_moves():
+            raise InvalidMoveError('Space %s is already occupied.' % index)
+        if player not in players:
+            raise InvalidPlayerError('Player %s does not exist.' % player)
+        self.spaces[index] = player
+
     def winner(self):
         '''Return who the winner is, if any.'''
         for win in wins:
