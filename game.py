@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import board
+import random # Whichever version of Python, this will be good enough
 
 WIN = 1
 LOSE = -1
@@ -14,12 +15,12 @@ def main():
     winner = None
     movers = (
         get_human_move,
-        get_human_move,
+        get_computer_move,
     )
     possible_moves = b.available_moves()
     while possible_moves and not winner:
         player = players[player_number]
-        current_move = movers[player_number](b, player, possible_moves)
+        current_move = movers[player_number](b, player_number, possible_moves)
         b.move(player, current_move)
         winner = b.winner()
         player_number = (player_number + 1) % 2
@@ -30,7 +31,7 @@ def main():
     else:
         print 'There was no winner.'
 
-def get_human_move(current_board, player, possible_moves):
+def get_human_move(current_board, player_number, possible_moves):
     while True:
         print current_board
         try:
@@ -45,8 +46,15 @@ def get_human_move(current_board, player, possible_moves):
             continue
         return move
 
-def get_computer_move(current_board, player, possible_moves):
-    raise NotImplementedError('Please implement get_computer_move().')
+def get_computer_move(current_board, player_number, possible_moves):
+    '''Randomly choose from the "best" moves.'''
+    results = analyze_board(current_board, player_number)
+    best = max(results)
+    choices = dict([
+        (x, results[x]) for x in range(len(results)) if results[x] == best
+    ]).keys()
+    return random.choice(choices)
+
 
 def analyze_board(subject_board, player_number):
     '''Find the possible outcomes for each move.'''
