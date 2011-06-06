@@ -49,7 +49,7 @@ def _search_winners(board, mark):
                     winner.remove(possible)
                     if all(board[pos] == mark for pos in winner):
                         return possible
-    return False
+    return -1
 
 
 def _should_place_edge(board, mark, opp_mark):
@@ -93,12 +93,12 @@ def determine_computer_move(board, mark):
     
     # check for winner
     possible = _search_winners(board, mark)
-    if possible:
+    if possible != -1:
         return possible, WIN
             
     # check for block
     possible = _search_winners(board, opp_mark)
-    if possible:
+    if possible != -1:
         return possible, NO_WIN
     
     # if first move, place mark in corner
