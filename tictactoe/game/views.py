@@ -33,7 +33,7 @@ def computer_move(request):
     board, mark = logic.construct_board(request)
     position, win = logic.determine_computer_move(board, mark)
     board[position] = mark if position != -1 else board[position]
-    draw = position == -1 or ' ' not in board
+    draw = not win and (position == -1 or ' ' not in board)
     return json_response(json.dumps(
                                     {'position': position,
                                      'is_winner': win,
