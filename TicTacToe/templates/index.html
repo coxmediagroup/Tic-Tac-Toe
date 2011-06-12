@@ -1,0 +1,45 @@
+
+<html>
+<head>
+    <title>TicTacToe</title>
+    <script type="text/javascript" src="/static/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="/static/game.js"></script>
+    <style type="text/css">
+        a.cell {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+        }
+        a.cell:hover {
+            cursor: pointer;
+        }
+        a.xchoice {
+            background: url('/static/x.png');
+        }
+        a.ochoice {
+            background: url('/static/o.png');
+        }
+    </style>
+</head>
+<body>
+    <table cellspacing="0" id="tictactoe">
+    <tr>
+        <td><a class="cell empty" id="c00">&nbsp;</a></td>
+        <td><a class="cell empty" id="c01">&nbsp;</a></td>
+        <td><a class="cell empty" id="c02">&nbsp;</a></td>
+    </tr>
+    <tr>
+        <td><a class="cell empty" id="c10">&nbsp;</a></td>
+        <td><a class="cell empty" id="c11">&nbsp;</a></td>
+        <td><a class="cell empty" id="c12">&nbsp;</a></td>
+    </tr>
+    <tr>
+        <td><a class="cell empty" id="c20">&nbsp;</a></td>
+        <td><a class="cell empty" id="c21">&nbsp;</a></td>
+        <td><a class="cell empty" id="c22">&nbsp;</a></td>
+    </tr>
+    </table>
+    <a id="rttt" href="#reset">Reset</a>
+</body>
+</html>
