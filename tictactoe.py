@@ -138,13 +138,15 @@ def computerPlayer(board, player):
     #print "computer move: %0.3f ms" % ((time.time()-t0)*1000)
     #print moves
     board.makeMove(moves[-1][0], player)
+    print "Computer has played."
 
 def game():
     """The game function"""
+    print "NOTE: Move numbers correspond to play positions, left to right, top to bottom."
     b = Board()
     turn = 1
     while True:
-        print "%i. turn" % turn
+        print "%i. Player's turn" % turn
         humanPlayer(b, Player_O)
         if b.gameOver(): 
             break
