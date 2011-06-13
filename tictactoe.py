@@ -147,10 +147,10 @@ def game():
     turn = 1
     while True:
         print "%i. Player's turn" % turn
-        humanPlayer(b, Player_O)
+        humanPlayer(b, Player_X)
         if b.gameOver(): 
             break
-        computerPlayer(b, Player_X)
+        computerPlayer(b, Player_O)
         if b.gameOver(): 
             break
         turn += 1
