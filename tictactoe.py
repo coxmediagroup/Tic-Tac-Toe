@@ -95,7 +95,7 @@ def humanPlayer(board, player):
 def computerPlayer(board, player):
     """Function for the computer player"""
     t0 = time.time()
-    board.output()
+    #board.output()
     opponent = { Player_O : Player_X, Player_X : Player_O }
 
     def judge(winner):
@@ -135,8 +135,8 @@ def computerPlayer(board, player):
     moves = [(move, evaluateMove(move)) for move in board.getValidMoves()]
     random.shuffle(moves)
     moves.sort(key = lambda (move, winner): winner)
-    print "computer move: %0.3f ms" % ((time.time()-t0)*1000)
-    print moves
+    #print "computer move: %0.3f ms" % ((time.time()-t0)*1000)
+    #print moves
     board.makeMove(moves[-1][0], player)
 
 def game():
