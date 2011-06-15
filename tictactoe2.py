@@ -55,20 +55,28 @@ def make_play(board, spaces, wincombos, player, n):
     status = checkwinner(wincombos, symbol)
     return board, status
 
-def get_computer_input(board, spaces, wincombos):
+def evalPossibleMoves(spaces, wincombos, player):
+    win_found = False
     for s in spaces:
-        board = board.replace(str(s), "X")
         test_wc = []
         for e in wincombos:
             if e != s:
                 test_wc.append(e)
             else:
-                test_wc.append("X")
-        print test_wc
-        status = checkwinner(test_wc, "X")
+                test_wc.append(player)
+        #print test_wc
+        status = checkwinner(test_wc, player)
         if status == 1:
-            return s
-    #import pdb; pdb.set_trace()
+            win_found = s
+    return win_found
+
+def get_computer_input(board, spaces, wincombos):
+    human_can_win = evalPossibleMoves(spaces, wincombos, "X")
+    computer_can_win = evalPossibleMoves(spaces, wincombos, "O")
+    if computer_can_win:
+        return computer_can_win
+    if human_can_win:
+        return human_can_win
     if 5 in spaces:
         return 5
     return choice(spaces)

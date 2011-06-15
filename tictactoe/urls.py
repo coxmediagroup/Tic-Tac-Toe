@@ -7,5 +7,5 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns(
     'tictactoe.views',
         (r'^$', 'show_game'),
-        #(r'^admin/', include(admin.site.urls)),
+        (r'^make_move/', 'make_move'),
 )
