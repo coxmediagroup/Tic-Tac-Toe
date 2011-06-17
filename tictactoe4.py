@@ -120,7 +120,6 @@ class ComputerPlayer:
         bmove = None
         for m in gameins.get_avail_positions():
             gameins.mark(self.marker, m)
-            gameins.print_board()
             if gameins.is_gameover():
                 score = self.get_score(gameins)
             else:
