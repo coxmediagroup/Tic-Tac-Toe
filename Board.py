@@ -37,3 +37,5 @@ class Board(object):
                 result.append(i)
 
         return result
+    def undo(self, idx):
+        self.tokens[idx] = None
