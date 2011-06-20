@@ -34,3 +34,11 @@ class BoardTest(unittest.TestCase):
     def test_lowerIndexRaisesException(self):
         """Does an index lower than expected raise a TokenPlacementException?"""
         self.assertRaises(TokenPlacementException, self.board.addToken, "x", -1)
+
+    def test_placeTokenInFilledSpot(self):
+        """Place a token in a filled spot prevented?"""
+
+
+        self.board.addToken("x", 0)
+        self.assertRaises(TokenPlacementException, self.board.addToken, "x", 0)
+        
