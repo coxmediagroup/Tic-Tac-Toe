@@ -50,3 +50,13 @@ class BoardTest(unittest.TestCase):
         self.board.addToken("x", 0)
         self.assertRaises(TokenPlacementException, self.board.addToken, "x", 0)
         
+    def test_undo(self):
+        """Can we undo a move?"""
+        start = self.board.getBoard()
+        idx = random.randint(0,8)
+        self.board.addToken("x", idx)
+        mid = self.board.getBoard()
+        self.assertEqual("x", mid[idx])
+        self.board.undo(idx)
+        end = self.board.getBoard()
+        self.assertEqual(None, end[idx])
