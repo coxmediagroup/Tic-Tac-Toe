@@ -1,6 +1,5 @@
 import unittest
 from Brain import Brain
-from pprint import pprint as pp
 
 class MinMaxTest(unittest.TestCase):
     
@@ -16,7 +15,7 @@ class MinMaxTest(unittest.TestCase):
         """Testing evaluateMove"""
 
         r = self.brain.evaluateMove(1,'x')
-        self.assertEqual(r, 0)
+        self.assertEqual(r, 1)
 
     def test_evalMoveOneForWin(self):
         """Does Winning move return 1?"""
@@ -30,12 +29,12 @@ class MinMaxTest(unittest.TestCase):
         """Does Drawing move return 0?"""
 
         data = ['x', 'o','x' ,'x' ,'o' ,'o' ,None, None, None]
-        r = self.brain.evaluateMove(7,'x', board=data)
+        r = self.brain.evaluateMove(8,'x', board=data)
         self.assertEqual(r, 0)
         
     def test_evalMoveForBadMove(self):
         """Does Losing move return -1?"""
 
-        data = ['x', 'o','x' ,'x' ,'o' ,'o' ,None, None, None]
-        r = self.brain.evaluateMove(8,'x', board=data)
+        data = ['o', 'x',None ,None,'o' ,None ,None, None, None]
+        r = self.brain.evaluateMove(5,'x', board=data)
         self.assertEqual(r, -1)

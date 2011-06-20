@@ -12,6 +12,7 @@ class Board(object):
         str token  "x" or "o"
         int idx    0-8"""
 
+        idx = int (idx)
         if  idx > 8 or idx < 0:
             msg = "Invalid index %s " % idx
             raise TokenPlacementException(msg)

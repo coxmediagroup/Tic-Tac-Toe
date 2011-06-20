@@ -16,23 +16,31 @@ class Brain(object):
             if not board:
                 board = [None] * 9
             self.scratch_board.tokens = board 
-            try:
-                self.scratch_board.addToken(p, move)
-            except TokenPlacementException:
-                pass
+            self.scratch_board.addToken(p, move)
             new_board = self.scratch_board.getBoard()
             outcome = self.scratch_judge.evalGame()
             if outcome is not None and 'done' in outcome:
                 return self.decide(self.scratch_judge.isWinner())
 
             outcomes = (
-                    self.evaluateMove(next_move, self.opponent[p], board=new_board) 
+                    self.evaluateMove(next_move, p=self.opponent[p], board=new_board) 
                     for next_move in self.scratch_board.getPossibleMoves())
-
-            if p == self.token:
-                return min(outcomes)
+            if p == 'o':
+                min_outcome = 1
+                return min(outcomes) #searching whole list takes a while
+                for o in outcomes:
+                    if o == -1:
+                        return o 
+                    min_outcome = min(o,min_outcome)
+                return min_outcome
             else:
                 return max(outcomes)
+                max_outcome = 1
+                for o in outcomes:
+                    if o == 1:
+                        return o 
+                    max_outcome = min(o,max_outcome)
+                return max_outcome
 
         finally:
             self.scratch_board.undo(move)
@@ -40,7 +48,7 @@ class Brain(object):
     def decide(self, winner):
         """Decide if it is a good thing our a bad thing"""
         if winner == self.token:
-            return +1
+            return 1
         if winner == None:
             return 0
         return -1
