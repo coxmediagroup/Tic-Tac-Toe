@@ -16,8 +16,18 @@ class BoardTest(unittest.TestCase):
 
 
 
-    def test_addToken(self):
+    def test_getPossibleMoves(self):
+        """Can we get a list of possible remaining moves?"""
+        expected = list()
+        for i in range(9):
+            ran = random.randint(8,9)
+            token = ("x", None)[ran % 2] 
+            self.board.addToken(token, i)
+            if not token:
+                expected.append(i)
+        self.assertEqual(expected, self.board.getPossibleMoves())
 
+    def test_addToken(self):
         """Can we add a token to a known empty space?"""
         local_board = []
         for i in range(9):
@@ -37,8 +47,6 @@ class BoardTest(unittest.TestCase):
 
     def test_placeTokenInFilledSpot(self):
         """Place a token in a filled spot prevented?"""
-
-
         self.board.addToken("x", 0)
         self.assertRaises(TokenPlacementException, self.board.addToken, "x", 0)
         

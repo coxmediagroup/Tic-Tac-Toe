@@ -28,3 +28,12 @@ class Board(object):
     def getBoard(self):
         return self.tokens
 
+    
+    def getPossibleMoves(self):
+        """Return the indexes of possible moves"""
+        result = list()
+        for i in range(9):
+            if not self.tokens[i]:
+                result.append(i)
+
+        return result
