@@ -3,4 +3,11 @@
 	<h1>You cannot win...</h1>
 	<h1>...I will beat you every time.</h1>
 	<button id="btn-play" class="button center"><span>Play</span></button>
+	<div id="game-area">
+		<canvas id="game-canvas" width="300" height="300">
+		</canvas>
+	</div>
+	<form action="/tictactoe/post" method="post">
+		{% csrf_token %}
+	</form>
 {% endblock %}

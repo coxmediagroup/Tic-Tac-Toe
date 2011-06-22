@@ -41,3 +41,4 @@ button.button { padding:10px 25px;background:#8ab;color:#fff;border-radius:10px;
 button.button span { font-size:25px; }
 
 #btn-play { margin:100px auto; }
+#game-area { width:300px;height:300px;border:1px solid #886;margin:25px auto;display:none; }
