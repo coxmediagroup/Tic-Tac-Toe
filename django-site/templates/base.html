@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tic Tac Toe Forever</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="header">
+				{% block header %}
+				<h1>Tic Tac Toe</h1>
+				<em>The legacy lives on!</em>
+				{% endblock %}
+			</div>
+			<div id="content">
+				{% block content %}
+				{% endblock %}
+			</div>
+			<div id="footer">
+				{% block footer %}
+				<p>Copyright&copy; 2011 Joseph King</p>
+				{% endblock %}
+			</div>
+		</div>
+	</body>
+</html>
