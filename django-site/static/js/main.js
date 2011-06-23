@@ -3,9 +3,15 @@ var game = new TicTacToe();
 $(document).ready(function(){
 	
 	game.init('game-canvas');
-	$('#btn-play').click(function(){
-		$(this).fadeOut(function(){
-			game.newGame('x',function(){
+	$('.btn-play').click(function(){
+		var playerIsX = true;
+		if($(this).hasClass('x')) {
+			playerIsX = true;
+		} else {
+			playerIsX = false;
+		}
+		$('#options').fadeOut(function(){
+			game.newGame(playerIsX,function(){
 				$('#game-area').fadeIn(function(){
 					game.clearBoard();
 				});

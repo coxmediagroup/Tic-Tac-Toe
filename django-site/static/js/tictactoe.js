@@ -6,6 +6,7 @@ function TicTacToe() {
 	this.canvasHeight = 0;
 	this.cellWidth = 0;
 	this.cellHeight = 0;
+	this.playerIsX = true;
 	
 	var click = function(e) {
 		var canvas = $('#'+self.canvasId);
@@ -20,13 +21,14 @@ function TicTacToe() {
 		$.post('/tictactoe/makemove/x/'+cellX+'/y/'+cellY,
 			function(data) {
 				if(data.success) {
-					self.drawX(cellX, cellY);
+					self.draw(self.playerIsX, cellX, cellY);
 					if(data.win) {
 						alert(data.winner+' wins!');
 					} else {
 						getmove();
 					}
-				} else {
+				}
+				else {
 					alert(data.message);
 				}
 			},
@@ -38,7 +40,7 @@ function TicTacToe() {
 		$.post('/tictactoe/getmove/',
 			function(data) {
 				if(data.success) {
-					self.drawO(data.x, data.y);
+					self.draw(!self.playerIsX, data.x, data.y);
 					if(data.win) {
 						alert(data.winner+' wins!');
 					}
@@ -48,6 +50,25 @@ function TicTacToe() {
 			},
 			'json'
 		);
+	}
+	
+	this.setPlayer = function(xo) {
+		if(xo == 'x') {
+			self.playerIsX = true;
+			return true;
+		} else if (xo == 'o') {
+			self.playerIsX = false;
+			return true;
+		}
+		return false;
+	}
+	
+	this.draw = function(drawX, cellX, cellY) {
+		if(drawX) {
+			self.drawX(cellX, cellY);
+		} else {
+			self.drawO(cellX, cellY);
+		}
 	}
 	
 	this.drawX = function(cellX, cellY) {
@@ -100,19 +121,19 @@ function TicTacToe() {
 		canvas.bind('click', click);
 	}
 	
-	this.newGame = function(xo, callback) {
-		if(xo == 'x' || xo == 'o') {
-			$.post('/tictactoe/newgame/setplayer/'+xo,
-				function(data) {
-					if(data.success) {
-						callback(true);
-					} else {
-						callback(false);
-					}
-				},
-				'json'
-			);
-		}
+	this.newGame = function(playerIsX, callback) {
+		this.playerIsX = playerIsX;
+		var xo = playerIsX ? 'x' : 'o';
+		$.post('/tictactoe/newgame/setplayer/'+xo,
+			function(data) {
+				if(data.success) {
+					callback(true);
+				} else {
+					callback(false);
+				}
+			},
+			'json'
+		);
 	},
 	
 	this.clearBoard = function() {
@@ -133,6 +154,10 @@ function TicTacToe() {
 			c.moveTo(0,i*ch);
 			c.lineTo(h,i*ch);
 			c.stroke();
+		}
+		
+		if(!this.playerIsX) {
+			getmove();
 		}
 	}
 	
