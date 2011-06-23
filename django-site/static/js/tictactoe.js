@@ -21,8 +21,22 @@ function TicTacToe() {
 			function(data) {
 				if(data.success) {
 					self.drawX(cellX, cellY);
+					getmove();
 				} else {
-					alert('Invalid move!');
+					alert(data.message);
+				}
+			},
+			'json'
+		);
+	}
+	
+	var getmove = function() {
+		$.post('/tictactoe/getmove/',
+			function(data) {
+				if(data.success) {
+					self.drawO(data.x, data.y);
+				} else {
+					alert(data.message);
 				}
 			},
 			'json'
@@ -40,6 +54,7 @@ function TicTacToe() {
 		var canvas = document.getElementById(self.canvasId);
 		var c = canvas.getContext('2d');
 		
+		c.beginPath();
 		c.strokeStyle = 'red';
 		c.moveTo(lft, top);
 		c.lineTo(rgt, btm);
@@ -58,6 +73,7 @@ function TicTacToe() {
 		var canvas = document.getElementById(self.canvasId);
 		var c = canvas.getContext('2d');
 		
+		c.beginPath();
 		c.strokeStyle = 'blue';
 		c.beginPath();
 		c.arc(centerX, centerY, 45, 0, Math.PI*2, true);
@@ -103,6 +119,7 @@ function TicTacToe() {
 		var c = canvas.getContext('2d');
 		c.clearRect(0,0,w,h);
 		for(var i = 1; i <= 3; i++) {
+			c.beginPath();
 			c.moveTo(i*cw,0);
 			c.lineTo(i*cw,w);
 			c.stroke();
