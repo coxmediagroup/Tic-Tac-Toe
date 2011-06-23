@@ -1,29 +1,19 @@
+var game = new TicTacToe();
+
 $(document).ready(function(){
 	
+	game.init('game-canvas');
 	$('#btn-play').click(function(){
-		newGame('x');
-		//$(this).fadeOut(function(){
-		//	$('#game-area').fadeIn();
-		//});
+		$(this).fadeOut(function(){
+			game.newGame('x',function(){
+				$('#game-area').fadeIn(function(){
+					game.clearBoard();
+				});
+			});
+		});
 	});
 	
 });
-
-function newGame(xo) {
-	var $ = jQuery.noConflict();
-	if(xo == 'x' || xo == 'o') {
-		$.post('/tictactoe/newgame/setplayer/'+xo,
-			function(data) {
-				if(data.success) {
-					alert('success!');
-				} else {
-					alert('no!');
-				}
-			},
-			'json'
-		);
-	}
-}
 
 // taken from https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 $(document).ajaxSend(function(event, xhr, settings) {
