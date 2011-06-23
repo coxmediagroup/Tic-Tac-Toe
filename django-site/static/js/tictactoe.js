@@ -21,7 +21,11 @@ function TicTacToe() {
 			function(data) {
 				if(data.success) {
 					self.drawX(cellX, cellY);
-					getmove();
+					if(data.win) {
+						alert(data.winner+' wins!');
+					} else {
+						getmove();
+					}
 				} else {
 					alert(data.message);
 				}
@@ -35,6 +39,9 @@ function TicTacToe() {
 			function(data) {
 				if(data.success) {
 					self.drawO(data.x, data.y);
+					if(data.win) {
+						alert(data.winner+' wins!');
+					}
 				} else {
 					alert(data.message);
 				}

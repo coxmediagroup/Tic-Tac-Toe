@@ -1,5 +1,8 @@
 from django.http import HttpResponse
-import json, random
+import json, random, game
+
+ID_PLAYER = 1
+ID_COMPUTER = 2
 
 def newgame(request, xo):
     if xo not in ('x','o'):
@@ -18,37 +21,51 @@ def newgame(request, xo):
 
 def makemove(request, x, y):
     # check if spot is already taken
-    x = int(x)
-    y = int(y)
-    matrix = request.session['matrix'];
-    if matrix[x][y]:
+    result = game.makemove(request.session['matrix'], int(x), int(y))
+    if result:
+        matrix = request.session['matrix']
+        matrix[result.x][result.y] = ID_PLAYER
+        request.session['matrix'] = matrix
+        
+        winResult = game.checkforwin(request.session['matrix'])
+        
+        response = {
+            'success': True,
+            'win': winResult.win
+        }
+        if winResult.win:
+            response['winner'] = winResult.winnerId
+    else:
         response = {
             'success': False,
             'message': 'Invalid move: spot already taken.'
         }
-    else:
-        matrix[x][y] = 1
-        request.session['matrix'] = matrix
-        response = {
-            'success': True
-        }
+        
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 def getmove(request):
-    # calculate next move based on session data
-    matrix = request.session['matrix'];
-    #right now just random
-    while True:
-        x = random.randint(0,2);
-        y = random.randint(0,2);
-        if matrix[x][y] == 0:
-            matrix[x][y] = 2;
-            response = {
-                'success': True,
-                'x': x,
-                'y': y
-            }
-            break;
+    result = game.getmove(request.session['matrix'])
+    
+    if result:
+        matrix = request.session['matrix']
+        matrix[result.x][result.y] = ID_COMPUTER
+        request.session['matrix'] = matrix
+        
+        winResult = game.checkforwin(request.session['matrix'])
+    
+        response = {
+            'success': True,
+            'x': result.x,
+            'y': result.y,
+            'win': winResult.win
+        }
+        if winResult.win:
+            response['winner'] = winResult.winnerId
+    else:
+        response = {
+            'success': False,
+            'message': 'Nowhere to move!'
+        }
     
     # place mark, save in session, and check for win
     return HttpResponse(json.dumps(response), mimetype="application/json")
