@@ -23,7 +23,11 @@ function TicTacToe() {
 				if(data.success) {
 					self.draw(self.playerIsX, cellX, cellY);
 					if(data.win) {
-						alert(data.winner+' wins!');
+						if(data.winner == 1) {
+							alert('You win!');
+						} else {
+							alert('You lose!');
+						}
 					} else {
 						getmove();
 					}
@@ -42,7 +46,11 @@ function TicTacToe() {
 				if(data.success) {
 					self.draw(!self.playerIsX, data.x, data.y);
 					if(data.win) {
-						alert(data.winner+' wins!');
+						if(data.winner == 1) {
+							alert('You win!');
+						} else {
+							alert('You lose!');
+						}
 					}
 				} else {
 					alert(data.message);

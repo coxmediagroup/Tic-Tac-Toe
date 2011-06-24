@@ -64,7 +64,7 @@ def getmove(request):
     else:
         response = {
             'success': False,
-            'message': 'Nowhere to move!'
+            'message': 'Tie!'
         }
     
     # place mark, save in session, and check for win
