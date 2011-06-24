@@ -44,9 +44,9 @@ def getmove(matrix):
     
     # the algorithm works like this:
     #   check each move the computer can take
-    #   generate all the possible outcomes that lead up to the player winning
+    #   generate all the possible outcomes that lead up to the computer winning
     #   add up all the possible wins for that move
-    #   take the move that has the least winnable outcomes for the player
+    #   take the move that has the most winnable outcomes for the computer
     nextX = 0
     nextY = 0
     max = 0
@@ -54,7 +54,7 @@ def getmove(matrix):
     for y in range(3):
         for x in range(3):
             if matrix[x][y] == 0:
-                count = countWinnableOutcomes(matrix, x, y)
+                count = countWinnableOutcomesForXY(matrix, x, y)
                 if (count > max) or first:
                     max = count
                     first = False
@@ -67,11 +67,11 @@ def getmove(matrix):
     return result
 
 # entry function to begin recursion
-# count up the number of winnable outcomes for the player if the computer chooses [x,y]
-def countWinnableOutcomes(matrix, x, y):
+# count up the number of winnable outcomes if the computer chooses [x,y]
+def countWinnableOutcomesForXY(matrix, x, y):
     m = list(matrix)
     m[x][y] = ID_COMPUTER
-    count = addPossibleLosses(m, 0, ID_PLAYER)
+    count = countWinnableOutcomes(m, 0, ID_PLAYER)
     m[x][y] = 0
     return count
 
@@ -79,9 +79,9 @@ def countWinnableOutcomes(matrix, x, y):
 # if there are no outcomes for the next turn, then
 #   do the same for all possible moves of the turn after next
 #   ...and so on...
-def addPossibleLosses(matrix, count, playerId):
+def countWinnableOutcomes(matrix, count, playerId):
     numWins = 0
-    if playerId == ID_PLAYER:
+    if playerId == ID_COMPUTER:
         for y in range(3):
             for x in range(3):
                 if matrix[x][y] == 0:
@@ -89,7 +89,7 @@ def addPossibleLosses(matrix, count, playerId):
                     result = checkforwin(matrix)
                     matrix[x][y] = 0
                     if result.win:
-                        if result.winnerId == ID_PLAYER:
+                        if result.winnerId == ID_COMPUTER:
                             numWins += 1
     
     if numWins > 0:
@@ -100,7 +100,7 @@ def addPossibleLosses(matrix, count, playerId):
             if matrix[x][y] == 0:
                 matrix[x][y] = playerId
                 nextPlayerId = ID_PLAYER if (playerId == ID_COMPUTER) else ID_COMPUTER
-                count = addPossibleLosses(matrix, count, nextPlayerId)
+                count = countWinnableOutcomes(matrix, count, nextPlayerId)
                 matrix[x][y] = 0
     
     return count
