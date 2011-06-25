@@ -11,6 +11,8 @@ class GameBoard(Grid):
     def __init__(self, grid_size):
         Grid.__init__(self)
 
+        SPACE = '&nbsp;'
+
         # populate the grid with some stuff
         #
         self.resize(grid_size, grid_size)
@@ -29,7 +31,7 @@ class GameBoard(Grid):
         index = 0   # debug
         for i in range(grid_size):
             for j in range(grid_size):
-                cell = HTML("&nbsp;")
+                cell = HTML(SPACE)
 #                cell.setVisible(False)  # causes to ignore click events
                 cell.position = (i, j)  # might be handy at some point
                 index+=1; cell.index = index    # debug
@@ -60,40 +62,150 @@ class GameBoard(Grid):
                 cell.setHTML(mark)
 
     def onCellClicked(self, sender):
+        PLAYER_COMPUTER = 'O'
+        PLAYER_HUMAN    = 'X'
+
         # to do: verify that sender still free
-        sender.setHTML("X")
+        sender.setHTML(PLAYER_HUMAN)
         sender.setStyleName("cell_X")
 
         perms = self.getRowPermutations()
 
-        # debug
-        for perm in perms:
-            print [cell.index for cell in perm]
-        return
-
         move_cell = None     # unless set below
 
-        move_cell = self.getWinningMove(perms)  # sets game status to WIN
-
-        if not move_cell:
-            move_cell = self.getBlockingMovie(perms)
-
-        if not move_cell:
-            move_cell = self.getAnyMove()
-
-        if not move_cell:
-            # It's a draw, since the poor human never wins.
-            #
-            self.setGameStatus(GAME_DRAW)
-            endGame()
-        else:
-            move_cell.setHTML('O')
-
+        move_cell = self.getWinningMove(perms, PLAYER_HUMAN)
+        if move_cell:   # take the win
+            move_cell.setHTML(PLAYER_COMPUTER)
+        else:           # prevent a loss
+            move_cell = self.getWinningMove(perms, PLAYER_COMPUTER)
+            if move_cell:
+                move_cell.setHTML(PLAYER_COMPUTER)
+            else:       # just move somewhere
+                move_cell = self.getAnyMove()
+                if move_cell:
+                    move_cell.setHTML(PLAYER_COMPUTER)
+                """
+                else:   # It's a draw, since the poor human never wins.
+                    self.setGameStatus(GAME_DRAW)
+                    endGame()
+                """
+        """
         if not self.getAnyMove():
             # we took the last avail position
             #
             self.setGameStatus(GAME_DRAW)
             endGame()
+        """
+
+    def getWinningMove(self, perms, player_mark):
+        """
+        Iterates over the input row permutations
+        looking for any which are nearly complete.
+        Returns the cell to be marked for the win,
+        if such a cell exists (already two in a row).
+
+        Input player is opposing player, since that's
+        the mark we're looking for.
+
+        If there is either a) more than one empty position or
+        b) an opposing mark, then the retval is None for that row.
+
+        Note: testing indicates too many positives in
+        later stage of game or when several winning
+        positions exist. We'll just hope this doesn't
+        bite us, as the logic looks good.
+        Perhaps finding the missing ';' in '&nbsp;' helps...
+        """
+
+        SPACE = '&nbsp;'
+
+        """
+        # debug/test
+        perms = [
+            [HTML("X"), HTML("X"), HTML(SPACE)],     # 0
+            [HTML("X"), HTML(SPACE), HTML("X")],      # 2
+
+            [HTML("X"), HTML(SPACE), HTML(SPACE)],
+            [HTML(SPACE), HTML("X"), HTML(SPACE)],
+            [HTML(SPACE), HTML(SPACE), HTML("X")],
+
+            [HTML(SPACE), HTML("X"), HTML("O")],
+        ]
+        """
+
+
+        retval = None
+        i = 0
+        for perm in perms:
+            empty_count = 0
+            for cell in perm:
+                mark = cell.getHTML()
+                if mark == SPACE: # possible winner
+                    empty_count += 1
+                    if empty_count <= 1:
+                        retval = cell
+                    else:
+                        # not nearly complete
+                        retval = None
+                        break
+                elif mark == player_mark:
+                    # false hopes shattered
+                    retval = None
+                    break
+            if retval:
+                # Window.alert("getWinningMove: " + str(i))
+                break   # turn this on after testing
+            i += 1
+        return retval
+
+    def getAnyMove(self):
+        """
+        Return the first of
+        a) center position
+        b) corner position
+        c) any position
+        """
+
+        SPACE = '&nbsp;'
+
+        retval = None
+        cells = []  # holds the center and corner cells
+        rows = self.rows()
+
+        # get the center
+        #
+        grid_size = len(rows) 
+        center = int(grid_size / 2)
+        #print "getAnyMove: center: ", center
+
+        center = rows[center][center]
+
+        # debug - okay where's my center?
+        center = rows[1][1]
+
+        cells.append(center)
+        #print "getAnyMove: center: ", center
+
+        # get the corners
+        #
+        max = grid_size - 1
+        corners = [
+            rows[0][0],
+            rows[0][max],
+            rows[max][0],
+            rows[max][max]
+        ]
+        #print corners   # debug
+
+        for cell in corners:
+            cells.append(cell)
+
+        for cell in cells:
+            #print "getAnyMove: cell: ", cell.position
+            if cell.getHTML() == SPACE:
+                retval = cell
+                break
+        return retval
 
     def getRowPermutations(self):
         """
@@ -183,7 +295,7 @@ class TicTacToe(HorizontalPanel):
         self.setStyleName("hpanel")
 
         # debug
-#       board = self.getChildren()[0]
+#       board = self.getChildren()[0]   # yes, this works
 #       board.setMark()
 
 def testInvert(board):
@@ -197,7 +309,7 @@ def testInvert(board):
 
 if __name__ == '__main__':
 #    testInvert(board)   # debug
-    game = TicTacToe(12)
+    game = TicTacToe(3)
     RootPanel().add(game)
 
     pyjd.run()
