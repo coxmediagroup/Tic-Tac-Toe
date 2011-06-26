@@ -7249,98 +7249,137 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 	$m.__track_lines__[5] = "tictactoe.py, line 5:\n    from pyjamas.ui.Grid import Grid";
 	$m.__track_lines__[6] = "tictactoe.py, line 6:\n    from pyjamas import Window";
 	$m.__track_lines__[8] = "tictactoe.py, line 8:\n    import pygwt";
-	$m.__track_lines__[10] = "tictactoe.py, line 10:\n    class GameBoard(Grid):";
-	$m.__track_lines__[11] = "tictactoe.py, line 11:\n    def __init__(self, grid_size):";
-	$m.__track_lines__[12] = "tictactoe.py, line 12:\n    Grid.__init__(self)";
-	$m.__track_lines__[16] = "tictactoe.py, line 16:\n    self.resize(grid_size, grid_size)";
-	$m.__track_lines__[18] = "tictactoe.py, line 18:\n    self.setBorderWidth(2)";
-	$m.__track_lines__[19] = "tictactoe.py, line 19:\n    self.setCellPadding(4)";
-	$m.__track_lines__[20] = "tictactoe.py, line 20:\n    self.setCellSpacing(1)";
-	$m.__track_lines__[22] = "tictactoe.py, line 22:\n    self.setStyleName(\"gameboard\") # just doesn\'t work";
-	$m.__track_lines__[29] = "tictactoe.py, line 29:\n    index = 0   # debug";
-	$m.__track_lines__[30] = "tictactoe.py, line 30:\n    for i in range(grid_size):";
-	$m.__track_lines__[31] = "tictactoe.py, line 31:\n    for j in range(grid_size):";
-	$m.__track_lines__[32] = "tictactoe.py, line 32:\n    cell = HTML(\"&nbsp;\")";
-	$m.__track_lines__[34] = "tictactoe.py, line 34:\n    cell.position = (i, j)  # might be handy at some point";
-	$m.__track_lines__[35] = "tictactoe.py, line 35:\n    index+=1; cell.index = index    # debug";
-	$m.__track_lines__[37] = "tictactoe.py, line 37:\n    cell.addClickListener(getattr(self, \"onCellClicked\"))";
-	$m.__track_lines__[38] = "tictactoe.py, line 38:\n    self.setWidget(i, j, cell)";
-	$m.__track_lines__[40] = "tictactoe.py, line 40:\n    def rows(self):";
-	$m.__track_lines__[44] = "tictactoe.py, line 44:\n    rows = []";
-	$m.__track_lines__[45] = "tictactoe.py, line 45:\n    for i in range(self.getRowCount()):";
-	$m.__track_lines__[46] = "tictactoe.py, line 46:\n    row = []";
-	$m.__track_lines__[47] = "tictactoe.py, line 47:\n    for j in range(self.getCellCount(i)):";
-	$m.__track_lines__[48] = "tictactoe.py, line 48:\n    widget = self.getWidget(i, j)";
-	$m.__track_lines__[49] = "tictactoe.py, line 49:\n    row.append(widget)";
-	$m.__track_lines__[50] = "tictactoe.py, line 50:\n    rows.append(row)";
-	$m.__track_lines__[51] = "tictactoe.py, line 51:\n    return rows";
-	$m.__track_lines__[53] = "tictactoe.py, line 53:\n    def setMark(self, mark=\"Z\"):";
-	$m.__track_lines__[58] = "tictactoe.py, line 58:\n    for row in self.rows():";
-	$m.__track_lines__[59] = "tictactoe.py, line 59:\n    for cell in row:";
-	$m.__track_lines__[60] = "tictactoe.py, line 60:\n    cell.setHTML(mark)";
-	$m.__track_lines__[62] = "tictactoe.py, line 62:\n    def onCellClicked(self, sender):";
-	$m.__track_lines__[64] = "tictactoe.py, line 64:\n    sender.setHTML(\"X\")";
-	$m.__track_lines__[65] = "tictactoe.py, line 65:\n    sender.setStyleName(\"cell_X\")";
-	$m.__track_lines__[67] = "tictactoe.py, line 67:\n    perms = self.getRowPermutations()";
-	$m.__track_lines__[70] = "tictactoe.py, line 70:\n    for perm in perms:";
-	$m.__track_lines__[71] = "tictactoe.py, line 71:\n    print [cell.index for cell in perm]";
-	$m.__track_lines__[72] = "tictactoe.py, line 72:\n    return";
+	$m.__track_lines__[10] = "tictactoe.py, line 10:\n    SPACE = \'&nbsp;\'    # needed to hold initial col width";
+	$m.__track_lines__[12] = "tictactoe.py, line 12:\n    class GameBoard(Grid):";
+	$m.__track_lines__[13] = "tictactoe.py, line 13:\n    def __init__(self, grid_size):";
+	$m.__track_lines__[14] = "tictactoe.py, line 14:\n    Grid.__init__(self)";
+	$m.__track_lines__[18] = "tictactoe.py, line 18:\n    self.resize(grid_size, grid_size)";
+	$m.__track_lines__[20] = "tictactoe.py, line 20:\n    self.setBorderWidth(2)";
+	$m.__track_lines__[21] = "tictactoe.py, line 21:\n    self.setCellPadding(4)";
+	$m.__track_lines__[22] = "tictactoe.py, line 22:\n    self.setCellSpacing(1)";
+	$m.__track_lines__[24] = "tictactoe.py, line 24:\n    self.setStyleName(\"gameboard\") # just doesn\'t work";
+	$m.__track_lines__[31] = "tictactoe.py, line 31:\n    index = 0   # debug";
+	$m.__track_lines__[32] = "tictactoe.py, line 32:\n    for i in range(grid_size):";
+	$m.__track_lines__[33] = "tictactoe.py, line 33:\n    for j in range(grid_size):";
+	$m.__track_lines__[34] = "tictactoe.py, line 34:\n    cell = HTML(SPACE)";
+	$m.__track_lines__[36] = "tictactoe.py, line 36:\n    cell.position = (i, j)  # might be handy at some point";
+	$m.__track_lines__[37] = "tictactoe.py, line 37:\n    index+=1; cell.index = index    # debug";
+	$m.__track_lines__[39] = "tictactoe.py, line 39:\n    cell.addClickListener(getattr(self, \"onCellClicked\"))";
+	$m.__track_lines__[40] = "tictactoe.py, line 40:\n    self.setWidget(i, j, cell)";
+	$m.__track_lines__[42] = "tictactoe.py, line 42:\n    def rows(self):";
+	$m.__track_lines__[46] = "tictactoe.py, line 46:\n    rows = []";
+	$m.__track_lines__[47] = "tictactoe.py, line 47:\n    for i in range(self.getRowCount()):";
+	$m.__track_lines__[48] = "tictactoe.py, line 48:\n    row = []";
+	$m.__track_lines__[49] = "tictactoe.py, line 49:\n    for j in range(self.getCellCount(i)):";
+	$m.__track_lines__[50] = "tictactoe.py, line 50:\n    widget = self.getWidget(i, j)";
+	$m.__track_lines__[51] = "tictactoe.py, line 51:\n    row.append(widget)";
+	$m.__track_lines__[52] = "tictactoe.py, line 52:\n    rows.append(row)";
+	$m.__track_lines__[53] = "tictactoe.py, line 53:\n    return rows";
+	$m.__track_lines__[55] = "tictactoe.py, line 55:\n    def setMark(self, mark=\"Z\"):";
+	$m.__track_lines__[60] = "tictactoe.py, line 60:\n    for row in self.rows():";
+	$m.__track_lines__[61] = "tictactoe.py, line 61:\n    for cell in row:";
+	$m.__track_lines__[62] = "tictactoe.py, line 62:\n    cell.setHTML(mark)";
+	$m.__track_lines__[64] = "tictactoe.py, line 64:\n    def onCellClicked(self, sender):";
+	$m.__track_lines__[65] = "tictactoe.py, line 65:\n    PLAYER_COMPUTER = \'O\'";
+	$m.__track_lines__[66] = "tictactoe.py, line 66:\n    PLAYER_HUMAN    = \'X\'";
+	$m.__track_lines__[69] = "tictactoe.py, line 69:\n    sender.setHTML(PLAYER_HUMAN)";
+	$m.__track_lines__[70] = "tictactoe.py, line 70:\n    sender.setStyleName(\"cell_X\")";
+	$m.__track_lines__[72] = "tictactoe.py, line 72:\n    perms = self.getRowPermutations()";
 	$m.__track_lines__[74] = "tictactoe.py, line 74:\n    move_cell = None     # unless set below";
-	$m.__track_lines__[76] = "tictactoe.py, line 76:\n    move_cell = self.getWinningMove(perms)  # sets game status to WIN";
-	$m.__track_lines__[78] = "tictactoe.py, line 78:\n    if not move_cell:";
-	$m.__track_lines__[79] = "tictactoe.py, line 79:\n    move_cell = self.getBlockingMovie(perms)";
-	$m.__track_lines__[81] = "tictactoe.py, line 81:\n    if not move_cell:";
-	$m.__track_lines__[82] = "tictactoe.py, line 82:\n    move_cell = self.getAnyMove()";
-	$m.__track_lines__[84] = "tictactoe.py, line 84:\n    if not move_cell:";
-	$m.__track_lines__[87] = "tictactoe.py, line 87:\n    self.setGameStatus(GAME_DRAW)";
-	$m.__track_lines__[88] = "tictactoe.py, line 88:\n    endGame()";
-	$m.__track_lines__[90] = "tictactoe.py, line 90:\n    move_cell.setHTML(\'O\')";
-	$m.__track_lines__[92] = "tictactoe.py, line 92:\n    if not self.getAnyMove():";
-	$m.__track_lines__[95] = "tictactoe.py, line 95:\n    self.setGameStatus(GAME_DRAW)";
-	$m.__track_lines__[96] = "tictactoe.py, line 96:\n    endGame()";
-	$m.__track_lines__[98] = "tictactoe.py, line 98:\n    def getRowPermutations(self):";
-	$m.__track_lines__[103] = "tictactoe.py, line 103:\n    board = self.rows()";
-	$m.__track_lines__[104] = "tictactoe.py, line 104:\n    perms = []";
-	$m.__track_lines__[109] = "tictactoe.py, line 109:\n    diag1 = []";
-	$m.__track_lines__[110] = "tictactoe.py, line 110:\n    for i in range(len(board)):";
-	$m.__track_lines__[111] = "tictactoe.py, line 111:\n    perms.append(board[i])  # add a \"horizontal\" row";
-	$m.__track_lines__[112] = "tictactoe.py, line 112:\n    diag1.append(board[i][i])";
-	$m.__track_lines__[113] = "tictactoe.py, line 113:\n    perms.append(diag1)";
-	$m.__track_lines__[118] = "tictactoe.py, line 118:\n    board = rotateMatrix(board)";
-	$m.__track_lines__[120] = "tictactoe.py, line 120:\n    diag2 = []";
-	$m.__track_lines__[121] = "tictactoe.py, line 121:\n    for i in range(len(board)):";
-	$m.__track_lines__[122] = "tictactoe.py, line 122:\n    perms.append(board[i])";
-	$m.__track_lines__[123] = "tictactoe.py, line 123:\n    diag2.append(board[i][i])";
-	$m.__track_lines__[124] = "tictactoe.py, line 124:\n    perms.append(diag2)";
-	$m.__track_lines__[126] = "tictactoe.py, line 126:\n    return perms";
-	$m.__track_lines__[128] = "tictactoe.py, line 128:\n    def __repr__(self):";
-	$m.__track_lines__[129] = "tictactoe.py, line 129:\n    return self.rows()";
-	$m.__track_lines__[131] = "tictactoe.py, line 131:\n    def rotateMatrix(board):";
-	$m.__track_lines__[157] = "tictactoe.py, line 157:\n    board_copy = []";
-	$m.__track_lines__[161] = "tictactoe.py, line 161:\n    for row in board:";
-	$m.__track_lines__[162] = "tictactoe.py, line 162:\n    row_copy = []";
-	$m.__track_lines__[163] = "tictactoe.py, line 163:\n    for col in row:";
-	$m.__track_lines__[164] = "tictactoe.py, line 164:\n    row_copy.append(col)";
-	$m.__track_lines__[165] = "tictactoe.py, line 165:\n    board_copy.append(row_copy)";
-	$m.__track_lines__[169] = "tictactoe.py, line 169:\n    size = len(board)";
-	$m.__track_lines__[170] = "tictactoe.py, line 170:\n    for i in range(size):";
-	$m.__track_lines__[171] = "tictactoe.py, line 171:\n    for j in range(size):";
-	$m.__track_lines__[172] = "tictactoe.py, line 172:\n    board_copy[i][j] = board[j][(size - 1) - i]";
-	$m.__track_lines__[176] = "tictactoe.py, line 176:\n    return board_copy";
-	$m.__track_lines__[178] = "tictactoe.py, line 178:\n    class TicTacToe(HorizontalPanel):";
-	$m.__track_lines__[179] = "tictactoe.py, line 179:\n    def __init__(self, grid_size):";
-	$m.__track_lines__[180] = "tictactoe.py, line 180:\n    HorizontalPanel.__init__(self)";
-	$m.__track_lines__[181] = "tictactoe.py, line 181:\n    board = GameBoard(grid_size)";
-	$m.__track_lines__[182] = "tictactoe.py, line 182:\n    self.add(board)";
-	$m.__track_lines__[183] = "tictactoe.py, line 183:\n    self.setStyleName(\"hpanel\")";
-	$m.__track_lines__[189] = "tictactoe.py, line 189:\n    def testInvert(board):";
-	$m.__track_lines__[190] = "tictactoe.py, line 190:\n    board = [";
-	$m.__track_lines__[195] = "tictactoe.py, line 195:\n    board = invertMatrix(board)";
-	$m.__track_lines__[196] = "tictactoe.py, line 196:\n    print board";
-	$m.__track_lines__[198] = "tictactoe.py, line 198:\n    if __name__ == \'__main__\':";
-	$m.__track_lines__[200] = "tictactoe.py, line 200:\n    game = TicTacToe(12)";
-	$m.__track_lines__[201] = "tictactoe.py, line 201:\n    RootPanel().add(game)";
-	$m.__track_lines__[203] = "tictactoe.py, line 203:\n    pyjd.run()";
+	$m.__track_lines__[76] = "tictactoe.py, line 76:\n    move_cell = self.getWinningMove(perms, PLAYER_HUMAN)";
+	$m.__track_lines__[77] = "tictactoe.py, line 77:\n    if move_cell:   # take the win";
+	$m.__track_lines__[78] = "tictactoe.py, line 78:\n    move_cell.setHTML(PLAYER_COMPUTER)";
+	$m.__track_lines__[80] = "tictactoe.py, line 80:\n    move_cell = self.getWinningMove(perms, PLAYER_COMPUTER)";
+	$m.__track_lines__[81] = "tictactoe.py, line 81:\n    if move_cell:";
+	$m.__track_lines__[82] = "tictactoe.py, line 82:\n    move_cell.setHTML(PLAYER_COMPUTER)";
+	$m.__track_lines__[84] = "tictactoe.py, line 84:\n    move_cell = self.getAnyMove()";
+	$m.__track_lines__[85] = "tictactoe.py, line 85:\n    if move_cell:";
+	$m.__track_lines__[86] = "tictactoe.py, line 86:\n    move_cell.setHTML(PLAYER_COMPUTER)";
+	$m.__track_lines__[91] = "tictactoe.py, line 91:\n    \"\"\"";
+	$m.__track_lines__[98] = "tictactoe.py, line 98:\n    \"\"\"";
+	$m.__track_lines__[100] = "tictactoe.py, line 100:\n    def getWinningMove(self, perms, player_mark):";
+	$m.__track_lines__[134] = "tictactoe.py, line 134:\n    \"\"\"";
+	$m.__track_lines__[136] = "tictactoe.py, line 136:\n    retval = None";
+	$m.__track_lines__[137] = "tictactoe.py, line 137:\n    i = 0";
+	$m.__track_lines__[138] = "tictactoe.py, line 138:\n    for perm in perms:";
+	$m.__track_lines__[139] = "tictactoe.py, line 139:\n    empty_count = 0";
+	$m.__track_lines__[140] = "tictactoe.py, line 140:\n    for cell in perm:";
+	$m.__track_lines__[141] = "tictactoe.py, line 141:\n    mark = cell.getHTML()";
+	$m.__track_lines__[142] = "tictactoe.py, line 142:\n    if mark == SPACE: # possible winner";
+	$m.__track_lines__[143] = "tictactoe.py, line 143:\n    empty_count += 1";
+	$m.__track_lines__[144] = "tictactoe.py, line 144:\n    if empty_count <= 1:";
+	$m.__track_lines__[145] = "tictactoe.py, line 145:\n    retval = cell";
+	$m.__track_lines__[148] = "tictactoe.py, line 148:\n    retval = None";
+	$m.__track_lines__[149] = "tictactoe.py, line 149:\n    break";
+	$m.__track_lines__[152] = "tictactoe.py, line 152:\n    retval = None";
+	$m.__track_lines__[153] = "tictactoe.py, line 153:\n    break";
+	$m.__track_lines__[154] = "tictactoe.py, line 154:\n    if retval:";
+	$m.__track_lines__[156] = "tictactoe.py, line 156:\n    break   # turn this on after testing";
+	$m.__track_lines__[157] = "tictactoe.py, line 157:\n    i += 1";
+	$m.__track_lines__[158] = "tictactoe.py, line 158:\n    return retval";
+	$m.__track_lines__[160] = "tictactoe.py, line 160:\n    def getAnyMove(self):";
+	$m.__track_lines__[168] = "tictactoe.py, line 168:\n    retval = None";
+	$m.__track_lines__[169] = "tictactoe.py, line 169:\n    cells = []  # holds the center and corner cells";
+	$m.__track_lines__[170] = "tictactoe.py, line 170:\n    rows = self.rows()";
+	$m.__track_lines__[174] = "tictactoe.py, line 174:\n    grid_size = len(rows)";
+	$m.__track_lines__[175] = "tictactoe.py, line 175:\n    center = int(grid_size / 2)";
+	$m.__track_lines__[178] = "tictactoe.py, line 178:\n    center = rows[center][center]";
+	$m.__track_lines__[180] = "tictactoe.py, line 180:\n    cells.append(center)";
+	$m.__track_lines__[185] = "tictactoe.py, line 185:\n    max = grid_size - 1";
+	$m.__track_lines__[186] = "tictactoe.py, line 186:\n    corners = [";
+	$m.__track_lines__[192] = "tictactoe.py, line 192:\n    for cell in corners:";
+	$m.__track_lines__[193] = "tictactoe.py, line 193:\n    cells.append(cell)";
+	$m.__track_lines__[199] = "tictactoe.py, line 199:\n    for row in rows:";
+	$m.__track_lines__[200] = "tictactoe.py, line 200:\n    for cell in row:";
+	$m.__track_lines__[201] = "tictactoe.py, line 201:\n    if cell.getHTML() == SPACE:";
+	$m.__track_lines__[202] = "tictactoe.py, line 202:\n    cells.append(cell)";
+	$m.__track_lines__[204] = "tictactoe.py, line 204:\n    for cell in cells:";
+	$m.__track_lines__[209] = "tictactoe.py, line 209:\n    if cell.getHTML() == SPACE:";
+	$m.__track_lines__[210] = "tictactoe.py, line 210:\n    retval = cell";
+	$m.__track_lines__[211] = "tictactoe.py, line 211:\n    break";
+	$m.__track_lines__[212] = "tictactoe.py, line 212:\n    return retval";
+	$m.__track_lines__[214] = "tictactoe.py, line 214:\n    def getRowPermutations(self):";
+	$m.__track_lines__[219] = "tictactoe.py, line 219:\n    board = self.rows()";
+	$m.__track_lines__[220] = "tictactoe.py, line 220:\n    perms = []";
+	$m.__track_lines__[225] = "tictactoe.py, line 225:\n    diag1 = []";
+	$m.__track_lines__[226] = "tictactoe.py, line 226:\n    for i in range(len(board)):";
+	$m.__track_lines__[227] = "tictactoe.py, line 227:\n    perms.append(board[i])  # add a \"horizontal\" row";
+	$m.__track_lines__[228] = "tictactoe.py, line 228:\n    diag1.append(board[i][i])";
+	$m.__track_lines__[229] = "tictactoe.py, line 229:\n    perms.append(diag1)";
+	$m.__track_lines__[234] = "tictactoe.py, line 234:\n    board = rotateMatrix(board)";
+	$m.__track_lines__[236] = "tictactoe.py, line 236:\n    diag2 = []";
+	$m.__track_lines__[237] = "tictactoe.py, line 237:\n    for i in range(len(board)):";
+	$m.__track_lines__[238] = "tictactoe.py, line 238:\n    perms.append(board[i])";
+	$m.__track_lines__[239] = "tictactoe.py, line 239:\n    diag2.append(board[i][i])";
+	$m.__track_lines__[240] = "tictactoe.py, line 240:\n    perms.append(diag2)";
+	$m.__track_lines__[242] = "tictactoe.py, line 242:\n    return perms";
+	$m.__track_lines__[244] = "tictactoe.py, line 244:\n    def __repr__(self):";
+	$m.__track_lines__[245] = "tictactoe.py, line 245:\n    return self.rows()";
+	$m.__track_lines__[247] = "tictactoe.py, line 247:\n    def rotateMatrix(board):";
+	$m.__track_lines__[273] = "tictactoe.py, line 273:\n    board_copy = []";
+	$m.__track_lines__[277] = "tictactoe.py, line 277:\n    for row in board:";
+	$m.__track_lines__[278] = "tictactoe.py, line 278:\n    row_copy = []";
+	$m.__track_lines__[279] = "tictactoe.py, line 279:\n    for col in row:";
+	$m.__track_lines__[280] = "tictactoe.py, line 280:\n    row_copy.append(col)";
+	$m.__track_lines__[281] = "tictactoe.py, line 281:\n    board_copy.append(row_copy)";
+	$m.__track_lines__[285] = "tictactoe.py, line 285:\n    size = len(board)";
+	$m.__track_lines__[286] = "tictactoe.py, line 286:\n    for i in range(size):";
+	$m.__track_lines__[287] = "tictactoe.py, line 287:\n    for j in range(size):";
+	$m.__track_lines__[288] = "tictactoe.py, line 288:\n    board_copy[i][j] = board[j][(size - 1) - i]";
+	$m.__track_lines__[292] = "tictactoe.py, line 292:\n    return board_copy";
+	$m.__track_lines__[294] = "tictactoe.py, line 294:\n    class TicTacToe(HorizontalPanel):";
+	$m.__track_lines__[295] = "tictactoe.py, line 295:\n    def __init__(self, grid_size):";
+	$m.__track_lines__[296] = "tictactoe.py, line 296:\n    HorizontalPanel.__init__(self)";
+	$m.__track_lines__[297] = "tictactoe.py, line 297:\n    board = GameBoard(grid_size)";
+	$m.__track_lines__[298] = "tictactoe.py, line 298:\n    self.add(board)";
+	$m.__track_lines__[299] = "tictactoe.py, line 299:\n    self.setStyleName(\"hpanel\")";
+	$m.__track_lines__[305] = "tictactoe.py, line 305:\n    def testInvert(board):";
+	$m.__track_lines__[306] = "tictactoe.py, line 306:\n    board = [";
+	$m.__track_lines__[311] = "tictactoe.py, line 311:\n    board = invertMatrix(board)";
+	$m.__track_lines__[312] = "tictactoe.py, line 312:\n    print board";
+	$m.__track_lines__[314] = "tictactoe.py, line 314:\n    if __name__ == \'__main__\':";
+	$m.__track_lines__[316] = "tictactoe.py, line 316:\n    game = TicTacToe(5) # supports arbitrary gameboard size";
+	$m.__track_lines__[317] = "tictactoe.py, line 317:\n    RootPanel().add(game)";
 
 
 	$pyjs.track.module='tictactoe';
@@ -7374,11 +7413,13 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 	$m['pygwt'] = $p['___import___']('pygwt', null);
 	$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 	$pyjs.track.lineno=10;
+	$m['SPACE'] = '\x26nbsp\x3B';
+	$pyjs.track.lineno=12;
 	$m['GameBoard'] = (function(){
 		var $cls_definition = new Object();
 		var $method;
 		$cls_definition.__module__ = 'tictactoe';
-		$pyjs.track.lineno=11;
+		$pyjs.track.lineno=13;
 		$method = $pyjs__bind_method2('__init__', function(grid_size) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -7387,42 +7428,42 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				grid_size = arguments[1];
 			}
 			var index,$iter2_nextval,$iter1_nextval,$iter1_type,$iter2_iter,$iter1_idx,i,j,$add2,$iter1_iter,cell,$iter2_idx,$add1,$pyjs__trackstack_size_2,$iter1_array,$pyjs__trackstack_size_1,$iter2_type,$iter2_array;
-			$pyjs.track={module:'tictactoe', lineno:11};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track={module:'tictactoe', lineno:13};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=11;
-			$pyjs.track.lineno=12;
+			$pyjs.track.lineno=13;
+			$pyjs.track.lineno=14;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return $m['Grid']['__init__'](self);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_1_err){if ($pyjs_dbg_1_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_1_err);}throw $pyjs_dbg_1_err;
 }})();
-			$pyjs.track.lineno=16;
+			$pyjs.track.lineno=18;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['resize'](grid_size, grid_size);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_2_err){if ($pyjs_dbg_2_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_2_err);}throw $pyjs_dbg_2_err;
 }})();
-			$pyjs.track.lineno=18;
+			$pyjs.track.lineno=20;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['setBorderWidth'](2);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_3_err){if ($pyjs_dbg_3_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_3_err);}throw $pyjs_dbg_3_err;
 }})();
-			$pyjs.track.lineno=19;
+			$pyjs.track.lineno=21;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['setCellPadding'](4);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_4_err){if ($pyjs_dbg_4_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_4_err);}throw $pyjs_dbg_4_err;
 }})();
-			$pyjs.track.lineno=20;
+			$pyjs.track.lineno=22;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['setCellSpacing'](1);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_5_err){if ($pyjs_dbg_5_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_5_err);}throw $pyjs_dbg_5_err;
 }})();
-			$pyjs.track.lineno=22;
+			$pyjs.track.lineno=24;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['setStyleName']('gameboard');
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_6_err){if ($pyjs_dbg_6_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_6_err);}throw $pyjs_dbg_6_err;
 }})();
-			$pyjs.track.lineno=29;
+			$pyjs.track.lineno=31;
 			index = 0;
-			$pyjs.track.lineno=30;
+			$pyjs.track.lineno=32;
 			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
 			$iter1_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return (function(){try{try{$pyjs.in_try_except += 1;
@@ -7434,7 +7475,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			$iter1_nextval=$p['__iter_prepare']($iter1_iter,false);
 			while (typeof($p['__wrapped_next']($iter1_nextval).$nextval) != 'undefined') {
 				i = $iter1_nextval.$nextval;
-				$pyjs.track.lineno=31;
+				$pyjs.track.lineno=33;
 				$pyjs__trackstack_size_2=$pyjs.trackstack.length;
 				$iter2_iter = (function(){try{try{$pyjs.in_try_except += 1;
 				return (function(){try{try{$pyjs.in_try_except += 1;
@@ -7446,21 +7487,21 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$iter2_nextval=$p['__iter_prepare']($iter2_iter,false);
 				while (typeof($p['__wrapped_next']($iter2_nextval).$nextval) != 'undefined') {
 					j = $iter2_nextval.$nextval;
-					$pyjs.track.lineno=32;
+					$pyjs.track.lineno=34;
 					cell = (function(){try{try{$pyjs.in_try_except += 1;
-					return $m['HTML']('\x26nbsp\x3B');
+					return $m['HTML']($m['SPACE']);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_11_err){if ($pyjs_dbg_11_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_11_err);}throw $pyjs_dbg_11_err;
 }})();
-					$pyjs.track.lineno=34;
+					$pyjs.track.lineno=36;
 					cell.position = (function(){try{try{$pyjs.in_try_except += 1;
 					return $p['tuple']([i, j]);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_12_err){if ($pyjs_dbg_12_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_12_err);}throw $pyjs_dbg_12_err;
 }})();
-					$pyjs.track.lineno=35;
-					index = $p['__op_add']($add1=index,$add2=1);
-					$pyjs.track.lineno=35;
-					cell.index = index;
 					$pyjs.track.lineno=37;
+					index = $p['__op_add']($add1=index,$add2=1);
+					$pyjs.track.lineno=37;
+					cell.index = index;
+					$pyjs.track.lineno=39;
 					(function(){try{try{$pyjs.in_try_except += 1;
 					return cell['addClickListener']((function(){try{try{$pyjs.in_try_except += 1;
 					return $p['getattr'](self, 'onCellClicked');
@@ -7468,7 +7509,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 }})());
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_14_err){if ($pyjs_dbg_14_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_14_err);}throw $pyjs_dbg_14_err;
 }})();
-					$pyjs.track.lineno=38;
+					$pyjs.track.lineno=40;
 					(function(){try{try{$pyjs.in_try_except += 1;
 					return self['setWidget'](i, j, cell);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_15_err){if ($pyjs_dbg_15_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_15_err);}throw $pyjs_dbg_15_err;
@@ -7490,7 +7531,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['grid_size']]);
 		$cls_definition['__init__'] = $method;
-		$pyjs.track.lineno=40;
+		$pyjs.track.lineno=42;
 		$method = $pyjs__bind_method2('rows', function() {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -7498,15 +7539,15 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				var self = arguments[0];
 			}
 			var widget,rows,i,$iter4_iter,$iter3_type,j,$iter4_idx,$iter3_idx,$pyjs__trackstack_size_2,$iter3_iter,$iter4_type,$iter3_array,$iter4_array,$iter4_nextval,$pyjs__trackstack_size_1,$iter3_nextval,row;
-			$pyjs.track={module:'tictactoe', lineno:40};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track={module:'tictactoe', lineno:42};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=40;
-			$pyjs.track.lineno=44;
+			$pyjs.track.lineno=42;
+			$pyjs.track.lineno=46;
 			rows = (function(){try{try{$pyjs.in_try_except += 1;
 			return $p['list']([]);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_16_err){if ($pyjs_dbg_16_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_16_err);}throw $pyjs_dbg_16_err;
 }})();
-			$pyjs.track.lineno=45;
+			$pyjs.track.lineno=47;
 			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
 			$iter3_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return (function(){try{try{$pyjs.in_try_except += 1;
@@ -7521,12 +7562,12 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			$iter3_nextval=$p['__iter_prepare']($iter3_iter,false);
 			while (typeof($p['__wrapped_next']($iter3_nextval).$nextval) != 'undefined') {
 				i = $iter3_nextval.$nextval;
-				$pyjs.track.lineno=46;
+				$pyjs.track.lineno=48;
 				row = (function(){try{try{$pyjs.in_try_except += 1;
 				return $p['list']([]);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_20_err){if ($pyjs_dbg_20_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_20_err);}throw $pyjs_dbg_20_err;
 }})();
-				$pyjs.track.lineno=47;
+				$pyjs.track.lineno=49;
 				$pyjs__trackstack_size_2=$pyjs.trackstack.length;
 				$iter4_iter = (function(){try{try{$pyjs.in_try_except += 1;
 				return (function(){try{try{$pyjs.in_try_except += 1;
@@ -7541,12 +7582,12 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$iter4_nextval=$p['__iter_prepare']($iter4_iter,false);
 				while (typeof($p['__wrapped_next']($iter4_nextval).$nextval) != 'undefined') {
 					j = $iter4_nextval.$nextval;
-					$pyjs.track.lineno=48;
+					$pyjs.track.lineno=50;
 					widget = (function(){try{try{$pyjs.in_try_except += 1;
 					return self['getWidget'](i, j);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_24_err){if ($pyjs_dbg_24_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_24_err);}throw $pyjs_dbg_24_err;
 }})();
-					$pyjs.track.lineno=49;
+					$pyjs.track.lineno=51;
 					(function(){try{try{$pyjs.in_try_except += 1;
 					return row['append'](widget);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_25_err){if ($pyjs_dbg_25_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_25_err);}throw $pyjs_dbg_25_err;
@@ -7557,7 +7598,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 					$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 				}
 				$pyjs.track.module='tictactoe';
-				$pyjs.track.lineno=50;
+				$pyjs.track.lineno=52;
 				(function(){try{try{$pyjs.in_try_except += 1;
 				return rows['append'](row);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_26_err){if ($pyjs_dbg_26_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_26_err);}throw $pyjs_dbg_26_err;
@@ -7568,15 +7609,15 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 			}
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=51;
-			$pyjs.track.lineno=51;
+			$pyjs.track.lineno=53;
+			$pyjs.track.lineno=53;
 			var $pyjs__ret = rows;
 			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 			return $pyjs__ret;
 		}
 	, 1, [null,null,['self']]);
 		$cls_definition['rows'] = $method;
-		$pyjs.track.lineno=53;
+		$pyjs.track.lineno=55;
 		$method = $pyjs__bind_method2('setMark', function(mark) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -7586,10 +7627,10 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			}
 			if (typeof mark == 'undefined') mark=arguments.callee.__args__[3][1];
 			var $iter5_nextval,$iter6_idx,$iter6_type,$iter5_array,$pyjs__trackstack_size_1,cell,$iter6_array,$iter5_iter,$pyjs__trackstack_size_2,$iter5_idx,$iter5_type,$iter6_iter,$iter6_nextval,row;
-			$pyjs.track={module:'tictactoe', lineno:53};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track={module:'tictactoe', lineno:55};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=53;
-			$pyjs.track.lineno=58;
+			$pyjs.track.lineno=55;
+			$pyjs.track.lineno=60;
 			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
 			$iter5_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return (function(){try{try{$pyjs.in_try_except += 1;
@@ -7601,7 +7642,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			$iter5_nextval=$p['__iter_prepare']($iter5_iter,false);
 			while (typeof($p['__wrapped_next']($iter5_nextval).$nextval) != 'undefined') {
 				row = $iter5_nextval.$nextval;
-				$pyjs.track.lineno=59;
+				$pyjs.track.lineno=61;
 				$pyjs__trackstack_size_2=$pyjs.trackstack.length;
 				$iter6_iter = (function(){try{try{$pyjs.in_try_except += 1;
 				return row;
@@ -7610,7 +7651,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$iter6_nextval=$p['__iter_prepare']($iter6_iter,false);
 				while (typeof($p['__wrapped_next']($iter6_nextval).$nextval) != 'undefined') {
 					cell = $iter6_nextval.$nextval;
-					$pyjs.track.lineno=60;
+					$pyjs.track.lineno=62;
 					(function(){try{try{$pyjs.in_try_except += 1;
 					return cell['setHTML'](mark);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_30_err){if ($pyjs_dbg_30_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_30_err);}throw $pyjs_dbg_30_err;
@@ -7632,7 +7673,7 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['mark', 'Z']]);
 		$cls_definition['setMark'] = $method;
-		$pyjs.track.lineno=62;
+		$pyjs.track.lineno=64;
 		$method = $pyjs__bind_method2('onCellClicked', function(sender) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -7640,62 +7681,256 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				var self = arguments[0];
 				sender = arguments[1];
 			}
-			var move_cell,$iter7_nextval,perms,$iter7_iter,$iter7_array,perm,$iter7_idx,$iter7_type,$pyjs__trackstack_size_1;
-			$pyjs.track={module:'tictactoe', lineno:62};$pyjs.trackstack.push($pyjs.track);
+			var move_cell,perms,PLAYER_COMPUTER,PLAYER_HUMAN;
+			$pyjs.track={module:'tictactoe', lineno:64};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=62;
 			$pyjs.track.lineno=64;
+			$pyjs.track.lineno=65;
+			PLAYER_COMPUTER = 'O';
+			$pyjs.track.lineno=66;
+			PLAYER_HUMAN = 'X';
+			$pyjs.track.lineno=69;
 			(function(){try{try{$pyjs.in_try_except += 1;
-			return sender['setHTML']('X');
+			return sender['setHTML'](PLAYER_HUMAN);
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_31_err){if ($pyjs_dbg_31_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_31_err);}throw $pyjs_dbg_31_err;
 }})();
-			$pyjs.track.lineno=65;
+			$pyjs.track.lineno=70;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return sender['setStyleName']('cell_X');
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_32_err){if ($pyjs_dbg_32_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_32_err);}throw $pyjs_dbg_32_err;
 }})();
-			$pyjs.track.lineno=67;
+			$pyjs.track.lineno=72;
 			perms = (function(){try{try{$pyjs.in_try_except += 1;
 			return self['getRowPermutations']();
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_33_err){if ($pyjs_dbg_33_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_33_err);}throw $pyjs_dbg_33_err;
 }})();
-			$pyjs.track.lineno=70;
+			$pyjs.track.lineno=74;
+			move_cell = null;
+			$pyjs.track.lineno=76;
+			move_cell = (function(){try{try{$pyjs.in_try_except += 1;
+			return self['getWinningMove'](perms, PLAYER_HUMAN);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_34_err){if ($pyjs_dbg_34_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_34_err);}throw $pyjs_dbg_34_err;
+}})();
+			$pyjs.track.lineno=77;
+			if ((function(){try{try{$pyjs.in_try_except += 1;
+				return $p['bool'](move_cell);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_35_err){if ($pyjs_dbg_35_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_35_err);}throw $pyjs_dbg_35_err;
+}})()) {
+				$pyjs.track.lineno=78;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return move_cell['setHTML'](PLAYER_COMPUTER);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_36_err){if ($pyjs_dbg_36_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_36_err);}throw $pyjs_dbg_36_err;
+}})();
+			}
+			else {
+				$pyjs.track.lineno=80;
+				move_cell = (function(){try{try{$pyjs.in_try_except += 1;
+				return self['getWinningMove'](perms, PLAYER_COMPUTER);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_37_err){if ($pyjs_dbg_37_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_37_err);}throw $pyjs_dbg_37_err;
+}})();
+				$pyjs.track.lineno=81;
+				if ((function(){try{try{$pyjs.in_try_except += 1;
+					return $p['bool'](move_cell);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_38_err){if ($pyjs_dbg_38_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_38_err);}throw $pyjs_dbg_38_err;
+}})()) {
+					$pyjs.track.lineno=82;
+					(function(){try{try{$pyjs.in_try_except += 1;
+					return move_cell['setHTML'](PLAYER_COMPUTER);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_39_err){if ($pyjs_dbg_39_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_39_err);}throw $pyjs_dbg_39_err;
+}})();
+				}
+				else {
+					$pyjs.track.lineno=84;
+					move_cell = (function(){try{try{$pyjs.in_try_except += 1;
+					return self['getAnyMove']();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_40_err){if ($pyjs_dbg_40_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_40_err);}throw $pyjs_dbg_40_err;
+}})();
+					$pyjs.track.lineno=85;
+					if ((function(){try{try{$pyjs.in_try_except += 1;
+						return $p['bool'](move_cell);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_41_err){if ($pyjs_dbg_41_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_41_err);}throw $pyjs_dbg_41_err;
+}})()) {
+						$pyjs.track.lineno=86;
+						(function(){try{try{$pyjs.in_try_except += 1;
+						return move_cell['setHTML'](PLAYER_COMPUTER);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_42_err){if ($pyjs_dbg_42_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_42_err);}throw $pyjs_dbg_42_err;
+}})();
+					}
+					$pyjs.track.lineno=91;
+				}
+			}
+			$pyjs.track.lineno=98;
+			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
+			return null;
+		}
+	, 1, [null,null,['self'],['sender']]);
+		$cls_definition['onCellClicked'] = $method;
+		$pyjs.track.lineno=100;
+		$method = $pyjs__bind_method2('getWinningMove', function(perms, player_mark) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				perms = arguments[1];
+				player_mark = arguments[2];
+			}
+			var $iter8_iter,perm,mark,cell,$add6,$iter7_type,$iter8_idx,$iter7_iter,$iter8_type,$add5,$iter8_nextval,$iter7_idx,empty_count,$iter7_nextval,i,$iter7_array,$iter8_array,$add3,$pyjs__trackstack_size_2,$add4,$pyjs__trackstack_size_1,retval;
+			$pyjs.track={module:'tictactoe', lineno:100};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=100;
+			$pyjs.track.lineno=134;
+			$pyjs.track.lineno=136;
+			retval = null;
+			$pyjs.track.lineno=137;
+			i = 0;
+			$pyjs.track.lineno=138;
 			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
 			$iter7_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return perms;
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_34_err){if ($pyjs_dbg_34_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_34_err);}throw $pyjs_dbg_34_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_43_err){if ($pyjs_dbg_43_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_43_err);}throw $pyjs_dbg_43_err;
 }})();
 			$iter7_nextval=$p['__iter_prepare']($iter7_iter,false);
 			while (typeof($p['__wrapped_next']($iter7_nextval).$nextval) != 'undefined') {
 				perm = $iter7_nextval.$nextval;
-				$pyjs.track.lineno=71;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return $p['printFunc']([function(){
-					var $iter8_iter,$attr2,$iter8_idx,$attr1,$iter8_type,cell,$iter8_array,$listcomp1,$pyjs__trackstack_size_2,$iter8_nextval;
-	$listcomp1 = $p['list']();
+				$pyjs.track.lineno=139;
+				empty_count = 0;
+				$pyjs.track.lineno=140;
 				$pyjs__trackstack_size_2=$pyjs.trackstack.length;
 				$iter8_iter = (function(){try{try{$pyjs.in_try_except += 1;
 				return perm;
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_35_err){if ($pyjs_dbg_35_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_35_err);}throw $pyjs_dbg_35_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_44_err){if ($pyjs_dbg_44_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_44_err);}throw $pyjs_dbg_44_err;
 }})();
 				$iter8_nextval=$p['__iter_prepare']($iter8_iter,false);
 				while (typeof($p['__wrapped_next']($iter8_nextval).$nextval) != 'undefined') {
 					cell = $iter8_nextval.$nextval;
-					(function(){try{try{$pyjs.in_try_except += 1;
-					return $listcomp1['append']((($attr1=($attr2=cell)['index']) == null || (($attr2.__is_instance__) && typeof $attr1 == 'function')?
-								$p['getattr']($attr2, 'index'):
-								cell['index']));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_36_err){if ($pyjs_dbg_36_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_36_err);}throw $pyjs_dbg_36_err;
+					$pyjs.track.lineno=141;
+					mark = (function(){try{try{$pyjs.in_try_except += 1;
+					return cell['getHTML']();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_45_err){if ($pyjs_dbg_45_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_45_err);}throw $pyjs_dbg_45_err;
 }})();
+					$pyjs.track.lineno=142;
+					if ((function(){try{try{$pyjs.in_try_except += 1;
+						return $p['bool']($p['op_eq'](mark, $m['SPACE']));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_46_err){if ($pyjs_dbg_46_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_46_err);}throw $pyjs_dbg_46_err;
+}})()) {
+						$pyjs.track.lineno=143;
+						empty_count = $p['__op_add']($add3=empty_count,$add4=1);
+						$pyjs.track.lineno=144;
+						if ((function(){try{try{$pyjs.in_try_except += 1;
+							return $p['bool'](($p['cmp'](empty_count, 1) < 1));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_47_err){if ($pyjs_dbg_47_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_47_err);}throw $pyjs_dbg_47_err;
+}})()) {
+							$pyjs.track.lineno=145;
+							retval = cell;
+						}
+						else {
+							$pyjs.track.lineno=148;
+							retval = null;
+							$pyjs.track.lineno=149;
+							break;
+						}
+					}
+					else if ((function(){try{try{$pyjs.in_try_except += 1;
+						return $p['bool']($p['op_eq'](mark, player_mark));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_48_err){if ($pyjs_dbg_48_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_48_err);}throw $pyjs_dbg_48_err;
+}})()) {
+						$pyjs.track.lineno=152;
+						retval = null;
+						$pyjs.track.lineno=153;
+						break;
+					}
 				}
 				if ($pyjs.trackstack.length > $pyjs__trackstack_size_2) {
 					$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_2);
 					$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 				}
 				$pyjs.track.module='tictactoe';
-
-	return $listcomp1;}()], 1);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_37_err){if ($pyjs_dbg_37_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_37_err);}throw $pyjs_dbg_37_err;
+				$pyjs.track.lineno=154;
+				if ((function(){try{try{$pyjs.in_try_except += 1;
+					return $p['bool'](retval);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_49_err){if ($pyjs_dbg_49_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_49_err);}throw $pyjs_dbg_49_err;
+}})()) {
+					$pyjs.track.lineno=156;
+					break;
+				}
+				$pyjs.track.lineno=157;
+				i = $p['__op_add']($add5=i,$add6=1);
+			}
+			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
+				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
+				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
+			}
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=158;
+			$pyjs.track.lineno=158;
+			var $pyjs__ret = retval;
+			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
+			return $pyjs__ret;
+		}
+	, 1, [null,null,['self'],['perms'],['player_mark']]);
+		$cls_definition['getWinningMove'] = $method;
+		$pyjs.track.lineno=160;
+		$method = $pyjs__bind_method2('getAnyMove', function() {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+			}
+			var $iter12_type,$iter10_nextval,$iter10_iter,row,rows,$iter9_iter,$iter9_nextval,$iter9_idx,cell,$iter11_iter,$sub2,$sub1,$iter11_idx,$iter9_type,max,$iter10_idx,$iter12_array,$iter11_array,$div2,$iter11_nextval,$div1,center,grid_size,corners,cells,$iter11_type,$iter12_idx,$iter10_array,$iter12_nextval,$iter12_iter,$pyjs__trackstack_size_2,$pyjs__trackstack_size_1,$iter10_type,retval,$iter9_array;
+			$pyjs.track={module:'tictactoe', lineno:160};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=160;
+			$pyjs.track.lineno=168;
+			retval = null;
+			$pyjs.track.lineno=169;
+			cells = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['list']([]);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_50_err){if ($pyjs_dbg_50_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_50_err);}throw $pyjs_dbg_50_err;
+}})();
+			$pyjs.track.lineno=170;
+			rows = (function(){try{try{$pyjs.in_try_except += 1;
+			return self['rows']();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_51_err){if ($pyjs_dbg_51_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_51_err);}throw $pyjs_dbg_51_err;
+}})();
+			$pyjs.track.lineno=174;
+			grid_size = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['len'](rows);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_52_err){if ($pyjs_dbg_52_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_52_err);}throw $pyjs_dbg_52_err;
+}})();
+			$pyjs.track.lineno=175;
+			center = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['float_int']((typeof ($div1=grid_size)==typeof ($div2=2) && typeof $div1=='number' && $div2 !== 0?
+				$div1/$div2:
+				$p['op_div']($div1,$div2)));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_53_err){if ($pyjs_dbg_53_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_53_err);}throw $pyjs_dbg_53_err;
+}})();
+			$pyjs.track.lineno=178;
+			center = rows.__getitem__(center).__getitem__(center);
+			$pyjs.track.lineno=180;
+			(function(){try{try{$pyjs.in_try_except += 1;
+			return cells['append'](center);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_54_err){if ($pyjs_dbg_54_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_54_err);}throw $pyjs_dbg_54_err;
+}})();
+			$pyjs.track.lineno=185;
+			max = $p['__op_sub']($sub1=grid_size,$sub2=1);
+			$pyjs.track.lineno=186;
+			corners = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['list']([rows.__getitem__(0).__getitem__(0), rows.__getitem__(0).__getitem__(max), rows.__getitem__(max).__getitem__(0), rows.__getitem__(max).__getitem__(max)]);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_55_err){if ($pyjs_dbg_55_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_55_err);}throw $pyjs_dbg_55_err;
+}})();
+			$pyjs.track.lineno=192;
+			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
+			$iter9_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			return corners;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_56_err){if ($pyjs_dbg_56_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_56_err);}throw $pyjs_dbg_56_err;
+}})();
+			$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
+			while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
+				cell = $iter9_nextval.$nextval;
+				$pyjs.track.lineno=193;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return cells['append'](cell);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_57_err){if ($pyjs_dbg_57_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_57_err);}throw $pyjs_dbg_57_err;
 }})();
 			}
 			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
@@ -7703,204 +7938,203 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 			}
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=72;
-			$pyjs.track.lineno=72;
-			var $pyjs__ret = null;
+			$pyjs.track.lineno=199;
+			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
+			$iter10_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			return rows;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_58_err){if ($pyjs_dbg_58_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_58_err);}throw $pyjs_dbg_58_err;
+}})();
+			$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
+			while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
+				row = $iter10_nextval.$nextval;
+				$pyjs.track.lineno=200;
+				$pyjs__trackstack_size_2=$pyjs.trackstack.length;
+				$iter11_iter = (function(){try{try{$pyjs.in_try_except += 1;
+				return row;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_59_err){if ($pyjs_dbg_59_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_59_err);}throw $pyjs_dbg_59_err;
+}})();
+				$iter11_nextval=$p['__iter_prepare']($iter11_iter,false);
+				while (typeof($p['__wrapped_next']($iter11_nextval).$nextval) != 'undefined') {
+					cell = $iter11_nextval.$nextval;
+					$pyjs.track.lineno=201;
+					if ((function(){try{try{$pyjs.in_try_except += 1;
+						return $p['bool']($p['op_eq']((function(){try{try{$pyjs.in_try_except += 1;
+					return cell['getHTML']();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_60_err){if ($pyjs_dbg_60_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_60_err);}throw $pyjs_dbg_60_err;
+}})(), $m['SPACE']));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_61_err){if ($pyjs_dbg_61_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_61_err);}throw $pyjs_dbg_61_err;
+}})()) {
+						$pyjs.track.lineno=202;
+						(function(){try{try{$pyjs.in_try_except += 1;
+						return cells['append'](cell);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_62_err){if ($pyjs_dbg_62_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_62_err);}throw $pyjs_dbg_62_err;
+}})();
+					}
+				}
+				if ($pyjs.trackstack.length > $pyjs__trackstack_size_2) {
+					$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_2);
+					$pyjs.track = $pyjs.trackstack.slice(-1)[0];
+				}
+				$pyjs.track.module='tictactoe';
+			}
+			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
+				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
+				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
+			}
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=204;
+			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
+			$iter12_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			return cells;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_63_err){if ($pyjs_dbg_63_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_63_err);}throw $pyjs_dbg_63_err;
+}})();
+			$iter12_nextval=$p['__iter_prepare']($iter12_iter,false);
+			while (typeof($p['__wrapped_next']($iter12_nextval).$nextval) != 'undefined') {
+				cell = $iter12_nextval.$nextval;
+				$pyjs.track.lineno=209;
+				if ((function(){try{try{$pyjs.in_try_except += 1;
+					return $p['bool']($p['op_eq']((function(){try{try{$pyjs.in_try_except += 1;
+				return cell['getHTML']();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_64_err){if ($pyjs_dbg_64_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_64_err);}throw $pyjs_dbg_64_err;
+}})(), $m['SPACE']));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_65_err){if ($pyjs_dbg_65_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_65_err);}throw $pyjs_dbg_65_err;
+}})()) {
+					$pyjs.track.lineno=210;
+					retval = cell;
+					$pyjs.track.lineno=211;
+					break;
+				}
+			}
+			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
+				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
+				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
+			}
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=212;
+			$pyjs.track.lineno=212;
+			var $pyjs__ret = retval;
 			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 			return $pyjs__ret;
-			$pyjs.track.lineno=74;
-			move_cell = null;
-			$pyjs.track.lineno=76;
-			move_cell = (function(){try{try{$pyjs.in_try_except += 1;
-			return self['getWinningMove'](perms);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_38_err){if ($pyjs_dbg_38_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_38_err);}throw $pyjs_dbg_38_err;
-}})();
-			$pyjs.track.lineno=78;
-			if ((function(){try{try{$pyjs.in_try_except += 1;
-				return $p['bool'](!$p['bool'](move_cell));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_39_err){if ($pyjs_dbg_39_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_39_err);}throw $pyjs_dbg_39_err;
-}})()) {
-				$pyjs.track.lineno=79;
-				move_cell = (function(){try{try{$pyjs.in_try_except += 1;
-				return self['getBlockingMovie'](perms);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_40_err){if ($pyjs_dbg_40_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_40_err);}throw $pyjs_dbg_40_err;
-}})();
-			}
-			$pyjs.track.lineno=81;
-			if ((function(){try{try{$pyjs.in_try_except += 1;
-				return $p['bool'](!$p['bool'](move_cell));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_41_err){if ($pyjs_dbg_41_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_41_err);}throw $pyjs_dbg_41_err;
-}})()) {
-				$pyjs.track.lineno=82;
-				move_cell = (function(){try{try{$pyjs.in_try_except += 1;
-				return self['getAnyMove']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_42_err){if ($pyjs_dbg_42_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_42_err);}throw $pyjs_dbg_42_err;
-}})();
-			}
-			$pyjs.track.lineno=84;
-			if ((function(){try{try{$pyjs.in_try_except += 1;
-				return $p['bool'](!$p['bool'](move_cell));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_43_err){if ($pyjs_dbg_43_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_43_err);}throw $pyjs_dbg_43_err;
-}})()) {
-				$pyjs.track.lineno=87;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return self['setGameStatus']((typeof GAME_DRAW == "undefined"?$m.GAME_DRAW:GAME_DRAW));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_44_err){if ($pyjs_dbg_44_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_44_err);}throw $pyjs_dbg_44_err;
-}})();
-				$pyjs.track.lineno=88;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return (typeof endGame == "undefined"?$m.endGame:endGame)();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_45_err){if ($pyjs_dbg_45_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_45_err);}throw $pyjs_dbg_45_err;
-}})();
-			}
-			else {
-				$pyjs.track.lineno=90;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return move_cell['setHTML']('O');
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_46_err){if ($pyjs_dbg_46_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_46_err);}throw $pyjs_dbg_46_err;
-}})();
-			}
-			$pyjs.track.lineno=92;
-			if ((function(){try{try{$pyjs.in_try_except += 1;
-				return $p['bool'](!$p['bool']((function(){try{try{$pyjs.in_try_except += 1;
-			return self['getAnyMove']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_47_err){if ($pyjs_dbg_47_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_47_err);}throw $pyjs_dbg_47_err;
-}})()));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_48_err){if ($pyjs_dbg_48_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_48_err);}throw $pyjs_dbg_48_err;
-}})()) {
-				$pyjs.track.lineno=95;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return self['setGameStatus']((typeof GAME_DRAW == "undefined"?$m.GAME_DRAW:GAME_DRAW));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_49_err){if ($pyjs_dbg_49_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_49_err);}throw $pyjs_dbg_49_err;
-}})();
-				$pyjs.track.lineno=96;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return (typeof endGame == "undefined"?$m.endGame:endGame)();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_50_err){if ($pyjs_dbg_50_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_50_err);}throw $pyjs_dbg_50_err;
-}})();
-			}
-			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
-			return null;
 		}
-	, 1, [null,null,['self'],['sender']]);
-		$cls_definition['onCellClicked'] = $method;
-		$pyjs.track.lineno=98;
+	, 1, [null,null,['self']]);
+		$cls_definition['getAnyMove'] = $method;
+		$pyjs.track.lineno=214;
 		$method = $pyjs__bind_method2('getRowPermutations', function() {
 			if (this.__is_instance__ === true) {
 				var self = this;
 			} else {
 				var self = arguments[0];
 			}
-			var $iter10_nextval,$iter9_iter,perms,$iter10_idx,$iter9_nextval,$iter9_idx,$iter10_array,$iter9_array,diag2,i,diag1,board,$pyjs__trackstack_size_1,$iter10_type,$iter10_iter,$iter9_type;
-			$pyjs.track={module:'tictactoe', lineno:98};$pyjs.trackstack.push($pyjs.track);
+			var $iter14_array,$iter13_nextval,$iter13_iter,perms,$iter13_array,diag2,i,diag1,board,$iter14_iter,$pyjs__trackstack_size_1,$iter14_type,$iter14_nextval,$iter13_type,$iter14_idx,$iter13_idx;
+			$pyjs.track={module:'tictactoe', lineno:214};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=98;
-			$pyjs.track.lineno=103;
+			$pyjs.track.lineno=214;
+			$pyjs.track.lineno=219;
 			board = (function(){try{try{$pyjs.in_try_except += 1;
 			return self['rows']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_51_err){if ($pyjs_dbg_51_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_51_err);}throw $pyjs_dbg_51_err;
-}})();
-			$pyjs.track.lineno=104;
-			perms = (function(){try{try{$pyjs.in_try_except += 1;
-			return $p['list']([]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_52_err){if ($pyjs_dbg_52_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_52_err);}throw $pyjs_dbg_52_err;
-}})();
-			$pyjs.track.lineno=109;
-			diag1 = (function(){try{try{$pyjs.in_try_except += 1;
-			return $p['list']([]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_53_err){if ($pyjs_dbg_53_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_53_err);}throw $pyjs_dbg_53_err;
-}})();
-			$pyjs.track.lineno=110;
-			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
-			$iter9_iter = (function(){try{try{$pyjs.in_try_except += 1;
-			return (function(){try{try{$pyjs.in_try_except += 1;
-			return $p['range']((function(){try{try{$pyjs.in_try_except += 1;
-			return $p['len'](board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_54_err){if ($pyjs_dbg_54_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_54_err);}throw $pyjs_dbg_54_err;
-}})());
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_55_err){if ($pyjs_dbg_55_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_55_err);}throw $pyjs_dbg_55_err;
-}})();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_56_err){if ($pyjs_dbg_56_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_56_err);}throw $pyjs_dbg_56_err;
-}})();
-			$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
-			while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
-				i = $iter9_nextval.$nextval;
-				$pyjs.track.lineno=111;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return perms['append'](board.__getitem__(i));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_57_err){if ($pyjs_dbg_57_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_57_err);}throw $pyjs_dbg_57_err;
-}})();
-				$pyjs.track.lineno=112;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return diag1['append'](board.__getitem__(i).__getitem__(i));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_58_err){if ($pyjs_dbg_58_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_58_err);}throw $pyjs_dbg_58_err;
-}})();
-			}
-			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
-				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
-				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
-			}
-			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=113;
-			(function(){try{try{$pyjs.in_try_except += 1;
-			return perms['append'](diag1);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_59_err){if ($pyjs_dbg_59_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_59_err);}throw $pyjs_dbg_59_err;
-}})();
-			$pyjs.track.lineno=118;
-			board = (function(){try{try{$pyjs.in_try_except += 1;
-			return (typeof rotateMatrix == "undefined"?$m.rotateMatrix:rotateMatrix)(board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_60_err){if ($pyjs_dbg_60_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_60_err);}throw $pyjs_dbg_60_err;
-}})();
-			$pyjs.track.lineno=120;
-			diag2 = (function(){try{try{$pyjs.in_try_except += 1;
-			return $p['list']([]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_61_err){if ($pyjs_dbg_61_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_61_err);}throw $pyjs_dbg_61_err;
-}})();
-			$pyjs.track.lineno=121;
-			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
-			$iter10_iter = (function(){try{try{$pyjs.in_try_except += 1;
-			return (function(){try{try{$pyjs.in_try_except += 1;
-			return $p['range']((function(){try{try{$pyjs.in_try_except += 1;
-			return $p['len'](board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_62_err){if ($pyjs_dbg_62_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_62_err);}throw $pyjs_dbg_62_err;
-}})());
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_63_err){if ($pyjs_dbg_63_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_63_err);}throw $pyjs_dbg_63_err;
-}})();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_64_err){if ($pyjs_dbg_64_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_64_err);}throw $pyjs_dbg_64_err;
-}})();
-			$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
-			while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
-				i = $iter10_nextval.$nextval;
-				$pyjs.track.lineno=122;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return perms['append'](board.__getitem__(i));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_65_err){if ($pyjs_dbg_65_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_65_err);}throw $pyjs_dbg_65_err;
-}})();
-				$pyjs.track.lineno=123;
-				(function(){try{try{$pyjs.in_try_except += 1;
-				return diag2['append'](board.__getitem__(i).__getitem__(i));
 }finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_66_err){if ($pyjs_dbg_66_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_66_err);}throw $pyjs_dbg_66_err;
 }})();
+			$pyjs.track.lineno=220;
+			perms = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['list']([]);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_67_err){if ($pyjs_dbg_67_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_67_err);}throw $pyjs_dbg_67_err;
+}})();
+			$pyjs.track.lineno=225;
+			diag1 = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['list']([]);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_68_err){if ($pyjs_dbg_68_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_68_err);}throw $pyjs_dbg_68_err;
+}})();
+			$pyjs.track.lineno=226;
+			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
+			$iter13_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			return (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['range']((function(){try{try{$pyjs.in_try_except += 1;
+			return $p['len'](board);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_69_err){if ($pyjs_dbg_69_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_69_err);}throw $pyjs_dbg_69_err;
+}})());
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_70_err){if ($pyjs_dbg_70_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_70_err);}throw $pyjs_dbg_70_err;
+}})();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_71_err){if ($pyjs_dbg_71_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_71_err);}throw $pyjs_dbg_71_err;
+}})();
+			$iter13_nextval=$p['__iter_prepare']($iter13_iter,false);
+			while (typeof($p['__wrapped_next']($iter13_nextval).$nextval) != 'undefined') {
+				i = $iter13_nextval.$nextval;
+				$pyjs.track.lineno=227;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return perms['append'](board.__getitem__(i));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_72_err){if ($pyjs_dbg_72_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_72_err);}throw $pyjs_dbg_72_err;
+}})();
+				$pyjs.track.lineno=228;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return diag1['append'](board.__getitem__(i).__getitem__(i));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_73_err){if ($pyjs_dbg_73_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_73_err);}throw $pyjs_dbg_73_err;
+}})();
 			}
 			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
 				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
 				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 			}
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=124;
+			$pyjs.track.lineno=229;
+			(function(){try{try{$pyjs.in_try_except += 1;
+			return perms['append'](diag1);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_74_err){if ($pyjs_dbg_74_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_74_err);}throw $pyjs_dbg_74_err;
+}})();
+			$pyjs.track.lineno=234;
+			board = (function(){try{try{$pyjs.in_try_except += 1;
+			return (typeof rotateMatrix == "undefined"?$m.rotateMatrix:rotateMatrix)(board);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_75_err){if ($pyjs_dbg_75_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_75_err);}throw $pyjs_dbg_75_err;
+}})();
+			$pyjs.track.lineno=236;
+			diag2 = (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['list']([]);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_76_err){if ($pyjs_dbg_76_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_76_err);}throw $pyjs_dbg_76_err;
+}})();
+			$pyjs.track.lineno=237;
+			$pyjs__trackstack_size_1=$pyjs.trackstack.length;
+			$iter14_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			return (function(){try{try{$pyjs.in_try_except += 1;
+			return $p['range']((function(){try{try{$pyjs.in_try_except += 1;
+			return $p['len'](board);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_77_err){if ($pyjs_dbg_77_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_77_err);}throw $pyjs_dbg_77_err;
+}})());
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_78_err){if ($pyjs_dbg_78_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_78_err);}throw $pyjs_dbg_78_err;
+}})();
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_79_err){if ($pyjs_dbg_79_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_79_err);}throw $pyjs_dbg_79_err;
+}})();
+			$iter14_nextval=$p['__iter_prepare']($iter14_iter,false);
+			while (typeof($p['__wrapped_next']($iter14_nextval).$nextval) != 'undefined') {
+				i = $iter14_nextval.$nextval;
+				$pyjs.track.lineno=238;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return perms['append'](board.__getitem__(i));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_80_err){if ($pyjs_dbg_80_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_80_err);}throw $pyjs_dbg_80_err;
+}})();
+				$pyjs.track.lineno=239;
+				(function(){try{try{$pyjs.in_try_except += 1;
+				return diag2['append'](board.__getitem__(i).__getitem__(i));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_81_err){if ($pyjs_dbg_81_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_81_err);}throw $pyjs_dbg_81_err;
+}})();
+			}
+			if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
+				$pyjs.trackstack = $pyjs.trackstack.slice(0,$pyjs__trackstack_size_1);
+				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
+			}
+			$pyjs.track.module='tictactoe';
+			$pyjs.track.lineno=240;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return perms['append'](diag2);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_67_err){if ($pyjs_dbg_67_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_67_err);}throw $pyjs_dbg_67_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_82_err){if ($pyjs_dbg_82_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_82_err);}throw $pyjs_dbg_82_err;
 }})();
-			$pyjs.track.lineno=126;
-			$pyjs.track.lineno=126;
+			$pyjs.track.lineno=242;
+			$pyjs.track.lineno=242;
 			var $pyjs__ret = perms;
 			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 			return $pyjs__ret;
 		}
 	, 1, [null,null,['self']]);
 		$cls_definition['getRowPermutations'] = $method;
-		$pyjs.track.lineno=128;
+		$pyjs.track.lineno=244;
 		$method = $pyjs__bind_method2('__repr__', function() {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -7908,14 +8142,14 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				var self = arguments[0];
 			}
 
-			$pyjs.track={module:'tictactoe', lineno:128};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track={module:'tictactoe', lineno:244};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=128;
-			$pyjs.track.lineno=129;
-			$pyjs.track.lineno=129;
+			$pyjs.track.lineno=244;
+			$pyjs.track.lineno=245;
+			$pyjs.track.lineno=245;
 			var $pyjs__ret = (function(){try{try{$pyjs.in_try_except += 1;
 			return self['rows']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_68_err){if ($pyjs_dbg_68_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_68_err);}throw $pyjs_dbg_68_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_83_err){if ($pyjs_dbg_83_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_83_err);}throw $pyjs_dbg_83_err;
 }})();
 			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 			return $pyjs__ret;
@@ -7927,44 +8161,44 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }
 		return $p['_create_class']('GameBoard', $p['tuple']($bases), $data);
 	})();
-	$pyjs.track.lineno=131;
+	$pyjs.track.lineno=247;
 	$m['rotateMatrix'] = function(board) {
-		var j,board_copy,row_copy,$iter13_idx,size,$iter12_nextval,$sub3,$sub2,$sub1,$iter11_idx,$iter13_type,$sub4,$iter14_array,$iter14_type,$iter11_iter,$iter12_array,$iter14_iter,$iter11_array,$iter11_nextval,$iter14_idx,$iter14_nextval,$iter13_nextval,$iter13_iter,row,$iter12_type,$iter11_type,$iter13_array,$iter12_iter,i,$pyjs__trackstack_size_2,$pyjs__trackstack_size_1,$iter12_idx,col;
-		$pyjs.track={module:'tictactoe',lineno:131};$pyjs.trackstack.push($pyjs.track);
+		var $iter18_type,$pyjs__trackstack_size_1,board_copy,$iter16_idx,$iter17_type,$iter16_iter,size,$iter17_iter,$iter15_iter,$iter16_type,$iter18_idx,$sub3,$iter16_nextval,row,$sub6,$sub5,$sub4,$iter17_nextval,$iter18_iter,$iter15_array,$iter17_array,$iter16_array,row_copy,$iter18_nextval,$iter18_array,i,j,$iter15_idx,$pyjs__trackstack_size_2,$iter15_nextval,$iter15_type,$iter17_idx,col;
+		$pyjs.track={module:'tictactoe',lineno:247};$pyjs.trackstack.push($pyjs.track);
 		$pyjs.track.module='tictactoe';
-		$pyjs.track.lineno=131;
-		$pyjs.track.lineno=157;
+		$pyjs.track.lineno=247;
+		$pyjs.track.lineno=273;
 		board_copy = (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['list']([]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_69_err){if ($pyjs_dbg_69_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_69_err);}throw $pyjs_dbg_69_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_84_err){if ($pyjs_dbg_84_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_84_err);}throw $pyjs_dbg_84_err;
 }})();
-		$pyjs.track.lineno=161;
+		$pyjs.track.lineno=277;
 		$pyjs__trackstack_size_1=$pyjs.trackstack.length;
-		$iter11_iter = (function(){try{try{$pyjs.in_try_except += 1;
+		$iter15_iter = (function(){try{try{$pyjs.in_try_except += 1;
 		return board;
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_70_err){if ($pyjs_dbg_70_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_70_err);}throw $pyjs_dbg_70_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_85_err){if ($pyjs_dbg_85_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_85_err);}throw $pyjs_dbg_85_err;
 }})();
-		$iter11_nextval=$p['__iter_prepare']($iter11_iter,false);
-		while (typeof($p['__wrapped_next']($iter11_nextval).$nextval) != 'undefined') {
-			row = $iter11_nextval.$nextval;
-			$pyjs.track.lineno=162;
+		$iter15_nextval=$p['__iter_prepare']($iter15_iter,false);
+		while (typeof($p['__wrapped_next']($iter15_nextval).$nextval) != 'undefined') {
+			row = $iter15_nextval.$nextval;
+			$pyjs.track.lineno=278;
 			row_copy = (function(){try{try{$pyjs.in_try_except += 1;
 			return $p['list']([]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_71_err){if ($pyjs_dbg_71_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_71_err);}throw $pyjs_dbg_71_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_86_err){if ($pyjs_dbg_86_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_86_err);}throw $pyjs_dbg_86_err;
 }})();
-			$pyjs.track.lineno=163;
+			$pyjs.track.lineno=279;
 			$pyjs__trackstack_size_2=$pyjs.trackstack.length;
-			$iter12_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			$iter16_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return row;
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_72_err){if ($pyjs_dbg_72_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_72_err);}throw $pyjs_dbg_72_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_87_err){if ($pyjs_dbg_87_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_87_err);}throw $pyjs_dbg_87_err;
 }})();
-			$iter12_nextval=$p['__iter_prepare']($iter12_iter,false);
-			while (typeof($p['__wrapped_next']($iter12_nextval).$nextval) != 'undefined') {
-				col = $iter12_nextval.$nextval;
-				$pyjs.track.lineno=164;
+			$iter16_nextval=$p['__iter_prepare']($iter16_iter,false);
+			while (typeof($p['__wrapped_next']($iter16_nextval).$nextval) != 'undefined') {
+				col = $iter16_nextval.$nextval;
+				$pyjs.track.lineno=280;
 				(function(){try{try{$pyjs.in_try_except += 1;
 				return row_copy['append'](col);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_73_err){if ($pyjs_dbg_73_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_73_err);}throw $pyjs_dbg_73_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_88_err){if ($pyjs_dbg_88_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_88_err);}throw $pyjs_dbg_88_err;
 }})();
 			}
 			if ($pyjs.trackstack.length > $pyjs__trackstack_size_2) {
@@ -7972,10 +8206,10 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 			}
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=165;
+			$pyjs.track.lineno=281;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return board_copy['append'](row_copy);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_74_err){if ($pyjs_dbg_74_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_74_err);}throw $pyjs_dbg_74_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_89_err){if ($pyjs_dbg_89_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_89_err);}throw $pyjs_dbg_89_err;
 }})();
 		}
 		if ($pyjs.trackstack.length > $pyjs__trackstack_size_1) {
@@ -7983,39 +8217,39 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 		}
 		$pyjs.track.module='tictactoe';
-		$pyjs.track.lineno=169;
+		$pyjs.track.lineno=285;
 		size = (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['len'](board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_75_err){if ($pyjs_dbg_75_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_75_err);}throw $pyjs_dbg_75_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_90_err){if ($pyjs_dbg_90_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_90_err);}throw $pyjs_dbg_90_err;
 }})();
-		$pyjs.track.lineno=170;
+		$pyjs.track.lineno=286;
 		$pyjs__trackstack_size_1=$pyjs.trackstack.length;
-		$iter13_iter = (function(){try{try{$pyjs.in_try_except += 1;
+		$iter17_iter = (function(){try{try{$pyjs.in_try_except += 1;
 		return (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['range'](size);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_76_err){if ($pyjs_dbg_76_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_76_err);}throw $pyjs_dbg_76_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_91_err){if ($pyjs_dbg_91_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_91_err);}throw $pyjs_dbg_91_err;
 }})();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_77_err){if ($pyjs_dbg_77_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_77_err);}throw $pyjs_dbg_77_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_92_err){if ($pyjs_dbg_92_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_92_err);}throw $pyjs_dbg_92_err;
 }})();
-		$iter13_nextval=$p['__iter_prepare']($iter13_iter,false);
-		while (typeof($p['__wrapped_next']($iter13_nextval).$nextval) != 'undefined') {
-			i = $iter13_nextval.$nextval;
-			$pyjs.track.lineno=171;
+		$iter17_nextval=$p['__iter_prepare']($iter17_iter,false);
+		while (typeof($p['__wrapped_next']($iter17_nextval).$nextval) != 'undefined') {
+			i = $iter17_nextval.$nextval;
+			$pyjs.track.lineno=287;
 			$pyjs__trackstack_size_2=$pyjs.trackstack.length;
-			$iter14_iter = (function(){try{try{$pyjs.in_try_except += 1;
+			$iter18_iter = (function(){try{try{$pyjs.in_try_except += 1;
 			return (function(){try{try{$pyjs.in_try_except += 1;
 			return $p['range'](size);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_78_err){if ($pyjs_dbg_78_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_78_err);}throw $pyjs_dbg_78_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_93_err){if ($pyjs_dbg_93_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_93_err);}throw $pyjs_dbg_93_err;
 }})();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_79_err){if ($pyjs_dbg_79_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_79_err);}throw $pyjs_dbg_79_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_94_err){if ($pyjs_dbg_94_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_94_err);}throw $pyjs_dbg_94_err;
 }})();
-			$iter14_nextval=$p['__iter_prepare']($iter14_iter,false);
-			while (typeof($p['__wrapped_next']($iter14_nextval).$nextval) != 'undefined') {
-				j = $iter14_nextval.$nextval;
-				$pyjs.track.lineno=172;
+			$iter18_nextval=$p['__iter_prepare']($iter18_iter,false);
+			while (typeof($p['__wrapped_next']($iter18_nextval).$nextval) != 'undefined') {
+				j = $iter18_nextval.$nextval;
+				$pyjs.track.lineno=288;
 				(function(){try{try{$pyjs.in_try_except += 1;
-				return board_copy.__getitem__(i).__setitem__(j, board.__getitem__(j).__getitem__($p['__op_sub']($sub3=$p['__op_sub']($sub1=size,$sub2=1),$sub4=i)));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_80_err){if ($pyjs_dbg_80_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_80_err);}throw $pyjs_dbg_80_err;
+				return board_copy.__getitem__(i).__setitem__(j, board.__getitem__(j).__getitem__($p['__op_sub']($sub5=$p['__op_sub']($sub3=size,$sub4=1),$sub6=i)));
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_95_err){if ($pyjs_dbg_95_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_95_err);}throw $pyjs_dbg_95_err;
 }})();
 			}
 			if ($pyjs.trackstack.length > $pyjs__trackstack_size_2) {
@@ -8029,8 +8263,8 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 			$pyjs.track = $pyjs.trackstack.slice(-1)[0];
 		}
 		$pyjs.track.module='tictactoe';
-		$pyjs.track.lineno=176;
-		$pyjs.track.lineno=176;
+		$pyjs.track.lineno=292;
+		$pyjs.track.lineno=292;
 		var $pyjs__ret = board_copy;
 		$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 		return $pyjs__ret;
@@ -8039,12 +8273,12 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 
 	$m['rotateMatrix'].__bind_type__ = 0;
 	$m['rotateMatrix'].__args__ = [null,null,['board']];
-	$pyjs.track.lineno=178;
+	$pyjs.track.lineno=294;
 	$m['TicTacToe'] = (function(){
 		var $cls_definition = new Object();
 		var $method;
 		$cls_definition.__module__ = 'tictactoe';
-		$pyjs.track.lineno=179;
+		$pyjs.track.lineno=295;
 		$method = $pyjs__bind_method2('__init__', function(grid_size) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -8053,28 +8287,28 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 				grid_size = arguments[1];
 			}
 			var board;
-			$pyjs.track={module:'tictactoe', lineno:179};$pyjs.trackstack.push($pyjs.track);
+			$pyjs.track={module:'tictactoe', lineno:295};$pyjs.trackstack.push($pyjs.track);
 			$pyjs.track.module='tictactoe';
-			$pyjs.track.lineno=179;
-			$pyjs.track.lineno=180;
+			$pyjs.track.lineno=295;
+			$pyjs.track.lineno=296;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return $m['HorizontalPanel']['__init__'](self);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_81_err){if ($pyjs_dbg_81_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_81_err);}throw $pyjs_dbg_81_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_96_err){if ($pyjs_dbg_96_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_96_err);}throw $pyjs_dbg_96_err;
 }})();
-			$pyjs.track.lineno=181;
+			$pyjs.track.lineno=297;
 			board = (function(){try{try{$pyjs.in_try_except += 1;
 			return $m['GameBoard'](grid_size);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_82_err){if ($pyjs_dbg_82_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_82_err);}throw $pyjs_dbg_82_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_97_err){if ($pyjs_dbg_97_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_97_err);}throw $pyjs_dbg_97_err;
 }})();
-			$pyjs.track.lineno=182;
+			$pyjs.track.lineno=298;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['add'](board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_83_err){if ($pyjs_dbg_83_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_83_err);}throw $pyjs_dbg_83_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_98_err){if ($pyjs_dbg_98_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_98_err);}throw $pyjs_dbg_98_err;
 }})();
-			$pyjs.track.lineno=183;
+			$pyjs.track.lineno=299;
 			(function(){try{try{$pyjs.in_try_except += 1;
 			return self['setStyleName']('hpanel');
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_84_err){if ($pyjs_dbg_84_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_84_err);}throw $pyjs_dbg_84_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_99_err){if ($pyjs_dbg_99_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_99_err);}throw $pyjs_dbg_99_err;
 }})();
 			$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 			return null;
@@ -8086,35 +8320,35 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }
 		return $p['_create_class']('TicTacToe', $p['tuple']($bases), $data);
 	})();
-	$pyjs.track.lineno=189;
+	$pyjs.track.lineno=305;
 	$m['testInvert'] = function(board) {
 
-		$pyjs.track={module:'tictactoe',lineno:189};$pyjs.trackstack.push($pyjs.track);
+		$pyjs.track={module:'tictactoe',lineno:305};$pyjs.trackstack.push($pyjs.track);
 		$pyjs.track.module='tictactoe';
-		$pyjs.track.lineno=189;
-		$pyjs.track.lineno=190;
+		$pyjs.track.lineno=305;
+		$pyjs.track.lineno=306;
 		board = (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['list']([(function(){try{try{$pyjs.in_try_except += 1;
 		return $p['list']([1, 2, 3]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_85_err){if ($pyjs_dbg_85_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_85_err);}throw $pyjs_dbg_85_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_100_err){if ($pyjs_dbg_100_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_100_err);}throw $pyjs_dbg_100_err;
 }})(), (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['list']([4, 5, 6]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_86_err){if ($pyjs_dbg_86_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_86_err);}throw $pyjs_dbg_86_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_101_err){if ($pyjs_dbg_101_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_101_err);}throw $pyjs_dbg_101_err;
 }})(), (function(){try{try{$pyjs.in_try_except += 1;
 		return $p['list']([7, 8, 9]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_87_err){if ($pyjs_dbg_87_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_87_err);}throw $pyjs_dbg_87_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_102_err){if ($pyjs_dbg_102_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_102_err);}throw $pyjs_dbg_102_err;
 }})()]);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_88_err){if ($pyjs_dbg_88_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_88_err);}throw $pyjs_dbg_88_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_103_err){if ($pyjs_dbg_103_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_103_err);}throw $pyjs_dbg_103_err;
 }})();
-		$pyjs.track.lineno=195;
+		$pyjs.track.lineno=311;
 		board = (function(){try{try{$pyjs.in_try_except += 1;
 		return (typeof invertMatrix == "undefined"?$m.invertMatrix:invertMatrix)(board);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_89_err){if ($pyjs_dbg_89_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_89_err);}throw $pyjs_dbg_89_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_104_err){if ($pyjs_dbg_104_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_104_err);}throw $pyjs_dbg_104_err;
 }})();
-		$pyjs.track.lineno=196;
+		$pyjs.track.lineno=312;
 		(function(){try{try{$pyjs.in_try_except += 1;
 		return $p['printFunc']([board], 1);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_90_err){if ($pyjs_dbg_90_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_90_err);}throw $pyjs_dbg_90_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_105_err){if ($pyjs_dbg_105_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_105_err);}throw $pyjs_dbg_105_err;
 }})();
 		$pyjs.trackstack.pop();$pyjs.track=$pyjs.trackstack.pop();$pyjs.trackstack.push($pyjs.track);
 		return null;
@@ -8123,28 +8357,23 @@ $pyjs.loaded_modules['tictactoe'] = function (__mod_name__) {
 
 	$m['testInvert'].__bind_type__ = 0;
 	$m['testInvert'].__args__ = [null,null,['board']];
-	$pyjs.track.lineno=198;
+	$pyjs.track.lineno=314;
 	if ((function(){try{try{$pyjs.in_try_except += 1;
 		return $p['bool']($p['op_eq']((typeof __name__ == "undefined"?$m.__name__:__name__), '__main__'));
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_91_err){if ($pyjs_dbg_91_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_91_err);}throw $pyjs_dbg_91_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_106_err){if ($pyjs_dbg_106_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_106_err);}throw $pyjs_dbg_106_err;
 }})()) {
-		$pyjs.track.lineno=200;
+		$pyjs.track.lineno=316;
 		$m['game'] = (function(){try{try{$pyjs.in_try_except += 1;
-		return $m['TicTacToe'](12);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_92_err){if ($pyjs_dbg_92_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_92_err);}throw $pyjs_dbg_92_err;
+		return $m['TicTacToe'](5);
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_107_err){if ($pyjs_dbg_107_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_107_err);}throw $pyjs_dbg_107_err;
 }})();
-		$pyjs.track.lineno=201;
+		$pyjs.track.lineno=317;
 		(function(){try{try{$pyjs.in_try_except += 1;
 		return (function(){try{try{$pyjs.in_try_except += 1;
 		return $m['RootPanel']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_93_err){if ($pyjs_dbg_93_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_93_err);}throw $pyjs_dbg_93_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_108_err){if ($pyjs_dbg_108_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_108_err);}throw $pyjs_dbg_108_err;
 }})()['add']($m['game']);
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_94_err){if ($pyjs_dbg_94_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_94_err);}throw $pyjs_dbg_94_err;
-}})();
-		$pyjs.track.lineno=203;
-		(function(){try{try{$pyjs.in_try_except += 1;
-		return $m['pyjd']['run']();
-}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_95_err){if ($pyjs_dbg_95_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_95_err);}throw $pyjs_dbg_95_err;
+}finally{$pyjs.in_try_except-=1;}}catch($pyjs_dbg_109_err){if ($pyjs_dbg_109_err.__name__ != 'StopIteration'){$p['_handle_exception']($pyjs_dbg_109_err);}throw $pyjs_dbg_109_err;
 }})();
 	}
 	return this;

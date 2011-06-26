@@ -7,11 +7,11 @@ from pyjamas import Window
 
 import pygwt
 
+SPACE = '&nbsp;'    # needed to hold initial col width
+
 class GameBoard(Grid):
     def __init__(self, grid_size):
         Grid.__init__(self)
-
-        SPACE = '&nbsp;'
 
         # populate the grid with some stuff
         #
@@ -104,8 +104,11 @@ class GameBoard(Grid):
         Returns the cell to be marked for the win,
         if such a cell exists (already two in a row).
 
-        Input player is opposing player, since that's
-        the mark we're looking for.
+        player_mark is the mark which, when looking
+        for a winning move, terminates the poss for a
+        row or, when looking for a "blocking" move,
+        rules out the poss of there being one for the
+        given row.
 
         If there is either a) more than one empty position or
         b) an opposing mark, then the retval is None for that row.
@@ -114,10 +117,7 @@ class GameBoard(Grid):
         later stage of game or when several winning
         positions exist. We'll just hope this doesn't
         bite us, as the logic looks good.
-        Perhaps finding the missing ';' in '&nbsp;' helps...
         """
-
-        SPACE = '&nbsp;'
 
         """
         # debug/test
@@ -132,7 +132,6 @@ class GameBoard(Grid):
             [HTML(SPACE), HTML("X"), HTML("O")],
         ]
         """
-
 
         retval = None
         i = 0
@@ -166,8 +165,6 @@ class GameBoard(Grid):
         c) any position
         """
 
-        SPACE = '&nbsp;'
-
         retval = None
         cells = []  # holds the center and corner cells
         rows = self.rows()
@@ -179,9 +176,6 @@ class GameBoard(Grid):
         #print "getAnyMove: center: ", center
 
         center = rows[center][center]
-
-        # debug - okay where's my center?
-        center = rows[1][1]
 
         cells.append(center)
         #print "getAnyMove: center: ", center
@@ -195,12 +189,22 @@ class GameBoard(Grid):
             rows[max][0],
             rows[max][max]
         ]
-        #print corners   # debug
-
         for cell in corners:
             cells.append(cell)
 
+        # get the first empty cell in case
+        # neither the center or a corner is
+        # available
+        #
+        for row in rows:
+            for cell in row:
+                if cell.getHTML() == SPACE:
+                    cells.append(cell)
+
         for cell in cells:
+            # cells are ordered in terms of priority:
+            # center, corner and first empty
+            #
             #print "getAnyMove: cell: ", cell.position
             if cell.getHTML() == SPACE:
                 retval = cell
@@ -309,7 +313,7 @@ def testInvert(board):
 
 if __name__ == '__main__':
 #    testInvert(board)   # debug
-    game = TicTacToe(3)
+    game = TicTacToe(3) # supports arbitrary gameboard size
     RootPanel().add(game)
 
-    pyjd.run()
+#    pyjd.run()

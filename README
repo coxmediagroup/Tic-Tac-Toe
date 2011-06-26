@@ -1,9 +1,20 @@
-Intructions:
-1. Fork this repo on GitHub.
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
+Program features:
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+GUI written entirely in Python and compiled into JavaScript using Pyjamas.
 
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+Accepts arbitrarily-large game board size as a parameter to the TicTacToe() constructor.
+
+Contains no hard-coded row or column numbers.
+
+Performs a simple matrix transformation (90-degree rotation) to get the list of winning row possibilities when searching for winning or blocking moves.
+
+Allows the human player to go first. Never loses.
+
+Implementation of game-ending sequence, such as flashing lights and sirens left for the student.
+
+INSTRUCTIONS:
+Copy output/ to a local directory.
+Load output/tictactoe.html into a recent version of Firefox.
+Click on a table cell. The program will then select its move, etc.
+Keep playing until the program gets 3 in a row or runs out of moves.
+Reload the page for a new game.
