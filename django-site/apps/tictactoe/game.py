@@ -3,6 +3,10 @@ import random, math
 ID_PLAYER = 1
 ID_COMPUTER = 2
 
+FLAG_SAFE = 0
+FLAG_UNSAFE = 1
+FLAG_WIN = 2
+
 class Result():
     pass
 
@@ -42,38 +46,41 @@ def getmove(matrix):
                 break
         return result
     
-    # first check if there is a winning move
-    r = checkForWinningMove(matrix, ID_COMPUTER)
-    # if not, check if there is a winning move from the player to block
-    if r is False:
-        r = checkForWinningMove(matrix, ID_PLAYER)
-    if r:
-        result.x = r.x
-        result.y = r.y
-        return result 
-    
-    # if there are no wins for the next move, then take the path that leads to
-    # the outcome with the most winnable vectors (3 across, 3 down, 2 diagonal...so up to 8)
-    # the algorithm works like this:
-    #   check each move the computer can take
-    #   generate all the possible outcomes that lead up to a game over (computer win, player win, cats)
-    #   take the move that has the highest number of winnable types (vectors)
+    # here's the idea
+    # for each move the computer can make, calculate all outcomes (win, loss, tie)
+    # trace backwards from the outcomes, make sure the computer doesn't
+    # make a move that can lead to a losable outcome
+    # the key is to flag outcomes where the computer can lose (assume the player will go for the win)
     nextX = 0
     nextY = 0
     max = 0
     first = True
+    flag_matrix = [[0,0,0],[0,0,0],[0,0,0]]
+    safe_moves = []
+    win_moves = []
     for y in range(3):
         for x in range(3):
             if matrix[x][y] == 0:
-                count = countWinnableOutcomesForXY(matrix, x, y)
-                if (max > count) or first:
-                    first = False
-                    max = count
-                    nextX = x
-                    nextY = y
+                flag = seeOutcomeForXY(matrix, x, y)
+                flag_matrix[x][y] = flag
+                #if flag != FLAG_UNSAFE:
+                #    safe_moves.append((x,y))
+                if flag == FLAG_SAFE:
+                    safe_moves.append((x,y))
+                elif flag == FLAG_WIN:
+                    win_moves.append((x,y))
     
-    result.x = nextX
-    result.y = nextY
+    #print len(safe_moves)
+    print flag_matrix
+    if len(win_moves):
+        m = random.randint(0,len(win_moves)-1)
+        result.x = win_moves[m][0]
+        result.y = win_moves[m][1]
+    else:
+        m = random.randint(0,len(safe_moves)-1)
+        result.x = safe_moves[m][0]
+        result.y = safe_moves[m][1]
+    
     
     return result
 
@@ -92,55 +99,70 @@ def checkForWinningMove(matrix, playerId):
                         return result
     return False
 
-# entry function to begin recursion
-# see how many possible types of wins there are throughout all possible scenarios if the compute chooses [x,y]
-# not number of wins, but types (3 across, 3 down, 2 diagonal...so it returns up to 8)
-def countWinnableOutcomesForXY(matrix, x, y):
-    m = list(matrix)
-    m[x][y] = ID_COMPUTER
-    bits = countWinnableOutcomes(m, 0, ID_PLAYER, ID_PLAYER)
-    m[x][y] = 0
-    
-    compWins = 0
-    
-    for i in [1,2,4,8,16,32,64,128]:
-        if i & bits:
-            compWins += 1
-
-    return compWins
-
-# return the number winnable outcomes types (up to 8 as a bit mask) for the next turn
-# if there are no outcomes for the next turn, then
-#   do the same for all possible moves of the turn after next
-#   ...and so on...
-def countWinnableOutcomes(matrix, count, playerId, winnerId):
-    gameOver = False
-    if playerId == winnerId:
-        for y in range(3):
-            for x in range(3):
-                if matrix[x][y] == 0:
-                    matrix[x][y] = playerId
-                    result = checkforwin(matrix)
-                    matrix[x][y] = 0
-                    if result.win:
-                        gameOver = True
-                        if result.winnerId == winnerId:
-                            count = count | result.winBit
-    
-    if gameOver:
-        return count
-    
-    cats = True
+# return True is there are no zeros in the matrix
+# False otherwise
+def matrixIsFull(matrix):
+    fullMatrix = True
     for y in range(3):
         for x in range(3):
             if matrix[x][y] == 0:
-                cats = False
-                matrix[x][y] = playerId
-                nextPlayerId = ID_PLAYER if (playerId == ID_COMPUTER) else ID_COMPUTER
-                count = countWinnableOutcomes(matrix, count, nextPlayerId, winnerId)
-                matrix[x][y] = 0
+                fullMatrix = False
+    return fullMatrix
+
+def seeOutcomeForXY(matrix, x, y):
+    m = list(matrix)
+    m[x][y] = ID_COMPUTER
     
-    return count
+    flag = seeOutcome(m, ID_PLAYER)
+    
+    m[x][y] = 0
+    return flag
+
+# base case: win, loss or tie
+# return FLAG_SAFE for tie
+# return FLAG_UNSAFE for loss
+# return FLAG_WIN to win
+# node is cleared (set to safe) if there is a another path on the node that leads to a safe/win flag
+def seeOutcome(matrix, currentPlayerId):
+    m = matrix
+    result = checkForWinningMove(m, currentPlayerId)
+    if result:
+        if currentPlayerId == ID_PLAYER:
+            return FLAG_UNSAFE
+        else:
+            return FLAG_WIN
+    
+    if matrixIsFull(m):
+        return FLAG_SAFE
+    
+    if currentPlayerId == ID_PLAYER:
+        flag = FLAG_SAFE
+        win = True
+        for y in range(3):
+            for x in range(3):
+                if m[x][y] == 0:
+                    m[x][y] = ID_PLAYER
+                    f = seeOutcome(m, ID_COMPUTER)
+                    m[x][y] = 0
+                    if f == FLAG_UNSAFE:
+                        flag = f
+                    if f != FLAG_WIN:
+                        win = False
+    else:
+        flag = FLAG_UNSAFE
+        win = False
+        for y in range(3):
+            for x in range(3):
+                if m[x][y] == 0:
+                    m[x][y] = ID_COMPUTER
+                    f = seeOutcome(m, ID_PLAYER)
+                    m[x][y] = 0
+                    if f != FLAG_UNSAFE:
+                        flag = f
+    
+    if win:
+        flag = FLAG_WIN
+    return flag
 
 def checkforwin(matrix):
     result = Result()
