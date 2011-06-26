@@ -4,23 +4,15 @@ import json, random, game
 ID_PLAYER = 1
 ID_COMPUTER = 2
 
-def newgame(request, xo):
-    if xo not in ('x','o'):
-        response = {
-            'success': False,
-            'message': 'Please set player to either X or O.'
-        }
-    else:
-        request.session['matrix'] = [[0,0,0],[0,0,0],[0,0,0]];
-        response = {
-            'success': True,
-            'message': 'Player set to '+xo
-        }
+def newgame(request):
+    request.session['matrix'] = [[0,0,0],[0,0,0],[0,0,0]];
+    response = {
+        'success': True
+    }
     
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 def makemove(request, x, y):
-    # check if spot is already taken
     result = game.makemove(request.session['matrix'], int(x), int(y))
     if result:
         matrix = request.session['matrix']

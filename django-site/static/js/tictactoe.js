@@ -132,7 +132,7 @@ function TicTacToe() {
 	this.newGame = function(playerIsX, callback) {
 		this.playerIsX = playerIsX;
 		var xo = playerIsX ? 'x' : 'o';
-		$.post('/tictactoe/newgame/setplayer/'+xo,
+		$.post('/tictactoe/newgame/',
 			function(data) {
 				if(data.success) {
 					callback(true);

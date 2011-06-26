@@ -51,27 +51,19 @@ def getmove(matrix):
     # trace backwards from the outcomes, make sure the computer doesn't
     # make a move that can lead to a losable outcome
     # the key is to flag outcomes where the computer can lose (assume the player will go for the win)
-    nextX = 0
-    nextY = 0
-    max = 0
-    first = True
-    flag_matrix = [[0,0,0],[0,0,0],[0,0,0]]
     safe_moves = []
     win_moves = []
     for y in range(3):
         for x in range(3):
             if matrix[x][y] == 0:
                 flag = seeOutcomeForXY(matrix, x, y)
-                flag_matrix[x][y] = flag
-                #if flag != FLAG_UNSAFE:
-                #    safe_moves.append((x,y))
                 if flag == FLAG_SAFE:
                     safe_moves.append((x,y))
                 elif flag == FLAG_WIN:
                     win_moves.append((x,y))
     
-    #print len(safe_moves)
-    print flag_matrix
+    # it doesn't matter which move is taken, as long as it is a safe one
+    # randomly select from safe moves, winning moves take precedence
     if len(win_moves):
         m = random.randint(0,len(win_moves)-1)
         result.x = win_moves[m][0]
