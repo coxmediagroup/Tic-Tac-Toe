@@ -34,6 +34,7 @@ TicTacToe = {
 		this.cellHeight = 0;
 		this.playerIsX = true;
 		this.gameOverCallback = null;
+		this.boardSize = 3;
 		
 		var click = function(e) {
 			var canvas = $('#'+self.canvasId);
@@ -61,7 +62,8 @@ TicTacToe = {
 						}
 					}
 					else {
-						self.gameOverCallback(TicTacToe.TIE);
+						alert(data.message);
+						//self.gameOverCallback(TicTacToe.TIE);
 					}
 				},
 				'json'
@@ -82,7 +84,8 @@ TicTacToe = {
 							}
 						}
 					} else {
-						self.gameOverCallback(TicTacToe.TIE);
+						alert(data.message);
+						//self.gameOverCallback(TicTacToe.TIE);
 					}
 				},
 				'json'
@@ -134,6 +137,7 @@ TicTacToe = {
 			var pad = 10;
 			var centerX = cellX*self.cellWidth+self.cellWidth/2;
 			var centerY = cellY*self.cellHeight+self.cellHeight/2;
+			var size = (self.cellWidth < self.cellHeight) ? (self.cellWidth-pad)/2 : (self.cellHeight-pad)/2;
 			
 			var canvas = document.getElementById(self.canvasId);
 			var c = canvas.getContext('2d');
@@ -141,7 +145,7 @@ TicTacToe = {
 			c.beginPath();
 			c.strokeStyle = 'blue';
 			c.beginPath();
-			c.arc(centerX, centerY, 45, 0, Math.PI*2, true);
+			c.arc(centerX, centerY, size, 0, Math.PI*2, true);
 			c.closePath();
 			c.stroke();
 			
@@ -152,8 +156,8 @@ TicTacToe = {
 			self.canvasId = canvasId;
 			self.canvasWidth = parseInt(canvas.attr('width'));
 			self.canvasHeight = parseInt(canvas.attr('height'));
-			self.cellWidth = parseInt(self.canvasWidth/3);
-			self.cellHeight = parseInt(self.canvasHeight/3);
+			self.cellWidth = parseInt(self.canvasWidth/self.boardSize);
+			self.cellHeight = parseInt(self.canvasHeight/self.boardSize);
 			
 			canvas.bind('click', click);
 			this.gameOverCallback = gameOverCallback;
@@ -164,7 +168,7 @@ TicTacToe = {
 		this.newGame = function(playerIsX, callback) {
 			this.playerIsX = playerIsX;
 			var xo = playerIsX ? 'x' : 'o';
-			$.post('/tictactoe/newgame/',
+			$.post('/tictactoe/newgame/size/'+self.boardSize+'/',
 				function(data) {
 					if(data.success) {
 						callback(true);
@@ -187,7 +191,7 @@ TicTacToe = {
 			var c = canvas.getContext('2d');
 			c.clearRect(0,0,w,h);
 			c.strokeStyle = 'black';
-			for(var i = 1; i <= 3; i++) {
+			for(var i = 1; i <= self.boardSize; i++) {
 				c.beginPath();
 				c.moveTo(i*cw,0);
 				c.lineTo(i*cw,w);

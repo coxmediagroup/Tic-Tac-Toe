@@ -4,11 +4,19 @@ import json, random, game, board
 ID_PLAYER = 1
 ID_COMPUTER = 2
 
-def newgame(request):
-    request.session['board'] = board.GameBoard(3)
-    response = {
-        'success': True
-    }
+def newgame(request, size):
+    if size is None: size = 3
+    if size >= 3:
+        request.session['board'] = board.GameBoard(int(size))
+        response = {
+            'success': True,
+            'message': 'Board size set to '+str(size)
+        }
+    else:
+        response = {
+            'success': False,
+            'message': 'Board size must be at least 3!'
+        }
     
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
