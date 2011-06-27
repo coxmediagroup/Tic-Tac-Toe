@@ -1,4 +1,4 @@
-import random, math
+import random, math, board
 
 ID_PLAYER = 1
 ID_COMPUTER = 2
@@ -10,37 +10,31 @@ FLAG_WIN = 2
 class Result():
     pass
 
-def makemove(matrix, x, y):
+def makemove(board, x, y):
     result = Result()
-    if matrix[x][y]:
+    if board.getXY((x, y)) != board.EMPTY_CELL:
         return False
     else:
+        board.plot((x, y), ID_PLAYER)
+        win = board.checkforwin(ID_PLAYER)
+        result.win = win
         result.x = x
         result.y = y
         return result
 
-def getmove(matrix):
+def getmove(board):
     result = Result()
     
     # is there a spot to move?
-    emptyMatrix = True
-    fullMatrix = True
-    for y in range(3):
-        for x in range(3):
-            if matrix[x][y] == 0:
-                fullMatrix = False
-            else:
-                emptyMatrix = False
-    
-    if fullMatrix:
+    if board.isFull():
         return False
     
-    if emptyMatrix:
+    if board.isEmpty():
         # this is the first move, just choose a random point
         while True:
             x = random.randint(0,2);
             y = random.randint(0,2);
-            if matrix[x][y] == 0:
+            if board.plot((x, y), ID_COMPUTER):
                 result.x = x
                 result.y = y
                 break
@@ -53,17 +47,20 @@ def getmove(matrix):
     # the key is to flag outcomes where the computer can lose (assume the player will go for the win)
     safe_moves = []
     win_moves = []
-    for y in range(3):
-        for x in range(3):
-            if matrix[x][y] == 0:
-                flag = seeOutcomeForXY(matrix, x, y)
-                if flag == FLAG_SAFE:
-                    safe_moves.append((x,y))
-                elif flag == FLAG_WIN:
-                    win_moves.append((x,y))
+    pm = [[0,0,0],[0,0,0],[0,0,0]]
+    for cell in board.getEmptyCells():
+        flag = seeOutcomeForCell(board, cell)
+        pm[cell[0]][cell[1]] = flag
+        if flag == FLAG_SAFE:
+            safe_moves.append(cell)
+        elif flag == FLAG_WIN:
+            win_moves.append(cell)
     
     # it doesn't matter which move is taken, as long as it is a safe one
     # randomly select from safe moves, winning moves take precedence
+    print len(win_moves)
+    print len(safe_moves)
+    print pm
     if len(win_moves):
         m = random.randint(0,len(win_moves)-1)
         result.x = win_moves[m][0]
@@ -77,37 +74,26 @@ def getmove(matrix):
     return result
 
 # see if the player/computer (specified by playerId) can win the game on the next turn
-def checkForWinningMove(matrix, playerId):
-    for y in range(3):
-        for x in range(3):
-            if matrix[x][y] == 0:
-                matrix[x][y] = playerId
-                result = checkforwin(matrix)
-                matrix[x][y] = 0
-                if result.win:
-                    if result.winnerId == playerId:
-                        result.x = x
-                        result.y = y
-                        return result
+def checkForWinningMove(board, playerId):
+    for cell in board.getEmptyCells():
+        board.plot(cell, playerId)
+        win = board.checkforwin(playerId)
+        board.clear(cell)
+        if win:
+            return True
+    
     return False
 
-# return True is there are no zeros in the matrix
-# False otherwise
-def matrixIsFull(matrix):
-    fullMatrix = True
-    for y in range(3):
-        for x in range(3):
-            if matrix[x][y] == 0:
-                fullMatrix = False
-    return fullMatrix
-
-def seeOutcomeForXY(matrix, x, y):
-    m = list(matrix)
-    m[x][y] = ID_COMPUTER
+def seeOutcomeForCell(board, cell):
+    board.plot(cell, ID_COMPUTER)
     
-    flag = seeOutcome(m, ID_PLAYER)
+    win = board.checkforwin(ID_COMPUTER)
+    if win:
+        flag = FLAG_WIN
+    else:
+        flag = seeOutcome(board, ID_PLAYER)
     
-    m[x][y] = 0
+    board.clear(cell)
     return flag
 
 # base case: win, loss or tie
@@ -115,93 +101,38 @@ def seeOutcomeForXY(matrix, x, y):
 # return FLAG_UNSAFE for loss
 # return FLAG_WIN to win
 # node is cleared (set to safe) if there is a another path on the node that leads to a safe/win flag
-def seeOutcome(matrix, currentPlayerId):
-    m = matrix
-    result = checkForWinningMove(m, currentPlayerId)
-    if result:
+def seeOutcome(board, currentPlayerId):
+    win = checkForWinningMove(board, currentPlayerId)
+    if win:
         if currentPlayerId == ID_PLAYER:
             return FLAG_UNSAFE
         else:
             return FLAG_WIN
     
-    if matrixIsFull(m):
+    if board.isFull():
         return FLAG_SAFE
     
     if currentPlayerId == ID_PLAYER:
         flag = FLAG_SAFE
         win = True
-        for y in range(3):
-            for x in range(3):
-                if m[x][y] == 0:
-                    m[x][y] = ID_PLAYER
-                    f = seeOutcome(m, ID_COMPUTER)
-                    m[x][y] = 0
-                    if f == FLAG_UNSAFE:
-                        flag = f
-                    if f != FLAG_WIN:
-                        win = False
+        for cell in board.getEmptyCells():
+            board.plot(cell, ID_PLAYER)
+            f = seeOutcome(board, ID_COMPUTER)
+            board.clear(cell)
+            if f == FLAG_UNSAFE:
+                flag = f
+            if f != FLAG_WIN:
+                win = False
     else:
         flag = FLAG_UNSAFE
         win = False
-        for y in range(3):
-            for x in range(3):
-                if m[x][y] == 0:
-                    m[x][y] = ID_COMPUTER
-                    f = seeOutcome(m, ID_PLAYER)
-                    m[x][y] = 0
-                    if f != FLAG_UNSAFE:
-                        flag = f
+        for cell in board.getEmptyCells():
+            board.plot(cell, ID_COMPUTER)
+            f = seeOutcome(board, ID_PLAYER)
+            board.clear(cell)
+            if f != FLAG_UNSAFE:
+                flag = f
     
     if win:
         flag = FLAG_WIN
     return flag
-
-def checkforwin(matrix):
-    result = Result()
-    result.win = False
-    for id in range(1,3):
-        # row win
-        for x in range(3):
-            win = True
-            for y in range(3):
-                if matrix[x][y] != id:
-                    win = False
-                    break;
-            if win:
-                result.win = True
-                result.winnerId = id
-                result.winBit = int(math.pow(2,y))
-        # column win
-        for y in range(3):
-            win = True
-            for x in range(3):
-                if matrix[x][y] != id:
-                    win = False
-                    break;
-            if win:
-                result.win = True
-                result.winnerId = id
-                result.winBit = int(math.pow(2,x+3))
-        # diagonal win
-        win = True
-        for xy in range(3):
-            if matrix[xy][xy] != id:
-                win = False
-                break;
-        if win:
-            result.win = True
-            result.winnerId = id
-            result.winBit = int(math.pow(2,6))
-        # other diagonal win
-        win = True
-        for xy in range(3):
-            if matrix[xy][2-xy] != id:
-                win = False
-                break;
-        if win:
-            result.win = True
-            result.winnerId = id
-            result.winBit = int(math.pow(2,7))
-    
-    return result 
-    

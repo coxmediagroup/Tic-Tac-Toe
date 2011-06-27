@@ -1,11 +1,11 @@
 from django.http import HttpResponse
-import json, random, game
+import json, random, game, board
 
 ID_PLAYER = 1
 ID_COMPUTER = 2
 
 def newgame(request):
-    request.session['matrix'] = [[0,0,0],[0,0,0],[0,0,0]];
+    request.session['board'] = board.GameBoard(3)
     response = {
         'success': True
     }
@@ -13,20 +13,17 @@ def newgame(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 def makemove(request, x, y):
-    result = game.makemove(request.session['matrix'], int(x), int(y))
+    board = request.session['board']
+    result = game.makemove(board, int(x), int(y))
     if result:
-        matrix = request.session['matrix']
-        matrix[result.x][result.y] = ID_PLAYER
-        request.session['matrix'] = matrix
-        
-        winResult = game.checkforwin(request.session['matrix'])
+        request.session['board'] = board
         
         response = {
             'success': True,
-            'win': winResult.win
+            'win': result.win
         }
-        if winResult.win:
-            response['winner'] = winResult.winnerId
+        if result.win:
+            response['winner'] = ID_PLAYER
     else:
         response = {
             'success': False,
@@ -36,23 +33,23 @@ def makemove(request, x, y):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 def getmove(request):
-    result = game.getmove(request.session['matrix'])
+    board = request.session['board']
+    result = game.getmove(board)
     
     if result:
-        matrix = request.session['matrix']
-        matrix[result.x][result.y] = ID_COMPUTER
-        request.session['matrix'] = matrix
+        board.plot((result.x, result.y), ID_COMPUTER)
+        request.session['board'] = board
         
-        winResult = game.checkforwin(request.session['matrix'])
+        win = board.checkforwin(ID_COMPUTER)
     
         response = {
             'success': True,
             'x': result.x,
             'y': result.y,
-            'win': winResult.win
+            'win': win
         }
-        if winResult.win:
-            response['winner'] = winResult.winnerId
+        if win:
+            response['winner'] = ID_COMPUTER
     else:
         response = {
             'success': False,
