@@ -1,8 +1,5 @@
-var game = new TicTacToe();
-
 $(document).ready(function(){
 	
-	game.init('game-canvas');
 	$('.btn-play').click(function(){
 		var playerIsX = true;
 		if($(this).hasClass('x')) {
@@ -11,16 +8,43 @@ $(document).ready(function(){
 			playerIsX = false;
 		}
 		$('#options').fadeOut(function(){
-			game.newGame(playerIsX,function(){
-				$('#game-area').fadeIn(function(){
-					game.clearBoard();
-				});
+			var game = new TicTacToe.game();
+			game.init('game-canvas', playerIsX, gameOver, function(){
+				$('#game-area').fadeIn();
 			});
 		});
 	});
 	
 });
 
+function reset() {
+	$('#game-area').fadeOut(function(){
+		$('#options').fadeIn();
+	});
+}
+
+function gameOver(code) {
+	switch(code) {
+	case TicTacToe.WIN:
+		msg = 'This isn\'t possible!';
+		break;
+	case TicTacToe.LOSE:
+		msg = 'You Lose.';
+		break;
+	case TicTacToe.TIE:
+		msg = 'It\'s a tie!';
+		break;
+	}
+	msg += ' Play Again?';
+	$('<div />').html(msg).dialog({
+		title:'Game Over',
+		modal:true,
+		buttons: {
+			'Yes': function() { $(this).dialog('close');reset(); },
+			'No': function() { $(this).dialog('close'); }
+		}
+	});
+}
 // taken from https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 $(document).ajaxSend(function(event, xhr, settings) {
     function getCookie(name) {

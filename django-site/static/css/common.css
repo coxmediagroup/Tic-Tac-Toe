@@ -44,3 +44,6 @@ button.button span { font-size:25px; }
 button.btn-play.x { background:red; }
 button.btn-play.o { background:blue; }
 #game-area { width:300px;height:300px;border:1px solid #886;margin:25px auto;display:none; }
+
+.ui-dialog-buttonset .ui-button:first-child { float:right; }
+.ui-dialog-buttonset .ui-button { float:left; }
