@@ -1,4 +1,4 @@
-import random, math, board
+import random, math
 
 ID_PLAYER = 1
 ID_COMPUTER = 2
