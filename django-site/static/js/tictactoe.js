@@ -13,7 +13,7 @@
  * }); 
  * 
  * function gameover(code) {
- * 	if(code == [TicTacToe.WIN | TicTacToe.LOSS | TicTacToe.TIE]) {
+ * 	if(code == [TicTacToe.WIN | TicTacToe.LOSE | TicTacToe.TIE]) {
  * 	  //show message
  *  }
  * }
