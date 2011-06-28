@@ -8,26 +8,19 @@ FLAG_SAFE = 0
 FLAG_UNSAFE = 1
 FLAG_WIN = 2
 
-class Result():
-    pass
-
 # plot player on board and check for win
 # return False if the spot is already taken
-def makemove(board, x, y):
-    result = Result()
-    if board.getXY((x, y)) != board.EMPTY_CELL:
-        return False
-    else:
+def makeMove(board, x, y):
+    
+    if board.getXY((x, y)) == board.EMPTY_CELL:
         board.plot((x, y), ID_PLAYER)
-        win = board.checkforwin(ID_PLAYER)
-        result.win = win
-        result.x = x
-        result.y = y
-        return result
+        return True
+    else:
+        return False
 
 # calculate the computer's next move
 # return tuple (x,y) containing the computer's suggested move
-def getmove(board):
+def getMove(board):
     
     # is there a spot to move?
     if board.isFull():
@@ -49,7 +42,6 @@ def getmove(board):
     safe_moves = []
     win_moves = []
     for cell in board.getEmptyCells():
-        print cell
         flag = seeOutcomeForCell(board, cell)
         if flag == FLAG_SAFE:
             safe_moves.append(cell)
@@ -58,8 +50,6 @@ def getmove(board):
     
     # it doesn't matter which move is taken, as long as it is a safe one
     # randomly select from safe moves, winning moves take precedence
-    print len(win_moves)
-    print len(safe_moves)
     if len(win_moves):
         m = random.randint(0,len(win_moves)-1)
         return win_moves[m]
@@ -74,7 +64,7 @@ def getmove(board):
 def checkForWinningMove(board, playerId):
     for cell in board.getEmptyCells():
         board.plot(cell, playerId)
-        win = board.checkforwin(playerId)
+        win = board.checkForWin(playerId)
         board.clear(cell)
         if win:
             return True
@@ -84,7 +74,7 @@ def checkForWinningMove(board, playerId):
 def seeOutcomeForCell(board, cell):
     board.plot(cell, ID_COMPUTER)
     
-    win = board.checkforwin(ID_COMPUTER)
+    win = board.checkForWin(ID_COMPUTER)
     if win:
         flag = FLAG_WIN
     else:
@@ -100,15 +90,11 @@ def seeOutcomeForCell(board, cell):
 # node is cleared (set to safe) if there is a another path on the node that leads to a safe/win flag
 def seeOutcome(board, currentPlayerId):
     win = checkForWinningMove(board, currentPlayerId)
-    cats = board.checkforcats() # check for cats before the board is full to cut down recursion
     if win:
         if currentPlayerId == ID_PLAYER:
             return FLAG_UNSAFE
         else:
             return FLAG_WIN
-    
-    if cats:
-        return FLAG_SAFE
     
     if board.isFull():
         return FLAG_SAFE
@@ -139,11 +125,14 @@ def seeOutcome(board, currentPlayerId):
     return flag
 
 def isGameOver(board):
-    if board.checkforwin(ID_PLAYER):
+    if board.checkForWin(ID_PLAYER):
+        print 'win'
         return ID_PLAYER
-    elif board.checkforwin(ID_COMPUTER):
+    elif board.checkForWin(ID_COMPUTER):
+        print 'loss'
         return ID_COMPUTER
-    elif board.checkforcats():
+    elif board.isFull():
+        print 'tie'
         return ID_TIE
     else:
         return False

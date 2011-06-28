@@ -1,13 +1,14 @@
 from django.http import HttpResponse
-import json, random, game, board
+import json, random, game, gameboard
 
 ID_PLAYER = 1
 ID_COMPUTER = 2
 
-def newgame(request, size):
+def newGame(request, size):
     if size is None: size = 3
     if size >= 3:
-        request.session['board'] = board.GameBoard(int(size))
+        board = gameboard.GameBoard(int(size))
+        request.session['board'] = board
         response = {
             'success': True,
             'message': 'Board size set to '+str(size)
@@ -20,9 +21,9 @@ def newgame(request, size):
     
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
-def makemove(request, x, y):
+def makeMove(request, x, y):
     board = request.session['board']
-    result = game.makemove(board, int(x), int(y))
+    result = game.makeMove(board, int(x), int(y))
     if result:
         request.session['board'] = board
         
@@ -32,8 +33,6 @@ def makemove(request, x, y):
             'success': True,
             'gameover': status
         }
-        if result.win:
-            response['winner'] = ID_PLAYER
     else:
         response = {
             'success': False,
@@ -42,9 +41,9 @@ def makemove(request, x, y):
         
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
-def getmove(request):
+def getMove(request):
     board = request.session['board']
-    next_move = game.getmove(board)
+    next_move = game.getMove(board)
     
     if next_move:
         board.plot(next_move, ID_COMPUTER)
@@ -62,7 +61,7 @@ def getmove(request):
     else:
         response = {
             'success': False,
-            'message': 'Tie!'
+            'message': 'No safe place to move. This isn\'t possible!'
         }
     
     # place mark, save in session, and check for win

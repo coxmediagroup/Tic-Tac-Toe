@@ -36,6 +36,54 @@ TicTacToe = {
 		this.gameOverCallback = null;
 		this.boardSize = 3;
 		
+		this.init = function(canvasId, playerIsX, gameOverCallback, returnCallback) {
+			var canvas = $('#'+canvasId);
+			self.canvasId = canvasId;
+			self.canvasWidth = parseInt(canvas.attr('width'));
+			self.canvasHeight = parseInt(canvas.attr('height'));
+			self.cellWidth = parseInt(self.canvasWidth/self.boardSize);
+			self.cellHeight = parseInt(self.canvasHeight/self.boardSize);
+			
+			this.gameOverCallback = gameOverCallback;
+			this.newGame(playerIsX, function(){
+				returnCallback();
+			});
+		}
+		
+		this.newGame = function(playerIsX, callback) {
+			this.playerIsX = playerIsX;
+			var xo = playerIsX ? 'x' : 'o';
+			$.post('/tictactoe/newgame/size/'+self.boardSize+'/',
+				function(data) {
+					if(data.success) {
+						self.clearBoard();
+						var canvas = $('#'+self.canvasId);
+						canvas.bind('click', click);
+						if (callback) { callback(true); }
+					} else {
+						if (callback) { callback(false); }
+					}
+				},
+				'json'
+			);
+		}
+		
+		this.endGame = function(status) {
+			var canvas = $('#'+self.canvasId);
+			canvas.unbind();
+			switch(status) {
+			case 1:
+				self.gameOverCallback(TicTacToe.WIN);
+			break;
+			case 2:
+				self.gameOverCallback(TicTacToe.LOSE);
+			break;
+			case 3:
+				self.gameOverCallback(TicTacToe.TIE);
+			break;
+			}
+		}
+		
 		var click = function(e) {
 			var canvas = $('#'+self.canvasId);
 			var clickX = parseInt(e.pageX-canvas.offset().left);
@@ -51,17 +99,9 @@ TicTacToe = {
 				function(data) {
 					if(data.success) {
 						self.draw(self.playerIsX, cellX, cellY);
-						switch(data.gameover) {
-						case 1:
-							self.gameOverCallback(TicTacToe.WIN);
-						break;
-						case 2:
-							self.gameOverCallback(TicTacToe.LOSE);
-						break;
-						case 3:
-							self.gameOverCallback(TicTacToe.TIE);
-						break;
-						default:
+						if(data.gameover) {
+							self.endGame(data.gameover);
+						} else {
 							getmove();
 						}
 					}
@@ -79,16 +119,8 @@ TicTacToe = {
 				function(data) {
 					if(data.success) {
 						self.draw(!self.playerIsX, data.x, data.y);
-						switch(data.gameover) {
-						case 1:
-							self.gameOverCallback(TicTacToe.WIN);
-						break;
-						case 2:
-							self.gameOverCallback(TicTacToe.LOSE);
-						break;
-						case 3:
-							self.gameOverCallback(TicTacToe.TIE);
-						break;
+						if(data.gameover) {
+							self.endGame(data.gameover);
 						}
 					}
 					else {
@@ -157,35 +189,6 @@ TicTacToe = {
 			c.stroke();
 			
 		}
-		
-		this.init = function(canvasId, playerIsX, gameOverCallback, returnCallback) {
-			var canvas = $('#'+canvasId);
-			self.canvasId = canvasId;
-			self.canvasWidth = parseInt(canvas.attr('width'));
-			self.canvasHeight = parseInt(canvas.attr('height'));
-			self.cellWidth = parseInt(self.canvasWidth/self.boardSize);
-			self.cellHeight = parseInt(self.canvasHeight/self.boardSize);
-			
-			canvas.bind('click', click);
-			this.gameOverCallback = gameOverCallback;
-			this.newGame(playerIsX, function(){ self.clearBoard() });
-			returnCallback();
-		}
-		
-		this.newGame = function(playerIsX, callback) {
-			this.playerIsX = playerIsX;
-			var xo = playerIsX ? 'x' : 'o';
-			$.post('/tictactoe/newgame/size/'+self.boardSize+'/',
-				function(data) {
-					if(data.success) {
-						callback(true);
-					} else {
-						callback(false);
-					}
-				},
-				'json'
-			);
-		},
 		
 		this.clearBoard = function() {
 			
