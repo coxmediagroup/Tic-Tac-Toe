@@ -1,9 +1,6 @@
 from django.http import HttpResponse
 import json, random, game, gameboard
 
-ID_PLAYER = 1
-ID_COMPUTER = 2
-
 def newGame(request, size):
     if size is None: size = 3
     if size >= 3:
@@ -46,7 +43,7 @@ def getMove(request):
     next_move = game.getMove(board)
     
     if next_move:
-        board.plot(next_move, ID_COMPUTER)
+        board.plot(next_move, game.ID_COMPUTER)
         request.session['board'] = board
         
         status = game.isGameOver(board)

@@ -3,6 +3,7 @@ $(document).ready(function(){
 	var game = null;
 	var playerIsX = true;
 	
+	// start game
 	$('.btn-play').click(function(){
 		if($(this).hasClass('x')) {
 			playerIsX = true;
@@ -17,6 +18,7 @@ $(document).ready(function(){
 		});
 	});
 	
+	// this is called when the game ends
 	function gameOver(code) {
 		switch(code) {
 		case TicTacToe.WIN:

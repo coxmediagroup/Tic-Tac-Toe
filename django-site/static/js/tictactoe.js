@@ -22,7 +22,7 @@
 TicTacToe = {
 	
 	WIN: 1,
-	LOSS: 2,
+	LOSE: 2,
 	TIE: 3,
 	
 	game: function() {
@@ -71,17 +71,7 @@ TicTacToe = {
 		this.endGame = function(status) {
 			var canvas = $('#'+self.canvasId);
 			canvas.unbind();
-			switch(status) {
-			case 1:
-				self.gameOverCallback(TicTacToe.WIN);
-			break;
-			case 2:
-				self.gameOverCallback(TicTacToe.LOSE);
-			break;
-			case 3:
-				self.gameOverCallback(TicTacToe.TIE);
-			break;
-			}
+			self.gameOverCallback(parseInt(status));
 		}
 		
 		var click = function(e) {
