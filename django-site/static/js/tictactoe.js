@@ -51,19 +51,22 @@ TicTacToe = {
 				function(data) {
 					if(data.success) {
 						self.draw(self.playerIsX, cellX, cellY);
-						if(data.win) {
-							if(data.winner == 1) {
-								self.gameOverCallback(TicTacToe.WIN);
-							} else {
-								self.gameOverCallback(TicTacToe.LOSE);
-							}
-						} else {
+						switch(data.gameover) {
+						case 1:
+							self.gameOverCallback(TicTacToe.WIN);
+						break;
+						case 2:
+							self.gameOverCallback(TicTacToe.LOSE);
+						break;
+						case 3:
+							self.gameOverCallback(TicTacToe.TIE);
+						break;
+						default:
 							getmove();
 						}
 					}
 					else {
 						alert(data.message);
-						//self.gameOverCallback(TicTacToe.TIE);
 					}
 				},
 				'json'
@@ -76,16 +79,20 @@ TicTacToe = {
 				function(data) {
 					if(data.success) {
 						self.draw(!self.playerIsX, data.x, data.y);
-						if(data.win) {
-							if(data.winner == 1) {
-								self.gameOverCallback(TicTacToe.WIN);
-							} else {
-								self.gameOverCallback(TicTacToe.LOSE);
-							}
+						switch(data.gameover) {
+						case 1:
+							self.gameOverCallback(TicTacToe.WIN);
+						break;
+						case 2:
+							self.gameOverCallback(TicTacToe.LOSE);
+						break;
+						case 3:
+							self.gameOverCallback(TicTacToe.TIE);
+						break;
 						}
-					} else {
+					}
+					else {
 						alert(data.message);
-						//self.gameOverCallback(TicTacToe.TIE);
 					}
 				},
 				'json'

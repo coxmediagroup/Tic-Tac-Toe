@@ -2,6 +2,7 @@ import random, math, board
 
 ID_PLAYER = 1
 ID_COMPUTER = 2
+ID_TIE = 3
 
 FLAG_SAFE = 0
 FLAG_UNSAFE = 1
@@ -10,6 +11,8 @@ FLAG_WIN = 2
 class Result():
     pass
 
+# plot player on board and check for win
+# return False if the spot is already taken
 def makemove(board, x, y):
     result = Result()
     if board.getXY((x, y)) != board.EMPTY_CELL:
@@ -22,8 +25,9 @@ def makemove(board, x, y):
         result.y = y
         return result
 
+# calculate the computer's next move
+# return tuple (x,y) containing the computer's suggested move
 def getmove(board):
-    result = Result()
     
     # is there a spot to move?
     if board.isFull():
@@ -35,10 +39,7 @@ def getmove(board):
             x = random.randint(0,2);
             y = random.randint(0,2);
             if board.plot((x, y), ID_COMPUTER):
-                result.x = x
-                result.y = y
-                break
-        return result
+                return (x,y)
     
     # here's the idea
     # for each move the computer can make, calculate all outcomes (win, loss, tie)
@@ -47,10 +48,9 @@ def getmove(board):
     # the key is to flag outcomes where the computer can lose (assume the player will go for the win)
     safe_moves = []
     win_moves = []
-    pm = [[0,0,0],[0,0,0],[0,0,0]]
     for cell in board.getEmptyCells():
+        print cell
         flag = seeOutcomeForCell(board, cell)
-        pm[cell[0]][cell[1]] = flag
         if flag == FLAG_SAFE:
             safe_moves.append(cell)
         elif flag == FLAG_WIN:
@@ -60,18 +60,15 @@ def getmove(board):
     # randomly select from safe moves, winning moves take precedence
     print len(win_moves)
     print len(safe_moves)
-    print pm
     if len(win_moves):
         m = random.randint(0,len(win_moves)-1)
-        result.x = win_moves[m][0]
-        result.y = win_moves[m][1]
+        return win_moves[m]
     else:
         m = random.randint(0,len(safe_moves)-1)
-        result.x = safe_moves[m][0]
-        result.y = safe_moves[m][1]
+        return safe_moves[m]
     
     
-    return result
+    return False # this case should never happen
 
 # see if the player/computer (specified by playerId) can win the game on the next turn
 def checkForWinningMove(board, playerId):
@@ -103,11 +100,15 @@ def seeOutcomeForCell(board, cell):
 # node is cleared (set to safe) if there is a another path on the node that leads to a safe/win flag
 def seeOutcome(board, currentPlayerId):
     win = checkForWinningMove(board, currentPlayerId)
+    cats = board.checkforcats() # check for cats before the board is full to cut down recursion
     if win:
         if currentPlayerId == ID_PLAYER:
             return FLAG_UNSAFE
         else:
             return FLAG_WIN
+    
+    if cats:
+        return FLAG_SAFE
     
     if board.isFull():
         return FLAG_SAFE
@@ -136,3 +137,13 @@ def seeOutcome(board, currentPlayerId):
     if win:
         flag = FLAG_WIN
     return flag
+
+def isGameOver(board):
+    if board.checkforwin(ID_PLAYER):
+        return ID_PLAYER
+    elif board.checkforwin(ID_COMPUTER):
+        return ID_COMPUTER
+    elif board.checkforcats():
+        return ID_TIE
+    else:
+        return False

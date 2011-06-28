@@ -26,9 +26,11 @@ def makemove(request, x, y):
     if result:
         request.session['board'] = board
         
+        status = game.isGameOver(board)
+        
         response = {
             'success': True,
-            'win': result.win
+            'gameover': status
         }
         if result.win:
             response['winner'] = ID_PLAYER
@@ -42,22 +44,21 @@ def makemove(request, x, y):
 
 def getmove(request):
     board = request.session['board']
-    result = game.getmove(board)
+    next_move = game.getmove(board)
     
-    if result:
-        board.plot((result.x, result.y), ID_COMPUTER)
+    if next_move:
+        board.plot(next_move, ID_COMPUTER)
         request.session['board'] = board
         
-        win = board.checkforwin(ID_COMPUTER)
+        status = game.isGameOver(board)
+        
     
         response = {
             'success': True,
-            'x': result.x,
-            'y': result.y,
-            'win': win
+            'x': next_move[0],
+            'y': next_move[1],
+            'gameover': status
         }
-        if win:
-            response['winner'] = ID_COMPUTER
     else:
         response = {
             'success': False,

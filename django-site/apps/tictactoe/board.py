@@ -105,4 +105,67 @@ class GameBoard:
             if win:
                 return True
     
-        return False 
+        return False
+    
+    def checkforcats(self):
+        # row win
+        for x in range(self.columnCount):
+            blocked = False
+            xo = False
+            for y in range(self.rowCount):
+                v = self.matrix[x][y]
+                if v != self.EMPTY_CELL:
+                    if not xo:
+                        xo = v
+                    else:
+                        if v != xo:
+                            blocked = True
+                            break
+            if not blocked:
+                return False
+        # column win
+        for y in range(self.rowCount):
+            blocked = False
+            xo = False
+            for x in range(self.columnCount):
+                v = self.matrix[x][y]
+                if v != self.EMPTY_CELL:
+                    if not xo:
+                        xo = v
+                    else:
+                        if v != xo:
+                            blocked = True
+                            break
+            if not blocked:
+                return False
+        # diagonal win
+        if self.rowCount == self.columnCount:
+            blocked = False
+            xo = False
+            for xy in range(self.rowCount):
+                v = self.matrix[x][y]
+                if v != self.EMPTY_CELL:
+                    if not xo:
+                        xo = v
+                    else:
+                        if v != xo:
+                            blocked = True
+                            break
+            if not blocked:
+                return False
+            # other diagonal win
+            blocked = False
+            xo = False
+            for xy in range(self.rowCount):
+                v = self.matrix[x][y]
+                if v != self.EMPTY_CELL:
+                    if not xo:
+                        xo = v
+                    else:
+                        if v != xo:
+                            blocked = True
+                            break
+            if not blocked:
+                return False
+    
+        return True
