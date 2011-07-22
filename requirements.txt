@@ -1,8 +1,8 @@
-gunicorn # not with fcgi
+#gunicorn # not with fcgi
 #flup # for fcgi
 #python-memcached # for memcached cache (you must install that separately)
 Django
-south
+#south
 #django-tagging-ng # original tagging works only up to Django 1.0
 #django-tinymce
 #django-mptt # working version only in SVN! see http://github.com/django-mptt/django-mptt
