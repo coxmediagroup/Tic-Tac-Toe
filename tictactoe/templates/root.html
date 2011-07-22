@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Tic Tac Toe :: {% block title %}Game{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" media="all" href="http://yui.yahooapis.com/2.8.1/build/reset-fonts-grids/reset-fonts-grids.css">
+  <link rel="stylesheet" type="text/css" media="all" href="http://yui.yahooapis.com/2.8.1/build/base/base.css">
+  <link rel="stylesheet" type="text/css" media="screen,projection" href="{{ MEDIA_URL }}css/style.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print.css" />
+  <link rel="sitemap" href="/sitemap.xml" type="text/xml" />
+  <!-- <link rel="alternate" type="application/rss+xml" title="Tic Tac Toe" href=""> -->
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="{{ MEDIA_URL }}favicon.ico" type="image/icon" />
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
+  </script>
+  {% block extra_head %}
+  {% endblock %}
+</head>
+<body>
+
+  <div id="game">
+  
+        <h1>Tic Tac Toe</h1>
+        <table class="board">
+          <tbody>
+            <tr>
+              <td>X</td><td>X</td><td>O</td>   
+            </tr>
+            <tr>
+              <td>X</td><td>X</td><td>O</td>   
+            </tr>
+            <tr>
+              <td>X</td><td>X</td><td>O</td>   
+            </tr>
+          </tbody>  
+        </table>
+  </div>
+</body>
+</html>

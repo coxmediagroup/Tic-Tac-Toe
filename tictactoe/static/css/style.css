@@ -1,0 +1,264 @@
+html {
+	color: black;
+  background-color: #6cf;
+  background: -webkit-gradient(linear, center top, center bottom, from(#cff), to(#6cf));
+  background-attachment: fixed;
+  background-position: top left;
+  background-repeat: no-repeat;
+}
+
+html[lang|="de"] {
+    quotes: "\201E" "\201C" "\201A" "\2018";
+}
+
+/*
+html[lang|="de-DE"] {
+  quotes:"\00BB" "\00AB" "\203A" "\2039";
+}
+*/
+
+html[lang|="de-CH"] {
+  quotes:"\00AB" "\00BB" "\2039" "\203A";
+}
+
+html[lang|="en"] {
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+html[lang|="fr"] {
+    quotes:"\00AB\00A0" "\00A0\00BB" "\2039\00A0" "\00A0\203A";
+}
+
+q:before { content:open-quote; }
+q:after { content:close-quote; }
+q q:before { content:open-quote; }
+q q:after { content:close-quote; }
+
+body {
+	margin: 0 0 0 0;
+	font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
+  text-align: left;
+  font-size: 85%;
+	volume: medium;
+	voice-family: female;
+	pitch: medium;
+}
+
+/* General */
+
+.clear  { 
+	clear: both; 
+}
+
+.nobreak   { 
+	white-space: nowrap; 
+}
+
+.left {
+    vertical-align: middle; 
+    float: left;
+    text-align: left;
+}
+
+.right {
+    float: right;
+    text-align: right;
+}
+
+
+/* Titles */
+
+h1, h2, h3, h4, h5, legend {
+	font-style: italic;
+	color: #c33;
+	line-height: 1.0;
+	font-weight: bold;
+	page-break-after: avoid;
+	voice-family: male;
+}
+
+h1 {
+	font-size: 182%;
+	margin: 0 0 1em 0;
+}
+
+h2 {
+	font-size: 167%;
+	margin: 0 0 1em 0;
+}
+
+h2.center {
+	font-size: 154%;
+	margin: 0 0 1em 0;
+}
+
+h3 {
+	font-size: 138.5%;
+	margin: 1em 0 1em 0;
+}
+
+h4 {
+	font-size: 116%;
+	margin: 0.5em 0 0.25em 0;
+}
+
+h5, th, dt {
+	font-size: 100%;
+	font-weight:bold;
+}
+
+p, 
+li, dd, 
+td {
+    line-height: 1.3;
+}
+
+.author, .autor {
+	text-align: right;
+	font-style: italic;
+}
+
+.hidden, .imagetext {
+	display: none;
+	visibility: hidden;
+}
+
+/* Images */
+
+img {
+	border: none;
+	max-width: 100%;
+}
+
+img.intext-right,
+.intext-right img,
+#yui-main p img {
+	float:right;
+	max-width: 300px;
+	margin-left: 2em;
+}
+
+img.logotop {
+	float:left;
+	padding: 0 20px 0 20px;
+	max-height: 110px;
+	max-width: 50%;
+	vertical-align: middle;
+}
+
+.image, .image_center {
+	padding: 1em 0 1em 0;
+}
+
+/* Lists */
+
+ul, ol, dl {
+	margin-left: 0;
+	margin-top: 0;
+}
+
+li {
+	list-style-position: outside;
+	margin-left: 1.5em;
+}
+
+ol li {
+	list-style-type: decimal;
+}
+
+ul li, dl dd {
+	list-style-type: disc;
+	margin-bottom: 0.25em;
+}
+
+dt {
+}
+
+dd {
+	margin-left: 1em;
+	background: none;
+}
+
+li li {
+	margin-left: 3em;
+}
+
+
+li li li {
+	margin-left: 4.5em;
+}
+
+/* Links */
+
+a:link, 
+a:visited, 
+a:active {
+	color: black;
+	text-decoration: none !important;
+}
+
+a:active {
+	font-weight: bold;
+}
+
+a:hover {
+	color: red;
+}
+
+a img, a:link img, a:visited img, a:active img {
+	border-bottom: none !important;
+}
+
+/* Auszeichnungen */
+
+i, em {
+	font-style: italic;
+	pitch: high;
+}
+
+b, strong {
+	font-weight: bold;
+	volume: loud;
+}
+
+/* Forms */
+
+input, textarea {
+	font-size: 77%;
+	line-height: 1.0;
+}
+
+.mainmenu a:link, .mainmenu a:visited .mainmenu a:active {
+	border-bottom: none;
+	text-decoration: none;
+}
+
+.mainmenu a:hover {
+	color: #006;
+	border-bottom: 1px solid #006;
+}
+/* top right bottom left */
+
+/* Microformats */
+
+.vcard {
+	font-size: 85%;
+	margin: 1em 0 1em 0;
+}
+
+.vcard .type {
+  display: none;
+}
+
+.vcard .n div,
+.vcard .postal-code {
+	display: inline;
+}
+
+/* Areas */
+
+#breadcrumbs {
+	font-size: 85%;
+	position: relative;
+	top: -3em;
+}

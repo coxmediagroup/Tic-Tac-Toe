@@ -1,0 +1,13 @@
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}">
+      {# with icon classes of jQuery UI #}
+      {% if "error" in message.tags %}<span class="ui-icon ui-icon-alert"></span>{% endif %}
+      {% if "warning" in message.tags %}<span class="ui-icon ui-icon-info"></span>{% endif %}
+      {% if "success" in message.tags %}<span class="ui-icon ui-icon-check"></span>{% endif %}
+      {% if "info" in message.tags %}<span class="ui-icon ui-icon-notice"></span>{% endif %}
+      {% else %}>{% endif %}{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}

@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if page_obj.has_other_pages %}
+<div class="pagination">
+  {# with icon classes of jQuery UI #}
+  <span class="arrows">
+  {% if page_obj.has_previous %}
+      <a href="?page=1&orderby={{ orderby }}" class="button" title="{% trans "First" %}"><span class="ui-icon ui-icon-arrowthickstop-1-w"></span></a>
+      <a href="?page={{ page_obj.previous_page_number }}&orderby={{ orderby }}" class="button" title="{% trans "Previous" %}"><span class="ui-icon ui-icon-arrowthick-1-w"></span></a>
+  {% endif %}
+  </span>
+  <span class="current"> {{ page_obj.number }}/{{ page_obj.paginator.num_pages }} </span>
+  <span class="arrows">
+  {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}&orderby={{ orderby }}" class="button" title="{% trans "Next" %}"><span class="ui-icon ui-icon-arrowthick-1-e"></span></a>
+      <a href="?page={{ page_obj.paginator.num_pages }}&orderby={{ orderby }}" class="button" title="{% trans "Last" %}"><span class="ui-icon ui-icon-arrowthickstop-1-e"></span></a>
+  {% endif %}
+  </span>
+  <span class="right"><a href="./new/" class="button">{% trans "New Item" %}</a></span>
+</div>
+{% endif %}

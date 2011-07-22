@@ -1,0 +1,9 @@
+{% extends "root.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Error 500: Server Error" %}{% endblock %}
+
+{% block main_content %}
+<h2>{% trans "Error 500: Server Error" %}</h2>
+<p>{% trans "Sorry, this page is temporalily unavailable due to a server misconfiguration." %}</p>
+{% endblock %}
