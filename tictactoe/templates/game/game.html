@@ -19,15 +19,22 @@
 </head>
 <body>
 
-  <div id="options">
+  <div id="game">
   
         <h1>Tic Tac Toe</h1>
-        <form id="options" action="." method="post">{% csrf_token %}
-           {{ form }}
-           <input type="submit" value="Play" />
-
-        </form>
-
+        <table class="board">
+          <tbody>
+            <tr>
+              <td>X</td><td>O</td><td>O</td>   
+            </tr>
+            <tr>
+              <td>X</td><td>X</td><td>O</td>   
+            </tr>
+            <tr>
+              <td>X</td><td>X</td><td>O</td>   
+            </tr>
+          </tbody>  
+        </table>
   </div>
 </body>
 </html>

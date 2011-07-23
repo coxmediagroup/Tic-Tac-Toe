@@ -5,16 +5,14 @@ from django.contrib.sitemaps import GenericSitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import os
 from django.views.generic import TemplateView, ListView
-
+from game.views import GameView
 admin.autodiscover()
-from tictactoe.views import OptionsView
 
 urlpatterns = patterns('',
-        url(r'^$', 
-            OptionsView(), 
-            name='options'),
-        (r'^game/', 
-            include('tictactoe.game.urls')),
+        url(r'^/(?P<computer_first>\w+)/$', 
+        GameView(), 
+        name='game'),
+
 )
 
 # serve static content in debug mode
@@ -34,9 +32,3 @@ if settings.DEBUG:
         }),
         (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     )
-
-
-urlpatterns += patterns('',
-    (r'^admin/', include(admin.site.urls)),    
-    #(r'sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': mysitemaps}),
-)

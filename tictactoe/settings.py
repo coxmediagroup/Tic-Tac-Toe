@@ -196,7 +196,7 @@ INSTALLED_APPS = [
     #'mptt',
     #'south',
     #'tagging',
-    'tictactoe',
+    'game'
 ]
 
 MIDDLEWARE_CLASSES = [
