@@ -42,11 +42,13 @@ class GameBoard:
     def isFull(self):
         return True if (self.matrix[0]|self.matrix[1]) == 0x1ff else False
     
+    def inBounds(self, x, y):
+        return True if (x >= 0 and x < self.columnCount and y >= 0 and y < self.rowCount) else False
+    
     def getXY(self, cell):
         x = cell[0]
         y = cell[1]
-        inBounds = True if (x >= 0 and x < self.columnCount and y >= 0 and y < self.rowCount) else False
-        if inBounds:
+        if self.inBounds(x,y):
             bit = self.cellToBit(cell)
             m0 = self.matrix[0] & bit
             m1 = self.matrix[1] & bit
@@ -57,8 +59,7 @@ class GameBoard:
     def plot(self, cell, xo):
         x = cell[0]
         y = cell[1]
-        inBounds = True if (x >= 0 and x < self.columnCount and y >= 0 and y < self.rowCount) else False
-        if inBounds:
+        if self.inBounds(x,y):
             bit = self.cellToBit(cell)
             self.matrix[xo-1] = self.matrix[xo-1] | bit
             return True
@@ -68,8 +69,7 @@ class GameBoard:
     def clear(self, cell):
         x = cell[0]
         y = cell[1]
-        inBounds = True if (x >= 0 and x < self.columnCount and y >= 0 and y < self.rowCount) else False
-        if inBounds:
+        if self.inBounds(x,y):
             bit = self.cellToBit(cell)
             self.matrix[0] = (self.matrix[0] | bit) ^ bit
             self.matrix[1] = (self.matrix[1] | bit) ^ bit
