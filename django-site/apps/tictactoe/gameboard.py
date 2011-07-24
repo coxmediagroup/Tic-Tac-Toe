@@ -45,6 +45,8 @@ class GameBoard:
     def inBounds(self, x, y):
         return True if (x >= 0 and x < self.columnCount and y >= 0 and y < self.rowCount) else False
     
+    # pass in a cell (x,y) and return whether or not that
+    # space on the board is taken or not
     def getXY(self, cell):
         x = cell[0]
         y = cell[1]
@@ -52,7 +54,7 @@ class GameBoard:
             bit = self.cellToBit(cell)
             m0 = self.matrix[0] & bit
             m1 = self.matrix[1] & bit
-            return m0 | m1
+            return True if (m0 | m1) else False
         else:
             return False
     
@@ -77,6 +79,8 @@ class GameBoard:
         else:
             return False
     
+    # return a list of (x,y) tuples, each representing an
+    # open space on the board
     def getEmptyCells(self):
         cells = []
         for y in range(self.rowCount):
@@ -86,6 +90,7 @@ class GameBoard:
                     cells.append((x,y))
         return cells
     
+    # check if the player's (xo) board has matched any defined wins
     def checkForWin(self, xo):
         m = self.matrix[xo-1]
         for win in self.wins:
