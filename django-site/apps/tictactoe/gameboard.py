@@ -47,14 +47,14 @@ class GameBoard:
     
     # pass in a cell (x,y) and return whether or not that
     # space on the board is taken or not
-    def getXY(self, cell):
+    def isVacant(self, cell):
         x = cell[0]
         y = cell[1]
         if self.inBounds(x,y):
             bit = self.cellToBit(cell)
             m0 = self.matrix[0] & bit
             m1 = self.matrix[1] & bit
-            return True if (m0 | m1) else False
+            return True if (m0 | m1) == 0 else False
         else:
             return False
     
@@ -62,9 +62,12 @@ class GameBoard:
         x = cell[0]
         y = cell[1]
         if self.inBounds(x,y):
-            bit = self.cellToBit(cell)
-            self.matrix[xo-1] = self.matrix[xo-1] | bit
-            return True
+            if self.isVacant(cell):
+                bit = self.cellToBit(cell)
+                self.matrix[xo-1] = self.matrix[xo-1] | bit
+                return True
+            else:
+                return False
         else:
             return False
     

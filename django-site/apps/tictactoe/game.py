@@ -12,11 +12,7 @@ FLAG_WIN = 2
 # return False if the spot is already taken
 def makeMove(board, x, y):
     
-    if board.getXY((x, y)) == 0:
-        board.plot((x, y), ID_PLAYER)
-        return True
-    else:
-        return False
+    return board.plot((x, y), ID_PLAYER)
 
 # calculate the computer's next move
 # return tuple (x,y) containing the computer's suggested move
