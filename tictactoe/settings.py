@@ -170,12 +170,13 @@ SITE_ID = 1
 
 ROOT_URLCONF = '%s.urls' % PROJECT_NAME
 
-MEDIA_ROOT = rel('media')
+MEDIA_ROOT = rel('static')
 MEDIA_URL = '/media/'
 
 # setup Django 1.3 staticfiles
 STATIC_URL = '/static/'
 STATIC_ROOT = rel('static_collection')
+STATICFILES_DIRS = ("/Users/user/TicTacToe/tictactoe/static",)
 ADMIN_MEDIA_PREFIX = '%sadmin/' % STATIC_URL
 
 # ==============================================================================

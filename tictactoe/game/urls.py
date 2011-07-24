@@ -9,7 +9,7 @@ from game.views import GameView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-        url(r'^/(?P<computer_first>\w+)/$', 
+        url(r'^(?P<computer_first>\w+)/$', 
         GameView(), 
         name='game'),
 

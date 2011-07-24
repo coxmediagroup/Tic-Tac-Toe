@@ -6,12 +6,12 @@
   <title>Tic Tac Toe :: {% block title %}Game{% endblock %}</title>
   <link rel="stylesheet" type="text/css" media="all" href="http://yui.yahooapis.com/2.8.1/build/reset-fonts-grids/reset-fonts-grids.css">
   <link rel="stylesheet" type="text/css" media="all" href="http://yui.yahooapis.com/2.8.1/build/base/base.css">
-  <link rel="stylesheet" type="text/css" media="screen,projection" href="{{ MEDIA_URL }}css/style.css" />
-  <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection" href="{{ STATIC_URL }}css/style.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="{{ STATIC_URL }}css/print.css" />
   <link rel="sitemap" href="/sitemap.xml" type="text/xml" />
   <!-- <link rel="alternate" type="application/rss+xml" title="Tic Tac Toe" href=""> -->
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" type="image/x-icon" />
-  <link rel="icon" href="{{ MEDIA_URL }}favicon.ico" type="image/icon" />
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/icon" />
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
   </script>
   {% block extra_head %}
@@ -22,19 +22,26 @@
   <div id="game">
   
         <h1>Tic Tac Toe</h1>
+        <p>{% if computer_first %}Your turn!{% else %}You go first!{% endif %}</p>
         <table class="board">
           <tbody>
             <tr>
-              <td>X</td><td>O</td><td>O</td>   
+              <td class='cell' id='0'></td><td class='cell' id='1'></td><td class='cell' id='2'></td>   
             </tr>
             <tr>
-              <td>X</td><td>X</td><td>O</td>   
+              <td class='cell' id='3'></td><td class='cell' id='4'></td><td  class='cell' id='5'></td>   
             </tr>
             <tr>
-              <td>X</td><td>X</td><td>O</td>   
+              <td class='cell' id='6'></td><td class='cell' id='7'></td><td class='cell' id='8'></td>   
             </tr>
           </tbody>  
         </table>
   </div>
 </body>
 </html>
+<script>
+  var computer_first = {% if computer_first %}true{% else %}false{% endif %};
+</script>
+
+<script type="text/javascript" src="/static/js/game.js"></script>
+

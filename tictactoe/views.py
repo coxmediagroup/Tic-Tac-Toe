@@ -25,9 +25,6 @@ class OptionsView(View):
         
         if form.is_valid():
             return redirect('game', computer_first=form.cleaned_data['computer_first'])
-            #print 'valid'
-            #return redirect('/game/%s' % form.cleaned_data['computer_first'])
-            #print 'after redir'
         else: # validation failed, cant happen in this case
             print 'validation failed'
             pass

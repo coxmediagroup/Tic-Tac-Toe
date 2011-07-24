@@ -28,8 +28,7 @@ If any row column or diag = 3 or 12 then win, 2 or 8 means
 next move must prevent win.
 
 2. as two arrays as above, one per player.
-var Xboard = [[1,0,1],[1,1,0],[1,1,1]];
-var Oboard = [[0,1,0],[0,0,1],[0,0,0]];
+
 Each element is either 0 (not selected), 1 (selected)
 
 3. a single array of 9 elements.  This allows lists of

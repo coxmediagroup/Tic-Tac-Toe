@@ -5,10 +5,13 @@ from view_helpers import View
 class GameView(View):
     def __call__(self, request, *args, **kwargs):
         if 'computer_first' in kwargs:
-            self.computer_first = kwargs.pop('computer_first')
-            print 'computer_first is', self.computer_first
+            option_string = kwargs.pop('computer_first')
+            if option_string == 'True':
+                self.computer_first = True
+            else:
+                self.computer_first = False
         else:
-            self.computer_first = 'True'
+            self.computer_first = True
             #TODO return improper args page here
             pass
         

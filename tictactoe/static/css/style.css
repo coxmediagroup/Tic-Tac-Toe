@@ -262,3 +262,16 @@ input, textarea {
 	position: relative;
 	top: -3em;
 }
+
+ul li {
+	list-style: none outside none;
+}
+
+
+td {
+	width: 2em;
+	height: 2em;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 30px;
+}
