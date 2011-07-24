@@ -12,7 +12,7 @@ FLAG_WIN = 2
 # return False if the spot is already taken
 def makeMove(board, x, y):
     
-    if board.getXY((x, y)) == board.EMPTY_CELL:
+    if board.getXY((x, y)) == 0:
         board.plot((x, y), ID_PLAYER)
         return True
     else:
@@ -126,13 +126,10 @@ def seeOutcome(board, currentPlayerId):
 
 def isGameOver(board):
     if board.checkForWin(ID_PLAYER):
-        print 'win'
         return ID_PLAYER
     elif board.checkForWin(ID_COMPUTER):
-        print 'loss'
         return ID_COMPUTER
     elif board.isFull():
-        print 'tie'
         return ID_TIE
     else:
         return False
