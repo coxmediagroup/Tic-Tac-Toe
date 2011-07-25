@@ -34,8 +34,7 @@ Each element is either 0 (not selected), 1 (selected)
 3. a single array of 9 elements.  This allows lists of
 all corner squares, all edge squares, all free squares.
 
-probably use all of the above.  The first one is more convenient for display, the second for determining wins (add row, col or diagonal = 3), the third for
-determining appropriate plays.
+Start with the third one since it is the simplest.  
 
 Strategy is first option from following list (wikipedia):
 1. Win: If the player has two in a row, play the third to get three in a row.
@@ -49,8 +48,8 @@ Option 2: If there is a configuration where the opponent can fork, block that fo
 7. Empty corner: Play in a corner square.
 8. Empty side: Play in a middle square on any of the 4 sides.
 
-Steps 3 and 4 are the hardest.  Perhaps make a table of fork combinations and
-look for a match?
+Steps 3 and 4 are the hardest.  They may not be necessary if using a playbook for
+response to first moves.
 
 If computer is first, play corner.
 

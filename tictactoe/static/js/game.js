@@ -1,16 +1,7 @@
 jQuery(function($)
 {
-    // create representations of board
     
-    // first representation will be for display: includes both players, 0 for unplayed, 1 for X, 4 for O
-    //top left element is board[0][0]
-    var board = [[0,0,0],[0,0,0],[0,0,0]];
-    
-    // second representation is one array for each player, 0 for unplayed, 1 for X or O
-    var Xboard = [[0,0,0],[0,0,0],[0,0,0]];
-    var Oboard = [[0,0,0],[0,0,0],[0,0,0]];
-    
-    // third representation is single array, left to right in each row.   0 for unplayed, 1 for X, 4 for O
+    // representation of board is single array, left to right in each row.   0 for unplayed, 1 for X, 4 for O
     var board_list = [0,0,0,0,0,0,0,0,0];
     var corners = [0,2,6,8];
     var opposite_corners = [8,6,2,0];
@@ -47,9 +38,8 @@ jQuery(function($)
     // this will be used by all the functions that look for situations, and return the cell to play or none.
     result = {found:false,cell_num:0};
     
+    // marks the square cell_num with X or O as appropriate
     function mark_square(cell_num) {
-        // marks the square cell_num with X or O as appropriate
-        
         // if computers turn and computer first, X
         // if computers turn and user first, O
         // if users turn and computer first, O
@@ -76,6 +66,7 @@ jQuery(function($)
         }
     }
     
+    // determines if there is a win to make or block
     function win(val_for_mark) {
         // if there are two in a row and the third is empty, then find the third.
         // Adding row equals 2 (if I'm X) or 8 (if I'm O)
@@ -145,7 +136,9 @@ jQuery(function($)
             users_turn = true;
             return;
         }
+        // Steps 3 and 4 are more complicated and not necessary to ensure not losing.
         //3. Fork: Create an opportunity where you can win in two ways.
+        
         //4. Block opponent's Fork:
         //Option 1: Create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork or winning. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
         //Option 2: If there is a configuration where the opponent can fork, block that fork.
