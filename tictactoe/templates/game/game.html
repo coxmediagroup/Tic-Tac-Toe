@@ -12,7 +12,7 @@
   <!-- <link rel="alternate" type="application/rss+xml" title="Tic Tac Toe" href=""> -->
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon" />
   <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/icon" />
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js">
   </script>
   {% block extra_head %}
   {% endblock %}
@@ -36,6 +36,7 @@
             </tr>
           </tbody>  
         </table>
+        <p>To play again, click reload.</p>
   </div>
 </body>
 </html>
