@@ -2,6 +2,11 @@ Requirements to run: Python 2.7 and Django 1.3.
 Go into the django-site folder and run "python manage.py runserver".
 Then open your browser to localhost:8000 and you should be able to play the game.
 
+Testing:
+Go to the unittest folder and run gameboardtest.py and gametest.py.
+gameboardtest.py validates the integrity of the GameBoard class
+gametest.py validates the integrity of the game.py module ability to never let the computer lose
+
 Notice:
 This django site doesn't run in Windows because of a Django bug with file-based sessions:
 https://code.djangoproject.com/ticket/9084
