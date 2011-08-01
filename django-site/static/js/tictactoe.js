@@ -21,9 +21,9 @@
 
 TicTacToe = {
 	
-	WIN: 1,
-	LOSE: 2,
-	TIE: 3,
+	WIN: 0,
+	LOSE: 1,
+	TIE: 2,
 	
 	game: function() {
 		var self = this;
@@ -53,7 +53,7 @@ TicTacToe = {
 		this.newGame = function(playerIsX, callback) {
 			this.playerIsX = playerIsX;
 			var xo = playerIsX ? 'x' : 'o';
-			$.post('/tictactoe/newgame/size/'+self.boardSize+'/',
+			$.post('/tictactoe/newgame/',
 				function(data) {
 					if(data.success) {
 						self.clearBoard();

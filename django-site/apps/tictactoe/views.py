@@ -1,20 +1,14 @@
 from django.http import HttpResponse
 import json, random, game, gameboard
 
-def newGame(request, size):
-    if size is None: size = 3
-    if size >= 3:
-        board = gameboard.GameBoard(int(size))
-        request.session['board'] = board
-        response = {
-            'success': True,
-            'message': 'Board size set to '+str(size)
-        }
-    else:
-        response = {
-            'success': False,
-            'message': 'Board size must be at least 3!'
-        }
+def newGame(request):
+    
+    board = gameboard.GameBoard()
+    request.session['board'] = board
+    response = {
+        'success': True,
+        'message': 'Game Initiated'
+    }
     
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
@@ -43,7 +37,7 @@ def getMove(request):
     next_move = game.getMove(board)
     
     if next_move:
-        board.plot(next_move, game.ID_COMPUTER)
+        board.makeMove(next_move, game.ID_COMPUTER)
         request.session['board'] = board
         
         status = game.isGameOver(board)

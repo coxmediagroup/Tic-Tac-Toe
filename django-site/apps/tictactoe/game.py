@@ -1,8 +1,8 @@
 import random, math
 
-ID_PLAYER = 1
-ID_COMPUTER = 2
-ID_TIE = 3
+ID_PLAYER = 0
+ID_COMPUTER = 1
+ID_TIE = 2
 
 FLAG_SAFE = 0
 FLAG_UNSAFE = 1
@@ -12,7 +12,11 @@ FLAG_WIN = 2
 # return False if the spot is already taken
 def makeMove(board, x, y):
     
-    return board.plot((x, y), ID_PLAYER)
+    if board.isVacant((x,y)):
+        board.makeMove((x,y), ID_PLAYER)
+        return True
+    else:
+        return False
 
 # calculate the computer's next move
 # return tuple (x,y) containing the computer's suggested move
@@ -27,8 +31,7 @@ def getMove(board):
         while True:
             x = random.randint(0,2);
             y = random.randint(0,2);
-            if board.plot((x, y), ID_COMPUTER):
-                return (x,y)
+            return (x,y)
     
     # here's the idea
     # for each move the computer can make, calculate all outcomes (win, loss, tie)
@@ -59,7 +62,7 @@ def getMove(board):
 # see if the player/computer (specified by playerId) can win the game on the next turn
 def checkForWinningMove(board, playerId):
     for cell in board.getEmptyCells():
-        board.plot(cell, playerId)
+        board.makeMove(cell, playerId)
         win = board.checkForWin(playerId)
         board.clear(cell)
         if win:
@@ -68,7 +71,7 @@ def checkForWinningMove(board, playerId):
     return False
 
 def seeOutcomeForCell(board, cell):
-    board.plot(cell, ID_COMPUTER)
+    board.makeMove(cell, ID_COMPUTER)
     
     win = board.checkForWin(ID_COMPUTER)
     if win:
@@ -99,7 +102,7 @@ def seeOutcome(board, currentPlayerId):
         flag = FLAG_SAFE
         win = True
         for cell in board.getEmptyCells():
-            board.plot(cell, ID_PLAYER)
+            board.makeMove(cell, ID_PLAYER)
             f = seeOutcome(board, ID_COMPUTER)
             board.clear(cell)
             if f == FLAG_UNSAFE:
@@ -110,7 +113,7 @@ def seeOutcome(board, currentPlayerId):
         flag = FLAG_UNSAFE
         win = False
         for cell in board.getEmptyCells():
-            board.plot(cell, ID_COMPUTER)
+            board.makeMove(cell, ID_COMPUTER)
             f = seeOutcome(board, ID_PLAYER)
             board.clear(cell)
             if f != FLAG_UNSAFE:
