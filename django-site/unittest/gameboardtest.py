@@ -62,7 +62,20 @@ class MoveTest(unittest.TestCase):
     
     # verify that one player cannot make a move over another player
     def testPlayerOverPlayer(self):
-        pass 
+        for playerId in range(2):
+            b = GameBoard()
+            for y in range(3):
+                for x in range(3):
+                    b.makeMove((x,y), playerId)
+                    self.assertRaises(InvalidMoveException, b.makeMove, (x,y), range(2)[playerId-1])
+    
+    # verify player/turn ids that are not 0 or 1 raise an exception
+    def testInvalidTurnException(self):
+        for playerId in (-1,3,4):
+            b = GameBoard()
+            for y in range(3):
+                for x in range(3):
+                    self.assertRaises(InvalidMoveException, b.makeMove, (x,y), playerId)
         
 
 class VacantTest(unittest.TestCase):
@@ -79,6 +92,7 @@ class VacantTest(unittest.TestCase):
             for cellCountShouldBe in (9,8,7,6,5,4,3,2,1,0):
                 self.assertEquals(len(b.getEmptyCells()), cellCountShouldBe)
                 if cellCountShouldBe > 0: b.makeMove(b.getEmptyCells()[0], playerId)
+
 
 class WinTest(unittest.TestCase):
     
@@ -174,15 +188,34 @@ class WinTest(unittest.TestCase):
                 
                 self.assertEqual(False, b.checkForWin(range(2)[playerId-1]))
 
-class CatsTest(unittest.TestCase):
+
+class EmptyAndFullTest(unittest.TestCase):
     
-    # verify that a full board with no win returns a tie
-    def testFullBoardTie(self):
-        pass
+    def setUp(self):
+        self.board = GameBoard()
     
-    # verify that ties are detected for boards that are not full but where no wins are possible
-    def testNonFullBoardTie(self):
-        pass
+    def tearDown(self):
+        self.board = None
+    
+    # verify that an initial board is empty
+    def testBoardEmpty(self):
+        self.assertEquals(True, self.board.isEmpty())
+    
+    # verify that isFull() returns True when the board is full
+    def testBoardFull0(self):
+        for y in range(3):
+            for x in range(3):
+                self.board.makeMove((x,y), 0)
+        
+        self.assertEquals(True, self.board.isFull())
+    
+    # verify that isFull() returns True when the board is full
+    def testBoardFull1(self):
+        for y in range(3):
+            for x in range(3):
+                self.board.makeMove((x,y), 1)
+        
+        self.assertEquals(True, self.board.isFull())
 
 if __name__ == '__main__':
     unittest.main()

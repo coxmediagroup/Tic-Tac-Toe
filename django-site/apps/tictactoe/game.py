@@ -47,14 +47,11 @@ def getMove(board):
         elif flag == FLAG_WIN:
             win_moves.append(cell)
     
-    # it doesn't matter which move is taken, as long as it is a safe one
-    # randomly select from safe moves, winning moves take precedence
+    # select from safe moves, winning moves take precedence
     if len(win_moves):
-        m = random.randint(0,len(win_moves)-1)
-        return win_moves[m]
+        return win_moves[0]
     else:
-        m = random.randint(0,len(safe_moves)-1)
-        return safe_moves[m]
+        return safe_moves[0]
     
     
     return False # this case should never happen

@@ -1,10 +1,8 @@
 import math
 
-class OutOfBoundsException(Exception):
-    pass
-
-class InvalidMoveException(Exception):
-    pass
+class OutOfBoundsException(Exception): pass
+class InvalidMoveException(Exception): pass
+class InvalidTypeException(Exception): pass
 
 class GameBoard:
     
@@ -34,9 +32,6 @@ class GameBoard:
                 bit = int(math.pow(2, x+y*self.boardSize))
                 self.bitIndex[x][y] = bit
     
-    def getPlayerIds(self):
-        return range(2)
-    
     def getBoardSize(self):
         return self.boardSize
     
@@ -64,8 +59,10 @@ class GameBoard:
         else:
             return False
     
+    # if the move is valid, mark a spot on the board for the player/turn
     def makeMove(self, cell, turn):
         self._validateMove(cell)
+        self._validateTurn(turn)
         
         bit = self._cellToBit(cell)
         self.matrix[turn] = self.matrix[turn] | bit
@@ -109,8 +106,19 @@ class GameBoard:
     
     # validate that the move is legal
     def _validateMove(self, cell):
+        if not isinstance(cell, tuple):
+            raise InvalidTypeException('cell must be a 2-tuple')
+        
+        if not len(cell) == 2:
+            raise InvalidTypeException('cell must be a 2-tuple')
+        
         if not self.inBounds(cell):
             raise OutOfBoundsException()
         
         if not self.isVacant(cell):
             raise InvalidMoveException('cell '+str(cell)+' is already occupied')
+
+    # validate that the turn (playerId) is valid
+    def _validateTurn(self, turn):
+        if turn not in range(2):
+            raise InvalidMoveException('turn can only be 0 or 1')
