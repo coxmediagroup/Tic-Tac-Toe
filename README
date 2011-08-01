@@ -11,4 +11,3 @@ Notice:
 This django site doesn't run in Windows because of a Django bug with file-based sessions:
 https://code.djangoproject.com/ticket/9084
 To avoid any database setup, this app uses file-based sessions.
-A work-around will be coded when I have some time to work on the project.
