@@ -4,6 +4,13 @@ class OutOfBoundsException(Exception): pass
 class InvalidMoveException(Exception): pass
 class InvalidTypeException(Exception): pass
 
+# GameBoard class
+# use to make moves on a 3x3 tic-tac-toe board
+# validates moves and checks for wins
+#
+# there are two boards, one for each player
+# they are each integers where the first nine bits represent whether that space on the board is taken or not
+# the reasoning is to quickly check wins (also represented as bits) through bit-wise comparisons
 class GameBoard:
     
     def __init__(self):
@@ -46,8 +53,8 @@ class GameBoard:
         y = cell[1]
         return True if (x >= 0 and x < self.boardSize and y >= 0 and y < self.boardSize) else False
     
-    # pass in a cell (x,y) and return whether or not that
-    # space on the board is taken or not
+    # pass in a cell (x,y) and return whether that space on the board is taken or not
+    # check both boards
     def isVacant(self, cell):
         x = cell[0]
         y = cell[1]
@@ -69,6 +76,7 @@ class GameBoard:
         
         return True
     
+    # clear the cell from both boards
     def clear(self, cell):
         x = cell[0]
         y = cell[1]
