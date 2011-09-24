@@ -22,17 +22,25 @@ def start_game(grid, human):
     ''' Starts the actual tic-tac-toe game
     '''
     if human == 'O':
-        ai = Book('X')
-        # Eventually put a turn here
+        ai = Book('X')        
     else:
         ai = Book('O')
+        while 1==1:
+            grid.print_grid()
+            square = raw_input("What square would you like to fill? (1-9) ")
+            if square[0] in grid.get_available():
+                grid = grid.fill_square(user=human, square=square[0])
+                break
+            else:
+                print "I'm sorry, %s isn't available." % square  
     while 1 == 1:
         grid = ai.check_grid(grid)
-        grid.print_grid()
         if grid.test_win():
+            grid.print_grid()
             print "Computer won!"
             break
         while 1==1:
+            grid.print_grid()
             square = raw_input("What square would you like to fill? (1-9) ")
             available = grid.get_available()
             if square[0] not in available:
@@ -42,9 +50,11 @@ def start_game(grid, human):
                 grid = grid.fill_square(user=human, square=square[0])
                 grid.print_grid()
                 break
-            if grid.test_win():
-                print "You won!"
-                break
+        if grid.test_win():
+            print "You won!"
+            break
+        else:
+            print "No one won."
                 
         
         

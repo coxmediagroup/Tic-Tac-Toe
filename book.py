@@ -57,35 +57,35 @@ class Book:
     def first_edge(self, grid):
         ''' If the other player marks an edge, mark a corner not boardered by that corner
         '''
+        # What edge has the other player taken?
+        for edge in self.edges:
+            if edge in grid.filled[self.other]:
+                break
         
-        
+        for corner in self.corner_boarders.keys():
+            if not grid.square_taken(corner) and edge not in self.corner_boarders[corner]:
+                grid = grid.fill_square(user=self.player, square=corner)
+                return grid
+            
         
     def check_grid(self, grid):
         
         print "Checking for a win threat"
         # First, make sure we either win, or block the other player from winning.
         # TODO: I should really try to win before blocking. Assess the whole board.
-        for win in grid.wins:
-            x = 0
-            o = 0
-            for square in win:
-                if square in grid.filled['X']:
-                    x = x + 1
-                if square in grid.filled['O']:
-                    o = o + 1
-                if x == 2 or o == 2:
-                    for square in win:
-                        if not grid.square_taken(square):
-                            grid = grid.fill_square(user=self.player, square=square)
-                            return grid
+        grid, changed = self.check_win(grid=grid, player=self.player)
+        if grid.test_win():
+            return grid
         
-        print "Checking for first move"
+        grid, changed = self.check_win(grid=grid, player=self.other)
+        if changed:
+            return grid
+        
         # It's the first move? Fill a corner
         if not grid.filled['X'] and not grid.filled['O']:
             self.strategy = "first"
             grid = self.first(grid)
             return grid
-        
         
         if self.strategy == "first":
             # Did they fill in the center square?
@@ -117,70 +117,41 @@ class Book:
                         grid = grid.fill_square(user=self.player, square = corner)
                         return grid
         
-        
-        
-        print "Checking for player filling the center"
-        # Did the other player fill in the center? Get the opposite corner, if possible
-        if grid.filled[self.other].__contains__('5'):
-            if grid.square_taken('9'):
-                print "mod from center"
-                grid = grid.fill_square(user=self.player, square='9')
-                
+        if not self.strategy:
+            # Did they mark an edge or a side?
+            if '5' not in grid.filled[self.other]:
+                self.strategy = "second_center"
+                grid = grid.fill_square(user=self.player, square='5')
                 return grid
+            # Did they mark the center?
+            else:
+                pass
         
-        print "Checking for player filling a corner"    
-        # Did the other player fill a corner? Fill any other corner!
-        for corner in self.corners.keys():
-            owner = grid.square_taken(corner)
-            if owner == self.other and grid.square_taken(self.corners[corner]):
-                print "Mod from corner"
-                grid = grid.fill_square(user=self.player, square=self.corners[corner])
-                
-                return grid
-        
-        print "Checking for player filling an edge"    
-        # Did the other player fill an edge? Fill an opposite corner!
-        for edge in self.edge_opp_corner.keys():
-            if grid.square_taken(edge) == self.other:
-                for corner in edge_opp_corner[edge]:
-                    if grid.square_taken(corner):
-                        print "mod from edge"
-                        grid = grid.fill_square(user=self.player, square=corner)
-                        return grid
-
-        
-                
+        if self.strategy == "second_center":
+            # Are there more than three marks on the board (Did we already block a threat?)
             
-    
+            # Are they in caddy corners?
             
-       
-    
-    def check_win(self, grid):
-        ''' Checks to see if anyone is going to win. 
-            If so, either block the other player or play the winning move.
+            # Are they in a corner + edge?
+            
+            # Are they in two edges?
+            
+            pass
+        
+        
+    def check_win(self, player, grid):
+        ''' Checks to see if the one of the players is going to win. If so, either
+            win or block!
         '''
-        no_win = True
         for win in grid.wins:
-            x = 0
-            o = 0
-            print win
-            
+            squares = 0
             for square in win:
-                if square in grid.filled['X']:
-                    x += 1
-                    win = win.replace(square, '')
-                if square in grid.filled['O']:
-                    o += 1
-                    win = win.replace(square, '')
-                if (o == 2 or x == 2) and grid.square_taken(square):
-                    print "Filling %s for a win or a block!" % square
-                    grid = grid.fill_square(user=self.player, square=win)      # This will either win the game, 
-                    no_win = False                                              # or block the other player from winning. 
-                    return grid                                                    # No need to check which we're doing, as the 
-                                                                        # grid will test for a win.
-            
-                    
-        
-        print "Sending a no win from check_win"
-        return grid
+                if square in grid.filled[player]:
+                    squares += 1
+            if squares == 2:
+                for square in win:
+                    if not grid.square_taken(square):
+                        grid = grid.fill_square(user=self.player, square=square)
+                        return grid, True
+        return grid, False
         
