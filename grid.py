@@ -30,11 +30,11 @@ class Grid:
     
             
         
-    def square_available(self, square):
+    def square_taken(self, square):
         ''' Tests to see if a square is available or not.
         '''
         if (square not in self.filled['X']) and (square not in self.filled['O']):
-            return True
+            return False
         if square in self.filled['X']:
             return 'X'
         else:
@@ -43,8 +43,7 @@ class Grid:
     def fill_square(self, user, square):
         ''' Given a user (X or O) and a square number (as a string),
         '''
-        print "Filling %s with %s." % (square, user)
-        if self.square_available(square) and square:
+        if not self.square_taken(square) and square:
             self.printable = self.printable.replace(square, user)
             self.filled[user].append(square)
             return self

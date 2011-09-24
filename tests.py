@@ -12,11 +12,9 @@ class TestGrid(unittest.TestCase):
         self.grid = Grid()
         
     def testSquareAvailabe(self):
-        ''' Asserts square_available returns the correct boolean for a free and for
-            a non-existant square
+        ''' Asserts square_taken returns the correct boolean for a free square
         '''
-        self.assertTrue(self.grid.square_available('1'))
-        self.assertTrue(self.grid.square_available('0'))
+        self.assertFalse(self.grid.square_taken('1'))
         
     def testAvailable(self):
         ''' 

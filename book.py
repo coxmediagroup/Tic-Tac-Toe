@@ -25,18 +25,8 @@ class Book:
         
     
     def first(self, grid):
-        print "mod from first move"
-        grid = grid.fill_square(user=self.player, square='1')
-        return grid
-    
-    def first_1(self, grid):
-        grid = grid.fill_square(user=self.player, square='9')
-    
-    def first_1_1(self, grid):
         pass
     
-    def first_1_1_1(self, grid):
-        pass
 
         
     def check_grid(self, grid):
@@ -60,17 +50,10 @@ class Book:
         print "Checking for first move"
         # It's the first move? Fill a corner
         if not grid.filled['X'] and not grid.filled['O']:
-            self.strategy = "first"
-            grid = self.first(grid)
+            print "mod from first move"
+            grid = grid.fill_square(user=self.player, square='1')
+            
             return grid
-        
-        if self.strategy == "first":
-            if grid.filled[self.other][0] == '5':
-                self.strategy = "first_1"
-                grid = self.first_1(grid)
-                return grid
-            
-            
         
         print "Checking for player filling the center"
         # Did the other player fill in the center? Get the opposite corner, if possible
