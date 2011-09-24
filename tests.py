@@ -1,8 +1,5 @@
 import unittest
 
-import sys
-sys.path.append('.')
-
 from grid import Grid
 from book import Book
 
@@ -43,19 +40,11 @@ class TestBook(unittest.TestCase):
         self.grid = Grid()
         self.book = Book('X')
         
-    def testWin(self):
+    def test_check_win(self):
         self.grid.fill_square(user='X', square='1')
         self.grid.fill_square(user='X', square='2')
-        self.grid = self.book.check_win(self.grid)
-        result = self.grid.test_win()
-        self.assertEquals(result, 'X')
+        self.grid, win = self.book.check_win(grid=self.grid, player='X')
+        self.assertEquals(self.grid.test_win(), 'X')
         
-    def testBlock(self):
-        self.grid.fill_square(user='O', square='4')
-        self.grid.fill_square(user='O', square='5')
-        self.grid = self.book.check_win(self.grid)
-        self.assertTrue(self.grid.filled['X'].__contains__('6'))
-
-
 if __name__ == "__main__":
     unittest.main()

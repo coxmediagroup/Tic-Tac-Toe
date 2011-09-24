@@ -46,16 +46,15 @@ def start_game(grid, human):
             if square[0] not in available:
                 print "I'm sorry, %s isn't available." % square
             else:
-                print "Sending from game"
                 grid = grid.fill_square(user=human, square=square[0])
                 grid.print_grid()
                 break
+        if grid.test_win() == 'Draw':
+            print "Draw! No one won!"
+            break
         if grid.test_win():
             print "You won!"
-            break
-        else:
-            print "No one won."
-                
+            break        
         
         
 

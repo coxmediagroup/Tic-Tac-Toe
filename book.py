@@ -25,14 +25,14 @@ class Book:
         self.corner_boarders = {'1': ['2', '4'],
                                 '3': ['2', '6'],
                                 '7': ['4', '8'],
-                                '9': ['8', '6']}
+                                '9': ['6', '8']}
+        
         self.strategy = ""
         
     
     def first(self, grid):
         ''' Strategy if the computer goes first (take the corner)
         '''
-        print "mod from first move"
         grid = grid.fill_square(user=self.player, square='1')
         return grid
     
@@ -50,9 +50,15 @@ class Book:
     
     def fill_any_corner(self, grid):
         for corner in self.corners.keys():
-                        if not grid.square_taken(corner):
-                            grid = grid.fill_square(user=self.player, square=corner)
-                            return grid
+             if not grid.square_taken(corner):
+                grid = grid.fill_square(user=self.player, square=corner)
+                return grid
+    
+    def fill_any_edge(self, grid):
+        for edge in self.edges:
+            if not grid.square_taken(edge):
+                grid = grid.fill_square(user=self.player, square=edge)
+                return grid
 
     def first_edge(self, grid):
         ''' If the other player marks an edge, mark a corner not boardered by that corner
@@ -69,8 +75,6 @@ class Book:
             
         
     def check_grid(self, grid):
-        
-        print "Checking for a win threat"
         # First, make sure we either win, or block the other player from winning.
         # TODO: I should really try to win before blocking. Assess the whole board.
         grid, changed = self.check_win(grid=grid, player=self.player)
@@ -125,18 +129,66 @@ class Book:
                 return grid
             # Did they mark the center?
             else:
-                pass
+                grid = self.fill_any_corner(grid)
+                self.strategy = "second_nocenter"
+                return grid
+            
+        if self.strategy == "second_nocenter":
+            grid = self.fill_any_corner(grid)
+            return grid
         
         if self.strategy == "second_center":
             # Are there more than three marks on the board (Did we already block a threat?)
-            
+            if grid.get_available().__len__() <= 4:
+                for edge in self.edges:
+                    if not grid.square_taken(edge):
+                        grid = grid.fill_square(user = self.player, square=edge)
+                        return grid
+                    
             # Are they in caddy corners?
+            for corner in self.corners.keys():
+                if corner in grid.filled[self.other] and self.corners[corner] in grid.filled[self.other]:
+                    grid = self.fill_any_edge(grid)
+                    return grid
             
             # Are they in a corner + edge?
+            for corner in self.corners.keys():
+                if corner in grid.filled[self.other]:
+                    for edge in self.edges:
+                        if edge in grid.filled[self.other]:
+                            grid = grid.fill_square(user=self.player, square=self.corners[corner])
+                            return grid
             
             # Are they in two edges?
+            edges = []
+            for edge in self.edges:
+                if edge in grid.filled[self.other]:
+                    edges.append(edge)
+            if edges.__len__() == 2:
+                edges.sort()
+                # Do they both boarder a corner?
+                for corner in self.corner_boarders.keys():
+                    if self.corner_boarders[corner] == edges:
+                        grid.fill_square(user=self.player, square=corner)
+                        self.strategy = "second_center_any"
+                        return grid
+                grid = self.fill_any_edge(grid)
+                self.strategy = "second_center_boarder"
+                return grid
+        if self.strategy == "second_center_boarder":
+            for corner in self.corners.keys():
+                if not grid.square_taken(corner):
+                    # One of these has to be open. The other has to have an X
+                    if not grid.square_taken(self.corner_boarders[corner][0]) or grid.square_taken(self.corner_boarders[corner][1]):
+                        if grid.square_taken(self.corner_boarders[corner][0]) == 'X' or grid.square_taken(self.corner_boarders[corner][1]) == 'X':
+                            grid = grid.fill_square(user=self.player, square=grid.get_available()[0])
+                            return grid
+                        
             
-            pass
+        if self.strategy == "second_center_any":
+            grid = grid.fill_square(user=self.player, square=grid.get_available()[0])
+            return grid
+            
         
         
     def check_win(self, player, grid):
