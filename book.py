@@ -49,6 +49,34 @@ class Book:
             
             return grid
         
+        print "Checking for player filling the center"
+        # Did the other player fill in the center? Get the opposite corner, if possible
+        if grid.filled[self.other].__contains__('5'):
+            if grid.square_available('9'):
+                print "mod from center"
+                grid = grid.fill_square(user=self.player, square='9')
+                
+                return grid
+        
+        print "Checking for player filling a corner"    
+        # Did the other player fill a corner? Fill any other corner!
+        for corner in self.corners.keys():
+            owner = grid.square_available(corner)
+            if owner == self.other and grid.square_available(self.corners[corner]):
+                print "Mod from corner"
+                grid = grid.fill_square(user=self.player, square=self.corners[corner])
+                
+                return grid
+        
+        print "Checking for player filling an edge"    
+        # Did the other player fill an edge? Fill an opposite corner!
+        for edge in edge_opp_corner.keys():
+            if grid.square_available(edge) == self.other:
+                for corner in edge_opp_corner[edge]:
+                    if grid.square_available(corner):
+                        print "mod from edge"
+                        grid = grid.fill_square(user=self.player, square=corner)
+                        return grid
 
         print "At the end of my logic! Halp!"
                 
