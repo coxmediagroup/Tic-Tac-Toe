@@ -25,14 +25,26 @@ class Book:
         
     
     def first(self, grid):
+        print "mod from first move"
+        grid = grid.fill_square(user=self.player, square='1')
+        return grid
+    
+    def first_1(self, grid):
+        grid = grid.fill_square(user=self.player, square='9')
+        return grid
+    
+    def first_1_1(self, grid):
         pass
     
+    def first_1_1_1(self, grid):
+        pass
 
         
     def check_grid(self, grid):
         
         print "Checking for a win threat"
         # First, make sure we either win, or block the other player from winning.
+        # TODO: I should really try to win before blocking. Assess the whole board.
         for win in grid.wins:
             x = 0
             o = 0
@@ -43,17 +55,31 @@ class Book:
                     o = o + 1
                 if x == 2 or o == 2:
                     for square in win:
-                        if not grid.square_taken():
+                        if not grid.square_taken(square):
                             grid = grid.fill_square(user=self.player, square=square)
                             return grid
         
         print "Checking for first move"
         # It's the first move? Fill a corner
         if not grid.filled['X'] and not grid.filled['O']:
-            print "mod from first move"
-            grid = grid.fill_square(user=self.player, square='1')
-            
+            self.strategy = "first"
+            grid = self.first(grid)
             return grid
+        
+        # Did they fill in the center square?
+        if self.strategy == "first":
+            if grid.filled[self.other][0] == '5':
+                self.strategy = "first_1"
+                grid = self.first_1(grid)
+                return grid
+        
+        # Did they fill in an edge, or a corner?
+        if self.strategy == "first_1":
+            if grid.filled[self.other][0] in self.corners.keys() or grid.filled[self.other][1] in self.corners.keys():
+                for corner in self.corners.keys():
+                    if not grid.square_taken(corner):
+                        grid = grid.fill_square(user=self.player, square = corner)
+                        return grid
         
         print "Checking for player filling the center"
         # Did the other player fill in the center? Get the opposite corner, if possible
