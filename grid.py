@@ -57,7 +57,7 @@ class Grid:
                 return 'X'
             if self.filled['O'].__contains__(win[0]) and self.filled['O'].__contains__(win[1]) and self.filled['O'].__contains__(win[2]):
                 return 'O'
-            return None
+            return False
             
     def get_available(self):
         available = []

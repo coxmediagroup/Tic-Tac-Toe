@@ -42,9 +42,9 @@ def start_game(grid, human):
                 grid = grid.fill_square(user=human, square=square[0])
                 grid.print_grid()
                 break
-        if grid.test_win():
-            print "You won!"
-            break
+            if grid.test_win():
+                print "You won!"
+                break
                 
         
         

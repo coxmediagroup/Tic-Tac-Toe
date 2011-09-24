@@ -21,24 +21,44 @@ class Book:
                                 '4': ['3', '9'],
                                 '6': ['1', '7'],
                                 '8': ['1', '3']}
+        
+        self.corner_boarders = {'1': ['2', '4'],
+                                '3': ['2', '6'],
+                                '7': ['4', '8'],
+                                '9': ['8', '6']}
         self.strategy = ""
         
     
     def first(self, grid):
+        ''' Strategy if the computer goes first (take the corner)
+        '''
         print "mod from first move"
         grid = grid.fill_square(user=self.player, square='1')
         return grid
     
-    def first_1(self, grid):
+    def first_center(self, grid):
+        ''' If the computer is first, and the user takes center, take the opposite corner
+            After this, the game is won by the default win threat check.
+        ''' 
         grid = grid.fill_square(user=self.player, square='9')
         return grid
     
-    def first_1_1(self, grid):
+    def first_corner(self, grid):
+        '''
+        '''
         pass
     
-    def first_1_1_1(self, grid):
-        pass
+    def fill_any_corner(self, grid):
+        for corner in self.corners.keys():
+                        if not grid.square_taken(corner):
+                            grid = grid.fill_square(user=self.player, square=corner)
+                            return grid
 
+    def first_edge(self, grid):
+        ''' If the other player marks an edge, mark a corner not boardered by that corner
+        '''
+        
+        
         
     def check_grid(self, grid):
         
@@ -66,20 +86,38 @@ class Book:
             grid = self.first(grid)
             return grid
         
-        # Did they fill in the center square?
+        
         if self.strategy == "first":
+            # Did they fill in the center square?
             if grid.filled[self.other][0] == '5':
-                self.strategy = "first_1"
-                grid = self.first_1(grid)
+                self.strategy = "first_center"
+                grid = self.first_center(grid)
+                return grid
+            # Did they play a corner square?
+            for corner in self.corners.keys():
+                if corner in grid.filled[self.other]:
+                    self.strategy = "first_corner"
+                    grid = self.fill_any_corner(grid)
+                    return grid
+            # Did they play an edge?
+            if grid.filled[self.other][0] in self.edges:
+                self.strategy = "first_edge"
+                grid = grid.fill_square(user=self.player, square='5')
                 return grid
         
-        # Did they fill in an edge, or a corner?
-        if self.strategy == "first_1":
+        if self.strategy == "first_edge":
+            grid = self.first_edge(grid)
+            return grid
+        
+        # Did they fill a corner? (If they filled in an edge, the game will draw with blocking)
+        if self.strategy == "first_center":
             if grid.filled[self.other][0] in self.corners.keys() or grid.filled[self.other][1] in self.corners.keys():
                 for corner in self.corners.keys():
                     if not grid.square_taken(corner):
                         grid = grid.fill_square(user=self.player, square = corner)
                         return grid
+        
+        
         
         print "Checking for player filling the center"
         # Did the other player fill in the center? Get the opposite corner, if possible
