@@ -41,6 +41,13 @@ class Book:
                             grid = grid.fill_square(user=self.player, square=square)
                             return grid
         
+        print "Checking for first move"
+        if not grid.filled['X'] and not grid.filled['O']:
+            # It's the first move!
+            print "mod from first move"
+            grid = grid.fill_square(user=self.player, square='1')
+            
+            return grid
         
 
         print "At the end of my logic! Halp!"
