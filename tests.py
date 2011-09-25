@@ -45,6 +45,31 @@ class TestBook(unittest.TestCase):
         self.grid.fill_square(user='X', square='2')
         self.grid, win = self.book.check_win(grid=self.grid, player='X')
         self.assertEquals(self.grid.test_win(), 'X')
+    
+        
+        
+class TestPlayerOneLogic(unittest.TestCase):
+    
+    def setUp(self):
+        self.grid = Grid()
+        self.book = Book('X')
+        
+    def first_center_corner(self):
+        moves = ['5', '7', '2']
+        moves.reverse() # reversing so I can pop them off
+        while not self.grid.test_win():
+            self.grid = self.book.check_grid(self.grid)
+            self.grid = self.grid.fill_square(user='O', square = moves.pop())
+        self.assertEquals(self.grid.test_win(), 'X')
+        
+    def first_center_edge(self):
+        moves = ['5', '8', '3', '4']
+        moves.reverse()
+        while not self.grid.get_available():
+            self.grid = self.book.check_grid(self.grid)
+            self.grid = self.grid.fill_square(user='O', square=moves.pop())
+        self.assertFalse(self.grid.get_available())
+        
         
 if __name__ == "__main__":
     unittest.main()
