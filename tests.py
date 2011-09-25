@@ -142,15 +142,60 @@ class TestPlayerTwoLogic(unittest.TestCase):
         self.assertEquals(self.grid.test_win(), 'Draw')
             
     def test_noncenter_threat_nothreat(self):
-        ''' Game where the first place does not fill the center, then follows with one threat
+        ''' Game where the first player does not fill the center, then follows with one threat
         '''
         moves = ['7', '9', '2', '6', '1']
-        moves .reverse()
+        moves.reverse()
         self.run_game(moves)
         self.assertEquals(self.grid.test_win(), 'Draw')
         
-    
+    def test_corner_edge(self):
+        ''' Game where the first player does not fill the center, and has filled a corner and an edge
+        '''
+        moves = ['1', '6', '7', '2', '8']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEquals(self.grid.test_win(), 'Draw')
         
+    def test_two_edges_on_corner(self):
+        ''' Game where the first player does not fill the center, and has filled two edges that boarder the same corner
+        '''
+        moves = ['4', '2','9','7', '6']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEquals(self.grid.test_win(), 'Draw')
+        
+    def test_two_edges_no_corner(self):
+        ''' Game where the first player does not fill the center, and has filled two edges that do not share a corner
+        '''
+        moves = ['4', '6', '8', '9']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEquals(self.grid.test_win(), 'O')
+        
+    def test_caddy_corners(self):
+        ''' Game where the first player does not fill the center, and has filled caddy corners.
+        '''
+        moves = ['1', '9', '8',  '3', '4']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEqual(self.grid.test_win(), 'Draw')
+    
+    def test_center_threat(self):
+        ''' game where the first player takes the center, then threatens a win
+        '''
+        moves = ['5', '7', '2', '6', '9']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEqual(self.grid.test_win(), 'Draw')
+        
+    def test_center_nothreat(self):
+        ''' Game where the first player takes center, and doesn't threaten a win on their next move
+        '''
+        moves = ['5', '9', '2', '4', '7']
+        moves.reverse()
+        self.run_game(moves)
+        self.assertEqual(self.grid.test_win(), 'Draw')
         
 if __name__ == "__main__":
     unittest.main()
