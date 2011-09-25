@@ -64,17 +64,23 @@ class TestPlayerOneLogic(unittest.TestCase):
         self.grid = Grid()
         self.book = Book('X')
         
+    def run_game(self, moves):
+        '''Actually runs the game until someone wins, or there are no more squares available
+        '''
+        while not self.grid.test_win() and self.grid.get_available():
+            self.grid = self.book.check_grid(self.grid)
+            try:
+                self.grid = self.grid.fill_square(user='O', square=moves.pop())
+            except:
+                break
+            
+        
     def test_first_center_corner(self):
         ''' Game for the second player taking the center, then a corner
         '''
         moves = ['5', '7', '2']
         moves.reverse() # reversing so I can pop them off
-        while not self.grid.test_win():
-            self.grid = self.book.check_grid(self.grid)
-            try:
-                self.grid = self.grid.fill_square(user='O', square = moves.pop())
-            except:
-                break
+        self.run_game(moves)
         self.assertEquals(self.grid.test_win(), 'X')
         
     def test_first_center_edge(self):
@@ -82,12 +88,7 @@ class TestPlayerOneLogic(unittest.TestCase):
         '''
         moves = ['5', '8', '3', '4']
         moves.reverse()
-        while self.grid.get_available():
-            self.grid = self.book.check_grid(self.grid)
-            try:
-                self.grid = self.grid.fill_square(user='O', square=moves.pop())
-            except:
-                pass
+        self.run_game(moves)
         self.assertFalse(self.grid.get_available())
         
     def test_first_corner(self):
@@ -95,12 +96,7 @@ class TestPlayerOneLogic(unittest.TestCase):
         '''
         moves = ['3', '5', '4']
         moves.reverse()
-        while not self.grid.test_win():
-            self.grid = self.book.check_grid(self.grid)
-            try:
-                self.grid = self.grid.fill_square(user='O', square = moves.pop())
-            except:
-                break
+        self.run_game(moves)
         self.assertEquals(self.grid.test_win(), 'X')
     
     def test_first_edge_nothreat(self):
@@ -108,12 +104,7 @@ class TestPlayerOneLogic(unittest.TestCase):
         '''
         moves = ['4', '9', '7']
         moves.reverse()
-        while not self.grid.test_win():
-            self.grid = self.book.check_grid(self.grid)
-            try:
-                self.grid = self.grid.fill_square(user='O', square=moves.pop())
-            except:
-                break
+        self.run_game(moves)
         self.assertEquals(self.grid.test_win(), 'X')
         
     def test_first_edge_threat(self):
@@ -121,12 +112,7 @@ class TestPlayerOneLogic(unittest.TestCase):
         '''
         moves = ['6', '9', '7']
         moves.reverse()
-        while not self.grid.test_win():
-            self.grid = self.book.check_grid(self.grid)
-            try:
-                self.grid = self.grid.fill_square(user='O', square=moves.pop())
-            except:
-                break
+        self.run_game(moves)
         self.assertEquals(self.grid.test_win(), 'X')
         
 class TestPlayerTwoLogic(unittest.TestCase):
@@ -138,24 +124,30 @@ class TestPlayerTwoLogic(unittest.TestCase):
         self.book = Book('O')
         
     def run_game(self, moves):
+        '''Actually runs the game until someone wins, or there are no more squares available
+        '''
         while not self.grid.test_win() and self.grid.get_available():
             try:
-                self.grid = self.grid.fill_square(user='O', square=moves.pop())
+                self.grid = self.grid.fill_square(user='X', square=moves.pop())
             except:
                 break
             self.grid = self.book.check_grid(self.grid)
         
     def test_noncenter_threat_threat(self):
+        ''' Game where the first player does not fill the center, then follows with two threats
+        '''
         moves = ['1', '4', '3', '8', '9']
         moves.reverse()
         self.run_game(moves)
-        self.assertEquals(self.grid.test_win(), 'O')
+        self.assertEquals(self.grid.test_win(), 'Draw')
             
     def test_noncenter_threat_nothreat(self):
+        ''' Game where the first place does not fill the center, then follows with one threat
+        '''
         moves = ['7', '9', '2', '6', '1']
         moves .reverse()
         self.run_game(moves)
-        self.assertEquals(self.grid.test_win(), 'O')
+        self.assertEquals(self.grid.test_win(), 'Draw')
         
     
         
