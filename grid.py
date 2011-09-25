@@ -11,6 +11,7 @@ class Grid:
         row3 = " 7 | 8 | 9 "
         divider = "---+---+---"
 
+        # self.printable is not only the printable grid, but it's also what is used as storage for the game
         self.printable =  row1 + '\n' + divider + '\n' + row2 + '\n' + divider + '\n' + row3
         
         self.filled = { 'X': [],
@@ -52,6 +53,8 @@ class Grid:
             return self
             
     def test_win(self):
+        ''' Tests the board for a win. Returns false if no one has won. Otherwise, returns the winner's mark.
+        '''
         for win in self.wins:
             if self.filled['X'].__contains__(win[0]) and self.filled['X'].__contains__(win[1]) and self.filled['X'].__contains__(win[2]):
                 return 'X'
@@ -62,6 +65,8 @@ class Grid:
         return False
             
     def get_available(self):
+        ''' Returns all available squares
+        '''
         available = []
         for c in self.printable:
             if c.isdigit():

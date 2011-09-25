@@ -7,6 +7,9 @@ class Book:
         
     '''
     def __init__(self, player):
+        ''' Initializes the Book, setting the marker, the marker for the other player,
+            and some useful dictionaries for determing which square to fill.
+        '''
         self.player=player
         if player == 'X':
             self.other = 'O'
@@ -43,25 +46,24 @@ class Book:
         grid = grid.fill_square(user=self.player, square='9')
         return grid
     
-    def first_corner(self, grid):
-        '''
-        '''
-        pass
-    
     def fill_any_corner(self, grid):
+        ''' Fills the first available corner
+        '''
         for corner in self.corners.keys():
              if not grid.square_taken(corner):
                 grid = grid.fill_square(user=self.player, square=corner)
                 return grid
     
     def fill_any_edge(self, grid):
+        ''' Fills the first available edge
+        '''
         for edge in self.edges:
             if not grid.square_taken(edge):
                 grid = grid.fill_square(user=self.player, square=edge)
                 return grid
 
     def first_edge(self, grid):
-        ''' If the other player marks an edge, mark a corner not boardered by that corner
+        ''' If the other player marks an edge, mark a corner not boardered by that edge
         '''
         # What edge has the other player taken?
         for edge in self.edges:
@@ -75,22 +77,31 @@ class Book:
             
         
     def check_grid(self, grid):
-        # First, make sure we either win, or block the other player from winning.
-        # TODO: I should really try to win before blocking. Assess the whole board.
+        ''' The main logic for the book. As the game progresses, the book keeps track of what
+            the current strategy is by modifying self.strategy.
+            
+            The most important thing is to either block the other player from winning, or win
+            ourselves. That runs before any other test.
+            
+            Once a strategy has been decided upon, the grid is return to the main game.
+        '''
+        # If we can win, do it!
         grid, changed = self.check_win(grid=grid, player=self.player)
         if grid.test_win():
             return grid
         
+        # If we have to block the other player, do it!
         grid, changed = self.check_win(grid=grid, player=self.other)
         if changed:
             return grid
         
-        # It's the first move? Fill a corner
+        # It's the first move? Fill a corner. 
         if not grid.filled['X'] and not grid.filled['O']:
             self.strategy = "first"
             grid = self.first(grid)
             return grid
         
+        # If we went first, and the other player has made a move...
         if self.strategy == "first":
             # Did they fill in the center square?
             if grid.filled[self.other][0] == '5':
@@ -109,11 +120,13 @@ class Book:
                 grid = grid.fill_square(user=self.player, square='5')
                 return grid
         
+        # Did we go first, with the player playing an edge, and us taking center? Mark corner not 
+        # boarded by their edge.
         if self.strategy == "first_edge":
             grid = self.first_edge(grid)
             return grid
         
-        # Did they fill a corner? (If they filled in an edge, the game will draw with blocking)
+        # Did we go first, and did they take the center?
         if self.strategy == "first_center":
             if grid.filled[self.other][0] in self.corners.keys() or grid.filled[self.other][1] in self.corners.keys():
                 for corner in self.corners.keys():
@@ -121,6 +134,7 @@ class Book:
                         grid = grid.fill_square(user=self.player, square = corner)
                         return grid
         
+        # Are we going second?
         if not self.strategy:
             # Did they mark an edge or a side?
             if '5' not in grid.filled[self.other]:
@@ -132,11 +146,13 @@ class Book:
                 grid = self.fill_any_corner(grid)
                 self.strategy = "second_nocenter"
                 return grid
-            
+        
+        # Did they mark the center on their first turn? Grab any corner.
         if self.strategy == "second_nocenter":
             grid = self.fill_any_corner(grid)
             return grid
         
+        # Did they mark something besides the center on their first turn?
         if self.strategy == "second_center":
             # Are there more than three marks on the board (Did we already block a threat?)
             if grid.get_available().__len__() <= 4:
@@ -145,7 +161,7 @@ class Book:
                         grid = grid.fill_square(user = self.player, square=edge)
                         return grid
                     
-            # Are they in caddy corners?
+            # Are their marks in caddy corners?
             for corner in self.corners.keys():
                 if corner in grid.filled[self.other] and self.corners[corner] in grid.filled[self.other]:
                     grid = self.fill_any_edge(grid)
@@ -164,6 +180,7 @@ class Book:
             for edge in self.edges:
                 if edge in grid.filled[self.other]:
                     edges.append(edge)
+            
             if edges.__len__() == 2:
                 edges.sort()
                 # Do they both boarder a corner?
@@ -175,6 +192,8 @@ class Book:
                 grid = self.fill_any_edge(grid)
                 self.strategy = "second_center_boarder"
                 return grid
+        
+        # Are they in the center and boarder an edge?    
         if self.strategy == "second_center_boarder":
             for corner in self.corners.keys():
                 if not grid.square_taken(corner):
@@ -184,7 +203,7 @@ class Book:
                             grid = grid.fill_square(user=self.player, square=grid.get_available()[0])
                             return grid
                         
-            
+        # This turn, we can mark any square   
         if self.strategy == "second_center_any":
             grid = grid.fill_square(user=self.player, square=grid.get_available()[0])
             return grid

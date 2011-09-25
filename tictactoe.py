@@ -6,17 +6,17 @@ def setup_game():
     ''' Sets up the game, allowing the player to chose whether they want to 
     go first or second.
     '''
-    
     while 1==1:
         choice = raw_input("Do you want to go first or second, or do you want me to decide (1/2/?): ")
-        if choice[0] == '?':
-            choice = str(randint(1,2))
-            print "It looks like you'll be player %s!" % choice
-        if choice[0] == '1':
-            return 'X'
-        if choice[0] == '2':
-            return 'O'
-        print "I'm sorry, but %s isn't valid." % choice
+        if choice:
+            if choice[0] == '?':
+                choice = str(randint(1,2))
+                print "It looks like you'll be player %s!" % choice
+            if choice[0] == '1':
+                return 'X'
+            if choice[0] == '2':
+                return 'O'
+            print "I'm sorry, but %s isn't valid." % choice
 
 def start_game(grid, human):
     ''' Starts the actual tic-tac-toe game
@@ -26,6 +26,7 @@ def start_game(grid, human):
     else:
         ai = Book('O')
         while 1==1:
+            # A turn for the human if they want to go first.
             grid.print_grid()
             square = raw_input("What square would you like to fill? (1-9) ")
             if square[0] in grid.get_available():
@@ -33,6 +34,8 @@ def start_game(grid, human):
                 break
             else:
                 print "I'm sorry, %s isn't available." % square  
+    
+    # Main game loop
     while 1 == 1:
         grid = ai.check_grid(grid)
         if grid.test_win():
