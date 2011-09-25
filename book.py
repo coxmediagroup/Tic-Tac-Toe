@@ -31,20 +31,6 @@ class Book:
                                 '9': ['6', '8']}
         
         self.strategy = ""
-        
-    
-    def first(self, grid):
-        ''' Strategy if the computer goes first (take the corner)
-        '''
-        grid = grid.fill_square(user=self.player, square='1')
-        return grid
-    
-    def first_center(self, grid):
-        ''' If the computer is first, and the user takes center, take the opposite corner
-            After this, the game is won by the default win threat check.
-        ''' 
-        grid = grid.fill_square(user=self.player, square='9')
-        return grid
     
     def fill_any_corner(self, grid):
         ''' Fills the first available corner
@@ -98,7 +84,7 @@ class Book:
         # It's the first move? Fill a corner. 
         if not grid.filled['X'] and not grid.filled['O']:
             self.strategy = "first"
-            grid = self.first(grid)
+            grid = grid.fill_square(user=self.player, square='1')
             return grid
         
         # If we went first, and the other player has made a move...
@@ -106,7 +92,7 @@ class Book:
             # Did they fill in the center square?
             if grid.filled[self.other][0] == '5':
                 self.strategy = "first_center"
-                grid = self.first_center(grid)
+                grid = grid.fill_square(user=self.player, square='9')
                 return grid
             # Did they play a corner square?
             for corner in self.corners.keys():
