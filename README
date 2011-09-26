@@ -1,11 +1,38 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
+Welcome to Katie's Unwinnable Tic-Tac-Toe!
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+Background
+----------
+This is my submission for Cox's coding challenge!
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+Terminology
+-----------
+Grid: The actual playing board (see below)
+Threat: Someone is about to win!
+Book: A compliation of all possible moves for a game. Tic-Tac-Toe is a 'solved' game
+    because its book is complete.
+Corner: For the grid below, squares 1, 3, 7, and 9
+Edge: For the grid below, squares 2, 4, 6, 8
+Center: The 5 square.
+
+ 1 | 2 | 3
+---+---+---
+ 4 | 5 | 6
+---+---+---
+ 7 | 8 | 9
+
+
+Playing
+-------
+In the Tic-Tac-Toe folder, run:
+
+$ python tictactoe.py
+
+
+Files
+-----
+book.py: Contains the strategies for the computer to win the game
+grid.py: Contains the current game and some helper functions for determining the state of the game
+README: This file
+tests.py: Contains the tests for the Book and Grid classes
+ticktactoe.py: This is the game code
