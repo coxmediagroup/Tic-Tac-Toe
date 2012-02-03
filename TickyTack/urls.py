@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     (_u(kJoin, r'/(\d+)$'), 'DJTickyTack.views.join'),
     (_u(kJoin), 'DJTickyTack.views.joinable'),
 
+    # restful API:
+    # (r'^api/', include('DJTickyTackAPI.urls')),
 
     # static files:
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
