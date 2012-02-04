@@ -5,7 +5,8 @@
 """
 
 """ Defines a custom exception for easy differentiation between a game error
-and a system error.
+and a system error. Game errors can be caught and handled by the UI. System
+errors will be generic Exceptions.
 """
 class TTTError(Exception):
 
@@ -15,8 +16,7 @@ class TTTError(Exception):
     def __str__(self):
         return repr(self.value)
         
-""" Defines a custom exception for indicating a winner... which should never
-happen...
+""" Defines a custom exception for indicating a winner.
 """
 class TTTEndGame(Exception):
     def __init__(self, value):
@@ -34,9 +34,6 @@ class TTTEngine:
         self.board = [ '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
         self.moves = 0 # tracks the number of completed moves
 
-        self.AI_DEPTH = 4 # how many moves to look ahead
-        self.curr_depth = 0 # tracks the current depth of the AI
-        
     """ Check to see if anyone has won, and if so raise the TTTEndGame
     exception. If a stalemate has occured, raises the TTTStalemate exception.
     """        
@@ -91,7 +88,76 @@ class TTTEngine:
     # Internal function to rate the given move with the current board state.
     # Returns 2 for a winning move, 1 for a blocking move, else 0 for other.
     def __rateMove(self, move):
-        return 0
+        WIN = 2
+        BLOCK = 1
+        OTHER = 0
+        
+        corners = (0, 2, 6, 8)
+        middle = 4
+        player = 'X'
+        # copy the board
+        b = self.board[:]
+
+        if not move in self.getValidMoves():
+            raise Exception('A non-available move was given.')
+        
+        # at this point, the move in question has not yet been played
+        if self.moves % 2 != 0:
+            player = 'O'
+            
+        # semi-apply the move
+        b[move] = player
+
+       # check for win
+        if ( move in (0, 1, 2) ) and ( b[0] == b[1] == b[2] ) or \
+          ( move in (3, 4, 5) ) and ( b[3] == b[4] == b[5] ) or \
+          ( move in (6, 7, 8) ) and ( b[6] == b[7] == b[8] ) or \
+          ( move in (0, 3, 6) ) and ( b[0] == b[3] == b[6] ) or \
+          ( move in (1, 4, 7) ) and ( b[1] == b[4] == b[7] ) or \
+          ( move in (2, 5, 8) ) and ( b[2] == b[5] == b[8] ):
+            return WIN
+            
+        # check diagonals is move is on a corner or in middle
+        if move in corners or move == middle:
+            if ( move in (0, 4, 8) ) and ( b[0] == b[4] == b[8] ) or \
+              ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ):
+                return WIN
+
+        # undo the semi-apply
+        b[move] = str(move + 1)
+        
+        # look for a block; same combos as win, but with one player off. Use
+        # math and numbers.
+        for i in range(0, 9):
+            if b[i] == 'X':
+                b[i] = 2
+            elif b[i] == 'O':
+                b[i] = 1
+            else:
+                b[i] = 0
+        
+        tot = 5
+        if player == 'O':
+            tot = 4
+            
+        # a block would be 2 + 2 + 1 = 5 if player move or
+        # 1 + 1 + 2 = 4 if CPU move
+        if ( move in (0, 1, 2) ) and ( b[0] + b[1] + b[2] == tot ) or \
+          ( move in (3, 4, 5) ) and ( b[3] + b[4] + b[5] == tot ) or \
+          ( move in (6, 7, 8) ) and ( b[6] + b[7] + b[8] == tot ) or \
+          ( move in (0, 3, 6) ) and ( b[0] + b[3] + b[6] == tot ) or \
+          ( move in (1, 4, 7) ) and ( b[1] + b[4] + b[7] == tot ) or \
+          ( move in (2, 5, 8) ) and ( b[2] + b[5] + b[8] == tot ):
+            return BLOCK
+
+         
+        if move in corners or move == middle:
+            if ( move in (0, 4, 8) ) and ( b[0] + b[4] + b[8] == tot ) or \
+              ( move in (2, 4, 6) ) and ( b[2] + b[4] + b[6] == tot):
+                return BLOCK
+        
+        # by now the move has become unvaluable
+        return OTHER
         
     # Back out the specified move (reset the space and decrement the moves
     # counter. Move is the actual index in the board list.
@@ -103,12 +169,6 @@ class TTTEngine:
     # tree for any available moves and appends them to the given move node's
     # children list. Returns the modified move node.
     def __getMoveTree(self, parent_node):
-        if self.curr_depth > self.AI_DEPTH:
-            # stop looking ahead and just return
-            self.curr_depth -= 1
-            return parent_node
-            
-        self.curr_depth += 1
         move_list = self.getValidMoves()
         
         if len(move_list) == 0:
@@ -116,28 +176,27 @@ class TTTEngine:
             return parent_node
 
         # rate each move and determine the best course of action
-        for move in move_list:
+        for move in self.getValidMoves():
             rating = self.__rateMove(move)
             move_node = TTTMoveNode(move, rating)
             
+            # ignore non-CPU weights
             if self.moves % 2 == 0:
-                # this is a cpu turn, so say so
-                move_node.is_cpu = True
+                move_node.weight = 0
 
             if rating == 2:
                 # Can immediately win, don't apply it and don't recurse. Also,
                 # if this is a player win, penalize the weight to push it down
                 # the list of potential moves.
-                if not move_node.is_cpu:
+                if self.moves % 2 == 0:
                     move_node.weight = -1
-                    
                 parent_node.addChild(move_node)
             
             else:
                 # low-value or blocking move, doesn't mean end-game so apply it
                 # and recurse, then back it out for the next potential move
                 self.applyMove(move)
-                move_node = self.getMoveTree(move_node)
+                move_node = self.__getMoveTree(move_node)
                 parent_node.addChild(move_node)
                 self.__backOutMove(move)
         
@@ -147,12 +206,15 @@ class TTTEngine:
     def getBestMove(self):
         moves = []
         for i in self.getValidMoves():
+            self.applyMove(i)
             move_node = self.__getMoveTree( TTTMoveNode(i, 0) )
             move_node.calculateWeight()
             moves.append(move_node)
+            self.__backOutMove(i)
             
+        # sort ascending by weight and return the heaviest one
         sorted(moves, key=lambda node: node.weight)
-        return moves[0].move
+        return moves[-1].move
 
 # Tracks potential moves, their child moves, and their weights. An optimal
 # move is indicated by the path with the highest weight.
@@ -161,7 +223,6 @@ class TTTMoveNode:
         self.children = []
         self.move = move
         self.weight = weight
-        self.is_cpu = False
         
     def addChild(self, child_node):
         self.children.append(child_node)
@@ -173,13 +234,9 @@ class TTTMoveNode:
         if len(self.children) > 0:
             for child in self.children:
                 child.calculateWeight()
+                self.weight += child.weight
     
-            # sort children by weight descending
-            sorted( self.children, key=lambda child: child.weight )
-        
-            # add only the heaviest child to current weight and only if it's the
-            # cpu's play
-            if self.children[0].is_cpu:
-                self.weight += self.children[0].weight
-        
         return
+        
+    def __str__(self):
+        return 'Move %s, weight %s' % (self.move, self.weight)

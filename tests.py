@@ -38,6 +38,8 @@ class UnitTests(unittest.TestCase):
         self.assertTrue(3 not in avail_moves and 8 not in avail_moves)
         
     def testGetBestMove(self):
+        # simulate an easy win opportunity and make sure the best move 
+        # detected is the expected opportunity
         game = TTTEngine()
         game.applyMove(8)
         game.applyMove(5)
@@ -46,10 +48,13 @@ class UnitTests(unittest.TestCase):
         # also make sure all the test moves were rolled back
         self.assertEqual(game.moves, 3)
         
-    def testBestMove(self):
-        # simulate an easy win opportunity and make sure the best move 
-        # detected is the expected opportunity
-        pass
+        # now test the typical X diagonal trick
+        game = TTTEngine()
+        game.applyMove(1)
+        game.applyMove(4)
+        game.applyMove(8)
+        best_move = game.getBestMove()
+        self.assertTrue(best_move != 6 and best_move != 2)
         
     def testXWinEndGame(self):
         # simulate a game where X wins
