@@ -28,6 +28,15 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(game.moves, 1)
         self.assertEqual(game.board[0], 'X')
         
+    def testAvailableMoves(self):
+        # simulate a move, then get the list of available moves; list should
+        # not include the move submitted
+        game = TTTEngine()
+        game.applyMove(4)
+        game.applyMove(9)
+        avail_moves = game.getValidMoves()
+        self.assertTrue(4 not in avail_moves and 9 not in avail_moves)
+        
     def testXWinEndGame(self):
         # simulate a game where X wins
         pass

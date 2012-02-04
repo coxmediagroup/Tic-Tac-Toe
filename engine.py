@@ -76,12 +76,18 @@ class TTTEngine(object):
             
         self.moves += 1
         
-    # Returns a list of valid moves given the current game state
+    # Returns a list of valid moves given the current game state; basically
+    # any open space
     def getValidMoves(self):
-        pass
+        avail_moves = []
+        for i in range(0,9):
+            if self.board[i].isdigit():
+                avail_moves.append( i + 1 )
+        
+        return avail_moves
         
     # Give a list of valid moves, returns the most damaging one based on the
-    # current game state
+    # current game state; all AI logic will go in here.
     def getBestMove(self, moves):
         pass
         
