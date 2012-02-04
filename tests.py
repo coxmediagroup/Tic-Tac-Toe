@@ -13,12 +13,19 @@ class UnitTests(unittest.TestCase):
         
     def testInvalidMove(self):
         # tests to make sure a known invalid moves are caught
-        pass
+        game = TTTEngine()
+        self.assertRaises(TTTError, game.applyMove, 0)
+        self.assertRaises(TTTError, game.applyMove, -1)
+        self.assertRaises(TTTError, game.applyMove, 'q')
+        self.assertRaises(TTTError, game.applyMove, 'skjif32@)#)(@1')
         
     def testValidMove(self):
         # simulate a move; should not result in errors and move counter would
         # increment
-        pass
+        game = TTTEngine()
+        game.applyMove(1)
+        self.assertEqual(game.move, 1)
+        self.assertEqual(game.board[0], 'X')
         
     def testXWinEndGame(self):
         # simulate a game where X wins

@@ -42,7 +42,19 @@ class TTTEngine(object):
         
     # Given a digit that represents the slot to move into
     def applyMove(self, move):
-        pass
+        # check that move is valid before applying it, raising a TTTError if not
+        if not move in range(1,10) or not self.board[ move - 1 ].isdigit():
+            # the specified slot is taken, so invalid move
+            raise TTTError('Please choose an open position.')
+            
+        if self.move % 2 == 0:
+            # this is X's turn
+            self.board[ move - 1] = 'X'
+        else:
+            # this is O's turn
+            self.board[ move - 1] = 'O'
+            
+        self.move += 1
         
     # Returns a list of valid moves given the current game state
     def getValidMoves(self):
