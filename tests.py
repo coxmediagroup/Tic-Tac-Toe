@@ -6,13 +6,14 @@
 """ 
 
 import unittest
+from engine import TTTEngine, TTTError
 
 class UnitTests(unittest.TestCase):
     def setUp(self):
         pass
         
     def testInvalidMove(self):
-        # tests to make sure a known invalid moves are caught
+        # tests to make sure any known invalid moves are caught
         game = TTTEngine()
         self.assertRaises(TTTError, game.applyMove, 0)
         self.assertRaises(TTTError, game.applyMove, -1)
@@ -24,7 +25,7 @@ class UnitTests(unittest.TestCase):
         # increment
         game = TTTEngine()
         game.applyMove(1)
-        self.assertEqual(game.move, 1)
+        self.assertEqual(game.moves, 1)
         self.assertEqual(game.board[0], 'X')
         
     def testXWinEndGame(self):
