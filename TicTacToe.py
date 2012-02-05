@@ -152,24 +152,52 @@ class TicTacToe(object):
         self.board_control = self.HUMAN
         
     def find_good_move(self, player):
-        """Find the optimal move for the computer player."""
-        #not implemented yet.  return a random free position
-        return 1, random.choice(self.free_squares)
-        #if game over, return score
-        #if computer turn:
-        #   for each available move:
-        #       make a move
-        #       call find_good_move with new board
-        #       undo move
-        #       evaluate whether the move gave us a good result
-        #   return best score and position
-        #else human turn:
-        #   for each available move:
-        #       make a move
-        #       call find_good_move with new board
-        #       undo move
-        #       evaluate whether the move gave human a good result
-        #   return best score and position
+        """Find the optimal move for the computer player.
+        
+        This is a recursive minimax algorithm.  A good description can be found here:
+            http://www.ocf.berkeley.edu/~yosenl/extras/alphabeta/alphabeta.html
+        
+        The computer will try every possible move, and simulate the human's responses.
+        The computer will then choose an advantageous move.
+        
+        Args:
+            player -- which player to try moves for
+            
+        Returns:
+            (score, pos).
+            score is used internally by the algorithm to evalute a move's worth to the player.
+            pos is discarded internally, but on final return contains a safe move.
+        
+        """
+        game_over, score = self.check_game_over(self.squares)
+        if game_over:
+            return score, None
+        
+        if player == self.COMPUTER:
+            #initialize best_score to a value worse than the worst score (-1)
+            best_score = -5
+            best_pos = -1
+            #use set() here to avoid repeat moves, as undo_move() doesn't preserve the order of the original list.
+            for pos in set(self.free_squares):
+                self.make_move(player, pos)
+                score, dummy = self.find_good_move(self.HUMAN)
+                self.undo_move(player, pos)
+                if score > best_score:
+                    best_score = score
+                    best_pos = pos
+            return best_score, best_pos
+            
+        else: #HUMAN turn
+            best_score = 5
+            best_pos = -1
+            for pos in set(self.free_squares):
+                self.make_move(player, pos)
+                score, dummy = self.find_good_move(self.COMPUTER)
+                self.undo_move(player, pos)
+                if score < best_score:
+                    best_score = score
+                    best_pos = pos
+            return best_score, best_pos
         
         
 if __name__ == '__main__':
