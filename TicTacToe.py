@@ -1,4 +1,4 @@
-
+import random
 
 class TicTacToe(object):
     """A simple class for creating unwinnable TicTacToe games.
@@ -56,7 +56,10 @@ class TicTacToe(object):
     def play(self):
         self.print_board()
         while self.game_over == False:
-            self.do_human_turn()
+            if self.board_control == self.HUMAN:
+                self.do_human_turn()
+            else:
+                self.do_computer_turn()
             self.print_board()
             game_over, winner = self.check_game_over(self.squares)
             if game_over:
@@ -136,6 +139,39 @@ class TicTacToe(object):
                 turn_done = self.make_move(self.HUMAN, pos)
         self.board_control = self.COMPUTER
 
+    def do_computer_turn(self):
+        """Make an optimal move for the computer."""
+        #For the computer's first move, always take the center or a corner.
+        if self.turns < 2:
+            if not self.make_move(self.COMPUTER, 4):
+                self.make_move(self.COMPUTER, 0)
+
+        else:
+            score, pos = self.find_good_move(self.COMPUTER)
+            self.make_move(self.COMPUTER, pos)
+        self.board_control = self.HUMAN
+        
+    def find_good_move(self, player):
+        """Find the optimal move for the computer player."""
+        #not implemented yet.  return a random free position
+        return 1, random.choice(self.free_squares)
+        #if game over, return score
+        #if computer turn:
+        #   for each available move:
+        #       make a move
+        #       call find_good_move with new board
+        #       undo move
+        #       evaluate whether the move gave us a good result
+        #   return best score and position
+        #else human turn:
+        #   for each available move:
+        #       make a move
+        #       call find_good_move with new board
+        #       undo move
+        #       evaluate whether the move gave human a good result
+        #   return best score and position
+        
+        
 if __name__ == '__main__':
     game = TicTacToe()
     game.play()

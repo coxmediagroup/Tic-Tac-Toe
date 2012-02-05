@@ -84,5 +84,13 @@ class test_TicTacToe(unittest.TestCase):
         self.ttt.undo_move(self.ttt.COMPUTER, 5)
         self.assertEqual(self.ttt.check_game_over(self.ttt.squares), (False, None))
         
+    def test_do_computer_turn(self):
+        self.ttt.do_computer_turn()
+        self.assertEqual(self.ttt.squares[self.ttt.COMPUTER], [4])
+        
+        self.ttt.do_computer_turn()
+        self.assertEqual(len(self.ttt.squares[self.ttt.COMPUTER]), 2)
+        
+        
 if __name__ == '__main__':
     unittest.main()
