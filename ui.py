@@ -14,9 +14,12 @@ class GameUI(TTTEngine):
     
     # Clears the screen and redraws the current board layout.
     def redrawScreen(self):
-        # WARNING: untested on Windows:
-        _,cols = os.popen('stty size', 'r').read().split()
-        print '\n' * int(cols)
+        if os.sys.platform == 'win32':
+            print '\n' * 25 # cheat for Windows
+            
+        else:
+            _,cols = os.popen('stty size', 'r').read().split()
+            print '\n' * int(cols)
         
         # draw the gameboard
         print '''
