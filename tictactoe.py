@@ -1,4 +1,9 @@
-from copy import copy
+from copy import deepcopy
+
+def get_pos(l, pos):
+  """l - a 2d list
+     pos - a tuple of (level 1 index, level 2 index)"""
+  return l[pos[0]][pos[1]]
 
 class TicTacToe:
   """An unbeatable Tic Tac Toe game.  Human always starts. """
@@ -56,7 +61,8 @@ class TicTacToe:
     for row in range(3):
       for col in range(3):
         if isinstance(board[row][col], int):
-          new_board = copy(board)
+          new_board = deepcopy(board)
+          new_board[row][col] = mark
           if self.tic_tac_toe(new_board):
             return row, col
 
@@ -69,7 +75,7 @@ class TicTacToe:
     for row in range(3):
       for col in range(3):
         if isinstance(self.board[row][col], int):
-          board = copy(self.board)
+          board = deepcopy(self.board)
           board[row][col] = mark
           win = self.win(board, mark)
           if win:
@@ -83,7 +89,7 @@ class TicTacToe:
     """Checkes if the center position is empty.
        
        Returns the position or None"""
-    if not isinstance(self.board[1][1], int):
+    if isinstance(self.board[1][1], int):
       return 1,1
 
   def opposite_corner(self):
@@ -94,9 +100,11 @@ class TicTacToe:
     """
     corners = (((0,0),(2,2)), ((0,2),(2,0)))
     for pair in corners:
-      if pair[0] == self.human and isinstance(pair[1], int):
+      if (get_pos(self.board, pair[0]) == self.human and 
+          isinstance(get_pos(self.board, pair[1]), int)):
         return pair[1]
-      if pair[1] == self.human and isinstance(pair[0], int):
+      if (get_pos(self.board, pair[1]) == self.human and 
+          isinstance(get_pos(self.board, pair[0]), int)):
         return pair[0]
 
   def empty_pos(self, positions): 
@@ -109,13 +117,13 @@ class TicTacToe:
        
        Returns the position or None
     """
-    return self.empty_pos((0,0), (0,2), (2, 0), (2, 2))
+    return self.empty_pos(((0,0), (0,2), (2, 0), (2, 2)))
 
   def empty_side(self):
     """Detects if any of the side positions are empty.
        
        Returns the position or None"""
-    return self.empty_pos((0,1), (1, 0), (1, 2), (2, 1))
+    return self.empty_pos(((0,1), (1, 0), (1, 2), (2, 1)))
       
   def tic_tac_toe(self, board):
     """Examines the board to determine if a tic tac toe
@@ -130,6 +138,7 @@ class TicTacToe:
       if len(set(l)) == 1:
         return l[0]
       return None
+
     return filter(all_same, self.win_combinations(board))
     
   def win_combinations(self, board):
