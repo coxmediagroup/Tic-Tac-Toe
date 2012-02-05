@@ -44,10 +44,10 @@ class TTTEngine:
         
         # winning combos:
         # 1-2-3 / 4-5-6 / 7-8-9 / 1-5-9 / 3-5-7 / 2-5-8 / 1-4-6 / 3-6-9
-        if ( b[0] == b[1] == b[2] ) or ( b[3] == b[4] == b[5] ) or \
-          ( b[6] == b[7] == b[8] ) or ( b[0] == b[4] == b[8] ) or \
-          ( b[2] == b[4] == b[6] ) or ( b[1] == b[4] == b[7] ) or \
-          ( b[0] == b[3]== b[6] ) or ( b[2] == b[5] == b[8] ):
+        if ( ( b[0] == b[1] == b[2] ) or ( b[3] == b[4] == b[5] ) or
+          ( b[6] == b[7] == b[8] ) or ( b[0] == b[4] == b[8] ) or
+          ( b[2] == b[4] == b[6] ) or ( b[1] == b[4] == b[7] ) or
+          ( b[0] == b[3]== b[6] ) or ( b[2] == b[5] == b[8] ) ):
             
             winner = 'You'
             if self.moves % 2 == 0:
@@ -112,18 +112,18 @@ class TTTEngine:
         b[move] = player
 
        # check for win
-        if ( move in (0, 1, 2) ) and ( b[0] == b[1] == b[2] ) or \
-          ( move in (3, 4, 5) ) and ( b[3] == b[4] == b[5] ) or \
-          ( move in (6, 7, 8) ) and ( b[6] == b[7] == b[8] ) or \
-          ( move in (0, 3, 6) ) and ( b[0] == b[3] == b[6] ) or \
-          ( move in (1, 4, 7) ) and ( b[1] == b[4] == b[7] ) or \
-          ( move in (2, 5, 8) ) and ( b[2] == b[5] == b[8] ):
+        if ( ( move in (0, 1, 2) ) and ( b[0] == b[1] == b[2] ) or
+          ( move in (3, 4, 5) ) and ( b[3] == b[4] == b[5] ) or
+          ( move in (6, 7, 8) ) and ( b[6] == b[7] == b[8] ) or
+          ( move in (0, 3, 6) ) and ( b[0] == b[3] == b[6] ) or
+          ( move in (1, 4, 7) ) and ( b[1] == b[4] == b[7] ) or
+          ( move in (2, 5, 8) ) and ( b[2] == b[5] == b[8] ) ):
             return WIN
             
         # check diagonals is move is on a corner or in middle
         if move in corners or move == middle:
-            if ( move in (0, 4, 8) ) and ( b[0] == b[4] == b[8] ) or \
-              ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ):
+            if ( ( move in (0, 4, 8) ) and ( b[0] == b[4] == b[8] ) or
+              ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ) ):
                 return WIN
    
         # look for a block; same combos as win, but with one player off. Use
@@ -143,18 +143,18 @@ class TTTEngine:
             
         # a block would be 2 + 2 + 1 = 5 if player move or
         # 1 + 1 + 2 = 4 if CPU move
-        if ( move in (0, 1, 2) ) and ( b[0] + b[1] + b[2] == tot ) or \
-          ( move in (3, 4, 5) ) and ( b[3] + b[4] + b[5] == tot ) or \
-          ( move in (6, 7, 8) ) and ( b[6] + b[7] + b[8] == tot ) or \
-          ( move in (0, 3, 6) ) and ( b[0] + b[3] + b[6] == tot ) or \
-          ( move in (1, 4, 7) ) and ( b[1] + b[4] + b[7] == tot ) or \
-          ( move in (2, 5, 8) ) and ( b[2] + b[5] + b[8] == tot ):
+        if ( ( move in (0, 1, 2) ) and ( b[0] + b[1] + b[2] == tot ) or
+          ( move in (3, 4, 5) ) and ( b[3] + b[4] + b[5] == tot ) or
+          ( move in (6, 7, 8) ) and ( b[6] + b[7] + b[8] == tot ) or
+          ( move in (0, 3, 6) ) and ( b[0] + b[3] + b[6] == tot ) or
+          ( move in (1, 4, 7) ) and ( b[1] + b[4] + b[7] == tot ) or
+          ( move in (2, 5, 8) ) and ( b[2] + b[5] + b[8] == tot ) ):
             return BLOCK
 
          
         if move in corners or move == middle:
-            if ( move in (0, 4, 8) ) and ( b[0] + b[4] + b[8] == tot ) or \
-              ( move in (2, 4, 6) ) and ( b[2] + b[4] + b[6] == tot):
+            if ( ( move in (0, 4, 8) ) and ( b[0] + b[4] + b[8] == tot ) or
+              ( move in (2, 4, 6) ) and ( b[2] + b[4] + b[6] == tot ) ):
                 return BLOCK
             
         # by now the move has become unvaluable
@@ -228,8 +228,8 @@ class TTTEngine:
         moves.children = sorted(moves.children, key=lambda node: -node.weight)
         
         # check for ties, returning a corner if possible
-        if len(moves.children) > 1 and \
-          moves.children[0].weight == moves.children[1].weight:
+        if ( len(moves.children) > 1 and
+          moves.children[0].weight == moves.children[1].weight ):
             if self.__isCorner(moves.children[0].move):
                 return moves.children[0].move
                 

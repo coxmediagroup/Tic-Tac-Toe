@@ -37,8 +37,8 @@ class UnitTests(unittest.TestCase):
         game.applyMove(1)
         game.applyMove(8)
         avail_moves = game.getValidMoves()
-        self.assertTrue(0 not in avail_moves and 1 not in avail_moves and \
-            4 not in avail_moves and 8 not in avail_moves)
+        self.assertTrue( (0 not in avail_moves and 1 not in avail_moves and
+            4 not in avail_moves and 8 not in avail_moves) )
     
     def testGetBestMove(self):
         # simulate an easy win opportunity and make sure the best move 
