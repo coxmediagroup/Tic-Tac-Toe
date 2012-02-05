@@ -11,19 +11,19 @@ errors will be generic Exceptions.
 class TTTError(Exception):
 
     def __init__(self, value):
-        self.value = value
+        self.value = str(value)
         
     def __str__(self):
-        return repr(self.value)
+        returnself.value
         
 """ Defines a custom exception for indicating a winner.
 """
 class TTTEndGame(Exception):
     def __init__(self, value):
-        self.value = value
+        self.value = str(value)
         
     def __str__(self):
-        return repr(self.value)
+        return self.value
         
 """ The bread n' butter of the whole game. Holdes everything together in a
 tight little package, completely separate from the UI.
@@ -76,6 +76,8 @@ class TTTEngine:
             
         self.moves += 1
         
+        self.checkState()
+        
     # returns a list of any open space on the board
     def getValidMoves(self):
         avail_moves = []
@@ -88,7 +90,7 @@ class TTTEngine:
     # Internal function to rate the given move with the current board state.
     # Returns 2 for a winning move, 1 for a blocking move, else 0 for other.
     def __rateMove(self, move):
-        WIN = 2
+        WIN = 4
         BLOCK = 1
         OTHER = 0
         
@@ -124,7 +126,7 @@ class TTTEngine:
                 return WIN
 
         # undo the semi-apply
-        b[move] = str(move + 1)
+        #b[move] = str(move + 1)
         
         # look for a block; same combos as win, but with one player off. Use
         # math and numbers.
@@ -136,9 +138,10 @@ class TTTEngine:
             else:
                 b[i] = 0
         
-        tot = 5
+        # the total X needs to block is 4, O needs 5 per row.
+        tot = 4
         if player == 'O':
-            tot = 4
+            tot = 5
             
         # a block would be 2 + 2 + 1 = 5 if player move or
         # 1 + 1 + 2 = 4 if CPU move
@@ -155,13 +158,16 @@ class TTTEngine:
             if ( move in (0, 4, 8) ) and ( b[0] + b[4] + b[8] == tot ) or \
               ( move in (2, 4, 6) ) and ( b[2] + b[4] + b[6] == tot):
                 return BLOCK
-        
+            
         # by now the move has become unvaluable
         return OTHER
         
     # Back out the specified move (reset the space and decrement the moves
     # counter. Move is the actual index in the board list.
     def __backOutMove(self, move):
+        if not self.board[move].isalpha():
+            raise Exception('Space given is not occupied.')
+            
         self.board[move] = str(move + 1)
         self.moves -= 1
         
@@ -179,24 +185,30 @@ class TTTEngine:
         for move in self.getValidMoves():
             rating = self.__rateMove(move)
             move_node = TTTMoveNode(move, rating)
-            
-            # ignore non-CPU weights
-            if self.moves % 2 == 0:
-                move_node.weight = 0
-
-            if rating == 2:
+ 
+            if rating > 0:
                 # Can immediately win, don't apply it and don't recurse. Also,
                 # if this is a player win, penalize the weight to push it down
                 # the list of potential moves.
                 if self.moves % 2 == 0:
                     move_node.weight = -1
+                    
+                self.applyMove(move)
+                move_node = self.__getMoveTree(move_node)
+                self.__backOutMove(move)
                 parent_node.addChild(move_node)
-            
+
             else:
                 # low-value or blocking move, doesn't mean end-game so apply it
                 # and recurse, then back it out for the next potential move
-                self.applyMove(move)
-                move_node = self.__getMoveTree(move_node)
+                try:
+                    self.applyMove(move)
+                    move_node = self.__getMoveTree(move_node)
+
+                except TTTEndGame:
+                    # means stalemate, stop recursing
+                    pass
+                    
                 parent_node.addChild(move_node)
                 self.__backOutMove(move)
         
@@ -204,16 +216,49 @@ class TTTEngine:
         
     # Runs the AI to determine the best next move for the CPU.
     def getBestMove(self):
+        # manual override for first move seems to iron out some "stupid"
+        # decisions the AI likes to make when it has too many choices or if
+        # the game is too vague
+        if self.moves == 1:
+            if 4 in self.getValidMoves():
+                return 4
+            
+            else:
+                return 0
+        
         moves = []
-        for i in self.getValidMoves():
-            self.applyMove(i)
-            move_node = self.__getMoveTree( TTTMoveNode(i, 0) )
-            move_node.calculateWeight()
+        valid_moves = self.getValidMoves()
+        
+        if len(valid_moves) == 0:
+            # no more moves, stalemate
+            raise TTTEndGame('Stalemate!')
+            
+        for i in valid_moves:
+            rating = self.__rateMove(i)
+            move_node = TTTMoveNode(i, rating)
+            
+            if rating > 0:
+                # can immediately block; take either one
+                return i
+
+            else:
+                # low-value move, doesn't mean end-game so apply it
+                # and recurse, then back it out for the next potential move
+                try:
+                    self.applyMove(i)
+                    move_node = self.__getMoveTree(move_node)
+
+                except TTTEndGame:
+                    # means stalemate, stop recursing
+                    pass
+                    
+                self.__backOutMove(i)
+            
             moves.append(move_node)
-            self.__backOutMove(i)
             
         # sort ascending by weight and return the heaviest one
         sorted(moves, key=lambda node: node.weight)
+
         return moves[-1].move
 
 # Tracks potential moves, their child moves, and their weights. An optimal

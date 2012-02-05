@@ -6,12 +6,12 @@
 """ 
 
 import unittest
-from engine import TTTEngine, TTTError, TTTMoveNode
+from engine import TTTEngine, TTTError, TTTMoveNode, TTTEndGame
 
 class UnitTests(unittest.TestCase):
     def setUp(self):
         pass
-        
+
     def testInvalidMove(self):
         # tests to make sure any known invalid moves are caught
         game = TTTEngine()
@@ -32,41 +32,74 @@ class UnitTests(unittest.TestCase):
         # simulate a move, then get the list of available moves; list should
         # not include the move submitted
         game = TTTEngine()
-        game.applyMove(3)
+        game.applyMove(0)
+        game.applyMove(4)
+        game.applyMove(1)
         game.applyMove(8)
         avail_moves = game.getValidMoves()
-        self.assertTrue(3 not in avail_moves and 8 not in avail_moves)
-        
+        self.assertTrue(0 not in avail_moves and 1 not in avail_moves and \
+            4 not in avail_moves and 8 not in avail_moves)
+
     def testGetBestMove(self):
         # simulate an easy win opportunity and make sure the best move 
         # detected is the expected opportunity
         game = TTTEngine()
-        game.applyMove(8)
-        game.applyMove(5)
-        game.applyMove(7)
-        self.assertEqual(game.getBestMove(), 6)
+        game.applyMove(0)
+        game.applyMove( game.getBestMove() )
+        game.applyMove(1)
+        self.assertEqual(game.getBestMove(), 2)
         # also make sure all the test moves were rolled back
         self.assertEqual(game.moves, 3)
-        
-        # now test the typical X diagonal trick
+
+        # a little more complicated
         game = TTTEngine()
-        game.applyMove(1)
         game.applyMove(4)
+        game.applyMove(0)
         game.applyMove(8)
-        best_move = game.getBestMove()
-        self.assertTrue(best_move != 6 and best_move != 2)
-        
+        self.assertEqual(game.getBestMove(), 2)
+
     def testXWinEndGame(self):
         # simulate a game where X wins
-        pass
+        game = TTTEngine()
+        game.applyMove(0)
+        game.applyMove(3)
+        game.applyMove(1)
+        game.applyMove(4)
+        try:
+            game.applyMove(2)
+        except TTTEndGame as e:
+            self.assertEqual( str(e), 'You won!' )
         
     def testOWinEndGame(self):
         # simulate a game where O wins
-        pass
+        game = TTTEngine()
+        game.applyMove(3)
+        game.applyMove(0)
+        game.applyMove(5)
+        game.applyMove(4)
+        game.applyMove(7)
+        try:
+            game.applyMove(8)
+        except TTTEndGame as e:
+            self.assertEqual( str(e), 'I won!' )
+            
         
     def testStalemateEndGame(self):
         # simulate a game where a stalemate occurs
-        pass
-        
+        game = TTTEngine()
+        game.applyMove(4)
+        game.applyMove(0)
+        game.applyMove(1)
+        game.applyMove(7)
+        game.applyMove(6)
+        game.applyMove(2)
+        game.applyMove(5)
+        game.applyMove(3)
+        try:
+            game.applyMove(8)
+        except TTTEndGame as e:
+            self.assertEqual( str(e), 'Stalemate!' )
+
 suite = unittest.TestLoader().loadTestsFromTestCase(UnitTests)
 unittest.TextTestRunner(verbosity=2).run(suite)
+

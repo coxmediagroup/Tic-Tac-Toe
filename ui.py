@@ -6,7 +6,7 @@ screen.
 """
 
 import os
-from engine import TTTEngine, TTTError
+from engine import TTTEngine, TTTError, TTTEndGame
 
 """ Slightly override TTTBoard to add UI methods.
 """
@@ -45,17 +45,16 @@ while( in_play ):
     elif var.isdigit() and len(var) == 1:
         try:
             game.applyMove( int(var) - 1 )
+            game.applyMove( game.getBestMove() )
+            game.redrawScreen()
         
         except TTTError as e:
-            print e.message
+            print str(e)
             _ = raw_input('Press ENTER to try again...')
             
         except TTTEndGame as e:
-            print e.message
+            print str(e)
             in_play = False
-        
-        game.applyMove( game.getBestMove() )
-        game.redrawScreen()
         
     else:
         # invalid input
