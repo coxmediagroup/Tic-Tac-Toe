@@ -41,6 +41,7 @@ class TicTacToe(object):
         """Print a representation of the board, and available moves, on the screen"""
         board = ""
         moves = ""
+        print "Board   Available moves\n"
         for i in range(len(self.board)):
             board += self.board[i]
             if self.board[i] == ".":
@@ -54,6 +55,16 @@ class TicTacToe(object):
         print "\n"
         
     def play(self):
+        coin_toss = random.randint(0,1)
+        self.tokens[coin_toss] = "x"
+        self.tokens[(coin_toss + 1) & 1] = "o"
+        if self.tokens[self.COMPUTER] == "x":
+            self.board_control = self.COMPUTER
+            print "You are Os.  Computer goes first.\n"
+        else:
+            self.board_control = self.HUMAN
+            print "You are Xs.  You go first!\n"
+        
         self.print_board()
         while self.game_over == False:
             if self.board_control == self.HUMAN:
