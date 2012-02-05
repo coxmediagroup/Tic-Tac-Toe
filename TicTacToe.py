@@ -15,9 +15,6 @@ class TicTacToe(object):
         """Create victory conditions and clear the board."""
         self.victories = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
         self.reset_board()
-        self.print_board()
-        self.do_human_turn()
-        self.print_board()
         
     def reset_board(self):
         """(Re)set all properties to an initial pre-game state.
@@ -126,7 +123,7 @@ class TicTacToe(object):
                 return True, 1
             elif set(victory).issubset(squares[self.HUMAN]):
                 return True, -1
-        if len(squares[0]) + len(squares[1]) == 9:
+        if self.turns == 9:
             return True, 0
         return False, None
         
