@@ -18,6 +18,10 @@ class TestTicTacToe(unittest.TestCase):
     self.T.board[0] = ['x']*3
     self.T.tic_tac_toe()
     assert self.T.winner == 'x'
+  #  7 move of these?
+
+  def test_human_input(self):
+    """Humans are not allowed to make invalid moves."""
 
 if __name__ == '__main__':
   unittest.main()
