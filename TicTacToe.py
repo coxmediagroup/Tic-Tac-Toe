@@ -15,7 +15,9 @@ class TicTacToe(object):
         """Create victory conditions and clear the board."""
         self.victories = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
         self.reset_board()
-        print "You lose!"
+        self.print_board()
+        self.do_human_turn()
+        self.print_board()
         
     def reset_board(self):
         """(Re)set all properties to an initial pre-game state.
@@ -37,6 +39,32 @@ class TicTacToe(object):
         self.game_over = False
         self.board_control = 0
         self.turns = 0
+        
+    def print_board(self):
+        """Print a representation of the board, and available moves, on the screen"""
+        board = ""
+        moves = ""
+        for i in range(len(self.board)):
+            board += self.board[i]
+            if self.board[i] == ".":
+                moves += str(i)
+            else:
+                moves += "."
+            if (i % 3 == 2):
+                print board, "   ", moves
+                board = ""
+                moves = ""
+        print "\n"
+        
+    def play(self):
+        self.print_board()
+        while self.game_over == False:
+            self.do_human_turn()
+            self.print_board()
+            game_over, winner = self.check_game_over(self.squares)
+            if game_over:
+                self.game_over = True
+                print "Game over.  You Lose!!"
         
     def move_possible(self, pos):
         """Determine if a particular square is free and return a boolean.
@@ -101,6 +129,16 @@ class TicTacToe(object):
         if len(squares[0]) + len(squares[1]) == 9:
             return True, 0
         return False, None
+        
+    def do_human_turn(self):
+        turn_done = False
+        while not turn_done:
+            pos = raw_input("Make your move: ")
+            if pos in ["0","1","2","3","4","5","6","7","8"]:
+                pos = int(pos)
+                turn_done = self.make_move(self.HUMAN, pos)
+        self.board_control = self.COMPUTER
 
 if __name__ == '__main__':
     game = TicTacToe()
+    game.play()
