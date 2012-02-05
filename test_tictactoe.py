@@ -47,13 +47,25 @@ class TestTicTacToe(unittest.TestCase):
     self.T.board[0][1] = 'x'
     self.T.board[1][0] = 'x'
     self.T.board[0][0] = 'o'
-    assert self.T.fork('x') == (1,1)
+    assert self.T.fork(self.T.board, 'x') == (1,1)
   def test_fork_2(self):
     self.T.board[0][0] = 'x'
     self.T.board[2][2] = 'x'
     self.T.board[1][1] = 'o'
     self.T.board[0][2] = 'o'
-    assert self.T.fork('x') == (2, 0)
+    assert self.T.fork(self.T.board, 'x') == (2, 0)
+
+  def test_block_fork_1(self):
+    self.T.board[0][0] = 'x'
+    self.T.board[2][2] = 'x'
+    self.T.board[1][1] = 'o'
+    assert self.T.bock_fork() == (0,1)
+  
+  def test_block_fork_1(self):
+    self.T.board[0][1] = 'x'
+    self.T.board[1][0] = 'x'
+    self.T.board[1][1] = 'o'
+    assert self.T.block_fork() == (0,0)
 
   def test_center(self):
     assert self.T.center() == (1,1)

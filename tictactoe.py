@@ -45,8 +45,8 @@ class TicTacToe:
     """
     (row, col) = (self.win(self.board, self.computer) or
                   self.win(self.board, self.human) or
-                  self.fork(self.computer) or
-                  self.fork(self.human) or
+                  self.fork(self.board, self.computer) or
+                  self.block_fork() or
                   self.center() or
                   self.opposite_corner() or
                   self.empty_corner() or
@@ -67,32 +67,51 @@ class TicTacToe:
             return row, col
 
   
-  def fork(self, mark):
+  def fork(self, board, mark):
     """Finds a position that will fork (a move that creates two 
        possible following winning moves).
        
        Returns the position or None"""
     for row in range(3):
       for col in range(3):
-        if isinstance(self.board[row][col], int):
-          board = deepcopy(self.board)
-          board[row][col] = mark
-          win = self.win(board, mark)
-          if win:
-            board[win[0]][win[1]] = 'i'
-            second_win = self.win(board, mark)
-            if second_win:
-              return row, col
+        if isinstance(board[row][col], int):
+          new_board = deepcopy(board)
+          new_board[row][col] = mark
+          if self.forked(new_board, mark):
+            return row, col
     return None
+
+  def forked(self, board, mark):
+    """
+    For a given board and mark, determine if a fork exists.
+    """
+    win = self.win(board, mark)
+    if win:
+      board[win[0]][win[1]] = 'i'
+      second_win = self.win(board, mark)
+      if second_win:
+        return True
 
   def block_fork(self):
     """Blocks an impending fork.
        If the oponent can fork next move,
          try to threaten a win or
          block the fork
-       Returns the position or None."""
-    if self.fork(self.human):
-      pass #FIXME
+       Returns the position or None.
+    """
+    if self.fork(self.board, self.human):
+      for row in range(3):
+        for col in range(3):
+          if isinstance(self.board[row][col], int):
+            board = deepcopy(self.board)
+            board[row][col] = self.computer
+            win_pos = self.win(board, self.computer)
+            if win_pos:
+              board[win_pos[0]][win_pos[1]] = self.human
+              print("Here")
+              if (self.tic_tac_toe(board) != self.human) and not self.forked(board, self.human):
+                return row, col
+      return self.fork(self.board, self.human)
 
   def center(self):
     """Checkes if the center position is empty.
@@ -148,7 +167,7 @@ class TicTacToe:
         return l[0]
       return None
     if len(set((v for row in self.board for v in row))) == 2:
-      return ["cat"]
+      return "cat"
     ret = filter(all_same, self.win_combinations(board))
     if ret:
       ret = ret[0][0]
@@ -184,7 +203,7 @@ class TicTacToe:
         self.computer_move()
       moves += 1
       winner = self.tic_tac_toe(self.board)
-    print("And the winner is............... {0}!!!".format(winner[0]))
+    print("And the winner is............... {0}!!!".format(winner))
       
 
 if __name__=='__main__':
