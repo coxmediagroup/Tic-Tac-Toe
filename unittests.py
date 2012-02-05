@@ -90,6 +90,7 @@ class test_TicTacToe(unittest.TestCase):
         
         self.ttt.do_computer_turn()
         self.assertEqual(len(self.ttt.squares[self.ttt.COMPUTER]), 2)
+        self.assertEqual(self.ttt.board_control, self.ttt.HUMAN)
         
         
 if __name__ == '__main__':
