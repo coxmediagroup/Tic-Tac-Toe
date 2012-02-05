@@ -9,12 +9,10 @@ screen.
 import os
 from engine import TTTEngine, TTTError, TTTEndGame
 
-""" Slightly override TTTBoard to add UI methods.
-"""
+# Add a UI method to TTTBoard.
 class GameUI(TTTEngine):
     
-    """ Clears the screen and redraws the current board layout.
-    """ 
+    # Clears the screen and redraws the current board layout.
     def redrawScreen(self):
         # WARNING: untested on Windows:
         _,cols = os.popen('stty size', 'r').read().split()
@@ -30,7 +28,7 @@ class GameUI(TTTEngine):
          ''' % tuple(self.board)
 
 
-# starter -- not ideal here, but not sure where else to put it.
+# Launcher; not ideal here, but not sure where else to put it.
 game = GameUI()
 game.redrawScreen()
 in_play = True

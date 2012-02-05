@@ -17,8 +17,7 @@ class TTTError(Exception):
     def __str__(self):
         return self.value
         
-""" Defines a custom exception for indicating a winner.
-"""
+# Defines a custom exception for indicating a winner.
 class TTTEndGame(Exception):
     def __init__(self, value):
         self.value = str(value)
@@ -26,18 +25,16 @@ class TTTEndGame(Exception):
     def __str__(self):
         return self.value
         
-""" The bread n' butter of the whole game. Holdes everything together in a
-tight little package, completely separate from the UI.
-"""
+# The bread n' butter of the whole game. Holdes everything together in a tight
+# little package, completely separate from the UI.
 class TTTEngine:
     def __init__(self):
         # the board consists of a nine-element mutable list
         self.board = [ '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
         self.moves = 0 # tracks the number of completed moves
 
-    """ Check to see if anyone has won, and if so raise the TTTEndGame
-    exception. If a stalemate has occured, raises the TTTStalemate exception.
-    """        
+    # Check to see if anyone has won, and if so raise the TTTEndGame exception.
+    # If a stalemate has occured, raises the TTTStalemate exception.
     def checkState(self):
         # little shortcut
         b = self.board
@@ -126,8 +123,8 @@ class TTTEngine:
               ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ) ):
                 return WIN
    
-        # look for a block; same combos as win, but with one player off. Use
-        # math and numbers.
+        # Try for a blocking move; uses similar combos as a win. Use math and
+        # numbers.
         for i in range(0, 9):
             if b[i] == 'X':
                 b[i] = 2
@@ -169,9 +166,10 @@ class TTTEngine:
         self.board[move] = str(move + 1)
         self.moves -= 1
         
-    # Given a move node and the current game state, generates a weighted move
-    # tree for any available moves and appends them to the given move node's
-    # children list. Returns the modified move node.
+    """ Given a move node and the current game state, generates a weighted move
+    tree for any available moves and appends them to the given move node's
+    children list. Returns the modified move node.
+    """
     def __getMoveTree(self, parent_node):
         move_list = self.getValidMoves()
         
@@ -211,9 +209,10 @@ class TTTEngine:
     
     # Runs the AI to determine the best next move for the CPU.
     def getBestMove(self):
-        # manual override for first move seems to iron out some "stupid"
-        # decisions the AI likes to make when it has too many choices or if
-        # the game is too vague
+        ''' Manual override for first move seems to iron out some "stupid"
+        decisions the AI likes to make when it has too many choices or if
+        the game is too vague.
+        '''
         if self.moves == 1:
             if 4 in self.getValidMoves():
                 return 4
@@ -224,17 +223,14 @@ class TTTEngine:
         # start the move tree with a root node move of -1
         moves = self.__getMoveTree( TTTMoveNode(-1, 0) )
             
-        # sort ascending by weight and return the heaviest one
+        # sort descending by weight
         moves.children = sorted(moves.children, key=lambda node: -node.weight)
         
         # check for ties, returning a corner if possible
         if ( len(moves.children) > 1 and
-          moves.children[0].weight == moves.children[1].weight ):
-            if self.__isCorner(moves.children[0].move):
-                return moves.children[0].move
-                
-            else:
-                return moves.children[1].move
+          moves.children[0].weight == moves.children[1].weight and
+          not self.__isCorner(moves.children[0].move) ):
+            return moves.children[1].move
                 
         else:
             return moves.children[0].move

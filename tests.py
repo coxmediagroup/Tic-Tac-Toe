@@ -15,30 +15,27 @@ class UnitTests(unittest.TestCase):
     def testInvalidMove(self):
         # tests to make sure any known invalid moves are caught
         game = TTTEngine()
-        self.assertRaises(TTTError, game.applyMove, 9)
-        self.assertRaises(TTTError, game.applyMove, -1)
-        self.assertRaises(TTTError, game.applyMove, 'q')
-        self.assertRaises(TTTError, game.applyMove, 'skjif32@)#)(@1')
+        
+        for i in ( 9, -1, 'q', 'skjif32@)#)(@1' ):
+            self.assertRaises(TTTError, game.applyMove, i)
         
     def testValidMove(self):
         # simulate a move; should not result in errors and move counter would
         # increment
         game = TTTEngine()
-        game.applyMove(0)
+        game.applyMove(4)
         self.assertEqual(game.moves, 1)
-        self.assertEqual(game.board[0], 'X')
+        self.assertEqual(game.board[4], 'X')
         
     def testAvailableMoves(self):
         # simulate a move, then get the list of available moves; list should
         # not include the move submitted
         game = TTTEngine()
-        game.applyMove(0)
-        game.applyMove(4)
-        game.applyMove(1)
-        game.applyMove(8)
-        avail_moves = game.getValidMoves()
-        self.assertTrue( (0 not in avail_moves and 1 not in avail_moves and
-            4 not in avail_moves and 8 not in avail_moves) )
+        
+        for i in ( 0, 4, 1, 8 ):
+            game.applyMove(i)
+            avail_moves = game.getValidMoves()
+            self.assertTrue( i not in avail_moves )
     
     def testGetBestMove(self):
         # simulate an easy win opportunity and make sure the best move 
@@ -66,20 +63,19 @@ class UnitTests(unittest.TestCase):
         
         # simulate a win that takes priority over blocking
         game = TTTEngine()
-        game.applyMove(5)
-        game.applyMove(4)
-        game.applyMove(3)
-        game.applyMove(7)
-        game.applyMove(0)
+        
+        for i in ( 5, 4, 3, 7, 0 ):
+            game.applyMove(i)
+            
         self.assertEqual( game.getBestMove(), 1)
     
     def testXWinEndGame(self):
         # simulate a game where X wins
         game = TTTEngine()
-        game.applyMove(0)
-        game.applyMove(3)
-        game.applyMove(1)
-        game.applyMove(4)
+        
+        for i in ( 0, 3, 1, 4 ):
+            game.applyMove(i)
+            
         try:
             game.applyMove(2)
         except TTTEndGame as e:
@@ -88,11 +84,10 @@ class UnitTests(unittest.TestCase):
     def testOWinEndGame(self):
         # simulate a game where O wins
         game = TTTEngine()
-        game.applyMove(3)
-        game.applyMove(0)
-        game.applyMove(5)
-        game.applyMove(4)
-        game.applyMove(7)
+        
+        for i in ( 3, 0, 5, 4, 7 ):
+            game.applyMove( i )
+            
         try:
             game.applyMove(8)
         except TTTEndGame as e:
@@ -102,14 +97,10 @@ class UnitTests(unittest.TestCase):
     def testStalemateEndGame(self):
         # simulate a game where a stalemate occurs
         game = TTTEngine()
-        game.applyMove(4)
-        game.applyMove(0)
-        game.applyMove(1)
-        game.applyMove(7)
-        game.applyMove(6)
-        game.applyMove(2)
-        game.applyMove(5)
-        game.applyMove(3)
+        
+        for i in ( 4, 0, 1, 7, 6, 2, 5, 3 ):
+            game.applyMove(i)
+            
         try:
             game.applyMove(8)
         except TTTEndGame as e:
