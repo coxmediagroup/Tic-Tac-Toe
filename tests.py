@@ -11,7 +11,7 @@ from engine import TTTEngine, TTTError, TTTMoveNode, TTTEndGame
 class UnitTests(unittest.TestCase):
     def setUp(self):
         pass
-
+    
     def testInvalidMove(self):
         # tests to make sure any known invalid moves are caught
         game = TTTEngine()
@@ -39,25 +39,40 @@ class UnitTests(unittest.TestCase):
         avail_moves = game.getValidMoves()
         self.assertTrue(0 not in avail_moves and 1 not in avail_moves and \
             4 not in avail_moves and 8 not in avail_moves)
-
+    
     def testGetBestMove(self):
         # simulate an easy win opportunity and make sure the best move 
-        # detected is the expected opportunity
+        # detected is the expected opportunity (look ahead 1 move)
         game = TTTEngine()
         game.applyMove(0)
-        game.applyMove( game.getBestMove() )
+        game.applyMove(4)
         game.applyMove(1)
         self.assertEqual(game.getBestMove(), 2)
         # also make sure all the test moves were rolled back
         self.assertEqual(game.moves, 3)
-
-        # a little more complicated
+        
+        # a little more complicated (look ahead 2 moves)
         game = TTTEngine()
         game.applyMove(4)
         game.applyMove(0)
         game.applyMove(8)
         self.assertEqual(game.getBestMove(), 2)
-
+        
+        game = TTTEngine()
+        game.applyMove(6)
+        game.applyMove(4)
+        game.applyMove(0)
+        self.assertEqual(game.getBestMove(), 3)
+        
+        # simulate a win that takes priority over blocking
+        game = TTTEngine()
+        game.applyMove(5)
+        game.applyMove(4)
+        game.applyMove(3)
+        game.applyMove(7)
+        game.applyMove(0)
+        self.assertEqual( game.getBestMove(), 1)
+    
     def testXWinEndGame(self):
         # simulate a game where X wins
         game = TTTEngine()
@@ -99,7 +114,7 @@ class UnitTests(unittest.TestCase):
             game.applyMove(8)
         except TTTEndGame as e:
             self.assertEqual( str(e), 'Stalemate!' )
-
+    
 suite = unittest.TestLoader().loadTestsFromTestCase(UnitTests)
 unittest.TextTestRunner(verbosity=2).run(suite)
 

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # Bernhardt, Russell
 # russell.bernhardt@gmail.com
+
 """ This module contains semi-graphical elements and controls drawing the
 screen.
 """
@@ -29,20 +30,18 @@ class GameUI(TTTEngine):
          ''' % tuple(self.board)
 
 
-# starter -- not ideal here, but not sure where else to put it yet.
+# starter -- not ideal here, but not sure where else to put it.
 game = GameUI()
 game.redrawScreen()
 in_play = True
 while( in_play ):
-    var = raw_input(
-        'Enter the number of an open space or "q" to quit: '
-    )
+    var = raw_input('Enter the number of an open space or "q" to quit: ')
 
     if var == 'q':
         print 'Thanks for playing!'
         in_play = False
         
-    elif var.isdigit() and len(var) == 1:
+    elif var.isdigit() and len(var) == 1 and int(var) > 0:
         try:
             game.applyMove( int(var) - 1 )
             game.applyMove( game.getBestMove() )
@@ -51,8 +50,11 @@ while( in_play ):
         except TTTError as e:
             print str(e)
             _ = raw_input('Press ENTER to try again...')
+            game.redrawScreen()
             
         except TTTEndGame as e:
+            # draw the screen one last time so you can actually see the result
+            game.redrawScreen()
             print str(e)
             in_play = False
         

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # Bernhardt, Russell
 # russell.bernhardt@gmail.com
+
 """ This module contains all the core functions and objects for game mechanics.
 """
 
@@ -14,7 +15,7 @@ class TTTError(Exception):
         self.value = str(value)
         
     def __str__(self):
-        returnself.value
+        return self.value
         
 """ Defines a custom exception for indicating a winner.
 """
@@ -90,7 +91,7 @@ class TTTEngine:
     # Internal function to rate the given move with the current board state.
     # Returns 2 for a winning move, 1 for a blocking move, else 0 for other.
     def __rateMove(self, move):
-        WIN = 4
+        WIN = 5 # super-prioritize winning; AI would often prefer to block
         BLOCK = 1
         OTHER = 0
         
@@ -107,7 +108,7 @@ class TTTEngine:
         if self.moves % 2 != 0:
             player = 'O'
             
-        # semi-apply the move
+        # fake-apply the move the the board copy
         b[move] = player
 
        # check for win
@@ -124,10 +125,7 @@ class TTTEngine:
             if ( move in (0, 4, 8) ) and ( b[0] == b[4] == b[8] ) or \
               ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ):
                 return WIN
-
-        # undo the semi-apply
-        #b[move] = str(move + 1)
-        
+   
         # look for a block; same combos as win, but with one player off. Use
         # math and numbers.
         for i in range(0, 9):
@@ -182,38 +180,35 @@ class TTTEngine:
             return parent_node
 
         # rate each move and determine the best course of action
-        for move in self.getValidMoves():
+        for move in move_list:
             rating = self.__rateMove(move)
             move_node = TTTMoveNode(move, rating)
  
-            if rating > 0:
-                # Can immediately win, don't apply it and don't recurse. Also,
-                # if this is a player win, penalize the weight to push it down
-                # the list of potential moves.
-                if self.moves % 2 == 0:
-                    move_node.weight = -1
-                    
+            # On predicted player moves, zero out the weight
+            if self.moves % 2 == 0:
+                move_node.weight = 0
+                
+            try:
                 self.applyMove(move)
                 move_node = self.__getMoveTree(move_node)
-                self.__backOutMove(move)
-                parent_node.addChild(move_node)
+                
+                if self.moves % 2 != 0:
+                    parent_node.weight += rating
 
-            else:
-                # low-value or blocking move, doesn't mean end-game so apply it
-                # and recurse, then back it out for the next potential move
-                try:
-                    self.applyMove(move)
-                    move_node = self.__getMoveTree(move_node)
-
-                except TTTEndGame:
-                    # means stalemate, stop recursing
-                    pass
-                    
-                parent_node.addChild(move_node)
-                self.__backOutMove(move)
+            except TTTEndGame:
+                pass
+                
+            self.__backOutMove(move)
+            parent_node.addChild(move_node)
         
         return parent_node
         
+        
+    # Returns True if the specified move occurs on a corner. Used for when a
+    # tie occurs between multiple moves. Corners are preferred if nothing else.
+    def __isCorner(self, move):
+        return move in (0, 2, 6, 8)
+    
     # Runs the AI to determine the best next move for the CPU.
     def getBestMove(self):
         # manual override for first move seems to iron out some "stupid"
@@ -226,40 +221,23 @@ class TTTEngine:
             else:
                 return 0
         
-        moves = []
-        valid_moves = self.getValidMoves()
-        
-        if len(valid_moves) == 0:
-            # no more moves, stalemate
-            raise TTTEndGame('Stalemate!')
-            
-        for i in valid_moves:
-            rating = self.__rateMove(i)
-            move_node = TTTMoveNode(i, rating)
-            
-            if rating > 0:
-                # can immediately block; take either one
-                return i
-
-            else:
-                # low-value move, doesn't mean end-game so apply it
-                # and recurse, then back it out for the next potential move
-                try:
-                    self.applyMove(i)
-                    move_node = self.__getMoveTree(move_node)
-
-                except TTTEndGame:
-                    # means stalemate, stop recursing
-                    pass
-                    
-                self.__backOutMove(i)
-            
-            moves.append(move_node)
+        # start the move tree with a root node move of -1
+        moves = self.__getMoveTree( TTTMoveNode(-1, 0) )
             
         # sort ascending by weight and return the heaviest one
-        sorted(moves, key=lambda node: node.weight)
-
-        return moves[-1].move
+        moves.children = sorted(moves.children, key=lambda node: -node.weight)
+        
+        # check for ties, returning a corner if possible
+        if len(moves.children) > 1 and \
+          moves.children[0].weight == moves.children[1].weight:
+            if self.__isCorner(moves.children[0].move):
+                return moves.children[0].move
+                
+            else:
+                return moves.children[1].move
+                
+        else:
+            return moves.children[0].move
 
 # Tracks potential moves, their child moves, and their weights. An optimal
 # move is indicated by the path with the highest weight.
@@ -272,16 +250,3 @@ class TTTMoveNode:
     def addChild(self, child_node):
         self.children.append(child_node)
         
-    # Calculates the current node's weight based on the child with the highest
-    # weight after going into each child and calculating their weight but only
-    # for the CPU player.
-    def calculateWeight(self):
-        if len(self.children) > 0:
-            for child in self.children:
-                child.calculateWeight()
-                self.weight += child.weight
-    
-        return
-        
-    def __str__(self):
-        return 'Move %s, weight %s' % (self.move, self.weight)
