@@ -19,10 +19,10 @@ class TicTacToe:
        Returns True on a valid move.
        Otherwise False."""
     move = raw_input("Your turn: ")
-    if ord(move) > ord('0') and ord(move) <= ord('9'):
-      move = int(move)
+    if ord(move) >= ord('0') and ord(move) < ord('9'):
+      move = int(move) 
       if isinstance(self.board[move//3][move%3], int):
-        self.board[move//3][move%3]
+        self.board[move//3][move%3] = self.human
         return True
       else:
         print("This position has already been played. Try again!")
@@ -85,6 +85,15 @@ class TicTacToe:
               return row, col
     return None
 
+  def block_fork(self):
+    """Blocks an impending fork.
+       If the oponent can fork next move,
+         try to threaten a win or
+         block the fork
+       Returns the position or None."""
+    if self.fork(self.human):
+      pass #FIXME
+
   def center(self):
     """Checkes if the center position is empty.
        
@@ -138,8 +147,12 @@ class TicTacToe:
       if len(set(l)) == 1:
         return l[0]
       return None
-
-    return filter(all_same, self.win_combinations(board))
+    if len(set((v for row in self.board for v in row))) == 2:
+      return ["cat"]
+    ret = filter(all_same, self.win_combinations(board))
+    if ret:
+      ret = ret[0][0]
+    return ret
     
   def win_combinations(self, board):
     return (board[0], board[1], board[2],  # Horizontal
@@ -148,7 +161,6 @@ class TicTacToe:
                                  tuple(row[2] for row in board),
                                  (board[0][0], board[1][1], board[2][2]),  # Diagonals
                                  (board[0][2], board[1][1], board[2][0]))
-
 
   def __str__(self):
     """Represents the board as a string."""
@@ -161,6 +173,19 @@ class TicTacToe:
  
   def main(self):
     """This function drives the game."""
+    moves = 0
+    winner = None
+    while not winner:
+      if moves%2 == 0:
+        print(self)
+        while not self.human_move():
+          pass
+      else:
+        self.computer_move()
+      moves += 1
+      winner = self.tic_tac_toe(self.board)
+    print("And the winner is............... {0}!!!".format(winner[0]))
+      
 
 if __name__=='__main__':
   game = TicTacToe()
