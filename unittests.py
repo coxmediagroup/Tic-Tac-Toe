@@ -58,5 +58,15 @@ class test_TicTacToe(unittest.TestCase):
         self.assertEqual(set(self.ttt.free_squares), set(free_squares))
         self.assertEqual(self.ttt.turns, 1)
         
+    def test_check_game_over(self):
+        squares = [[0,1,2],[]]
+        self.assertEqual(self.ttt.check_game_over(squares), (True, 1))
+        squares = [[],[2,5,8]]
+        self.assertEqual(self.ttt.check_game_over(squares), (True, -1))
+        squares = [[4,1,8,6,5],[0,7,3,2]]
+        self.assertEqual(self.ttt.check_game_over(squares), (True, 0))
+        squares = [[0,1,3],[2,5,6]]
+        self.assertEqual(self.ttt.check_game_over(squares), (False, None))
+        
 if __name__ == '__main__':
     unittest.main()

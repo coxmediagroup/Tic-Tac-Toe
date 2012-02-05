@@ -80,6 +80,27 @@ class TicTacToe(object):
             self.turns = self.turns - 1
             return True
         return False
+        
+    def check_game_over(self, squares):
+        """Check to see if the game is over and identify the winner
+        
+        Args:
+            squares -- list containing lists of squares held by each player
+        Returns:
+            a boolean value for whether the game is over, and a score:
+                -1: human wins
+                 1: computer wins
+                 0: tie game (board full)
+        
+        """
+        for victory in self.victories:
+            if set(victory).issubset(squares[self.COMPUTER]):
+                return True, 1
+            elif set(victory).issubset(squares[self.HUMAN]):
+                return True, -1
+        if len(squares[0]) + len(squares[1]) == 9:
+            return True, 0
+        return False, None
 
 if __name__ == '__main__':
     game = TicTacToe()
