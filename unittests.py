@@ -44,5 +44,19 @@ class test_TicTacToe(unittest.TestCase):
         
         self.assertEqual(2, self.ttt.turns)
         
+    def test_undo_move(self):
+        self.ttt.make_move(self.ttt.COMPUTER, 0)
+        self.ttt.make_move(self.ttt.HUMAN, 8)
+        board = ["."] * 9
+        board[0] = "x"
+        self.assertTrue(self.ttt.undo_move(self.ttt.HUMAN, 8))
+        self.assertEqual(board, self.ttt.board)
+        self.assertEqual([], self.ttt.squares[self.ttt.HUMAN])
+        self.assertFalse(self.ttt.undo_move(self.ttt.HUMAN, 0))
+        
+        free_squares = [x for x in range(1, 9)]
+        self.assertEqual(set(self.ttt.free_squares), set(free_squares))
+        self.assertEqual(self.ttt.turns, 1)
+        
 if __name__ == '__main__':
     unittest.main()

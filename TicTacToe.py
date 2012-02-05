@@ -62,6 +62,24 @@ class TicTacToe(object):
             self.turns = self.turns + 1
             return True
         return False
+        
+    def undo_move(self, player, pos):
+        """Undo a move at pos for player.  Return True on success.
+        
+        Arguments:
+        player -- which player's move to undo.  Either self.COMPUTER or self.HUMAN
+        pos -- board position to free
+        
+        """
+        if self.board[pos] == self.tokens[player]:
+            self.board[pos] = "."
+            self.squares[player].remove(pos)
+            
+            #free_squares will likely not be in the same order it was before a move.  be careful
+            self.free_squares.append(pos)
+            self.turns = self.turns - 1
+            return True
+        return False
 
 if __name__ == '__main__':
     game = TicTacToe()
