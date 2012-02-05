@@ -42,12 +42,18 @@ class TestTicTacToe(unittest.TestCase):
   def test_win_second_diag(self):
     self.sim(((0,2),(2,0)),(1,1))
  
-  #TODO test fork possibilities
-  def test_fork(self):
+  # Test fork 
+  def test_fork_1(self):
     self.T.board[0][1] = 'x'
     self.T.board[1][0] = 'x'
     self.T.board[0][0] = 'o'
     assert self.T.fork('x') == (1,1)
+  def test_fork_2(self):
+    self.T.board[0][0] = 'x'
+    self.T.board[2][2] = 'x'
+    self.T.board[1][1] = 'o'
+    self.T.board[0][2] = 'o'
+    assert self.T.fork('x') == (2, 0)
 
   def test_center(self):
     assert self.T.center() == (1,1)

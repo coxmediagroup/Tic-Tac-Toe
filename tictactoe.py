@@ -79,7 +79,7 @@ class TicTacToe:
           board[row][col] = mark
           win = self.win(board, mark)
           if win:
-            board[row][col] = 'i'
+            board[win[0]][win[1]] = 'i'
             second_win = self.win(board, mark)
             if second_win:
               return row, col
@@ -143,9 +143,9 @@ class TicTacToe:
     
   def win_combinations(self, board):
     return (board[0], board[1], board[2],  # Horizontal
-                                 (row[0] for row in board),  # Verticals
-                                 (row[1] for row in board),
-                                 (row[2] for row in board),
+                                 tuple(row[0] for row in board),  # Verticals
+                                 tuple(row[1] for row in board),
+                                 tuple(row[2] for row in board),
                                  (board[0][0], board[1][1], board[2][2]),  # Diagonals
                                  (board[0][2], board[1][1], board[2][0]))
 
