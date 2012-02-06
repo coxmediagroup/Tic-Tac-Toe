@@ -72,7 +72,7 @@ class TicTacToe(object):
             else:
                 self.do_computer_turn()
             self.print_board()
-            game_over, winner = self.check_game_over(self.squares)
+            game_over, winner = self.check_game_over()
             if game_over:
                 self.game_over = True
                 if winner == 1:
@@ -125,7 +125,7 @@ class TicTacToe(object):
             return True
         return False
         
-    def check_game_over(self, squares):
+    def check_game_over(self):
         """Check to see if the game is over and identify the winner
         
         Args:
@@ -138,15 +138,16 @@ class TicTacToe(object):
         
         """
         for victory in self.victories:
-            if set(victory).issubset(squares[self.COMPUTER]):
+            if set(victory).issubset(self.squares[self.COMPUTER]):
                 return True, 1
-            elif set(victory).issubset(squares[self.HUMAN]):
+            elif set(victory).issubset(self.squares[self.HUMAN]):
                 return True, -1
         if self.turns == 9:
             return True, 0
         return False, None
         
     def do_human_turn(self):
+        """Prompt the user for a board position and make the move if possible."""
         turn_done = False
         while not turn_done:
             pos = raw_input("Make your move: ")
@@ -185,7 +186,7 @@ class TicTacToe(object):
             pos is discarded internally, but on final return contains a safe move.
         
         """
-        game_over, score = self.check_game_over(self.squares)
+        game_over, score = self.check_game_over()
         if game_over:
             return score, None
         

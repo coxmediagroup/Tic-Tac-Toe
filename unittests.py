@@ -60,15 +60,16 @@ class test_TicTacToe(unittest.TestCase):
         
     def test_check_game_over(self):
         #test computer victory
-        squares = [[0,1,2],[]]
-        self.assertEqual(self.ttt.check_game_over(squares), (True, 1))
+        self.ttt.squares = [[0,1,2],[]]
+        self.assertEqual(self.ttt.check_game_over(), (True, 1))
         
         #test human victory
-        squares = [[],[2,5,8]]
-        self.assertEqual(self.ttt.check_game_over(squares), (True, -1))
+        self.ttt.squares = [[],[2,5,8]]
+        self.assertEqual(self.ttt.check_game_over(), (True, -1))
         
         #test tie
         #squares = [[4,1,8,6,5],[0,7,3,2]]
+        self.ttt.reset_board()
         self.ttt.make_move(self.ttt.COMPUTER,4)
         self.ttt.make_move(self.ttt.HUMAN,0)
         self.ttt.make_move(self.ttt.COMPUTER,1)
@@ -78,11 +79,11 @@ class test_TicTacToe(unittest.TestCase):
         self.ttt.make_move(self.ttt.COMPUTER,6)
         self.ttt.make_move(self.ttt.HUMAN,2)
         self.ttt.make_move(self.ttt.COMPUTER,5)
-        self.assertEqual(self.ttt.check_game_over(self.ttt.squares), (True, 0))
+        self.assertEqual(self.ttt.check_game_over(), (True, 0))
 
         #test no winner, no tie
         self.ttt.undo_move(self.ttt.COMPUTER, 5)
-        self.assertEqual(self.ttt.check_game_over(self.ttt.squares), (False, None))
+        self.assertEqual(self.ttt.check_game_over(), (False, None))
         
     def test_do_computer_turn(self):
         self.ttt.do_computer_turn()
@@ -127,7 +128,7 @@ class test_TicTacToe(unittest.TestCase):
                 score, pos = self.ttt.find_good_move(self.ttt.HUMAN)
                 self.ttt.make_move(self.ttt.HUMAN, pos)
                 self.ttt.board_control = self.ttt.COMPUTER
-            self.ttt.game_over, winner = self.ttt.check_game_over(self.ttt.squares)
+            self.ttt.game_over, winner = self.ttt.check_game_over()
             if self.ttt.game_over:
                 self.assertEqual(winner, 0)
         
