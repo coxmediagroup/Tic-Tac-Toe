@@ -93,6 +93,43 @@ class test_TicTacToe(unittest.TestCase):
         self.assertEqual(self.ttt.board_control, self.ttt.HUMAN)
         self.assertEqual(self.ttt.turns, 2)
         
+    def test_find_good_move(self):
+        #check that all initial moves are neutral (expected to tie)
+        score, pos = self.ttt.find_good_move(self.ttt.COMPUTER)
+        self.assertEqual(score, 0)
+        for i in range(9):
+            self.ttt.make_move(self.ttt.HUMAN, i)
+            score, pos = self.ttt.find_good_move(self.ttt.COMPUTER)
+            self.ttt.undo_move(self.ttt.HUMAN, i)
+            self.assertEqual(score, 0)
+        
+        self.ttt.reset_board()
+        
+        #set up a cpu wins situation and make sure cpu finds it
+        self.ttt.make_move(self.ttt.COMPUTER, 0)
+        self.ttt.make_move(self.ttt.HUMAN, 3)
+        self.ttt.make_move(self.ttt.COMPUTER, 1)
+        self.ttt.make_move(self.ttt.HUMAN, 4)
+        score, pos = self.ttt.find_good_move(self.ttt.COMPUTER)
+        self.assertEqual(score, 1)
+        
+        #set up a human wins situation and make sure human finds it
+        self.ttt.make_move(self.ttt.COMPUTER, 8)
+        score, pos = self.ttt.find_good_move(self.ttt.HUMAN)
+        self.assertEqual(score, -1)
+        
+        #play a game, both players make best moves.  ensure a tie
+        self.ttt.reset_board()
+        while not self.ttt.game_over:
+            if self.ttt.board_control == self.ttt.COMPUTER:
+                self.ttt.do_computer_turn()
+            else:
+                score, pos = self.ttt.find_good_move(self.ttt.HUMAN)
+                self.ttt.make_move(self.ttt.HUMAN, pos)
+                self.ttt.board_control = self.ttt.COMPUTER
+            self.ttt.game_over, winner = self.ttt.check_game_over(self.ttt.squares)
+            if self.ttt.game_over:
+                self.assertEqual(winner, 0)
         
 if __name__ == '__main__':
     unittest.main()
