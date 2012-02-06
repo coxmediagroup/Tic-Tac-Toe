@@ -193,6 +193,8 @@ class TicTacToe(object):
                 self.make_move(player, pos)
                 score, dummy = self.find_good_move(self.HUMAN)
                 self.undo_move(player, pos)
+                if score == 1:
+                    return score, pos
                 if score > best_score:
                     best_score = score
                     best_pos = pos
@@ -205,6 +207,8 @@ class TicTacToe(object):
                 self.make_move(player, pos)
                 score, dummy = self.find_good_move(self.COMPUTER)
                 self.undo_move(player, pos)
+                if score == -1:
+                    return score, pos
                 if score < best_score:
                     best_score = score
                     best_pos = pos
