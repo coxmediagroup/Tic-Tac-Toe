@@ -75,7 +75,12 @@ class TicTacToe(object):
             game_over, winner = self.check_game_over(self.squares)
             if game_over:
                 self.game_over = True
-                print "Game over.  You Lose!!"
+                if winner == 1:
+                    print "Game over.  You Lose!!"
+                elif winner == 0:
+                    print "Tie game.  You don't win!!"
+                else:
+                    print "You win.  This shouldn't be possible."
         
     def move_possible(self, pos):
         """Determine if a particular square is free and return a boolean.
@@ -217,4 +222,17 @@ class TicTacToe(object):
         
 if __name__ == '__main__':
     game = TicTacToe()
-    game.play()
+    lets_play = True
+    while lets_play:
+        game.play()
+        
+        while True:
+            answer = raw_input("Play again? (y or n):").upper()
+            if answer == "Y":
+                game.reset_board()
+                break
+            elif answer == "N":
+                lets_play = False
+                break
+            else:
+                print "Invalid input."
