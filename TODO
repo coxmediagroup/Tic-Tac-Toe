@@ -1,0 +1,29 @@
+
+Project: TicTacToe
+
+TODO
+====
+- Configure database
+- Create game model
+- Create game model unit tests
+- Create views/controllers
+  - Get a game board
+  - Post a move
+  - Post a move via Ajax
+- Create unit tests for views/controllers
+- Configure project urls to be aware of game app
+- Templates
+  - Update game board to post on div click
+  - Update game board to post via ajax on div click
+- User creation and authentication
+- Track games via User
+- Don't allow user to create a game if there's an incomplete game
+- Keep a talley of User wins and losses
+- Show a log of played games
+- Allow user to see re-play of game
+
+DONE
+====
+- Create django boiler plate
+- Create TODO
+
