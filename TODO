@@ -3,7 +3,6 @@ Project: TicTacToe
 
 TODO
 ====
-- Create game model
 - Create game model unit tests
 - Create views/controllers
   - Get a game board
@@ -26,4 +25,5 @@ DONE
 - Create django boiler plate
 - Create TODO
 - Configure database
+- Create game model
 
