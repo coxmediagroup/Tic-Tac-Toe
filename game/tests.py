@@ -18,39 +18,39 @@ class GameTest(TestCase):
     def test_game_creation_method(self):
         """
         Tests that a method in Game built for kosher creation succeeds
-        """"
+        """
         g = Game.create_new()
         assert g is not None
         assert g._board is not None
 
     def test_illegal_board_indices(self):
         g = Game.create_new()
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           ill = g[-1]
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           ill = g[3]
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           ill = g[0][-1]
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           ill = g[0][3]
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][-1] = PLAYER_X
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][3] = PLAYER_X
 
     def test_illegal_board_values(self):
         g = Game.create_new()
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = -2
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = -1.1
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = 0.5
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = 1.1
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = 2
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
           g[0][0] = PLAYER_NONE
         g[0][0] = PLAYER_X
         g[1][0] = PLAYER_O
@@ -60,6 +60,7 @@ class GameTest(TestCase):
         """
         Test that x gets to make the first move
         """
+        g = Game.create_new()
         g[0][0] = PLAYER_X
         assert g._board.upper_left == PLAYER_X
 
@@ -67,7 +68,8 @@ class GameTest(TestCase):
         """
         Test that o gets to make the first move
         """
-        with self.assertRaise(Exception):
+        g = Game.create_new()
+        with self.assertRaises(Exception):
             g[0][0] = PLAYER_O
 
     def test_two_valid_moves(self):
@@ -80,8 +82,8 @@ class GameTest(TestCase):
         g[0][1] = PLAYER_O
         g.save()
 
-        assert g._board.upper_left   == PLAYER_X
-        assert g._board.upper_center == PLAYER_O
+        assert g._board.upper_left  == PLAYER_X
+        assert g._board.center_left == PLAYER_O
 
     def test_x_goes_out_of_turn(self):
         """
@@ -90,7 +92,7 @@ class GameTest(TestCase):
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[0][1] = PLAYER_X
 
     def test_o_goes_out_of_turn(self):
@@ -101,7 +103,7 @@ class GameTest(TestCase):
         g = Game.create_new()
         g[0][0] = PLAYER_X
         g[0][1] = PLAYER_O
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[0][2] = PLAYER_O
 
     def test_dup_move(self):
@@ -112,7 +114,7 @@ class GameTest(TestCase):
         g = Game.create_new()
         g[0][0] = PLAYER_X
         g[0][1] = PLAYER_O
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[0][0] = PLAYER_X
 
     def test_stomp_move(self):
@@ -122,7 +124,7 @@ class GameTest(TestCase):
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[0][0] = PLAYER_O
 
     def test_no_win_complete(self):
@@ -164,7 +166,7 @@ class GameTest(TestCase):
         assert delta.seconds < 2
         assert g.is_complete()
         assert g.who_won() == PLAYER_X
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[1][2] = PLAYER_O
 
     
@@ -173,7 +175,6 @@ class GameTest(TestCase):
         Test if the game is complete when game board is filled and no winner
         """
         from datetime import datetime
-
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
@@ -189,15 +190,13 @@ class GameTest(TestCase):
         assert delta.seconds < 2
         assert g.is_complete()
         assert g.who_won() == PLAYER_O
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             g[0][2] = PLAYER_X
     
-    def test_x_winning_move(self):
+    def test_x_winning_move_col_0(self):
         """
-        Test if the game is complete when game board is filled and no winner
+        Test if there is a winning move for x along a column
         """
-        from datetime import datetime
-
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
@@ -208,12 +207,10 @@ class GameTest(TestCase):
         win = g.winning_move(for_player=PLAYER_X)
         assert win == (0,2)
     
-    def test_x_blocker(self):
+    def test_x_blocker_rev_diag(self):
         """
-        Test if the game is complete when game board is filled and no winner
+        Test if there is a winning move along the reverse diag (to block x)
         """
-        from datetime import datetime
-
 
         g = Game.create_new()
         g[0][2] = PLAYER_X
@@ -221,6 +218,20 @@ class GameTest(TestCase):
         g[1][1] = PLAYER_X
 
         win = g.winning_move(for_player=PLAYER_X)
-        assert win == (0,2)
+        assert win == (2,0)
 
-    
+    def test_o_winning_move_row(self):
+        """
+        Test if there is a winning move along a row for o
+        """
+        
+        g = Game.create_new()
+        g[0][2] = PLAYER_X
+        g[0][1] = PLAYER_O
+        g[2][0] = PLAYER_X
+        g[1][1] = PLAYER_O
+        g[0][0] = PLAYER_X
+
+        win = g.winning_move(for_player=PLAYER_O)
+        assert win == (2,1)
+
