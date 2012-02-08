@@ -8,7 +8,8 @@ Empty = ' '
 Player_X = 'X'
 Player_O = 'O'
 Size = 1
-max_prof = -1
+max_prof = 3
+max_pieces_left = 10
 
 class Board:
     """This class represents a tic tac toe board state."""
@@ -110,7 +111,7 @@ def humanPlayer(board, player):
         move = int(raw_input("Enter your move (%s): " % (', '.join(map(str,possible_moves)))))
     board.makeMove(move, player)
 
-def computerPlayer(board, player):
+def computerPlayer(board, player, pieces_left):
     """Function for the computer player"""
     opponent = { Player_O : Player_X, Player_X : Player_O }
 
@@ -147,39 +148,51 @@ def computerPlayer(board, player):
         finally:
             board.undoMove(move)
 
-    moves = [(move, evaluateMove(move,player,0)) for move in board.getValidMoves()]
-    #moves = board.getValidMoves()
+    moves = [(move, evaluateMove(move,player,0,pieces_left)) for move in board.getValidMoves()]
     random.shuffle(moves)
     moves.sort(key = lambda (move, winner): winner)
     board.makeMove(moves[-1][0], player)
-    #board.makeMove(moves[0],player)
 
 def game():
     """The game function"""
+    """First asks for the size of the board"""
     global Size
-    Size = int(raw_input("Please enter the size of the board: "))
-    while Size < 3:
-        print "Sorry, '%d' is not a valid size for the board." % Size
-        Size = int(raw_input("Please enter the size of the board: "))
+    Size = raw_input("Please enter the size of the board: ")
+    while Size == "" or int(Size) < 3:
+        print "Sorry, '%s' is not a valid size for the board." % Size
+        Size = raw_input("Please enter the size of the board: ")
+    Size = int(Size)
+
+    """If the size of the board is 3x3, does not limit the depth of the search by setting max_prof in -1"""
+    if Size == 3:
+	global max_prof
+	max_prof = -1
+
+    """Asks if the human wants to start"""
     first = raw_input("Would you like to start? (yes/no): ")
-    while string.find('yes', first) == -1 and string.find('no', first) == -1:
+    while first == "" or (string.find('yes', first) == -1 and string.find('no', first) == -1):
 	print "Incorrect answer"
 	first = raw_input("Would you like to start? (yes/no): ")
+
     b = Board()
+    pieces_left = Size * Size
     if string.find('yes', first) == -1:
 	print "My turn."
 	computerPlayer(b, Player_X)
+	pieces_left--
     while True:
 	b.printBoard()
         print "Your turn.",
         humanPlayer(b, Player_O)
         if b.gameOver(): 
             break
+	pieces_left--
 	b.printBoard()
         print "My turn."
-        computerPlayer(b, Player_X)
+        computerPlayer(b, Player_X, pieces_left)
         if b.gameOver(): 
             break
+	pieces_left--
 
     b.printBoard()
     if b.winner():
