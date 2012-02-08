@@ -109,7 +109,6 @@ class TicTacToe:
             win_pos = self.win(board, self.computer)
             if win_pos:
               board[win_pos[0]][win_pos[1]] = self.human
-              print("Here")
               if (self.tic_tac_toe(board) != self.human) and not self.forked(board, self.human):
                 return row, col
       return self.fork(self.board, self.human)
@@ -210,11 +209,8 @@ class TicTacToe:
         self.computer_move()
       moves += 1
       winner = self.tic_tac_toe(self.board)
-<<<<<<< HEAD
     
     print(self)
-=======
->>>>>>> 69485a701c062f6866499ff6df00817dbd4cc17b
     print("And the winner is............... {0}!!!".format(winner))
       
 
