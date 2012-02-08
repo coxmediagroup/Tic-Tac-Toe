@@ -79,7 +79,7 @@ class TicTacToe:
         scratch_board = deepcopy(board)
         for row in range(3):
             for col in range(3):
-                if isinstance(board[row][col], int):
+                if isinstance(scratch_board[row][col], int):
                     scratch_board[row][col] = mark
                     if self.forked(scratch_board, mark):
                         return row, col
@@ -95,6 +95,7 @@ class TicTacToe:
             second_win = self.win(board, mark)
             if second_win:
                 return True
+            board[win[0]][win[1]] = win[0] * 3 + win[1]
 
     def block_fork(self):
         """Blocks an impending fork.
