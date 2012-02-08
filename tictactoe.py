@@ -176,10 +176,10 @@ def game():
     """The game function"""
     # First asks for the size of the board
     global Size
-    Size = raw_input("Please enter the size of the board: ")
-    while Size == "" or int(Size) < 3:
+    Size = raw_input("Please enter the size of the board (3, 4, 5, 6): ")
+    while Size == "" or int(Size) < 3 or int(Size) > 6:
         print "Sorry, '%s' is not a valid size for the board." % Size
-        Size = raw_input("Please enter the size of the board: ")
+        Size = raw_input("Please enter the size of the board (3, 4, 5, 6): ")
     Size = int(Size)
 
     # If the size of the board is 3x3, does not limit the depth of the search by setting max_prof in -1
