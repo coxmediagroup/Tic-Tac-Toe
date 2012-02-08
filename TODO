@@ -3,15 +3,11 @@ Project: TicTacToe
 
 TODO
 ====
-- Create unit tests for views/controllers
-- Implement views/controllers
-  - Get a game board
-  - Post a move
-  - Post a move via Ajax
-- Configure project urls to be aware of game app
-- Templates
+- Update index template to list games, link to games, show game status
+- Update game template to play a game
   - Update game board to post on div click
   - Update game board to post via ajax on div click
+- Implement Comp move logic
 - User creation and authentication
 - Track games via User
 - Don't allow user to create a game if there's an incomplete game
@@ -28,5 +24,11 @@ DONE
 - Create game model unit tests
 - Update models to make unit tests pass
 - Create views/controllers
-- Map urls
+- Map urls / - Configure project urls to be aware of game app
+- Create unit tests for views/controllers
+- Implement unit tests for views/controllers
+- Implement views/controllers
+  - Get a game board
+  - Post a move
+  - Post a move via Ajax
 
