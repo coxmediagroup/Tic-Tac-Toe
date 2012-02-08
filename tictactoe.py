@@ -1,4 +1,17 @@
-import operator, sys, random, string
+# -*- coding: utf-8 -
+
+#  Tic-Tac-Toe excercise
+#
+#  Authors: Lucia Gonzalez, Alan Descoins
+#  e-mail: lucia@tryolabs.com, alan@tryolabs.com
+#
+#                               Tryolabs - Feb 2012
+#
+
+import operator
+import sys
+import random
+import string
 
 def allEqual(list):
     """returns True if all the elements in a list are equal, or if the list is empty."""
