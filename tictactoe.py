@@ -60,29 +60,30 @@ class TicTacToe:
 
            Returns the row, col of or None
         """
-        # FIXME naive approach
+        scratch_board = deepcopy(board)
         for row in range(3):
             for col in range(3):
-                if isinstance(board[row][col], int):
-                    new_board = deepcopy(board)
-                    new_board[row][col] = mark
-                    if self.tic_tac_toe(new_board):
+                if isinstance(scratch_board[row][col], int):
+                    scratch_board[row][col] = mark
+                    if self.tic_tac_toe(scratch_board):
                         return row, col
+                    scratch_board[row][col] = 3 * row + col
 
     
     def fork(self, board, mark):
         """Finds a position that will fork (a move that creates two 
-             possible following winning moves).
+           possible following winning moves).
              
-             Returns the position or None"""
+           Returns the position or None
+        """
+        scratch_board = deepcopy(board)
         for row in range(3):
             for col in range(3):
                 if isinstance(board[row][col], int):
-                    new_board = deepcopy(board)
-                    new_board[row][col] = mark
-                    if self.forked(new_board, mark):
+                    scratch_board[row][col] = mark
+                    if self.forked(scratch_board, mark):
                         return row, col
-        return None
+                    scratch_board[row][col] = row * 3 + col
 
     def forked(self, board, mark):
         """
@@ -119,19 +120,20 @@ class TicTacToe:
     def center(self):
         """Checkes if the center position is empty.
              
-             Returns the position or None"""
+           Returns the position or None
+        """
         if isinstance(self.board[1][1], int):
             return 1, 1
 
     def opposite_corner(self):
         """Detects if the opponent has selected a corner and if  
-             the opposite corner is available.
+           the opposite corner is available.
 
-             Returns the position or None
+           Returns the position or None
         """
         def get_pos(board, pos):
-            """board - the 2d list to pull from
-               pos - a tuple of (level 1 index, level 2 index)
+            """
+            Returns the value in baord at the givent position
             """
             return board[pos[0]][pos[1]]
         corners = (((0, 0),(2, 2)), ((0, 2),(2, 0)))
@@ -154,14 +156,14 @@ class TicTacToe:
     def empty_corner(self):
         """Detects if any corners are empty.    
              
-             Returns the position or None
+           Returns the position or None
         """
         return self.empty_pos(((0, 0), (0, 2), (2, 0), (2, 2)))
 
     def empty_side(self):
         """Detects if any of the side positions are empty.
              
-             Returns the position or None"""
+           Returns the position or None"""
         return self.empty_pos(((0, 1), (1, 0), (1, 2), (2, 1)))
             
     def tic_tac_toe(self, board):
@@ -179,10 +181,8 @@ class TicTacToe:
                     return combo[0]
         if len(set((v for row in self.board for v in row))) == 2:
             return "cat"
-        ret = the_winner(self.win_combinations(board))
-        if ret:
-            ret = ret
-        return ret
+        winner = the_winner(self.win_combinations(board))
+        return winner
         
     def win_combinations(self, board):
         """
