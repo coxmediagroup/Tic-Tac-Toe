@@ -22,8 +22,8 @@ Player_X = 'X'
 Player_O = 'O'
 Size = 1
 # Maximum search depth for board size > 3
-max_prof = 3
-# Minimum number of free spots after which max_prof has no effect
+max_depth = 3
+# Minimum number of free spots after which max_depth has no effect
 min_free_spots = 9
 
 class Board:
@@ -140,16 +140,16 @@ def computerPlayer(board, player):
             return 0
         return -1
 
-    def evaluateMove(move, p = player, prof = 0, limit_recursion = True):
+    def evaluateMove(move, p = player, depth = 0, limit_recursion = True):
         """Evaluates the next move using the Minimax decision rule."""
         try:
             board.makeMove(move, p)
-            if max_prof != -1 and limit_recursion:
-                if prof >= max_prof:
+            if max_depth != -1 and limit_recursion:
+                if depth >= max_depth:
                     return 0
             if board.gameOver():
                 return judge(board.winner())
-            outcomes = (evaluateMove(next_move, opponent[p], prof + 1, limit_recursion) for next_move in board.getValidMoves())
+            outcomes = (evaluateMove(next_move, opponent[p], depth + 1, limit_recursion) for next_move in board.getValidMoves())
             if p == player:
                 min_element = 1
                 for o in outcomes:
@@ -182,10 +182,10 @@ def game():
         Size = raw_input("Please enter the size of the board (3, 4, 5, 6): ")
     Size = int(Size)
 
-    # If the size of the board is 3x3, does not limit the depth of the search by setting max_prof in -1
+    # If the size of the board is 3x3, does not limit the depth of the search by setting max_depth in -1
     if Size == 3:
-        global max_prof
-        max_prof = -1
+        global max_depth
+        max_depth = -1
 
     # Asks if the human wants to start
     first = raw_input("Would you like to start? (yes/no): ")
