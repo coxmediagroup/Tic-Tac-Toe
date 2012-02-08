@@ -1,3 +1,4 @@
+from random import random
 from copy import deepcopy
 
 def get_pos(l, pos):
@@ -19,7 +20,7 @@ class TicTacToe:
        Returns True on a valid move.
        Otherwise False."""
     move = raw_input("Your turn: ")
-    if ord(move) >= ord('0') and ord(move) < ord('9'):
+    if len(move) == 1 and ord(move) >= ord('0') and ord(move) < ord('9'):
       move = int(move) 
       if isinstance(self.board[move//3][move%3], int):
         self.board[move//3][move%3] = self.human
@@ -137,9 +138,9 @@ class TicTacToe:
   def tic_tac_toe(self, board):
     """Examines the board to determine if a tic tac toe
        has occured.
-
-       Returns True or False
-       if True, also sets self.winner to "Human", "Computer", or "Cat"
+      
+       Returns the character that won ('x' or 'o')
+         or None
     """
     def all_same(l):
       """Check if all members of the list are the same value, 
@@ -148,7 +149,7 @@ class TicTacToe:
         return l[0]
       return None
     if len(set((v for row in self.board for v in row))) == 2:
-      return ["cat"]
+      return "cat"
     ret = filter(all_same, self.win_combinations(board))
     if ret:
       ret = ret[0][0]
@@ -175,6 +176,12 @@ class TicTacToe:
     """This function drives the game."""
     moves = 0
     winner = None
+    if random() < 0.5:
+      print("You go first!")
+    else:
+      print("I go first!")
+      moves += 1
+
     while not winner:
       if moves%2 == 0:
         print(self)
@@ -184,7 +191,9 @@ class TicTacToe:
         self.computer_move()
       moves += 1
       winner = self.tic_tac_toe(self.board)
-    print("And the winner is............... {0}!!!".format(winner[0]))
+    
+    print(self)
+    print("And the winner is............... {0}!!!".format(winner))
       
 
 if __name__=='__main__':

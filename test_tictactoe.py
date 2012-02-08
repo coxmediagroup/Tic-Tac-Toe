@@ -1,13 +1,59 @@
 import unittest
 from tictactoe import TicTacToe
+from mock import Mock
+import sys, os
+from itertools import combinations_with_replacement
 
 class TestTicTacToe(unittest.TestCase):
   def setUp(self):
     self.T = TicTacToe()
+    __builtins__.raw_input = Mock()
+    self.ri = __builtins__.raw_input
 
   def tearDown(self):
     self.T = None
 
+  def test_brute_force_ttt(self):
+    """Ensure that computer cannot be beated by niavely 
+       brute forcing all possibilities"""
+    def simulate(moves): 
+      #print(moves)
+      T = TicTacToe()
+      for move in moves:
+        self.ri.return_value = str(move)
+        T.human_move()
+        winner = T.tic_tac_toe(T.board)
+        if winner:
+          #print(winner)
+          return winner == T.computer or winner == 'cat'
+        T.computer_move()
+        winner = T.tic_tac_toe(T.board)
+        if winner:
+          #print(winner)
+          return winner == T.computer or winner == 'cat'
+      return True
+    sys.stdout, tmp = open(os.devnull, 'w'), sys.stdout
+    assert True == all(simulate(moves) for moves in combinations_with_replacement(range(9), 5))
+    sys.stdout = tmp
+
+  def test_human_move_char(self):
+    """Test that the human_move does not accept input outside of range"""
+    self.ri.return_value = 'c'
+    assert False == self.T.human_move()
+
+  def test_human_move_taken(self):
+    self.T.board[0][0] = 'x'
+    self.ri.return_value = '0'
+    assert False == self.T.human_move()  # TODO Potentially test that a message is displayed
+  
+  def test_human_move_acceptable(self):
+    """Test that the human_move accepts all possible input"""
+    for i in range(9):
+      self.ri.return_value = str(i)
+      T = TicTacToe()
+      assert self.T.human_move() == True
+      T = None
+  
   def test_win(self):
     """Test that a winner is detected"""
     self.T.board[0] = ['x']*3
