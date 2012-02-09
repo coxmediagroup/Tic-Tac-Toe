@@ -23,3 +23,18 @@ def test_add_move():
         pass
     else:
         assert False, 'Board allowed a move by an unknown player'
+        
+        
+def test_winner_detection():
+    board = tictactoe.Board()
+
+    assert board.get_winner() == None
+
+    board.add_move(pos=(0,0), player= tictactoe.PLAYER_X)
+    assert board.get_winner() == None
+
+    board.add_move(pos=(1,1), player= tictactoe.PLAYER_X)
+    assert board.get_winner() == None
+
+    board.add_move(pos=(2,2), player= tictactoe.PLAYER_X)
+    assert board.get_winner() == tictactoe.PLAYER_X

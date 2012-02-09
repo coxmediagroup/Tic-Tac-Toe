@@ -29,6 +29,56 @@ class Board(object):
 
     def get_winner(self):
         """Returns true if a player has won"""
+
+        # To hold the winner for the helper
+        winner = [ ]
+
+        # helper for checking matches
+        def is_winner(move_0, move_1, move_2):
+            # if any haven't been played on, no
+            if None in (move_0, move_1, move_2):
+                return None
+
+            # if the don't match, no
+            if move_0 != move_1 or move_1 != move_2:
+                return None
+
+            # winner
+            winner.append(move_0)
+            return move_0
+        
+        for idx in range(self.size):
+            # check column
+            move_0 = self.get_move_at_position((idx, 0))
+            move_1 = self.get_move_at_position((idx, 1))
+            move_2 = self.get_move_at_position((idx, 2))
+
+            if is_winner(move_0, move_1, move_2):
+                return winner[0]
+
+            # check row
+            move_0 = self.get_move_at_position((0, idx))
+            move_1 = self.get_move_at_position((1, idx))
+            move_2 = self.get_move_at_position((2, idx))
+
+            if is_winner(move_0, move_1, move_2):
+                return winner[0]
+
+        # all columns and rows checked, check diagonals  
+        move_0 = self.get_move_at_position((0, 0))
+        move_1 = self.get_move_at_position((1, 1))
+        move_2 = self.get_move_at_position((2, 2))
+
+        if is_winner(move_0, move_1, move_2):
+            return winner[0]
+
+        move_0 = self.get_move_at_position((0, 2))
+        move_1 = self.get_move_at_position((1, 1))
+        move_2 = self.get_move_at_position((2, 0))
+
+        if is_winner(move_0, move_1, move_2):
+            return winner[0]
+
         # no winner found
         return None
 
