@@ -37,44 +37,40 @@ $(document).ajaxSend(function(event, xhr, settings) {
 
 // my code
 $(function() {
-  //$('.ttt_new').click(function() {
-    //$.post(
-    //  '/game/new',
-    //   undefined,
-    //   function(data)
-    //     {
-    //       window.location.href=data.redirect;
-    //     });
-    //return false;
-  //});
-  $('.ttt_cell').click(function(event) {
-    var source = $(event.target);
-    if(source.hasClass('ttt_x') || source.hasClass('ttt_o') || source.hasClass('ttt_done')) return;
-    var id = source[0].id.slice(-2);
-    var col = id.charAt(0);
-    var row = id.charAt(1);
+  $('.ttt_board').each(function(index, board) {
+    board = $(board);
+    var game_id = board.children('#ttt_game_id')[0].value;
+    var player_token = board.children('#ttt_player')[0].value.toUpperCase();
+    board.children('.ttt_cell').click(function(event) {
+      var source = $(event.target);
+      if(source.hasClass('ttt_x') || source.hasClass('ttt_o') || source.hasClass('ttt_done')) return;
+      var id = source[0].id.slice(-2);
+      var col = id.charAt(0);
+      var row = id.charAt(1);
     
-    url = window.location.href + 'move'
-    $.ajax({
-      'url': url,
-      'type': 'POST',
-      'data': { 'player':'x', 'col':col, 'row':row },
-      'dataType': 'json',
-      'success': function(content, response)
-        {
-          if(content['player'] !== '-')
+      url = window.location.href + 'move'
+      $.ajax({
+        'url': url,
+        'type': 'POST',
+        'data': { 'player':'x', 'col':col, 'row':row },
+        'dataType': 'json',
+        'success': function(content, response)
           {
-              var cell = $('#ttt_cell_' + content['col'] + content['row'])
-              cell.addClass('ttt_' + content['player']);
-              cell.innerHTML = content['player'].toUpperCase();
+            source[0].innerHTML = player_token;
+            if(content['player'] !== '-')
+            {
+                var cell = $('#ttt_cell_' + content['col'] + content['row'])
+                cell.addClass('ttt_' + content['player']);
+                cell.innerHTML = content['player'].toUpperCase();
+            }
+          },
+        'error': function()
+          {
+            alert('Something bad happened');
           }
-        },
-      'error': function()
-        {
-          alert('Something bad happened');
-        }
-      });
-  });
+        }); //end ajax
+    }); // end board children
+  }); // end board
 });
 
 

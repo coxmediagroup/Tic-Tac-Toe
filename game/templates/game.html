@@ -13,6 +13,8 @@
   <form>
   {% csrf_token %}
   <div class='ttt_board'>
+  <input type='hidden' id='ttt_player' value='{{ player }}'></input>
+  <input type='hidden' id='ttt_game_id' value='{{ game.id }}'></input>
   {% for row in game.rows %}
     {% with ri=forloop.counter0 %}
       {% for cell in row %}

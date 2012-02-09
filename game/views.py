@@ -23,12 +23,14 @@ def get(request, game_id):
     Get a game
     """
     game = get_object_or_404(Game, pk=game_id)
+    player = 'x' if game.is_user_x else 'o'
     return render_to_response(
         'game.html', 
         {
-            'game':game,
-            'PLAYER_X':PLAYER_X,
-            'PLAYER_O':PLAYER_O,
+            'game':     game,
+            'player':   player,
+            'PLAYER_X': PLAYER_X,
+            'PLAYER_O': PLAYER_O,
         },
         context_instance=RequestContext(request))
 

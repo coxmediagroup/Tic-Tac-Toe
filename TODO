@@ -3,13 +3,12 @@ Project: TicTacToe
 
 TODO
 ====
+- Randomize whether user is X
+- Implement Comp move logic
 - Continue update game template to play a game
-  - Include player's token in game board form
-  - Place player's token on board when cell is clicked
   - Update game board status from ajax response
   - Introduce a ttt_done, ttt_win, ttt_lose class?
   - Gray out loser tokens for complete boards
-- Implement Comp move logic
 - Update index template to show game status
 - User creation and authentication
 - Track games via User
@@ -42,4 +41,10 @@ DONE
 - Provide a link back to game index from game board
 - Provide a hidden 'New Game' button to show when the game is complete
 - Ugly-style the submit button - 'cause I wanted to try it
+- Continue update game template to play a game
+  - Include player's token in game board form
+  - Also included game id - probably unneeded, but whatever
+  - Also update tictactoe.js so it could (presumably) handle multiple boards
+    on a page
+  - Place player's token on board when cell is clicked
 
