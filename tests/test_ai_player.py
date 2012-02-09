@@ -92,3 +92,12 @@ def test_get_adjacent_corners():
     assert 2 == len(corners)
     assert (0, 2) in corners
     assert (2, 2) in corners
+
+def test_get_opposite_edge():
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    assert (2, 1) == computer._get_opposite_edge((0, 1))
+    assert (0, 1) == computer._get_opposite_edge((2, 1))
+    assert (1, 2) == computer._get_opposite_edge((1, 0))
+    assert (1, 0) == computer._get_opposite_edge((1, 2))
+

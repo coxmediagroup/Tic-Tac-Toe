@@ -198,6 +198,13 @@ class AIPlayer(object):
         else:
             return [(edge[0], 0), (edge[0], 2)]
 
+    def _get_opposite_edge(self, edge):
+        """Return the edge opposite of the specified edge"""
+        if edge[0] == 1:
+            return (1, 2 if edge[1] == 0 else 0)
+        else:
+            return (2 if edge[0] == 0 else 0, 1)
+
     def get_next_move(self, board):
         """Returns the position of the next move"""
         available_moves = board.get_available_moves()
@@ -239,20 +246,13 @@ class AIPlayer(object):
 
                     # the center
                     possible_moves.append(center)
-                    possible_moves.extend(self._get_corners_adjacent_to_edge(edge))
 
-                    if edge[0] == 1:
-                        # Opposite edge
-                        if edge[1] == 0:
-                            possible_moves.append((1, 2))
-                        else:
-                            possible_moves.append((1, 0))
-                    else:
-                        # Opposite edge
-                        if edge[0] == 0:
-                            possible_moves.append((2, 1))
-                        else:
-                            possible_moves.append((0, 1))
+                    # adjacent corners
+                    possible_moves.extend(
+                            self._get_corners_adjacent_to_edge(edge))
+
+                    # opposite edge
+                    possible_moves.append(self._get_opposite_edge(edge))
 
                     return random.choice(possible_moves)
 
