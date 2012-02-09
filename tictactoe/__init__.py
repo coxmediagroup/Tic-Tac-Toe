@@ -31,10 +31,11 @@ class Board(object):
         """Returns true if a player has won"""
 
         # To hold the winner for the helper
-        winner = [ ]
+        winner = []
 
-        # helper for checking matches
         def is_winner(move_0, move_1, move_2):
+            """helper for checking matches"""
+
             # if any haven't been played on, no
             if None in (move_0, move_1, move_2):
                 return None
@@ -46,7 +47,7 @@ class Board(object):
             # winner
             winner.append(move_0)
             return move_0
-        
+
         for idx in range(self.size):
             # check column
             move_0 = self.get_move_at_position((idx, 0))
@@ -64,7 +65,7 @@ class Board(object):
             if is_winner(move_0, move_1, move_2):
                 return winner[0]
 
-        # all columns and rows checked, check diagonals  
+        # all columns and rows checked, check diagonals
         move_0 = self.get_move_at_position((0, 0))
         move_1 = self.get_move_at_position((1, 1))
         move_2 = self.get_move_at_position((2, 2))
@@ -103,6 +104,19 @@ class Board(object):
 
         self.board[pos[0]][pos[1]] = player
 
+    def get_available_moves(self):
+        """Returns a sequence of available moves on the board"""
+        available_moves = []
+
+        for column in range(self.size):
+            for row in range(self.size):
+                move = self.get_move_at_position((column, row))
+
+                if move is None:
+                    available_moves.append((column, row))
+
+        return available_moves
+
 
 class AIPlayer(object):
     """An AI Tic-Tac-Toe player
@@ -111,8 +125,7 @@ class AIPlayer(object):
     """
 
     def __init__(self, player):
-        pass
+        self.player = player
 
     def get_next_move(self, board):
         """Returns the position of the next move"""
-        pass
