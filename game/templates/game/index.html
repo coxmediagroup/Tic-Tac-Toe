@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block javascript %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.bigtext').bigtext();
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+
+    <div class="span3">
+      <div class="well">
+        <h2>{% trans "Games Played" %}</h2>
+        <p class="score">{{ played }}</p>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div class="well">
+        <h2>{% trans "Games Won" %}</h2>
+        <p class="score">{{ won }}</p>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div class="well">
+        <h2>{% trans "Games Tied" %}</h2>
+        <p class="score">{{ tied }}</p>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div class="well">
+        <h2>{% trans "Games Lost" %}</h2>
+        <p class="score">{{ lost }}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="span12">
+      <table class="board" width="100%">
+        <tbody>
+          <tr>
+            <td width="33%" class="bigtext right bottom">X</td>
+            <td width="33%" class="bigtext right bottom">&nbsp;</td>
+            <td width="33%" class="bigtext bottom">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="33%" class="bigtext right bottom">&nbsp;</td>
+            <td width="33%" class="bigtext right bottom">O</td>
+            <td width="33%" class="bigtext bottom">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="33%" class="bigtext right">&nbsp;</td>
+            <td width="33%" class="bigtext right">&nbsp;</td>
+            <td width="33%" class="bigtext">X</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span3">
+      <a class="btn btn-large" href="/">
+        <i class="icon-play"></i>
+        {% trans "Start new game" %}
+      </a>
+    </div>
+  </div>
+
+{% endblock %}
