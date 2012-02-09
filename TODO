@@ -3,8 +3,6 @@ Project: TicTacToe
 
 TODO
 ====
-- Probably should improve testing of controller business logic
-  - But how do you test the deliberately indeterminent method of play?
 - Update index template to show game status
 - User creation and authentication
 - Track games via User
@@ -51,6 +49,8 @@ DONE
   - Refetch database record after it has been written
     - Was losing data because business logic wasn't saving the record
 - Complete Comp move logic
+- Probably should improve testing of controller business logic
+  - But how do you test the deliberately indeterminent method of play?
 
 NOT DOING
 =========
