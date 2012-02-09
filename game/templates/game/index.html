@@ -1,78 +1,69 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block javascript %}
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.bigtext').bigtext();
-  });
-</script>
-{% endblock %}
-
 {% block content %}
 
   <div class="row">
-
-    <div class="span3">
-      <div class="well">
-        <h2>{% trans "Games Played" %}</h2>
-        <p class="score">{{ played }}</p>
-      </div>
-    </div>
-
-    <div class="span3">
-      <div class="well">
-        <h2>{% trans "Games Won" %}</h2>
-        <p class="score">{{ won }}</p>
-      </div>
-    </div>
-
-    <div class="span3">
-      <div class="well">
-        <h2>{% trans "Games Tied" %}</h2>
-        <p class="score">{{ tied }}</p>
-      </div>
-    </div>
-
-    <div class="span3">
-      <div class="well">
-        <h2>{% trans "Games Lost" %}</h2>
-        <p class="score">{{ lost }}</p>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-    <div class="span12">
+    <div class="span6">
       <table class="board" width="100%">
         <tbody>
           <tr>
-            <td width="33%" class="bigtext right bottom">X</td>
-            <td width="33%" class="bigtext right bottom">&nbsp;</td>
-            <td width="33%" class="bigtext bottom">&nbsp;</td>
+            <td width="33%" class="right bottom">
+              <div class="bigtext"><div class="square">{{ cell.0 }}</div></div>
+            </td>
+            <td width="33%" class="right bottom">
+              <div class="bigtext"><div class="square">{{ cell.1 }}</div></div>
+            </td>
+            <td width="33%" class="bottom">
+              <div class="bigtext"><div class="square">{{ cell.2 }}</div></div>
+            </td>
           </tr>
           <tr>
-            <td width="33%" class="bigtext right bottom">&nbsp;</td>
-            <td width="33%" class="bigtext right bottom">O</td>
-            <td width="33%" class="bigtext bottom">&nbsp;</td>
+            <td width="33%" class="right bottom">
+              <div class="bigtext"><div class="square">{{ cell.3 }}</div></div>
+            </td>
+            <td width="33%" class="right bottom">
+              <div class="bigtext"><div class="square">{{ cell.4 }}</div></div>
+            </td>
+            <td width="33%" class="bottom">
+              <div class="bigtext"><div class="square">{{ cell.5 }}</div></div>
+            </td>
           </tr>
           <tr>
-            <td width="33%" class="bigtext right">&nbsp;</td>
-            <td width="33%" class="bigtext right">&nbsp;</td>
-            <td width="33%" class="bigtext">X</td>
+            <td width="33%" class="right">
+              <div class="bigtext"><div class="square">{{ cell.6 }}</div></div>
+            </td>
+            <td width="33%" class="right">
+              <div class="bigtext"><div class="square">{{ cell.7 }}</div></div>
+            </td>
+            <td width="33%">
+              <div class="bigtext"><div class="square">{{ cell.8 }}</div></div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="span3">
-      <a class="btn btn-large" href="/">
-        <i class="icon-play"></i>
-        {% trans "Start new game" %}
-      </a>
+    <div class="span4">
+      <p><div class="well">
+        <a class="btn btn-large" href="/">
+          <i class="icon-play"></i>
+          {% trans "Play first in new game as X" %}
+        </a>
+      </div></p>
+      <p><div class="well">
+        <a class="btn btn-large" href="/">
+          <i class="icon-play"></i>
+          {% trans "Play second in new game as O" %}
+        </a>
+      </div></p>
+      <p><div class="well">
+        <h3>{% trans "Statistics" %}</h3>
+        <p>{{ played }} games played</p>
+        <p>{{ won }} won</p>
+        <p>{{ tied }} tied</p>
+        <p>{{ lost }} lost</p>
+      </div></p>
     </div>
   </div>
 
