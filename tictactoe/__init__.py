@@ -1,8 +1,10 @@
 """A base implementation for a Tic-Tac-Toe game"""
+import random
 
 
 PLAYER_O = 'circle'
 PLAYER_X = 'cross'
+PLAYERS = (PLAYER_O, PLAYER_X)
 
 
 class MoveNotAvailable(Exception):
@@ -117,11 +119,48 @@ class Board(object):
 
         return available_moves
 
+    def print_board(self):
+        def get_player_name(player):
+            if player is None:
+                return '_'
+            if player is PLAYER_O:
+                return 'O'
+            return 'X'
+
+        for row in range(self.size):
+            print '%s %s %s' % (
+                    get_player_name(self.get_move_at_position((0, row))),
+                    get_player_name(self.get_move_at_position((1, row))),
+                    get_player_name(self.get_move_at_position((2, row))),
+                    )
+
+
+WIN_COMBOS = (
+        ((0, 0), (0, 1), (0, 2)),
+        ((1, 0), (1, 1), (1, 2)),
+        ((2, 0), (2, 1), (2, 2)),
+
+        ((0, 0), (1, 0), (2, 0)),
+        ((0, 1), (1, 1), (2, 1)),
+        ((0, 2), (1, 2), (2, 2)),
+
+        ((0, 0), (1, 1), (2, 2)),
+        ((0, 2), (1, 1), (2, 0)),
+    )
+
 
 class AIPlayer(object):
     """An AI Tic-Tac-Toe player
 
     Guaranteed to always at least stalemate
+
+    It works by:
+        Can it win in one move? Do that.
+        Can the opponent win in one move? Block that.
+
+        Otherwise play the optimal opening.
+
+        After that just choose randomly from available moves
     """
 
     def __init__(self, player):
@@ -129,3 +168,7 @@ class AIPlayer(object):
 
     def get_next_move(self, board):
         """Returns the position of the next move"""
+        available_moves = board.get_available_moves()
+
+        # other wise follow the priority list
+        return random.choice(available_moves)
