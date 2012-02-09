@@ -21,12 +21,16 @@ def test_win_condition_checking():
     assert (0,0) == computer.get_next_move(board)
 
 
-def test_optimal_opening_moves():
+def test_first_move():
     human = tictactoe.PLAYER_X
     computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
 
     board = tictactoe.Board()
     assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))
+
+def test_response_to_center():
+    human = tictactoe.PLAYER_X
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
 
     board = tictactoe.Board()
     board.add_move((1, 1), human)
