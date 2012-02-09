@@ -220,5 +220,10 @@ class AIPlayer(object):
             if board.get_move_at_position(center) != None:
                 return random.choice(corners)
 
+            # Respond to a corner with the center
+            for corner in corners:
+                if board.get_move_at_position(corner) != None:
+                    return center
+
         # other wise follow the priority list
         return random.choice(available_moves)

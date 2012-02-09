@@ -28,6 +28,7 @@ def test_first_move():
     board = tictactoe.Board()
     assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))
 
+
 def test_response_to_center():
     human = tictactoe.PLAYER_X
     computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
@@ -35,3 +36,13 @@ def test_response_to_center():
     board = tictactoe.Board()
     board.add_move((1, 1), human)
     assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))
+
+
+def test_response_to_corners():
+    human = tictactoe.PLAYER_X
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    for corner in ((0,0), (2,0), (0,2), (2,2)):
+        board = tictactoe.Board()
+        board.add_move(corner, human)
+        assert (1, 1) == computer.get_next_move(board)
