@@ -23,6 +23,7 @@
           class='ttt_cell 
             {% ifequal cell PLAYER_X %}ttt_x{% endifequal %}
             {% ifequal cell PLAYER_O %}ttt_o{% endifequal %}
+            {% if game_done %}ttt_done{% endif %}
             '
             >
             {% ifequal cell PLAYER_X %}X{% endifequal %}
@@ -38,7 +39,10 @@
 </div>
 <form action='/game/new' method='post'>
   {% csrf_token %}
-  <input type='submit' value='New Game' class='ttt_new' style='visibility:hidden;'></input>
+  <input type='submit' value='New Game' class='ttt_new' 
+    {% if not game_done %}style='display:none;'{% endif %}
+    >
+  </input>
 </form>
 </div>
 </body>

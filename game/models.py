@@ -38,7 +38,7 @@ class Game(models.Model):
         def __setitem__(self, cell, val):
             if cell < 0 or cell > 2:
                 raise IndexError('Invalid Index %d' % cell)
-            assert val != PLAYER_NONE and val == self.game.who_moves()
+            assert val is not None and val != PLAYER_NONE and val == self.game.who_moves()
             assert self.game._board.__dict__[self.col_group[cell]] == PLAYER_NONE
             self.game._board.__dict__[self.col_group[cell]] = val
             self.game._board.save()
@@ -46,10 +46,12 @@ class Game(models.Model):
             state = self.game._determine_state()
             if state[1]:
                 self.game.ended = datetime.now()
+                self.game.save()
 
     @classmethod
-    def create_new(cls):
+    def create_new(cls, is_user_x=True):
         game = Game()
+        game.is_user_x = is_user_x
         game.save()
 
         board = Board()
@@ -99,7 +101,7 @@ class Game(models.Model):
         return self._determine_state()[2]
 
     def is_complete(self):
-        return self._determine_state()[1]
+        return self.ended is not None
 
     def who_won(self):
         return self._determine_state()[0]

@@ -53,6 +53,8 @@ class GameTest(TestCase):
           g[0][0] = 2
         with self.assertRaises(Exception):
           g[0][0] = PLAYER_NONE
+        with self.assertRaises(Exception):
+          g[0][0] = None
         g[0][0] = PLAYER_X
         g[1][0] = PLAYER_O
         g.save()

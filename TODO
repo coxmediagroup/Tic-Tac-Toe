@@ -3,12 +3,10 @@ Project: TicTacToe
 
 TODO
 ====
-- Randomize whether user is X
-- Implement Comp move logic
-- Continue update game template to play a game
-  - Update game board status from ajax response
-  - Introduce a ttt_done, ttt_win, ttt_lose class?
-  - Gray out loser tokens for complete boards
+- Complete Comp move logic
+- Fix problem in unit tests
+  - Refetch database record after it has been written
+    - Was losing data because business logic wasn't saving the record
 - Update index template to show game status
 - User creation and authentication
 - Track games via User
@@ -47,4 +45,12 @@ DONE
   - Also update tictactoe.js so it could (presumably) handle multiple boards
     on a page
   - Place player's token on board when cell is clicked
+  - Update game board status from ajax response
+  - Introduce a ttt_done
+- Randomize whether user is X
+- Implement Comp move logic
 
+NOT DOING
+=========
+- ttt_win ttt_lose class
+- Gray out loser tokens for complete boards

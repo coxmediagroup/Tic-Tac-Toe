@@ -40,7 +40,8 @@ $(function() {
   $('.ttt_board').each(function(index, board) {
     board = $(board);
     var game_id = board.children('#ttt_game_id')[0].value;
-    var player_token = board.children('#ttt_player')[0].value.toUpperCase();
+    var player = board.children('#ttt_player')[0].value;
+    var player_token = player.toUpperCase();
     board.children('.ttt_cell').click(function(event) {
       var source = $(event.target);
       if(source.hasClass('ttt_x') || source.hasClass('ttt_o') || source.hasClass('ttt_done')) return;
@@ -52,16 +53,22 @@ $(function() {
       $.ajax({
         'url': url,
         'type': 'POST',
-        'data': { 'player':'x', 'col':col, 'row':row },
+        'data': { 'player':player, 'col':col, 'row':row },
         'dataType': 'json',
         'success': function(content, response)
           {
+            source.addClass('ttt_' + player);
             source[0].innerHTML = player_token;
             if(content['player'] !== '-')
             {
-                var cell = $('#ttt_cell_' + content['col'] + content['row'])
+                var cell = board.children('#ttt_cell_' + content['col'] + content['row']).first()
                 cell.addClass('ttt_' + content['player']);
-                cell.innerHTML = content['player'].toUpperCase();
+                cell[0].innerHTML = content['player'].toUpperCase();
+            }
+            if(content['is_complete'])
+            {
+                board.children('.ttt_cell').addClass('ttt_done');
+                $('.ttt_new').show();
             }
           },
         'error': function()
