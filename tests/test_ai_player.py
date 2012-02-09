@@ -27,3 +27,7 @@ def test_optimal_opening_moves():
 
     board = tictactoe.Board()
     assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))
+
+    board = tictactoe.Board()
+    board.add_move((1, 1), human)
+    assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))
