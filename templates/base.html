@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load bootstrap_toolkit %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tic-Tac-Toe by Van Gale</title>
+    <meta name="description" content="A Django/Bootstrap/jQuery based web game">
+    <meta name="author" content="Van Gale">
+    {% bootstrap_stylesheet_tag %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            background: #fff url({{ STATIC_URL }}i/white_paperboard.png) repeat;
+        }
+        .brand {
+            font-family: 'Permanent Marker', cursive;
+        }
+        .navbar-inner {
+            background: #468966 none repeat;
+        }
+        .navbar .nav li > a { color: #FFF0A5; } {# or darker red 8E2800 #}
+        .gameboard { color: #B64926; }
+        .score {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 96px;
+            line-height: 96px;
+            color: #8E2800;
+            margin: auto;
+            text-align: center;
+        }
+        .board td {
+            font-family: 'Permanent Marker', cursive;
+            color: #FFB03B;
+        }
+        td.right {
+            border-right: 12px solid #999;
+        }
+        td.bottom {
+            border-bottom: 12px solid #999;
+        }
+    </style>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    {# bootstrap_javascript_tag "alerts" #}
+    {% bootstrap_javascript_tag "dropdown" %}
+    {# bootstrap_javascript_tag "modal" #}
+    {# bootstrap_javascript_tag "popover" #}
+    {# bootstrap_javascript_tag "tabs" #}
+    <script src="{{ STATIC_URL }}js/bigtext.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/">Tic-Tac-Toe!</a>
+      <ul class="nav">
+        <li><a href="{% url game:index %}" class="">Current Game</a></li>
+{% comment %}
+        <li><a href="{% url archived %}">Old Games</a></li>
+{% endcomment %}
+        <li><a href="{% url contact %}">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  {% block content %}Empty page{% endblock %}
+</div>
+
+{% block javascript %}{% endblock %}
+</body>
+</html>
