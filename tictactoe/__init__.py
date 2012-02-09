@@ -120,7 +120,11 @@ class Board(object):
         return available_moves
 
     def print_board(self):
+        """Prints a human readable representation of the current board state"""
+
         def get_player_name(player):
+            """Returns a human readable version of the player name"""
+
             if player is None:
                 return '_'
             if player is PLAYER_O:
@@ -136,14 +140,17 @@ class Board(object):
 
 
 WIN_COMBOS = (
+        # columns
         ((0, 0), (0, 1), (0, 2)),
         ((1, 0), (1, 1), (1, 2)),
         ((2, 0), (2, 1), (2, 2)),
 
+        # rows
         ((0, 0), (1, 0), (2, 0)),
         ((0, 1), (1, 1), (2, 1)),
         ((0, 2), (1, 2), (2, 2)),
 
+        # diagonals
         ((0, 0), (1, 1), (2, 2)),
         ((0, 2), (1, 1), (2, 0)),
     )
@@ -165,10 +172,38 @@ class AIPlayer(object):
 
     def __init__(self, player):
         self.player = player
+        self.opponent = PLAYER_X if self.player == PLAYER_O else PLAYER_O
+
+    def _can_player_win_next_move(self, player, board):
+        """Checks for a move the specified player can win with"""
+
+        # find if the player can win in one move
+        for win_condition in WIN_COMBOS:
+            moves = (board.get_move_at_position(win_condition[0]),
+                     board.get_move_at_position(win_condition[1]),
+                     board.get_move_at_position(win_condition[2]))
+
+            if None not in moves:
+                continue
+
+            if moves.count(player) == 2:
+                return win_condition[moves.index(None)]
+
+        return None
 
     def get_next_move(self, board):
         """Returns the position of the next move"""
         available_moves = board.get_available_moves()
+
+        # can I win in one move?
+        move = self._can_player_win_next_move(self.player, board)
+        if move is not None:
+            return move
+
+        # can the opponent win in one move?
+        move = self._can_player_win_next_move(self.opponent, board)
+        if move is not None:
+            return move
 
         # other wise follow the priority list
         return random.choice(available_moves)
