@@ -5,6 +5,9 @@
 <script type='text/javascript' src='/static/js/tictactoe.js'></script>
 </head>
 <body>
+<div class='ttt_index'>
+  <a href="/">Game Index</a>
+</div>
 <div class='content'>
 {% if game %}
   <form>
@@ -30,6 +33,11 @@
   </div>
   </form>
 {% endif %}
+</div>
+<form action='/game/new' method='post'>
+  {% csrf_token %}
+  <input type='submit' value='New Game' class='ttt_new' style='visibility:hidden;'></input>
+</form>
 </div>
 </body>
 </html>

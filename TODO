@@ -3,7 +3,6 @@ Project: TicTacToe
 
 TODO
 ====
-- Provide a link back to game index from game board
 - Continue update game template to play a game
   - Include player's token in game board form
   - Place player's token on board when cell is clicked
@@ -40,4 +39,7 @@ DONE
   - Update game board to post on div click
   - Update game board to post via ajax on div click
   - Dealt with cross site scripting - oi!
+- Provide a link back to game index from game board
+- Provide a hidden 'New Game' button to show when the game is complete
+- Ugly-style the submit button - 'cause I wanted to try it
 

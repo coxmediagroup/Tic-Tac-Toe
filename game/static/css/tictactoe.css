@@ -1,17 +1,17 @@
 
-div.content
+.content
 {
     width: 800px;
 }
 
-div.ttt_board
+.ttt_board
 {
     background-color: black;
     width: 300px;
     height: 300px;
 }
 
-div.ttt_cell
+.ttt_cell
 {
     background-color: white;
     float:          left;
@@ -21,20 +21,20 @@ div.ttt_cell
     text-align:     center;
 }
 
-div.ttt_x
+.ttt_x
 {
     border-color: red;
     border-width: 5px;
 }
 
-div.ttt_o
+.ttt_o
 {
     border-color: blue;
     border-width: 5px;
     content: 'O';
 }
 
-div.ttt_new
+.ttt_new
 {
     border-top:       lightgray solid 3px;
     border-left:      lightgray solid 3px;
