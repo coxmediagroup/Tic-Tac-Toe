@@ -2,6 +2,7 @@ from django.core                  import serializers
 from django.core.urlresolvers     import reverse
 from django.http                  import HttpResponse, HttpResponseRedirect
 from django.shortcuts             import get_object_or_404, render_to_response
+from django.template              import RequestContext
 from django.utils                 import simplejson
 from django.views.decorators.http import require_GET, require_POST, \
                                          require_http_methods
@@ -14,7 +15,7 @@ def all(request):
     List all games
     """
     games = Game.objects.all()
-    return render_to_response('index.html', {'games':games})
+    return render_to_response('index.html', {'games':games}, context_instance=RequestContext(request))
 
 @require_GET
 def get(request, game_id):
@@ -22,7 +23,14 @@ def get(request, game_id):
     Get a game
     """
     game = get_object_or_404(Game, pk=game_id)
-    return render_to_response('game.html', {'game':game})
+    return render_to_response(
+        'game.html', 
+        {
+            'game':game,
+            'PLAYER_X':PLAYER_X,
+            'PLAYER_O':PLAYER_O,
+        },
+        context_instance=RequestContext(request))
 
 @require_POST
 def new(request):

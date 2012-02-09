@@ -1,0 +1,35 @@
+<html>
+<head>
+<link rel='stylesheet' type='text/css' href='/static/css/tictactoe.css'>
+<script type='text/javascript' src='/static/js/jquery-1.7.1.js'></script>
+<script type='text/javascript' src='/static/js/tictactoe.js'></script>
+</head>
+<body>
+<div class='content'>
+{% if game %}
+  <form>
+  {% csrf_token %}
+  <div class='ttt_board'>
+  {% for row in game.rows %}
+    {% with ri=forloop.counter0 %}
+      {% for cell in row %}
+        <div 
+          id='ttt_cell_{{ forloop.counter0 }}{{ ri }}'
+          class='ttt_cell 
+            {% ifequal cell PLAYER_X %}ttt_x{% endifequal %}
+            {% ifequal cell PLAYER_O %}ttt_o{% endifequal %}
+            '
+            >
+            {% ifequal cell PLAYER_X %}X{% endifequal %}
+            {% ifequal cell PLAYER_O %}O{% endifequal %}
+          <label></label>
+        </div>
+      {% endfor %}
+    {% endwith %}
+  {% endfor %}
+  </div>
+  </form>
+{% endif %}
+</div>
+</body>
+</html>

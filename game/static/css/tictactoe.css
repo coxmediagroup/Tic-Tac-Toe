@@ -1,0 +1,47 @@
+
+div.content
+{
+    width: 800px;
+}
+
+div.ttt_board
+{
+    background-color: black;
+    width: 300px;
+    height: 300px;
+}
+
+div.ttt_cell
+{
+    background-color: white;
+    float:          left;
+    height:         30%;
+    margin:         1.5%;
+    width:          30%;
+    text-align:     center;
+}
+
+div.ttt_x
+{
+    border-color: red;
+    border-width: 5px;
+}
+
+div.ttt_o
+{
+    border-color: blue;
+    border-width: 5px;
+    content: 'O';
+}
+
+div.ttt_new
+{
+    border-top:       lightgray solid 3px;
+    border-left:      lightgray solid 3px;
+    border-right:     dimgray solid 3px;
+    border-bottom:    dimgray solid 3px;
+    background-color: darkgray;
+    color:            white;
+    width:            20em;
+    text-align:       center;
+}

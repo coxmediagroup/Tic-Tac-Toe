@@ -3,11 +3,15 @@ Project: TicTacToe
 
 TODO
 ====
-- Update index template to list games, link to games, show game status
-- Update game template to play a game
-  - Update game board to post on div click
-  - Update game board to post via ajax on div click
+- Provide a link back to game index from game board
+- Continue update game template to play a game
+  - Include player's token in game board form
+  - Place player's token on board when cell is clicked
+  - Update game board status from ajax response
+  - Introduce a ttt_done, ttt_win, ttt_lose class?
+  - Gray out loser tokens for complete boards
 - Implement Comp move logic
+- Update index template to show game status
 - User creation and authentication
 - Track games via User
 - Don't allow user to create a game if there's an incomplete game
@@ -31,4 +35,9 @@ DONE
   - Get a game board
   - Post a move
   - Post a move via Ajax
+- Update index template to list games, link to games, create games
+- Update game template to play a game
+  - Update game board to post on div click
+  - Update game board to post via ajax on div click
+  - Dealt with cross site scripting - oi!
 

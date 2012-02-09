@@ -22,7 +22,7 @@ class Game(models.Model):
     __winning_sets  = tuple(list(__board_by_col) + list(__board_by_row) \
                           + list(__board_by_diag))
 
-    class __col_class(object):
+    class __grp_class(object):
         def __init__(self, game, col_group):
             # self.__class__ is perhaps bad, but 
             # this class won't/shouldn't-be sub-classed
@@ -32,12 +32,12 @@ class Game(models.Model):
 
         def __getitem__(self, cell):
             if cell < 0 or cell > 2:
-                raise Exception('Invalid Index %d' % cell)
+                raise IndexError('Invalid Index %d' % cell)
             return self.game._board.__dict__[self.col_group[cell]]
 
         def __setitem__(self, cell, val):
             if cell < 0 or cell > 2:
-                raise Exception('Invalid Index %d' % cell)
+                raise IndexError('Invalid Index %d' % cell)
             assert val != PLAYER_NONE and val == self.game.who_moves()
             assert self.game._board.__dict__[self.col_group[cell]] == PLAYER_NONE
             self.game._board.__dict__[self.col_group[cell]] = val
@@ -62,8 +62,12 @@ class Game(models.Model):
 
     def __getitem__(self, col):
         if col < 0 or col > 2:
-            raise Exception('Invalid Index %d' % col)
-        return Game.__col_class(self, self.__board_by_col[col])
+            raise IndexError('Invalid Index %d' % col)
+        return Game.__grp_class(self, self.__board_by_col[col])
+
+    def __get_rows(self):
+        return tuple((Game.__grp_class(self, row) for row in self.__board_by_row))
+    rows = property(__get_rows)
 
     def _determine_state(self):
        # offsets
