@@ -4,9 +4,8 @@ Project: TicTacToe
 TODO
 ====
 - Complete Comp move logic
-- Fix problem in unit tests
-  - Refetch database record after it has been written
-    - Was losing data because business logic wasn't saving the record
+- Probably should improve controller business logic
+  - But how do you test the deliberately indeterminent method of play?
 - Update index template to show game status
 - User creation and authentication
 - Track games via User
@@ -49,6 +48,9 @@ DONE
   - Introduce a ttt_done
 - Randomize whether user is X
 - Implement Comp move logic
+- Fix problem in unit tests
+  - Refetch database record after it has been written
+    - Was losing data because business logic wasn't saving the record
 
 NOT DOING
 =========

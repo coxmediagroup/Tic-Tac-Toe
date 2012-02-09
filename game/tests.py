@@ -13,6 +13,8 @@ class GameTest(TestCase):
         g = Game()
         assert g is not None
         g.save()
+
+        g = Game.objects.get(pk=g.id)
         with self.assertRaises(Board.DoesNotExist):
             board = g._board
 
@@ -57,7 +59,6 @@ class GameTest(TestCase):
           g[0][0] = None
         g[0][0] = PLAYER_X
         g[1][0] = PLAYER_O
-        g.save()
 
     def test_x_goes_first(self):
         """
@@ -72,6 +73,7 @@ class GameTest(TestCase):
         Test that o gets to make the first move
         """
         g = Game.create_new()
+
         with self.assertRaises(Exception):
             g[0][0] = PLAYER_O
 
@@ -83,8 +85,8 @@ class GameTest(TestCase):
         g = Game.create_new()
         g[0][0] = PLAYER_X
         g[0][1] = PLAYER_O
-        g.save()
 
+        g = Game.objects.get(pk=g.id)
         assert g._board.upper_left  == PLAYER_X
         assert g._board.center_left == PLAYER_O
 
@@ -95,6 +97,8 @@ class GameTest(TestCase):
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
+
+        g = Game.objects.get(pk=g.id)
         with self.assertRaises(Exception):
             g[0][1] = PLAYER_X
 
@@ -106,6 +110,8 @@ class GameTest(TestCase):
         g = Game.create_new()
         g[0][0] = PLAYER_X
         g[0][1] = PLAYER_O
+
+        g = Game.objects.get(pk=g.id)
         with self.assertRaises(Exception):
             g[0][2] = PLAYER_O
 
@@ -117,6 +123,8 @@ class GameTest(TestCase):
         g = Game.create_new()
         g[0][0] = PLAYER_X
         g[0][1] = PLAYER_O
+
+        g = Game.objects.get(pk=g.id)
         with self.assertRaises(Exception):
             g[0][0] = PLAYER_X
 
@@ -127,6 +135,8 @@ class GameTest(TestCase):
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
+
+        g = Game.objects.get(pk=g.id)
         with self.assertRaises(Exception):
             g[0][0] = PLAYER_O
 
@@ -146,6 +156,7 @@ class GameTest(TestCase):
         g[2][2] = PLAYER_O
         g[2][1] = PLAYER_X
 
+        g = Game.objects.get(pk=g.id)
         assert g.is_complete()
         assert g.who_won() == PLAYER_NONE
 
@@ -162,6 +173,8 @@ class GameTest(TestCase):
         g[0][1] = PLAYER_X
         g[1][1] = PLAYER_O
         g[0][2] = PLAYER_X
+
+        g = Game.objects.get(pk=g.id)
 
         delta = datetime.now() - g.ended if g.ended is not None else None
 
@@ -186,6 +199,8 @@ class GameTest(TestCase):
         g[1][1] = PLAYER_O
         g[2][2] = PLAYER_X
         g[1][2] = PLAYER_O
+
+        g = Game.objects.get(pk=g.id)
 
         delta = datetime.now() - g.ended if g.ended is not None else None
 
