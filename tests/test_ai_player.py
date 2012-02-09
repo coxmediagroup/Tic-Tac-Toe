@@ -46,3 +46,25 @@ def test_response_to_corners():
         board = tictactoe.Board()
         board.add_move(corner, human)
         assert (1, 1) == computer.get_next_move(board)
+
+
+def test_response_to_edge():
+    human = tictactoe.PLAYER_X
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    board = tictactoe.Board()
+    board.add_move((1, 0), human)
+    
+    good_moves = [
+            # center
+            (1, 1),
+
+            # adjacent corner
+            (0, 0), (2, 0),
+
+            # opposite edge
+            (1, 2),
+        ]
+
+    for i in range(100):
+        assert computer.get_next_move(board) in good_moves

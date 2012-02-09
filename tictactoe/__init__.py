@@ -225,5 +225,36 @@ class AIPlayer(object):
                 if board.get_move_at_position(corner) != None:
                     return center
 
+            # Respond to a side with one of three choices
+            for edge in sides:
+                if board.get_move_at_position(edge) != None:
+                    possible_moves = []
+
+                    # the center
+                    possible_moves.append(center)
+
+                    if edge[0] == 1:
+                        # An adjacent corner
+                        possible_moves.append((0, edge[1]))
+                        possible_moves.append((2, edge[1]))
+
+                        # Opposite edge
+                        if edge[1] == 0:
+                            possible_moves.append((1, 2))
+                        else:
+                            possible_moves.append((1, 0))
+                    else:
+                        # An adjacent corner
+                        possible_moves.append((edge[0], 0))
+                        possible_moves.append((edge[0], 2))
+
+                        # Opposite edge
+                        if edge[0] == 0:
+                            possible_moves.append((2, 1))
+                        else:
+                            possible_moves.append((0, 1))
+
+                    return random.choice(possible_moves)
+
         # other wise follow the priority list
         return random.choice(available_moves)
