@@ -191,6 +191,13 @@ class AIPlayer(object):
 
         return None
 
+    def _get_corners_adjacent_to_edge(self, edge):
+        """Return both corners adjacent to the specified edge"""
+        if edge[0] == 1:
+            return [(0, edge[1]), (2, edge[1])]
+        else:
+            return [(edge[0], 0), (edge[0], 2)]
+
     def get_next_move(self, board):
         """Returns the position of the next move"""
         available_moves = board.get_available_moves()
@@ -232,22 +239,15 @@ class AIPlayer(object):
 
                     # the center
                     possible_moves.append(center)
+                    possible_moves.extend(self._get_corners_adjacent_to_edge(edge))
 
                     if edge[0] == 1:
-                        # An adjacent corner
-                        possible_moves.append((0, edge[1]))
-                        possible_moves.append((2, edge[1]))
-
                         # Opposite edge
                         if edge[1] == 0:
                             possible_moves.append((1, 2))
                         else:
                             possible_moves.append((1, 0))
                     else:
-                        # An adjacent corner
-                        possible_moves.append((edge[0], 0))
-                        possible_moves.append((edge[0], 2))
-
                         # Opposite edge
                         if edge[0] == 0:
                             possible_moves.append((2, 1))

@@ -68,3 +68,27 @@ def test_response_to_edge():
 
     for i in range(100):
         assert computer.get_next_move(board) in good_moves
+
+
+def test_get_adjacent_corners():
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    corners = computer._get_corners_adjacent_to_edge((0, 1))
+    assert 2 == len(corners)
+    assert (0, 0) in corners
+    assert (0, 2) in corners
+    
+    corners = computer._get_corners_adjacent_to_edge((2, 1))
+    assert 2 == len(corners)
+    assert (2, 0) in corners
+    assert (2, 2) in corners
+    
+    corners = computer._get_corners_adjacent_to_edge((1, 0))
+    assert 2 == len(corners)
+    assert (0, 0) in corners
+    assert (2, 0) in corners
+    
+    corners = computer._get_corners_adjacent_to_edge((1, 2))
+    assert 2 == len(corners)
+    assert (0, 2) in corners
+    assert (2, 2) in corners
