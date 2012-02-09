@@ -9,11 +9,13 @@ urlpatterns = patterns('',
     url(r'^convert/', include('lazysignup.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^game/', include('game.urls', namespace='game')),
+    url(r'^contact$',
+        direct_to_template, {'template': 'contact.html'},
+        name='contact'),
     url(r'^$',
         redirect_to,
         { 'url': '/game/', 'permanent': True },
         name='home'),
-    #url(r'^$', direct_to_template, {'template': 'index.html'}, "home"),
 )
 
 urlpatterns += staticfiles_urlpatterns()
