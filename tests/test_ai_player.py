@@ -19,3 +19,11 @@ def test_win_condition_checking():
     board.add_move((2,0), tictactoe.PLAYER_O)
 
     assert (0,0) == computer.get_next_move(board)
+
+
+def test_optimal_opening_moves():
+    human = tictactoe.PLAYER_X
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    board = tictactoe.Board()
+    assert computer.get_next_move(board) in ((0,0), (2,0), (0,2), (2,2))

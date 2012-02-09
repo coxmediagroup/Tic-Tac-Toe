@@ -205,5 +205,14 @@ class AIPlayer(object):
         if move is not None:
             return move
 
+        corners = ((0,0), (2,0), (0,2), (2,2))
+        sides = ((1,0), (2, 1), (1,2), (0,1))
+        center = (1, 1)
+
+        # Use any corner as the first move
+        if len(available_moves) == 9:
+            # play a corner
+            return random.choice(corners)
+
         # other wise follow the priority list
         return random.choice(available_moves)
