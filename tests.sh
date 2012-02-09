@@ -9,3 +9,7 @@ pep8 --ignore=E501 tictactoe
 pylint --rcfile=pylint.rc tictactoe
 
 echo
+
+nosetests
+
+echo
