@@ -69,6 +69,18 @@ class Game(models.Model):
                 state -= 1
         return state
 
+    def winner(self):
+        '''Count number of lines that have three in a row'''
+        for line in lines:
+            count = self.line_count(*line)
+            if count == 3: # Three machine fills
+                self.status = self.LOST
+                return line
+            if count == -3: # Three human fills
+                self.status = self.WON
+                return line
+        return None
+
     def win_lines(self, symbol):
         '''
         Count number of lines that have one empty square and two
@@ -184,7 +196,6 @@ class Game(models.Model):
 
     def machine_move(self):
         if self.place_win() is not None:
-            self.status = self.LOST
             return
         if self.place_block() is not None:
             return
@@ -201,9 +212,10 @@ class Game(models.Model):
         if self.place_empty_side() is not None:
             return
         self.place_empty()
-        # Error check: empty squares left is an error
+        # Error check: any empty squares is an error at this point
         for cell in range(9):
             if self.board[cell] == ' ':
                 assert 0
         # No squares left, no winner, thus tie
         self.status = self.TIE
+        return range(9)
