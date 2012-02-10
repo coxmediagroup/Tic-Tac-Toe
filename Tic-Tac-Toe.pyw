@@ -1,4 +1,5 @@
 from Tkinter import *
+import tkMessageBox
 import tkFont
 
 root = Tk()
@@ -19,7 +20,10 @@ class Square():
         self.btn = Button(master, textvariable=self.text, command=lambda:btn_click(self.number), bg='white', width=3, font=buttonFont).grid(row=i/3,column=i%3)
 
 def btn_click(number):
-    print number
+    if app.bb[number].text.get() == "":
+        app.bb[number].text.set('X')
+    else:
+        tkMessageBox.showerror('Error','Space is already taken')
 
 if __name__ == '__main__':
     app = App(root)
