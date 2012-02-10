@@ -18,12 +18,7 @@ h1 {
 }
 
 a {
-    color: #EE4444;
-}
-
-a:hover {
-    background-color: #EE4444;
-    color: #DDDDDD;
+    text-decoration: none
 }
 
 .clearfix:before, .clearfix:after {
@@ -93,12 +88,30 @@ table.gameboard {
     border-collapse: collapse;
 }
 
-table.gameboard td {
+input {
+    background: none;
+    display: block;
+    margin: 0 auto;
+    border: none;
+    padding: none;
+}
+
+table.gameboard input {
     width: 250px;
     height: 250px;
-    text-align: center;
     font-size: 10em;
     font-family: fixed;
+}
+
+table.gameboard input:not([disabled]) {
+    cursor: pointer;
+}
+
+table.gameboard input[disabled='disabled'] {
+    color: black;
+}
+
+table.gameboard td {
     border: solid 1px black;
 }
 
@@ -111,14 +124,23 @@ table.gameboard td:first-child {
     border-top: none;
 }
 
-table.gameboard td.empty {
-    cursor: pointer;
-}
-
 table tr:first-child td {
     border-top: none;
 }
 
 table tr:last-child td {
     border-bottom: none;
+}
+
+input.game-status {
+    color: black;
+    cursor: pointer;
+    font-size: 1em;
+    border: solid 1px #aaa;
+    background-image: -ms-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -moz-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -o-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, #00A3EF));
+    background-image: -webkit-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
 }

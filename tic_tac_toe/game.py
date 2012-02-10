@@ -97,7 +97,7 @@ class TicTacToe(object):
         if self.status == DRAW:
             raise InvalidPlay, 'The game is already over.  The game is a draw.'
         elif self.status:
-            raise InvalidPlay, '`%s` has already won the game.' % self.winner
+            raise InvalidPlay, '`%s` has already won the game.' % self.status
         elif self.board[x][y].value:
             raise InvalidPlay, '(%s, %s) has already been played.' % (x, y)
         else:

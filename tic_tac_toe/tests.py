@@ -21,7 +21,7 @@ class TestCoverage(unittest.TestCase):
                 _play(my_ttt)
 
         _play(game.TicTacToe(user_starts=False))
-        #_play(game.TicTacToe(user_starts=True))
+        _play(game.TicTacToe(user_starts=True))
 
 if __name__ == '__main__':
     unittest.main()

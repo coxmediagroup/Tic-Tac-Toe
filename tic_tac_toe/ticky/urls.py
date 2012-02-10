@@ -5,4 +5,5 @@ import views
 
 urlpatterns = patterns('',
     url(r'^$', views.gameboard, name='gameboard'),
+    url(r'^play/$', views.play, name='play'),
 )
