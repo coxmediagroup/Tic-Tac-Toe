@@ -1,43 +1,101 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+
 {% block content %}
 
   <div class="row">
     <div class="span6">
       <table class="board" width="100%">
         <tbody>
+
           <tr>
             <td width="33%" class="right bottom">
-              <div class="bigtext"><div class="square">{{ cell.0 }}</div></div>
+              {% if cell.0 == ' ' %}<a href="?cell=0" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.0 }}
+                </div>
+              </div>
+              {% if cell.0 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%" class="right bottom">
-              <div class="bigtext"><div class="square">{{ cell.1 }}</div></div>
+              {% if cell.1 == ' ' %}<a href="?cell=1" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.1 }}
+                </div>
+              </div>
+              {% if cell.1 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%" class="bottom">
-              <div class="bigtext"><div class="square">{{ cell.2 }}</div></div>
+              {% if cell.2 == ' ' %}<a href="?cell=2" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.2 }}
+                </div>
+              </div>
+              {% if cell.2 == ' ' %}</a>{% endif %}
             </td>
           </tr>
+
           <tr>
             <td width="33%" class="right bottom">
-              <div class="bigtext"><div class="square">{{ cell.3 }}</div></div>
+              {% if cell.3 == ' ' %}<a href="?cell=3" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.3 }}
+                </div>
+              </div>
+              {% if cell.3 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%" class="right bottom">
-              <div class="bigtext"><div class="square">{{ cell.4 }}</div></div>
+              {% if cell.4 == ' ' %}<a href="?cell=4" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.4 }}
+                </div>
+              </div>
+              {% if cell.4 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%" class="bottom">
-              <div class="bigtext"><div class="square">{{ cell.5 }}</div></div>
+              {% if cell.5 == ' ' %}<a href="?cell=5" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.5 }}
+                </div>
+              </div>
+              {% if cell.5 == ' ' %}</a>{% endif %}
             </td>
           </tr>
+
           <tr>
             <td width="33%" class="right">
-              <div class="bigtext"><div class="square">{{ cell.6 }}</div></div>
+              {% if cell.6 == ' ' %}<a href="?cell=6" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.6 }}
+                </div>
+              </div>
+              {% if cell.6 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%" class="right">
-              <div class="bigtext"><div class="square">{{ cell.7 }}</div></div>
+              {% if cell.7 == ' ' %}<a href="?cell=7" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.7 }}
+                </div>
+              </div>
+              {% if cell.7 == ' ' %}</a>{% endif %}
             </td>
             <td width="33%">
-              <div class="bigtext"><div class="square">{{ cell.8 }}</div></div>
+              {% if cell.8 == ' ' %}<a href="?cell=8" class="cell">{% endif %}
+              <div class="bigtext">
+                <div class="square">
+                  {{ cell.8 }}
+                </div>
+              </div>
+              {% if cell.8 == ' ' %}</a>{% endif %}
             </td>
           </tr>
         </tbody>
@@ -46,13 +104,13 @@
 
     <div class="span4">
       <p><div class="well">
-        <a class="btn btn-large" href="/">
+        <a class="btn btn-large" href="{% url game:newX %}">
           <i class="icon-play"></i>
           {% trans "Play first in new game as X" %}
         </a>
       </div></p>
       <p><div class="well">
-        <a class="btn btn-large" href="/">
+        <a class="btn btn-large" href="{% url game:newO %}">
           <i class="icon-play"></i>
           {% trans "Play second in new game as O" %}
         </a>
