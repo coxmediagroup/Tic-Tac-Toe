@@ -94,8 +94,14 @@ def end_game(message):
 def playAgain():
     for i in range(9):
         app.bb[i].text.set('')
+    goFirst()
+
+def goFirst():
+    if tkMessageBox.askyesno('Tic-Tac-Toe', 'Do you want to go first?') == False:
+        ai_play()
 
 if __name__ == '__main__':
     app = App(root)
     root.title("Tic-Tac-Toe")
+    goFirst()
     root.mainloop()
