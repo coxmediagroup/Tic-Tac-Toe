@@ -58,6 +58,9 @@ def index(request, template_name='game/index.html'):
                 # Bad cell parameter.. should be between 0 and 8
                 cell = None
 
+    # Init list we use to identify a winning row (list of the 3 cells)
+    winning_cells = None
+
     # Get 'current' game pk from session storage and then game from database
     game_id = request.session.get('game_id', None)
     if game_id is None:
@@ -86,8 +89,11 @@ def index(request, template_name='game/index.html'):
         # Verify this is valid location to play (ignore it if it isn't)
         if game.board[cell] == ' ':
             game.board[cell] = game.symbol
-            # Generate computer move
-            game.machine_move()
+            winning_cells = game.winner()
+            if winning_cells is None:
+                # Generate computer move
+                game.machine_move()
+                winning_cells = game.winner()
 
         game.save()
         request.session['game_id'] = game.id
@@ -95,7 +101,10 @@ def index(request, template_name='game/index.html'):
 
     games = Game.objects.filter(player=request.user)
     return render_to_response(template_name, {
-        'cell': board,
+        'board': board,
+        'right_row': (2, 5, 8),
+        'bottom_row': (6, 7, 8),
+        'winning_cells': winning_cells,
         'played': games.count(),
         'won': games.filter(status=Game.WON).count(),
         'tied': games.filter(status=Game.TIE).count(),
