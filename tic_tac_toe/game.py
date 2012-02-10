@@ -80,7 +80,7 @@ class TicTacToe(object):
     def play(self, x, y):
         """
         Play user at position (x, y).
-        Returns the winner (GAME or USER), DRAW, or None if game not over.
+        Returns the winner (COMPUTER or USER), DRAW, or None if game not over.
         """
         self._push_play(USER, x, y)
         self.status = self.get_status()
@@ -109,8 +109,10 @@ class TicTacToe(object):
         self.board[last_play[0]][last_play[1]].value = None
 
     def _get_computer_play(self):
-        # Special-case playing the center piece from strategy here:
+        # Special-case first play strategy.
         # http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+        if len(self.history) == 0:
+            return self.board[0][0]
         if len(self.history) == 1:
             edge_coords = (0, SIZE-1)
             x, y = self.history[0][1]
@@ -121,41 +123,40 @@ class TicTacToe(object):
         fitness, play = self._minimax(COMPUTER)
         return play
 
-    def _minimax(self, player):
+    def _minimax(self, player, prefix=''):
         """
         Use the minimax algorithm to determine the best play from a
         protection-standpoint.
         """
-        winner = self._get_winner(self._get_rows(self.board))
-        if winner == COMPUTER:
+        status = self.get_status()
+        if status == COMPUTER:
             return 1, None
-        elif winner == USER:
+        elif status == USER:
             return -1, None
-        else:
-            if player == COMPUTER:
-                best_fitness, best_play = float('-inf'), None
-                op = operator.gt
-                next_player = USER
-            else:
-                best_fitness, best_play = float('inf'), None
-                op = operator.lt
-                next_player = COMPUTER
+        elif status == DRAW:
+            return 0, None
 
-            for play in self.get_open_plays():
-                self._push_play(player, play.x, play.y)
-                fitness, unused_play = self._minimax(next_player)
-                self._pop_play()
-                if op(fitness, 0):
-                    return fitness, play
-                elif op(fitness, best_fitness):
-                    best_fitness, best_play = fitness, play
-            return best_fitness, best_play
+        if player == COMPUTER:
+            best_fitness, best_play = float('-inf'), None
+            op = operator.gt
+            next_player = USER
+        else:
+            best_fitness, best_play = float('inf'), None
+            op = operator.lt
+            next_player = COMPUTER
+
+        for play in self.get_open_plays():
+            self._push_play(player, play.x, play.y)
+            fitness, unused_play = self._minimax(next_player)
+            self._pop_play()
+            # Break out early to avoid unnecessary passes.
+            if op(fitness, 0):
+                best_fitness, best_play = fitness, play
+                break
+            if op(fitness, best_fitness):
+                best_fitness, best_play = fitness, play
+        return best_fitness, best_play
 
     def __str__(self):
         return '\n'.join([' '.join([self.board[x][y].value or '·'
             for x in range(SIZE)]) for y in range(SIZE)])
-
-if __name__ == '__main__':
-    t = TicTacToe(user_starts=True)
-    t.play(0,0)
-    print t

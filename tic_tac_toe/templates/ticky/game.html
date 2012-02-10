@@ -15,7 +15,7 @@
         <tr>
             {% for col in row %}
             <td class="{% if col.value %}played{% else %}empty{% endif %}">
-                <input type="submit" value="{% firstof col.value '·' %}" name="{{col.x}}_{{col.y}}" {% if col.value or status %}disabled="disabled"{% endif %}>
+                <input type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value or status %}disabled="disabled"{% endif %}>
             </td>
             {% endfor %}
         </tr>

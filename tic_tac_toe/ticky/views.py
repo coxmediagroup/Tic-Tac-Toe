@@ -32,10 +32,9 @@ def gameboard(request, template_name='ticky/game.html'):
 
 def play(request):
     """
-    Responds to user gameplay and returns either an Ajax response or
-    redirects to `gameboard`.
+    Responds to user gameplay and redirects to `gameboard`.
     """
-    # A valid post will contain exactly one input with key "x_y".
+    # A valid post will contain exactly one input with key "x_y" or "replay".
     if request.POST and len(request.POST) == 1:
         key = request.POST.keys()[0]
         if key == 'replay':

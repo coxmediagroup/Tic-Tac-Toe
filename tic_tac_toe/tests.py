@@ -14,7 +14,6 @@ class TestCoverage(unittest.TestCase):
                 my_ttt = deepcopy(ttt)
                 status = my_ttt.play(play.x, play.y)
                 if status:
-                    print 'GAME OVER ', status
                     assert status != game.USER, (
                         '\n%s\nHistory: %s' % (str(my_ttt), my_ttt.history))
                     break
