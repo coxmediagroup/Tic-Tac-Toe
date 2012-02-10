@@ -12,16 +12,17 @@ class Game(models.Model):
         (WON, _('Won')),
         (LOST, _('Lost')),
         (TIE, _('Tie')))
-    user = models.ForeignKey(User, related_name='games')
+    player = models.ForeignKey(User, related_name='games')
     started = models.DateTimeField(_('Started'), auto_now_add=True)
     ended = models.DateTimeField(_('Ended'), auto_now=True)
     status = models.SmallIntegerField(_('Game Status'),
                                       choices=STATUS_CHOICES,
                                       default=INCOMPLETE)
-    board = models.CharField(max_length=9)
+    board = models.CharField(max_length=9, default='         ')
+    symbol = models.CharField(max_length=1, default='X')
 
     def __unicode__(self):
-        return u'Player: %s %s' % (self.user.get_full_name(), self.status)
+        return u'Player %s, %s' % (self.user.get_full_name(), self.status)
 
     # Tic Tac Toe game board is a 3x3 array
     # We represent the board with a string of nine characters
