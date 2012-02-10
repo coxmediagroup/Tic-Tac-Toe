@@ -73,8 +73,8 @@ def checkPopulate(value):
             else: return 'Win'
     # check first diagonal
     if app.bb[0].text.get() + app.bb[4].text.get() + app.bb[8].text.get() == value:
-        if   app.bb[0].text.get() == '': return 8
-        elif app.bb[8].text.get() == '': return 0
+        if   app.bb[8].text.get() == '': return 8
+        elif app.bb[0].text.get() == '': return 0
         elif app.bb[4].text.get() == '': return 4
         else: return 'Win'
     # check second diagonal
