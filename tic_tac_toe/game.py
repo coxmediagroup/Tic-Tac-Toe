@@ -7,6 +7,7 @@ from random import randint
 SIZE = 3
 USER = 'X'
 COMPUTER = 'O'
+DRAW = 'DRAW'
 
 class InvalidPlay(Exception):
     pass
@@ -21,7 +22,7 @@ class TicTacToe(object):
     def __init__(self, user_starts=None):
         self.board = [[Pos(x, y) for y in range(SIZE)] for x in range(SIZE)]
         self.history = []
-        self.winner = None
+        self.status = None
 
         # If the program plays first, then play...
         if user_starts is None:
@@ -61,38 +62,50 @@ class TicTacToe(object):
         return reduce(lambda x, y: x or y, map(cls._row_winner, rows))
 
     @classmethod
-    def get_open_plays(cls, board):
+    def _get_open_board_plays(cls, board):
         plays = []
         for row in board:
             plays += [x for x in row if not x.value]
         return plays
 
+    def get_open_plays(self):
+        return self._get_open_board_plays(self.board)
+
+    def get_status(self):
+        winner = self._get_winner(self.get_rows(self.board))
+        if winner:
+            return winner
+        else:
+            return DRAW if len(self.history) == SIZE*SIZE else None
+
     def play(self, x, y):
         """
-        Play user at position (x, y).  Returns `True` if play results in a win.
+        Play user at position (x, y).
+        Returns the winner (GAME or USER), DRAW, or None if game not over.
         """
         self._do_play(USER, x, y)
-        self.winner = self._get_winner(self.get_rows(self.board))
+        self.status = self.get_status()
 
         # Computer plays after user, if the board isn't clear.
-        if not self.winner:
+        if not self.status:
             fitness, play = self._minimax(COMPUTER, self.board)
             self._do_play(COMPUTER, play.x, play.y)
-            self.winner = self._get_winner(self.get_rows(self.board))
+            self.status = self.get_status()
 
-        return self.winner is not None
+        return self.status
 
     def _do_play(self, player, x, y):
-        if self.winner:
+        if self.status == DRAW:
+            raise InvalidPlay, 'The game is already over.  The game is a draw.'
+        elif self.status:
             raise InvalidPlay, '`%s` has already won the game.' % self.winner
         elif self.board[x][y].value:
             raise InvalidPlay, '(%s, %s) has already been played.' % (x, y)
         else:
-            print 'Playing %s at (%s, %s)' % (player, x, y)
+            #print 'Playing %s at (%s, %s)' % (player, x, y)
             self.board[x][y].value = player
-            self.history += (player, (x, y))
-
-        print self
+            self.history.append((player, (x, y)))
+        #print self
 
     def _minimax(self, player, board):
         """
@@ -107,7 +120,7 @@ class TicTacToe(object):
         else:
             if player == COMPUTER:
                 max_fitness, max_play = float('-inf'), None
-                for play in self.get_open_plays(board):
+                for play in self._get_open_board_plays(board):
                     my_board = deepcopy(board)
                     my_board[play.x][play.y].value = COMPUTER
                     fitness = self._minimax(USER, my_board)
@@ -119,7 +132,7 @@ class TicTacToe(object):
                 return max_fitness, max_play
             else:
                 min_fitness, min_play = float('inf'), None
-                for play in self.get_open_plays(board):
+                for play in self._get_open_board_plays(board):
                     my_board = deepcopy(board)
                     my_board[play.x][play.y].value = USER
                     fitness = self._minimax(COMPUTER, my_board)
