@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Tic-Tac-Toe - {% block page_title %}Welcome{% endblock %}</title>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}js/tictactoe.jquery.js"></script>
+
+        <link rel="stylesheet" href="{{STATIC_URL}}css/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="{{STATIC_URL}}css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="{{STATIC_URL}}css/blueprint/print.css" type="text/css" media="print" />
+        <!--[if lt IE 8]><link rel="stylesheet" href="{{STATIC_URL}}css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+        <link type="text/css" href="{{STATIC_URL}}css/base.css" rel="stylesheet" />
+
+        {% block extra_head %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="body" class="container">
+            <header class="span-24 last">
+                {% block header %}
+                <h1 class="alt title-header">
+                    <a href="{% url gameboard %}">Tic-Tac-Toe</a>
+                </h1>
+                {% endblock %}
+            </header>
+
+            <div id="content">
+                {% if messages %}
+                <ul class="messages span-24 last">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="clearfix"></div>
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            <footer class="span-24 last">
+            {% block footer %}
+                Copyright &copy; {% now "Y" %} <a href="http://www.nattynerd.com/">Daniel Naab</a>
+            {% endblock %}
+            </footer>
+        </div>
+        {% block extra_body %}
+        {% endblock %}
+    </body>
+</html>

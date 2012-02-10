@@ -1,11 +1,16 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
+# Tic-Tac-Toe
+## Code test for Cox Media Group.
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+This project has been built and tested on Python 2.7.1 and Django 1.3.1.
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+A basic game implementation is stored in the game.py module.  The strategy
+employed is a simple one taken from here:
+    [http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy]
 
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+In addition, a Django interface for the game is included.  To run, install
+dependencies (ideally into a virtual environment):
+
+    pip install -r requirements.txt
+
+The default project configuration has dependencies on sqlite3 for session
+management.  Game state is stored in the (anonymous) user session.

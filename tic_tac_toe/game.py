@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
+from copy import deepcopy
+import itertools
 from random import randint
 
 SIZE = 3
 USER = 'X'
-COMP = 'O'
+COMPUTER = 'O'
 
 class InvalidPlay(Exception):
     pass
@@ -14,13 +16,6 @@ class Pos(object):
         self.x = x
         self.y = y
         self.value = None
-
-    def __repr__(self):
-        #return str(self.value)
-        return '(%s, %s)' % (self.x, self.y)
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
 
 class TicTacToe(object):
     def __init__(self, user_starts=None):
@@ -32,81 +27,116 @@ class TicTacToe(object):
         if user_starts is None:
             user_starts = bool(randint(0, 1))
         if not user_starts:
-            self._take_turn()
+            fitness, play = self._minimax(COMPUTER, self.board)
+            self._do_play(COMPUTER, play.x, play.y)
 
-    def get_rows(self):
-        """Returns the 8 possible winning rows for the current board."""
+    @classmethod
+    def get_rows(cls, board):
+        """Returns the 8 possible winning rows for the specified board."""
         return (
             # horizontal
-            [row for row in self.board]
+            [row for row in board]
 
             # vertical
-            + [[row[i] for row in self.board] for i in range(SIZE)]
+            + [[row[i] for row in board] for i in range(SIZE)]
 
             # diagonal
-            + [[self.board[i][i] for i in range(SIZE)]]
-            + [[self.board[i][SIZE-1-i] for i in range(SIZE)]]
+            + [[board[i][i] for i in range(SIZE)]]
+            + [[board[i][SIZE-1-i] for i in range(SIZE)]]
         )
 
-    def _row_winner(self, row):
+    @classmethod
+    def _row_winner(cls, row):
         """
         Return the winner of the given row, or `None` if there is no winner.
         """
-        if row[0] and all([row[0] == row[i] for i in range(1, SIZE)]):
-            return row[0]
+        if row[0].value and all(
+                [row[0].value == row[i].value for i in range(1, SIZE)]):
+            return row[0].value
         else:
             return None
 
+    @classmethod
+    def _get_winner(cls, rows):
+        return reduce(lambda x, y: x or y, map(cls._row_winner, rows))
+
+    @classmethod
+    def get_open_plays(cls, board):
+        plays = []
+        for row in board:
+            plays += [x for x in row if not x.value]
+        return plays
+
     def play(self, x, y):
         """
-        Play user
+        Play user at position (x, y).  Returns `True` if play results in a win.
         """
-        _do_play(USER, x, y)
+        self._do_play(USER, x, y)
+        self.winner = self._get_winner(self.get_rows(self.board))
 
-        self.winner = reduce(
-            lambda x, y: x or y,
-            map(self._row_winner, self.get_rows())
-        )
-        return self.winner
+        # Computer plays after user, if the board isn't clear.
+        if not self.winner:
+            fitness, play = self._minimax(COMPUTER, self.board)
+            self._do_play(COMPUTER, play.x, play.y)
+            self.winner = self._get_winner(self.get_rows(self.board))
 
-    def __str__(self):
-        return '\n'.join(
-            [' '.join([x.value or '·' for x in row]) for row in self.board]
-        )
+        return self.winner is not None
 
     def _do_play(self, player, x, y):
-        if self.game_over:
-            raise InvalidPlay, 'Game is already over.'
-        elif self.board.value:
-            raise InvalidPlay, '(%s, %s) has already been played.'
-        else self.board.value:
+        if self.winner:
+            raise InvalidPlay, '`%s` has already won the game.' % self.winner
+        elif self.board[x][y].value:
+            raise InvalidPlay, '(%s, %s) has already been played.' % (x, y)
+        else:
+            print 'Playing %s at (%s, %s)' % (player, x, y)
             self.board[x][y].value = player
             self.history += (player, (x, y))
 
-        return self.get_game_status()
+        print self
 
-    def _take_turn(self):
-        # Calculate optimal play.  Strategy condensed from:
-        # http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
-        # We could use a minimax algorithm here instead, but the rules are
-        # straight-forward enough.
-        rows = self.get_rows()
+    def _minimax(self, player, board):
+        """
+        Use the minimax algorithm to determine the best play from a
+        protection-standpoint.
+        """
+        winner = self._get_winner(self.get_rows(board))
+        if winner == COMPUTER:
+            return 1
+        elif winner == USER:
+            return -1
+        else:
+            if player == COMPUTER:
+                max_fitness, max_play = float('-inf'), None
+                for play in self.get_open_plays(board):
+                    my_board = deepcopy(board)
+                    my_board[play.x][play.y].value = COMPUTER
+                    fitness = self._minimax(USER, my_board)
+                    if fitness > max_fitness:
+                        max_fitness, max_play = fitness, play
+                    # skip out early to avoid extra passes
+                    if max_fitness > 0:
+                        break
+                return max_fitness, max_play
+            else:
+                min_fitness, min_play = float('inf'), None
+                for play in self.get_open_plays(board):
+                    my_board = deepcopy(board)
+                    my_board[play.x][play.y].value = USER
+                    fitness = self._minimax(COMPUTER, my_board)
+                    if fitness < min_fitness:
+                        min_fitness, min_play = fitness, play
+                    # skip out early to avoid extra passes
+                    if min_fitness < 0:
+                        break
+                return min_fitness, min_play
 
-        while True:
-            # If first play, choose corner.
-            if not any()
-            self.board[0][0].value = COMP
-            break
-
-            # Get rows requiring one more play to win.
-            winnable_rows = map(lambda row: )
-
-            # Play winning position, if possible.
-            for row in rows:
-                pass#if set(row)
-
-        _do_play(COMP, x, y)
+    def __str__(self):
+        return '\n'.join([' '.join([self.board[x][y].value or '·'
+            for x in range(SIZE)]) for y in range(SIZE)])
 
 if __name__ == '__main__':
-    t = TicTacToe()
-    print t
+    t = TicTacToe(user_starts=False)
+    t.play(1,1)
+    t.play(0,2)
+    t.play(2,2)
+    t.play(2,1)

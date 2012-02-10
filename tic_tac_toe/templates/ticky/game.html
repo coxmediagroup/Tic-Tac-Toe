@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block page_title %}Gameboard{% endblock %}
+
+{% block content %}
+    <table class="gameboard">
+        {% for row in game.board %}
+        <tr>
+            {% for col in row %}
+            <td class="{% if col.value %}played{% else %}empty{% endif %}">
+                {% firstof col.value '·' %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
