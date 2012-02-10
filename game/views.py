@@ -79,6 +79,7 @@ def index(request, template_name='game/index.html'):
         else:
             # Just redraw current game board
             board = game.board
+            winning_cells = game.winner() # Might be refresh of win/tie
         # TODO: add alert message?
     else:
         if game is None:
