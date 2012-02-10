@@ -101,3 +101,12 @@ def test_get_opposite_edge():
     assert (1, 2) == computer._get_opposite_edge((1, 0))
     assert (1, 0) == computer._get_opposite_edge((1, 2))
 
+def test_get_opposite_corner():
+    computer = tictactoe.AIPlayer(tictactoe.PLAYER_O)
+
+    assert (2, 2) == computer._get_opposite_corner((0, 0))
+    assert (0, 0) == computer._get_opposite_corner((2, 2))
+    assert (0, 2) == computer._get_opposite_corner((2, 0))
+    assert (2, 0) == computer._get_opposite_corner((0, 2))
+
+

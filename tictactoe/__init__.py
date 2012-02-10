@@ -1,5 +1,6 @@
 """A base implementation for a Tic-Tac-Toe game"""
 import random
+import copy
 
 
 PLAYER_O = 'circle'
@@ -174,8 +175,11 @@ class AIPlayer(object):
         self.player = player
         self.opponent = PLAYER_X if self.player == PLAYER_O else PLAYER_O
 
-    def _can_player_win_next_move(self, player, board):
-        """Checks for a move the specified player can win with"""
+    def _find_player_wins_next_move(self, player, board):
+        """Returns all moves that would result in a win for the specified player
+        """
+
+        winning_moves = []
 
         # find if the player can win in one move
         for win_condition in WIN_COMBOS:
@@ -187,7 +191,26 @@ class AIPlayer(object):
                 continue
 
             if moves.count(player) == 2:
-                return win_condition[moves.index(None)]
+                winning_moves.append(
+                        (win_condition[moves.index(None)], win_condition))
+
+        return winning_moves
+
+    def _find_fork_for_player(self, player, board, available_moves):
+        """Finds a move for the specified player that would
+        result in 2 possible ways to win next turn
+        """
+        #TODO: Ugly and brute force but it works
+        for move in available_moves:
+            temp_board = copy.deepcopy(board)
+
+            temp_board.add_move(move, player)
+
+            winning_moves = self._find_player_wins_next_move(player, temp_board)
+
+            # found a fork, return it
+            if len(winning_moves) > 1:
+                return move
 
         return None
 
@@ -205,19 +228,32 @@ class AIPlayer(object):
         else:
             return (2 if edge[0] == 0 else 0, 1)
 
+    def _get_opposite_corner(self, corner):
+        """Return the corner opposite of the specified corner"""
+        if corner[0] == corner[1]:
+            if corner[0] == 0:
+                return (2, 2)
+            else:
+                return (0, 0)
+        else:
+            if corner[0] == 0:
+                return (2, 0)
+            else:
+                return (0, 2)
+
     def get_next_move(self, board):
         """Returns the position of the next move"""
-        available_moves = board.get_available_moves()
+        available_moves = set(board.get_available_moves())
 
         # can I win in one move?
-        move = self._can_player_win_next_move(self.player, board)
-        if move is not None:
-            return move
+        moves = self._find_player_wins_next_move(self.player, board)
+        if moves:
+            return random.choice(moves)[0]
 
         # can the opponent win in one move?
-        move = self._can_player_win_next_move(self.opponent, board)
-        if move is not None:
-            return move
+        moves = self._find_player_wins_next_move(self.opponent, board)
+        if moves:
+            return random.choice(moves)[0]
 
         corners = ((0, 0), (2, 0), (0, 2), (2, 2))
         sides = ((1, 0), (2, 1), (1, 2), (0, 1))
@@ -256,5 +292,57 @@ class AIPlayer(object):
 
                     return random.choice(possible_moves)
 
-        # other wise follow the priority list
-        return random.choice(available_moves)
+        # Special Cases
+        if len(available_moves) == 6:
+            # If the opponent has two corners,
+            # the logic below would have us play a corner
+            # That would allow the opponent to create an unavoidable fork though
+            # Instead play an edge
+            corner_moves = [board.get_move_at_position(x) for x in corners]
+
+            if corner_moves.count(self.opponent) > 1:
+                return random.choice(sides)
+
+            # Fork detection breaks here so hard code it
+            center_move = board.get_move_at_position(center)
+
+            if self.player in corner_moves and \
+                    self.opponent in corner_moves \
+                    and self.opponent == center_move:
+                return random.choice(
+                        list(available_moves.intersection(corners)))
+
+        # Can I create a fork for myself?
+        my_fork = self._find_fork_for_player(
+                self.player, board, available_moves)
+
+        if my_fork:
+            return my_fork
+
+        # Can the opponent create a fork next turn?
+        opponent_fork = self._find_fork_for_player(
+                self.opponent, board, available_moves)
+
+        if opponent_fork:
+            return opponent_fork
+
+        # if the center is available, play it
+        if (1, 1) in available_moves:
+            return (1, 1)
+
+        corners_available = available_moves.intersection(corners)
+
+        # if a corner is available,
+        # play it only if the opponent is in the opposite corner
+        for corner in corners_available:
+            opposite_corner = self._get_opposite_corner(corner)
+
+            if self.opponent == board.get_move_at_position(opposite_corner):
+                return corner
+
+        # otherwise, play a corner if I can
+        if corners_available:
+            return random.choice(list(corners_available))
+
+        # other wise play one of the edges
+        return random.choice(list(available_moves))
