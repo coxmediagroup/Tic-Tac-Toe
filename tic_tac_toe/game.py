@@ -27,7 +27,7 @@ class TicTacToe(object):
         if user_starts is None:
             user_starts = bool(randint(0, 1))
         if not user_starts:
-            play = self.__computer_play()
+            play = self._get_computer_play()
             self._push_play(COMPUTER, play.x, play.y)
 
     @classmethod
@@ -143,7 +143,7 @@ class TicTacToe(object):
 
             for play in self.get_open_plays():
                 self._push_play(player, play.x, play.y)
-                fitness, depth_play = self._minimax(next_player)
+                fitness, unused_play = self._minimax(next_player)
                 self._pop_play()
                 if op(fitness, 0):
                     return fitness, play
