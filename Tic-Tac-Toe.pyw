@@ -85,7 +85,15 @@ def ai_play():
         end_game('Tie Game!')
 
 def end_game(message):
-    tkMessageBox.showinfo('Tic-Tac-Toe', message)
+    if tkMessageBox.askyesno('Tic-Tac-Toe', message+'\nDo you want to play again?'):
+        playAgain()
+    else:
+        root.destroy()
+        root.quit()
+
+def playAgain():
+    for i in range(9):
+        app.bb[i].text.set('')
 
 if __name__ == '__main__':
     app = App(root)
