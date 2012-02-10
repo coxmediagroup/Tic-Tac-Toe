@@ -3,9 +3,11 @@
 
 This project has been built and tested on Python 2.7.1 and Django 1.3.1.
 
-A basic game implementation is stored in the game.py module.  The strategy
-employed is a simple one taken from here:
-    [http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy]
+The game implementation is stored in the game.py module.  The strategy is a
+defensive one, based on the Minimax algorithm.
+    http://en.wikipedia.org/wiki/Minimax
+
+A basic unittest that iterates over every possible game is in tests.py,
 
 In addition, a Django interface for the game is included.  To run, install
 dependencies (ideally into a virtual environment):
