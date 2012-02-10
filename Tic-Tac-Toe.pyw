@@ -4,12 +4,33 @@ import tkFont
 
 root = Tk()
 buttonFont = tkFont.Font(family='Arial', size=50, weight='bold')
+labelFont  = tkFont.Font(family="Arial", size=14)
+countFont  = tkFont.Font(family="Arial", size=16, weight='bold')
+
+win = IntVar()
+lose= IntVar()
+tie = IntVar()
 
 class App():
     def __init__(self, master):
         self.bb = range(9)
         for i in range(9):
             self.bb[i] = Square(i)
+        self.score = Score(3)
+
+class Score():
+    def __init__(self, row):
+        win.set(0)
+        lose.set(0)
+        tie.set(0)
+        
+        self.winLbl  = Label(text="Wins", font=labelFont).grid(row=row,column=0)
+        self.loseLbl = Label(text="Losses", font=labelFont).grid(row=row,column=1)
+        self.tieLbl  = Label(text="Ties", font=labelFont).grid(row=row,column=2)
+
+        self.winCnt  = Label(textvariable=win, font=countFont).grid(row=row+1,column=0)
+        self.loseCnt = Label(textvariable=lose, font=countFont).grid(row=row+1,column=1)
+        self.tieCnt  = Label(textvariable=tie, font=countFont).grid(row=row+1,column=2)     
 
 class Square():
     def __init__(self, i, master=None):
@@ -23,6 +44,7 @@ def btn_click(number):
     if app.bb[number].text.get() == "":
         app.bb[number].text.set('X')
         if checkPopulate('XXX') == 'Win':
+            win.set(win.get()+1)
             end_game('You Win!')
         else:
             ai_play()
@@ -66,6 +88,7 @@ def ai_play():
     # win game
     if checkPopulate('OO') != None:
         app.bb[checkPopulate('OO')].text.set('O')
+        lose.set(lose.get()+1)
         end_game('You Lose!')
     # block player from winning
     elif checkPopulate('XX') != None:
@@ -82,6 +105,7 @@ def ai_play():
 
     # check if board is full
     if checkPopulate('') == None:
+        tie.set(tie.get()+1)
         end_game('Tie Game!')
 
 def end_game(message):
