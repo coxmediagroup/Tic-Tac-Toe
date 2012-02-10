@@ -5,103 +5,42 @@
 {% block content %}
 
   <div class="row">
+
+    {# Six columns for game board #}
     <div class="span6">
       <table class="board" width="100%">
         <tbody>
 
-          <tr>
-            <td width="33%" class="right bottom">
-              {% if cell.0 == ' ' %}<a href="?cell=0" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.0 }}
-                </div>
-              </div>
-              {% if cell.0 == ' ' %}</a>{% endif %}
-            </td>
-            <td width="33%" class="right bottom">
-              {% if cell.1 == ' ' %}<a href="?cell=1" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.1 }}
-                </div>
-              </div>
-              {% if cell.1 == ' ' %}</a>{% endif %}
-            </td>
-            <td width="33%" class="bottom">
-              {% if cell.2 == ' ' %}<a href="?cell=2" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.2 }}
-                </div>
-              </div>
-              {% if cell.2 == ' ' %}</a>{% endif %}
-            </td>
-          </tr>
+          {# Loop through all the cells #}
+          {% for cell in board %}
 
-          <tr>
-            <td width="33%" class="right bottom">
-              {% if cell.3 == ' ' %}<a href="?cell=3" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.3 }}
-                </div>
-              </div>
-              {% if cell.3 == ' ' %}</a>{% endif %}
-            </td>
-            <td width="33%" class="right bottom">
-              {% if cell.4 == ' ' %}<a href="?cell=4" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.4 }}
-                </div>
-              </div>
-              {% if cell.4 == ' ' %}</a>{% endif %}
-            </td>
-            <td width="33%" class="bottom">
-              {% if cell.5 == ' ' %}<a href="?cell=5" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.5 }}
-                </div>
-              </div>
-              {% if cell.5 == ' ' %}</a>{% endif %}
-            </td>
-          </tr>
+            {# Start a new row every 3 cells #}
+            {% if forloop.counter0|divisibleby:"3" %}<tr>{% endif %}
 
-          <tr>
-            <td width="33%" class="right">
-              {% if cell.6 == ' ' %}<a href="?cell=6" class="cell">{% endif %}
+            {# Table cell for the square. The class #}
+            <td width="33%" class="{% if forloop.counter0 not in right_row %}right{% endif %} {% if forloop.counter0 not in bottom_row %}bottom{% endif %}">
+
+              {% if cell == ' ' %}
+                <a href="?cell={{ forloop.counter0 }}" class="cell">
+              {% endif %}
               <div class="bigtext">
-                <div class="square">
-                  {{ cell.6 }}
+                <div class="{% if forloop.counter0 in winning_cells %}red{% endif %}square">
+                  {{ cell }}
                 </div>
               </div>
-              {% if cell.6 == ' ' %}</a>{% endif %}
+              {% if cell == ' ' %}</a>{% endif %}
             </td>
-            <td width="33%" class="right">
-              {% if cell.7 == ' ' %}<a href="?cell=7" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.7 }}
-                </div>
-              </div>
-              {% if cell.7 == ' ' %}</a>{% endif %}
-            </td>
-            <td width="33%">
-              {% if cell.8 == ' ' %}<a href="?cell=8" class="cell">{% endif %}
-              <div class="bigtext">
-                <div class="square">
-                  {{ cell.8 }}
-                </div>
-              </div>
-              {% if cell.8 == ' ' %}</a>{% endif %}
-            </td>
-          </tr>
+
+            {# Terminate row every 3 cells #}
+            {% if forloop.counter|divisibleby:"3" %}</tr>{% endif %}
+
+          {% endfor %}
+
         </tbody>
       </table>
     </div>
 
+    {# Four columns for stats and buttons #}
     <div class="span4">
       <p><div class="well">
         <a class="btn btn-large" href="{% url game:newX %}">
