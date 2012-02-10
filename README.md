@@ -11,9 +11,8 @@ This project has been built and tested on Python 2.7.1 and Django 1.3.1.
 Details
 -------
 The game implementation is stored in the `game.py` module.  The strategy is a
-defensive one, based on the Minimax algorithm.
-
-    http://en.wikipedia.org/wiki/Minimax
+defensive one, based on the [Minimax](http://en.wikipedia.org/wiki/Minimax)
+algorithm.
 
 A basic unittest that iterates over every possible game is in `tests.py`:
 
@@ -25,6 +24,6 @@ you must create a database:
 
     $ ./manage.py syncdb
 
-To run the Django dev server:
+Then, to run the Django dev server:
 
     $ ./manage.py runserver
