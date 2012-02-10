@@ -4,9 +4,31 @@ import wx
 import tictactoe
 
 
+class MoveDisplayPanel(wx.Panel):
+    def __init__(self, parent, text, size):
+        wx.Panel.__init__(self, parent, -1, size=size)
+
+        self.text = text
+
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+
+    def on_paint(self, evt):
+        dc = wx.PaintDC(self)
+        dc.SetPen(wx.BLACK_PEN)
+
+        text_size = dc.GetTextExtent(self.text)
+        my_size = self.GetClientSize()
+
+        x = (my_size[0] / 2) - (text_size[0] / 2) 
+        y = (my_size[1] / 2) - (text_size[1] / 2) 
+
+        dc.DrawText(self.text, x, y)
+
+
+
 class TicTacToeFrame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, -1, 'Tic-Tac-Toe', size=(400, 400))
+        wx.Frame.__init__(self, None, -1, 'Tic-Tac-Toe', size=(400, 400), style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN)
 
         self.board = tictactoe.Board()
         self.human = tictactoe.PLAYER_X
@@ -18,28 +40,22 @@ class TicTacToeFrame(wx.Frame):
                 tictactoe.PLAYER_O: "Computer's turn",
             }
 
-        self.turn_label = wx.StaticText(self, label=self.turn_messages[self.turn])
+        self.button_size = (64, 64)
+
+        self.turn_label = wx.StaticText(self, label=self.turn_messages[self.turn], style=wx.ST_NO_AUTORESIZE|wx.ALIGN_CENTER)
 
         gridbag = wx.GridBagSizer(5, 5)
-        gridbag.Add(self.turn_label, (0, 0), (1, 3), wx.ALIGN_CENTER_HORIZONTAL)
+        gridbag.Add(self.turn_label, (0, 0), (1, 3), wx.EXPAND)
 
         self.button_map = {}
 
         for column in range(self.board.size):
             for row in range(self.board.size):
-                button = wx.Button(self, id=wx.NewId(), label='?')
+                button = wx.Button(self, id=wx.NewId(), label='?', size=self.button_size)
                 self.button_map[button.GetId()] = ((column, row), button)
 
                 gridbag.Add(button, (row+1, column), (1, 1), wx.EXPAND)
 
-
-        gridbag.AddGrowableCol(0)
-        gridbag.AddGrowableCol(1)
-        gridbag.AddGrowableCol(2)
-
-        gridbag.AddGrowableRow(1)
-        gridbag.AddGrowableRow(2)
-        gridbag.AddGrowableRow(3)
 
         self.SetSizerAndFit(gridbag)
         self.Bind(wx.EVT_BUTTON, self.on_button_press)
@@ -51,7 +67,7 @@ class TicTacToeFrame(wx.Frame):
         button.Hide()
 
         self.GetSizer().Detach(button)
-        self.GetSizer().Add(wx.StaticText(self, label=label_text), gbpos, (1, 1), wx.ALIGN_CENTER|wx.ALIGN_CENTER_HORIZONTAL)
+        self.GetSizer().Add(MoveDisplayPanel(self, label_text, size=self.button_size), gbpos, (1, 1), wx.EXPAND)
         self.Layout()
 
     def _new_game(self):
@@ -61,7 +77,7 @@ class TicTacToeFrame(wx.Frame):
             label = self.GetSizer().FindItemAtPosition(gbpos).GetWindow()
             self.GetSizer().Detach(label)
 
-            if label.GetClassName() == 'wxStaticText':
+            if label.GetClassName() != 'wxButton':
                 label.Destroy()
 
             button.Show()
@@ -94,6 +110,8 @@ class TicTacToeFrame(wx.Frame):
 
             if result == wx.YES:
                 self._new_game()
+            else:
+                self.Close()
 
             return
 
@@ -102,6 +120,8 @@ class TicTacToeFrame(wx.Frame):
 
             if result == wx.YES:
                 self._new_game()
+            else:
+                self.Close()
 
             return
 
@@ -119,6 +139,8 @@ class TicTacToeFrame(wx.Frame):
 
             if result == wx.YES:
                 self._new_game()
+            else:
+                self.Close()
 
             return
 
