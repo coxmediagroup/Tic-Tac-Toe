@@ -1,1 +1,2 @@
+mock==0.7.2
 django-debug-toolbar==0.9.4
