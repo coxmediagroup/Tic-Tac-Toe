@@ -59,6 +59,21 @@ class Game(models.Model):
         else:
             return 'X'
 
+    def find_single(self, *line):
+        '''Find a line with a single X or O (whichever is machine_symbol)'''
+        state = 0
+        for cell in line:
+            if self.board[cell] == self.machine_symbol:
+                state += 16
+            elif self.board[cell] == self.symbol:
+                state += 4
+            else:
+                state += 1
+        if state == 18:
+            return True
+        else:
+            return False
+
     def line_count(self, *line):
         '''Count number of X's and O's in a line'''
         state = 0
@@ -71,6 +86,7 @@ class Game(models.Model):
 
     def winner(self):
         '''Count number of lines that have three in a row'''
+        empty_count = 0
         for line in lines:
             count = self.line_count(*line)
             if count == 3: # Three machine fills
@@ -79,6 +95,12 @@ class Game(models.Model):
             if count == -3: # Three human fills
                 self.status = self.WON
                 return line
+            for cell in line:
+                if self.board[cell] == ' ':
+                    empty_count += 1
+        if empty_count == 0:
+            self.status = self.TIE
+            return range(9)
         return None
 
     def win_lines(self, symbol):
@@ -135,12 +157,16 @@ class Game(models.Model):
 
     def place_fork_block(self):
         '''Rule 4: Block opponents fork'''
+        # Look for lines with one machine symbol so
+        # we can block a fork with 2 in row
         for line in lines:
-            if self.line_count(*line) == 1: # One machine fills, and two empty
+            if self.find_single(*line): # One machine fill, and two empty
+                # Add a speculative machine symbol to one of the blanks
                 for cell1 in line:
                     if self.board[cell1] == ' ':
                         self.board[cell1] = self.machine_symbol
                         break
+                # Add speculative player symbol to the other blank square
                 for cell2 in line:
                     if self.board[cell2] == ' ':
                         self.board[cell2] = self.symbol
@@ -148,8 +174,8 @@ class Game(models.Model):
                 if self.win_lines(self.symbol) < 2: # No fork with this play
                     self.board[cell2] = ' '; # Restore cell2 (player cell)
                     return cell1
-                self.board[cell2] = ' '; # Restore cell2 (player cell)
                 self.board[cell1] = ' '; # Restore cell1 (machine cell)
+                self.board[cell2] = ' '; # Restore cell2 (player cell)
         return None
 
     def place_center(self):
@@ -213,9 +239,7 @@ class Game(models.Model):
             return
         self.place_empty()
         # Error check: any empty squares is an error at this point
-        for cell in range(9):
-            if self.board[cell] == ' ':
-                assert 0
-        # No squares left, no winner, thus tie
-        self.status = self.TIE
-        return range(9)
+        #for cell in range(9):
+        #    if self.board[cell] == ' ':
+        #        assert 0
+        return
