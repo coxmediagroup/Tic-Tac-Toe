@@ -24,10 +24,18 @@ def btn_click(number):
         app.bb[number].text.set('X')
         if checkPopulate('XXX') == 'Win':
             end_game('You Win!')
+        else:
+            ai_play()
     else:
         tkMessageBox.showerror('Error','Space is already taken')
 
 def checkPopulate(value):
+    #check for any empty cell when value = ''
+    if value == '':
+        for i in range(9):
+            if app.bb[i].text.get() == value:
+                return i
+
     for i in range(3):
         # check rows
         if app.bb[i*3].text.get() + app.bb[1+i*3].text.get() + app.bb[2+i*3].text.get() == value:
@@ -53,6 +61,28 @@ def checkPopulate(value):
         elif app.bb[6].text.get() == '': return 6
         elif app.bb[4].text.get() == '': return 4
         else: return 'Win'
+
+def ai_play():
+    # win game
+    if checkPopulate('OO') != None:
+        app.bb[checkPopulate('OO')].text.set('O')
+        end_game('You Lose!')
+    # block player from winning
+    elif checkPopulate('XX') != None:
+        app.bb[checkPopulate('XX')].text.set('O')
+    # take middle square if available
+    elif app.bb[4].text.get() == '':
+        app.bb[4].text.set('O')
+    # check if AI can setup win on next move
+    elif checkPopulate('O') != None:
+        app.bb[checkPopulate('O')].text.set('O')
+    # take any open space
+    elif checkPopulate('') != None:
+        app.bb[checkPopulate('')].text.set('O')
+
+    # check if board is full
+    if checkPopulate('') == None:
+        end_game('Tie Game!')
 
 def end_game(message):
     tkMessageBox.showinfo('Tic-Tac-Toe', message)
