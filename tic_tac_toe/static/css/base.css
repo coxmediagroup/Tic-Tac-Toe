@@ -65,7 +65,8 @@ footer {
 
 .accent {
     background-color: #EEEEEE;
-    margin-bottom: 4px;
+    padding: 4px;
+    margin: -4px;
 }
 
 .shadowed {
