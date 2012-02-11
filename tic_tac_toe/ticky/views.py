@@ -72,7 +72,6 @@ def play(request):
                     for row in ttt.board for pos in row
             }
         }
-        print data
         return HttpResponse(simplejson.dumps(data),
             mimetype='application/json')
 
