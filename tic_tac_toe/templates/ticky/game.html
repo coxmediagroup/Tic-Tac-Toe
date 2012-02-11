@@ -7,27 +7,29 @@
 {% endblock %}
 
 {% block content %}
-    <form class="board-form" action="{% url play %}" method="post">
-        {% if status %}
-            <input class="game-status" type="submit" value="Play Again" name="replay">
-            <h2>
-                {{status}}
-            </h2>
-        {% else %}
-            <h2>
-                Choose a position.
-            </h2>
-        {% endif %}
+    <form id="board-form" action="{% url play %}" method="post">
+        <input id="replay-button" class="game-status" type="submit" value="Play Again" name="replay" {% if not gameover %}style="display: none"{% endif %}>
+        <h2 id="status-message">
+            {{status}}
+        </h2>
         <table class="gameboard">
             {% for row in game.board %}
             <tr>
                 {% for col in row %}
-                <td class="{% if col.value %}played{% else %}empty{% endif %}">
-                    <input type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value or status %}disabled="disabled"{% endif %}>
+                <td>
+                    <input id="{{col.x}}_{{col.y}}" type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value %}disabled="disabled"{% endif %}>
                 </td>
                 {% endfor %}
             </tr>
             {% endfor %}
         </table>
     </form>
+{% endblock %}
+
+{% block extra_body %}
+    {{ block.super }}
+
+    <script>
+        $("#board-form").ticTacToe();
+    </script>
 {% endblock %}

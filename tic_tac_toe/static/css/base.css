@@ -146,7 +146,7 @@ input.game-status {
     float: right;
 }
 
-.board-form h2 {
+#board-form h2 {
     color: #555;
     margin-left: .5em;
 }
