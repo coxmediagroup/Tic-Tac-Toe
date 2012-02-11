@@ -99,8 +99,8 @@ input {
 table.gameboard input {
     width: 250px;
     height: 250px;
-    font-size: 10em;
-    font-family: fixed;
+    font-size: 15em;
+    font-family: serif;
 }
 
 table.gameboard input:not([disabled]) {
@@ -135,7 +135,7 @@ table tr:last-child td {
 input.game-status {
     color: black;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.75em;
     border: solid 1px #aaa;
     background-image: -ms-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
     background-image: -moz-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
@@ -143,4 +143,14 @@ input.game-status {
     background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, #00A3EF));
     background-image: -webkit-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
     background-image: linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    float: right;
+}
+
+.board-form h2 {
+    color: #555;
+    margin-left: .5em;
+}
+
+.gameboard input {
+    text-shadow: 8px 8px 8px #555;
 }

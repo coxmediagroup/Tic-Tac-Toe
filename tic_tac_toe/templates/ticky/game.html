@@ -2,24 +2,32 @@
 
 {% block page_title %}Gameboard{% endblock %}
 
+{% block extra_head %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/tictactoe.jquery.js"></script>
+{% endblock %}
+
 {% block content %}
-<form action="{% url play %}" method="post">
-    {% if status %}
-        <h2>
-            {{status}}
+    <form class="board-form" action="{% url play %}" method="post">
+        {% if status %}
             <input class="game-status" type="submit" value="Play Again" name="replay">
-        </h2>
-    {% endif %}
-    <table class="gameboard">
-        {% for row in game.board %}
-        <tr>
-            {% for col in row %}
-            <td class="{% if col.value %}played{% else %}empty{% endif %}">
-                <input type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value or status %}disabled="disabled"{% endif %}>
-            </td>
+            <h2>
+                {{status}}
+            </h2>
+        {% else %}
+            <h2>
+                Choose a position.
+            </h2>
+        {% endif %}
+        <table class="gameboard">
+            {% for row in game.board %}
+            <tr>
+                {% for col in row %}
+                <td class="{% if col.value %}played{% else %}empty{% endif %}">
+                    <input type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value or status %}disabled="disabled"{% endif %}>
+                </td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-</form>
+        </table>
+    </form>
 {% endblock %}
