@@ -36,6 +36,7 @@ TEMPLATE_DIRS = (
 #)
 
 INSTALLED_APPS += ('debug_toolbar',)
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 MEDIA_ROOT = ROOT('Tic-Tac-Toe/media/')
 STATIC_ROOT = ROOT('Tic-Tac-Toe/static/')
@@ -50,7 +51,11 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
@@ -58,7 +63,34 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'game': {
+            'handlers':['console'],
+            'level':'DEBUG',
+            'propagate': True,
+        },
     }
+}
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    #'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
+
+INTERNAL_IPS = ('67.176.120.241','127.0.0.1','192.168.1.2','192.168.1.25')
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+    #'SHOW_TOOLBAR_CALLBACK': None,
+    #'EXTRA_SIGNALS': ['employees.MySignal', etc.],
+    'ENABLE_STACKTRACES': True,
+    #'MEDIA_URL': MEDIA_URL + 'debug_toolbar/',
 }
 
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
