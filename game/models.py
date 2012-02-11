@@ -148,7 +148,7 @@ class Game(models.Model):
         '''Rule 3: Create a fork'''
         for cell in range(9):
             if self.board[cell] == ' ':
-                self.board[cell] == self.machine_symbol
+                self.board[cell] = self.machine_symbol
                 count = self.win_lines(self.machine_symbol)
                 if count >= 2: # We found 2 win lines, so play this for a fork
                     return cell
