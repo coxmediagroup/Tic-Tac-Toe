@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from picklefield.fields import PickledObjectField
+
+log = logging.getLogger('game.models')
 
 # Tic Tac Toe game board is a 3x3 array
 # We represent the board with a string of nine characters
@@ -126,39 +129,49 @@ class Game(models.Model):
 
     def place_win(self):
         '''Rule 1: Play three in a row'''
+        log.debug('1] PLACE WIN')
         for line in lines:
             if self.line_count(*line) == 2: # Two machine fills, and one empty
                 for cell in line:
                     if self.board[cell] == ' ':
                         self.board[cell] = self.machine_symbol
+                        log.debug('1] win found at %d' % cell)
                         return cell
+        log.debug('1] no win')
         return None
 
     def place_block(self):
         '''Rule 2: Block opponent two in a row'''
+        log.debug('2] PLACE BLOCK')
         for line in lines:
             if self.line_count(*line) == -2: # Two player fills, and one empty
                 for cell in line:
                     if self.board[cell] == ' ':
                         self.board[cell] = self.machine_symbol
+                        log.debug('2] block found at %d' % cell)
                         return cell
+        log.debug('2] no block found')
         return None
 
     def place_fork(self):
         '''Rule 3: Create a fork'''
+        log.debug('3] PLACE FORK')
         for cell in range(9):
             if self.board[cell] == ' ':
                 self.board[cell] = self.machine_symbol
                 count = self.win_lines(self.machine_symbol)
                 if count >= 2: # We found 2 win lines, so play this for a fork
+                    log.debug('3] fork created at %d' % cell)
                     return cell
                 self.board[cell] = ' ' # Restore back to original
+        log.debug('3] no fork created')
         return None
 
     def place_fork_block(self):
         '''Rule 4: Block opponents fork'''
         # Look for lines with one machine symbol so
         # we can block a fork with 2 in row
+        log.debug('4] BLOCK FORK')
         for line in lines:
             if self.find_single(*line): # One machine fill, and two empty
                 # Add a speculative machine symbol to one of the blanks
@@ -172,52 +185,74 @@ class Game(models.Model):
                         self.board[cell2] = self.symbol
                         break
                 if self.win_lines(self.symbol) < 2: # No fork with this play
-                    self.board[cell2] = ' '; # Restore cell2 (player cell)
+                    self.board[cell2] = ' ' # Restore cell2 (player cell)
                     return cell1
-                self.board[cell1] = ' '; # Restore cell1 (machine cell)
-                self.board[cell2] = ' '; # Restore cell2 (player cell)
+                # Switch the two cells for testing the reverse
+                self.board[cell1] = self.symbol
+                self.board[cell2] = self.machine_symbol
+                if self.win_lines(self.symbol) < 2: # No fork with this play
+                    self.board[cell1] = ' ' # Restore cell1 (player cell)
+                    return cell2
+                self.board[cell1] = ' ' # Restore cell1 (machine cell)
+                self.board[cell2] = ' ' # Restore cell2 (player cell)
+        log.debug('4] no fork to block')
         return None
 
     def place_center(self):
         '''Rule 5: Play the center'''
+        log.debug('5] PLACE CENTER')
         if self.board[center] != ' ':
+            log.debug('5] center not available')
             return None
         self.board[center] = self.machine_symbol
+        log.debug('5] played center')
         return center
 
     def place_opposite_corner(self):
         '''Rule 6: If opponent is in the corner, play the opposite corner'''
+        log.debug('6] OPPOSITE CORNER')
         for corner in corners:
             cell1 = corner[0]
             cell2 = corner[1]
             if self.board[cell1] == self.symbol and self.board[cell2] == ' ':
                 self.board[cell2] = self.machine_symbol
+                log.debug('6] played opposite corner at %d' % cell2)
                 return cell2
+        log.debug('6] no opposite corner to play')
         return None
 
     def place_empty_corner(self):
         '''Rule 7: Play in a corner'''
+        log.debug('7] EMPTY CORNER')
         for corner in corners:
             cell = corner[0]
             if self.board[cell] == ' ':
                 self.board[cell] = self.machine_symbol
+                log.debug('7] played empty corner %d' % cell)
                 return cell
+        log.debug('7] no empty corner')
         return None
 
     def place_empty_side(self):
         '''Rule 8: Play in a middle square on any side'''
+        log.debug('8] PLAY EMPTY SIDE')
         for cell in edges:
             if self.board[cell] == ' ':
                 self.board[cell] = self.machine_symbol
+                log.debug('8] played empty side at %d' % cell)
                 return cell
+        log.debug('8] no empty side to play')
         return None
 
     def place_empty(self):
         '''Play any empty square (should only be one)'''
+        log.debug('9] PLACE EMPTY')
         for cell in range(9):
             if self.board[cell] == ' ':
                 self.board[cell] = self.machine_symbol
+                log.debug('9] played empty cell at %d' % cell)
                 return cell
+        log.debug('9] no empty cells')
         return None
 
     def machine_move(self):
