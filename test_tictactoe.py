@@ -148,8 +148,5 @@ class TestTicTacToe(unittest.TestCase):
         assert self.T.empty_side() == (1,0)
 
 
-    def test_human_input(self):
-        """Humans are not allowed to make invalid moves."""
-
 if __name__ == '__main__':
     unittest.main()

@@ -181,9 +181,9 @@ class TicTacToe:
             for combo in combinations:
                 if len(set(combo)) == 1:
                     return combo[0]
-        if len(set((v for row in self.board for v in row))) == 2:
-            return "cat"
         winner = the_winner(self.win_combinations(board))
+        if not winner and len(set((v for row in self.board for v in row))) == 2:
+            return "cat"
         return winner
         
     def win_combinations(self, board):
