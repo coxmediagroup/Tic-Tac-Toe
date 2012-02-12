@@ -2,7 +2,7 @@ from random import random
 from copy import deepcopy
 
 class TicTacToe:
-    """An unbeatable Tic Tac Toe game.  Human always starts. """
+    """An unbeatable Tic Tac Toe game.  Starting player chosen randomly. """
     def __init__(self):
         self.board = [list(range(3)), list(range(3, 6)), list(range(6, 9))]
         self.human = 'x'
@@ -17,8 +17,8 @@ class TicTacToe:
     def human_move(self):
         """Accepts / validates the input for a human move.
              
-             Returns True on a valid move.
-             Otherwise False."""
+             Makes the move and returns True on a valid move.
+             Otherwise returns False."""
         move = raw_input("Your turn: ")
         if len(move) == 1 and ord(move) >= ord('0') and ord(move) < ord('9'):
             move = int(move) 
@@ -32,7 +32,7 @@ class TicTacToe:
         return False
     
     def computer_move(self):
-        """The logic for the computer move. From wikipedia:
+        """The logic for the computer move. (from wikipedia):
 
              Attempt to move in this order
              1. Win
@@ -98,7 +98,7 @@ class TicTacToe:
             board[win[0]][win[1]] = win[0] * 3 + win[1]
 
     def block_fork(self):
-        """Blocks an impending fork.
+        """Find the position to block an impending fork.
              If the oponent can fork next move,
                  try to threaten a win or
                  block the fork
@@ -148,7 +148,8 @@ class TicTacToe:
 
     def empty_pos(self, positions): 
         """
-        Returns the first empty position found on the board
+        Returns the first empty position found in the 
+        iterable positions.
         """
         for row, col in positions:
             if isinstance(self.board[row][col], int):
@@ -171,7 +172,7 @@ class TicTacToe:
         """Examines the board to determine if a tic tac toe
              has occured.
             
-             Returns the character that won ('x' or 'o')
+             Returns the character that won ('x', 'o', or 'cat')
                  or None
         """
         def the_winner(combinations):
@@ -190,7 +191,9 @@ class TicTacToe:
         Returns the values for each of the possible 
         3 in a row combinations.
         """
-        return (board[0], board[1], board[2],  # Horizontal
+        return (board[0], # Horizontals
+                board[1], 
+                board[2], 
                 tuple(row[0] for row in board),    # Verticals
                 tuple(row[1] for row in board),
                 tuple(row[2] for row in board),
