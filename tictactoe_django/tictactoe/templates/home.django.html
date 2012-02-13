@@ -8,7 +8,102 @@
 
 <body>
     
-    <h1>Django works</h1>
+    <h1>Tic-Tac-Toe</h1>
+    
+    <table class='gameboard' border='1'>
+        <tr class='gamerow' id='row1'>
+            <td class='gamespace column-1' id='r0c0'>
+                <a href="javascript:sendPlayerMove('r0c0')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr0c0'>
+                </a>
+            </td>
+            <td class='gamespace column-2' id='r0c0'>
+                <a href="javascript:sendPlayerMove('r0c1')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr0c1'>
+                </a>
+            </td>
+            <td class='gamespace column-3' id='r0c0'>
+                <a href="javascript:sendPlayerMove('r0c2')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr0c2'>
+                </a>
+            </td>
+        </tr>
+        <tr class='gamerow' id='row2'>
+            <td class='gamespace column-1' id='r1c0'>
+                <a href="javascript:sendPlayerMove('r1c0')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr1c0'>
+                </a>
+            </td>
+            <td class='gamespace column-2' id='r1c1'>
+                <a href="javascript:sendPlayerMove('r1c1')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr1c1'>
+                </a>
+            </td>
+            <td class='gamespace column-3' id='r1c2'>
+                <a href="javascript:sendPlayerMove('r1c2')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr1c2'>
+                </a>
+            </td>
+        </tr>
+        <tr class='gamerow' id='row3'>
+            <td class='gamespace column-1' id='r2c0'>
+                <a href="javascript:sendPlayerMove('r2c0')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr2c0'>
+                </a>
+            </td>
+            <td class='gamespace column-2' id='r2c1'>
+                <a href="javascript:sendPlayerMove('r2c1')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr2c1'>
+                </a>
+            </td>
+            <td class='gamespace column-3' id='r2c2'>
+                <a href="javascript:sendPlayerMove('r2c2')">
+                    <img src='{{ STATIC_URL }}square-Blank.png' class='gamesquare' id='imgr2c2'>
+                </a>
+            </td>
+        </tr>
+    </table>
+    
+    <script type="text/javascript">
+        var board = {{ board|safe }};
+        
+        function refresh_board_table()
+        {
+            for (var i=0; i < board.length; i++)
+            {
+                for (var k=0; k < board[i].length; k++)
+                {
+                    selector = "#imgr" + i + "c" + k
+                    switch  (board[i][k])
+                    {
+                        case "X":
+                            $(selector).attr("src", "{{ STATIC_URL }}square-X.png");
+                            break;
+                        case "O":
+                            $(selector).attr("src", "{{ STATIC_URL }}square-O.png");
+                            break;
+                        default:
+                            $(selector).attr("src", "{{ STATIC_URL }}square-Blank.png");
+                            break;
+                    }
+                }
+            }
+        }
+        refresh_board_table();
+        
+        function sendPlayerMove(pos)
+        {
+            $.post("playeraction", "pos=" + pos, get_board_from_server, "json")
+        }
+        
+        function get_board_from_server(data, textStatus, jqXHR)
+        {
+            if(textStatus == "success") {
+                board = data;
+                refresh_board_table();
+            }
+        }
+    </script>
     
 </body>
 </html>
