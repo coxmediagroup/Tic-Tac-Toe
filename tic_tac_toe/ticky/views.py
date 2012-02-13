@@ -58,7 +58,7 @@ def play(request):
             x, y = command.split('_')
             ttt = _get_game(request)
             ttt.play(int(x), int(y))
-            request.session['tic_tac_toe_game'] = ttt
+            request.session['ttt'] = ttt
         except ValueError:
             raise Http404, _('Invalid POST key %s.' % command)
 

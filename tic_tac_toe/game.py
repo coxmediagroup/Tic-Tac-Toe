@@ -30,48 +30,23 @@ class TicTacToe(object):
             play = self._get_computer_play()
             self._push_play(COMPUTER, play.x, play.y)
 
-    @classmethod
-    def _get_rows(cls, board):
-        """Returns the 8 possible winning rows for the specified board."""
-        return (
-            # horizontal
-            [row for row in board]
-
-            # vertical
-            + [[row[i] for row in board] for i in range(SIZE)]
-
-            # diagonal
-            + [[board[i][i] for i in range(SIZE)]]
-            + [[board[i][SIZE-1-i] for i in range(SIZE)]]
-        )
-
-    @classmethod
-    def _row_winner(cls, row):
-        """
-        Return the winner of the given row, or `None` if there is no winner.
-        """
-        if row[0].value and all(
-                [row[0].value == row[i].value for i in range(1, SIZE)]):
-            return row[0].value
-        else:
-            return None
-
-    @classmethod
-    def _get_winner(cls, rows):
-        return reduce(lambda x, y: x or y, map(cls._row_winner, rows))
-
-    @classmethod
-    def _get_open_board_plays(cls, board):
+    def get_open_plays(self):
         plays = []
-        for row in board:
+        for row in self.board:
             plays += [x for x in row if not x.value]
         return plays
 
-    def get_open_plays(self):
-        return self._get_open_board_plays(self.board)
-
     def get_status(self):
-        winner = self._get_winner(self._get_rows(self.board))
+        def _row_winner(row):
+            """
+            Return the winner of the given row, or `None` if there is no winner.
+            """
+            if row[0].value and all(
+                    [row[0].value == row[i].value for i in range(1, SIZE)]):
+                return row[0].value
+            else:
+                return None
+        winner = reduce(lambda x, y: x or y, map(_row_winner, self._get_rows()))
         if winner:
             return winner
         else:
@@ -92,6 +67,20 @@ class TicTacToe(object):
             self.status = self.get_status()
 
         return self.status
+
+    def _get_rows(self):
+        """Returns the 8 possible winning rows for the current game."""
+        return (
+            # horizontal
+            [row for row in self.board]
+
+            # vertical
+            + [[row[i] for row in self.board] for i in range(SIZE)]
+
+            # diagonal
+            + [[self.board[i][i] for i in range(SIZE)]]
+            + [[self.board[i][SIZE-1-i] for i in range(SIZE)]]
+        )
 
     def _push_play(self, player, x, y):
         if self.status == DRAW:
