@@ -1,4 +1,3 @@
-
 1. virtualenv Tic-Tac-Toe --no-site-packages
 
 2. cd Tic-Tac-Toe
@@ -11,6 +10,8 @@
 
 6. python manage.py syncdb
 
-7. python manage.py runserver
+7. python manage.py collectstatic
+
+8. python manage.py runserver
 
 Now, point browser to localhost:8080
