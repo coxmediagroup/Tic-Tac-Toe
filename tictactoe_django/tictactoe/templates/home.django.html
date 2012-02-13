@@ -8,6 +8,7 @@
 
 <body>
     
+    <center>
     <h1>Tic-Tac-Toe</h1>
     
     <table class='gameboard' border='1'>
@@ -63,6 +64,9 @@
             </td>
         </tr>
     </table>
+    <h2 id="statusline"></h2>
+    <a href=''>Restart</a>
+    </center>
     
     <script type="text/javascript">
         var board = {{ board|safe }};
@@ -99,8 +103,9 @@
         function get_board_from_server(data, textStatus, jqXHR)
         {
             if(textStatus == "success") {
-                board = data;
+                board = data['board'];
                 refresh_board_table();
+                $("#statusline").html(data['status']);
             }
         }
     </script>
