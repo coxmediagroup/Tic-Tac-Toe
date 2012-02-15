@@ -79,8 +79,8 @@ def checkPopulate(value):
         else: return 'Win'
     # check second diagonal
     if app.bb[2].text.get() + app.bb[4].text.get() + app.bb[6].text.get() == value:
-        if   app.bb[2].text.get() == '': return 2
-        elif app.bb[6].text.get() == '': return 6
+        if   app.bb[6].text.get() == '': return 6
+        elif app.bb[2].text.get() == '': return 2
         elif app.bb[4].text.get() == '': return 4
         else: return 'Win'
 
@@ -113,8 +113,7 @@ def end_game(message):
     if tkMessageBox.askyesno('Tic-Tac-Toe', message+'\nDo you want to play again?'):
         playAgain()
     else:
-        root.destroy()
-        root.quit()
+        sys.quit()
 
 def playAgain():
     for i in range(9):
