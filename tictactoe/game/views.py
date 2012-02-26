@@ -20,9 +20,6 @@ def playGame(request, playerCharacter='X'):
     else:
         game = TicTacToeModel.objects.create(sessionID=request.session.session_key, playerCharacter=playerCharacter)
 
-    #if request.method == 'POST' and gameforms.TicTacToeForm(request.POST).is_valid():
-        #Add logic for game here.
-
     form = gameforms.TicTacToeForm(initial={'gameID': game.gameID})
     game.save()
 
