@@ -1,7 +1,15 @@
 {% extends "site_base.html" %}
 
 {% block content-body %}
+<form action="" method="POST">
+    {% csrf_token %}
+
     {% include 'game/snippets/tictactoe_board.html' %}
     <br /><br /><br />
+    {% include 'snippets/simple_hidden_form.html' %}
     <input type="button" class="ticButton" value="Reset" />
+    {% for field in form %}
+    {{ field }}
+    {%  endfor %}
+</form>
 {% endblock %}
