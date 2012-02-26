@@ -1,5 +1,9 @@
 {% extends "site_base.html" %}
 
 {% block content-body %}
-        Blank Index Page
+        <ul>
+            <li><a href="{% url game:playGame %}">Play Tic Tac Toe</a></li>
+            <li><a href="{{ STATIC_URL }}resume/Steven_Anderson_Public.doc">View Resume</a></li>
+            <li><a href="mailto:anderson@phdgaming.com">Email (anderson@phdgaming.com)</a></li>
+        </ul>
 {% endblock %}
