@@ -122,3 +122,6 @@ Known Issues
 
 * I used the deprecated "<center>" tag in two locations as I haven't had time
   to fully setup the design.
+
+* The AI is dumb for larger game boards due to the limits placed on how many moves it can look ahead.
+  It will stop a player from winning, but doesn't make moves to win itself that needs to be fixed.
