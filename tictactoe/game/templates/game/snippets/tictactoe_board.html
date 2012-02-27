@@ -1,18 +1,17 @@
 <table width="246" class="ticBoard" border="2">
+    {% for row in gameObj.gameBoard %}
     <tr>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
+        {% for column in row %}
+            {% if column == ' ' %}
+                <td width="82"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
+            {% endif %}
+            {% if column == 'X' %}
+                <td width="82"><img src="{{ STATIC_URL }}images/tic_X.png" /></td>
+            {% endif %}
+            {% if column == 'O' %}
+                <td width="82"><img src="{{ STATIC_URL }}images/tic_O.png" /></td>
+            {% endif %}
+        {% endfor %}
     </tr>
-    <tr>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-    </tr>
-    <tr>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-        <td width="82"><a href="#"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
-    </tr>
-
+    {% endfor %}
 </table>

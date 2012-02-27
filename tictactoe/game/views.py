@@ -11,7 +11,7 @@ def index(request):
     '''
     return render(request, 'game/index.html')
 
-def playGame(request, playerCharacter='X'):
+def playGame(request, boardSize=3, playerCharacter='X'):
     '''This is the initial view placeholder for the game itself.
     '''
 
@@ -19,6 +19,7 @@ def playGame(request, playerCharacter='X'):
         game = TicTacToeModel(gameID=request.POST["gameID"], sessionID=request.session.session_key)
     else:
         game = TicTacToeModel.objects.create(sessionID=request.session.session_key, playerCharacter=playerCharacter)
+        game.gameBoard = [[' '] * boardSize,] * boardSize
 
     form = gameforms.TicTacToeForm(initial={'gameID': game.gameID})
     game.save()
