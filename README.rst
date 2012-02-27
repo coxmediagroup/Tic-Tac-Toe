@@ -25,10 +25,11 @@ does correctly fall-back to a normal post if disabled.
 System Dependencies
 -------------------
 
-There are no network dependencies at this time.
+There are no network dependencies at this time. For installation, please see
+DEPLOYNOTES.rst.
 
 -----
 
 For more detailed information, including installation instructions and upgrade
-notes, see :ref:`DEPLOYNOTES.rst`.  For details about the features included in each release,
-see :ref:`CHANGELOG.rst`.
+notes, see DEPLOYNOTES.rst.  For details about the features included in each release,
+see CHANGELOG.rst.
