@@ -35,11 +35,6 @@ class GameViewsTest(TestCase):
         self.assertEqual(code, expected, 'Expected %s but returned %s for %s'
         % (expected, code, game_creation))
 
-        #path = response.path
-        #expected = reverse('site_index')
-        #self.assertEqual(path, expected, 'Expected %s but returned %s for %s'
-        #% (expected, code, game_creation))
-
         #Test with fully invalid form
         form_data = {'blah': 'blah',
                      'size': 3,}
@@ -85,7 +80,7 @@ class GameViewsTest(TestCase):
         expected = 200
         self.assertEqual(code, expected, 'Expected %s but returned %s for %s'
         % (expected, code, game_creation))
-        self.assertContains(response, 'tic_X.png', 'Expected the CPU player to have an X on the board')
+        self.assertContains(response, 'tic_X.png', msg_prefix='Expected the CPU player to have an X on the board')
 
 
 class GameModelsTest(TestCase):
@@ -105,6 +100,8 @@ class GameModelsTest(TestCase):
         expected_winner = ' '
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
             % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+            % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a few random values
         self.gameObj.gameBoard = [['O', 'O', 'X'], ['O', 'X', ' '], [' ', 'X', ' ']]
@@ -113,6 +110,8 @@ class GameModelsTest(TestCase):
         expected_winner = ' '
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a horizontal win for the CPU
         self.gameObj.gameBoard = [['O', 'O', 'O'], ['O', 'X', ' X'], [' ', 'X', ' ']]
@@ -121,6 +120,8 @@ class GameModelsTest(TestCase):
         expected_winner = self.gameObj.cpuCharacter
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a verticle win for the Player
         self.gameObj.gameBoard = [['O', 'O', 'X'], ['O', 'X', ' X'], [' ', 'O', 'X']]
@@ -129,6 +130,8 @@ class GameModelsTest(TestCase):
         expected_winner = self.gameObj.playerCharacter
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a diagonal win for the CPU (top left to bottom right)
         self.gameObj.gameBoard = [['O', 'O', 'X'], ['X', 'O', ' X'], [' ', 'X', 'O']]
@@ -137,6 +140,8 @@ class GameModelsTest(TestCase):
         expected_winner = self.gameObj.cpuCharacter
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a diagonal win for the player (top right to bottom left)
         self.gameObj.gameBoard = [['O', 'O', 'X'], ['O', 'X', '  '], ['X', 'X', 'O']]
@@ -145,13 +150,76 @@ class GameModelsTest(TestCase):
         expected_winner = self.gameObj.playerCharacter
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
         #Check with a draw for the both players
-        self.gameObj.gameBoard = [['O', 'O', 'X'], ['O', 'O', 'X '], ['X', 'X', 'O']]
+        self.gameObj.gameBoard = [['X', 'O', 'X'], ['O', 'X', 'X '], ['O', 'X', 'O']]
         result = self.gameObj.checkGameOver()
         expected_return = True
         expected_winner = ' '
         self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
         % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
 
-        #TODO: Checks for some other sizes here
+        #Change the characters and game board size
+        self.gameObj = TicTacToeModel.objects.create(
+            boardSize = 4,
+            gameBoard = [[' ', ' ', ' ', ' '], [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']],
+            playerCharacter = 'O',
+            cpuCharacter = 'X',
+            sessionID = 'testing'
+        )
+
+        #Check with a draw for the both players on 4 sizes
+        self.gameObj.gameBoard = [['X', 'O', 'X', 'O'], ['O', 'O', 'X', 'O'], ['X', 'X', 'O', 'X'], ['X', 'O', 'O', 'X']]
+        result = self.gameObj.checkGameOver()
+        expected_return = True
+        expected_winner = ' '
+        self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
+        % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
+
+        #Check with a horizontal win for the CPU
+        self.gameObj.gameBoard = [['O', 'O', 'X', 'X'], ['O', 'O', 'X ', 'O'], ['X', 'X', 'X', 'X'], ['X', 'O', 'O', 'O']]
+        result = self.gameObj.checkGameOver()
+        expected_return = True
+        expected_winner = self.gameObj.cpuCharacter
+        self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
+        % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
+
+        #Check with a vertical win for the Player
+        self.gameObj.gameBoard = [['O', ' ', 'X', ' '], ['O', 'O', '  ', ' '], ['O', 'X', 'X', 'X'], ['O', 'X', ' ', ' ']]
+        result = self.gameObj.checkGameOver()
+        expected_return = True
+        expected_winner = self.gameObj.playerCharacter
+        self.assertEqual(result, expected_return, 'Expected %s but returned %s for %s'
+        % (expected_return, result, 'game models checkGameOver()'))
+        self.assertEqual(self.gameObj.winner, expected_winner, 'Expected %s but returned %s for %s'
+        % (expected_winner, self.gameObj.winner, 'game models checkGameOver() winner'))
+
+        #TODO: Checks for some other sizes and variations
+
+    def test_calculateCPUMove(self):
+
+        #Test for a block of X winning
+        self.gameObj.gameBoard = [[' ', ' ', ' '], ['O', ' ', '  '], [' ', 'X', 'X']]
+        self.gameObj.calculateCPUMove()
+        self.assertEqual(self.gameObj.gameBoard[2][0], 'O', 'Expected CPU move to block X winning')
+
+        #Test that it will pick winning
+        self.gameObj.gameBoard = [[' ', 'X', ' '], ['O', 'O', ' '], [' ', 'X', 'X']]
+        self.gameObj.calculateCPUMove()
+        self.assertEqual(self.gameObj.gameBoard[1][2], 'O', 'Expected CPU to pick winning')
+
+        #Test that it will pick stop a corner play by going for 3 in a row
+        self.gameObj.gameBoard = [['X', 'O', ' '], [' ', ' ', ' O'], [' ', ' ', 'X']]
+        self.gameObj.calculateCPUMove()
+        self.assertEqual(self.gameObj.gameBoard[1][1], 'O', 'Expected CPU to stop corner play and go for 3 in a row')
+
+        #TODO: More AI checks using theories from: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+

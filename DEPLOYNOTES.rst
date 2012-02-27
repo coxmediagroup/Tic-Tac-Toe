@@ -92,8 +92,10 @@ from the tictactoe directory of your checkout:
 Known Issues
 """"""""""""
 
-* Error checking is still very light. Sending incorrect form data or attempting
-  to send an invalid move won't be stopped yet (among other issues).
+* Error checking is still very light. Beyond not handling many normal cases well (ie. DB down),
+  some concerns to note: Incorrect form data isn't handled gracefully. Attempting
+  to spam multiple invalid moves for the same exact game aren't really stopped as it is currently
+  only prevented on the UI/Client level rather than on the server.
 
 * Unit tests need to be fleshed out and have only partial code coverage.
 

@@ -20,7 +20,8 @@ class TicTacToeModel(models.Model):
 
     def putPlayerMove(self,row,col):
         '''Set the player move'''
-        self.gameBoard[row][col] = self.playerCharacter
+        if self.gameBoard[row][col] == ' ':
+            self.gameBoard[row][col] = self.playerCharacter
 
     def putCPUMove(self,row,col):
         '''Set the cpu move'''
