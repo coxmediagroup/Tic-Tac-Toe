@@ -1,5 +1,11 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function () {
+
+        //Show the result box if the game is over.
+        {% if gameObj.checkGameOver %}
+            $('#resultBox').show();
+        {% endif %}
+
         $('.tictac_available_space').click(function(event) {
 
             //Prevent another move submission

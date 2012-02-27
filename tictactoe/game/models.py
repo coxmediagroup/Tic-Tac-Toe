@@ -5,11 +5,18 @@ from picklefield.fields import PickledObjectField
 class TicTacToeModel(models.Model):
     gameID = models.AutoField(primary_key=True)
     sessionID = models.CharField(max_length=255, help_text="Used to prevent the user from affecting other games by form editing.")
-    playerCharacter = models.CharField(max_length=1, help_text="Determines if they are X or O.")
-    cpuCharacter = models.CharField(max_length=1)
-    boardSize = models.IntegerField()
+    playerCharacter = models.CharField(max_length=1, help_text="Determines if the player is X or O.")
+    cpuCharacter = models.CharField(max_length=1, help_text="The side that the CPU is on (X or O).")
+    boardSize = models.IntegerField(help_text="Length and width of the square board.")
     gameBoard = PickledObjectField()
+
+    #Winner of the game
     winner = ' '
+
+    #maximum number of moves to look forward as it gets CPU intensive
+    maximum_move_depth = 0
+    current_move_depth = 0
+
 
     def putPlayerMove(self,row,col):
         '''Set the player move'''
@@ -25,6 +32,21 @@ class TicTacToeModel(models.Model):
 
     def calculateCPUMove(self):
         '''Calculate and do the CPU Move'''
+
+        #Set the maximum number of expected moves  the system can handle.
+        self.current_move_depth = 0
+        print self.getOpenSpacesCount()
+        if self.getOpenSpacesCount() < 9:
+            self.maximum_move_depth = 7
+        elif self.getOpenSpacesCount() < 13:
+            self.maximum_move_depth = 5
+        elif self.getOpenSpacesCount() < 24:
+            self.maximum_move_depth = 4
+        elif self.getOpenSpacesCount() < 50:
+            self.maximum_move_depth = 3
+        else:
+            self.maximum_move_depth = 2
+
         if not self.checkGameOver():
             move_position, score = self.getMaximizedMove()
             self.putCPUMove(move_position[0], move_position[1])
@@ -39,15 +61,17 @@ class TicTacToeModel(models.Model):
                 if column_value == ' ':
                     #Mark the position as now taken by the CPU
                     self.putCPUMove(row_index, column_index)
+                    self.current_move_depth += 1
 
                     #Check opponent move possibilities
-                    if self.checkGameOver():
+                    if self.checkGameOver() or self.current_move_depth >= self.maximum_move_depth:
                         score = self.calculateScore()
                     else:
                         move_position,score = self.getMinimizedMove()
 
                     #Revert back from the move
                     self.clearMove(row_index, column_index)
+                    self.current_move_depth -= 1
 
                     if bestScore == None or score > bestScore:
                         bestScore = score
@@ -64,14 +88,16 @@ class TicTacToeModel(models.Model):
             for column_index, column_value in enumerate(row_value):
                 if column_value == ' ':
                     self.putPlayerMove(row_index, column_index)
+                    self.current_move_depth += 1
 
-                    if self.checkGameOver():
+                    if self.checkGameOver() or self.current_move_depth >= self.maximum_move_depth:
                         score = self.calculateScore()
                     else:
                         move_position,score = self.getMaximizedMove()
 
                     #Revert back from the move
                     self.clearMove(row_index, column_index)
+                    self.current_move_depth -= 1
 
                     if bestScore == None or score < bestScore:
                         bestScore = score
@@ -144,6 +170,14 @@ class TicTacToeModel(models.Model):
             elif self.winner == self.playerCharacter:
                 return -1 # Person won
         return 0 # Draw
+
+    def getOpenSpacesCount(self):
+        '''Get the total amount of open spaces'''
+        count = 0
+        for row_values in self.gameBoard:
+            count += row_values.count(' ')
+
+        return count
 
 
 

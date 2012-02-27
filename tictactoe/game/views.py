@@ -44,7 +44,8 @@ def createGame(request):
             )
 
             if cpuCharacter == 'X':
-                game.calculateCPUMove();
+                #Always will be upper left, so no need to calculate currently.
+                game.putCPUMove(0,0);
 
             game.save()
 
