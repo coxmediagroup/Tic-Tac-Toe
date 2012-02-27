@@ -88,6 +88,27 @@ from the tictactoe directory of your checkout:
     python manage.py runserver
 </pre>
 
+Unit Tests and Sphinx Docs
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run Unit Tests
+^^^^^^^^^^^^^^
+
+In the tictactoe directory of your checkout, run:
+
+<pre>
+    python manage.py test game
+</pre>
+
+Create Sphinx Docs
+^^^^^^^^^^^^^^^^^^
+
+In the doc directory of Tic-Tac-Toe, run the following:
+
+<pre>
+    make html
+</pre>
+
 
 Known Issues
 """"""""""""
