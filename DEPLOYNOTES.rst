@@ -83,10 +83,8 @@ localsettings.py and enter in the appropriate data for your setup.
 If running it in a development environment, then one will need to do the following
 from the tictactoe directory of your checkout:
 
-<pre>
-    python manage.py syncdb
-    python manage.py runserver
-</pre>
+  $ python manage.py syncdb
+  $ python manage.py runserver
 
 Unit Tests and Sphinx Docs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,18 +94,14 @@ Run Unit Tests
 
 In the tictactoe directory of your checkout, run:
 
-<pre>
-    python manage.py test game
-</pre>
+  $ python manage.py test game
 
 Create Sphinx Docs
 ^^^^^^^^^^^^^^^^^^
 
 In the doc directory of Tic-Tac-Toe, run the following:
 
-<pre>
-    make html
-</pre>
+ $ make html
 
 
 Known Issues
