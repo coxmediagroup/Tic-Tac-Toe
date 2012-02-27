@@ -1,1 +1,1 @@
-.. include:: ../DEPLOYNOTES
+.. include:: ../DEPLOYNOTES.rst

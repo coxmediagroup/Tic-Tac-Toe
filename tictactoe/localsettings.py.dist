@@ -12,9 +12,9 @@ DATABASES = {
 }
 
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
-DEV_ENV = False
+DEBUG = True
+TEMPLATE_DEBUG = True
+DEV_ENV = True
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -60,7 +60,7 @@ LOGGING = {
         'logfile':{
             'level': 'INFO',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': '/var/log/tictactoe.log',
+            'filename': 'tictactoe.log',
             'backupCount': 7,
             'when': 'midnight',
             'formatter': 'simple',

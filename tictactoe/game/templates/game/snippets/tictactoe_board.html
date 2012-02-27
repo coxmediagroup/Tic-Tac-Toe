@@ -1,19 +1,13 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function () {
-
-        //Show the result box if the game is over.
-        {% if gameObj.checkGameOver %}
-            $('#resultBox').show();
-        {% endif %}
-
         $('.tictac_available_space').click(function(event) {
 
             //Prevent another move submission
             $('.tictac_available_space').unbind("click");
 
             //Show that CPU is thinking
-            $('#resultBox').html('CPU is currently thinking! Please wait.')
-            $('#resultBox').show();
+            $('#gameStatusBox').html('CPU is currently thinking! Please wait.')
+            $('#gameStatusBox').show();
 
             //Update their move
             {%  if gameObj.playerCharacter == 'X' %}
@@ -56,9 +50,11 @@
 </table>
 </center>
 
+<div id="gameStatusBox">
+</div>
 
-<div id="resultBox">
-   {% if gameObj.checkGameOver %}
+{% if gameObj.checkGameOver %}
+    <div id="resultBox">
         {% if gameObj.winner == gameObj.playerCharacter %}
             Congratulations! You won as {{ gameObj.playerCharacter }}!
         {% endif %}
@@ -68,6 +64,6 @@
         {% if gameObj.winner == ' ' %}
             It was a draw! Better luck next time.
         {% endif %}
-   {% endif %}
-</div>
+    </div>
+{% endif %}
 

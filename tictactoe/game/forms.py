@@ -11,7 +11,8 @@ class TicTacToeForm(forms.Form):
 
 class BoardSizeForm(forms.Form):
     """
-    Form that controls the size of the game board.
+    Form that controls the size of the game board along with what player
+    the user will be (X or O).
     """
     BOARD_SIZES = (
         (3, '3'),
