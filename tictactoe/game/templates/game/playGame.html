@@ -7,9 +7,12 @@
     {% include 'game/snippets/tictactoe_board.html' %}
     <br /><br /><br />
 
-    <input type="button" class="ticButton" value="Reset" />
-    {% for field in form %}
+    {% for field in gameForm %}
     {{ field }}
     {%  endfor %}
 </form>
+<br />
+    {% with sizeForm as form %}
+        {% include 'game/snippets/board_size.html' %}
+    {% endwith %}
 {% endblock %}
