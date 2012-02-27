@@ -84,6 +84,7 @@ If running it in a development environment, then one will need to do the followi
 from the tictactoe directory of your checkout:
 
   $ python manage.py syncdb
+
   $ python manage.py runserver
 
 Unit Tests and Sphinx Docs
