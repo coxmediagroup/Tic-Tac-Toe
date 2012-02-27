@@ -28,6 +28,9 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = ''
+
 # basic logging configuration for django 1.3 - adjust as needed
 LOGGING = {
     'version': 1,

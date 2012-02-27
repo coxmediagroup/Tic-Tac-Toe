@@ -36,12 +36,11 @@ class TicTacToeModel(models.Model):
 
         #Set the maximum number of expected moves  the system can handle.
         self.current_move_depth = 0
-        print self.getOpenSpacesCount()
         if self.getOpenSpacesCount() < 9:
             self.maximum_move_depth = 7
         elif self.getOpenSpacesCount() < 13:
             self.maximum_move_depth = 5
-        elif self.getOpenSpacesCount() < 24:
+        elif self.getOpenSpacesCount() < 23:
             self.maximum_move_depth = 4
         elif self.getOpenSpacesCount() < 50:
             self.maximum_move_depth = 3
