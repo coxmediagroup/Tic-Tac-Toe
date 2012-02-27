@@ -1,0 +1,9 @@
+#resultBox {
+    margin-top:30px;
+    color:#000000;
+    font-size:20px;
+    border: 5px outset #98bf21;
+    text-align:center;
+    width:100%;
+    display:none;
+}

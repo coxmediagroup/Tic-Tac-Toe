@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from tictactoe.game import forms as gameforms
 from tictactoe.game.models import TicTacToeModel
@@ -54,6 +55,7 @@ def createGame(request):
     # Redirect to the index if something is wrong. TODO: Add a message about this to the template?
     return HttpResponseSeeOtherRedirect(reverse('site-index'))
 
+@csrf_exempt
 def doMove(request):
     '''This is the initial view placeholder for the game itself.
     '''
@@ -61,24 +63,21 @@ def doMove(request):
     if(request.method == 'POST'):
         gameForm = gameforms.TicTacToeForm(request.POST)
         if gameForm.is_valid():
-            print request.POST['tictacBoxSelection']
-            game = TicTacToeModel.objects.get(gameID=request.POST["gameID"], sessionID=request.session.session_key)
-            sizeForm = gameforms.BoardSizeForm(initial={'boardSize': game.boardSize, 'playerCharacter':game.playerCharacter})
 
+            game = TicTacToeModel.objects.get(gameID=request.POST["gameID"], sessionID=request.session.session_key)
             row, sep, col = request.POST['tictacBoxSelection'].partition(',')
             game.putPlayerMove(int(row), int(col))
 
-            if game.checkGameOver():
-                print "it works"
             game.calculateCPUMove()
-
-            print game.gameID
-            print game.gameBoard
-            #TODO: Check that game was loaded.
 
             game.save()
 
-            return render(request, 'game/playGame.html', {'gameObj': game, 'gameForm': gameForm, 'sizeForm': sizeForm})
+            #If AJAX request, return only the part we need to update. Otherwise fallback and update the whole page.
+            if request.is_ajax():
+                return render(request, 'game/snippets/tictactoe_board.html', {'gameObj': game})
+            else:
+                sizeForm = gameforms.BoardSizeForm(initial={'boardSize': game.boardSize, 'playerCharacter':game.playerCharacter})
+                return render(request, 'game/playGame.html', {'gameObj': game, 'gameForm': gameForm, 'sizeForm': sizeForm})
 
 
     # Redirect to the index if something is wrong. TODO: Add a message about this to the template?

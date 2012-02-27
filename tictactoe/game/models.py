@@ -25,8 +25,9 @@ class TicTacToeModel(models.Model):
 
     def calculateCPUMove(self):
         '''Calculate and do the CPU Move'''
-        move_position, score = self.getMaximizedMove()
-        self.putCPUMove(move_position[0], move_position[1])
+        if not self.checkGameOver():
+            move_position, score = self.getMaximizedMove()
+            self.putCPUMove(move_position[0], move_position[1])
 
     def getMaximizedMove(self):
         ''' Find maximized move'''
