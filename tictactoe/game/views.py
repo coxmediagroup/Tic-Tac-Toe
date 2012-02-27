@@ -41,6 +41,10 @@ def createGame(request):
                 cpuCharacter = cpuCharacter,
                 sessionID = request.session.session_key
             )
+
+            if cpuCharacter == 'X':
+                game.calculateCPUMove();
+
             game.save()
 
             gameForm = gameforms.TicTacToeForm(initial={'gameID': game.gameID})
@@ -64,6 +68,8 @@ def doMove(request):
             row, sep, col = request.POST['tictacBoxSelection'].partition(',')
             game.putPlayerMove(int(row), int(col))
 
+            if game.checkGameOver():
+                print "it works"
             game.calculateCPUMove()
 
             print game.gameID

@@ -80,14 +80,59 @@ class TicTacToeModel(models.Model):
 
     def checkGameOver(self):
         '''Check to see if we have a winner'''
-        for row_index, row_value in enumerate(self.gameBoard):
 
-            #Check for a horizontal winner
-            if row_value.count(' ') == 0:
-                self.winner = row_value[0]
+        #Check for a horizontal winner
+        for row_values in self.gameBoard:
+            if row_values.count(self.playerCharacter) == self.boardSize or row_values.count(self.cpuCharacter) == self.boardSize:
+                self.winner = row_values[0]
                 return True
 
-            #Other win conditions later
+        #Check for a verticle winner
+        for column_values in zip(*self.gameBoard):
+            #FIXME: Transposing a character onto a blank space leaves the extra space in the list which makes this slightly uglier.
+            if (column_values.count(self.playerCharacter) + column_values.count(' '+self.playerCharacter)) == self.boardSize or (column_values.count(self.cpuCharacter) + column_values.count(' '+self.cpuCharacter)) == self.boardSize:
+                self.winner = column_values[0]
+                return True
+
+        #Check for a diagonal winner - top left to bottom right
+        winner_found = True
+        column_index = 0
+        starting_character_val = self.gameBoard[0][column_index]
+        for row_values in self.gameBoard:
+            if row_values[column_index] == ' ' or starting_character_val != row_values[column_index]:
+                winner_found = False
+                break
+            column_index+=1
+
+        if(winner_found):
+            self.winner = starting_character_val
+            return True
+
+        #Check for a diagonal winner - top right to bottom left
+        winner_found = True
+        column_index = self.boardSize-1
+        starting_character_val = self.gameBoard[0][column_index]
+        for row_values in self.gameBoard:
+            if row_values[column_index] == ' ' or starting_character_val != row_values[column_index]:
+                winner_found = False
+                break
+            column_index-=1
+
+        if(winner_found):
+            self.winner = starting_character_val
+            return True
+
+        #Finally, check for a draw game with no moves
+        space_found = False
+        for row_values in self.gameBoard:
+            if row_values.count(' ') != 0:
+                space_found = True
+                break
+
+        if(not space_found):
+            self.winner = ' '
+            return True
+
         return False
 
     def calculateScore(self):
