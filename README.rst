@@ -30,5 +30,5 @@ There are no network dependencies at this time.
 -----
 
 For more detailed information, including installation instructions and upgrade
-notes, see :ref:`DEPLOYNOTES`.  For details about the features included in each release,
-see :ref:`CHANGELOG`.
+notes, see :ref:`DEPLOYNOTES.rst`.  For details about the features included in each release,
+see :ref:`CHANGELOG.rst`.
