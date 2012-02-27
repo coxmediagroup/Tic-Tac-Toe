@@ -1,9 +1,7 @@
-import logging
-import os
 from django.shortcuts import render
 from tictactoe.game import forms as gameforms
 from tictactoe.game.models import TicTacToeModel
-from tictactoe.game.responses import HttpResponseSeeOtherRedirect
+from tictactoe.responses import HttpResponseSeeOtherRedirect
 
 from django.core.urlresolvers import reverse
 
