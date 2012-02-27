@@ -3,7 +3,7 @@
     <tr>
         {% for column in row %}
             {% if column == ' ' %}
-                <td width="82"><input type="image" src="{{ STATIC_URL }}images/tic_blank.png" /></td>
+                <td width="82"><input name="tictacBoxSelection" type="image" src="{{ STATIC_URL }}images/tic_blank.png" value={{ forloop.parentloop.counter0 }},{{ forloop.counter0 }} /></td>
             {% endif %}
             {% if column == 'X' %}
                 <td width="82"><img src="{{ STATIC_URL }}images/tic_X.png" /></td>
