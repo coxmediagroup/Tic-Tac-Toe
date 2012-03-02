@@ -38,8 +38,8 @@ module TicTacToe
 
       puts board.pretty
 
-      puts "--- We'll interpret your input as the column and row you wish to mark."
-      puts "    (So, to mark the second column and third row, you'd enter '23'.)"
+      puts "--- We'll interpret your input as the row and column you wish to mark."
+      puts "    (So, to mark the second row and third row, you'd enter '23'.)"
 
       # read from the console, validating the structure and content of the input
       valid_move_entered = false
@@ -49,14 +49,14 @@ module TicTacToe
         next_play = gets
 
         # ensure it's the right length and only numbers
-        if next_play.match(/[0-9][0-9]/)
+        if next_play.match(/[1-3][1-3]/)
           
           # validate the row and column are unmarked and within the board
           row, column = next_play[0].chr.to_i - 1, next_play[1].chr.to_i - 1
           # puts "--- Checking row #{row} and column #{column} for validity and presence of existing marks..."
-          if board.at(row,column) == 0 and
+          if board.get(row,column) == 0 and
              row >= 0 and column >= 0 and
-             row <= board.size[0]-1 and column <= board.size[1]-1
+             row <= 3 and column <= 3
 
              # alright! we should have a good position
              valid_move_entered = true

@@ -22,8 +22,6 @@ module TicTacToe
 
     attr_accessor :board, :players
     
-    DEFAULT_SIZE = [2,2]
-
     #
     #   Game.new takes an options hash with the following possible parameters:
     #
@@ -33,7 +31,6 @@ module TicTacToe
     def initialize(opts={})
 
       puts "=== Performing setup..."
-      @size    = opts[:size] || DEFAULT_SIZE
       @players = []
 
       player_count = opts[:player_count] || 2
@@ -44,7 +41,7 @@ module TicTacToe
       human_count.times { |n| @players << HumanPlayer.new(n+1)                } if human_count > 0
 
       puts "--- Creating #{cpu_count} AI players."
-      cpu_count.times   { |m| @players << ComputerPlayer.new(m+human_count+1) } if cpu_count   > 0
+      cpu_count.times   { |m| @players << MaximizingPlayer.new(m+human_count+1) } if cpu_count   > 0
 
       puts "--- Setup complete."
     end
@@ -57,6 +54,7 @@ module TicTacToe
 
       until @board.done?
         @players.each do |player|
+          puts board.pretty
           player.move(@board)
           break if @board.done?
         end

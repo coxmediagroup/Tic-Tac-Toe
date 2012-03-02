@@ -9,11 +9,7 @@ module TicTacToe
 
     attr_accessor :number
 
-    #
-    #
-    #
     def initialize(player_number)
-      puts "--- creating new player with number #{player_number}"
       @number = player_number
     end
 
@@ -25,7 +21,12 @@ module TicTacToe
       puts "=== It is player #@number's move."
       play = next_move(board)
       puts "--- Player has decided to move at #{play[0]}, #{play[1]}."
-      board.inscribe! @number, play
+      board.inscribe! play, @number
+      puts "--- State of board: "
+      puts
+      puts board.pretty
+      puts
+      play
     end
 
     # abstract def next_move; ...; return [x,y]; end

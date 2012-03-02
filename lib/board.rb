@@ -14,9 +14,7 @@
 module TicTacToe
   class Board
 
-    attr_accessor :size, :matrix
-    
-    DEFAULT_SIZE = [3,3]
+    attr_accessor :field, :turn
 
     #
     #  Board.new takes an optional :size parameter which indicates the size of the
@@ -30,16 +28,22 @@ module TicTacToe
     #  taken to be the player to go first, 2 the second.
     #
     def initialize(opts={})
-      @size    = opts[:size]   || DEFAULT_SIZE
-      @matrix  = filled_matrix(0,size)
+      @field   = opts[:field]  || Array.new(9) { 0 }
+      @turn    = opts[:turn]   || 1
+    end
 
-      if opts[:matrix]
-        matrix = opts[:matrix]
-        matrix.each_with_index do |row, x|
-          row.each_with_index do |value, y|
-            inscribe!(value, [x,y])
-          end
-        end
+    #  Helper to determine whether it is the provided player's turn
+    def player_moves_next?(n); @turn==n; end
+
+    # increment turn
+    def next_turn!
+      #@turn += 1
+      #@turn %= 3
+
+      if player_moves_next?(2)
+        @turn = 1  
+      else
+        @turn = 2
       end
     end
 
@@ -51,11 +55,15 @@ module TicTacToe
     def pretty(value_map=[' ','X','O'])
       txt = StringIO.new
 
-      @matrix.each_with_index do |row, n|
-        txt << row.map { |value| " #{value_map[value]} " }.join('|') << "\n"
+      matrix.each_with_index do |row, n|
+        txt << row.map do |value|
+          mark = value_map[value]
+          line = " #{mark} "
+          line
+        end.join('|') << "\n"
 
         # draw a line between each row
-        txt << "-"*((3*@size[0])+(@size[0]-1)) << "\n" unless n == @matrix.length-1
+        txt << "-"*((3*3)+(2)) << "\n" unless n == matrix.length-1
       end
 
       txt.rewind
@@ -63,6 +71,23 @@ module TicTacToe
     end
 
 
+    #
+    #  Dimension-indirection helper to provide direct access to values in
+    #  the underlying board matrix.
+    #
+    def get(x,y)
+      # p @matrix
+      # puts "--- attempting to find value at row #{x}, column #{y}"
+      value = matrix[x][y]
+      # puts "--- returning #{value}"
+      value
+    end
+
+
+    def set(x,y,value)
+      i = x*3 + y
+      @field[i] =  value
+    end
 
     #
     #
@@ -70,48 +95,46 @@ module TicTacToe
     #  marking the same cell twice.
     #
     #
-    def inscribe!(mark, position)
-      
-      raise ArgumentError.new("second argument must be an array-valued position") if not position.is_a? Array
-
-      x, y = position[0], position[1]
-
-      # puts "--- attempting to inscribe board at row #{x}, column #{y} with mark '#{mark}'"
-      if at(x,y) != 0
-        raise ArgumentError.new("may not mark a board position ([#{x},#{y}]) already marked (as #{at(x,y)})")
+    def inscribe!(position, mark=@turn)
+      x,y = position[0], position[1]
+      if get(x,y) != 0
+        raise ArgumentError.new("may not mark a board position ([#{x},#{y}]) already marked (as #{get(x,y)})")
       end
-
-      @matrix[x][y] = mark
-      
-      nil      
+      set x, y, mark
     end
 
 
-
-    #
-    #  Dimension-indirection helper to provide direct access to values in
-    #  the underlying board matrix.
-    #
-    def at(x,y)
-      # p @matrix
-      # puts "--- attempting to find value at row #{x}, column #{y}"
-      value = @matrix[x][y]
-      # puts "--- returning #{value}"
-      value
+    def erase!(p)
+      raise ArgumentError.new("erasing an empty position") if get(p[0],p[1]) == 0
+      set(p[0],p[1],0)
     end
 
 
 
 
     #
-    #  Iterator yielding the elements of the board matrix in order
-    #  also yielding the position (as the first and second elements of an
-    #  array.)
+    #  Iterator yielding the elements of the board.
+    #
+    #def each
+    #  @field.each
+#      matrix.each_with_index do |row|
+#        row.each_with_index do |value|
+#          yield value
+#        end
+#      end
+    #end
+
+
+
+    #
+    #  Iterator yielding the elements of the board matrix in order, and
+    #  also yielding the position as the first and second elements of an
+    #  array respectively.
     #
     def each_with_position
-      @matrix.each_with_index do |row, x|
-        row.each_with_index do |cell, y|
-          yield [cell, [x,y]]
+      matrix.each_with_index do |row, x|
+        row.each_with_index do |value, y|
+          yield [value, [x,y]]
         end
       end
     end
@@ -140,8 +163,8 @@ module TicTacToe
       return true if board_filled
 
       # there's a win if every element in the line are the same (and not empty)
-      each_row_column_and_diagonal do |line| 
-        return true if line.uniq.size == 1 and not line.uniq == [0]
+      rows_columns_and_diagonals.each do |line|
+        return true if line.uniq.length == 1 and line.uniq != [0]
       end
 
       false
@@ -161,61 +184,73 @@ module TicTacToe
       
       raise StandardError.new("winner cannot be determined at this stage in the game") if not done?
 
-      each_row_column_and_diagonal do |line|
-        return line.first if line.uniq.size == 1 and line.uniq != [0]
-      end
-
-      # since we complained if we've been invoked when the game couldn't be called yet,
-      # the game appears to be a draw
-      nil
-    end
-    
-
-
-    private
-
-    #
-    #  Internal helper utility for assembling a mxn Array with a particular value.
-    #
-    def filled_matrix(mark, size=DEFAULT_SIZE)
-      Array.new(size[0]) { Array.new(size[1]) { mark }}
-    end
-
-    #
-    #  Internal helper to determine whether there are any empty spaces on the board
-    #
-    def board_filled
-      @matrix.each do |row|
-        row.each do |cell|
-          return false if cell == 0
+      rows_columns_and_diagonals.each do |line|
+        if line.first != 0
+          return line.first if line.uniq.size == 1
         end
       end
-      true
-    end # end private board_filled
+
+      # since we would have complained if we've been invoked when the game couldn't be called yet
+      # the game appears to be a draw
+      0
+    end
+
+
 
     #
-    #  Internal helper for gathering the diagonal elements. Assumes a square board.
+    #  Provide collection of legal 'next' board states
+    #
+    # TODO optimize; first thought (to make this an iterator) is on the money
+    #      we can just use THIS board, and inscribe/erase as necessary
+    # =>   this is crazy expensive memory-wise, accordingly.
+    # =>   probably won't help the speed much at all, think we'll need some a/b for that.
+    def legal_next_states #(player)
+      raise StandardError.new("cannot predict legal next game board configurations once game is over") if done?
+      unmarked_positions.collect do |position|
+        board = Board.new :field => @field.clone, :turn => @turn
+        board.inscribe! position #, @turn #player
+        board.next_turn!
+        board
+      end
+    end
+
+
+    def matrix
+      f = @field
+      [[f[0],f[1],f[2]],
+       [f[3],f[4],f[5]],
+       [f[6],f[7],f[8]]]
+    end
+
+    #
+    #  Internal helper to determine whether there are any empty
+    #  spaces still left on the board.
+    #
+    def board_filled
+      @field.each { |v| return false if v == 0 }
+      true
+    end 
+
+    #
+    #  Internal helper for gathering the diagonal elements.
     #
     def diagonals
-      [ (0...@size[0]).collect { |i| @matrix[i][i]    },
-        (0...@size[0]).collect { |i| @matrix[i][@size[0]-1-i] } ]
+      [ (0..2).collect { |i| matrix[i][i]    },
+        (0..2).collect { |i| matrix[i][2-i] } ]
     end
 
     #
     #  Internal helper for iterating over both rows and columns.
     #  We can get these fairly directly by enumerating the board
     #  and its transposition.
+    #  
+    #  The diagonals are a bit trickier; I think it's probably
+    #  just to do it in the pseudo-general way above.
     #
-    def each_row_and_column
-      (@matrix + @matrix.transpose).each { |line| yield line }
+    def rows_columns_and_diagonals
+      matrix + matrix.transpose + diagonals #.collect
     end
 
-    #
-    #   Identical to each_row_and_column, but grabbing the diagonals as well.
-    #
-    def each_row_column_and_diagonal
-      (@matrix + @matrix.transpose + diagonals).each { |line| yield line }
-    end
 
   end # end Board
 end # end TicTacToe
