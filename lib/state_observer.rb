@@ -1,3 +1,6 @@
+#
+#   Specifications for the StateObserver class.
+#
 module TicTacToe
   class StateObserver
 

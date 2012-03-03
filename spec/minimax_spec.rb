@@ -1,3 +1,8 @@
+#
+#   Specifications for the Minimax class.
+#
+
+
 require 'minimax'
 require 'state_observer'
 require 'state'
@@ -87,22 +92,52 @@ module TicTacToe
         1,0,0,
         0,0,2
       ]
-
       Minimax.best_move(@state, player, @observes).should == 4
 
     end
 
     describe Minimax, "provides optimal play" do
-
-      before(:each) do
+      it "should win/draw if it gets to start" do
         @observe = StateObserver.new
-        @tree = Tree.new
-      end
-
-      it "should win if it gets to start" do
-
-        # @tree = Tree.new(@state, @observe)
         @state = State.new
+        @tree = Tree.new(@state)
+
+        puts '--- generating subtrees'
+        @tree.generate_successors
+
+        until @observe.terminal? @state
+
+          puts "==== player 1 considering board state"
+          @observe.pretty_print @state
+
+          player_one_move = Minimax.best_move(@state, 1, @observe)
+          puts "--- player 1 has selected to move at #{player_one_move}"
+          @state = @state.successors[player_one_move]
+          puts "--- state after player 1's move"
+          @observe.pretty_print(@state)
+
+          unless @observe.terminal? @state
+            puts "==== player 2"
+            player_two_move = Minimax.best_move(@state, 2, @observe)
+            @state = @state.successors[player_two_move]
+            @observe.pretty_print @state
+          end
+          
+        end
+
+        @observe.winner(@state).should be 0 or 1
+
+      end
+    end
+
+    it "should play every legal board position (until turn 6) to a win or draw" do
+      @observe = StateObserver.new
+      @tree = Tree.new
+      puts "--- about to generate successors"
+      @tree.generate_successors
+      puts "--- done!"
+      @tree.collect_successors do |state|
+        puts "-----------------"
         until @observe.terminal? state
           puts "==== player 1"
           player_one_move = Minimax.best_move(state, 1, @observe)
@@ -117,40 +152,9 @@ module TicTacToe
             @observe.pretty_print state
           end
         end
+
+        @observe.winner(state).should be 0 or 1
       end
- =begin
-      it "should draw if it goes second" do
-
-      end
-
-      it "wins or draws every legal board position" do
-        @observe = StateObserver.new
-        @tree = Tree.new
-        puts "--- about to generate successors"
-        @tree.generate_successors
-        puts "--- done!"
-        @tree.collect_successors do |state|
-          puts "-----------------"
-          until @observe.terminal? state
-            puts "==== player 1"
-            player_one_move = Minimax.best_move(state, 1, @observe)
-            state = state.successors[player_one_move]
-
-            @observe.pretty_print state
-
-            unless @observe.terminal? state
-              puts "==== player 2"
-              player_two_move = Minimax.best_move(state, 2, @observe)
-              state = state.successors[player_two_move]
-              @observe.pretty_print state
-            end
-          end
-
-          @observe.winner(state).should be 1
-        end
-      end
-    end
-=end
-
     end
   end
+end

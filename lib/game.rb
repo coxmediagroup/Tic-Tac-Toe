@@ -18,6 +18,8 @@
 #
 #
 module TicTacToe
+=begin
+TODO refactor to handle new class organization
   class Game
 
     attr_accessor :state, :players, :observer
@@ -40,10 +42,10 @@ module TicTacToe
       cpu_count    = player_count - human_count
 
       puts "--- Creating #{human_count} human players."
-      human_count.times { |n| @players << HumanPlayer.new(n+1)                } if human_count > 0
+      human_count.times { |n| @players << :human } if human_count > 0
 
       puts "--- Creating #{cpu_count} AI players."
-      cpu_count.times   { |m| @players << MaximizingPlayer.new(m+human_count+1) } if cpu_count   > 0
+      cpu_count.times   { |m| @players << :minimax_ai } if cpu_count   > 0
 
       puts "--- Setup complete."
     end
@@ -79,4 +81,5 @@ module TicTacToe
     end
 
   end
+=end
 end

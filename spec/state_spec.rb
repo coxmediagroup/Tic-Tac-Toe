@@ -1,3 +1,7 @@
+#
+#   Specifications for the State class.
+#
+
 require 'state'
 
 module TicTacToe

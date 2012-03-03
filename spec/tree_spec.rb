@@ -1,3 +1,7 @@
+#
+#   Specifications for the Tree class.
+#
+
 require 'tree'
 require 'state'
 require 'state_observer'

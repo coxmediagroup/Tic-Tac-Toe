@@ -1,32 +1,20 @@
-
-class Array
-  def uniq_by(&blk)
-    transforms = []
-    self.select do |el|
-      should_keep = !transforms.include?(t=blk[el])
-      transforms << t
-      should_keep
-    end
-  end
-end
-
+#
+#   Implementation of the Tree class.
+#
+#   Responsible for generating and assembling lists of valid successor states.
+#
 module TicTacToe
   class Tree
     
     def initialize(state=State.new, observe=StateObserver.new)
       @state = @root = state
       @observe = observe
-
-      # puts "=== New tree created, with root"
-      # pretty_print @root
     end
 
     def current_state;    @state;   end
     def current_observer; @observe; end
 
-    def generate_successors(state=current_state, observe=current_observer,depth=0)
-      puts "--- generate successors [depth=#{depth}]"
-      observe.pretty_print state
+    def generate_successors(state=current_state, observe=current_observer, depth=0)
       return if observe.terminal? state # r depth < MAX_DEPTH
       observe.open_positions(state).each do |position|
         successor = State.new(state.board.dup)
@@ -38,12 +26,12 @@ module TicTacToe
     end
 
 
-    MAX_DEPTH = -3
+    MAX_DEPTH = -6
     #
     #
     #
-    def collect_successors(state=current_state,observe=current_observer,depth=0)
-      puts "--- collect successors [depth=#{depth}, terminal=#{observe.terminal? state}]"
+    def collect_successors(state=current_state, observe=current_observer, depth=0)
+      # puts "--- collect successors [depth=#{depth}, terminal=#{observe.terminal? state}]"
       successors = [state]
       return successors if observe.terminal? state or depth < MAX_DEPTH
       for successor in state.successors.values
@@ -51,7 +39,7 @@ module TicTacToe
           successors << n
         end
       end
-      successors.uniq_by { |s| s.board }
+      successors.uniq # _by { |s| s.board }
     end
 
     #

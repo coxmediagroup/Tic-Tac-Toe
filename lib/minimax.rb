@@ -14,27 +14,23 @@ module TicTacToe
       if observe.terminal?(state)
         score = observe.evaluate(state, player)
         score *= INFINITY if depth == 0
-        # puts "=== minimax [depth=#{depth}, score=#{score}]"
         return score
       end
 
       Tree.new(state).generate_successors if state.successors.empty?
 
-      successors_values = state.successors.map do |m, succ|
+      # sum the minimax trees of successor states
+      successors_values = state.successors.values.map do |succ|
         Minimax.value(succ, player, depth-1, observe)
       end
 
-      # minimax
+      # min/max!
       score = 0
-      # puts "current player: #{state.current_player} (#{player})"
       if state.current_player == player
         score = successors_values.max
-        # puts "max #{score}"
       else
         score = successors_values.min
-        # puts "min #{score}"
       end
-      # puts "--- minimax [depth=#{depth}, score=#{score}]"
       score
 
     end

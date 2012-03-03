@@ -1,3 +1,7 @@
+#
+#   Specs for the StateObserver class.
+#
+
 require 'state_observer'
 require 'state'
 
