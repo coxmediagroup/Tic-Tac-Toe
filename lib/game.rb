@@ -20,8 +20,8 @@
 module TicTacToe
   class Game
 
-    attr_accessor :board, :players
-    
+    attr_accessor :state, :players, :observer
+
     #
     #   Game.new takes an options hash with the following possible parameters:
     #
@@ -31,7 +31,9 @@ module TicTacToe
     def initialize(opts={})
 
       puts "=== Performing setup..."
-      @players = []
+      @state    = State.new
+      @observer = StateObserver.new
+      @players  = []
 
       player_count = opts[:player_count] || 2
       human_count  = opts[:humans]       || 1
