@@ -1,7 +1,16 @@
 #
-#   Specifications for the State class.
+#  class:         StateSpec
+#  extends:       --
+#  module:        TicTacToe
 #
-
+#   description:
+#
+#   Provides a specification for the State class encapsulating a
+#   particular board configuration.
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
+#
 require 'state'
 
 module TicTacToe

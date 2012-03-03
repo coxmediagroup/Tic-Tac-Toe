@@ -1,3 +1,57 @@
+=== Challenge
+
+"Create a program that can interactively play the game of Tic-Tac-Toe
+against a human player and can never lose."
+
+
+--- About this project
+
+This project implements a simple Tic-Tac-Toe game. Currently it's pretty
+slow, though I'm hoping to improve that.
+
+--- Instructions
+
+To run the Ruby application, assuming you have Ruby installed, just say from
+the root of the project directory clone:
+
+'ruby lib/game.rb'
+
+The game should be fairly self-explanatory in terms of the input, but you
+use 1-9 in 'inverted phone' style to play against the CPU. (Note: at this
+state there is no iterative deepening/difficulty levels or anything --
+so if the implementation is correct, you shouldn't be able to beat the computer.
+At best you should be able to play the CPU to a draw.)
+
+Now, to run the specifications, you'll need the RSpec gem, but once this is done you
+should be able to run
+
+'spec'
+
+from the command line to issue instructions to run the specifications. There
+are 11 tests that should run and pass quickly, and a longer test that attempts
+to validate the implementation.
+
+
+=== Status
+
+In-progress. Algorithm appears to be playing optimally and can play itself
+to a win or draw for all the legal board positions up to two moves in; the
+problem is that this takes nearly 12m to run on my machine. I'm trying to
+investigate ways to improve this, including negamax, a/b pruning and
+transposition tables.
+
+
+
+=== Wishlist
+
+* Minimax (implemented, needs more exhaustive validation)
+* Negamax/Pruning/Transposition Tables (in progress)
+* Iterative deepening. (--)
+* GUI and/or Web Interface (--)
+
+
+=== Original Instructions
+
 Intructions:
 1. Fork this repo on GitHub
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.

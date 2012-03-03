@@ -1,5 +1,16 @@
 #
-#   Specifications for the Tree class.
+#  specified class:         Tree
+#  extends:                 --
+#  module:                  TicTacToe
+#
+#   description:
+#
+#   Provides a specification for the Tree class responsible for
+#   recursively constructing future game states; setting up iterators to
+#   enumerate them.
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
 #
 
 require 'tree'
@@ -13,6 +24,9 @@ module TicTacToe
       @observe = StateObserver.new
     end
 
+    #
+    #   assert that the tree assembles successors one state 'in advance'
+    #
     it "should assemble a tree of successors for a single depth of a given state" do
 
       @state = State.new [
@@ -74,7 +88,8 @@ module TicTacToe
 
 
     #
-    #   work through a slightly more complex one to assert player alternation is functioning properly
+    #   work through a slightly more complex one ("three in advance") to assert
+    #   player alternation is functioning properly
     #
     it "should assemble a tree of successors of a given state for a depth of three" do
       @state = State.new [
@@ -99,6 +114,9 @@ module TicTacToe
 
 
 
+    #
+    #  assert we can iterate over the states in advance of this one
+    #
     it "should iterate over successors for a given state" do
       @state = State.new [
         1,0,2,

@@ -1,5 +1,16 @@
 #
-#   Specs for the StateObserver class.
+#  specified class:         StateObserver
+#  extends:                 --
+#  module:                  TicTacToe
+#
+#   description:
+#
+#   Provides a specification for the game state observer class in charge
+#   of most of the business logic around inspection and analysis of
+#   static board configuration.
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
 #
 
 require 'state_observer'

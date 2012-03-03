@@ -1,7 +1,23 @@
 #
-#   Implementation of the Tree class.
+#  class:                   Tree
+#  extends:                 --
+#  module:                  TicTacToe
 #
-#   Responsible for assembling trees of valid successor states.
+#   description:
+#
+#   Constructs the game state tree and can assemble an iterator for the
+#   full set of possible legal future states from a given board configuration.
+#
+#   In passing I want to note that, looking forward, constructing
+#   the full tree in advance is technically unnecessary, and we may want to
+#   de-factor this back out (once transpositions and a/b are working).
+#   On the other hand, hashes could speed this construction up significantly;
+#   transposition tables as well, etc.
+#
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
+#
 #
 module TicTacToe
 
@@ -16,7 +32,7 @@ module TicTacToe
     def current_observer; @observe; end
 
     def generate_successors(state=current_state, observe=current_observer, depth=0)
-      return if observe.terminal? state # r depth < MAX_DEPTH
+      return if observe.terminal? state
       observe.open_positions(state).each do |position|
         successor = State.new(state.board.dup)
         successor.board[position] = state.current_player
@@ -27,12 +43,12 @@ module TicTacToe
     end
 
 
-    MAX_DEPTH = -1
+    MAX_DEPTH = -2
     #
     #   iterate over future legal states
     #
     def each_successor(state=current_state, observe=current_observer, depth=0)      
-      if observe.terminal? state or depth < MAX_DEPTH
+      if observe.terminal? state or depth <= MAX_DEPTH
         yield state
         return
       end
@@ -42,21 +58,5 @@ module TicTacToe
         each_successor(successor,observe,depth-1) { |s| yield s }
       end
     end
-
-    #
-    # recursive helper to visually debug the state of the tree (will build the tree from the given state if need be)
-    #
-#    def pretty_print(state=@state, observe=@observe,depth=0)
-#      puts
-#      puts "----------- state at depth #{depth} --------------"
-#      puts
-#      puts
-#      observe.pretty_print(state)
-#      generate_successors(state) if state.successors.empty? and not observe.terminal? state
-#      depth = depth - 1
-#      for successor in state.successors.values
-#        pretty_print(successor,observe,depth)
-#      end
-#    end
   end
 end

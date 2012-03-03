@@ -1,5 +1,18 @@
 #
-#   Specifications for the StateObserver class.
+#  specified class:         StateObserver
+#  extends:                 --
+#  module:                  TicTacToe
+#
+#   description:
+#
+#   Observes the current state of the game and provides some rendering and endgame
+#   detection facilities; in charge of most of the logic around inspection and analysis of
+#   board configuration.
+#
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
+#
 #
 module TicTacToe
   class StateObserver
