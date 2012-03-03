@@ -1,9 +1,8 @@
+#
+#     The State class encapsulates a potential game state.
+#
+#
 module TicTacToe
-
-  #
-  #
-  #  technically this could be done as 8 bits, i.e., a single byte!
-  #
   class State
     
     attr_accessor :board, :current_player, :successors

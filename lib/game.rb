@@ -17,69 +17,87 @@
 #  author: Joseph Weissman, <jweissman1986@gmail.com>
 #
 #
+require 'stringio'
+
+
+require 'state'
+require 'tree'
+require 'state_observer'
+require 'minimax'
+
 module TicTacToe
-=begin
-TODO refactor to handle new class organization
   class Game
+    attr_accessor :tree, :state, :observer
 
-    attr_accessor :state, :players, :observer
-
-    #
-    #   Game.new takes an options hash with the following possible parameters:
-    #
-    #     :size       size of the board in question
-    #     :humans     number of human players (mutually exclusive with :players)
-    #
     def initialize(opts={})
+      @state = @root = State.new
+      @observe = StateObserver.new # (@state)
 
-      puts "=== Performing setup..."
-      @state    = State.new
-      @observer = StateObserver.new
-      @players  = []
+      @tree = Tree.new(@state)
 
-      player_count = opts[:player_count] || 2
-      human_count  = opts[:humans]       || 1
-      cpu_count    = player_count - human_count
-
-      puts "--- Creating #{human_count} human players."
-      human_count.times { |n| @players << :human } if human_count > 0
-
-      puts "--- Creating #{cpu_count} AI players."
-      cpu_count.times   { |m| @players << :minimax_ai } if cpu_count   > 0
-
-      puts "--- Setup complete."
     end
 
+    def about
+      zero_to_eight = Array.new(9) { |i| i }
+      one_to_nine = Array.new(9) { |i| i+1 }
+      about_state = State.new(zero_to_eight)
 
-    def play!
-      puts "--- Let's go!"
+      puts '='*80
+      puts
+      puts "Tic Tac Toe".center(80)
+      puts
+      puts '='*80
 
-      @board   = Board.new :size => @size
+      10.times { puts }
 
-      until @board.done?
-        @players.each do |player|
-          puts board.pretty
-          player.move(@board)
-          break if @board.done?
+      puts "--- Welcome! You'll enter your moves as follows: "
+      puts
+      @observe.pretty_print(about_state, one_to_nine.map(&:to_s))
+      puts
+      puts "--- So, you'll just enter 1 for the top-left column, 2 for top-center; 9 for the bottom right, etc."
+      
+      5.times { puts }
+
+    end
+
+    def play(first_time=true)
+      about
+
+      puts
+      puts "=== Performing setup. (Please wait, this may take a minute or two.)"
+      @state = @root
+      @tree.generate_successors if first_time
+      puts "--- Ok, great. Thanks for waiting. Let's play!"
+
+      @observe.pretty_print @state
+      
+      raise StandardError("state was unexpectedly nil?!") if @state.nil?
+      until @observe.terminal? @state
+
+        puts "=== computer player considering move, please wait..."
+        # puts "--- options: "
+        # p @state.successors.keys
+
+        cpu_move = Minimax.best_move(@state, 1, @observe)
+
+        @state = @state.successors[cpu_move]
+        puts "--- cpu inscribes #{cpu_move}"
+        @observe.pretty_print @state
+
+        # move human
+        unless @observe.terminal? @state
+          puts "--- your move? "
+          human_move = ''
+          human_move = gets.chomp until human_move.match(/^[1-9]$/)
+          @state = @state.successors[human_move.to_i-1]
         end
       end
 
-      puts "--- Game complete!"
-      puts
-      puts @board.pretty
-      puts
-      puts
-
-      if @board.winner == nil
-        puts "--- The game was a draw."
-      else
-        puts "--- Player #{@board.winner} is victorious."
-      end
-
-      puts "--- Would you like to begin another game?"
-      play! if gets.chomp.downcase.slice(0).chr == 'y'
+      puts "=== player #{@observe.winner(state)} is victorious."
+      puts "play again? "
+      play(false) if gets.chomp.downcase.slice(0).chr == 'y'
     end
-
   end
-=end
 end
+
+TicTacToe::Game.new.play if __FILE__ == $0

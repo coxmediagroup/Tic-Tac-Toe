@@ -74,7 +74,7 @@ module TicTacToe
 
 
     #
-    #   work through a slightly more complex one to assert alternation is functioning properly
+    #   work through a slightly more complex one to assert player alternation is functioning properly
     #
     it "should assemble a tree of successors of a given state for a depth of three" do
       @state = State.new [
@@ -99,7 +99,7 @@ module TicTacToe
 
 
 
-    it "should collect all successors for a given state" do
+    it "should iterate over successors for a given state" do
       @state = State.new [
         1,0,2,
         2,1,1,
@@ -109,9 +109,11 @@ module TicTacToe
       tree = Tree.new(@state)
       tree.generate_successors
 
-      successors = tree.collect_successors
-      # p successors
-      successors.should have(5).items #(state, observe, depth)
+      successors = []
+      tree.each_successor do |successor|
+        successors << successor
+      end
+      successors.should have(4).items
 
       @state = State.new [
         1,0,2,
@@ -120,9 +122,12 @@ module TicTacToe
       ]
       tree = Tree.new(@state)
       tree.generate_successors
+      successors = []
+      tree.each_successor do |successor|
+        successors << successor
+      end
 
-      successors = tree.collect_successors
-      successors.should have(11).items
+      successors.should have(8).items
     end
 
   end

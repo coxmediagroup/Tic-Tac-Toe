@@ -1,9 +1,10 @@
 #
 #   Implementation of the Tree class.
 #
-#   Responsible for generating and assembling lists of valid successor states.
+#   Responsible for assembling trees of valid successor states.
 #
 module TicTacToe
+
   class Tree
     
     def initialize(state=State.new, observe=StateObserver.new)
@@ -26,20 +27,20 @@ module TicTacToe
     end
 
 
-    MAX_DEPTH = -6
+    MAX_DEPTH = -1
     #
+    #   iterate over future legal states
     #
-    #
-    def collect_successors(state=current_state, observe=current_observer, depth=0)
-      # puts "--- collect successors [depth=#{depth}, terminal=#{observe.terminal? state}]"
-      successors = [state]
-      return successors if observe.terminal? state or depth < MAX_DEPTH
-      for successor in state.successors.values
-        collect_successors(successor,observe,depth-1).each do |n|
-          successors << n
-        end
+    def each_successor(state=current_state, observe=current_observer, depth=0)      
+      if observe.terminal? state or depth < MAX_DEPTH
+        yield state
+        return
       end
-      successors.uniq # _by { |s| s.board }
+
+      state.successors.values.each do |successor|
+        yield successor if depth == 0
+        each_successor(successor,observe,depth-1) { |s| yield s }
+      end
     end
 
     #

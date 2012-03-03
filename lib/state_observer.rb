@@ -63,14 +63,22 @@ module TicTacToe
       txt.read
     end
 
-    private
-
     def matrix(state)
       f = state.board
       [[f[0], f[1], f[2]],
        [f[3], f[4], f[5]],
        [f[6], f[7], f[8]]]
     end
+
+
+    def transpose(state);       matrix(state).transpose; end
+    def flip_vertical(state);   matrix(state).reverse; end
+    def rotate(state);          matrix(state).reverse.transpose; end # transpose(flip_vertical(matrix(state))); end
+    def rotate_ccw(state);      matrix(state).transpose.reverse; end
+    def flip_horizontal(state); matrix(state).transpose.reverse.transpose; end
+    # ... more?
+
+    private
 
     def diagonals(state)
       m = matrix(state)
