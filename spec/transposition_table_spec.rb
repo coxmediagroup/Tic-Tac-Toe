@@ -50,10 +50,10 @@ module TicTacToe
     end
 
     it "should apply transformations" do
-      @sample.apply(TranspositionTable::TRANSPOSE, @state).board.should == @transposed_state.board
-      @sample.apply(TranspositionTable::INVERSE, @state).board.should == @inverted_state.board
-      @sample.apply(TranspositionTable::INVERSE_HORIZ, @state).board.should == @inverted_horizontal_state.board
-      @sample.apply(TranspositionTable::ROTATE, @state).board.should == @rotated_state.board
+      @sample.apply_transformation(TranspositionTable::TRANSPOSE, @state).board.should == @transposed_state.board
+      @sample.apply_transformation(TranspositionTable::INVERSE, @state).board.should == @inverted_state.board
+      @sample.apply_transformation(TranspositionTable::INVERSE_HORIZ, @state).board.should == @inverted_horizontal_state.board
+      @sample.apply_transformation(TranspositionTable::ROTATE, @state).board.should == @rotated_state.board
     end
 
 

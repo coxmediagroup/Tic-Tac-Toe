@@ -5,7 +5,7 @@
 #  author: Joseph Weissman, <jweissman1986@gmail.com>
 #
 #
-$:.unshift("../lib")
+$:.unshift("./lib")
 
 require 'stringio'
 
@@ -15,7 +15,6 @@ require 'abstract_strategy'
 require 'mock_game'
 require 'alpha_beta'
 require 'state'
-# require 'abstract_strategy_spec'
 require 'hashing_provider'
 require 'transposition_table'
 require 'alpha_beta_with_transpositions_table'
@@ -42,8 +41,6 @@ module TicTacToe
     def initialize
       @state   = @root = State.new
       @ai      = AI.new
-      # @observe = StateObserver.new
-      # @tree    = Tree.new(@state)
     end
 
     #

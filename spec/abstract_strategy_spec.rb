@@ -1,4 +1,12 @@
 #
+#  specified class:         AlphaBetaWithTranspositionsTable
+#  extends:                 --
+#  module:                  TicTacToe
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
+#
+#
+#  description:
+#
 #     A group of shared focused behavior descriptions for
 #     gameplaying strategies subclassing AbstractStrategy class.
 #
@@ -40,7 +48,7 @@ module TicTacToe
     end
 
     it "should play to a win/draw mock games for all successors of successors" do
-      draws, wins, losses = @mock_game.play_successors(@state, 2,true)
+      draws, wins, losses = @mock_game.play_successors(@state, 1,true)
 
       losses.should be 0
       draws.should be >= 0

@@ -17,8 +17,8 @@ module TicTacToe
     #
     #   The constructor takes the algorithm to be used in the game
     #
-    def initialize(algorithm=Minimax.new)
-      raise StandardError.new("algorithm must subclass AbstractStrategy") unless algorithm.is_a? AbstractStrategy
+    def initialize(algorithm=AlphaBetaWithTranspositionTable.new)
+      raise StandardError.new("algorithm must subclass AbstractStrategy -- provided #{algorithm.name}") unless algorithm.is_a? AbstractStrategy
       @ai = algorithm
     end
 
@@ -26,20 +26,21 @@ module TicTacToe
     #   Play mock games for all successors of a given state up
     #   to the specified depth.
     #
-    def play_successors(state, depth=2, debug=true)
+    def play_successors(state, depth=1, debug=true)
       scores = [0,0,0]
-      return scores if terminal? state or depth == 0
+      return scores if terminal? state
       each_immediate_successor_state(state) do |successor|
         new_scores = [0,0,0]
 
-        unless depth == 0 or terminal? successor
-          new_scores = play_successors(successor, depth-1, debug)
+        unless depth > 0
+          game_result = play(successor, debug)
+          new_scores[game_result] += 1
         else
-          new_scores[play(successor,debug)] += 1
+          new_scores = play_successors(successor, depth-1, debug)
         end
-        
+
         # sum pairs of array entries
-        scores.zip(new_scores).map! { |e| e[0] + e[1] }
+        scores = scores.zip(new_scores).map { |e| e[0] + e[1] }
       end
       scores
     end
@@ -62,7 +63,7 @@ module TicTacToe
     #
     def play(state, debug=true)
       puts '*' * 80 if debug
-      puts "--- playing game..." if debug
+      # puts "--- playing game..." if debug
 
       first_player = state.current_player
       second_player = 3 - first_player
@@ -82,9 +83,9 @@ module TicTacToe
     #
     def move!(state, player, debug=true)
       if debug
-        pp state
-        puts
         puts '=' * 30
+        puts
+        pp state
         puts
       end
       move = @ai.best_move(state, player, debug)

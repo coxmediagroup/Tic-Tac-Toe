@@ -4,7 +4,12 @@
 #  module:                  TicTacToe
 #  author:                  Joseph Weissman, <jweissman1986@gmail.com>
 #
-
+#
+#  specified class:         StateObserver
+#  extends:                 --
+#  module:                  TicTacToe
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
+#
 require 'state_observer'
 require 'state'
 

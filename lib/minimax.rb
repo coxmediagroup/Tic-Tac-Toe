@@ -18,16 +18,9 @@ module TicTacToe
     #
     #   Sum minimax trees for a given state on behalf of player.
     #
-    def value(state, player=1, depth=0) # , observe=StateObserver.new)
+    def value(state, player=1, depth=0)
 
       return endgame_score(state,player,depth) if terminal?(state)
-#        return 0 if draw?(state)
-#        score = evaluate(state, player)
-#        if depth >= -1
-#          score = score * INFINITY
-#        end
-#        return score
-#      end
 
       successors_values = []
       each_immediate_successor_state(state) do |successor|
@@ -36,7 +29,6 @@ module TicTacToe
       end
 
       score = 0
-      # p successors_values
       if state.current_player == player
         score = successors_values.max
       else

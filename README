@@ -3,11 +3,13 @@
 "Create a program that can interactively play the game of Tic-Tac-Toe
 against a human player and can never lose."
 
-
 --- About this project
 
-This project implements a simple Tic-Tac-Toe game. Currently it's pretty
-slow, though I'm hoping to improve that.
+This project implements a simple Tic-Tac-Toe game.
+
+It's still somewhat slow, but I've already put in place a few improvements
+and optimizations to the core game logic, including alpha beta and a
+transpositions table to minimize deep recursion.
 
 --- Instructions
 
@@ -44,8 +46,10 @@ transposition tables.
 
 === Wishlist
 
-* Minimax (implemented, needs more exhaustive validation)
-* Negamax/Pruning/Transposition Tables (in progress)
+* Minimax (implemented)
+* Pruning (implemented, needs more exhaustive validation)
+* Transposition Tables (implemented, needs more exhaustive validation)
+* Negamax/Negascout. (--)
 * Iterative deepening. (--)
 * GUI and/or Web Interface (--)
 

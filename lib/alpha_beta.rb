@@ -14,9 +14,6 @@ module TicTacToe
     #
     #   Walk minimax tree for a given state on behalf of player, using alpha/beta pruning to optimize search.
     #
-    #   (Note: alpha should track the MAXIMUM lower bound for possible
-    #   solutions and beta the MINIMUM upper bound for possible solutions.)
-    #
     def value(state, player=1, depth=0, alpha=-INFINITY,beta=INFINITY)
       return endgame_score(state,player,depth) if terminal?(state)
       player_up = state.current_player == player

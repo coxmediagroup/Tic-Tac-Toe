@@ -2,16 +2,19 @@
 #  specified class:  MockGame
 #  extends:          --
 #  module:           TicTacToe
-
 #  author: Joseph Weissman, <jweissman1986@gmail.com>
 #
 #
 
 require 'state'
 require 'state_observer'
-require 'mock_game'
 require 'abstract_strategy'
-require 'minimax'
+require 'mock_game'
+require 'alpha_beta'
+require 'state'
+require 'hashing_provider'
+require 'transposition_table'
+require 'alpha_beta_with_transposition_table'
 
 module TicTacToe
   #
@@ -46,7 +49,8 @@ module TicTacToe
 
     it "should play mock games for all successors of successors" do
       puts "======= second round mock matches"
-      draws, wins, losses = @mock_game.play_successors(@state, 2, true)
+
+      draws, wins, losses = @mock_game.play_successors(@state,1, true)
       puts "--- draws: #{draws} / wins: #{wins} / losses: #{losses}"
       
       losses.should be 0
