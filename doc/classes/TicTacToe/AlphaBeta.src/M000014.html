@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>value (TicTacToe::AlphaBeta)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/alpha_beta.rb, line 20</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-constant">AlphaBeta</span>.<span class="ruby-identifier">value</span>(<span class="ruby-identifier">state</span>, <span class="ruby-identifier">player</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">depth</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">observe</span>=<span class="ruby-constant">StateObserver</span>.<span class="ruby-identifier">new</span>,<span class="ruby-identifier">alpha</span>=<span class="ruby-constant">INFINITY</span>,<span class="ruby-identifier">beta</span>=<span class="ruby-operator">-</span><span class="ruby-constant">INFINITY</span>) <span class="ruby-comment cmt"># , cutoff_depth=-Infinity)</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">observe</span>.<span class="ruby-identifier">terminal?</span>(<span class="ruby-identifier">state</span>)
+        <span class="ruby-keyword kw">return</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">observe</span>.<span class="ruby-identifier">draw?</span>(<span class="ruby-identifier">state</span>)
+        <span class="ruby-identifier">score</span> = <span class="ruby-identifier">observe</span>.<span class="ruby-identifier">evaluate</span>(<span class="ruby-identifier">state</span>, <span class="ruby-identifier">player</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">depth</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">-2</span>
+         <span class="ruby-identifier">score</span> = <span class="ruby-identifier">score</span> <span class="ruby-operator">*</span> <span class="ruby-constant">INFINITY</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">score</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-constant">Tree</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">state</span>).<span class="ruby-identifier">generate_successors</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">state</span>.<span class="ruby-identifier">successors</span>.<span class="ruby-identifier">empty?</span>
+
+      <span class="ruby-comment cmt"># 'sum' the minimax trees of successor states, pruning if need be</span>
+      <span class="ruby-identifier">player_up</span> = <span class="ruby-identifier">state</span>.<span class="ruby-identifier">current_player</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">player</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">player_up</span>
+        <span class="ruby-identifier">state</span>.<span class="ruby-identifier">successors</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">succ</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">subalpha</span> = <span class="ruby-constant">AlphaBeta</span>.<span class="ruby-identifier">value</span>(<span class="ruby-identifier">succ</span>, <span class="ruby-identifier">player</span>, <span class="ruby-identifier">depth</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>, <span class="ruby-identifier">observe</span>, <span class="ruby-identifier">alpha</span>, <span class="ruby-identifier">beta</span>)
+          <span class="ruby-identifier">alpha</span> = [<span class="ruby-identifier">alpha</span>, <span class="ruby-identifier">subalpha</span>].<span class="ruby-identifier">max</span>
+          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">beta</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">alpha</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">alpha</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">state</span>.<span class="ruby-identifier">successors</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">succ</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">subbeta</span> = <span class="ruby-constant">AlphaBeta</span>.<span class="ruby-identifier">value</span>(<span class="ruby-identifier">succ</span>, <span class="ruby-identifier">player</span>, <span class="ruby-identifier">depth</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>, <span class="ruby-identifier">observe</span>, <span class="ruby-identifier">alpha</span>, <span class="ruby-identifier">beta</span>)
+          <span class="ruby-identifier">beta</span> = [<span class="ruby-identifier">beta</span>, <span class="ruby-identifier">subbeta</span>].<span class="ruby-identifier">min</span>
+          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">alpha</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">beta</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">beta</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

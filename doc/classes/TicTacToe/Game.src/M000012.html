@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>play (TicTacToe::Game)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/game.rb, line 80</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">play</span>
+      <span class="ruby-identifier">about</span>
+      <span class="ruby-identifier">puts</span>
+      <span class="ruby-ivar">@state</span> = <span class="ruby-ivar">@root</span>
+      <span class="ruby-identifier">pp</span> <span class="ruby-ivar">@state</span>
+      <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">terminal?</span> <span class="ruby-ivar">@state</span>
+        <span class="ruby-identifier">puts</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;=== Computer player considering move, please wait...&quot;</span>
+        <span class="ruby-identifier">cpu_move</span> = <span class="ruby-ivar">@ai</span>.<span class="ruby-identifier">best_move</span>(<span class="ruby-ivar">@state</span>, <span class="ruby-value">1</span>) 
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;--- CPU has elected to inscribe #{cpu_move}.&quot;</span>
+        <span class="ruby-ivar">@state</span> = <span class="ruby-ivar">@state</span>.<span class="ruby-identifier">successor</span>(<span class="ruby-identifier">cpu_move</span>)
+        <span class="ruby-identifier">pp</span> <span class="ruby-ivar">@state</span>
+
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">terminal?</span> <span class="ruby-ivar">@state</span>
+            <span class="ruby-identifier">human_move</span> = <span class="ruby-value str">''</span>
+            <span class="ruby-identifier">puts</span>
+            <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;--- It's your turn! Please enter your move (1-9):&quot;</span>
+            <span class="ruby-identifier">human_move</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span> <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">human_move</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^[1-9]$/</span>) 
+            <span class="ruby-ivar">@state</span> = <span class="ruby-ivar">@state</span>.<span class="ruby-identifier">successor</span>(<span class="ruby-identifier">human_move</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;=== Player #{winner(state)} is victorious!&quot;</span>
+      <span class="ruby-identifier">puts</span>
+      <span class="ruby-identifier">puts</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Do you wish to challenge me again? (y/n)&quot;</span>
+      <span class="ruby-identifier">play</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>).<span class="ruby-identifier">chr</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'y'</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

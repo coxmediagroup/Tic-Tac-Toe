@@ -48,6 +48,21 @@ module TicTacToe
     def empty?; @board == initial_field; end
 
 
+    #
+    #  Construct a new State object with the given index marked and
+    #  the current player toggled. Raises a StandardError if the successor
+    #  index isn't empty.
+    #
+    def successor(n)
+      # puts "-- attempting to generate successor state to current state, moving at #{n}: "
+      # StateObserver.new.pp(self)
+      raise StandardError.new("invalid successor index '#{n}' provided") if n.nil? or @board[n] != 0
+      succ = State.new(@board.dup, @current_player)
+      succ.board[n] = @current_player
+      succ.toggle_player
+      succ
+    end
+
     private
 
     def initial_field; Array.new(9) {0}; end

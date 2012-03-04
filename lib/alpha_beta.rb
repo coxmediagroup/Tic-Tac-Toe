@@ -1,55 +1,42 @@
 #
+#  class:         AlphaBeta
+#  extends:       --
+#  module:        TicTacToe
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
 #
-#  alpha/beta pruning -- under construction
 #
 module TicTacToe
-  class AlphaBeta < Minimax
-    # def initialize; end
-
-
+  #
+  #  Encapsulates an alpha-beta pruning approach to speeding up
+  #  the computation of the minimax.
+  #
+  class AlphaBeta < AbstractStrategy
     #
-    #   walk minimax tree for a given state on behalf of player.
+    #   Walk minimax tree for a given state on behalf of player, using alpha/beta pruning to optimize search.
     #
-    #   use a/b pruning to optimize search.
+    #   (Note: alpha should track the MAXIMUM lower bound for possible
+    #   solutions and beta the MINIMUM upper bound for possible solutions.)
     #
-    #   assumes state.successors is a hash of moves => successor states
-    #
-    #   NOTE: under construction
-    #   TODO investigate
-    #
-=begin
-    def AlphaBeta.value(state, player=1, depth=0, observe=StateObserver.new,alpha=1,beta=-1) # , cutoff_depth=-Infinity)
-
-      if observe.terminal?(state)
-        return 0 if observe.draw?(state)
-        score = observe.evaluate(state, player)
-        if depth >= -2
-         score = score * INFINITY
-        end
-        return score
-      end
-
-      Tree.new(state).generate_successors if state.successors.empty?
-
-      # 'sum' the minimax trees of successor states
+    def value(state, player=1, depth=0, alpha=-INFINITY,beta=INFINITY)
+      return endgame_score(state,player,depth) if terminal?(state)
       player_up = state.current_player == player
-      # score = player_up ? -INFINITY : INFINITY
+      score = 0
       if player_up
-        state.successors.values.each do |succ|
-          minimax = AlphaBeta.value(succ, player, depth-1, observe, alpha, beta)
-          alpha = [alpha, minimax].max
+        each_immediate_successor_state(state) do |succ|
+          subalpha = value(succ, player, depth-1, alpha, beta)
+          alpha = [alpha, subalpha].max
           break if beta <= alpha
         end
-        return alpha
+        score = alpha
       else
-        state.successors.values.each do |succ|
-          minimax = AlphaBeta.value(succ, player, depth-1, observe, alpha, beta)
-          beta = [beta, minimax].min
-         break if alpha <= beta
+        each_immediate_successor_state(state) do |succ|
+          subbeta = value(succ, player, depth-1, alpha, beta)
+          beta = [beta, subbeta].min
+          break if beta <= alpha
         end
-        return beta
+        score = beta
       end
+      score
     end
-=end
   end
 end

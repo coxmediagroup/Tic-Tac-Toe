@@ -2,21 +2,18 @@
 #  specified class:         StateObserver
 #  extends:                 --
 #  module:                  TicTacToe
-#
-#   description:
-#
-#   Provides a specification for the game state observer class in charge
-#   of most of the business logic around inspection and analysis of
-#   static board configuration.
-#
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
-#
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
 #
 
 require 'state_observer'
 require 'state'
 
 module TicTacToe
+  #
+  #   Provides a specification for the game state observer class in charge
+  #   of most of the business logic around inspection and analysis of
+  #   static board configuration.
+  #
   describe StateObserver do
     before(:each) do
       @observes = StateObserver.new
@@ -41,14 +38,25 @@ module TicTacToe
       ]
     end
 
-    it "should format the state matrix for display" do
-      describe State, "displays a game state" do
+    #
+    #   validate the structure of the pretty printer
+    #
+    it "should format the game state for display" do
+      describe StateObserver, "should display an empty state" do
         subject { StateObserver.new.pretty(State.new) }
         it { should == "   |   |   \n-----------\n   |   |   \n-----------\n   |   |   \n" }
+      end
+      
+      describe StateObserver, "should display an intermediate state" do
+        subject { StateObserver.new.pretty(State.new [1,0,0,2,0,0,0,0,0])}
+        it { should == " X |   |   \n-----------\n O |   |   \n-----------\n   |   |   \n" }
       end
     end
 
 
+    #
+    #   assert we can properly assemble lists of available positions
+    #
     it "should collect open positions" do
       @observes.open_positions(@empty_state).should == Array.new(9) {|i|i}
       @observes.open_positions(@player_one_win_state).should == [4]
@@ -61,6 +69,9 @@ module TicTacToe
       ]).should == [0,1,2,3,6,7,8]
     end
 
+    #
+    #   determine whether we are properly evaluating different possible states
+    #
     it "should detect win/loss/draw conditions and rank them accordingly" do
       
       @observes.terminal?(@empty_state).should be false
@@ -79,8 +90,20 @@ module TicTacToe
       @observes.evaluate(@player_two_win_state, 1).should == -1
       @observes.evaluate(@player_two_win_state, 2).should == +1
       @observes.terminal?(@player_two_win_state).should be true
+      
+    end
+
+    #
+    #   should 'lazily' iterate over successor states
+    #
+    it "should iterate over successor states" do
+      successors = []
+      @observes.each_immediate_successor_state_with_index(@empty_state) do |successor, index|
+        successor.board.should == Array.new(9) { |n| n == index ? 1 : 0 }
+        successors << successor
+      end
+      successors.should have(9).items
     end
 
   end
-
 end

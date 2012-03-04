@@ -1,49 +1,42 @@
 #
-#  specified class:         Minimax
+#  class:                   Minimax
 #  extends:                 --
 #  module:                  TicTacToe
-#
-#   description:
-#
-#   Recursively calculates the value of the minimax tree for a given
-#   state, and recommends a best move to a player.
-#   
-#   The implementation is for now a very simple no-frills MiniMax,
-#   which does seem to work effectively. It's a bit slow, of course.
-#
 #  author: Joseph Weissman, <jweissman1986@gmail.com>
-#
 #
 
 module TicTacToe
 
-  INFINITY = 1.0/0
 
-  class Minimax
+  #
+  #   Recursively calculates the value of the minimax tree for a given state
+  #
+  class Minimax < AbstractStrategy
+
+
 
     #
-    #   sum minimax trees for a given state on behalf of player.
+    #   Sum minimax trees for a given state on behalf of player.
     #
-    #   note that we do assume state.successors is a hash of moves => successor states
-    #
-    def Minimax.value(state, player=1, depth=0, observe=StateObserver.new)
-      if observe.terminal?(state)
-        return 0 if observe.draw?(state)
-        score = observe.evaluate(state, player)
-        if depth >= -1
-          score = score * INFINITY
-        end
-        return score
-      end
+    def value(state, player=1, depth=0) # , observe=StateObserver.new)
 
-      Tree.new(state).generate_successors if state.successors.empty?
+      return endgame_score(state,player,depth) if terminal?(state)
+#        return 0 if draw?(state)
+#        score = evaluate(state, player)
+#        if depth >= -1
+#          score = score * INFINITY
+#        end
+#        return score
+#      end
 
-      # 'sum' the minimax trees of successor states
-      successors_values = state.successors.values.map do |succ|
-        Minimax.value(succ, player, depth-1, observe)
+      successors_values = []
+      each_immediate_successor_state(state) do |successor|
+        successor_value = value(successor, player, depth-1)
+        successors_values << successor_value
       end
 
       score = 0
+      # p successors_values
       if state.current_player == player
         score = successors_values.max
       else
@@ -51,24 +44,6 @@ module TicTacToe
       end
       score
     end
-
-    
-    #
-    #   select the best move by ranking minimax trees
-    #   for each potential next game state
-    #
-    def Minimax.best_move(state, player=1, observe=StateObserver.new)
-      Tree.new(state).generate_successors if state.successors.empty?
-
-      best_position = state.successors.max_by do |m,succ|
-        Minimax.value(succ, player, 0, observe) 
-      end.first
-
-      # return best position
-      best_position
-      
-    end # end Minimax.best_move
-
 
 
   end

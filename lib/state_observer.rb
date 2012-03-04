@@ -1,62 +1,166 @@
 #
-#  specified class:         StateObserver
-#  extends:                 --
-#  module:                  TicTacToe
+#  class:         StateObserver
+#  extends:       --
+#  module:        TicTacToe
 #
-#   description:
-#
-#   Observes the current state of the game and provides some rendering and endgame
-#   detection facilities; in charge of most of the logic around inspection and analysis of
-#   board configuration.
-#
-#
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
-#
-#
+#  author:        Joseph Weissman, <jweissman1986@gmail.com>
 #
 module TicTacToe
+ 
+
+  #
+  #   Observes the current state of the game and provides some rendering and endgame
+  #   detection facilities; in charge of most of the logic around inspection and analysis of
+  #   board configuration.
+  #
   class StateObserver
 
-    def terminal?(state); filled?(state) or won?(state); end
-    def draw?(state); filled?(state) and winner(state) == 0; end
+    #
+    #  Determine whether the state is terminal.
+    #
+    def terminal?(state)
+      filled?(state) or win_condition_achieved?(state)
+    end
 
-    def won?(state); winner(state) != 0; end
-    def player_won?(state, n); winner(state) == n; end
-    def first_player_won?(state, n); player_won?(state, 1); end
+    #
+    #   determine whether the board is filled.
+    #
+    def filled?(state)
+      not state.board.include? 0
+    end
 
+    #
+    #   Determine whether the game was won.
+    #
+    def win_condition_achieved?(state)
+      winner(state) != 0
+    end
+
+
+    #
+    #   determine who the winner of the current state is (returns 0 if cannot
+    #   be determined yet/draw)
+    #
+    def winner(state)
+      win_player = 0
+      each_line(state) do |line|
+        if line.first != 0 and line.uniq.length == 1
+          # the player with that mark has won
+          win_player = line.first
+          break
+        end
+      end
+
+      win_player
+    end
+
+
+    #
+    #   Assemble an array containing the rows, columns and diagonal elements
+    #   of the state.
+    #
+    def each_line(state)
+      m = matrix(state)
+
+      lines = (m + m.transpose +
+
+      # diagonals
+      [ (0..2).collect { |i| m[i][i] },
+        (0..2).collect { |i| m[i][2-i] } ] )
+
+      lines.each do |line|
+        yield line
+      end
+    end
+
+
+    #
+    #   Assemble a 2-d array with the elements of the board.
+    #
+    def matrix(state)
+      f = state.board
+      [[f[0], f[1], f[2]],
+       [f[3], f[4], f[5]],
+       [f[6], f[7], f[8]]]
+    end
+
+    
+
+    #
+    #  Determine whether the game is a draw.
+    #
+    def draw?(state)
+      filled?(state) and winner(state) == 0
+    end
+
+
+    #
+    #  determine whether the winner of the state is the player with provided index
+    #
+    def player_won?(state, player)
+      winner(state) == player
+    end
+
+    #
+    #   Assembles an array of available positions/moves for the given state.
+    #
     def open_positions(state)
       open = []
       state.board.each_with_index { |c, i| open << i if c == 0 }
       open
     end
 
-    def winner(state)
-      win_player = 0
-      each_line(state) do |line|
-        if line.first != 0 and line.uniq.length == 1
-          win_player = line.first
-          break
-        end
-      end
-      win_player
+    #
+    #   Iterator over immediate successor states of the provided state.
+    #
+    def each_immediate_successor_state(state)
+      raise StandardError.new("no successors; game is over") if terminal? state
+      open_positions(state).each { |position| yield state.successor(position) }
     end
 
+    #
+    #  Iterator over immediate successor states, constructing them if need be
+    #  (combination of previous two methods). Note the return value is an
+    #  array with two elements: the successor state resulting
+    #  from the current player moving a given position and the index of that
+    #  position in the board array.
+    #
+    def each_immediate_successor_state_with_index(state)
+      open_positions(state).each { |n| yield [state.successor(n), n] }
+    end
+
+
+
+
+
+    #
+    #  Perform a simple evaluation of the state under observation for the given
+    #  player, namely:
+    #
+    #     state           value returned by StateObserver.evaluate(state,player)
+    #     -----           ------------------------------------------------------
+    #
+    #     draw                                     0
+    #     win                                     +1
+    #     loss                                    -1
+    #
+    #
     def evaluate(state, player)
       return 0 if draw?(state)
       player_won?(state, player) ? 1 : -1
     end
+    
 
-    def filled?(state)
-      state.board.each do |value|
-        return false if value == 0
-      end
-      true
-    end
-
-    def pretty_print(state,value_map=[' ','X','O'])
+    #
+    #     Format and display the schematic representation of the state.
+    #
+    def pp(state,value_map=[' ','X','O'])
       puts pretty(state,value_map)
     end
-    
+
+    #
+    #    Format a schematic representation of a game state.
+    #
     def pretty(state,value_map=[' ','X','O'])
       txt = StringIO.new
 
@@ -75,39 +179,5 @@ module TicTacToe
       txt.rewind
       txt.read
     end
-
-    def matrix(state)
-      f = state.board
-      [[f[0], f[1], f[2]],
-       [f[3], f[4], f[5]],
-       [f[6], f[7], f[8]]]
-    end
-
-
-    def transpose(state);       matrix(state).transpose; end
-    def flip_vertical(state);   matrix(state).reverse; end
-    def rotate(state);          matrix(state).reverse.transpose; end # transpose(flip_vertical(matrix(state))); end
-    def rotate_ccw(state);      matrix(state).transpose.reverse; end
-    def flip_horizontal(state); matrix(state).transpose.reverse.transpose; end
-    # ... more?
-
-    private
-
-    def diagonals(state)
-      m = matrix(state)
-
-      [ (0..2).collect { |i| m[i][i] },
-        (0..2).collect { |i| m[i][2-i] } ]
-    end
-
-    def each_line(state)
-      m = matrix(state)
-      
-      lines = (m + m.transpose + diagonals(state))
-
-      lines.each do |line|
-        yield line
-      end
-    end
-  end
-end
+  end # end class StateObserver
+end # end module TicTacToe

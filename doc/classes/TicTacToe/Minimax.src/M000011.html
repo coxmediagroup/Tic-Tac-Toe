@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>value (TicTacToe::Minimax)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/minimax.rb, line 21</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>(<span class="ruby-identifier">state</span>, <span class="ruby-identifier">player</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">depth</span>=<span class="ruby-value">0</span>) <span class="ruby-comment cmt"># , observe=StateObserver.new)</span>
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">endgame_score</span>(<span class="ruby-identifier">state</span>,<span class="ruby-identifier">player</span>,<span class="ruby-identifier">depth</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">terminal?</span>(<span class="ruby-identifier">state</span>)
+<span class="ruby-comment cmt">#        return 0 if draw?(state)</span>
+<span class="ruby-comment cmt">#        score = evaluate(state, player)</span>
+<span class="ruby-comment cmt">#        if depth &gt;= -1</span>
+<span class="ruby-comment cmt">#          score = score * INFINITY</span>
+<span class="ruby-comment cmt">#        end</span>
+<span class="ruby-comment cmt">#        return score</span>
+<span class="ruby-comment cmt">#      end</span>
+
+      <span class="ruby-identifier">successors_values</span> = []
+      <span class="ruby-identifier">each_immediate_successor_state</span>(<span class="ruby-identifier">state</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">successor</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">successor_value</span> = <span class="ruby-identifier">value</span>(<span class="ruby-identifier">successor</span>, <span class="ruby-identifier">player</span>, <span class="ruby-identifier">depth</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+        <span class="ruby-identifier">successors_values</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">successor_value</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">score</span> = <span class="ruby-value">0</span>
+      <span class="ruby-comment cmt"># p successors_values</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">state</span>.<span class="ruby-identifier">current_player</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">player</span>
+        <span class="ruby-identifier">score</span> = <span class="ruby-identifier">successors_values</span>.<span class="ruby-identifier">max</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">score</span> = <span class="ruby-identifier">successors_values</span>.<span class="ruby-identifier">min</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">score</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
