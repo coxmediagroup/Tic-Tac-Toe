@@ -1,19 +1,19 @@
 === Usage
 
-To run the Ruby application, assuming you have Ruby installed, you can issue
-the folllowing command from the root of the project directory clone to challenge
-the computer to a game of Tic Tac Toe:
+To run the Ruby application, assuming you have Ruby installed, you can
+issue the folllowing command from the root of the project directory
+to challenge the computer to a game of Tic Tac Toe:
 
 'ruby lib/game.rb'
 
 The game should be fairly self-explanatory in terms of the input, but you
 use 1-9 in 'inverted phone' style to play against the CPU. (Note: at this
 state there is no iterative deepening/difficulty levels or anything --
-so if the implementation is correct, you shouldn't be able to beat the computer.
-At best you should be able to play the CPU to a draw.)
+so if the implementation is correct, you shouldn't be able to beat the
+computer. At best you should be able to play the CPU to a draw.)
 
-Now, to run the specifications, you'll need the RSpec gem, but once this is done you
-should be able to run
+Now, to run the specifications, you'll need the RSpec gem, but once this is
+done you should be able to run
 
 'spec'
 
@@ -23,22 +23,25 @@ and evaluate the various algorithms for correctness and optimality.
 
 === About this project
 
-This project implements a simple Tic-Tac-Toe game and explores several algorithms
-for implementing perfect play. It includes a console-based client for playing
-against the computer.
+This project implements a simple Tic-Tac-Toe game and explores several
+algorithms for implementing perfect play. It includes a console-based
+client for playing against the computer.
 
 --- Algorithms
 
-There is really only one algorithm involved here, which is minimax, or alternatively
-maximizing and minimizing over the recursively-calculated value of subtrees of a
-particular game state node. Negamax is a similar algorithm which incorporates some
-coding simplifications. Alpha/beta pruning is a technique which permits us to
-take 'note' of really good or bad moves as we are examining the tree, allowing the
-computer to more intelligently determine whether exploring a given subtree further
-will yield any new information.
+In a sense there is really only one algorithm involved here, which is called
+'minimax,' and is a technique involving alternatively maximizing and minimizing
+over the recursively-calculated value of subtrees of a particular game state
+node. Negamax is a similar algorithm which incorporates some coding
+simplifications owing to the mathematical dualism of max(x,y) and -min(-x,-y).
+Alpha/beta  pruning is a technique which permits us to take 'note' of really
+good or bad moves as we are examining the tree, allowing the computer to more
+intelligently determine whether exploring a given subtree further will yield
+any new information.
 
-The interactive game in its current configuration utilizes the Negamax algorithm
-with an in-memory cache (which in this case makes use of a transposition table.)
+The interactive game in its current configuration utilizes the Negamax
+algorithm with an in-memory cache (which in this case makes use of a
+transposition table.)
 
 There is a benchmarking utility that can be invoked by issuing
 
@@ -68,16 +71,16 @@ pruning, they seem to actually increase the expense of the analysis.
 === Current Status
 
 Negamax is working very effectively, though the optimizations aren't quite
-as effective as I'd hoped. I've been able to get the in-memory value cache yielding
-performance returns but the transposition tables are a bit more obstinate (my
-sense is that improvement here is going to come from simplifying the state representation
-further.)
+as effective as I'd hoped. I've been able to get the in-memory value cache
+yielding performance returns but the transposition tables are a bit more
+obstinate (my sense is that improvement here is going to come from
+simplifying the state representation further.)
 
 * Minimax (implemented)
 * Pruning (implemented)
 * Negamax (implemented)
 * In-memory Cache (implemented, could be optimized further)
-* Transposition Tables (implemented, needs improvement)
+* Transposition Tables (implemented, could be optimized further)
 * Zobrist hashing for game state. (--)
 * Shallow searching to order moves for minimax. (--)
 * Iterative deepening. (--)
@@ -92,14 +95,14 @@ against a human player and can never lose."
 === Thoughts
 
 
-I have found that the optimizations as implemented were not quite as effective
-as I'd hoped, even after some focused tuning/refactoring. For real gains I think
-I would have to refactor the core of the engine to work with a simpler model
-of the board, and not duplicate State objects all over the place. This would be
-one place I'd go first in terms of optimizing the performance characteristics
-of the system.
+I have found that the optimizations as implemented were not quite as
+effective as I'd hoped, even after some focused tuning/refactoring. For
+real gains I think I would have to refactor the core of the engine to work
+with a simpler model of the board, and not duplicate State objects all over
+the place. This would be one place I'd go first in terms of optimizing the
+performance characteristics of the system.
 
-Another thing to thing about would be the hashing indicated above, and which I
-have tried to integrate to some degree into the caching system. Using a proper
-Zobrist hash of the current state would permit simpler tracking of moves as
-well as generation of successors. 
+Another thing to thing about would be some form of hashing, which
+I have tried to integrate to some degree into the caching system. Using a
+proper Zobrist hash of the current state would permit simpler tracking of
+moves as well as generation of successors.
