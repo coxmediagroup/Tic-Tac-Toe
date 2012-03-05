@@ -1,6 +1,6 @@
 #
 #  class:         AlphaBetaWithTranspositionsTable
-#  extends:       --
+#  extends:       AlphaBeta
 #  module:        TicTacToe
 #  author:        Joseph Weissman, <jweissman1986@gmail.com>
 #

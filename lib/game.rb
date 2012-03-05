@@ -1,8 +1,8 @@
 #
 #  class:         Game
-#  extends:       --
+#  extends:       StateObserver
 #  module:        TicTacToe
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#  author:        Joseph Weissman, <jweissman1986@gmail.com>
 #
 #
 $:.unshift("./lib")
@@ -15,9 +15,9 @@ require 'abstract_strategy'
 require 'mock_game'
 require 'alpha_beta'
 require 'state'
-require 'hashing_provider'
+require 'infinity'
 require 'transposition_table'
-require 'alpha_beta_with_transpositions_table'
+require 'alpha_beta_with_transposition_table'
 
 module TicTacToe
   #
@@ -36,7 +36,7 @@ module TicTacToe
     attr_accessor :tree, :state, :observer, :ai
 
     # which algorithm to utilize
-    AI = AlphaBetaWithTranspositionsTable
+    AI = AlphaBetaWithTranspositionTable
 
     def initialize
       @state   = @root = State.new
@@ -88,11 +88,20 @@ module TicTacToe
         pp @state
 
         unless terminal? @state
+          begin
             human_move = ''
             puts
             puts "--- It's your turn! Please enter your move (1-9):"
-            human_move = gets.chomp until human_move.match(/^[1-9]$/) 
+            human_move = gets.chomp until human_move.match(/^[1-9]$/)  and @state.has_legal_successor?(human_move.to_i - 1)
+
             @state = @state.successor(human_move.to_i-1)
+          rescue StandardError => e
+
+
+
+          end
+          # ./lib/state.rb:59:in `successor': invalid successor index '3' provided (StandardError)
+
         end
       end
 

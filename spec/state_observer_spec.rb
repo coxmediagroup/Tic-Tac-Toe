@@ -110,5 +110,11 @@ module TicTacToe
       successors.should have(9).items
     end
 
+    it "should report the disposition of the game in a human friendly way" do
+      @observes.disposition(@empty_state).should == "game is in-progress"
+      @observes.disposition(@draw_state).should == "game ended in a draw"
+      @observes.disposition(@player_one_win_state).should == "player one is victorious"
+      @observes.disposition(@player_two_win_state).should == "player two is victorious"
+    end
   end
 end

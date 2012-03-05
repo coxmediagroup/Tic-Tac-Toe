@@ -1,5 +1,5 @@
 #
-#  class:                   StateObserver
+#  class:                   MockGame
 #  extends:                 --
 #  module:                  TicTacToe
 #  author:                  Joseph Weissman, <jweissman1986@gmail.com>
@@ -17,7 +17,7 @@ module TicTacToe
     #
     #   The constructor takes the algorithm to be used in the game
     #
-    def initialize(algorithm=AlphaBetaWithTranspositionTable.new)
+    def initialize(algorithm=AlphaBeta.new)
       raise StandardError.new("algorithm must subclass AbstractStrategy -- provided #{algorithm.name}") unless algorithm.is_a? AbstractStrategy
       @ai = algorithm
     end
@@ -63,17 +63,19 @@ module TicTacToe
     #
     def play(state, debug=true)
       puts '*' * 80 if debug
-      # puts "--- playing game..." if debug
-
       first_player = state.current_player
       second_player = 3 - first_player
 
       # play game out
       until terminal? state
-        state = move!(state, first_player, debug)
-        state = move!(state, second_player, debug) unless terminal? state
+        [first_player, second_player].each do |player|
+          state = move!(state, player, debug) unless terminal? state
+        end
+
+        puts '*'*80 if debug
+        puts '*'*20 + "#{disposition(state).capitalize}.".center(40) +'*'*20 if debug # and not state.nil?
+        puts '*'*80 if debug
       end
-      puts '===== game complete ======' if debug
 
       return winner(state)
     end
@@ -83,10 +85,13 @@ module TicTacToe
     #
     def move!(state, player, debug=true)
       if debug
-        puts '=' * 30
+        puts
+        puts
+        puts '-' * 25 + "Player #{player} moving".center(30) + '=' * 25
         puts
         pp state
         puts
+        puts 
       end
       move = @ai.best_move(state, player, debug)
       state.successor move

@@ -10,8 +10,7 @@ require 'mock_game'
 require 'alpha_beta'
 require 'state'
 require 'abstract_strategy_spec'
-
-require 'hashing_provider'
+require 'infinity'
 require 'transposition_table'
 require 'alpha_beta_with_transposition_table'
 

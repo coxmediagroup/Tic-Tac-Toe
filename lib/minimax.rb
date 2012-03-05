@@ -1,8 +1,8 @@
 #
-#  class:                   Minimax
-#  extends:                 --
-#  module:                  TicTacToe
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#  class:     Minimax
+#  extends:   AbstractStrategy
+#  module:    TicTacToe
+#  author:    Joseph Weissman, <jweissman1986@gmail.com>
 #
 
 module TicTacToe
@@ -18,7 +18,7 @@ module TicTacToe
     #
     #   Sum minimax trees for a given state on behalf of player.
     #
-    def value(state, player=1, depth=0)
+    def value(state, player=1, depth=0,alpha=nil, beta=nil,color=nil)
 
       return endgame_score(state,player,depth) if terminal?(state)
 

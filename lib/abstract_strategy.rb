@@ -12,31 +12,29 @@ module TicTacToe
   #
   class AbstractStrategy < StateObserver
 
-    INFINITY = 1.0/0
 
     #
     #  Invoke the best move possible -- will invoke a method "value" on
     #  self with each successor state, the current player and the initial depth (0),
     #  selecting the best-ranking move.
     #
-    def best_move(state, player=1, debug=false)
+    def best_move(state, player=1, debug=true)
 
+      pp state if debug
       best_val = -INFINITY
       best_position = nil
-      pp state if debug
+
       each_immediate_successor_state_with_index(state) do |succ, i|
-        move_value = value(succ, player, 0) # , self)
-
-        # puts "--- #{self.class.name} got move value #{move_value} for move #{i}" if debug
-
+        move_value = value(succ, player, 0)
         if move_value >= best_val
           best_val = move_value
           best_position = i
         end
+        puts "--- move #{i} has value #{move_value}" if debug
       end
 
-     # puts "=== #{self.class.name} returning #{best_position} as best position" if debug
-
+      puts "===== best position: #{best_position}" if debug
+      
       # return best position
       best_position
 

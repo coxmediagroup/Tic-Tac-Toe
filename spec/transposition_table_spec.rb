@@ -1,75 +1,75 @@
+#
+#  specified class:         TranspositionTable
+#  extends:                 --
+#  module:                  TicTacToe
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
+#
 require 'state'
-require 'hashing_provider'
+require 'state_observer'
+require 'abstract_strategy'
+require 'alpha_beta'
+require 'infinity'
 require 'transposition_table'
+require 'mock_game'
+
+require 'abstract_strategy_spec'
 
 module TicTacToe
-  describe TranspositionTable, "tracks a map of states => values up to state isomorphy" do
-    #  before(:each) do
-    #    @transposition_table = TranspositionTable.new
-    #  end
 
-    class ExampleTranspositionTableUtilizingClass
+  #
+  #     Provides a specification for the transposition table functionality.
+  #
+  #     TODO specify override behavior 
+  #
+  describe TranspositionTable do
+
+    class AlphaBetaPlusTranspositionTable < AlphaBeta
       include TranspositionTable
     end
   
     before(:each) do
-      @sample = ExampleTranspositionTableUtilizingClass.new
-      @state = State.new [
-        1,2,0,
-        0,0,0,
-        0,0,0
-      ]
+      @sample = AlphaBetaPlusTranspositionTable.new
 
-      @transposed_state = State.new [
-        1,0,0,
-        2,0,0,
-        0,0,0
-      ]
-    
-      @inverted_state = State.new [
-        0,0,0,
-        0,0,0,
-        1,2,0
-      ]
-
-      @inverted_horizontal_state = State.new [
-        0,2,1,
-        0,0,0,
-        0,0,0
-
-      ]
-
-      @rotated_state = State.new [
-        0,0,0,
-        2,0,0,
-        1,0,0
-      ]
-
-      # try to prevent test leakage here (think it was causing failures when running spec suite?)
-      TranspositionTable.clear! # = {}
+      @state                     = State.new [ 1,2,0, 0,0,0, 0,0,0 ]
+      @transposed_state          = State.new [ 1,0,0, 2,0,0, 0,0,0 ]
+      @inverted_state            = State.new [ 0,0,0, 0,0,0, 1,2,0 ]
+      @inverted_horizontal_state = State.new [ 0,2,1, 0,0,0, 0,0,0 ]
+      @rotated_state             = State.new [ 0,0,1, 0,0,2, 0,0,0 ]
+      @rotated_ccw_state         = State.new [ 0,0,0, 2,0,0, 1,0,0 ]
+      @rotated_180_state         = State.new [ 0,0,0, 0,0,0, 0,2,1 ]
     end
 
     it "should apply transformations" do
-      @sample.apply_transformation(TranspositionTable::TRANSPOSE, @state).board.should == @transposed_state.board
-      @sample.apply_transformation(TranspositionTable::INVERSE, @state).board.should == @inverted_state.board
-      @sample.apply_transformation(TranspositionTable::INVERSE_HORIZ, @state).board.should == @inverted_horizontal_state.board
-      @sample.apply_transformation(TranspositionTable::ROTATE, @state).board.should == @rotated_state.board
+      m = @sample.matrix(@state)
+
+      transformations_and_expected_states = {
+        TranspositionTable::IDENTITY      => @state,
+        TranspositionTable::TRANSPOSE     => @transposed_state,
+        TranspositionTable::INVERSE       => @inverted_state,
+        TranspositionTable::INVERSE_HORIZ => @inverted_horizontal_state,
+        TranspositionTable::ROTATE        => @rotated_state,
+        TranspositionTable::ROTATE_CCW    => @rotated_ccw_state,
+        TranspositionTable::ROTATE_180    => @rotated_180_state
+      }
+
+      transformations_and_expected_states.each do |txf, state|
+        @sample.apply_transformation(txf,m).should == state.board
+      end
     end
 
 
-    it "should remeber, recognize and lookup states" do
-      @sample.recognized?(@state).should be false
-      @sample.memorize(@state,1)
+    it "should identify transpositionally unique successor states" do
+      @sample.open_positions(State.new).should have(3).items
 
-      @sample.recognized?(@inverted_state).should be true
-      @sample.recognized?(@state).should be true
-      @sample.recognized?(@rotated_state).should be true
-      @sample.recognized?(@inverted_horizontal_state).should be true
+      # TODO assert that none of the transpositions is actually the SAME as
+      #      any of the others and that they ARE transpositionally identical
+    end
 
-      @sample.lookup(@state).should be 1
-      @sample.lookup(@inverted_state).should be 1
-      @sample.lookup(@rotated_state).should be 1
-      @sample.lookup(@inverted_horizontal_state).should be 1
+
+    it "should integrate safely into and optimize over an existing algorithm" do
+      describe AlphaBetaPlusTranspositionTable do
+        it_should_behave_like "an optimization"
+      end
     end
   end
 

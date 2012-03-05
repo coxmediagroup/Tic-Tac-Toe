@@ -11,34 +11,53 @@ require 'state'
 require 'state_observer'
 require 'abstract_strategy'
 require 'mock_game'
+require 'state'
+require 'infinity'
+require 'transposition_table'
+require 'in_memory_state_value_cache'
+
 require 'minimax'
 require 'alpha_beta'
-require 'state'
-require 'hashing_provider'
-require 'transposition_table'
+require 'negamax'
+
 require 'minimax_with_transposition_table'
 require 'alpha_beta_with_transposition_table'
+require 'alpha_beta_with_in_memory_cache'
+require 'negamax_with_in_memory_cache'
 
 require 'stringio'
 require 'benchmark'
 
 module TicTacToe
-  
-
   def self.mock_games(algorithm)
     MockGame.new(algorithm).play_successors(State.new,1,false)
   end
 
-  Benchmark.bm(1) do |algorithm|
+  Benchmark.bm(5) do |algorithm|
 
-    algorithm.report("minimax") { TicTacToe.mock_games(Minimax.new) }
-    algorithm.report("minimax + table") do
-      TicTacToe.mock_games(MinimaxWithTranspositionTable.new)
+    # negamax
+    algorithm.report("negamax") { TicTacToe.mock_games(Negamax.new) }
+
+    algorithm.report("negamax + cache") do
+      TicTacToe.mock_games(NegamaxWithInMemoryCache.new)
     end
 
-    algorithm.report("alpha-beta") { TicTacToe.mock_games(AlphaBeta.new) }
-    algorithm.report("alpha-beta + table") do
+    # minimax + a/b pruning
+    algorithm.report("a/b") { TicTacToe.mock_games(AlphaBeta.new) }
+
+    algorithm.report("a/b + table") do
       TicTacToe.mock_games(AlphaBetaWithTranspositionTable.new)
+    end
+    algorithm.report("a/b + cache") do
+      TicTacToe.mock_games(AlphaBetaWithInMemoryCache.new)
+    end
+
+
+    # minimax
+    algorithm.report("minimax") { TicTacToe.mock_games(Minimax.new) }
+
+    algorithm.report("minimax + table") do
+      TicTacToe.mock_games(MinimaxWithTranspositionTable.new)
     end
   end
 end

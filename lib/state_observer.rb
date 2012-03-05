@@ -2,12 +2,10 @@
 #  class:         StateObserver
 #  extends:       --
 #  module:        TicTacToe
-#
 #  author:        Joseph Weissman, <jweissman1986@gmail.com>
 #
 module TicTacToe
  
-
   #
   #   Observes the current state of the game and provides some rendering and endgame
   #   detection facilities; in charge of most of the logic around inspection and analysis of
@@ -149,7 +147,23 @@ module TicTacToe
       return 0 if draw?(state)
       player_won?(state, player) ? 1 : -1
     end
-    
+
+
+    #
+    #    Return a human-friendly string expressing the state's
+    #    current status -- in progress, drawn, or won by a particular player.
+    #
+    def disposition(state)
+      raise ArgumentError.new("state cannot be nil") if state.nil?
+      return "game is in-progress" if not terminal? state
+      if player_won?(state, 1)
+        return "player one is victorious"
+      elsif player_won?(state, 2)
+        return "player two is victorious"
+      else
+        return "game ended in a draw"
+      end
+    end
 
     #
     #     Format and display the schematic representation of the state.

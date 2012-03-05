@@ -22,7 +22,6 @@ module TicTacToe
     #   A new state can be created with just an array of values (0-space,1-X, 2-O)
     #   but also optionally takes the player up.
     #
-    #
     def initialize(field = initial_field, current_player=1)
       @board          = field
       @current_player = current_player
@@ -61,6 +60,19 @@ module TicTacToe
       succ.board[n] = @current_player
       succ.toggle_player
       succ
+    end
+
+
+    #
+    #   Determine whether this state has a legal successor at the provided
+    #   position.
+    #
+    #
+    def has_legal_successor?(n)
+      successor(n)
+      true
+    rescue
+      false
     end
 
     private

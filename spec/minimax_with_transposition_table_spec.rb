@@ -11,7 +11,6 @@ require 'mock_game'
 require 'alpha_beta'
 require 'state'
 require 'abstract_strategy_spec'
-require 'hashing_provider'
 require 'transposition_table'
 require 'minimax_with_transposition_table'
 

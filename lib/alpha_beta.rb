@@ -1,9 +1,8 @@
 #
 #  class:         AlphaBeta
-#  extends:       --
+#  extends:       AbstractStrategy
 #  module:        TicTacToe
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
-#
+#  author:        Joseph Weissman, <jweissman1986@gmail.com>
 #
 module TicTacToe
   #
@@ -12,12 +11,16 @@ module TicTacToe
   #
   class AlphaBeta < AbstractStrategy
     #
-    #   Walk minimax tree for a given state on behalf of player, using alpha/beta pruning to optimize search.
+    #   Walk minimax tree for a given state on behalf of player,
+    #   using alpha/beta pruning to optimize search.
     #
-    def value(state, player=1, depth=0, alpha=-INFINITY,beta=INFINITY)
+    def value(state, player=1, depth=0, alpha=-INFINITY,beta=INFINITY,color=nil)
+
       return endgame_score(state,player,depth) if terminal?(state)
+
       player_up = state.current_player == player
       score = 0
+
       if player_up
         each_immediate_successor_state(state) do |succ|
           subalpha = value(succ, player, depth-1, alpha, beta)
@@ -33,7 +36,9 @@ module TicTacToe
         end
         score = beta
       end
+
       score
+
     end
   end
 end
