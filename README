@@ -1,11 +1,108 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
+=== Usage
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+To run the Ruby application, assuming you have Ruby installed, you can
+issue the folllowing command from the root of the project directory
+to challenge the computer to a game of Tic Tac Toe:
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+'ruby lib/game.rb'
 
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+The game should be fairly self-explanatory in terms of the input, but you
+use 1-9 in 'inverted phone' style to play against the CPU. (Note: at this
+state there is no iterative deepening/difficulty levels or anything --
+so if the implementation is correct, you shouldn't be able to beat the
+computer. At best you should be able to play the CPU to a draw.)
+
+Now, to run the specifications, you'll need the RSpec gem, but once this is
+done you should be able to run
+
+'spec'
+
+from the command line to issue instructions to run the specifications. There
+are around 30 tests that specify the behavior of components of the engine
+and evaluate the various algorithms for correctness and optimality.
+
+=== About this project
+
+This project implements a simple Tic-Tac-Toe game and explores several
+algorithms for implementing perfect play. It includes a console-based
+client for playing against the computer.
+
+--- Algorithms
+
+In a sense there is really only one algorithm involved here, which is called
+'minimax,' and is a technique involving alternatively maximizing and minimizing
+over the recursively-calculated value of subtrees of a particular game state
+node. Negamax is a similar algorithm which incorporates some coding
+simplifications owing to the mathematical dualism of max(x,y) and -min(-x,-y).
+Alpha/beta  pruning is a technique which permits us to take 'note' of really
+good or bad moves as we are examining the tree, allowing the computer to more
+intelligently determine whether exploring a given subtree further will yield
+any new information.
+
+The interactive game in its current configuration utilizes the Negamax
+algorithm with an in-memory cache (which in this case makes use of a
+transposition table.)
+
+There is a benchmarking utility that can be invoked by issuing
+
+'ruby lib/strategy_benchmark_suite.rb'
+
+and which benchmarks the performance of the various algorithms with the
+particular optimizations/augmentations. The output is the from the standard
+Ruby benchmarking library. A sample run on my machine is reproduced below.
+
+                          user     system      total        real
+negamax              14.350000   0.130000  14.480000 ( 14.520641)
+negamax + table      21.340000   0.050000  21.390000 ( 21.488665)
+negamax + cache      18.730000   0.050000  18.780000 ( 18.855850)
+a/b                  14.170000   0.120000  14.290000 ( 14.313514)
+a/b + table          21.660000   0.050000  21.710000 ( 21.775437)
+a/b + cache          17.920000   0.050000  17.970000 ( 17.994938)
+minimax              52.310000   0.430000  52.740000 ( 52.945050)
+minimax + table      60.880000   0.480000  61.360000 ( 61.991931)
+minimax + cache      51.490000   0.430000  51.920000 ( 52.114739)
+
+Note that the state cache relies on and extends the functionality of the
+transpositions now. To briefly summarize, the optimizations as implemented
+seem to be only somewhat effective for the minimax operation; and only then 
+when used together. For the other minimax variants, negamax and minimax with
+pruning, they seem to actually increase the expense of the analysis.
+
+=== Current Status
+
+Negamax is working very effectively, though the optimizations aren't quite
+as effective as I'd hoped. I've been able to get the in-memory value cache
+yielding performance returns but the transposition tables are a bit more
+obstinate (my sense is that improvement here is going to come from
+simplifying the state representation further.)
+
+* Minimax (implemented)
+* Pruning (implemented)
+* Negamax (implemented)
+* In-memory Cache (implemented, could be optimized further)
+* Transposition Tables (implemented, could be optimized further)
+* Zobrist hashing for game state. (--)
+* Shallow searching to order moves for minimax. (--)
+* Iterative deepening. (--)
+* GUI and/or Web Interface (--)
+
+=== Challenge
+
+"Create a program that can interactively play the game of Tic-Tac-Toe
+against a human player and can never lose."
+
+
+=== Thoughts
+
+
+I have found that the optimizations as implemented were not quite as
+effective as I'd hoped, even after some focused tuning/refactoring. For
+real gains I think I would have to refactor the core of the engine to work
+with a simpler model of the board, and not duplicate State objects all over
+the place. This would be one place I'd go first in terms of optimizing the
+performance characteristics of the system.
+
+Another thing to thing about would be some form of hashing, which
+I have tried to integrate to some degree into the caching system. Using a
+proper Zobrist hash of the current state would permit simpler tracking of
+moves as well as generation of successors.

@@ -1,0 +1,17 @@
+--- About this project
+
+To run the Ruby application, assuming you have Ruby installed, should be as simple as ruby ./lib/main.rb.
+
+To run the specifications, you'll need the RSpec gem, but once this is done you should be able to run 'spec' from the command line.
+
+
+--- Status
+
+In-progress. 
+
+--- Wishlist
+
+* Naive Minimax (in progress)
+* Negamax/Pruning (--)
+* Iterative deepening. (--)
+* GUI and/or Web Interface (--)
