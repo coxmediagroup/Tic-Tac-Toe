@@ -15,8 +15,8 @@ module TicTacToe
 
     #
     #  Invoke the best move possible -- will invoke a method "value" on
-    #  self with each successor state, the current player and the initial depth (0),
-    #  selecting the best-ranking move.
+    #  self providing as arguments the successor state, the current player
+    #  and the initial depth (0). We select the best-ranking move.
     #
     def best_move(state, player=1, debug=true)
 
@@ -43,7 +43,7 @@ module TicTacToe
     protected
 
     #
-    #  calculate the final score for a terminal board state
+    #  Calculate the final score for a terminal board state.
     #
     def endgame_score(state, player, depth)
         return 0 if draw?(state)

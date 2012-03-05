@@ -17,12 +17,15 @@ require 'transposition_table'
 require 'in_memory_state_value_cache'
 
 require 'minimax'
-require 'alpha_beta'
-require 'negamax'
-
 require 'minimax_with_transposition_table'
+require 'minimax_with_in_memory_cache'
+
+require 'alpha_beta'
 require 'alpha_beta_with_transposition_table'
 require 'alpha_beta_with_in_memory_cache'
+
+require 'negamax'
+require 'negamax_with_transposition_table'
 require 'negamax_with_in_memory_cache'
 
 require 'stringio'
@@ -33,10 +36,14 @@ module TicTacToe
     MockGame.new(algorithm).play_successors(State.new,1,false)
   end
 
-  Benchmark.bm(5) do |algorithm|
+  Benchmark.bm(20) do |algorithm|
 
     # negamax
     algorithm.report("negamax") { TicTacToe.mock_games(Negamax.new) }
+
+    algorithm.report("negamax + table") {
+      TicTacToe.mock_games(NegamaxWithTranspositionTable.new)
+    }
 
     algorithm.report("negamax + cache") do
       TicTacToe.mock_games(NegamaxWithInMemoryCache.new)
@@ -58,6 +65,10 @@ module TicTacToe
 
     algorithm.report("minimax + table") do
       TicTacToe.mock_games(MinimaxWithTranspositionTable.new)
+    end
+
+    algorithm.report("minimax + cache") do
+      TicTacToe.mock_games(MinimaxWithInMemoryCache.new)
     end
   end
 end

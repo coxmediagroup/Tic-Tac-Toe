@@ -1,9 +1,17 @@
+#
+#  specified class:         InMemoryStateValueCache
+#  extends:                 --
+#  module:                  TicTacToe
+#
+#  author: Joseph Weissman, <jweissman1986@gmail.com>
+#
+#
 require 'benchmark'
 
 require 'state'
 require 'state_observer'
 require 'abstract_strategy'
-require 'alpha_beta'
+require 'negamax'
 require 'infinity'
 require 'transposition_table'
 require 'mock_game'
@@ -11,17 +19,18 @@ require 'abstract_strategy_spec'
 require 'in_memory_state_value_cache'
 
 module TicTacToe
+  #
+  #  Test class for specifying module contract.
+  #
+  class NegamaxPlusInMemoryCache < Negamax
+    include InMemoryStateValueCache
+  end
+
   describe InMemoryStateValueCache do
+    it "should memorize and recall states" do
 
-    class AlphaBetaPlusInMemoryCache < AlphaBeta
-      include InMemoryStateValueCache
-    end
-
-
-
-    before(:each) do
-      @sample = AlphaBetaPlusInMemoryCache.new
-      @sample.clear_state_value_table!
+      @observe = NegamaxPlusInMemoryCache.new
+      @observe.clear_state_value_table!
 
       @state                     = State.new [ 1,2,0, 0,0,0, 0,0,0 ]
       @transposed_state          = State.new [ 1,0,0, 2,0,0, 0,0,0 ]
@@ -30,27 +39,26 @@ module TicTacToe
       @rotated_state             = State.new [ 0,0,1, 0,0,2, 0,0,0 ]
       @rotated_ccw_state         = State.new [ 0,0,0, 2,0,0, 1,0,0 ]
       @rotated_180_state         = State.new [ 0,0,0, 0,0,0, 0,2,1 ]
-    end
 
-    it "should remeber, recognize and lookup states" do
-      @sample.collect_state_values.should be_empty
+      @transpositions = [ @transposed_state, @inverted_state, @inverted_horizontal_state,
+                          @rotated_state,   @rotated_ccw_state, @rotated_180_state ]
 
-      @sample.recognized?(@state).should be false
-      @sample.memorize(@state,1)
+      player, depth, color, value = 1, 0, 1, 0
+      m = @observe.matrix(@state)
 
-      @sample.recognized?(@state).should be 1
-      @sample.recognized?(@transposed_state).should be 1
-      @sample.recognized?(@inverted_state).should be 1
-      @sample.recognized?(@rotated_state).should be 1
-      @sample.recognized?(@inverted_horizontal_state).should be 1
-      @sample.recognized?(@rotated_180_state).should be 1
-      @sample.recognized?(@rotated_ccw_state).should be 1
-    end
+      @observe.collect_state_values.should be_empty
+      @observe.recognized?(m).should be false
+      @observe.memorize(m, player, depth, color, value)
 
-    it "should integrate safely into and optimize over an existing algorithm" do
-      describe AlphaBetaPlusInMemoryCache do
-        it_should_behave_like 'an optimization'
+      @observe.recognized?(m).should be value
+      @transpositions.each do |transposition|
+        m = @observe.matrix(transposition)
+        @observe.recognized?(m).should be value
       end
     end
+  end
+
+  describe NegamaxPlusInMemoryCache do
+    it_should_behave_like 'an optimization'
   end
 end

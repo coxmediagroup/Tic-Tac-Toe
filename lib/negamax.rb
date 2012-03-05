@@ -1,9 +1,8 @@
 #
-#  specified class:         Negamax
+#  class:                   Negamax
 #  extends:                 AbstractStrategy
-#  module:                  TicTacToe#
-#  author: Joseph Weissman, <jweissman1986@gmail.com>
-#
+#  module:                  TicTacToe
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
 #
 module TicTacToe
   #
@@ -17,10 +16,12 @@ module TicTacToe
     #  node with provided color.)
     #
     def value(state, player=1, depth=0, alpha=-INFINITY, beta=INFINITY, color=1)
-      return color*endgame_score(state,3-player,depth) if terminal? state
+      color = -color
+      return color*endgame_score(state,player,depth) if terminal? state
+
       score = -INFINITY
       each_immediate_successor_state(state) do |succ|
-        subalpha = -value(succ, player, depth-1, -beta, -alpha, -color)
+        subalpha = -value(succ, player, depth-1, -beta, -alpha, color)
         score    = [score, subalpha].max
         alpha    = [alpha, subalpha].max
         break unless beta > alpha

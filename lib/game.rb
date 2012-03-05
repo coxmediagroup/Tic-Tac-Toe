@@ -13,38 +13,25 @@ require 'state'
 require 'state_observer'
 require 'abstract_strategy'
 require 'mock_game'
-require 'alpha_beta'
-require 'state'
 require 'infinity'
-require 'transposition_table'
-require 'alpha_beta_with_transposition_table'
+require 'negamax'
 
 module TicTacToe
+
   #
-  #   Provides a Tic-Tac-Toe game engine that plays interactively with a human
-  #   being. Application entrypoint.
-  #
-  #
-  #   Feature wishlist:
-  #       - scalable difficulty / enforced time limits on computation
-  #       - support arbitrary board sizes
-  #       - support 2+ opponents
-  #       - playable via local network and/or web
+  #   Provides a Tic-Tac-Toe game engine that plays interactively
+  #   with a human being. Application entrypoint.
   #
   class Game < StateObserver
 
-    attr_accessor :tree, :state, :observer, :ai
-
-    # which algorithm to utilize
-    AI = AlphaBetaWithTranspositionTable
-
+    attr_accessor :state, :ai
     def initialize
       @state   = @root = State.new
-      @ai      = AI.new
+      @ai      = Negamax.new
     end
 
     #
-    #   display an about message
+    #   Display an about message.
     #
     def about
       zero_to_eight = Array.new(9) { |i| i   }
@@ -72,7 +59,8 @@ module TicTacToe
     end
 
     #
-    #   Play a game against the computer.
+    #   Play a game of tic-tac-toe against the computer
+    #   using a terminal console.
     #
     def play
       about
@@ -88,20 +76,11 @@ module TicTacToe
         pp @state
 
         unless terminal? @state
-          begin
             human_move = ''
             puts
             puts "--- It's your turn! Please enter your move (1-9):"
             human_move = gets.chomp until human_move.match(/^[1-9]$/)  and @state.has_legal_successor?(human_move.to_i - 1)
-
             @state = @state.successor(human_move.to_i-1)
-          rescue StandardError => e
-
-
-
-          end
-          # ./lib/state.rb:59:in `successor': invalid successor index '3' provided (StandardError)
-
         end
       end
 

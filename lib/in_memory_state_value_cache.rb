@@ -10,10 +10,7 @@ module TicTacToe
   #   Provide a transposition-aware state => value cache for optimizing
   #   traversals and accelerating computation of sums over minimax subtrees.
   #
-  #   TODO investigate 
-  #
   module InMemoryStateValueCache
-
     #
     #     Perform augmentations to strategy business logic on inclusion.
     #     In particular we include a transposition table and override the
@@ -25,57 +22,51 @@ module TicTacToe
         alias :_value :value
 
         #
-        #   Begin the cache at states at depth of -2 or greater (successors
-        #   of successor nodes and their subtrees) from the current point of view.
-        #
-        def reached_cache_depth?(depth); depth <= -4; end
-
-        #
         #  Override the value returned by default from the base strategy with the
-        #  cached value from the cache, if present (memorize otherwise.)
+        #  cached value from the cache, if present (else memoize.)
         #
         def value(state,player=1,depth=0,alpha=-INFINITY,beta=INFINITY,color=1)
-          return endgame_score(state,player,depth) if terminal?(state)
-
-          unless reached_cache_depth?(depth)
-            each_transposition(state,self) do |transpose|
-              val = recognized?(transpose, depth)
-              return val unless val == false
+          if depth < -4
+            m = matrix(state)
+            val = recognized?(m, player, depth, color)
+            if val
+              return val
             end
           end
 
           score = _value(state,player,depth,alpha,beta,color)
-          memorize(state,score,depth) if reached_cache_depth?(depth)
+
+          memorize(m,player,depth,color,score) if depth < -4
           score
         end # end base.value [dynamically overriden]
       end # end base.class_eval
     end # end InMemoryStateValueCache.included(base)
 
-
     #
     #  Determine whether a particular state is entered into the table.
     #  Return the value if found.
     #
-    def recognized?(state, depth=0)
+    def recognized?(matrix, player=1, depth=0, color=1)
       @@state_value_table ||= {}
-      each_transposition(state,self) do |transpose|
-        if @@state_value_table.keys.include? hash(transpose,depth)
-          return @@state_value_table[hash(transpose, depth)]
-        end
+      h = hash(matrix, player, depth, color)
+      if @@state_value_table.keys.include? h
+        return @@state_value_table[h]
       end
       false
     end
 
     #
-    #
     #     Memorize the value of the provided state.
     #
-    def memorize(state, value, depth=0)
+    def memorize(matrix, player=1, depth=0, color=1, value=nil)
+      raise ArgumentError.new("pass in matrix directly") if matrix.is_a? State
       raise StandardError.new("cannot enter a nil value") if value.nil?
       @@state_value_table ||= {}
-      @@state_value_table[hash(state, depth)] = value
+      each_transposition(matrix, true) do |transpose|
+        h = hash(transpose, player, depth, color)
+        @@state_value_table[h] = value
+      end
     end
-
 
     #
     #   Remove all entries from the transpositions table.
@@ -87,22 +78,17 @@ module TicTacToe
       @@state_value_table = @@state_value_table.clear
     end
 
-
-
     def collect_state_values
       @@state_value_table
     end
-
 
     protected
     #
     #    Construct a unique hash per board configuration / player / depth
     #
-    def hash(state,depth)
-      key = state.board.hash.to_s + state.current_player.to_s + depth.abs.to_s
-      key = key.to_i
-      key
+    def hash(matrix,player=1,depth=0, color=1)
+      # [ player, depth, matrix.flatten ].hash
+      [ matrix.flatten, player, depth, color ].hash
     end
-
   end # end module InMemoryStateValueCache
 end

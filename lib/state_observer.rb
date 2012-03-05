@@ -143,7 +143,7 @@ module TicTacToe
     #     loss                                    -1
     #
     #
-    def evaluate(state, player)
+    def evaluate(state, player=1)
       return 0 if draw?(state)
       player_won?(state, player) ? 1 : -1
     end

@@ -1,6 +1,9 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-
+#
+#  specified class:         Negamax
+#  extends:                 --
+#  module:                  TicTacToe
+#  author:                  Joseph Weissman, <jweissman1986@gmail.com>
+#
 require 'state_observer'
 require 'abstract_strategy'
 require 'abstract_strategy_spec'
