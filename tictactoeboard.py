@@ -9,30 +9,30 @@ By: Will Riley
 
 def main():
   # create empty tic-tac-toe game board
-  b = TicTacToeBoard()
+  board = TicTacToeBoard()
   
   # randomly pick whether the user will be the first or second player
-  playerNum = random.choice([1,2])
-  otherPlayerNum = b.get_other_player_num(playerNum)
+  userPlayerId = random.choice([1,2])
+  computerPlayerId = board.get_other_player_num(userPlayerId)
   
   # welcome the user to the game
   print "Welcome to Tic-Tac-Toe"
 
   # beginning with the first player,
   # alternate turns between players until the game ends
-  currentPlayerNum = 1 # the number of the current player
+  currentPlayerId = 1 # the id of the current player
   cmd = '' # the command entered by the user
-  while(cmd != 'q' and b.is_game_over() is False):
-    if currentPlayerNum == otherPlayerNum:      
-      b.take_best_move(otherPlayerNum)
-      # end turn and change to next player
-      currentPlayerNum = b.get_other_player_num(currentPlayerNum)
+  while(cmd != 'q' and board.is_game_over() is False):
+    if currentPlayerId == computerPlayerId:      
+      board.take_best_move(computerPlayerId)
+      # end turn and allow the user to take a turn
+      currentPlayerId = userPlayerId
     else:
       # display the board
-      b.display()
+      board.display()
       
       # remind the user whether they are X's or O's
-      if playerNum == 1:
+      if userPlayerId == 1:
         print "You are X's"
       else:
         print "You are O's"
@@ -46,25 +46,25 @@ def main():
       if len(parts) == 2:
         row = int(parts[0].strip())
         col = int(parts[1].strip())
-        validRange = [1,2,3]
-        if row in validRange and col in validRange:
+        validRowRange = validColRange = [1,2,3]
+        if row in validRowRange and col in validColRange:
           # make sure a mark does not already exist at the coordinates 
-          if  b.d[row - 1][col - 1] == b.CELL_NO_PLAYER:
+          if  board.d[row - 1][col - 1] == board.CELL_NO_PLAYER:
             # mark the board at the coordinate for the player
-            b.d[row - 1][col - 1] = playerNum
-            # end turn and change to next player
-            currentPlayerNum = b.get_other_player_num(currentPlayerNum)
+            board.d[row - 1][col - 1] = userPlayerId
+            # end turn and allow the computer player to take a turn
+            currentPlayerId = computerPlayerId
   
   # display final board  
-  b.display()
+  board.display()
 
   # display final game results
-  winner = b.get_winner()
-  if winner == playerNum:
+  winnerId = board.get_winner()
+  if winnerId == userPlayerId:
     print "You won!"
-  elif winner == otherPlayerNum:
+  elif winnerId == computerPlayerId:
     print "You lost!"
-  elif winner == b.GAME_WINNER_TIED:
+  elif winnerId == board.GAME_WINNER_TIED:
     print "You tied!"
         
 class TicTacToeBoard:  
