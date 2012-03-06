@@ -15,34 +15,50 @@ def main():
   playerNum = random.choice([1,2])
   otherPlayerNum = b.get_other_player_num(playerNum)
   
-  # alternate turns between players until the game ends
+  # welcome the user to the game
   print "Welcome to Tic-Tac-Toe"
-  turn = 1
-  cmd = ''
+
+  # beginning with the first player,
+  # alternate turns between players until the game ends
+  currentPlayerNum = 1 # the number of the current player
+  cmd = '' # the command entered by the user
   while(cmd != 'q' and b.is_game_over() is False):
-    if turn % 2 == otherPlayerNum % 2:      
+    if currentPlayerNum == otherPlayerNum:      
       b.take_best_move(otherPlayerNum)
-      turn += 1
+      # end turn and change to next player
+      currentPlayerNum = b.get_other_player_num(currentPlayerNum)
     else:
+      # display the board
       b.display()
+      
+      # remind the user whether they are X's or O's
       if playerNum == 1:
         print "You are X's"
       else:
         print "You are O's"
+      
       # ask user to input the coordinates of her mark, or to press q to quit
       cmd = raw_input('<enter "{rowNum}, {columnNum}" or "q" to quit>: ')
+      
+      # make sure the user has entered valid coordinates for her mark
+      # and if so, mark the board for the user
       parts = cmd.split(',')
       if len(parts) == 2:
         row = int(parts[0].strip())
         col = int(parts[1].strip())
         validRange = [1,2,3]
         if row in validRange and col in validRange:
+          # make sure a mark does not already exist at the coordinates 
           if  b.d[row - 1][col - 1] == b.CELL_NO_PLAYER:
+            # mark the board at the coordinate for the player
             b.d[row - 1][col - 1] = playerNum
-            turn += 1
+            # end turn and change to next player
+            currentPlayerNum = b.get_other_player_num(currentPlayerNum)
   
-  # display final game results  
+  # display final board  
   b.display()
+
+  # display final game results
   winner = b.get_winner()
   if winner == playerNum:
     print "You won!"
