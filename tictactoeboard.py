@@ -16,7 +16,9 @@ def main():
   computerPlayerId = board.get_other_player_num(userPlayerId)
   
   # welcome the user to the game
+  print ""
   print "Welcome to Tic-Tac-Toe"
+  print ""
 
   # beginning with the first player,
   # alternate turns between players until the game ends
@@ -39,6 +41,7 @@ def main():
       
       # ask user to input the coordinates of her mark, or to press q to quit
       cmd = raw_input('<enter "{rowNum}, {columnNum}" or "q" to quit>: ')
+      print ""
       
       # make sure the user has entered valid coordinates for her mark
       # and if so, mark the board for the user
@@ -49,9 +52,9 @@ def main():
         validRowRange = validColRange = [1,2,3]
         if row in validRowRange and col in validColRange:
           # make sure a mark does not already exist at the coordinates 
-          if  board.d[row - 1][col - 1] == board.CELL_NO_PLAYER:
+          if  board.matrix[row - 1][col - 1] == board.CELL_NO_PLAYER:
             # mark the board at the coordinate for the player
-            board.d[row - 1][col - 1] = userPlayerId
+            board.matrix[row - 1][col - 1] = userPlayerId
             # end turn and allow the computer player to take a turn
             currentPlayerId = computerPlayerId
   
@@ -66,18 +69,23 @@ def main():
     print "You lost!"
   elif winnerId == board.GAME_WINNER_TIED:
     print "You tied!"
+  print ""
         
 class TicTacToeBoard:  
   def __init__(self):
-    # create a 3 by 3 matrix representing the tic-tac-toe board
+        
+    # create a matrix representing the tic-tac-toe board
     # each cell will have the player number 
     # 0 = no player, 1 = player 1, 2 = player 2    
-    self.CELL_NO_PLAYER = 0
-    self.d = [[self.CELL_NO_PLAYER for i in xrange(3)] for j in xrange(3)]
+    self.COLUMN_COUNT = 3
+    self.ROW_COUNT = 3
+    self.CELL_NO_PLAYER = 0    
+    self.matrix = [[self.CELL_NO_PLAYER for col in xrange(self.COLUMN_COUNT)] for row in xrange(self.ROW_COUNT)]
     
+    # define winner codes
     self.GAME_WINNER_GAME_NOT_OVER = 0
-    self.GAME_WINNER_TIED = 3
-    
+    self.GAME_WINNER_TIED = -1
+        
   def is_game_over(self):
     return self.get_winner() != self.GAME_WINNER_GAME_NOT_OVER
   
@@ -89,44 +97,48 @@ class TicTacToeBoard:
     
   def take_best_move(self, playerNum):
     # if player can win, mark spot so the player can win 
-    for r in xrange(3):
-      for c in xrange(3):
-        if self.d[r][c] == self.CELL_NO_PLAYER:
+    for row in xrange(self.ROW_COUNT):
+      for col in xrange(self.COLUMN_COUNT):
+        if self.matrix[row][col] == self.CELL_NO_PLAYER:
           nB = copy.deepcopy(self)
-          nB.d[r][c] = str(playerNum)
+          nB.matrix[row][col] = playerNum
           if nB._can_win(playerNum):
-            self.d[r][c] = playerNum
+            self.matrix[row][col] = playerNum
             return
     
     # if player cannot win but the player can tie, 
     # mark spot so the player can tie     
-    for r in xrange(3):
-      for c in xrange(3):
-        if self.d[r][c] == self.CELL_NO_PLAYER:
+    for row in xrange(self.ROW_COUNT):
+      for col in xrange(self.COLUMN_COUNT):
+        if self.matrix[row][col] == self.CELL_NO_PLAYER:
           nB = copy.deepcopy(self)
-          nB.d[r][c] = str(playerNum)
+          nB.matrix[row][col] = playerNum
           if nB._can_tie(playerNum):
-            self.d[r][c] = playerNum
+            self.matrix[row][col] = playerNum
             return
             
     # if player can neither win nor tie, mark any spot
-    for r in xrange(3):
-      for c in xrange(3):
-        if self.d[r][c] == self.CELL_NO_PLAYER:
-          self.d[r][c] = playerNum
+    for row in xrange(self.ROW_COUNT):
+      for col in xrange(self.COLUMN_COUNT):
+        if self.matrix[row][col] == self.CELL_NO_PLAYER:
+          self.matrix[row][col] = playerNum
           return
   
   def display(self):
     # display board such that 
     # player 1 has X's and player 2 has O's 
     # and other spots have dashes
-    # also include axes with row and column coordinates 
-    print '  123'
+    # also include axes labels with row and column coordinates 
+    
+    # print column axis labels
+    print '  ' + ''.join(map(str, xrange(1, self.COLUMN_COUNT + 1)))
+    
+    # print rows and row axis labels
     no_player_symbol = '-'
     player_1_symbol = 'X'
     player_2_symbol = 'O'
-    for i in xrange(3):
-        print str(i+1) + ' ' + ''.join(map(str, self.d[i])).replace('1', player_1_symbol).replace('2', player_2_symbol).replace('0', no_player_symbol)
+    for i in xrange(self.ROW_COUNT):
+        print str(i+1) + ' ' + ''.join(map(str, self.matrix[i])).replace('1', player_1_symbol).replace('2', player_2_symbol).replace('0', no_player_symbol)
     pass
   
   def get_winner(self):
@@ -136,12 +148,12 @@ class TicTacToeBoard:
     # return 3 if player 1 and player 2 tied
     gameOver = True
     for line in self._get_lines():
-      if line == '111':
-        return 1 # player 1 won
-      elif line == '222':
-        return 2 # player 2 won
-      if '0' in line:
+      if line.count(0) > 0:
         gameOver = False
+      elif line.count(1) > 0 and line.count(2) == 0:
+        return 1 # player 1 won
+      elif line.count(2) > 0 and line.count(1) == 0:
+        return 2 # player 2 won
     if gameOver:
       return self.GAME_WINNER_TIED # tied
     else:
@@ -155,31 +167,36 @@ class TicTacToeBoard:
   
   def _get_lines(self):
     # return all horizontal, vertical, and diagnol lines on the tic-tac-toe board
-    # where each line is represented by a string of player numbers
+    # where each line is represented by a list of player numbers
     # it will use zeros to represent empty cells where no player is present
     lines = []
     
     # add horizontal row lines
-    for i in xrange(3):
-      lines.append(''.join(map(str, self.d[i])))
+    for row in xrange(self.ROW_COUNT):
+      lines.append(copy.deepcopy(self.matrix[row]))
     
     # add vertical column lines
-    for i in xrange(3):
-      lines.append(str(self.d[0][i]) + str(self.d[1][i]) + str(self.d[2][i]))
+    for col in xrange(self.COLUMN_COUNT):
+      colLine = []
+      for row in xrange(self.ROW_COUNT):
+        colLine.append(self.matrix[row][col])
+      lines.append(colLine)
     
-    # add diagnol lines
-    lines.append(str(self.d[0][0]) + str(self.d[1][1]) + str(self.d[2][2]))
-    lines.append(str(self.d[0][2]) + str(self.d[1][1]) + str(self.d[2][0]))
+    # add diagnol lines if the board matrix is square
+    if self.ROW_COUNT == self.COLUMN_COUNT:
+      lines.append([self.matrix[i][i] for i in xrange(self.ROW_COUNT)])
+      lines.append([self.matrix[i][self.ROW_COUNT - i - 1] for i in xrange(self.ROW_COUNT)])    
+    
     return lines
     
   def _get_next_move_boards(self, playerNum):
     nextBoards = []
-    for r in xrange(3):
-      for c in xrange(3):
-        if self.d[r][c] == self.CELL_NO_PLAYER:
-          nB = copy.deepcopy(self)
-          nB.d[r][c] = str(playerNum)
-          nextBoards.append(nB)
+    for row in xrange(self.ROW_COUNT):
+      for col in xrange(self.COLUMN_COUNT):
+        if self.matrix[row][col] == self.CELL_NO_PLAYER:
+          nextBoard = copy.deepcopy(self)
+          nextBoard.matrix[row][col] = playerNum
+          nextBoards.append(nextBoard)
     return nextBoards
 
   def _can_win(self, playerNum):
@@ -202,12 +219,12 @@ class TicTacToeBoard:
       nextWinner = nextMoveBoard.get_winner()
       if nextWinner == otherPlayerNum or nextWinner == self.GAME_WINNER_TIED:
         return False
-      cW = False
+      canWin = False
       for nextMoveBoard2 in nextMoveBoard._get_next_move_boards(playerNum): 
         if nextMoveBoard2._can_win(playerNum):
-          cW = True
+          canWin = True
           break
-      if cW is False:
+      if canWin is False:
         return False
     return True
 
@@ -232,12 +249,12 @@ class TicTacToeBoard:
         return False
       if nextMoveBoard.get_winner() == self.GAME_WINNER_TIED:
         continue
-      cT = False
+      canTie = False
       for nextMoveBoard2 in nextMoveBoard._get_next_move_boards(playerNum): 
         if nextMoveBoard2._can_tie(playerNum):
-          cT = True
+          canTie = True
           break
-      if cT is False:
+      if canTie is False:
         return False
     return True
 
