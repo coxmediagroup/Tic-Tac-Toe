@@ -204,13 +204,13 @@ class TicTacToeBoard:
     return next_boards
 
   def _can_win(self, player_id):
-    """"Return whether a player can win, assuming the specified player has just moved and it is the other player's turn.
+    """"Return whether a player can always win, assuming the specified player has just moved and it is the other player's turn.
     
     Arguments:
     player_id -- id of player.
     
     Returns:
-    A boolean, indicating whether the player can win,
+    A boolean, indicating whether the player can always win,
     assuming the specified player has just moved and it is the other players turn. 
     
     """
@@ -237,13 +237,13 @@ class TicTacToeBoard:
     return True
 
   def _can_tie(self, player_id):
-    """"Return whether a player can tie, assuming the specified player has just moved and it is the other player's turn.
+    """"Return whether a player can always tie, assuming the specified player has just moved and it is the other player's turn.
     
     Arguments:
     player_id -- id of player.
     
     Returns:
-    A boolean, indicating whether the player can tie,
+    A boolean, indicating whether the player can always tie,
     assuming the specified player has just moved and it is the other players turn. 
     
     """
