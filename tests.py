@@ -6,6 +6,7 @@
 """ 
 
 import unittest
+import random
 from engine import TTTEngine, TTTError, TTTMoveNode, TTTEndGame
 
 class UnitTests(unittest.TestCase):
@@ -106,6 +107,30 @@ class UnitTests(unittest.TestCase):
         except TTTEndGame as e:
             self.assertEqual( str(e), 'Stalemate!' )
     
+    def testUnbeatable(self):
+        # loop through random games in an attempt to find an instance where the "player" wins
+        random.seed()
+        
+        for count in range(0,100): # emulate 100 games
+            game = TTTEngine()
+            print '\nGame %s: ' % (count + 1),
+            eog = False
+            while len(game.getValidMoves()) > 0 and not eog:
+                moves = game.getValidMoves()
+                move = random.choice(moves)
+                print 'P%s' % (move + 1),
+                try:
+                    game.applyMove(move)
+                    game.checkState()
+                    move = game.getBestMove()
+                    print 'C%s' % (move + 1),
+                    game.applyMove(move)
+                    game.checkState()
+                except TTTEndGame as e:
+                    print str(e)
+                    eog = True
+                    self.assertTrue( str(e) != 'You won!' )
+            
 suite = unittest.TestLoader().loadTestsFromTestCase(UnitTests)
 unittest.TextTestRunner(verbosity=2).run(suite)
 
