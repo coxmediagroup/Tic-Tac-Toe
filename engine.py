@@ -48,7 +48,7 @@ class TTTEngine:
         
     # Check to see if anyone has won, and if so raise the TTTEndGame exception.
     # If a stalemate has occured, raises the TTTStalemate exception.
-    def checkState(self):
+    def check_state(self):
         # little shortcut
         b = self.board
         
@@ -68,7 +68,7 @@ class TTTEngine:
         # No else because there was no winner and no stalemate.
         
     # given a digit that represents the slot to move into
-    def applyMove(self, move):
+    def apply_move(self, move):
         # check that move is valid before applying it, raising a TTTError if not
         if not move in range(0,9) or not self.board[ move ].isdigit():
             # the specified slot is taken, so invalid move
@@ -83,10 +83,10 @@ class TTTEngine:
             
         self.moves += 1
         
-        self.checkState()
+        self.check_state()
         
     # returns a list of any open space on the board
-    def getValidMoves(self):
+    def get_valid_moves(self):
         avail_moves = []
         for i in range(0,9):
             if self.board[i].isdigit():
@@ -105,8 +105,8 @@ class TTTEngine:
     
     # Internal function to rate the given move with the current board state.
     # It is assumed that the given move is an available move on the board.
-    def __rateMove(self, move, player_value, opp_value):
-        if not move in self.getValidMoves():
+    def __rate_move(self, move, player_value, opp_value):
+        if not move in self.get_valid_moves():
             raise Exception('A non-available move was given.')
 
         # Copy the current board state.
@@ -166,7 +166,7 @@ class TTTEngine:
         
     # Back out the specified move (reset the space and decrement the moves
     # counter. Move is the actual index in the board list.
-    def __backOutMove(self, move):
+    def __back_out_move(self, move):
         if not self.board[move].isalpha():
             raise Exception('Space given is not occupied.')
             
@@ -177,8 +177,8 @@ class TTTEngine:
     tree for any available moves and appends them to the given move node's
     children list. Returns the modified move node.
     """
-    def __getMoveTree(self, parent_node, player_value, opp_value):
-        move_list = self.getValidMoves()
+    def __get_move_tree(self, parent_node, player_value, opp_value):
+        move_list = self.get_valid_moves()
         
         if len(move_list) == 0:
             # no more moves, board is currently full so just return
@@ -186,35 +186,35 @@ class TTTEngine:
 
         # rate each move and determine the best course of action
         for move in move_list:
-            move_node = TTTMoveNode(move, self.__rateMove(move, player_value, opp_value))
+            move_node = TTTMoveNode(move, self.__rate_move(move, player_value, opp_value))
  
             # On predicted player moves, zero out the weight
             if self.moves % 2 == 0:
                 move_node.weight = 0
             
             try:
-                self.applyMove(move)
-                # Note if the applyMove throws an end game, the recursion stops.
+                self.apply_move(move)
+                # Note if the apply_move throws an end game, the recursion stops.
                 # Apply diminishing returns on events the farther into predection this goes.
-                move_node = self.__getMoveTree(move_node, (player_value / 2.0), (opp_value / 2.0))  
+                move_node = self.__get_move_tree(move_node, (player_value / 2.0), (opp_value / 2.0))  
             
             except TTTEndGame:
                 pass
 
-            self.__backOutMove(move)
+            self.__back_out_move(move)
             parent_node.weight += move_node.weight
-            parent_node.addChild(move_node)
+            parent_node.add_child(move_node)
         
         return parent_node
         
         
     # Returns True if the specified move occurs on a corner. Used for when a
     # tie occurs between multiple moves. Corners are preferred if nothing else.
-    def __isCorner(self, move):
+    def __is_corner(self, move):
         return move in (0, 2, 6, 8)
     
     # Runs the AI to determine the best next move for the CPU.
-    def getBestMove(self):
+    def get_best_move(self):
         ''' Manual override for first move seems to iron out some very very slow
         decisions the AI makes when it has too many choices or if
         the game is too vague.
@@ -224,7 +224,7 @@ class TTTEngine:
                 # Determine where the opponent has gone.
                 if not pos.isdigit():
                     p_move = self.board.index(pos)
-                    if self.__isCorner(p_move) or p_move in (1, 3, 5, 7):
+                    if self.__is_corner(p_move) or p_move in (1, 3, 5, 7):
                         # Opponent moves to corner, you move to center.
                         return 4
                     
@@ -238,7 +238,7 @@ class TTTEngine:
         elif self.moves == 3:
             p_moves = []
             for i in range(0, len(self.board)):
-                if not self.board[i].isdigit() and self.board[i] == 'X' and self.__isCorner(i):
+                if not self.board[i].isdigit() and self.board[i] == 'X' and self.__is_corner(i):
                     p_moves.append(i)
                     
             if len(p_moves) == 2:
@@ -248,7 +248,7 @@ class TTTEngine:
                     return 5
                 
         # start the move tree with a root node move of -1
-        moves = self.__getMoveTree(TTTMoveNode(-1, 0), 4, 3) # 4 and 6 are arbitrary weights
+        moves = self.__get_move_tree(TTTMoveNode(-1, 0), 4, 3) # 4 and 6 are arbitrary weights
             
         # sort descending by weight
         moves.children = sorted(moves.children, key=lambda node: -node.weight)
@@ -272,6 +272,6 @@ class TTTMoveNode:
         self.move = move
         self.weight = weight
         
-    def addChild(self, child_node):
+    def add_child(self, child_node):
         self.children.append(child_node)
         
