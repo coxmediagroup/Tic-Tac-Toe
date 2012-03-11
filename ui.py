@@ -13,7 +13,7 @@ from engine import TTTEngine, TTTError, TTTEndGame
 class GameUI(TTTEngine):
     
     # Clears the screen and redraws the current board layout.
-    def redrawScreen(self):
+    def redraw_screen(self):
         if os.sys.platform == 'win32':
             print '\n' * 25 # cheat for Windows
             
@@ -33,7 +33,7 @@ class GameUI(TTTEngine):
 
 # Launcher; not ideal here, but not sure where else to put it.
 game = GameUI()
-game.redrawScreen()
+game.redraw_screen()
 in_play = True
 while( in_play ):
     var = raw_input('Enter the number of an open space or "q" to quit: ')
@@ -44,18 +44,18 @@ while( in_play ):
         
     elif var.isdigit() and len(var) == 1 and int(var) > 0:
         try:
-            game.applyMove( int(var) - 1 )
-            game.applyMove( game.getBestMove() )
-            game.redrawScreen()
+            game.apply_move( int(var) - 1 )
+            game.apply_move( game.get_best_move() )
+            game.redraw_screen()
         
         except TTTError as e:
             print str(e)
             _ = raw_input('Press ENTER to try again...')
-            game.redrawScreen()
+            game.redraw_screen()
             
         except TTTEndGame as e:
             # draw the screen one last time so you can actually see the result
-            game.redrawScreen()
+            game.redraw_screen()
             print str(e)
             in_play = False
         
