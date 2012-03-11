@@ -4,6 +4,7 @@
 
 """ This module contains all the core functions and objects for game mechanics.
 """
+from math import sqrt # for diminishing returns
 
 """ Defines a custom exception for easy differentiation between a game error
 and a system error. Game errors can be caught and handled by the UI. System
@@ -32,31 +33,39 @@ class TTTEngine:
         # the board consists of a nine-element mutable list
         self.board = [ '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
         self.moves = 0 # tracks the number of completed moves
-
+                
+        # Define all the different kinds of lines.
+        self.LINES = [
+            (0, 1, 2),
+            (3, 4, 5),
+            (6, 7, 8),
+            (0, 3, 6),
+            (1, 4, 7),
+            (2, 5, 8),
+            (0, 4, 8),
+            (2, 4, 6),
+        ]
+        
     # Check to see if anyone has won, and if so raise the TTTEndGame exception.
     # If a stalemate has occured, raises the TTTStalemate exception.
     def checkState(self):
         # little shortcut
         b = self.board
         
-        # winning combos:
-        # 1-2-3 / 4-5-6 / 7-8-9 / 1-5-9 / 3-5-7 / 2-5-8 / 1-4-6 / 3-6-9
-        if ( ( b[0] == b[1] == b[2] ) or ( b[3] == b[4] == b[5] ) or
-          ( b[6] == b[7] == b[8] ) or ( b[0] == b[4] == b[8] ) or
-          ( b[2] == b[4] == b[6] ) or ( b[1] == b[4] == b[7] ) or
-          ( b[0] == b[3]== b[6] ) or ( b[2] == b[5] == b[8] ) ):
-            
-            winner = 'You'
-            if self.moves % 2 == 0:
-                winner = 'I'
-    
-            raise TTTEndGame('%s won!' % winner)
+        # Check for a winner.
+        for line in self.LINES:
+            if b[line[0]] == b[line[1]] == b[line[2]]:
+                winner = 'You'
+                if self.moves % 2 == 0:
+                    winner = 'I'
         
-        # no winner, so check for stalemate (all X's and O's)
-        elif len( ''.join(b).replace('X','').replace('O','') ) == 0:
+                raise TTTEndGame('%s won!' % winner)
+            
+        # No winner, so check for stalemate (all X's and O's).
+        if len( ''.join(b).replace('X','').replace('O','') ) == 0:
             raise TTTEndGame('Stalemate!')
             
-        # no else because there was no winner and no stalemate
+        # No else because there was no winner and no stalemate.
         
     # given a digit that represents the slot to move into
     def applyMove(self, move):
@@ -85,77 +94,75 @@ class TTTEngine:
         
         return avail_moves
         
+    def __highest(self, val1, val2):
+        if val1 > val2:
+            return val1
+        else:
+            return val2
+            
+    def __sum(self, board, row):
+        return board[row[0]] + board[row[1]] + board[row[2]]
+    
     # Internal function to rate the given move with the current board state.
-    # Returns 2 for a winning move, 1 for a blocking move, else 0 for other.
-    def __rateMove(self, move):
-        WIN = 5 # super-prioritize winning; AI would often prefer to block
-        BLOCK = 1
-        OTHER = 0
-        
-        corners = (0, 2, 6, 8)
-        middle = 4
-        player = 'X'
-        # copy the board
-        b = self.board[:]
-
+    # It is assumed that the given move is an available move on the board.
+    def __rateMove(self, move, player_value, opp_value):
         if not move in self.getValidMoves():
             raise Exception('A non-available move was given.')
-        
-        # at this point, the move in question has not yet been played
-        if self.moves % 2 != 0:
-            player = 'O'
-            
-        # fake-apply the move the the board copy
-        b[move] = player
 
-       # check for win
-        if ( ( move in (0, 1, 2) ) and ( b[0] == b[1] == b[2] ) or
-          ( move in (3, 4, 5) ) and ( b[3] == b[4] == b[5] ) or
-          ( move in (6, 7, 8) ) and ( b[6] == b[7] == b[8] ) or
-          ( move in (0, 3, 6) ) and ( b[0] == b[3] == b[6] ) or
-          ( move in (1, 4, 7) ) and ( b[1] == b[4] == b[7] ) or
-          ( move in (2, 5, 8) ) and ( b[2] == b[5] == b[8] ) ):
-            return WIN
+        # Copy the current board state.
+        b = self.board[:]
+
+        # Initialize the highest point value for this move as having no value.
+        highest = 0
+        
+        # Determine whose turn it is.
+        token = 'O'
+        if self.moves % 2 == 0:
+            token = 'X'
             
-        # check diagonals is move is on a corner or in middle
-        if move in corners or move == middle:
-            if ( ( move in (0, 4, 8) ) and ( b[0] == b[4] == b[8] ) or
-              ( move in (2, 4, 6) ) and ( b[2] == b[4] == b[6] ) ):
-                return WIN
-   
-        # Try for a blocking move; uses similar combos as a win. Use math and
-        # numbers.
+        # Replace player tokens with numerical values so we can read entire lines easily.
         for i in range(0, 9):
-            if b[i] == 'X':
-                b[i] = 2
-            elif b[i] == 'O':
-                b[i] = 1
+            if not b[i].isdigit():
+                if b[i] == token:
+                    b[i] = player_value
+                else:
+                    b[i] = opp_value
             else:
                 b[i] = 0
-        
-        # the total X needs to block is 4, O needs 5 per row.
-        tot = 4
-        if player == 'O':
-            tot = 5
-            
-        # a block would be 2 + 2 + 1 = 5 if player move or
-        # 1 + 1 + 2 = 4 if CPU move
-        if ( ( move in (0, 1, 2) ) and ( b[0] + b[1] + b[2] == tot ) or
-          ( move in (3, 4, 5) ) and ( b[3] + b[4] + b[5] == tot ) or
-          ( move in (6, 7, 8) ) and ( b[6] + b[7] + b[8] == tot ) or
-          ( move in (0, 3, 6) ) and ( b[0] + b[3] + b[6] == tot ) or
-          ( move in (1, 4, 7) ) and ( b[1] + b[4] + b[7] == tot ) or
-          ( move in (2, 5, 8) ) and ( b[2] + b[5] + b[8] == tot ) ):
-            return BLOCK
 
-         
-        if move in corners or move == middle:
-            if ( ( move in (0, 4, 8) ) and ( b[0] + b[4] + b[8] == tot ) or
-              ( move in (2, 4, 6) ) and ( b[2] + b[4] + b[6] == tot ) ):
-                return BLOCK
+        # Determine which lines the current move is in.
+        m_lines = []
+        
+        # Apply the move to the board copy for checking flat out wins or blocks.
+        b[move] = player_value
+        
+        for line in self.LINES:
+            if move in line:
+                # Weight player moves that would block an opponent who is about to win.
+                if self.__sum(b, line) == 2 * opp_value:
+                    for cell in line:
+                        if b[cell] == opp_value:
+                            b[cell] = player_value
+                
+                # Weight player moves that are about to win.
+                if self.__sum(b, line) == 3 * player_value:
+                    for cell in line:
+                        if b[cell] == player_value:
+                            b[cell] = player_value * 100.0
+                
+                # Slightly weight empty cells so they're more desirable.
+                for cell in line:
+                    if b[cell] == 0:
+                        b[cell] = opp_value / 100.0
+                        
+                m_lines.append(line)
+        
+        # Calculate the highest value line this move would produce.
+        for line in m_lines:
+            line_total = self.__sum(b, line)
+            highest = self.__highest(highest, line_total)
             
-        # by now the move has become unvaluable
-        return OTHER
+        return highest
         
     # Back out the specified move (reset the space and decrement the moves
     # counter. Move is the actual index in the board list.
@@ -170,7 +177,7 @@ class TTTEngine:
     tree for any available moves and appends them to the given move node's
     children list. Returns the modified move node.
     """
-    def __getMoveTree(self, parent_node):
+    def __getMoveTree(self, parent_node, player_value, opp_value):
         move_list = self.getValidMoves()
         
         if len(move_list) == 0:
@@ -179,24 +186,23 @@ class TTTEngine:
 
         # rate each move and determine the best course of action
         for move in move_list:
-            rating = self.__rateMove(move)
-            move_node = TTTMoveNode(move, rating)
+            move_node = TTTMoveNode(move, self.__rateMove(move, player_value, opp_value))
  
             # On predicted player moves, zero out the weight
             if self.moves % 2 == 0:
                 move_node.weight = 0
-                
+            
             try:
                 self.applyMove(move)
-                move_node = self.__getMoveTree(move_node)
-                
-                if self.moves % 2 != 0:
-                    parent_node.weight += rating
-
+                # Note if the applyMove throws an end game, the recursion stops.
+                # Apply diminishing returns on events the farther into predection this goes.
+                move_node = self.__getMoveTree(move_node, (player_value / 2.0), (opp_value / 2.0))  
+            
             except TTTEndGame:
                 pass
-                
+
             self.__backOutMove(move)
+            parent_node.weight += move_node.weight
             parent_node.addChild(move_node)
         
         return parent_node
@@ -209,31 +215,54 @@ class TTTEngine:
     
     # Runs the AI to determine the best next move for the CPU.
     def getBestMove(self):
-        ''' Manual override for first move seems to iron out some "stupid"
-        decisions the AI likes to make when it has too many choices or if
+        ''' Manual override for first move seems to iron out some very very slow
+        decisions the AI makes when it has too many choices or if
         the game is too vague.
         '''
         if self.moves == 1:
-            if 4 in self.getValidMoves():
-                return 4
+            for pos in self.board:
+                # Determine where the opponent has gone.
+                if not pos.isdigit():
+                    p_move = self.board.index(pos)
+                    if self.__isCorner(p_move) or p_move in (1, 3, 5, 7):
+                        # Opponent moves to corner, you move to center.
+                        return 4
+                    
+                    else:
+                        # Opponent moved to center or to a middle spot, so move to position 0,
+                        # top-left corner
+                        return 0
+                    
             
-            else:
-                return 0
-        
+        # Second special-case: P1 - C5 - P9, AI should choose 2, 4, 6, or 8.
+        elif self.moves == 3:
+            p_moves = []
+            for i in range(0, len(self.board)):
+                if not self.board[i].isdigit() and self.board[i] == 'X' and self.__isCorner(i):
+                    p_moves.append(i)
+                    
+            if len(p_moves) == 2:
+                diag = { 0: 8, 8: 0, 2: 6, 6: 2 }
+                # Only enforce this rule if the two corners are opposite of each other.
+                if diag[p_moves[0]] == p_moves[1]:
+                    return 5
+                
         # start the move tree with a root node move of -1
-        moves = self.__getMoveTree( TTTMoveNode(-1, 0) )
+        moves = self.__getMoveTree(TTTMoveNode(-1, 0), 4, 3) # 4 and 6 are arbitrary weights
             
         # sort descending by weight
         moves.children = sorted(moves.children, key=lambda node: -node.weight)
         
-        # check for ties, returning a corner if possible
-        if ( len(moves.children) > 1 and
-          moves.children[0].weight == moves.children[1].weight and
-          not self.__isCorner(moves.children[0].move) ):
-            return moves.children[1].move
-                
-        else:
-            return moves.children[0].move
+        # debug
+        '''
+        print '\n----\n'
+        for child in moves.children:
+            print '%s = %s' % (child.move+1, child.weight)
+        '''
+        
+        # Ties don't matter, so just take the first element regardless.
+        return moves.children[0].move
+        
 
 # Tracks potential moves, their child moves, and their weights. An optimal
 # move is indicated by the path with the highest weight.
