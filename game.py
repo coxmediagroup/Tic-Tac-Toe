@@ -71,7 +71,7 @@ class TicTacToe(object):
         except:
             return False
         return False
-
+    """
     #TODO: Should remove is_there_a_winner function
     def is_there_a_winner(self):
         for win in wins:
@@ -80,7 +80,6 @@ class TicTacToe(object):
             if (win & self.player_two)==win:
                 return self.player_two, win
         return False
-    """
 
     def is_it_a_winner(self, player):
         """Does this player have a winner"""
