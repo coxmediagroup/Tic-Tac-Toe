@@ -57,7 +57,7 @@ ON_WINDOWS = platform.system() == "Windows"
 
 
 class Pytddmon(object):
-    """The core class, all functionality are agregated and lives inside this
+    """The core class, all functionality are aggregated and lives inside this
     class."""
     def __init__(
         self,
@@ -141,7 +141,7 @@ class Monitor:
         return change_detected
 
 class DefaultLogger(object):
-    """class that handels accumulation of logs. It also take care of tagging
+    """class that handles accumulation of logs. It also take care of tagging
     logs so that you can query for specific log messages."""
     levels = {
         None: int("1111",2),
