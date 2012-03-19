@@ -1,5 +1,12 @@
+#! /usr/bin/env python
 from bitarray import bitarray
 from exceptions import Exception
+from optparse import OptionParser
+
+import sys
+
+if not sys.version_info[:2] == (2, 7):
+    print "Warning, this script has only been tested with python 2.7"
 
 row_wins = (bitarray('111000000'), bitarray('000111000'), bitarray('000000111'))
 col_wins = (bitarray('100100100'), bitarray('010010010'), bitarray('001001001'))
@@ -8,6 +15,16 @@ diag_wins =(bitarray('100010001'), bitarray('001010100'))
 wins = row_wins + col_wins + diag_wins
 row_dict = {'a':0, 'b':3, 'c': 6}
 col_dict = {'1': 0, '2':2, '3':2}
+
+if __file__ == "__main__":
+    print "error"
+    parser = OptionParser()
+    parser.add_option("-f", "--file",
+                      help="read game moves from a file", metavar="FILE")
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose",
+                      help="Print additional messages to the user", default=False)
+    (options, args) = parser.parse_args()
 
 class InvalidMove(Exception):
     def __init__(self, value):
@@ -45,6 +62,7 @@ class TicTacToe(object):
         return True
 
     #TODO: Should remove legal_move function
+    """
     def legal_move(self, move):
         row, col = self.parse_move(move)
         try:
@@ -62,6 +80,7 @@ class TicTacToe(object):
             if (win & self.player_two)==win:
                 return self.player_two, win
         return False
+    """
 
     def is_it_a_winner(self, player):
         """Does this player have a winner"""
@@ -184,3 +203,18 @@ class TicTacToe(object):
             self.player_one[opponents_best_move] = True
             return (opponents_best_move, opp_win_count)
 
+
+def main(options, args):
+    print """
+            please designate your move by entering a row('abc') and column('123')
+            for example the top left corner would be designated as 'a1'
+            print "your moves would be designated, by an 'X', and the computers by a 'Y'
+          """
+    s = raw_input('---->')
+
+
+
+if __file__ == "__main__":
+    print "start"
+    parser.parse_args()
+    main()
