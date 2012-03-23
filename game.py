@@ -81,11 +81,6 @@ class TicTacToe(object):
                 return True
         return False
 
-    def may_move_lead_to_win(self, move, player):
-        '''check if all possible rows, columns or  diags are blocked
-        '''
-        pass
-
     def possible_moves(self, board=None):
         """What moves are available."""
         if board is None:
@@ -173,16 +168,24 @@ class TicTacToe(object):
             return result
         '''Does the opponent have a move that will give them two chance'''
         result = self.move_that_results_with_two_winning_options(self.opponent)
+#        import pdb
+#        pdb.set_trace()
+
         if result is not False:
             '''Does the opponent have another move that will give them two chances'''
             result2 = self.move_that_results_with_two_winning_options(self.opponent, block=result)
             if result2 is not False:
+                self.machine[result] = True
+                if self.is_there_a_winning_move(self.machine) != result2:
+                    return result
                 for x in self.possible_moves():
                     if x == result:
                         continue
                     if x == result2:
                         continue
                     self.machine[x] = True
+                    self.machine[result] = False
+                    self.machine[result2] = False
                     return result
             else:
                 self.machine[result] = True
@@ -219,6 +222,13 @@ class TicTacToe(object):
         game_display.append(row)
         return game_display
 
+def restart_game(game, first, counter):
+    game.reset()
+    counter += 1
+    if first:
+        game.make_the_best_move()
+    game.print_game()
+    return raw_input('---->')
 
 def main():  # pragma: no cover
     print """
@@ -256,40 +266,32 @@ def main():  # pragma: no cover
               """
         if game.is_it_a_winner(game.opponent):
             print "You Won"
-            opponent_wins += 1
-            game.reset()
-            if first:
-                game.make_the_best_move()
-            game.print_game()
-            s = raw_input('---->')
+            s = game_restart(game, first, draws)
+            print "%s your wins" % opponent_wins
             continue
         if len(game.possible_moves()) == 0:
             print "The game was a draw"
-            draws += 1
+            s = game_restart(game, first, draws)
+            print "%s draws" % draws
+            """
             game.reset()
             if first:
                 game.make_the_best_move()
             game.print_game()
             s = raw_input('---->')
+            """
             continue
         game.make_the_best_move()
         if game.is_it_a_winner(game.machine):
-            print "machine wins"
-            machine_wins += 1
-            game.reset()
-            if first:
-                game.make_the_best_move()
-            game.print_game()
-            s = raw_input('---->')
+            print "The machine won"
+            s = game_restart(game, first, draws)
+            print "%s machine wins" % machine_wins
             continue
         game.print_game()
         if len(game.possible_moves()) == 0:
-            draws += 1
-            game.reset()
-            if first:
-                game.make_the_best_move()
-            game.print_game()
-            s = raw_input('---->')
+            print "The game was a draw"
+            s = game_restart(game, first, draws)
+            print "%s draws" % draws
             continue
         s = raw_input('---->')
 

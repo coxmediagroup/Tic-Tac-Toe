@@ -6,11 +6,14 @@ import unittest
 from unittest import TestCase
 from game import TicTacToe, InvalidMove
 from bitarray import bitarray
+from time import sleep
+from optparse import OptionParser
+
+verbose = False
 
 
 class TicTacToeTest(TestCase):
     '''Test the game '''
-
     depth = 0
     recurse_level = 0
 
@@ -209,44 +212,57 @@ class TicTacToeTest(TestCase):
                 print 'machine', game.machine
                 print 'opponent', game.opponent
 
-    def _recurse_attack(self, tg):
+    def _recurse_attack(self, tg, level=0):
 #        print "recurse_level", self.recurse_level
         game = copy.deepcopy(tg)
         self.games = []
-        self.recurse_level += 1
+        recurse_level = 1 + level
         self.assertLess(self.recurse_level, 10)
         #print "level", self.recurse_level
         #print "machine here", self.game.machine
         #print "opponent here", self.game.opponent
-        if self.recurse_level == 0:
+        moves = range(0, 9)
+        if level == 0:
             moves = (0, 1, 4)
-        else:
-            moves = range(0, 9)
         for move in moves:
             reset_game = copy.deepcopy(game)
             if (game.machine[move] == True) | (game.opponent[move] == True):
                 continue
             game.opponent[move] = True
-            self.assertFalse(game.is_it_a_winner(game.opponent))
+            sleep(5)
+            if verbose == True:
+                print "opponents move"
+                game.print_game()
+            try:
+                self.assertFalse(game.is_it_a_winner(game.opponent))
+            except:
+                import pdb
+                pdb.set_trace()
+            if len(game.possible_moves()) == 0:
+                if verbose == True:
+                    print "draw"
+                game = copy.deepcopy(reset_game)   # should step back 2 moves
+                continue
             game.make_the_best_move()
             if game.is_it_a_winner(game.machine):
                 """Not a good move for opponent, as machine wins. So try a different move"""
+                if verbose == True:
+                    print "machine wins"
+                    game.print_game()
                 game = copy.deepcopy(reset_game)
-#                print "player one wins"
-#                print "player one", game.machine
-#                print "player two", game.opponent
                 continue
             """No winners so lets recurse another level"""
-#            print "no_win"
-#            print "machine", game.machine
-#            print "opponent", game.opponent
-            result, game = self._recurse_attack(game)
+            result, game = self._recurse_attack(game, level=recurse_level)
             try:
                 self.games += game.games
             except AttributeError:
                 pass
             self.games.append(game)
+            game = copy.deepcopy(reset_game)
             self.assertFalse(result)
+        if verbose == True:
+            print "no more moves"
+            game.print_game()
         return False, game
 
     def test_move_c2(self):
@@ -316,4 +332,12 @@ class TicTacToeTest(TestCase):
         self.assertFalse(self.game.is_there_a_winner())
 
 if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose",
+        action="store_true", dest="verbose",
+        help="Print additional messages to the user", default=False)
+    (options, args) = parser.parse_args()
+    if options.verbose == True:
+        verbose = True
+
     unittest.main()
