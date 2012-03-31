@@ -15,7 +15,12 @@ diag_wins = (bitarray('100010001'), bitarray('001010100'))
 wins = row_wins + col_wins + diag_wins
 row_dict = {'a': 0, 'b': 3, 'c': 6}
 col_dict = {'1': 0, '2': 1, '3': 2}
-
+instructions = """
+            Please designate your move by entering a row('abc') and column('123')
+            for example the top left corner would be designated as 'a1'
+            print "your moves would be designated, by an 'X', and the computers by a 'Y'.
+            You can end the game at any time be entering 'q'.
+          """
 if __name__ == "__main__":   # pragma: no cover
     print "error"
     parser = OptionParser()
@@ -150,8 +155,7 @@ class TicTacToe(object):
         return best
 
     def make_the_best_move(self):
-        """Find the best possible move. Start by checking if there is a winning move for us"""
-        #pdb.set_trace()
+        """Find the best possible move. Start by checking if there is a winning move for the machine"""
         result = self.is_there_a_winning_move(self.machine)
         if result is not False:
             self.machine[result] = True
@@ -168,8 +172,6 @@ class TicTacToe(object):
             return result
         '''Does the opponent have a move that will give them two chance'''
         result = self.move_that_results_with_two_winning_options(self.opponent)
-#        import pdb
-#        pdb.set_trace()
 
         if result is not False:
             '''Does the opponent have another move that will give them two chances'''
@@ -222,37 +224,37 @@ class TicTacToe(object):
         game_display.append(row)
         return game_display
 
-def restart_game(game, first, counter):
+    def start_the_game(self):
+        print """
+            If you want to go first enter 'f'. Else enter any other key.
+            """
+        s = raw_input('---->')
+        first = False
+        game = TicTacToe()
+        if s != 'f':
+            """
+            machine is going first
+            """
+            game.make_the_best_move()
+            game.print_game()
+            first = True
+        print instructions
+        return first
+
+
+def game_restart(game, first, counter):
     game.reset()
-    counter += 1
     if first:
         game.make_the_best_move()
     game.print_game()
     return raw_input('---->')
 
-def main():  # pragma: no cover
-    print """
-            If you want to go first enter 'f'. Else enter any other key.
-            """
-    s = raw_input('---->')
-    first = False
+def main():  #
     game = TicTacToe()
+    first = game.start_the_game()
     machine_wins = 0
     opponent_wins = 0
     draws = 0
-    if s != 'f':
-        """
-        machine is going first
-        """
-        game.make_the_best_move()
-        game.print_game()
-        first = True
-    print """
-            Please designate your move by entering a row('abc') and column('123')
-            for example the top left corner would be designated as 'a1'
-            print "your moves would be designated, by an 'X', and the computers by a 'Y'.
-            You can end the game at any time be entering 'q'.
-          """
     s = raw_input('---->')
     while s != 'q':
         try:
@@ -273,13 +275,6 @@ def main():  # pragma: no cover
             print "The game was a draw"
             s = game_restart(game, first, draws)
             print "%s draws" % draws
-            """
-            game.reset()
-            if first:
-                game.make_the_best_move()
-            game.print_game()
-            s = raw_input('---->')
-            """
             continue
         game.make_the_best_move()
         if game.is_it_a_winner(game.machine):
