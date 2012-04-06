@@ -9,3 +9,18 @@ If you don't want to broadcast your intentions by forking this, feel free to clo
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
 (Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+
+
+Tic Tac Toe
+-----------
+
+We based on http://en.literateprograms.org/Special:Downloadcode/Tic_Tac_Toe_%28Python%29
+
+It implements the logic of a 3x3 board together with the basic minimax algorithm that makes it unable to lose.
+
+We did some improvements to this:
+    * First, added support for larger board sizes. The game played is n-in-line in an nxn board. Boards larger than 6x6 are not allowed.
+    * Prettier printing of the board.
+    * For boards larger than 3x3, the naive minimax will not work correctly since there are far too many branches in the game search tree. We added a max_depth parameter that serves to limit the depth of the recursion of the minimax algorithm. This makes it feasible to play in various boards, but a win is not really guaranteed by the theroy. In practice however it might be very difficult to beat because of the improvement that follows.
+    * Added a parameter to specify the number of free spots in the board after which max_depth has no effect. This is to say, when the search tree does reach a manageable size (near the end of the matches), the player will make perfect moves given those circumstances.
+    
