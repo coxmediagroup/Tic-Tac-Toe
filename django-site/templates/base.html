@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tic Tac Toe</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/jquery-ui-1.8.13.custom.css" />
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<script type="text/javascript" src="/static/js/jquery-1.6.1.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-ui-1.8.13.custom.min.js"></script>
+		<script type="text/javascript" src="/static/js/tictactoe.js"></script>
+		<script type="text/javascript" src="/static/js/main.js"></script>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="header">
+				{% block header %}
+				<h1>Tic Tac Toe</h1>
+				<em>The legacy lives on!</em>
+				{% endblock %}
+			</div>
+			<div id="content">
+				{% block content %}
+				{% endblock %}
+			</div>
+			<div id="footer">
+				{% block footer %}
+				<p>Copyright&copy; 2011 Joseph King</p>
+				{% endblock %}
+			</div>
+		</div>
+	</body>
+</html>

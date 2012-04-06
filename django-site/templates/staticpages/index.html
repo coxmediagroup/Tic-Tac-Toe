@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1>You cannot win...</h1>
+	<h1>...but you can try muwahaha!</h1>
+	<div id="options">
+		<button class="button btn-play x"><span>X</span></button>
+		<button class="button btn-play o"><span>O</span></button>
+	</div>
+	<div id="game-area">
+		<canvas id="game-canvas" width="300" height="300">
+		</canvas>
+	</div>
+	<form action="/tictactoe/post" method="post">
+		{% csrf_token %}
+	</form>
+{% endblock %}
