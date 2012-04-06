@@ -1,0 +1,37 @@
+{% extends "game/base.html" %}
+
+{% block page-head %}
+    {{ block.super }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            //Prevent accidental form submission as handled by AJAX.
+            $('#playGameForm').submit(function() {
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content-header %}
+        <h1>Player is {{ gameObj.playerCharacter }} and the CPU is {{ gameObj.cpuCharacter }}</h1>
+{% endblock %}
+
+{% block content-body %}
+<form action="{% url game:doMove %}" method="POST" id="playGameForm">
+
+    {% csrf_token %}
+    <div id='tic_tac_board'>
+        {% include 'game/snippets/tictactoe_board.html' %}
+    </div>
+
+    <br /><br />
+
+    {% for field in gameForm %}
+    {{ field }}
+    {%  endfor %}
+</form>
+<br />
+    {% with sizeForm as form %}
+        {% include 'game/snippets/board_size.html' %}
+    {% endwith %}
+{% endblock %}

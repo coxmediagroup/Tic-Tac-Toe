@@ -1,0 +1,4 @@
+sphinx
+unittest-xml-reporting>1.0.3
+unittest2
+coverage

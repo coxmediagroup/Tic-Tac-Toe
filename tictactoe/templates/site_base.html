@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>{% block page-title %}Tic-Tac-Toe {% block page-subtitle %} - Home{% endblock %}{% endblock %}</title>
+
+    {% block style %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}style/main.css" type="text/css">
+    {% endblock %}
+
+    {% block scripts %}
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.js"></script>
+    {% endblock %}
+
+    {% block page-head %}
+    {% comment %}Put Extra Header information here.{% endcomment %}
+    {% endblock %}
+
+
+</head>
+<body>
+    <div id="page">
+        <div id="content">
+
+            <div id="content-header">
+                {% block content-header %}
+                    <h1>Tic Tac Toe Challenge By Steven Anderson<h1>
+                {% endblock %}
+            </div>
+
+            <div id="content-body">
+                {% block content-body %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

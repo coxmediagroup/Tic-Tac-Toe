@@ -1,0 +1,10 @@
+build
+dist
+test-results
+*.pyc
+*.log
+*.db
+#ignore the docs _build directory
+doc/_build/
+#ignore any localsettings
+tictactoe/localsettings.py

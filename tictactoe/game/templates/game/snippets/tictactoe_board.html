@@ -1,0 +1,69 @@
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $('.tictac_available_space').click(function(event) {
+
+            //Prevent another move submission
+            $('.tictac_available_space').unbind("click");
+
+            //Show that CPU is thinking
+            $('#gameStatusBox').html('CPU is currently thinking! Please wait.')
+            $('#gameStatusBox').show();
+
+            //Update their move
+            {%  if gameObj.playerCharacter == 'X' %}
+                $(this).attr("src", "{{ STATIC_URL }}images/tic_X.png");
+            {% endif %}
+
+            {%  if gameObj.playerCharacter == 'O' %}
+                $(this).attr("src", "{{ STATIC_URL }}images/tic_O.png");
+            {% endif %}
+
+            $.post("{% url game:doMove %}", $("#playGameForm").serialize()+ "&tictacBoxSelection="+ $(this).attr("value"),
+                    function(data) {
+                        $('#tic_tac_board').html(data);
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<center>
+<table class="ticBoard" border="2">
+    {% for row in gameObj.gameBoard %}
+    <tr>
+        {% for column in row %}
+            {% if column == ' ' and not gameObj.checkGameOver %}
+                <td width="82"><input class="tictac_available_space" name="tictacBoxSelection" type="image" src="{{ STATIC_URL }}images/tic_blank.png" value={{ forloop.parentloop.counter0 }},{{ forloop.counter0 }} /></td>
+            {% endif %}
+            {% if column == ' ' and gameObj.checkGameOver %}
+                <td width="82"><img src="{{ STATIC_URL }}images/tic_blank.png" /></td>
+            {% endif %}
+            {% if column == 'X' %}
+                <td width="82"><img src="{{ STATIC_URL }}images/tic_X.png" /></td>
+            {% endif %}
+            {% if column == 'O' %}
+                <td width="82"><img src="{{ STATIC_URL }}images/tic_O.png" /></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+</center>
+
+<div id="gameStatusBox">
+</div>
+
+{% if gameObj.checkGameOver %}
+    <div id="resultBox">
+        {% if gameObj.winner == gameObj.playerCharacter %}
+            Congratulations! You won as {{ gameObj.playerCharacter }}!
+        {% endif %}
+        {% if gameObj.winner == gameObj.cpuCharacter %}
+            Sorry! You lost as {{ gameObj.playerCharacter }}.
+        {% endif %}
+        {% if gameObj.winner == ' ' %}
+            It was a draw! Better luck next time.
+        {% endif %}
+    </div>
+{% endif %}
+
