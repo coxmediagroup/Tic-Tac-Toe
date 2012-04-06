@@ -9,3 +9,18 @@ If you don't want to broadcast your intentions by forking this, feel free to clo
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
 (Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+
+------------------------------
+Console version:
+    python ttt.py
+
+Network version:
+   $ python server.py
+   then run
+   $ telnet localhost 2300
+
+Ai vs Ai:
+    edit ttt.py and change
+    Storage()._player_two = ThreeByThreeLocalHuman()
+    to 
+    Storage()._player_two = Ai()
