@@ -3,6 +3,9 @@ from django.views.generic import TemplateView
 from tictactoe.game.game import Gameboard
 
 def _fetch_gameboard(request):
+    """
+    Check session for saved gameboard or instantiate new gameboard
+    """
     gameboard = request.session.get('gameboard', None)
     if not gameboard:
         gameboard = Gameboard()
@@ -16,25 +19,40 @@ class GameView(TemplateView):
         return self.render_to_response(self.get_context_data(request, **kwargs))
     
     def post(self, request, **kwargs):
+        """
+        Check for valid POST data, then attempt player's move
+        """
         reset = request.POST.get('reset')
-        move = request.POST.get('submit')
+        position = request.POST.get('position')
+        move = request.POST.get('move')
         if reset:
             request.session['gameboard'] = None
-        if move:
-            return self.render_to_response(self.do_move(request, **kwargs))
+        if position and move:
+            position = list(position)
+            for index, item in enumerate(position):
+                position[index] = int(item)
+            return self.render_to_response(self.do_move(request, position, **kwargs))
         return self.render_to_response(self.get_context_data(request, **kwargs))
     
-    def do_move(self, request, **kwargs):
-        # do game logic
+    def do_move(self, request, position, **kwargs):
+        """
+        Check for valid move, then run AI routine
+        """
         gameboard = _fetch_gameboard(request)
-        gameboard.change()
+        if position not in gameboard.available_spaces():
+            context = self.get_context_data(request, **kwargs)
+            context['message'] = 'Invalid move!'
+            return context
+        gameboard.player_move(position)
+        gameboard.computer_move()
         request.session['gameboard'] = gameboard
         context = self.get_context_data(request, **kwargs)
-        context['message'] = 'Invalid move!'
-        context['post'] = request.POST
         return context
     
     def get_context_data(self, request, **kwargs):
+        """
+        Add gameboard to view context
+        """
         context = super(GameView, self).get_context_data(**kwargs)
         context['gameboard'] = _fetch_gameboard(request)
         return context
