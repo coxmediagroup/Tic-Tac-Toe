@@ -43,10 +43,10 @@ class GameView(TemplateView):
             context = self.get_context_data(request, **kwargs)
             context['message'] = 'Invalid move!'
             return context
-        gameboard.player_move(position)
+        gameboard.save_move(position, 1)
         finished = gameboard.check_status(1)
         if not finished:
-            gameboard.computer_move()
+            gameboard.calc_computer_move()
             finished = gameboard.check_status(-1)
         request.session['gameboard'] = gameboard
         context = self.get_context_data(request, **kwargs)

@@ -36,13 +36,56 @@ class Gameboard(object):
             return True
         return False
         
-    def player_move(self, position):
+    def save_move(self, position, player):
+        """
+        Save player's move
+        """
         x = position[0]
         y = position[1]
-        self.boardstate[x][y] = 1
+        self.boardstate[x][y] = player
         
-    def computer_move(self):
-        #x = position[0]
-        #y = position[1]
-        #self.boardstate[x][y] = -1
-        pass
+    def calc_computer_move(self):
+        """
+        Calculate computer's move
+        """
+        snapshot = Gameboard()
+        snapshot.boardstate = self.boardstate
+        best_move = snapshot._minimax(2, -1)
+        #self.status = best_move
+        self.save_move(best_move[1], -1)
+        
+    def _minimax(self, level, player):
+        """
+        Minimax algorithm to determine best move
+        """
+        best_score = -10 * player
+        best_position = []
+        children = self.available_spaces()
+        if not children or level == 0 or self.check_status(-1) or self.check_status(1):
+            best_score = self._calc_score()
+        else:
+            for child in children:
+                position = [child[0], child[1]]
+                self.save_move(position, player)
+                if player == 1: # maximize
+                    score = self._minimax(level - 1, -1)[0]
+                    if score > best_score:
+                        best_score = score
+                        best_position = position
+                else: # minimize
+                    score = self._minimax(level - 1, 1)[0]
+                    if score < best_score:
+                        best_score = score
+                        best_position = position
+                self.save_move(position, 0)
+        return [best_score, best_position]
+            
+    def _calc_score(self):
+        """
+        Heuristic evaluation function for minimax
+        """
+        if self.check_status(1):
+            return 1
+        if self.check_status(-1):
+            return -1
+        return 0
