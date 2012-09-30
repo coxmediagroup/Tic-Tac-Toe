@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block message %}
+    {% if message %}{{ message }}{% endif %}
+{% endblock %}
+
+{% block gameboard %}
+    <form method="POST">{% csrf_token %}
+        <input type="submit">
+    </form>
+{% endblock %}
