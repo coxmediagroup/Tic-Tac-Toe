@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block gameboard %}
+    {{ gameboard.boardstate }}
+
     <form method="POST">{% csrf_token %}
-        <input type="submit">
+        <input type="submit" name="submit" value="submit">
+        <input type="submit" name="reset" value="reset">
     </form>
 {% endblock %}
