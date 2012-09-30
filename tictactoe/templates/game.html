@@ -29,15 +29,13 @@ form input[type=submit] {
 {% endblock %}
 
 {% block gameboard %}
-    {{ gameboard.boardstate }}
-
     <form method="POST">{% csrf_token %}
         {% for row in gameboard.boardstate %}
             {% with forloop.counter0 as x %}
                 {% for value in row %}
                     {% with forloop.counter0 as y %}
                         {% if value %}
-                            <span>{{ xo.items.0 }}{{ value }}</span>
+                            <span>{{ value }}</span>
                         {% else %}
                             <span><input type="radio" name="position" value="{{x}}{{y}}"></span>
                         {% endif %}
@@ -45,7 +43,7 @@ form input[type=submit] {
                 {% endfor %}
             {% endwith %}
         {% endfor %}
-        <input type="submit" name="move" value="Confirm Move">
+        {% if not gameboard.status %}<input type="submit" name="move" value="Confirm Move">{% endif %}
         <input type="submit" name="reset" value="Start New Game">
     </form>
 {% endblock %}

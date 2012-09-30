@@ -36,7 +36,7 @@ class GameView(TemplateView):
     
     def do_move(self, request, position, **kwargs):
         """
-        Check for valid move, then run AI routine
+        Check for valid move, then run AI routine if no winner
         """
         gameboard = _fetch_gameboard(request)
         if position not in gameboard.available_spaces():
@@ -44,9 +44,14 @@ class GameView(TemplateView):
             context['message'] = 'Invalid move!'
             return context
         gameboard.player_move(position)
-        gameboard.computer_move()
+        finished = gameboard.check_status(1)
+        if not finished:
+            gameboard.computer_move()
+            finished = gameboard.check_status(-1)
         request.session['gameboard'] = gameboard
         context = self.get_context_data(request, **kwargs)
+        if finished:
+            context['message'] = gameboard.status
         return context
     
     def get_context_data(self, request, **kwargs):
