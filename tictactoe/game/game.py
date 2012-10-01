@@ -4,6 +4,9 @@ class Gameboard(object):
         self.status = None
         
     def available_spaces(self):
+        """
+        Check for empty game spaces
+        """
         spaces = []
         for x in range(3):
             for y in range(3):
@@ -93,6 +96,9 @@ class Gameboard(object):
         return score
         
     def _sum_rows(self, row):
+        """
+        Sum a row and scale for heuristic evaluation
+        """
         score = reduce(lambda x, y: x + y, row)
         if score == 2 or score == -2:
             score = 10 * (score / 2)

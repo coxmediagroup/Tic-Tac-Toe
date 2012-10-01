@@ -62,6 +62,9 @@ class GameboardTestCase(TestCase):
         self.assertEqual(self.gameboard._sum_rows([1,1,1]), 100)
 
 class ComputerWinsTestCase(TestCase):
+    """
+    Test all possible game outcomes to ensure computer doesn't lose
+    """
     def setUp(self):
         self.gameboard = game.Gameboard()
         

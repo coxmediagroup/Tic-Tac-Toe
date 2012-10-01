@@ -35,7 +35,7 @@ form input[type=submit] {
                 {% for value in row %}
                     {% with forloop.counter0 as y %}
                         {% if value %}
-                            <span>{{ value }}</span>
+                            <span>{% ifequal value 1 %}X{% endifequal %}{% ifequal value -1 %}O{% endifequal %}</span>
                         {% else %}
                             <span><input type="radio" name="position" value="{{x}}{{y}}"></span>
                         {% endif %}
