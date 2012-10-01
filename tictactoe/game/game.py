@@ -38,27 +38,26 @@ class Gameboard(object):
         
     def save_move(self, position, player):
         """
-        Save player's move
+        Save any player's move
         """
         x = position[0]
         y = position[1]
         self.boardstate[x][y] = player
         
-    def calc_computer_move(self):
+    def computer_move(self):
         """
         Calculate computer's move
         """
         snapshot = Gameboard()
         snapshot.boardstate = self.boardstate
-        best_move = snapshot._minimax(2, -1)
-        #self.status = best_move
+        best_move = snapshot._minimax(5, -1)
         self.save_move(best_move[1], -1)
         
     def _minimax(self, level, player):
         """
         Minimax algorithm to determine best move
         """
-        best_score = -10 * player
+        best_score = -1000 * player
         best_position = []
         children = self.available_spaces()
         if not children or level == 0 or self.check_status(-1) or self.check_status(1):
@@ -84,8 +83,19 @@ class Gameboard(object):
         """
         Heuristic evaluation function for minimax
         """
-        if self.check_status(1):
-            return 1
-        if self.check_status(-1):
-            return -1
-        return 0
+        all_rows = [row for row in self.boardstate] + \
+                   [[row[i] for row in self.boardstate] for i in range(3)] + \
+                   [[self.boardstate[i][i]] for i in range(3)] + \
+                   [[self.boardstate[i][2-i]] for i in range(3)]
+        score = 0
+        for row in all_rows:
+            score += self._sum_rows(row)
+        return score
+        
+    def _sum_rows(self, row):
+        score = reduce(lambda x, y: x + y, row)
+        if score == 2 or score == -2:
+            score = 10 * (score / 2)
+        if score == 3 or score == -3:
+            score = 100 * (score / 3)
+        return score

@@ -46,7 +46,7 @@ class GameView(TemplateView):
         gameboard.save_move(position, 1)
         finished = gameboard.check_status(1)
         if not finished:
-            gameboard.calc_computer_move()
+            gameboard.computer_move()
             finished = gameboard.check_status(-1)
         request.session['gameboard'] = gameboard
         context = self.get_context_data(request, **kwargs)
