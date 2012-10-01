@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+form span {
+    display: block;
+    float: left;
+    height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    width: 20px;
+}
+
+form span:nth-child(5),
+form span:nth-child(8),
+form input[type=submit] {
+    clear: both;
+}
+
+form input[type=submit] {
+    float: left;
+    margin: 10px 0;
+}
+</style>
+{% endblock %}
+
+{% block message %}
+    {% if message %}{{ message }}{% endif %}
+{% endblock %}
+
+{% block gameboard %}
+    <form method="POST">{% csrf_token %}
+        {% for row in gameboard.boardstate %}
+            {% with forloop.counter0 as x %}
+                {% for value in row %}
+                    {% with forloop.counter0 as y %}
+                        {% if value %}
+                            <span>{% ifequal value 1 %}X{% endifequal %}{% ifequal value -1 %}O{% endifequal %}</span>
+                        {% else %}
+                            <span><input type="radio" name="position" value="{{x}}{{y}}"></span>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            {% endwith %}
+        {% endfor %}
+        {% if not gameboard.status %}<input type="submit" name="move" value="Confirm Move">{% endif %}
+        <input type="submit" name="reset" value="Start New Game">
+    </form>
+{% endblock %}
