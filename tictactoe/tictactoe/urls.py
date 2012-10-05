@@ -8,7 +8,12 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'tictactoe.views.home', name='home'),
     # url(r'^tictactoe/', include('tictactoe.foo.urls')),
-	url(r'^tictactoegame/$', 'tictactoegame.views.index'),
+    url(r'^tictactoegame/$', 'tictactoegame.views.index'),
+    url(r'^tictactoegame/(?P<game_id>\d+)/$', 'tictactoegame.views.detail'),
+    url(r'^tictactoegame/session_check/$', 'tictactoegame.views.session_check'),
+    url(r'^tictactoegame/play/$', 'tictactoegame.views.play'),
+    # url(r'^tictactoegame/(?P<game_id>\d+)/results/$', 'tictactoegame.views.results'),
+    # url(r'^tictactoegame/(?P<game_id>\d+)/vote/$', 'tictactoegame.views.vote'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

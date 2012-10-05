@@ -1,7 +1,9 @@
 # Django settings for tictactoe project.
 
-# DEBUG = True
-DEBUG = False
+# ROOTDIR = os.path.abspath(os.path.dirname(__file__))
+
+DEBUG = True
+# DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -107,6 +109,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    "/Users/neilhudson/work/github/coxmediagroup_tests/Tic-Tac-Toe/tictactoe/tictactoegame/templates"
 )
 
 INSTALLED_APPS = (
@@ -120,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'tictactoegame'
 )
 
 # A sample logging configuration. The only tangible logging
