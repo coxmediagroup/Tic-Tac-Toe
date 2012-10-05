@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^tictactoegame/(?P<game_id>\d+)/$', 'tictactoegame.views.detail'),
     url(r'^tictactoegame/session_check/$', 'tictactoegame.views.session_check'),
     url(r'^tictactoegame/play/$', 'tictactoegame.views.play'),
+    url(r'^tictactoegame/play/(?P<move_string>\d+)/$', 'tictactoegame.views.play'),
+    url(r'^tictactoegame/login/$', 'tictactoegame.views.login'),
     # url(r'^tictactoegame/(?P<game_id>\d+)/results/$', 'tictactoegame.views.results'),
     # url(r'^tictactoegame/(?P<game_id>\d+)/vote/$', 'tictactoegame.views.vote'),
     # Uncomment the admin/doc line below to enable admin documentation:
