@@ -8,7 +8,9 @@ from tictactoegame.tictactoeai import TictactoeAi
 
 
 def index(request):
-	request.session['pointless_flag']=False
+	if len(Player.objects.filter(session=request.COOKIES['sessionid']))>0:
+		return HttpResponseRedirect("/tictactoegame/play")
+
 	t = loader.get_template('tictactoegame/index.html')
 	c = RequestContext(request,{
 	    'latest_poll_list': "hello",
@@ -19,13 +21,20 @@ def login(request):
 	player_name=request.POST['player_name']
 	try:
 		p = Player.objects.get(name=player_name)
+
 	except:
 		p=Player(name=player_name, session=request.COOKIES['sessionid'])
 		p.save()
 	else:
 		p.session=request.COOKIES['sessionid']
+	p.save()
 
 	return HttpResponseRedirect("/tictactoegame/play")
+
+def logout(request):
+	request.session.flush()
+	return HttpResponseRedirect("/tictactoegame/")
+
 
 def play(request,move_string=""):
 	t = loader.get_template('tictactoegame/play.html')
@@ -41,6 +50,9 @@ def play(request,move_string=""):
 		if len(active_game_set)==0:
 			message="no active games"
 			active_game=Game(board='-'*9, player=p, is_active=True)
+			ai=TictactoeAi(active_game.board)
+			active_game.board=ai.move()
+			active_game.save()
 		else:
 			active_game=active_game_set[0]#todo handle exception of multiple active games
 		if len(move_string)==2:
@@ -48,21 +60,19 @@ def play(request,move_string=""):
 			board=list(active_game.board)
 			board[move_loc]='o' #human's move choice
 			active_game.board=''.join(board)
-
-		#computer moves here
-		ai=TictactoeAi(active_game.board)
-		active_game.board=ai.move()
-		active_game.save()
-		if ai.i_won:
-			message="computer wins!"
+			#computer moves here
+			ai=TictactoeAi(active_game.board)
+			active_game.board=ai.move()
+			active_game.save()
+			if ai.i_won:
+				message="computer wins!"
 
 		game_state=[]
 		for i in range(3):
 			game_state.append([])
 			for j in range(3):
 				game_state[i].append(active_game.board[i*3+j])
-		# game_state[1][1]='x' #computer move
-		# game_state[2][2]='o' #human move
+
 	c = RequestContext(request,{
 		'game_state': game_state,
 		'message': message
