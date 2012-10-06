@@ -2,8 +2,8 @@
 # import os
 # ROOTDIR = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -109,7 +109,10 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/Users/neilhudson/work/github/coxmediagroup_tests/Tic-Tac-Toe/tictactoe/tictactoegame/templates"
+    # "/Users/neilhudson/work/github/coxmediagroup_tests/Tic-Tac-Toe/tictactoe/tictactoegame/templates"
+    # ROOTDIR
+    # +"/tictactoe/tictactoegame/templates"
+    
 )
 
 INSTALLED_APPS = (
