@@ -1,10 +1,11 @@
 # Create your views here.
 from django.template import Context, RequestContext, loader
-# from polls.models import Poll
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from tictactoegame.models import Player, Game
 from tictactoegame.tictactoeai import TictactoeAi
+
+
 
 
 def index(request):
@@ -13,7 +14,6 @@ def index(request):
 
 	t = loader.get_template('tictactoegame/index.html')
 	c = RequestContext(request,{
-	    'latest_poll_list': "hello",
 	})
 	return HttpResponse(t.render(c))
 
@@ -38,6 +38,7 @@ def logout(request):
 
 def play(request,move_string=""):
 	t = loader.get_template('tictactoegame/play.html')
+	ai=TictactoeAi()
 	message=""
 	try:
 		p = Player.objects.get(session=request.COOKIES['sessionid'])
@@ -50,7 +51,7 @@ def play(request,move_string=""):
 		if len(active_game_set)==0:
 			message="no active games"
 			active_game=Game(board='-'*9, player=p, is_active=True)
-			ai=TictactoeAi(active_game.board)
+			ai.game_board=active_game.board
 			active_game.board=ai.move()
 			active_game.save()
 		else:
@@ -61,7 +62,7 @@ def play(request,move_string=""):
 			board[move_loc]='o' #human's move choice
 			active_game.board=''.join(board)
 			#computer moves here
-			ai=TictactoeAi(active_game.board)
+			ai.game_board=active_game.board
 			active_game.board=ai.move()
 			active_game.save()
 			if ai.i_won:
@@ -75,7 +76,10 @@ def play(request,move_string=""):
 
 	c = RequestContext(request,{
 		'game_state': game_state,
-		'message': message
+		'message': message,
+		'computer_character': ai.my_character,
+		'human_character': ai.his_character,
+		'empty_space': ai.empty_space
 	})
 	return HttpResponse(t.render(c))
 

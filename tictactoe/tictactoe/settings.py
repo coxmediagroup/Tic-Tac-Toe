@@ -1,9 +1,10 @@
 # Django settings for tictactoe project.
-# import os
-# ROOTDIR = os.path.abspath(os.path.dirname(__file__))
+import os
+ROOTDIR = os.path.abspath(os.path.dirname(__file__))
+# 
 
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -59,6 +60,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
+# STATIC_ROOT = '/Users/neilhudson/work/github/coxmediagroup_tests/Tic-Tac-Toe/tictactoe/static'
 STATIC_ROOT = ''
 
 # URL prefix for static files.
@@ -110,8 +112,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # "/Users/neilhudson/work/github/coxmediagroup_tests/Tic-Tac-Toe/tictactoe/tictactoegame/templates"
-    # ROOTDIR
-    # +"/tictactoe/tictactoegame/templates"
+    ROOTDIR+"/templates"
     
 )
 
