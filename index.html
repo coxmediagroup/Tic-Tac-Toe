@@ -1,0 +1,35 @@
+<!doctype html>
+<html ng-app="memoryGameApp">
+<head>
+  <meta charset="utf-8">
+  <title>Memory Game</title>
+  <link rel="stylesheet" href="css/app.css">
+  <script src="lib/angular/angular.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/game.js"></script>
+</head>
+<body ng-controller="GameCtrl">
+  <div>Pairs left to match: {{game.unmatchedPairs}}</div>
+  <div>Matching: {{game.firstPick.title}}</div>
+
+  <table>
+    <tr ng-repeat="row in game.grid">
+      <td ng-repeat="tile in row" ng-click="game.flipTile(tile)">
+
+        <!-- this entire block can be replaced with our custom component mgCard:
+          <mg-card tile="tile"></mg-card>
+        -->
+        <div class="container">
+          <div class="card" ng-class="{flipped: tile.flipped}">
+              <img class="front" ng-src="img/back.png">
+              <img class="back" ng-src="img/{{tile.title}}.png">
+          </div>
+        </div>
+
+      </td>
+    </tr>
+  </table>
+
+  <div class="message">{{game.message}}</div>
+</body>
+</html>
