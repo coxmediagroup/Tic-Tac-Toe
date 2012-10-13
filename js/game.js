@@ -1,9 +1,7 @@
 'use strict';
-/* Memory Game Models and Business Logic */
-
-
-
-
+/* Tic Tac Toe Game Models and Business Logic */
+/* based on python version from http://www.sarathlakshman.com/2011/04/30/writing-a-tic-tac/ */
+/* this is a js version using angular js  */
 
 function Human(marker){
     //Class for Human player
@@ -21,7 +19,7 @@ function Human(marker){
     self.move = function(gameInstance, mov){
          /*** Move are only from 0-8 ***/
         //var mov = self.getValidMove(gameInstance);
-        gameInstance.mark(self.marker,mov)
+        gameInstance.mark(self.marker,mov);
     };
 
     init();
