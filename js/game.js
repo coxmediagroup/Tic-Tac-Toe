@@ -101,18 +101,18 @@ function Human(marker){
         self.description = "Human";
     };
 
-    function IsValidMove(userMove,gameInstance){
+    self.IsValidMove = function (userMove,gameInstance){
         return gameInstance.isValidMove(userMove);
-    }
+    };
 
-    var move = function(gameInstance){
+    self.move = function(gameInstance, mov){
          /*** Move are only from 0-8 ***/
-        var mov = self.getValidMove(gameInstance);
-
+        //var mov = self.getValidMove(gameInstance);
         gameInstance.mark(self.marker,mov)
     };
 
     init();
+    return self;
 }
 
 
@@ -132,29 +132,32 @@ function Computer(marker){
     };
 
 
-
-    function move(gameInstance){
-        var position_score = self.maximized_move(gameInstance),
+    self.move = function (gameInstance){
+        var position_score = maximized_move(gameInstance),
             move_position = position_score['bestMove'];
-        game_instance.mark(self.marker,move_position);
-    }
+        gameInstance.mark(self.marker,move_position);
+    };
 
 
-    var maximized_move = function(game_instance){
+    var maximized_move = function(gameInstance){
         // Find maximized move
-        var best_score, best_move, m,
-            score, position_score;
+        var best_score, best_move, i, m,
+            score, position_score,
+            free_positions = gameInstance.get_free_positions(),
+            len_free_positions = free_positions.length;
 
-        for (m in game_instance.get_free_positions()){
-            game_instance.mark(self.marker,m);
+        for (i = 0; i < len_free_positions; i += 1){
+            m = free_positions[i];
+            gameInstance.mark(self.marker,m);
 
-            if (game_instance.is_game_over())
-                score = self.get_score(game_instance);
-            else
-                position_score = self.minimized_move(game_instance);
+            if (gameInstance.is_game_over())
+                score = get_score(gameInstance);
+            else{
+                position_score = minimized_move(gameInstance);
                 score = position_score['bestScore'];
+            }
 
-            game_instance.revert_last_move();
+            gameInstance.revert_last_move();
 
             if ((best_score === undefined) || (score > best_score)){
                 best_score = score;
@@ -164,23 +167,26 @@ function Computer(marker){
         return { bestMove : best_move, bestScore : best_score };
     };
 
-    var minimized_move = function(game_instance){
+    var minimized_move = function(gameInstance){
     //Find the minimized move
-        var best_score, best_move, m,
-            score, move_position_score;
+        var best_score, best_move, i, m,
+            score, move_position_score,
+            free_positions = gameInstance.get_free_positions(),
+            len_free_positions = free_positions.length;
 
-        for (m in game_instance.get_free_positions()){
-            game_instance.mark(self.opponent_marker,m)
+        for (i = 0; i < len_free_positions; i += 1){
+            m = free_positions[i];
 
-            if (game_instance.is_game_over())
-                score = self.get_score(game_instance);
+            gameInstance.mark(self.opponent_marker,m);
+
+            if (gameInstance.is_game_over())
+                score = get_score(gameInstance);
             else {
-
-                move_position_score = self.maximized_move(game_instance);
+                move_position_score = maximized_move(gameInstance);
                 score = move_position_score['bestScore'];
             }
 
-            game_instance.revert_last_move();
+            gameInstance.revert_last_move();
 
             if ((best_score === undefined) || (score < best_score)){
                 best_score = score;
@@ -191,19 +197,21 @@ function Computer(marker){
         return { bestMove : best_move, bestScore : best_score };
     };
 
-    var get_score = function(game_instance){
-        if (game_instance.is_game_over())
-            if ((game_instance.winner  === self.marker))
+    var get_score = function(gameInstance){
+        if (gameInstance.is_game_over())
+            if ((gameInstance.winner  === self.marker))
                 return 1; // Won
-            else if (game_instance.winner === self.opponent_marker)
+            else if (gameInstance.winner === self.opponent_marker)
                 return -1; // Opponent won
         return 0; // Draw
-    }
+    };
 
     init();
+    return self;
 }
 
-function Game(){
+function TicGame(){
+    var self = this;
 
     var init = function(){
         //Initialize parameters - the game board, moves stack and winner
@@ -214,7 +222,7 @@ function Game(){
     };
 
 
-     function get_free_positions(){
+     self.get_free_positions = function (){
         //Get the list of available positions
         var i, moves = [];
         for (i = 0; i < 9; i+=1){
@@ -223,19 +231,19 @@ function Game(){
             }
         }
         return moves;
-     }
+     };
 
-     function mark(marker,pos){
+    self.mark = function (marker,pos){
         //Mark a position with marker X or O
         self.board[pos] = marker;
         self.last_moves.push(pos);
-     }
+     };
 
-    function revert_last_move(){
+    self.revert_last_move = function (){
         ///Reset the last move
         self.board[self.last_moves.pop()] = '-';
         self.winner = undefined;
-    }
+    };
 
     var hm_possible_plays = function(){
         var plays = self.board.filter(
@@ -246,7 +254,11 @@ function Game(){
         return plays.length;
     };
 
-    function is_game_over(){
+    var get_state = function(win_position){
+        return win_position.map(function (item) { return self.board[item]; });
+    };
+
+    self.is_game_over = function (){
     //    Test whether game has ended
 
         var i, win_position, state,
@@ -255,10 +267,11 @@ function Game(){
 
         for (i = 0; i < len_win_positions; i += 1){
             win_position = win_positions[i];
-            state = win_position.map(function (item) { return self.board[item]; });
-            if ((state[0] === state[1]) && (state[1] === state[2]) && (state[0] != '-'))
-                self.winner = self.state[0];
-            return true;
+            state = get_state(win_position);
+            if ((state[0] === state[1]) && (state[1] === state[2]) && (state[0] != '-')){
+                self.winner = state[0];
+                return true;
+            }
         }
         if (hm_possible_plays() === 0){
             self.winner = '-';
@@ -266,7 +279,8 @@ function Game(){
         }
         else
             return false;
-    }
+    };
+
     var display_who_is_playing = function(player){
         if (player.type === 'H')
             console.log("\t\t[Human's Move]");
@@ -274,7 +288,7 @@ function Game(){
             console.log("\t\t[Computer's Move]");
     };
 
-    function play(player1,player2){
+    self.play = function (player1,player2){
         //Execute the game play with players
         var i, current_player;
 
@@ -303,8 +317,24 @@ function Game(){
                 return;
             }
         }
-    }
+    };
+
+    self.isValidMove = function (move){
+        var positions = self.get_free_positions(),
+            result = positions.filter(function (item){return item === move });
+
+        return result.length === 1;
+    };
 
     init();
+    return self;
+}
+
+var g = new TicGame();
+var c = new Computer('X');
+var h = new Human('O');
+
+function test(){
+    g.play(c,h);
 }
 
