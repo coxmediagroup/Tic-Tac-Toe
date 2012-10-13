@@ -1,42 +1,48 @@
 'use strict';
 /* App Controllers */
 
+var GameApp = angular.module('GameApp', []);
 
-var memoryGameApp = angular.module('memoryGameApp', []);
-
-
-memoryGameApp.factory('game', function() {
-  var tileNames = ['8-ball', 'kronos', 'baked-potato', 'dinosaur', 'rocket', 'skinny-unicorn',
-    'that-guy', 'zeppelin'];
-
-  return new Game(tileNames);
+GameApp.factory('game', function() {
+    return new Game();
 });
 
 
-memoryGameApp.controller('GameCtrl', function GameCtrl($scope, game) {
-  $scope.game = game;
-});
+GameApp.controller('GameCtrl', function GameCtrl($scope, game) {
+    $scope.game = game;
+    $scope.whoStart = "human";
+    $scope.startGame = function(){
+        $scope.c = new Computer('X');
+        $scope.h = new Human('O');
+        game.initialize();
+        if ($scope.whoStart === "computer"){
+            $scope.message = game.MESSAGE_COMPUTER_TURN;
+            $scope.c.move(game);
+            $scope.message = game.MESSAGE_HUMAN_TURN;
+        }
+    };
 
-
-//usages:
-//- in the repeater as: <mg-card tile="tile"></mg-card>
-//- card currently being matched as: <mg-card tile="game.firstPick"></mg-card>
-
-memoryGameApp.directive('mgCard', function() {
-  return {
-    restrict: 'E',
-    // instead of inlining the template string here, one could use templateUrl: 'mg-card.html'
-    // and then either create a mg-card.html file with the content or add
-    // <script type="text/ng-template" id="mg-card.html">.. template here.. </script> element to
-    // index.html
-    template: '<div class="container">' +
-                '<div class="card" ng-class="{flipped: tile().flipped}">' +
-                  '<img class="front" ng-src="img/back.png">' +
-                  '<img class="back" ng-src="img/{{tile().title}}.png">' +
-                '</div>' +
-              '</div>',
-    scope: {
-      tile: 'accessor'
+    $scope.humanTryingMove = function(position){
+        if (game.isValidMove(position)){
+            $scope.h.move(game,position);
+            if (game.is_game_over()){
+                if (game.winner === '-')
+                    $scope.message = "Game over with Draw";
+                else
+                    $scope.message = game.MESSAGE_WON;
+            }
+            else{
+                $scope.c.move(game);
+                if (game.is_game_over()){
+                    if (game.winner === '-')
+                        $scope.message = "Game over with Draw";
+                    else
+                        $scope.message = game.MESSAGE_MISS;
+                }
+            }
+        }
     }
-  }
+
+    $scope.startGame();
 });
+
