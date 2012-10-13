@@ -45,10 +45,18 @@ function Computer(marker){
     };
 
 
-    self.move = function (gameInstance){
-        var position_score = maximized_move(gameInstance),
-            move_position = position_score['bestMove'];
-        gameInstance.mark(self.marker,move_position);
+    self.move = function (gameInstance, square){
+        square = square || false;
+        if (square){
+            var index = Math.floor(Math.random()*4),
+                squares = [0,2,6,8];
+            gameInstance.mark(self.marker,squares[index]);
+        }
+        else{
+            var position_score = maximized_move(gameInstance);
+            var move_position = position_score['bestMove'];
+            gameInstance.mark(self.marker,move_position);
+        }
     };
 
 
