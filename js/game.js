@@ -3,6 +3,7 @@
 /* based on python version from http://www.sarathlakshman.com/2011/04/30/writing-a-tic-tac/ */
 /* this is a js version using angular js  */
 
+
 function Human(marker){
     //Class for Human player
     var self = this;
@@ -19,7 +20,7 @@ function Human(marker){
     self.move = function(gameInstance, mov){
          /*** Move are only from 0-8 ***/
         //var mov = self.getValidMove(gameInstance);
-        gameInstance.mark(self.marker,mov);
+        gameInstance.mark(self.marker,mov)
     };
 
     init();
@@ -34,12 +35,7 @@ function Computer(marker){
         self.marker = marker;
         self.type = 'C';
         self.description = "Computer";
-        if (self.marker === 'X'){
-            self.opponent_marker = 'O';
-        }
-        else{
-            self.opponent_marker = 'X';
-        }
+        self.opponent_marker = self.marker === "O" ? "X" : "O";
     };
 
 

@@ -11,13 +11,19 @@ GameApp.factory('game', function() {
 GameApp.controller('GameCtrl', function GameCtrl($scope, game) {
     $scope.game = game;
     $scope.whoStart = "human";
+    $scope.humanMarker = "O";
     $scope.startGame = function(){
-        $scope.c = new Computer('X');
-        $scope.h = new Human('O');
+        var humanMarker = $scope.humanMarker,
+            computerMarker = humanMarker === "O" ? "X" : "O";
+        $scope.h = new Human(humanMarker);
+        $scope.c = new Computer(computerMarker);
         game.initialize();
         if ($scope.whoStart === "computer"){
             $scope.message = game.MESSAGE_COMPUTER_TURN;
-            $scope.c.move(game);
+            $scope.c.move(game,true);
+            $scope.message = game.MESSAGE_HUMAN_TURN;
+        }
+        else{
             $scope.message = game.MESSAGE_HUMAN_TURN;
         }
     };
