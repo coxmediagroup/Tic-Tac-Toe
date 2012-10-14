@@ -246,7 +246,7 @@ function Game(){
         var positions = self.get_free_positions(),
             result = positions.filter(function (item){return item === move });
 
-        return result.length === 1;
+        return (result.length === 1) && (!self.is_game_over());
     };
 
     self.value = function(position){
@@ -261,7 +261,3 @@ function Game(){
     self.initialize();
     return self;
 }
-
-
-
-
