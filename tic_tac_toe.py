@@ -43,3 +43,8 @@ class Board(object):
         if j is None:
             i, j = i
         return i * 3 + j
+
+    def any2g(self, *coord):
+        if len(coord) == 2:
+            return coord
+        return self.l2g(*coord)
