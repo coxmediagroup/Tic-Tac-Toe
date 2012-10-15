@@ -30,4 +30,16 @@ class Board(object):
 
     def __repr__(self):
         return self.board_str % tuple(self.grid)
-        
+
+    def l2g(self, coord):
+        """Convert list coordinates (0-8) to grid coordinates (0-2, 0-2).
+        Grid coords are in (row, col) format.
+        """
+        return coord / 3, coord % 3
+
+    def g2l(self, i, j=None):
+        """Convert grid coordinates (0-2, 0-2) to list coordinates (0-8).
+        Can pass grid coords individually or as tuple."""        
+        if j is None:
+            i, j = i
+        return i * 3 + j
