@@ -6,10 +6,22 @@ all_trips_dct = {1: (1, 4, 7),
 all_trips = set()
 
 def three_cons(st, inc):
-    """Returns sequence of '3 in a row', starting with st and
-    incremented by inc"""
+    "Returns sequence of '3 in a row', starting with st and incremented by inc"
     return st, st + inc, st + inc * 2
 
 for inc, starts in all_trips_dct.iteritems():
     for start in starts:
         all_trips.add(three_cons(start, inc))
+
+x, o = 'x', 'o'
+
+class Board(object):
+    """Tic tac toe board. Positions on board are given by index inlist of
+    length 9.
+    """
+    def __init__(self):
+        "Start off with empty board--empty sets of x's and o's"
+        self.xs = set()
+        self.os = set()
+        self.grid = [' '] * 9
+        
