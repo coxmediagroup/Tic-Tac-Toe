@@ -24,4 +24,10 @@ class Board(object):
         self.xs = set()
         self.os = set()
         self.grid = [' '] * 9
+        row_str = '%s|%s|%s\n'
+        sep_str = '-' * 5 + '\n'
+        self.board_str = sep_str.join([row_str] * 3)
+
+    def __repr__(self):
+        return self.board_str % tuple(self.grid)
         
