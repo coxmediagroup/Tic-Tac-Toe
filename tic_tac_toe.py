@@ -42,6 +42,13 @@ class Board(object):
         self._empty = None
         self.grid[idx] = val
 
+    def clear(self, idx):
+        self[idx] = ' '
+
+    def clearall(self):
+        for i in range(len(self.grid)):
+            self.clear(i)
+
     def l2g(self, coord):
         """Convert list coordinates (0-8) to grid coordinates (0-2, 0-2).
         Grid coords are in (row, col) format.
