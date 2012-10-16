@@ -32,6 +32,8 @@ class Board(object):
         self.board_str = sep_str.join([row_str] * 3)[:-1]
         self.range = set([0, 1, 2])
         self._empty = None
+        self._corners = (0, 2, 6, 8)
+        self._edges = (1, 3, 5, 7)
 
     def __repr__(self):
         return self.board_str % tuple(self.grid)
@@ -99,6 +101,14 @@ class Board(object):
     def isempty(self, *coord):
         coord = self.any2l(*coord)
         return coord in self.empty_cells
+
+    def iscorner(self, *coord):
+        coord = self.any2l(*coord)
+        return coord in self._corners
+
+    def isedge(self, *coord):
+        coord = self.any2l(*coord)
+        return coord in self._edges
 
     def adj(self, coord, include_diag=False, only_empty=False):
         i, j = self.any2g(coord)
