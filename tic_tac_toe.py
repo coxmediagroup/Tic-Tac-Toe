@@ -1,3 +1,5 @@
+from itertools import izip, izip_longest, chain 
+
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
                  3: (0, 1, 2),
@@ -27,6 +29,7 @@ class Board(object):
         row_str = '%s|%s|%s\n'
         sep_str = '-' * 5 + '\n'
         self.board_str = sep_str.join([row_str] * 3)
+        self.range = set([0, 1, 2])
 
     def __repr__(self):
         return self.board_str % tuple(self.grid)
@@ -56,7 +59,28 @@ class Board(object):
             return coord
         return self.l2g(*coord)
 
+    def any2l(self, *coord):
+        "Returns coordinates in index format regardless of input format"
+        if len(coord) == 1:
+            return coord[0]
+        return self.g2l(*coord)
+
     def empty_cells(self):
         "Returns set of empty cells on board"
         return set([i for i, s in enumerate(self.grid) if s == ' '])
 
+    def adj(self, coord, include_diag=False, only_empty=False):
+        i, j = self.any2g(coord)
+        other_rows = [r for r in (i + 1, i - 1) if r in self.range]
+        other_cols = [c for c in (j + 1, j - 1) if c in self.range]
+        vert = izip_longest(other_rows, [j], fillvalue=j)
+        horz = izip_longest([i], other_cols, fillvalue=i)
+        vert, horz = list(vert), list(horz)
+        lr, lc = map(len, (other_rows, other_cols))
+        if lr < lc:
+            other_rows *= lc
+        elif lr > lc:
+            other_cols *= lr
+        diag = izip(other_rows, other_cols)
+        ret_args = [vert, horz] + ([diag] if include_diag else [])
+        return chain(*ret_args)
