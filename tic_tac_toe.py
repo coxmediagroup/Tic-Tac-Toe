@@ -1,4 +1,5 @@
 from itertools import izip, izip_longest, chain, ifilter, combinations
+import random
 
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
@@ -135,6 +136,9 @@ class Board(object):
                 break
             val = raw_input("What value? ")
             self[int(idx)] = val
+
+    def policy(self):
+        return random.choice(tuple(self.empty_cells))
 
 def main():
     player_first = raw_input("Do you want to go first? [y/n] ")
