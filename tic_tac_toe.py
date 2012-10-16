@@ -145,12 +145,16 @@ class Board(object):
 
     def policy(self):
         options = self.empty_cells
+        player_moves = self.findall(self.player)
         if len(options) == 9:
             #first round, first turn
             pass
         elif len(options) == 8:
             #first round, second turn
-            pass
+            pm = player_moves.next()
+            # if first move was in corner, hit the middle
+            if self.iscorner(pm):
+                return 4
         else:
             pass
 
