@@ -134,7 +134,17 @@ class Board(object):
             self[int(idx)] = val
 
     def policy(self):
-        return random.choice(tuple(self.empty_cells))
+        options = self.empty_cells
+        if len(options) == 9:
+            #first round, first turn
+            pass
+        elif len(options) == 8:
+            #first round, second turn
+            pass
+        else:
+            pass
+
+        return random.choice(tuple(options))
 
     def gameover(self, sym=x):
         """Returns False if not gameover, True if draw, else returns the winning
