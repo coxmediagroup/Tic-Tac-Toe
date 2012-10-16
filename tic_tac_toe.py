@@ -65,7 +65,6 @@ class Board(object):
         b2.grid = self.grid[:]
         return b2
 
-
     def findall(self, val):
         "Yields indices of grid having value `val`."
         for idx, val2 in enumerate(self.grid):
@@ -144,6 +143,14 @@ class Board(object):
         for triplet in combinations(self.findall(sym), 3):
             if triplet in all_trips:
                 return True
+        return False
+
+    def winnable(self, sym=x):
+        for cell in self.empty_cells:
+            test = self.clone()
+            test[cell] = sym
+            if test.won(sym):
+                return cell
         return False
 
     def isetvalues(self):
