@@ -60,6 +60,12 @@ class Board(object):
             except IndexError, e:
                 return
 
+    def clone(self):
+        b2 = type(self)(autosym=self.auto, playersym=self.player)
+        b2.grid = self.grid[:]
+        return b2
+
+
     def findall(self, val):
         "Yields indices of grid having value `val`."
         for idx, val2 in enumerate(self.grid):
