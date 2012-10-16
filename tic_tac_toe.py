@@ -26,8 +26,6 @@ class Board(object):
         "Start off with empty board--empty sets of x's and o's"
         self.auto = autosym
         self.player = playersym
-        self.xs = set()
-        self.os = set()
         self.grid = [' '] * 9
         row_str = '%s|%s|%s\n'
         sep_str = '-' * 5 + '\n'
@@ -43,10 +41,6 @@ class Board(object):
 
     def __setitem__(self, idx, val):
         self._empty = None
-        if val == x:
-            self.xs.add(idx)
-        elif val == o:
-            self.os.add(idx)
         self.grid[idx] = val
 
     def clear(self, idx):
