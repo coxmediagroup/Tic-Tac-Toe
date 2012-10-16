@@ -1,4 +1,4 @@
-from itertools import izip, izip_longest, chain, ifilter, combinations
+from itertools import izip, izip_longest, chain, ifilter, combinations, cycle
 import random
 
 all_trips_dct = {1: (0, 3, 6),
@@ -151,20 +151,35 @@ class Board(object):
         sym = self.auto if auto else self.player
         if not auto:
             print demo or ''
-            idx = raw_input("Where do you want to move? Choose number as shown\
-                above")
+            print ''
+            idx = raw_input("Where do you want to move? Choose number as shown \
+above. ")
         else:
             idx = self.policy()
-        self[idx] = sym
+        self[int(idx)] = sym
+        demo[int(idx)] = ' '
+        if auto:
+            print self
+            print ''
         return self.gameover(sym)
 
 def main():
-    player_first = raw_input("Do you want to go first? [y/n] ")
-    b = Board()
-    b.setboard(range(9))
+    auto_first = raw_input("Do you want to go first? [y/n] ").lower()[0] == 'n'
+    # print auto_first
+    demo, b = Board(), Board(x, o)
+    demo.setboard()
+    DONE = False
+    whose_turn = cycle([auto_first, not auto_first])
+    while not DONE:
+        DONE = b.turn(auto=next(whose_turn), demo=demo)
     print b
-    idx = raw_input('Choose a square by the number as shown above. ')
+    if DONE == True:
+        print 'Game over! Draw!'
+    else:
+        print "Game over! %s's one!" % DONE
+
+    # idx = raw_input('Choose a square by the number as shown above. ')
 
 if __name__ == '__main__':
     pass
-    # main()
+    main()
