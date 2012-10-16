@@ -28,7 +28,7 @@ class Board(object):
         self.grid = [' '] * 9
         row_str = '%s|%s|%s\n'
         sep_str = '-' * 5 + '\n'
-        self.board_str = sep_str.join([row_str] * 3)
+        self.board_str = sep_str.join([row_str] * 3)[:-1]
         self.range = set([0, 1, 2])
         self._empty = None
 
@@ -48,6 +48,14 @@ class Board(object):
     def clearall(self):
         for i in range(len(self.grid)):
             self.clear(i)
+
+    def setboard(self, it):
+        "Starting from the 0th cell, fill in board with values from it."
+        for i, val in enumerate(it):
+            try:
+                self[i] = val
+            except IndexError, e:
+                pass
 
     def l2g(self, coord):
         """Convert list coordinates (0-8) to grid coordinates (0-2, 0-2).
