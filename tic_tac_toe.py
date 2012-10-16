@@ -140,6 +140,20 @@ class Board(object):
     def policy(self):
         return random.choice(tuple(self.empty_cells))
 
+    def gameover(self, p1=x, p2=o):
+        """Returns False if not gameover, True if draw, else returns the winning
+        symbol.
+        """
+        if self.won(p1):
+            return p1
+        elif self.won(p2):
+            return p2
+        elif len(self.empty_cells) == 0:
+            return True
+        else:
+            return False
+
+
 def main():
     player_first = raw_input("Do you want to go first? [y/n] ")
     b = Board()
