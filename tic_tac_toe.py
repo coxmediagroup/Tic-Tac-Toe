@@ -1,4 +1,4 @@
-from itertools import izip, izip_longest, chain 
+from itertools import izip, izip_longest, chain, ifilter
 
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
@@ -74,8 +74,8 @@ class Board(object):
             self._empty = set([i for i, s in enumerate(self.grid) if s == ' '])
         return self._empty
 
-    def isempty(self, coord):
-        coord = self.any2l(coord)
+    def isempty(self, *coord):
+        coord = self.any2l(*coord)
         return coord in self.empty_cells
 
     def adj(self, coord, include_diag=False, only_empty=False):
@@ -92,4 +92,6 @@ class Board(object):
             other_cols *= lr
         diag = izip(other_rows, other_cols)
         ret_args = [vert, horz] + ([diag] if include_diag else [])
+        if only_empty:
+            return ifilter(lambda x: self.isempty(*x), chain(*ret_args))
         return chain(*ret_args)
