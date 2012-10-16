@@ -61,6 +61,12 @@ class Board(object):
             except IndexError, e:
                 pass
 
+    def findall(self, val):
+        "Yields indices of grid having value `val`."
+        for idx, val2 in enumerate(self.grid):
+            if val == val2:
+                yield idx
+
     def l2g(self, coord):
         """Convert list coordinates (0-8) to grid coordinates (0-2, 0-2).
         Grid coords are in (row, col) format.
