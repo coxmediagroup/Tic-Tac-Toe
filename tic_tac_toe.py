@@ -51,6 +51,7 @@ class Board(object):
         return i * 3 + j
 
     def any2g(self, *coord):
+        "Returns coordinates in grid format regardless of input format"
         if len(coord) == 2:
             return coord
         return self.l2g(*coord)
