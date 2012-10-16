@@ -110,6 +110,12 @@ class Board(object):
         coord = self.any2l(*coord)
         return coord in self._edges
 
+    def emptycorners(self):
+        return [i for i in self.empty_cells if self.iscorner(i)]
+
+    def emptyedges(self):
+        return [i for i in self.empty_cells if self.isedge(i)]
+
     def adj(self, coord, include_diag=False, only_empty=False):
         i, j = self.any2g(coord)
         other_rows = [r for r in (i + 1, i - 1) if r in self.range]
