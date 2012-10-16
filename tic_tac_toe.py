@@ -30,6 +30,7 @@ class Board(object):
         sep_str = '-' * 5 + '\n'
         self.board_str = sep_str.join([row_str] * 3)
         self.range = set([0, 1, 2])
+        self._empty = None
 
     def __repr__(self):
         return self.board_str % tuple(self.grid)
@@ -38,6 +39,7 @@ class Board(object):
         return self.grid[idx]
 
     def __setitem__(self, idx, val):
+        self._empty = None
         self.grid[idx] = val
 
     def l2g(self, coord):
@@ -65,9 +67,16 @@ class Board(object):
             return coord[0]
         return self.g2l(*coord)
 
+    @property
     def empty_cells(self):
         "Returns set of empty cells on board"
-        return set([i for i, s in enumerate(self.grid) if s == ' '])
+        if self._empty is None:
+            self._empty = set([i for i, s in enumerate(self.grid) if s == ' '])
+        return self._empty
+
+    def isempty(self, coord):
+        coord = self.any2l(coord)
+        return coord in self.empty_cells
 
     def adj(self, coord, include_diag=False, only_empty=False):
         i, j = self.any2g(coord)
