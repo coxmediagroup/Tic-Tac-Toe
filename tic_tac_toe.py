@@ -130,4 +130,5 @@ def main():
     idx = raw_input('Choose a square by the number as shown above. ')
 
 if __name__ == '__main__':
-    main()
+    pass
+    # main()
