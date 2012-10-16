@@ -110,3 +110,14 @@ class Board(object):
         if only_empty:
             return ifilter(lambda x: self.isempty(*x), chain(*ret_args))
         return chain(*ret_args)
+
+
+def main():
+    player_first = raw_input("Do you want to go first? [y/n] ")
+    b = Board()
+    b.setboard(range(9))
+    print b
+    idx = raw_input('Choose a square by the number as shown above. ')
+
+if __name__ == '__main__':
+    main()
