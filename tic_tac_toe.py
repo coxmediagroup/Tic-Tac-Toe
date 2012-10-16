@@ -1,4 +1,4 @@
-from itertools import izip, izip_longest, chain, ifilter, permutations
+from itertools import izip, izip_longest, chain, ifilter, combinations
 
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
@@ -121,6 +121,11 @@ class Board(object):
             return ifilter(lambda x: self.isempty(*x), chain(*ret_args))
         return chain(*ret_args)
 
+    def won(self, sym=x):
+        for triplet in combinations(self.findall(sym), 3):
+            if triplet in all_trips:
+                return True
+        return False
 
 def main():
     player_first = raw_input("Do you want to go first? [y/n] ")
