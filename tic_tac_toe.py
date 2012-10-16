@@ -58,4 +58,5 @@ class Board(object):
 
     def empty_cells(self):
         "Returns set of empty cells on board"
-        return = set([i for i, s in enumerate(self.grid) if s == ' '])
+        return set([i for i, s in enumerate(self.grid) if s == ' '])
+
