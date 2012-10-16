@@ -55,3 +55,7 @@ class Board(object):
         if len(coord) == 2:
             return coord
         return self.l2g(*coord)
+
+    def empty_cells(self):
+        "Returns set of empty cells on board"
+        return = set([i for i, s in enumerate(self.grid) if s == ' '])
