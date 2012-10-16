@@ -127,6 +127,15 @@ class Board(object):
                 return True
         return False
 
+    def isetvalues(self):
+        DONE = False
+        while not DONE:
+            idx = raw_input("Set value for which index? [q to quit] ")
+            if idx == 'q':
+                break
+            val = raw_input("What value? ")
+            self[int(idx)] = val
+
 def main():
     player_first = raw_input("Do you want to go first? [y/n] ")
     b = Board()
