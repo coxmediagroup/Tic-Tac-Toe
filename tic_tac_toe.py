@@ -161,6 +161,8 @@ class Board(object):
             # if first move was in corner, hit the middle
             if self.iscorner(pm):
                 return 4
+            else:
+                return random.choice(self.emptycorners())
         else:
             pass
 
