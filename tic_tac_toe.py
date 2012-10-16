@@ -31,6 +31,12 @@ class Board(object):
     def __repr__(self):
         return self.board_str % tuple(self.grid)
 
+    def __getitem__(self, idx):
+        return self.grid[idx]
+
+    def __setitem__(self, idx, val):
+        self.grid[idx] = val
+
     def l2g(self, coord):
         """Convert list coordinates (0-8) to grid coordinates (0-2, 0-2).
         Grid coords are in (row, col) format.
