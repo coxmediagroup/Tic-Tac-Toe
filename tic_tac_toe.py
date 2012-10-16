@@ -1,4 +1,4 @@
-from itertools import izip, izip_longest, chain, ifilter
+from itertools import izip, izip_longest, chain, ifilter, permutations
 
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
@@ -40,6 +40,10 @@ class Board(object):
 
     def __setitem__(self, idx, val):
         self._empty = None
+        if val == x:
+            self.xs.add(idx)
+        elif val == o:
+            self.os.add(idx)
         self.grid[idx] = val
 
     def clear(self, idx):
