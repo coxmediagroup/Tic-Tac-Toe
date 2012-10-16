@@ -22,8 +22,10 @@ class Board(object):
     """Tic tac toe board. Positions on board are given by index inlist of
     length 9.
     """
-    def __init__(self):
+    def __init__(self, autosym=x, playersym=o):
         "Start off with empty board--empty sets of x's and o's"
+        self.auto = autosym
+        self.player = playersym
         self.xs = set()
         self.os = set()
         self.grid = [' '] * 9
@@ -54,13 +56,13 @@ class Board(object):
         for i in range(len(self.grid)):
             self.clear(i)
 
-    def setboard(self, it):
+    def setboard(self, it=range(9)):
         "Starting from the 0th cell, fill in board with values from it."
         for i, val in enumerate(it):
             try:
                 self[i] = val
             except IndexError, e:
-                pass
+                return
 
     def findall(self, val):
         "Yields indices of grid having value `val`."
@@ -140,19 +142,27 @@ class Board(object):
     def policy(self):
         return random.choice(tuple(self.empty_cells))
 
-    def gameover(self, p1=x, p2=o):
+    def gameover(self, sym=x):
         """Returns False if not gameover, True if draw, else returns the winning
         symbol.
         """
-        if self.won(p1):
-            return p1
-        elif self.won(p2):
-            return p2
+        if self.won(sym):
+            return sym
         elif len(self.empty_cells) == 0:
             return True
         else:
             return False
 
+    def turn(self, auto=False, demo=None):
+        sym = self.auto if auto else self.player
+        if not auto:
+            print demo or ''
+            idx = raw_input("Where do you want to move? Choose number as shown\
+                above")
+        else:
+            idx = self.policy()
+        self[idx] = sym
+        return self.gameover(sym)
 
 def main():
     player_first = raw_input("Do you want to go first? [y/n] ")
