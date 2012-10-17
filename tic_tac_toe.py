@@ -20,8 +20,8 @@ for inc, starts in all_trips_dct.iteritems():
 
 x, o = 'x', 'o'
 
-class Board(object):
-    """Tic tac toe board. Positions on board are given by index inlist of
+class Game(object):
+    """Tic tac toe game. Positions on board are given by index inlist of
     length 9.
     """
     def __init__(self, autosym=x, playersym=o):
@@ -253,7 +253,7 @@ above. ")
 def main():
     auto_first = raw_input("Do you want to go first? [y/n] ").lower()[0] == 'n'
     # print auto_first
-    demo, b = Board(), Board(x, o)
+    demo, b = Game(), Game(x, o)
     demo.setboard()
     DONE = False
     whose_turn = cycle([auto_first, not auto_first])
