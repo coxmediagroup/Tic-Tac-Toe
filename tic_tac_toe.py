@@ -165,21 +165,46 @@ class Board(object):
     def policy(self):
         options = self.empty_cells
         player_moves = self.findall(self.player)
-        if len(options) == 9:
-            #first round, first turn
-            pass
-        elif len(options) == 8:
+
+        win = self.winnable(self.auto)
+        if win is not False:
+            return win
+        block = self.winnable(self.player)
+        if block is not False:
+            return block
+        if len(options) == 8:
             #first round, second turn
             pm = player_moves.next()
             # if first move was in corner, hit the middle
-            if self.iscorner(pm):
+            if pm != 4:
                 return 4
-            else:
-                return random.choice(self.emptycorners())
-        else:
-            pass
+            return random.choice(self.emptycorners())
+        if len(options) == 6:
+            if len(self.emptycorners()) == len(self.emptyedges()) == 3:
+                l = [self.l2g(i) for i in self.findall(self.player)]
+                for c in self.emptycorners():
+                    coord_auto = self.l2g(c)
+                    if all([(i in j) for i, j in zip(coord_auto, zip(*l))]):
+                        return c
+            return random.choice(self.emptycorners())
 
-        return random.choice(tuple(options))
+        # computer goes first:
+        elif len(options) in (9, 7, 5):
+            if len(options) == 7:
+                p = player_moves.next()
+                if not self.iscorner(p):
+                    for c in self.emptycorners():
+                        coord_auto = self.l2g(c)
+                        coord_player = self.l2g(p)
+                        if coord_auto[0] == coord_player[0] or \
+                            coord_auto[1] == coord_player[1]:
+                            return c
+            return random.choice(self.emptycorners())
+        else:
+            try:
+                return random.choice(self.emptyedges())
+            except IndexError:
+                return random.choice(tuple(options))
 
     def gameover(self, sym=x):
         """Returns False if not gameover, True if draw, else returns the winning
