@@ -180,15 +180,30 @@ class Board(object):
                 return 4
             return random.choice(self.emptycorners())
         if len(options) == 6:
+            # player first, 2nd round- going for edge trap
+            # move to corner in between player's 2 pieces, i.e., in space marked
+            # 'v' below
+            # 
+            # v|o| 
+            # -----
+            #  |x| 
+            # -----
+            # o| | 
+            # player played 1 corner & 1 edge:
             if len(self.emptycorners()) == len(self.emptyedges()) == 3:
                 l = [self.l2g(i) for i in self.findall(self.player)]
                 for c in self.emptycorners():
                     coord_auto = self.l2g(c)
+                    # zip jujitsu- basically find empty corner position that is
+                    # aligned in some way with both of the player's positions
                     if all([(i in j) for i, j in zip(coord_auto, zip(*l))]):
                         return c
-            return random.choice(self.emptycorners())
+            # fallback- I've already played the center, so any on the edge 
+            return random.choice(self.emptyedges())
 
         # computer goes first:
+        # start in a corner, prefer corners that are aligned in some dimension
+        # to one of player's positions
         elif len(options) in (9, 7, 5):
             if len(options) == 7:
                 p = player_moves.next()
