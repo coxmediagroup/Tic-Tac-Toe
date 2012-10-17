@@ -246,7 +246,7 @@ def main():
     if DONE == True:
         print 'Game over! Draw!'
     else:
-        print "Game over! %s's one!" % DONE
+        print "Game over! %s's won!" % DONE
 
     # idx = raw_input('Choose a square by the number as shown above. ')
 
