@@ -1,6 +1,8 @@
 from itertools import izip, izip_longest, chain, ifilter, combinations, cycle
 import random
 
+# My way of checking for 3-in-a-rows: generate a set of all the sequences, 
+# all_trips, and look at the board to see if any triplet is in them
 all_trips_dct = {1: (0, 3, 6),
                  2: (2,),
                  3: (0, 1, 2),
