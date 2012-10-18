@@ -129,7 +129,7 @@ class Game(object):
             
         if self.win_or_block_diag(block, choice): return
         
-        # only gets here early on!
+        # only gets here early on! (and for the last move on a tie)
         return self.make_early_choice(choice)
     
     def win_or_block(self, column, target, block_with=None):
@@ -289,33 +289,6 @@ class Game(object):
         if over:
             print 'game over,', winner, 'wins'
             self.active = False
-        
-if __name__ == '__main__':
-    # I wanted to use a cellspace and moore rules to solve this,
-    # but Katie seems to want me to submit this today
-    import random
-    
-    num_games = 100
-    num_wins = 0
-    num_ties = 0
-    for x in xrange(num_games):
-        g = Game()
-        
-        winner = None
-        while winner is None:
-            while not g.make_choice(random.randint(0, 2), random.randint(0, 2), 1):
-                pass
-            
-            g.make_ai_choice(2)
-            
-            __, winner = g.game_over()
-            if winner == 2: num_wins += 1
-            elif winner == None: num_ties += 1
-            else: print g
-            
-    print 'ai won', num_wins, "times, and lost", str(num_games - (num_wins + num_ties))
-    
-    raw_input("press enter to close...")
     
             
         
