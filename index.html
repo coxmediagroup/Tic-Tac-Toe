@@ -10,13 +10,22 @@
 </head>
 <body ng-controller="GameCtrl">
 <h1>Tic Tac Toe using Angular JS</h1>
-<div>Please select who start:
+<div>
+    <label for="who-start">Please select who start</label>:
 
-    <select ng-model="whoStart">
+    <select id="who-start" ng-model="whoStart">
         <option value="computer" selected>Computer</option>
         <option value="human">Human</option>
 
-    </select>
+    </select><br/>
+    <label for="human-marker">Please select your marker</label>:
+
+    <select id="human-marker" ng-model="humanMarker">
+        <option value="O" selected>O</option>
+        <option value="X">X</option>
+
+    </select><br/>
+
     <button ng-click="startGame()" class="btn">Start</button>
 </div>
 
@@ -25,36 +34,27 @@
 <FORM NAME="tic">
     <div>
         <INPUT TYPE="button" class="tictac" value="{{game.value(0)}}"
-               ng-click= "humanTryingMove(0)">
-        </input>
+               ng-click= "humanTryingMove(0)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(1)}}"
-               ng-click= "humanTryingMove(1)">
-        </input>
+               ng-click= "humanTryingMove(1)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(2)}}"
-               ng-click= "humanTryingMove(2)">
-        </input>
+               ng-click= "humanTryingMove(2)"/>
     </div>
     <div>
         <INPUT TYPE="button" class="tictac" value="{{game.value(3)}}"
-               ng-click= "humanTryingMove(3)">
-        </input>
+               ng-click= "humanTryingMove(3)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(4)}}"
-               ng-click= "humanTryingMove(4)">
-        </input>
+               ng-click= "humanTryingMove(4)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(5)}}"
-               ng-click= "humanTryingMove(5)">
-        </input>
+               ng-click= "humanTryingMove(5)"/>
     </div>
     <div>
         <INPUT TYPE="button" class="tictac" value="{{game.value(6)}}"
-               ng-click= "humanTryingMove(6)">
-        </input>
+               ng-click= "humanTryingMove(6)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(7)}}"
-               ng-click = "humanTryingMove(7)">
-        </input>
+               ng-click = "humanTryingMove(7)"/>
         <INPUT TYPE="button" class="tictac" value="{{game.value(8)}}"
-               ng-click= "humanTryingMove(8)">
-        </input>
+               ng-click= "humanTryingMove(8)"/>
     </div>
 </form>
 <br/>
