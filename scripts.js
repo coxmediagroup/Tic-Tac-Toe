@@ -79,7 +79,7 @@ function auto_play() {
     // If the player has two corners and the computer has center,
     // go for a win across or down, otherwise the player will win
     if (corner_controls.filter('[value="1"]').length == 2) {
-        $('#2, #4, #6, #8').filter('[value="0"]')[0].click();
+        $('#2, #4, #6, #8').filter('[value="0"]:first').click();
         return;
     }
 
@@ -103,7 +103,7 @@ function auto_play() {
                 return Math.round(Math.random())-.5;
             });
     if (available_corners.length > 0) {
-        available_corners[0].click();
+        $(available_corners[0]).click();
     }
     else {
         $('.board td[value="0"]:first').click();
