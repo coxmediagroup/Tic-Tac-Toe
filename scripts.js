@@ -38,22 +38,23 @@ var lines = {
 function take_turn(event) {
     // Get the clicked cell
     var $cell = $(this);
-    if ($cell.html().trim() == '') {
+    if ($cell.html().trim() == '' && current_player != '') {
         // If they clicked on an empty cell then set the contents
         // of the cell to their player symbol and set the value 
         // of the cell to their value (X=1, O=-1).
         $cell.html(current_player);
         $cell.attr('value', players[current_player].value);
 
-        // Swap the current_player variable
-        current_player = players[current_player].opponent;
-
         // Check for a winner
-        check_for_winner();
+        if (!check_for_winner()) {
 
-        // If it's the computer's turn, make a move
-        if (current_player == 'O') {
-            auto_play();
+            // Swap the current_player variable
+            current_player = players[current_player].opponent;
+
+            // If it's the computer's turn, make a move
+            if (current_player == 'O') {
+                //auto_play();
+            }
         }
     }
 }
@@ -69,14 +70,37 @@ function auto_play() {
            return;
         }
     }
-    // Get a random corner
-    $('#1, #3, #7, #9')
+    // If the player starts with a corner, take center
+    if ($('#5[value="0"]').length == 1) {
+        $('#5[value="0"]').click();
+        return;
+    }
+
+    // Get a random corner, unless the other player started in a corner,
+    // in which case get the opposite corner, otherwise they will win
+    var corners = {1:9, 3:7, 9:1, 7:3};
+    for (corner in corners) {
+        var other_corner = corners[corner];
+        if ($('#' + corner + '[value="1"], #' + other_corner + '[value="0"]').length == 2) {
+            $('#' + other_corner).click();
+            return;
+        }
+    }
+    // Usually if all of the corners are taken up there are two in a 
+    // row somewhere, but just to be sure, check for an available
+    // corner, and if there are none then grab a random empty cell
+    var available_corners = $('#1, #3, #7, #9')
         .filter('[value="0"]')
         .get()
         .sort(function() { 
                 return Math.round(Math.random())-.5;
-            })[0]
-        .click();
+            });
+    if (available_corners.length > 0) {
+        available_corners[0].click();
+    }
+    else {
+        $('.board td[value="0"]:first').click();
+    }
 }
 
 // See if anyone has won yet, and if so mark the winning line in red
@@ -86,14 +110,18 @@ function check_for_winner() {
         var row = rows[index];
         if (Math.abs(row) > 2) {
            lines[index].css({'color': 'red'}); 
+           $('.winner').html(current_player + ' wins!');
            current_player = '';
-           break;
+           return true;
         }
     }
     if ($('.board td[value="0"]').length == 0) {
         // Game over
+        $('.winner').html('Draw!');
         current_player = '';
+        return true;
     }
+    return false;
 }
 
 // Get a list of line states so we can calculate if someone has won
