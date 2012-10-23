@@ -10,7 +10,7 @@ body {
 }
 
 .wrapper {
-    width: 600px;
+    width: 300px;
     margin: 20px auto 10px  auto;
 }
 
@@ -25,3 +25,7 @@ body {
     cursor: pointer;
 }
 
+.winner {
+    text-align: center;
+    color: red;
+}

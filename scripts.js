@@ -32,13 +32,14 @@ var lines = {
     6: $('#2,#5,#8'), // Column 2
     7: $('#3,#6,#9')  // Column 3
 }
+var corner_controls = $('#1, #3, #7, #9');
 
 // Handle a turn, check for a winner, and if it's the computer's 
 // turn next then have the computer take a turn
 function take_turn(event) {
     // Get the clicked cell
     var $cell = $(this);
-    if ($cell.html().trim() == '' && current_player != '') {
+    if ($cell.html() == '' && current_player != '') {
         // If they clicked on an empty cell then set the contents
         // of the cell to their player symbol and set the value 
         // of the cell to their value (X=1, O=-1).
@@ -53,7 +54,7 @@ function take_turn(event) {
 
             // If it's the computer's turn, make a move
             if (current_player == 'O') {
-                //auto_play();
+                auto_play();
             }
         }
     }
@@ -71,8 +72,14 @@ function auto_play() {
         }
     }
     // If the player starts with a corner, take center
-    if ($('#5[value="0"]').length == 1) {
+    if ($('#5').attr('value') == "0") {
         $('#5[value="0"]').click();
+        return;
+    }
+    // If the player has two corners and the computer has center,
+    // go for a win across or down, otherwise the player will win
+    if (corner_controls.filter('[value="1"]').length == 2) {
+        $('#2, #4, #6, #8').filter('[value="0"]')[0].click();
         return;
     }
 
@@ -89,7 +96,7 @@ function auto_play() {
     // Usually if all of the corners are taken up there are two in a 
     // row somewhere, but just to be sure, check for an available
     // corner, and if there are none then grab a random empty cell
-    var available_corners = $('#1, #3, #7, #9')
+    var available_corners = corner_controls
         .filter('[value="0"]')
         .get()
         .sort(function() { 
