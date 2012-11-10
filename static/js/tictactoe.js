@@ -11,6 +11,7 @@
     });
 
     GameView = Backbone.View.extend({
+        round: 1,
         initialize: function() {
             this.render();
         },
@@ -27,6 +28,14 @@
             square.html("X");
             this.collection.at(square_index).set("has_x", true);
             // computer moves now.
+            $.getJSON("/computer/" + this.round, {"board[]": JSON.stringify(this.collection)}, 
+                function(data) {
+                    var square = $("#square-" + data.square);
+                    square.html("O");
+                    this.collection.at(data.square).set("has_o", true);
+                }
+            )
+            this.round++;
         }
     });
     
