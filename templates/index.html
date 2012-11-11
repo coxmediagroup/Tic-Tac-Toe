@@ -9,7 +9,18 @@
         <div class="navbar">
           <div class="navbar-inner">
             <div class="container">
-              <a class="brand" href="/">Andrew Schoen</a>
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="/">Andrew Schoen</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="http://twitter.com/andrewschoen" target="_blank">@andrewschoen</a></li>
+                        <li><a href="http://github.com/andrewschoen" target="_blank">github.com/andrewschoen</a></li>
+                    </ul>
+                </div>
             </div>
           </div>
         </div>
@@ -21,7 +32,7 @@
                 </div>
             </div>
             <div class="row">
-                <div id="tie-game" class="alert alert-info">
+                <div id="tie-game" class="alert alert-error">
                     <h2>Game over!  It's a cats game!</h2>
                 </div>
                 <div id="computer-win" class="alert alert-info">
@@ -35,6 +46,7 @@
         </div>
 
         <script type="text/javascript" src="static/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="static/js/underscore-min.js"></script>
         <script type="text/javascript" src="static/js/backbone-min.js"></script>
 
