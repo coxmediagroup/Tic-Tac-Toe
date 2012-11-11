@@ -4,6 +4,7 @@ from flask import Flask, render_template, jsonify, request, json
 app = Flask(__name__)
 
 CORNERS = [0, 2, 6, 8]
+OPPOSITE_CORNERS = [[0, 8], [2, 6]]
 WALLS = [1, 3, 5, 7]
 CENTER = 4
 WINNING_MOVES = [
@@ -24,12 +25,22 @@ class TicTacToePlayer(object):
 
     rounds = [
         'round_one',
+        'round_two',
     ]
 
     def round_one(self, last_play):
         if last_play in CORNERS:
             return CENTER
         return random.choice(CORNERS)
+
+    def round_two(self, last_play):
+        needs_blocked, play = self.block_win()
+        if needs_blocked:
+            return play
+        if last_play in CORNERS:
+            # tie game
+            return random.choice(WALLS)
+        return random.choice(self.remaining_corners)
 
     def play(self, round, last_play):
         # find the function to call for the specified round in self.rounds
@@ -39,11 +50,11 @@ class TicTacToePlayer(object):
 
     @property
     def xes(self):
-        return [i for i, square in enumerate(self.board) if square.has_x]
+        return [x for x, square in enumerate(self.board) if square['has_x']]
 
     @property
     def oes(self):
-        return [i for i, square in enumerate(self.board) if square.has_o]
+        return [o for o, square in enumerate(self.board) if square['has_o']]
 
     @property
     def xes_and_oes(self):
@@ -52,6 +63,19 @@ class TicTacToePlayer(object):
     @property
     def remaining_corners(self):
         return [i for i in CORNERS if i not in self.xes_and_oes]
+
+    @property
+    def remaining_walls(self):
+        return [i for i in WALLS if i not in self.xes_and_oes]
+
+    def block_win(self):
+        for win in WINNING_MOVES:
+            xes_in_win = [x for x in self.xes if x in win]
+            if len(xes_in_win) == 2:
+                oes_in_win = [o for o in self.oes if o in win]
+                if not oes_in_win:
+                    return True, [x for x in win if x not in xes_in_win][0]
+        return False, False
 
 
 @app.route('/')
