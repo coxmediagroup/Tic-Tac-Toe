@@ -4,7 +4,6 @@ from flask import Flask, render_template, jsonify, request, json
 app = Flask(__name__)
 
 CORNERS = [0, 2, 6, 8]
-OPPOSITE_CORNERS = [[0, 8], [2, 6]]
 WALLS = [1, 3, 5, 7]
 CENTER = 4
 WINNING_MOVES = [
@@ -26,6 +25,7 @@ class TicTacToePlayer(object):
     rounds = [
         'round_one',
         'round_two',
+        'round_three',
     ]
 
     def round_one(self, last_play):
@@ -39,8 +39,19 @@ class TicTacToePlayer(object):
             return play
         if last_play in CORNERS:
             # tie game
-            return random.choice(WALLS)
+            return random.choice([1, 7])
         return random.choice(self.remaining_corners)
+
+    def round_three(self, last_play):
+        needs_blocked, play = self.block_win()
+        if needs_blocked:
+            return play
+        can_win, play = self.winning_move()
+        if can_win:
+            return play
+        if CENTER not in self.xes_and_oes:
+            return CENTER
+        return random.choice(self.remaining_spaces)
 
     def play(self, round, last_play):
         # find the function to call for the specified round in self.rounds
@@ -68,6 +79,11 @@ class TicTacToePlayer(object):
     def remaining_walls(self):
         return [i for i in WALLS if i not in self.xes_and_oes]
 
+    @property
+    def remaining_spaces(self):
+        spaces = CORNERS + WALLS + CENTER
+        return [space for space in spaces if space not in self.xes_and_oes]
+
     def block_win(self):
         for win in WINNING_MOVES:
             xes_in_win = [x for x in self.xes if x in win]
@@ -75,6 +91,15 @@ class TicTacToePlayer(object):
                 oes_in_win = [o for o in self.oes if o in win]
                 if not oes_in_win:
                     return True, [x for x in win if x not in xes_in_win][0]
+        return False, False
+
+    def can_win(self):
+        for win in WINNING_MOVES:
+            oes_in_win = [o for o in self.oes if o in win]
+            if len(oes_in_win) == 2:
+                xes_in_win = [x for x in self.xes if x in win]
+                if not xes_in_win:
+                    return True, [o for o in win if o not in oes_in_win]
         return False, False
 
 
