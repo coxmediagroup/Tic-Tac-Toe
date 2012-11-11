@@ -26,6 +26,7 @@ class TicTacToePlayer(object):
         'round_one',
         'round_two',
         'round_three',
+        'round_four',
     ]
 
     def round_one(self, last_play):
@@ -40,17 +41,22 @@ class TicTacToePlayer(object):
         if last_play in CORNERS:
             # tie game
             return random.choice([1, 7])
-        return random.choice(self.remaining_corners)
+        if CENTER not in self.exes_and_oes:
+            return CENTER
+        return random.choice(self.best_spaces)
 
     def round_three(self, last_play):
-        needs_blocked, play = self.block_win()
-        if needs_blocked:
-            return play
-        can_win, play = self.winning_move()
-        if can_win:
+        play_found, play = self.block_or_win()
+        if play_found:
             return play
         if CENTER not in self.xes_and_oes:
             return CENTER
+        return random.choice(self.remaining_spaces)
+
+    def round_four(self, last_play):
+        play_found, play = self.block_or_win()
+        if play_found:
+            return play
         return random.choice(self.remaining_spaces)
 
     def play(self, round, last_play):
@@ -81,8 +87,20 @@ class TicTacToePlayer(object):
 
     @property
     def remaining_spaces(self):
-        spaces = CORNERS + WALLS + CENTER
+        spaces = CORNERS + WALLS + [CENTER]
         return [space for space in spaces if space not in self.xes_and_oes]
+
+    @property
+    def best_spaces(self):
+        """returns a list of spaces that best setup the computer
+        for a winning game
+        """
+        spaces = []
+        for win in WINNING_MOVES:
+            oes_in_win = [o for o in self.oes if o in win]
+            if oes_in_win:
+                spaces += win
+        return [space for space in spaces if space in self.remaining_spaces]
 
     def block_win(self):
         for win in WINNING_MOVES:
@@ -93,13 +111,22 @@ class TicTacToePlayer(object):
                     return True, [x for x in win if x not in xes_in_win][0]
         return False, False
 
-    def can_win(self):
+    def winning_move(self):
         for win in WINNING_MOVES:
             oes_in_win = [o for o in self.oes if o in win]
             if len(oes_in_win) == 2:
                 xes_in_win = [x for x in self.xes if x in win]
                 if not xes_in_win:
                     return True, [o for o in win if o not in oes_in_win]
+        return False, False
+
+    def block_or_win(self):
+        can_win, play = self.winning_move()
+        if can_win:
+            return True, play
+        needs_blocked, play = self.block_win()
+        if needs_blocked:
+            return True, play
         return False, False
 
 
