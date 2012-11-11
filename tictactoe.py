@@ -40,8 +40,8 @@ class TicTacToePlayer(object):
             return play
         if last_play in CORNERS:
             # tie game
-            return random.choice([1, 7])
-        if CENTER not in self.exes_and_oes:
+            return random.choice([3, 5, 7])
+        if CENTER not in self.xes_and_oes:
             return CENTER
         return random.choice(self.best_spaces)
 
@@ -76,14 +76,6 @@ class TicTacToePlayer(object):
     @property
     def xes_and_oes(self):
         return self.xes + self.oes
-
-    @property
-    def remaining_corners(self):
-        return [i for i in CORNERS if i not in self.xes_and_oes]
-
-    @property
-    def remaining_walls(self):
-        return [i for i in WALLS if i not in self.xes_and_oes]
 
     @property
     def remaining_spaces(self):
@@ -131,7 +123,7 @@ class TicTacToePlayer(object):
 
 
 @app.route('/')
-def hello_world():
+def index():
     return render_template("index.html")
 
 
