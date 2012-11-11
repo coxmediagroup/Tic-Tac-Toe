@@ -36,7 +36,7 @@
                 "last_play": square_index
                 }, 
                 function(data) {
-                    if (data.square < 9) {
+                    if (data.square != null) {
                         var square = $("#square-" + data.square);
                         square.html("O");
                         board.at(data.square).set("has_o", true);
@@ -47,7 +47,7 @@
                     if (data.winning_squares) {
                         _.each(data.winning_squares, function(square) {
                             var square = $("#square-" + square);
-                            square.css("color", "red");
+                            square.addClass("winner");
                         });
                         $("#computer-win").show();
                     }

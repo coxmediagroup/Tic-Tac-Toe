@@ -16,12 +16,10 @@ def computer_turn():
     last_play = request.args.get("last_play", 0, type=int)
     board = request.args.get("board[]", "")
     board = json.loads(board)
-    # figure out what move to take based on current round and the board
     computer = ComputerPlayerO(board, round)
+    move = None
     if round < 5:
         move = computer.play(last_play)
-    else:
-        move = 10  # bogus move, will stop game play
     game_over, winning_squares = computer.is_game_over()
     return jsonify(
         square=move,
