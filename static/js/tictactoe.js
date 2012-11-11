@@ -29,7 +29,11 @@
             this.collection.at(square_index).set("has_x", true);
             // computer moves now.
             var board = this.collection
-            $.getJSON("/computer/" + this.round, {"board[]": JSON.stringify(board)}, 
+            $.getJSON("/computer", {
+                "board[]": JSON.stringify(board),
+                "round": this.round,
+                "last_play": square_index
+                }, 
                 function(data) {
                     var square = $("#square-" + data.square);
                     square.html("O");
