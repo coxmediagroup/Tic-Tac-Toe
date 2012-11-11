@@ -20,3 +20,9 @@ h1 {
     vertical-align: middle;
     cursor: pointer;
 }
+#tie-game {
+    display:none;
+}
+#computer-win {
+    display:none;
+}

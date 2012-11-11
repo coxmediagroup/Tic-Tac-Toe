@@ -29,18 +29,35 @@
             this.collection.at(square_index).set("has_x", true);
             // computer moves now.
             var board = this.collection
+            var self = this
             $.getJSON("/computer", {
                 "board[]": JSON.stringify(board),
                 "round": this.round,
                 "last_play": square_index
                 }, 
                 function(data) {
-                    var square = $("#square-" + data.square);
-                    square.html("O");
-                    board.at(data.square).set("has_o", true);
+                    if (data.square < 9) {
+                        var square = $("#square-" + data.square);
+                        square.html("O");
+                        board.at(data.square).set("has_o", true);
+                    }
+                    if (data.game_over) {
+                        self.undelegateEvents();
+                    }
+                    if (data.winning_squares) {
+                        _.each(data.winning_squares, function(square) {
+                            var square = $("#square-" + square);
+                            square.css("color", "red");
+                        });
+                        $("#computer-win").show();
+                    }
+                    else if (data.game_over) {
+                        $("#tie-game").show();
+                    }
+                    
                 }
             )
-            this.round++;
+            this.round++;                
         }
     });
     

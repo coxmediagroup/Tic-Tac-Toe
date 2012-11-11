@@ -4,6 +4,7 @@ from flask import Flask, render_template, jsonify, request, json
 app = Flask(__name__)
 
 CORNERS = [0, 2, 6, 8]
+CADDY_CORNERS = [[0, 8], [2, 6]]
 WALLS = [1, 3, 5, 7]
 CENTER = 4
 WINNING_MOVES = [
@@ -19,8 +20,9 @@ WINNING_MOVES = [
 
 
 class TicTacToePlayer(object):
-    def __init__(self, board):
+    def __init__(self, board, round):
         self.board = board
+        self.round = round
 
     rounds = [
         'round_one',
@@ -30,7 +32,7 @@ class TicTacToePlayer(object):
     ]
 
     def round_one(self, last_play):
-        if last_play in CORNERS:
+        if last_play is not CENTER:
             return CENTER
         return random.choice(CORNERS)
 
@@ -38,20 +40,17 @@ class TicTacToePlayer(object):
         needs_blocked, play = self.block_win()
         if needs_blocked:
             return play
-        if last_play in CORNERS:
+        # needs to check if caddy-corners
+        if self.caddy_corner_xes():
             # tie game
             return random.choice([3, 5, 7])
-        if CENTER not in self.xes_and_oes:
-            return CENTER
-        return random.choice(self.best_spaces)
+        return random.choice(self.remaining_corners)
 
     def round_three(self, last_play):
         play_found, play = self.block_or_win()
         if play_found:
             return play
-        if CENTER not in self.xes_and_oes:
-            return CENTER
-        return random.choice(self.remaining_spaces)
+        return random.choice(self.remaining_walls)
 
     def round_four(self, last_play):
         play_found, play = self.block_or_win()
@@ -59,11 +58,13 @@ class TicTacToePlayer(object):
             return play
         return random.choice(self.remaining_spaces)
 
-    def play(self, round, last_play):
+    def play(self, last_play):
         # find the function to call for the specified round in self.rounds
         # and call it to get the next move
-        round_method = getattr(self, self.rounds[round - 1])
-        return round_method(last_play)
+        play_round = getattr(self, self.rounds[self.round - 1])
+        next_play = play_round(last_play)
+        self.board[next_play]["has_o"] = True
+        return next_play
 
     @property
     def xes(self):
@@ -83,6 +84,14 @@ class TicTacToePlayer(object):
         return [space for space in spaces if space not in self.xes_and_oes]
 
     @property
+    def remaining_corners(self):
+        return [i for i in CORNERS if i not in self.xes_and_oes]
+
+    @property
+    def remaining_walls(self):
+        return [i for i in WALLS if i not in self.xes_and_oes]
+
+    @property
     def best_spaces(self):
         """returns a list of spaces that best setup the computer
         for a winning game
@@ -97,7 +106,7 @@ class TicTacToePlayer(object):
     def block_win(self):
         for win in WINNING_MOVES:
             xes_in_win = [x for x in self.xes if x in win]
-            if len(xes_in_win) == 2:
+            if len(xes_in_win) is 2:
                 oes_in_win = [o for o in self.oes if o in win]
                 if not oes_in_win:
                     return True, [x for x in win if x not in xes_in_win][0]
@@ -106,10 +115,10 @@ class TicTacToePlayer(object):
     def winning_move(self):
         for win in WINNING_MOVES:
             oes_in_win = [o for o in self.oes if o in win]
-            if len(oes_in_win) == 2:
+            if len(oes_in_win) is 2:
                 xes_in_win = [x for x in self.xes if x in win]
                 if not xes_in_win:
-                    return True, [o for o in win if o not in oes_in_win]
+                    return True, [o for o in win if o not in oes_in_win][0]
         return False, False
 
     def block_or_win(self):
@@ -120,6 +129,20 @@ class TicTacToePlayer(object):
         if needs_blocked:
             return True, play
         return False, False
+
+    def caddy_corner_xes(self):
+        return self.xes in CADDY_CORNERS
+
+    def is_game_over(self):
+        """Returns True of False if the game is over and the winning
+        combiniation if there was one.
+        """
+        game_over = self.round is 5
+        for win in WINNING_MOVES:
+            oes_in_win = [o for o in self.oes if o in win]
+            if len(oes_in_win) is 3:
+                return True, win
+        return game_over, False
 
 
 @app.route('/')
@@ -134,9 +157,17 @@ def computer_turn():
     board = request.args.get("board[]", "")
     board = json.loads(board)
     # figure out what move to take based on current round and the board
-    computer = TicTacToePlayer(board)
-    move = computer.play(round, last_play)
-    return jsonify(square=move)
+    computer = TicTacToePlayer(board, round)
+    if round < 5:
+        move = computer.play(last_play)
+    else:
+        move = 10  # bogus move, will stop game play
+    game_over, winning_squares = computer.is_game_over()
+    return jsonify(
+        square=move,
+        game_over=game_over,
+        winning_squares=winning_squares
+    )
 
 
 if __name__ == '__main__':
