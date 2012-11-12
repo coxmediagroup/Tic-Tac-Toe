@@ -57,7 +57,7 @@ class ComputerPlayerO(object):
         If the X's are caddy corner, play 3, 5 or 7 to force a tie
         If X on edge and corner, play the corner square caddy-corner
             to the corner X
-        IF X's border a corner, play in that corner
+        If X's border a corner, play in that corner
         Else, pick a remaining corner
         """
         needs_blocked, play = self.block_win()
