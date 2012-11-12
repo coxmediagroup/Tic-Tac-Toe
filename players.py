@@ -42,16 +42,16 @@ class ComputerPlayerO(object):
         'round_four',
     ]
 
-    def round_one(self, last_play):
+    def round_one(self):
         """Strategy:
         If X plays anything other than center, take center.
         If X plays center, pick a random corner.
         """
-        if last_play is not CENTER:
+        if self.xes[0] is not CENTER:
             return CENTER
         return random.choice(CORNERS)
 
-    def round_two(self, last_play):
+    def round_two(self):
         """Strategy:
         If X threatens a win, block it
         If the X's are caddy corner, play 3, 5 or 7 to force a tie
@@ -72,33 +72,33 @@ class ComputerPlayerO(object):
             return CORNER_BORDERS_MAP[tuple(self.xes)]
         return random.choice(self.remaining_corners)
 
-    def round_three(self, last_play):
+    def round_three(self):
         """Strategy:
         If O can win, take the win
         If X threatens a win, block it
         Else, pick a wall space
         """
-        play_found, play = self.block_or_win()
+        play_found, play = self.win_or_block()
         if play_found:
             return play
         return random.choice(self.remaining_walls)
 
-    def round_four(self, last_play):
+    def round_four(self):
         """Strategy:
         If O can win, take the win
         If X threatens a win, block it
         Else, pick a remaining space
         """
-        play_found, play = self.block_or_win()
+        play_found, play = self.win_or_block()
         if play_found:
             return play
         return random.choice(self.remaining_spaces)
 
-    def play(self, last_play):
+    def play(self):
         # find the function to call for the specified round in self.rounds
         # and call it to get the next move
         play_round = getattr(self, self.rounds[self.current_round - 1])
-        next_play = play_round(last_play)
+        next_play = play_round()
         self.board[next_play]["has_o"] = True
         return next_play
 
@@ -149,7 +149,7 @@ class ComputerPlayerO(object):
                     return True, [o for o in win if o not in oes_in_win][0]
         return False, False
 
-    def block_or_win(self):
+    def win_or_block(self):
         can_win, play = self.winning_move()
         if can_win:
             return True, play

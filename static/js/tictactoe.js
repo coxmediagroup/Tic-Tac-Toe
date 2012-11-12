@@ -2,7 +2,7 @@
     Square = Backbone.Model.extend({
         defaults: {
             has_x: false,
-            has_o: false,
+            has_o: false
         }
     });
 
@@ -32,8 +32,7 @@
                 var board = this.collection
                 var self = this
                 $.getJSON("/computer", {
-                    "board[]": JSON.stringify(board),
-                    "last_play": square_index
+                    "board[]": JSON.stringify(board)
                     }, 
                     function(data) {
                         if (data.square != null) {
