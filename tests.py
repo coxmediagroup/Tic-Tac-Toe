@@ -26,7 +26,7 @@ class ComputerPlayerOTests(unittest.TestCase):
         """
         for win in WINNING_MOVES:
             board = get_board(xes=win[0:2])
-            player = ComputerPlayerO(board, 2)
+            player = ComputerPlayerO(board)
             next_move = player.play(win[1])
             self.assertEqual(next_move, win[2])
 
@@ -36,7 +36,7 @@ class ComputerPlayerOTests(unittest.TestCase):
         """
         for win in WINNING_MOVES:
             board = get_board(oes=win[0:2])
-            player = ComputerPlayerO(board, 3)
+            player = ComputerPlayerO(board)
             next_move = player.play(win[1])
             self.assertEqual(next_move, win[2])
 

@@ -12,13 +12,12 @@ def index():
 
 @app.route('/computer')
 def computer_turn():
-    round = request.args.get("round", 1, type=int)
     last_play = request.args.get("last_play", 0, type=int)
     board = request.args.get("board[]", "")
     board = json.loads(board)
-    computer = ComputerPlayerO(board, round)
+    computer = ComputerPlayerO(board)
     move = None
-    if round < 5:
+    if computer.current_round < 5:
         move = computer.play(last_play)
     game_over, winning_squares = computer.is_game_over()
     return jsonify(

@@ -32,9 +32,8 @@ class ComputerPlayerO(object):
     """A computer player for the game TicTacToe
     Plays only the O round.
     """
-    def __init__(self, board, round):
+    def __init__(self, board):
         self.board = board
-        self.round = round
 
     rounds = [
         'round_one',
@@ -98,7 +97,7 @@ class ComputerPlayerO(object):
     def play(self, last_play):
         # find the function to call for the specified round in self.rounds
         # and call it to get the next move
-        play_round = getattr(self, self.rounds[self.round - 1])
+        play_round = getattr(self, self.rounds[self.current_round - 1])
         next_play = play_round(last_play)
         self.board[next_play]["has_o"] = True
         return next_play
@@ -129,16 +128,8 @@ class ComputerPlayerO(object):
         return [i for i in WALLS if i not in self.xes_and_oes]
 
     @property
-    def best_spaces(self):
-        """returns a list of spaces that best setup the computer
-        for a winning game
-        """
-        spaces = []
-        for win in WINNING_MOVES:
-            oes_in_win = [o for o in self.oes if o in win]
-            if oes_in_win:
-                spaces += win
-        return [space for space in spaces if space in self.remaining_spaces]
+    def current_round(self):
+        return len(self.xes)
 
     def block_win(self):
         for win in WINNING_MOVES:
@@ -186,7 +177,7 @@ class ComputerPlayerO(object):
         """Returns True of False if the game is over and the winning
         combination if there is one.
         """
-        game_over = self.round is 5
+        game_over = self.current_round is 5
         for win in WINNING_MOVES:
             oes_in_win = [o for o in self.oes if o in win]
             if len(oes_in_win) is 3:

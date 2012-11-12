@@ -11,7 +11,6 @@
     });
 
     GameView = Backbone.View.extend({
-        round: 1,
         initialize: function() {
             this.render();
         },
@@ -34,7 +33,6 @@
                 var self = this
                 $.getJSON("/computer", {
                     "board[]": JSON.stringify(board),
-                    "round": this.round,
                     "last_play": square_index
                     }, 
                     function(data) {
@@ -59,7 +57,6 @@
                         
                     }
                 )
-                this.round++;                
             }
         }
     });
