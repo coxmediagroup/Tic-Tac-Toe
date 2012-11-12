@@ -23,41 +23,44 @@
             "click td": "play"
         },
         play: function(event) {
-            var square = $(event.currentTarget);
-            var square_index = square.attr("id").split("-")[1];
-            square.html("X");
-            this.collection.at(square_index).set("has_x", true);
-            // computer moves now.
-            var board = this.collection
-            var self = this
-            $.getJSON("/computer", {
-                "board[]": JSON.stringify(board),
-                "round": this.round,
-                "last_play": square_index
-                }, 
-                function(data) {
-                    if (data.square != null) {
-                        var square = $("#square-" + data.square);
-                        square.html("O");
-                        board.at(data.square).set("has_o", true);
+            var square_el = $(event.currentTarget);
+            var square_index = square_el.attr("id").split("-")[1];
+            var square = this.collection.at(square_index);
+            if (!square.get("has_x") && !square.get("has_o")) {
+                square_el.html("X");
+                square.set("has_x", true);
+                // computer moves now.
+                var board = this.collection
+                var self = this
+                $.getJSON("/computer", {
+                    "board[]": JSON.stringify(board),
+                    "round": this.round,
+                    "last_play": square_index
+                    }, 
+                    function(data) {
+                        if (data.square != null) {
+                            var square = $("#square-" + data.square);
+                            square.html("O");
+                            board.at(data.square).set("has_o", true);
+                        }
+                        if (data.game_over) {
+                            self.undelegateEvents();
+                        }
+                        if (data.winning_squares) {
+                            _.each(data.winning_squares, function(square) {
+                                var square = $("#square-" + square);
+                                square.addClass("winner");
+                            });
+                            $("#computer-win").show();
+                        }
+                        else if (data.game_over) {
+                            $("#tie-game").show();
+                        }
+                        
                     }
-                    if (data.game_over) {
-                        self.undelegateEvents();
-                    }
-                    if (data.winning_squares) {
-                        _.each(data.winning_squares, function(square) {
-                            var square = $("#square-" + square);
-                            square.addClass("winner");
-                        });
-                        $("#computer-win").show();
-                    }
-                    else if (data.game_over) {
-                        $("#tie-game").show();
-                    }
-                    
-                }
-            )
-            this.round++;                
+                )
+                this.round++;                
+            }
         }
     });
     
