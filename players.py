@@ -14,6 +14,18 @@ WINNING_MOVES = [
     [0, 4, 8],
     [2, 4, 6]
 ]
+CADDY_CORNER_MAP = {
+    0: 8,
+    8: 0,
+    2: 6,
+    6: 2,
+}
+CORNER_BORDERS_MAP = {
+    (1, 3): 0,
+    (1, 5): 2,
+    (3, 7): 6,
+    (5, 7): 8,
+}
 
 
 class ComputerPlayerO(object):
@@ -43,15 +55,22 @@ class ComputerPlayerO(object):
     def round_two(self, last_play):
         """Strategy:
         If X threatens a win, block it
-        If the X's are in opposite corners, play 3, 5 or 7 to force a tie
+        If the X's are caddy corner, play 3, 5 or 7 to force a tie
+        If X on edge and corner, play the corner square caddy-corner
+            to the corner X
+        IF X's border a corner, play in that corner
         Else, pick a remaining corner
         """
         needs_blocked, play = self.block_win()
         if needs_blocked:
             return play
+        edge_and_corner, corner_x = self.xes_on_edge_and_corner()
+        if edge_and_corner:
+            return CADDY_CORNER_MAP[corner_x]
         if self.caddy_corner_xes():
-            # tie game
             return random.choice([3, 5, 7])
+        if self.xes_border_a_corner():
+            return CORNER_BORDERS_MAP[tuple(self.xes)]
         return random.choice(self.remaining_corners)
 
     def round_three(self, last_play):
@@ -151,9 +170,21 @@ class ComputerPlayerO(object):
     def caddy_corner_xes(self):
         return self.xes in CADDY_CORNERS
 
+    def xes_on_edge_and_corner(self):
+        on_edge = [x for x in self.xes if x in WALLS]
+        on_corner = [x for x in self.xes if x in CORNERS]
+        try:
+            corner_x = on_corner[0]
+        except IndexError:
+            corner_x = None
+        return all([on_edge, on_corner]), corner_x
+
+    def xes_border_a_corner(self):
+        return tuple(self.xes) in CORNER_BORDERS_MAP
+
     def is_game_over(self):
         """Returns True of False if the game is over and the winning
-        combiniation if there was one.
+        combination if there is one.
         """
         game_over = self.round is 5
         for win in WINNING_MOVES:
