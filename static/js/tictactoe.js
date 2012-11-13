@@ -28,11 +28,7 @@
             if (!square.get("has_x") && !square.get("has_o")) {
                 square_el.html("X");
                 square.set("has_x", true);
-                var self = this
-                setTimeout(function() {
-                    self.computer_move();
-                }, 350)
-                
+                this.computer_move();
             }
         },
         computer_move: function() {
