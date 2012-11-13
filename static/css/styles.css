@@ -26,3 +26,7 @@ h1 {
     color:#3A87AD;
     background-color:#D9EDF7;
 }
+.board td.tie {
+    background-color:#F2DEDE;
+    color:#B94A48;
+}

@@ -28,35 +28,42 @@
             if (!square.get("has_x") && !square.get("has_o")) {
                 square_el.html("X");
                 square.set("has_x", true);
-                // computer moves now.
-                var board = this.collection
                 var self = this
-                $.getJSON("/computer", {
-                    "board[]": JSON.stringify(board)
-                    }, 
-                    function(data) {
-                        if (data.square != null) {
-                            var square = $("#square-" + data.square);
-                            square.html("O");
-                            board.at(data.square).set("has_o", true);
-                        }
-                        if (data.game_over) {
-                            self.undelegateEvents();
-                        }
-                        if (data.winning_squares) {
-                            _.each(data.winning_squares, function(square) {
-                                var square = $("#square-" + square);
-                                square.addClass("winner");
-                            });
-                            $("#computer-win").show();
-                        }
-                        else if (data.game_over) {
-                            $("#tie-game").show();
-                        }
-                        
-                    }
-                )
+                setTimeout(function() {
+                    self.computer_move();
+                }, 350)
+                
             }
+        },
+        computer_move: function() {
+            var board = this.collection
+            var self = this
+            $.getJSON("/computer", {
+                "board[]": JSON.stringify(board)
+                }, 
+                function(data) {
+                    if (data.square != null) {
+                        var square = $("#square-" + data.square);
+                        square.html("O").fadeIn("slow");
+                        board.at(data.square).set("has_o", true);
+                    }
+                    if (data.game_over) {
+                        self.undelegateEvents();
+                    }
+                    if (data.winning_squares) {
+                        _.each(data.winning_squares, function(square) {
+                            var square = $("#square-" + square);
+                            square.addClass("winner");
+                        });
+                        $("#computer-win").show();
+                    }
+                    else if (data.game_over) {
+                        $("#tie-game").show();
+                        self.$el.find("td").addClass("tie");
+                    }
+                    
+                }
+            )
         }
     });
     
