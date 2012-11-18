@@ -106,11 +106,13 @@ class ComputerPlayerO(object):
 
     @property
     def xes(self):
-        return [x for x, square in enumerate(self.board) if square['has_x']]
+        return [x for x, square in enumerate(self.board)
+                if square['has_x']]
 
     @property
     def oes(self):
-        return [o for o, square in enumerate(self.board) if square['has_o']]
+        return [o for o, square in enumerate(self.board)
+                if square['has_o']]
 
     @property
     def xes_and_oes(self):
@@ -119,15 +121,18 @@ class ComputerPlayerO(object):
     @property
     def remaining_spaces(self):
         spaces = CORNERS + WALLS + [CENTER]
-        return [space for space in spaces if space not in self.xes_and_oes]
+        return [space for space in spaces
+                if space not in self.xes_and_oes]
 
     @property
     def remaining_corners(self):
-        return [i for i in CORNERS if i not in self.xes_and_oes]
+        return [i for i in CORNERS
+                if i not in self.xes_and_oes]
 
     @property
     def remaining_walls(self):
-        return [i for i in WALLS if i not in self.xes_and_oes]
+        return [i for i in WALLS
+                if i not in self.xes_and_oes]
 
     @property
     def current_round(self):
@@ -135,20 +140,30 @@ class ComputerPlayerO(object):
 
     def block_win(self):
         for win in WINNING_MOVES:
-            xes_in_win = [x for x in self.xes if x in win]
+            xes_in_win = [x for x in self.xes
+                          if x in win]
+            oes_in_win = [o for o in self.oes
+                          if o in win]
+            if oes_in_win:
+                # already blocked
+                continue
             if len(xes_in_win) is 2:
-                oes_in_win = [o for o in self.oes if o in win]
-                if not oes_in_win:
-                    return True, [x for x in win if x not in xes_in_win][0]
+                return True, [x for x in win
+                              if x not in xes_in_win][0]
         return False, False
 
     def winning_move(self):
         for win in WINNING_MOVES:
-            oes_in_win = [o for o in self.oes if o in win]
+            oes_in_win = [o for o in self.oes
+                          if o in win]
+            xes_in_win = [x for x in self.xes
+                          if x in win]
+            if xes_in_win:
+                # already blocked
+                continue
             if len(oes_in_win) is 2:
-                xes_in_win = [x for x in self.xes if x in win]
-                if not xes_in_win:
-                    return True, [o for o in win if o not in oes_in_win][0]
+                return True, [o for o in win
+                              if o not in oes_in_win][0]
         return False, False
 
     def win_or_block(self):
@@ -164,8 +179,10 @@ class ComputerPlayerO(object):
         return self.xes in CADDY_CORNERS
 
     def xes_on_edge_and_corner(self):
-        on_edge = [x for x in self.xes if x in WALLS]
-        on_corner = [x for x in self.xes if x in CORNERS]
+        on_edge = [x for x in self.xes
+                   if x in WALLS]
+        on_corner = [x for x in self.xes
+                     if x in CORNERS]
         try:
             corner_x = on_corner[0]
         except IndexError:
@@ -181,7 +198,8 @@ class ComputerPlayerO(object):
         """
         game_over = self.current_round is 5
         for win in WINNING_MOVES:
-            oes_in_win = [o for o in self.oes if o in win]
+            oes_in_win = [o for o in self.oes
+                          if o in win]
             if len(oes_in_win) is 3:
                 return True, win
         return game_over, False
