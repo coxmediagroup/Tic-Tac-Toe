@@ -5,8 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # url(r'^$', 'tictactoe.views.home', name='home'),
-    # url(r'^tictactoe/', include('tictactoe.foo.urls')),
+    # url(r'^$', 'cmg_tictactoe.views.home', name='home'),
+    # url(r'^cmg_tictactoe/', include('cmg_tictactoe.foo.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

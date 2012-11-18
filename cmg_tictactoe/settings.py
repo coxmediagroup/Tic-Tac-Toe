@@ -1,4 +1,4 @@
-# Django settings for tictactoe project.
+# Django settings for cmg_tictactoe project.
 
 import os
 
@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'tictactoe.sqlite'),
+        'NAME': os.path.join(PROJECT_ROOT, 'cmg_tictactoe.sqlite'),
     }
 }
 
@@ -25,8 +25,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-ROOT_URLCONF = 'tictactoe.urls'
-WSGI_APPLICATION = 'tictactoe.wsgi.application'
+ROOT_URLCONF = 'cmg_tictactoe.urls'
+WSGI_APPLICATION = 'cmg_tictactoe.wsgi.application'
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media_root')
 MEDIA_URL = '/media/'
@@ -34,7 +34,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'tictactoe', 'static'),
+    os.path.join(PROJECT_ROOT, 'cmg_tictactoe', 'static'),
 )
 
 STATICFILES_FINDERS = (
@@ -70,7 +70,7 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_ROOT, 'tictactoe', 'templates'),
+    os.path.join(PROJECT_ROOT, 'cmg_tictactoe', 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'cmg_tictactoe.tictactoe',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -131,7 +132,7 @@ try:
     __import__('debug_toolbar')
     INSTALLED_APPS = list(INSTALLED_APPS) + ['debug_toolbar']
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
-            ['debug_toolbar.middleware.DebugToolbarMiddleware']
+        ['debug_toolbar.middleware.DebugToolbarMiddleware']
     # Put toolbar middleware before flatpage middleware, if necessary.
     fp_mware = 'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
     if MIDDLEWARE_CLASSES.count(fp_mware):

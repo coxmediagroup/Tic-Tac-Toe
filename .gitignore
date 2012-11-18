@@ -5,6 +5,6 @@
 *.egg-info
 dist/
 build/
-tictactoe.sqlite
+cmg_tictactoe.sqlite
 media_root/
 static_root/
