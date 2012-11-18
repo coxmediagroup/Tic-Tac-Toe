@@ -1,0 +1,36 @@
+h1 {
+    margin-bottom:20px;
+}
+#board {
+    width: 330px;
+    margin: 20px auto 10px  auto;
+}
+
+.board td {
+    margin: 0;
+    border: 2px solid #000;
+    height: 100px;
+    width: 100px;
+    font-size: 40pt;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+#tie-game {
+    display:none;
+}
+#computer-win {
+    display:none;
+}
+.board td.winner {
+    color:#3A87AD;
+    background-color:#D9EDF7;
+}
+.board td.tie {
+    background-color:#F2DEDE;
+    color:#B94A48;
+}
+#board .btn {
+    margin-bottom:5px;
+    display:none;
+}
