@@ -30,3 +30,7 @@ h1 {
     background-color:#F2DEDE;
     color:#B94A48;
 }
+#board .btn {
+    margin-bottom:5px;
+    display:none;
+}

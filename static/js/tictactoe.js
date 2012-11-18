@@ -19,7 +19,8 @@
             this.$el.html( template );
         },
         events: {
-            "click td": "play"
+            "click td": "play",
+            "click a.btn": "retry"
         },
         play: function(event) {
             var square_el = $(event.currentTarget);
@@ -45,6 +46,8 @@
                     }
                     if (data.game_over) {
                         self.undelegateEvents();
+                        self.show_retry_btn();
+
                     }
                     if (data.winning_squares) {
                         _.each(data.winning_squares, function(square) {
@@ -60,6 +63,17 @@
                     
                 }
             )
+        },
+        show_retry_btn: function() {
+            this.$el.find(".btn").css("display", "inline-block");
+            this.delegateEvents({"click a.btn": "retry"});
+        },
+        retry: function(event) {
+            $(".alert").hide();
+            this.render();
+            var squares = _.map(_.range(9), function () { return {}; });
+            this.collection.reset(squares);
+            this.delegateEvents();
         }
     });
     
