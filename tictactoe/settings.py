@@ -1,23 +1,22 @@
 # Django settings for tictactoe project.
 
+import os
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Ben Spaulding', 'ben@benspaulding.us'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_ROOT, 'tictactoe.sqlite'),
     }
 }
 
@@ -46,18 +45,18 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media_root')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -65,9 +64,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'tictactoe', 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -94,8 +91,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'tictactoe.urls'
@@ -104,9 +100,7 @@ ROOT_URLCONF = 'tictactoe.urls'
 WSGI_APPLICATION = 'tictactoe.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'tictactoe', 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -116,10 +110,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -149,4 +141,35 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+
+###
+# Development settings.
+###
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Setup Django Debug Toolbar.
+try:
+    INTERNAL_IPS
+except NameError:
+    INTERNAL_IPS = []
+INTERNAL_IPS = list(INTERNAL_IPS) + ['127.0.0.1']
+
+try:
+    __import__('debug_toolbar')
+    INSTALLED_APPS = list(INSTALLED_APPS) + ['debug_toolbar']
+    MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
+            ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    # Put toolbar middleware before flatpage middleware, if necessary.
+    fp_mware = 'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
+    if MIDDLEWARE_CLASSES.count(fp_mware):
+        i = MIDDLEWARE_CLASSES.index(fp_mware)
+        MIDDLEWARE_CLASSES.insert(i, MIDDLEWARE_CLASSES.pop())
+except ImportError:
+    pass
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
 }
