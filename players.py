@@ -97,9 +97,11 @@ class ComputerPlayerO(object):
     def play(self):
         # find the function to call for the specified round in self.rounds
         # and call it to get the next move
-        play_round = getattr(self, self.rounds[self.current_round - 1])
-        next_play = play_round()
-        self.board[next_play]["has_o"] = True
+        next_play = None
+        if self.current_round < 5:
+            play_round = getattr(self, self.rounds[self.current_round - 1])
+            next_play = play_round()
+            self.board[next_play]["has_o"] = True
         return next_play
 
     @property
