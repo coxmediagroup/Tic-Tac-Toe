@@ -1,0 +1,10 @@
+*.py[co]
+*.swp
+*.un~
+.DS_Store
+*.egg-info
+dist/
+build/
+tictactoe.sqlite
+media_root/
+static_root/
