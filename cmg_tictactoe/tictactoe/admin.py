@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
 from .models import Game
 
@@ -10,7 +9,7 @@ class GameAdmin(admin.ModelAdmin):
     list_filter = ('created', 'modified')
     readonly_fields = ('created', 'modified')
 
-    # TODO: Add method to output grid as HTML in ``list_display``.
+    # TODO: Add method to output grid as HTML table in ``list_display``.
 
 
 admin.site.register(Game, GameAdmin)

@@ -1,6 +1,5 @@
 import re
 
-
 EMPTY = u'_'
 X = u'x'
 O = u'o'
@@ -34,8 +33,8 @@ class Grid(list):
     # TODO: Remove pop, remove, reverse, and sort.
     # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
     # TODO: When item is being set, validate that it is _, x, or o. Also set
-    # the state of the game after an item is set. Render immutable if there is
-    # a winning sequence.
+    # the state of the game (in-progress, complete) after an item is set.
+    # And render the grid immutable if there is a winning sequence.
 
     def __init__(self, positions=''.join([EMPTY for x in POSITIONS])):
         # TODO: Do some validation to only allow 9 items, no more, no less.
@@ -54,7 +53,12 @@ class Grid(list):
         return positions
 
     def is_complete(self):
-        """ Returns True if every position has been played in. """
+        """
+        Returns True if every position has been played in.
+
+        This behavior will likely be changed to return True when the game has
+        been won, which requires a winning sequence, not all positions filled.
+        """
         return self.count(X) + self.count(O) == NUM_POSITIONS
 
     def is_turn(self, mark):
@@ -90,6 +94,11 @@ class Player(object):
 
         Source: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
         """
+        # FIXME: This code is an abomination of nested, sharp-stick-in-your-eye
+        # pain. DRY it up and make it readable. Bale on the nesting and use
+        # some filter and or map functions. (This is what you get when writing
+        # code this late.)
+
         if self.grid.is_turn(self.x) and self.grid.positions():
             # TODO: Abstract options 1 and 2 into a method. All the same code
             # except the mark.

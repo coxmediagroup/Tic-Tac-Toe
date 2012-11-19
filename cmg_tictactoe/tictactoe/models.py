@@ -15,7 +15,6 @@ Future improvements:
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-
 from basic_extras.models import MetaBase
 
 from .core import EMPTY, X, O, NUM_POSITIONS, GRID_RE, Grid
@@ -50,15 +49,12 @@ class GridField(models.Field):
     def get_internal_type(self):
         return 'CharField'
 
-    # def value_to_string(self, obj):
-    #     value = self._get_val_from_obj(obj)
-    #     return self.get_prep_value(value)
-
 
 class Game(MetaBase):
     """ A game of Tic-tac-toe played by one person against the program. """
 
     grid = GridField(_(u'grid'))
+    # TODO: Denormalize result data.
 
     class Meta:
         ordering = ('-created', 'id')
@@ -66,12 +62,8 @@ class Game(MetaBase):
         verbose_name_plural = _(u'games')
 
     def __unicode__(self):
-        # TODO: Format the time pretty.
+        # TODO: Format the time pretty-like.
         return '%s on %s' % (self.grid.__unicode__(), self.created)
-
-    # TODO: Denormalize result data.
-    # TODO: Add method to indicate result of game.In progress, draw (cat),
-    # X won, O won.
 
     def game_over(self):
         # NOTE: Again we assume that a filled grid is a complete game. (Though

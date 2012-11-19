@@ -13,6 +13,7 @@ class GameUpdateView(UpdateView):
     # TODO: Redirect to detail view if game is over.
 
     def get_success_url(self):
+        # Since the user played successfully, have the bot play again.
         player = Player(grid=self.object.grid)
         player.play()
         self.object.save()
@@ -24,6 +25,9 @@ class GameUpdateView(UpdateView):
 
 
 def start_game(request):
+    """
+    Creates a Game object, has the bot play, and redirects to the update view.
+    """
     game = Game.objects.create()
     player = Player(grid=game.grid)
     player.play()
