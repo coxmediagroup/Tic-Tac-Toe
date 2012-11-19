@@ -16,16 +16,9 @@ from django.utils.translation import ugettext_lazy as _
 from basic_extras.models import MetaBase
 
 
-GRID_POSITIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-GRID_POSITIONS = [(n, n) for n in GRID_POSITIONS]
-UNPLAYED_MARK = u'_'
-X_PLAYED_MARK = u'x'
-O_PLAYED_MARK = u'o'
-POSITION_MARKS = (
-    (UNPLAYED_MARK, _(u'unplayed')),
-    (X_PLAYED_MARK, _(u'x')),
-    (O_PLAYED_MARK, _(u'o')),
-)
+EMPTY_MARK = u'_'
+X_MARK = u'x'
+O_MARK = u'o'
 
 
 class Grid(object):
@@ -38,8 +31,9 @@ class Grid(object):
 
     # TODO: Learn if there is a more graceful way to handle all these args and
     # there common default value.
-    def __init__(self, p1='_', p2='_', p3='_', p4='_', p5='_', p6='_', p7='_',
-                 p8='_', p9='_'):
+    def __init__(self, p1=EMPTY_MARK, p2=EMPTY_MARK, p3=EMPTY_MARK,
+            p4=EMPTY_MARK, p5=EMPTY_MARK, p6=EMPTY_MARK, p7=EMPTY_MARK,
+            p8=EMPTY_MARK, p9=EMPTY_MARK):
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
@@ -54,17 +48,6 @@ class Grid(object):
         return ''.join([self.p1, self.p2, self.p3, self.p4, self.p5, self.p6,
                        self.p7, self.p8, self.p9])
 
-    def can_play(self, mark):
-        # Again we assume that X went first.
-        # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-        xs = re.findall(r'x{1}', self.__unicode__())
-        os = re.findall(r'o{1}', self.__unicode__())
-        x_turn = len(xs) == len(os)
-        return x_turn if mark == X_PLAYED_MARK else not x_turn
-
-    def next_turn(self):
-        return X_PLAYED_MARK if self.can_play(X_PLAYED_MARK) else O_PLAYED_MARK
-
 
 class GridField(models.Field):
 
@@ -73,8 +56,8 @@ class GridField(models.Field):
     __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = 9
         kwargs['default'] = Grid()
+        kwargs['max_length'] = 9
         kwargs['help_text'] = _(u'Positions 1-9, indicated as unplayed by "_" '
                                 'and played by "x" or "o".')
         super(GridField, self).__init__(*args, **kwargs)
@@ -83,23 +66,24 @@ class GridField(models.Field):
         if isinstance(value, Grid):
             return value
 
-        state = re.compile(r'[_xo]{1}')
-        args = state.findall(value)
+        # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
+        args = re.findall(r'[_xo]{1}', value)
         if len(args) != 9:
             raise ValidationError('Invalid input for Grid instance.')
 
         return Grid(*args)
 
     def get_prep_value(self, value):
+        # TODO: DRY this -- Grid.__unicode__ uses the same logic.
         return ''.join([value.p1, value.p2, value.p3, value.p4, value.p5,
                        value.p6, value.p7, value.p8, value.p9])
 
     def get_internal_type(self):
         return 'CharField'
 
-    def value_to_string(self, obj):
-        value = self._get_val_from_obj(obj)
-        return self.get_prep_value(value)
+    # def value_to_string(self, obj):
+    #     value = self._get_val_from_obj(obj)
+    #     return self.get_prep_value(value)
 
 
 class Game(MetaBase):
@@ -107,8 +91,6 @@ class Game(MetaBase):
 
     player = models.ForeignKey(User, verbose_name=_(u'player'), related_name='games')
     grid = GridField(_(u'grid'))
-    # TODO: Denormalize turn data.
-    # TODO: Denormalize result data.
 
     class Meta:
         ordering = ('-modified', 'id')
@@ -119,9 +101,25 @@ class Game(MetaBase):
         # TODO: Format the time pretty.
         return '%s on %s' % (self.player.username, self.created)
 
-    # TODO: Add method to indicate whose turn it is. (X always goes first.)
+    # TODO: Denormalize result data.
     # TODO: Add method to indicate result of game.
     # In progress, draw (cat), x won, o won.
 
+    def game_over(self):
+        # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
+        marks = re.findall(r'xo{1}', self.grid.__unicode__())
+        return len(marks) == 9
 
+    def can_play(self, mark):
+        """ Return true if the given mark (X or O) is allowed to play. """
+        if not self.game_over():
+            # Again we assume that X went first.
+            # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
+            xs = re.findall(r'x{1}', self.grid.__unicode__())
+            os = re.findall(r'o{1}', self.grid.__unicode__())
+            x_turn = len(xs) == len(os)
+            return x_turn if mark == X_MARK else not x_turn
+        return False
 
+    def next_turn(self):
+        return X_MARK if self.can_play(X_MARK) else O_MARK
