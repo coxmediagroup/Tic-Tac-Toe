@@ -111,7 +111,7 @@ class Game(MetaBase):
 
     def game_over(self):
         # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-        marks = re.findall(r'xo{1}', self.grid.__unicode__())
+        marks = re.findall(r'[xo]{1}', self.grid.__unicode__())
         return len(marks) == 9
 
     def can_play(self, mark):
