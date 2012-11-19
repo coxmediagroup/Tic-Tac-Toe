@@ -21,3 +21,19 @@ program as a Django app.
 (Don't be offended when I don't actually pull. I will clone your repo and
 inspect it locally when I receive the request. This repo will be left
 solution-less for obvious reasons.)
+
+
+TODO
+----
+
+Along with all the FIXME and TODO notes in the code:
+
+* Write form/form field for better handling game and grid.
+* Refactor Player.next_turn code.
+* Write tests for everything.
+* Create custom manager for game to access games based on status.
+* Flesh out templates.
+* Prettify with Bootstrap.
+* Install South.
+* Write initial data migration. (Setup my user, site, etc.)
+* Add travis-ci support.
