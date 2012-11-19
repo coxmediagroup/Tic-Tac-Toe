@@ -5,6 +5,11 @@ Because of the time constraints we are working in, we make a fiew assumptions.
 * X is the program.
 * O is the user.
 * Even in a draw all posiitons are marked.
+
+Future improvements:
+
+* Decouple the app and the solver. (See assumptions above.)
+* Allow users to view their game history.
 """
 import re
 
@@ -89,7 +94,6 @@ class GridField(models.Field):
 class Game(MetaBase):
     """ A game of Tic-tac-toe played by one person against the program. """
 
-    player = models.ForeignKey(User, verbose_name=_(u'player'), related_name='games')
     grid = GridField(_(u'grid'))
 
     class Meta:
@@ -99,7 +103,7 @@ class Game(MetaBase):
 
     def __unicode__(self):
         # TODO: Format the time pretty.
-        return '%s on %s' % (self.player.username, self.created)
+        return '%s on %s' % (self.grid.__unicode__(), self.created)
 
     # TODO: Denormalize result data.
     # TODO: Add method to indicate result of game.
