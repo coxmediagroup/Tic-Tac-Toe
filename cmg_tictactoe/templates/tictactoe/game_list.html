@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Game List{% endblock %}
+
+{% block content %}
+{% if game_list %}
+<ul class="game-list">
+    {% for game in game_list %}
+    <li><a href="{% url 'tictactoe_game_update' pk=game.pk %}">{{ game.grid }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

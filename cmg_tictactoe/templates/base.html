@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block full_title %}{% block title %}{% endblock %} — {{ site.name }}{% endblock %}</title>
+</head>
+<body>
+<div class="page">
+    {% block content %}
+    {% endblock %}
+</div><!-- .page -->
+</body>
+</html>
