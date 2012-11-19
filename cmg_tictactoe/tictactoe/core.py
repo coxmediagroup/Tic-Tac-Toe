@@ -20,7 +20,7 @@ CENTER = 4
 SIDES = (1, 3, 5, 7)
 CORNERS = (0, 2, 6, 8)
 OPPOSITE_CORNERS = ((0, 8), (2, 6))
-GRID_RE = re.compile('[_%s%s]{%s}' % (X, O, NUM_POSITIONS))
+GRID_RE = re.compile('[%s%s%s]{%s}' % (EMPTY, X, O, NUM_POSITIONS))
 
 
 class Grid(list):
@@ -33,11 +33,13 @@ class Grid(list):
 
     # TODO: Remove pop, remove, reverse, and sort.
     # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
-    # TODO: Render immutable if there is a winning sequence.
+    # TODO: When item is being set, validate that it is _, x, or o. Also set
+    # the state of the game after an item is set. Render immutable if there is
+    # a winning sequence.
 
-    def __init__(self, vals=''.join([EMPTY for x in POSITIONS])):
+    def __init__(self, positions=''.join([EMPTY for x in POSITIONS])):
         # TODO: Do some validation to only allow 9 items, no more, no less.
-        super(Grid, self).__init__(vals)
+        super(Grid, self).__init__(positions)
 
     def __unicode__(self):
         return ''.join([x for x in self])
@@ -79,12 +81,14 @@ class Player(object):
 
         1. Form a winning sequence.
         2. Prevent the opponent from forming a winning sequence.
-        3. Fork?
-        4. Block opponent's fork?
+        3. Fork. (Create two non-block sequences of two.)
+        4. Block opponent's fork.
         5. Play in the center.
         6. Play in the corner opposite the opponent.
         7. Play in a corner.
         8. Play on a side.
+
+        Source: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
         """
         if self.grid.is_turn(self.x) and self.grid.positions():
             # TODO: Abstract options 1 and 2 into a method. All the same code

@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
 from django.shortcuts import redirect
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import UpdateView
 
 from .core import Player
 from .models import Game
