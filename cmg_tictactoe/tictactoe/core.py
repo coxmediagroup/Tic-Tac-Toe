@@ -68,8 +68,8 @@ class Player(object):
     """ A class that can choose the next turn in a game and never loose. """
 
     def __init__(self, mark=X, opponent=O, grid=None):
-        self.mark = mark
-        self.opponent = opponent
+        self.x = mark
+        self.o = opponent
         self.grid = grid or Grid()
 
     def next_position(self):
@@ -86,7 +86,7 @@ class Player(object):
         7. Play in a corner.
         8. Play on a side.
         """
-        if self.grid.is_turn(self.mark) and self.grid.positions():
+        if self.grid.is_turn(self.x) and self.grid.positions():
             # TODO: Abstract options 1 and 2 into a method. All the same code
             # except the mark.
             # 1. Form a winning sequence.
@@ -94,7 +94,7 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(self.mark) and l[1] in self.grid.positions(self.mark):
+                        if l[0] in self.grid.positions(self.x) and l[1] in self.grid.positions(self.x):
                             return position
 
             # 2. Prevent the opponent from forming a winning sequence.
@@ -102,7 +102,7 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(self.opponent) and l[1] in self.grid.positions(self.opponent):
+                        if l[0] in self.grid.positions(self.o) and l[1] in self.grid.positions(self.o):
                             return position
 
             # TODO: Abstract options 3 and 4 into a method. All the same code
@@ -112,13 +112,13 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(self.opponent) and l[1] not in self.grid.positions(self.opponent):
-                            if l[0] in self.grid.positions(self.mark) or l[1] in self.grid.positions(self.mark):
+                        if l[0] not in self.grid.positions(self.o) and l[1] not in self.grid.positions(self.o):
+                            if l[0] in self.grid.positions(self.x) or l[1] in self.grid.positions(self.x):
                                 for seq2 in WINNING_SEQUENCES:
                                     if position in seq2 and seq != seq2:
                                         l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(self.opponent) and l2[1] not in self.grid.positions(self.opponent):
-                                            if l2[0] in self.grid.positions(self.mark) or l2[1] in self.grid.positions(self.mark):
+                                        if l2[0] not in self.grid.positions(self.o) and l2[1] not in self.grid.positions(self.o):
+                                            if l2[0] in self.grid.positions(self.x) or l2[1] in self.grid.positions(self.x):
                                                 return position
 
             # 4. Block the opponent's fork.
@@ -126,13 +126,13 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(self.mark) and l[1] not in self.grid.positions(self.mark):
-                            if l[0] in self.grid.positions(self.opponent) or l[1] in self.grid.positions(self.opponent):
+                        if l[0] not in self.grid.positions(self.x) and l[1] not in self.grid.positions(self.x):
+                            if l[0] in self.grid.positions(self.o) or l[1] in self.grid.positions(self.o):
                                 for seq2 in WINNING_SEQUENCES:
                                     if position in seq2 and seq != seq2:
                                         l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(self.mark) and l2[1] not in self.grid.positions(self.mark):
-                                            if l2[0] in self.grid.positions(self.opponent) or l2[1] in self.grid.positions(self.opponent):
+                                        if l2[0] not in self.grid.positions(self.x) and l2[1] not in self.grid.positions(self.x):
+                                            if l2[0] in self.grid.positions(self.o) or l2[1] in self.grid.positions(self.o):
                                                 return position
 
             # 5. Play in the center.
@@ -142,7 +142,7 @@ class Player(object):
             # 6. Play in a corner opposite the opponent.
             opponent_corners = []
             for corner in CORNERS:
-                if self.grid[corner] == self.opponent:
+                if self.grid[corner] == self.o:
                     opponent_corners.append(corner)
 
             for corner in opponent_corners:
@@ -177,6 +177,6 @@ class Player(object):
         """
         position = self.next_position()
         if position in POSITIONS:
-            self.grid[position] = self.mark
+            self.grid[position] = self.x
 
         return position, self.grid
