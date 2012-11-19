@@ -86,8 +86,6 @@ class Player(object):
         7. Play in a corner.
         8. Play on a side.
         """
-        # TODO: Replace X and O with self.mark and self.opponent, respectively.
-
         if self.grid.is_turn(self.mark) and self.grid.positions():
             # TODO: Abstract options 1 and 2 into a method. All the same code
             # except the mark.
@@ -96,7 +94,7 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(X) and l[1] in self.grid.positions(X):
+                        if l[0] in self.grid.positions(self.mark) and l[1] in self.grid.positions(self.mark):
                             return position
 
             # 2. Prevent the opponent from forming a winning sequence.
@@ -104,7 +102,7 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(O) and l[1] in self.grid.positions(O):
+                        if l[0] in self.grid.positions(self.opponent) and l[1] in self.grid.positions(self.opponent):
                             return position
 
             # TODO: Abstract options 3 and 4 into a method. All the same code
@@ -114,13 +112,13 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(O) and l[1] not in self.grid.positions(O):
-                            if l[0] in self.grid.positions(X) or l[1] in self.grid.positions(X):
+                        if l[0] not in self.grid.positions(self.opponent) and l[1] not in self.grid.positions(self.opponent):
+                            if l[0] in self.grid.positions(self.mark) or l[1] in self.grid.positions(self.mark):
                                 for seq2 in WINNING_SEQUENCES:
                                     if position in seq2 and seq != seq2:
                                         l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(O) and l2[1] not in self.grid.positions(O):
-                                            if l2[0] in self.grid.positions(X) or l2[1] in self.grid.positions(X):
+                                        if l2[0] not in self.grid.positions(self.opponent) and l2[1] not in self.grid.positions(self.opponent):
+                                            if l2[0] in self.grid.positions(self.mark) or l2[1] in self.grid.positions(self.mark):
                                                 return position
 
             # 4. Block the opponent's fork.
@@ -128,13 +126,13 @@ class Player(object):
                 for seq in WINNING_SEQUENCES:
                     if position in seq:
                         l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(X) and l[1] not in self.grid.positions(X):
-                            if l[0] in self.grid.positions(O) or l[1] in self.grid.positions(O):
+                        if l[0] not in self.grid.positions(self.mark) and l[1] not in self.grid.positions(self.mark):
+                            if l[0] in self.grid.positions(self.opponent) or l[1] in self.grid.positions(self.opponent):
                                 for seq2 in WINNING_SEQUENCES:
                                     if position in seq2 and seq != seq2:
                                         l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(X) and l2[1] not in self.grid.positions(X):
-                                            if l2[0] in self.grid.positions(O) or l2[1] in self.grid.positions(O):
+                                        if l2[0] not in self.grid.positions(self.mark) and l2[1] not in self.grid.positions(self.mark):
+                                            if l2[0] in self.grid.positions(self.opponent) or l2[1] in self.grid.positions(self.opponent):
                                                 return position
 
             # 5. Play in the center.
