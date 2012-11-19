@@ -83,17 +83,3 @@ class Game(MetaBase):
         # a game can be complete at a draw with only eight moves, this works
         # for now.)
         return self.grid.is_filled()
-
-    def can_play(self, mark):
-        """ Return true if the given mark (X or O) is allowed to play. """
-        if not self.game_over():
-            # Again we assume that X went first.
-            # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-            xs = re.findall(r'x{1}', self.grid.__unicode__())
-            os = re.findall(r'o{1}', self.grid.__unicode__())
-            x_turn = len(xs) == len(os)
-            return x_turn if mark == X_MARK else not x_turn
-        return False
-
-    def next_turn(self):
-        return X_MARK if self.can_play(X_MARK) else O_MARK
