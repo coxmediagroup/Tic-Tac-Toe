@@ -1,3 +1,5 @@
+import re
+
 
 EMPTY = u'_'
 X = u'x'
@@ -18,6 +20,7 @@ CENTER = 4
 SIDES = (1, 3, 5, 7)
 CORNERS = (0, 2, 6, 8)
 OPPOSITE_CORNERS = ((0, 8), (2, 6))
+GRID_RE = re.compile('[_%s%s]{%s}' % (X, O, NUM_POSITIONS))
 
 
 class Grid(list):
@@ -30,6 +33,7 @@ class Grid(list):
 
     # TODO: Remove pop, remove, reverse, and sort.
     # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
+    # TODO: Render immutable if there is a winning sequence.
 
     def __init__(self, vals=''.join([EMPTY for x in POSITIONS])):
         # TODO: Do some validation to only allow 9 items, no more, no less.
@@ -112,7 +116,12 @@ class Player(object):
                         l = [x for x in seq if x != position]
                         if l[0] not in self.grid.positions(O) and l[1] not in self.grid.positions(O):
                             if l[0] in self.grid.positions(X) or l[1] in self.grid.positions(X):
-                                return position
+                                for seq2 in WINNING_SEQUENCES:
+                                    if position in seq2 and seq != seq2:
+                                        l2 = [x for x in seq2 if x != position]
+                                        if l2[0] not in self.grid.positions(O) and l2[1] not in self.grid.positions(O):
+                                            if l2[0] in self.grid.positions(X) or l2[1] in self.grid.positions(X):
+                                                return position
 
             # 4. Block the opponent's fork.
             for position in self.grid.positions():
@@ -121,7 +130,12 @@ class Player(object):
                         l = [x for x in seq if x != position]
                         if l[0] not in self.grid.positions(X) and l[1] not in self.grid.positions(X):
                             if l[0] in self.grid.positions(O) or l[1] in self.grid.positions(O):
-                                return position
+                                for seq2 in WINNING_SEQUENCES:
+                                    if position in seq2 and seq != seq2:
+                                        l2 = [x for x in seq2 if x != position]
+                                        if l2[0] not in self.grid.positions(X) and l2[1] not in self.grid.positions(X):
+                                            if l2[0] in self.grid.positions(O) or l2[1] in self.grid.positions(O):
+                                                return position
 
             # 5. Play in the center.
             if self.grid[CENTER] == EMPTY:
