@@ -1,11 +1,26 @@
-import re
 
-EMPTY_MARK = u'_'
-X_MARK = u'x'
-O_MARK = u'o'
+EMPTY = u'_'
+X = u'x'
+O = u'o'
+NUM_POSITIONS = 9
+POSITIONS = tuple(xrange(NUM_POSITIONS))
+WINNING_SEQUENCES = (
+    (0, 1, 2),
+    (3, 4, 5),
+    (6, 7, 8),
+    (0, 3, 6),
+    (1, 4, 7),
+    (2, 5, 8),
+    (0, 4, 8),
+    (2, 4, 6),
+)
+CENTER = 4
+SIDES = (1, 3, 5, 7)
+CORNERS = (0, 2, 6, 8)
+OPPOSITE_CORNERS = ((0, 8), (2, 6))
 
 
-class Grid(object):
+class Grid(list):
     """
     A grid in a game of Tic-tac-toe.
 
@@ -13,69 +28,125 @@ class Grid(object):
     represented by ``x`` or ``o``.
     """
 
-    # TODO: Learn if there is a more graceful way to handle all these args and
-    # there common default value.
-    def __init__(self, p1=EMPTY_MARK, p2=EMPTY_MARK, p3=EMPTY_MARK,
-            p4=EMPTY_MARK, p5=EMPTY_MARK, p6=EMPTY_MARK, p7=EMPTY_MARK,
-            p8=EMPTY_MARK, p9=EMPTY_MARK):
-        self.p1 = p1
-        self.p2 = p2
-        self.p3 = p3
-        self.p4 = p4
-        self.p5 = p5
-        self.p6 = p6
-        self.p7 = p7
-        self.p8 = p8
-        self.p9 = p9
+    # TODO: Remove pop, remove, reverse, and sort.
+    # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
+
+    def __init__(self, vals=''.join([EMPTY for x in POSITIONS])):
+        # TODO: Do some validation to only allow 9 items, no more, no less.
+        super(Grid, self).__init__(vals)
 
     def __unicode__(self):
-        return ''.join([self.p1, self.p2, self.p3, self.p4, self.p5, self.p6,
-                       self.p7, self.p8, self.p9])
+        return ''.join([x for x in self])
 
-    def is_filled(self):
-        # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-        marks = re.findall(r'[xo]{1}', self.__unicode__())
-        return len(marks) == 9
+    def positions(self, mark=EMPTY):
+        """ Returns a list of all positions matching the given mark. """
+        positions = []
+        for position in POSITIONS:
+            if self[position] == mark:
+                positions.append(position)
+
+        return positions
+
+    def is_complete(self):
+        """ Returns True if every position has been played in. """
+        return self.count(X) + self.count(O) == NUM_POSITIONS
 
     def is_turn(self, mark):
         """ Return true if the given mark (X or O) is allowed to play. """
-        if not self.is_filled():
-            # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-            xs = re.findall(r'x{1}', self.__unicode__())
-            os = re.findall(r'o{1}', self.__unicode__())
-            # Again we assume that X went first.
-            x_turn = len(xs) == len(os)
-            return x_turn if mark == X_MARK else not x_turn
-        return False
-
-    def next_turn(self):
-        return X_MARK if self.is_turn(X_MARK) else O_MARK
-
-    def mark_position(self, position, mark):
-        # TODO: Add validation here that the mark is either and int 1-9 or a
-        # string p1-p9.
-        # TODO: Decide if validation that mark is not overwriting previous mark
-        # is a necessary and/or good thing.
-        position = 'p%s' % position if isinstance(position, int) else position
-        setattr(self, position, mark)
+        if self.is_complete():
+            return False
+        # Again we assume that X went first.
+        x_turn = self.count(X) == self.count(O)
+        return x_turn if mark == X else not x_turn
 
 
 class Player(object):
-    """ A program that can choose the next turn in a game and never loose. """
+    """ A class that can choose the next turn in a game and never loose. """
 
-    def __init__(self, mark=X_MARK, grid=None):
+    def __init__(self, mark=X, opponent=O, grid=None):
         self.mark = mark
+        self.opponent = opponent
         self.grid = grid or Grid()
 
-    def get_next_position(self):
-        if self.grid.is_turn(self.mark):
-            return 1
+    def next_position(self):
+        """
+        The strategy for never losing Tic-tac-toe; choose the first available
+        option.
+
+        1. Form a winning sequence.
+        2. Prevent the opponent from forming a winning sequence.
+        3. Fork?
+        4. Block opponent's fork?
+        5. Play in the center.
+        6. Play in the corner opposite the opponent.
+        7. Play in a corner.
+        8. Play on a side.
+        """
+        # TODO: Abstract options 1 and 2 into a method. All the same code
+        # except the mark.
+        if self.grid.is_turn(self.mark) and self.grid.positions():
+            # 1. Form a winning sequence.
+            for position in self.grid.positions():
+                for seq in WINNING_SEQUENCES:
+                    if position in seq:
+                        l = [x for x in seq if x != position]
+                        if l[0] in self.grid.positions(X) and l[1] in self.grid.positions(X):
+                            return position
+
+            # 2. Prevent the opponent from forming a winning sequence.
+            for position in self.grid.positions():
+                for seq in WINNING_SEQUENCES:
+                    if position in seq:
+                        l = [x for x in seq if x != position]
+                        if l[0] in self.grid.positions(O) and l[1] in self.grid.positions(O):
+                            return position
+
+            # 3. Fork.
+
+            # 4. Block the opponent's fork.
+
+            # 5. Play in the center.
+            if self.grid[CENTER] == EMPTY:
+                return CENTER
+
+            # 6. Play in a corner opposite the opponent.
+            opponent_corners = []
+            for corner in CORNERS:
+                if self.grid[corner] == self.opponent:
+                    opponent_corners.append(corner)
+
+            for corner in opponent_corners:
+                d = dict(OPPOSITE_CORNERS)
+                d.update({v: k for k, v in d.items()})
+                if corner in d:
+                    return d[corner]
+
+            # 7. Play in a corner.
+            open_corners = []
+            for corner in CORNERS:
+                if self.grid[corner] == EMPTY:
+                    open_corners.append(corner)
+            if open_corners:
+                return open_corners.pop()
+
+            # 8. Finally, play on a side.
+            open_sides = []
+            for side in SIDES:
+                if self.grid[side] == EMPTY:
+                    open_sides.append(side)
+            return open_sides.pop()
+
+        # There are no open positions or it is not our turn.
         return None
 
-    def _mark_position(self, position):
-        self.grid.mark_position(position, self.mark)
-
     def play(self):
-        position = self.get_next_position()
+        """
+        Determine the next position to play in and then mark it.
+
+        Returns the position played and the updated grid.
+        """
+        position = self.next_position()
         if position:
-            self._mark_position(position)
+            self.grid[position] = self.mark
+
+        return position, self.grid

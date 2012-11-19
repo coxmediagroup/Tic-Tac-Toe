@@ -20,7 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from basic_extras.models import MetaBase
 
-from .core import Grid, X_MARK
+from .core import Grid
 
 
 class GridField(models.Field):
