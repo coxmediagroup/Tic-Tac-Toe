@@ -11,16 +11,14 @@ Future improvements:
 * Decouple the app and the solver. (See assumptions above.)
 * Allow users to view their game history.
 """
-import re
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from basic_extras.models import MetaBase
 
-from .core import Grid
+from .core import EMPTY, X, O, NUM_POSITIONS, GRID_RE, Grid
 
 
 class GridField(models.Field):
@@ -31,26 +29,23 @@ class GridField(models.Field):
 
     def __init__(self, *args, **kwargs):
         kwargs['default'] = Grid()
-        kwargs['max_length'] = 9
-        kwargs['help_text'] = _(u'Positions 1-9, indicated as unplayed by "_" '
-                                'and played by "x" or "o".')
+        kwargs['max_length'] = NUM_POSITIONS
+        kwargs['help_text'] = _(u'Positions 1-%(num)s, indicated as unplayed '
+            'by "%(empty)s" and played by "%(x)s" or "%(o)s".') % {
+                'num': NUM_POSITIONS, 'empty': EMPTY, 'x': X, 'o': O}
         super(GridField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
         if isinstance(value, Grid):
             return value
 
-        # TODO: Do we need the ``{1}`` limiter? Write tests to find out.
-        args = re.findall(r'[_xo]{1}', value)
-        if len(args) != 9:
+        if len(value) != NUM_POSITIONS or not GRID_RE.match(value):
             raise ValidationError('Invalid input for Grid instance.')
 
-        return Grid(*args)
+        return Grid(value)
 
     def get_prep_value(self, value):
-        # TODO: DRY this -- Grid.__unicode__ uses the same logic.
-        return ''.join([value.p1, value.p2, value.p3, value.p4, value.p5,
-                       value.p6, value.p7, value.p8, value.p9])
+        return value.__unicode__()
 
     def get_internal_type(self):
         return 'CharField'
@@ -82,4 +77,4 @@ class Game(MetaBase):
         # NOTE: Again we assume that a filled grid is a complete game. (Though
         # a game can be complete at a draw with only eight moves, this works
         # for now.)
-        return self.grid.is_filled()
+        return self.grid.is_complete()
