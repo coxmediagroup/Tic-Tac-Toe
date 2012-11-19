@@ -1,15 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Game, Play
-
-
-class PlayInline(admin.TabularInline):
-    exclude = ('created', 'modified')
-    extra = 9
-    max_num = 9
-    model = Play
-    # radio_fields = {'mark': admin.HORIZONTAL}
+from .models import Game
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -23,7 +15,6 @@ class GameAdmin(admin.ModelAdmin):
             'classes': ('collapse', ),
         }),
     )
-    inlines = (PlayInline,)
     list_display = ('player', 'grid', 'created')
     list_filter = ('created', 'modified')
     raw_id_fields = ('player',)
@@ -41,10 +32,4 @@ class GameAdmin(admin.ModelAdmin):
     # TODO: Add method to output grid as HTML in ``list_display``.
 
 
-class PlayAdmin(admin.ModelAdmin):
-    radio_fields = {'mark': admin.VERTICAL}
-    readonly_fields = ('created', 'modified')
-
-
 admin.site.register(Game, GameAdmin)
-admin.site.register(Play, PlayAdmin)

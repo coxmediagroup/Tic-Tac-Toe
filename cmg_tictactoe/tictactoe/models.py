@@ -124,35 +124,4 @@ class Game(MetaBase):
     # In progress, draw (cat), x won, o won.
 
 
-class Play(MetaBase):
-    """ A play in a game of Tic-tac-toe. """
 
-    game = models.ForeignKey(Game, verbose_name=_(u'game'), related_name='plays')
-    position = models.PositiveSmallIntegerField(_(u'position'),
-        choices=GRID_POSITIONS, help_text=_(u'A number 1-9.'))
-    mark = models.CharField(_(u'mark'), max_length=1, choices=POSITION_MARKS,
-        default=UNPLAYED_MARK)
-
-    class Meta:
-        order_with_respect_to = 'game'
-        ordering = ('game', '-created', 'id')
-        unique_together = (('position', 'game'),)
-        verbose_name = _(u'play')
-        verbose_name_plural = _(u'plays')
-
-    def __unicode__(self):
-        # TODO: Return game, position, player, and order.
-        return self.game.__unicode__()
-
-    def save(self, *args, **kwargs):
-        if self.game.grid.can_play(self.mark):
-            # self.game.grid.
-        else:
-            raise ValidationError('Incorrect mark, cannot play out of turn.')
-
-        super(Play, self).save(*args, **kwargs)
-
-    # FIXME: Update the game grid on save.
-    # FIXME: Validate that this is a valid play:
-    # 1. Marks alternate.
-    # 2. Does not overwrite other mark. (Handled by Meta.unique_together.)
