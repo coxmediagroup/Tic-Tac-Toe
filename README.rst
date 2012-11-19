@@ -1,4 +1,9 @@
-Intructions:
+================================
+ CMG Tic-tac-toe Code Challenge
+================================
+
+Intructions
+-----------
 
 1. Fork this repo on GitHub.
 2. Create a program that can interactively play the game of Tic-Tac-Toe against
