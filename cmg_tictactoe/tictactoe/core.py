@@ -146,7 +146,7 @@ class Player(object):
         Returns the position played and the updated grid.
         """
         position = self.next_position()
-        if position:
+        if position in POSITIONS:
             self.grid[position] = self.mark
 
         return position, self.grid
