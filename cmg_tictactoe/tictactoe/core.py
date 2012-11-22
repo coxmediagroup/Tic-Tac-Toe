@@ -78,6 +78,81 @@ class Player(object):
         self.o = opponent
         self.grid = grid or Grid()
 
+    def _complete_winning_sequence(self, mark):
+        for position in self.grid.positions():
+            for seq in WINNING_SEQUENCES:
+                if position in seq:
+                    other = [x for x in seq if x != position]
+                    if other[0] in self.grid.positions(mark) and other[1] in self.grid.positions(mark):
+                        return position
+
+    def form_winning_sequence(self):
+        return self._complete_winning_sequence(self.x)
+
+    def prevent_winning_sequence(self):
+        return self._complete_winning_sequence(self.o)
+
+    def _form_fork(self, mark):
+        oppo = self.o if mark is self.x else self.x
+        for position in self.grid.positions():
+            for seq in WINNING_SEQUENCES:
+                if position in seq:
+                    l = [x for x in seq if x != position]
+                    if l[0] not in self.grid.positions(oppo) and l[1] not in self.grid.positions(oppo):
+                        if l[0] in self.grid.positions(mark) or l[1] in self.grid.positions(mark):
+                            for seq2 in WINNING_SEQUENCES:
+                                if position in seq2 and seq != seq2:
+                                    l2 = [x for x in seq2 if x != position]
+                                    if l2[0] not in self.grid.positions(oppo) and l2[1] not in self.grid.positions(oppo):
+                                        if l2[0] in self.grid.positions(mark) or l2[1] in self.grid.positions(mark):
+                                            return position
+
+    def create_fork(self):
+        """ Form two non-blocked lines of two. """
+        return self._form_fork(self.x)
+
+    def prevent_fork(self):
+        """ Prevent opponent from forming two non-blocked lines of two. """
+        return self._form_fork(self.o)
+
+    def play_in_center(self):
+        """ Play in the center. """
+        if self.grid[CENTER] == EMPTY:
+            return CENTER
+
+    def play_in_corner_opposite_opponent(self):
+        """ Play in a corner opposite the opponent. """
+        opponent_corners = []
+        for corner in CORNERS:
+            if self.grid[corner] == self.o:
+                opponent_corners.append(corner)
+
+        # TODO: Rethink this, and make it more obvious.
+        for corner in opponent_corners:
+            d = dict(OPPOSITE_CORNERS)
+            d.update({v: k for k, v in d.items()})
+            if corner in d:
+                return d[corner]
+
+    def play_in_corner(self):
+        """ Play in any open corner. """
+        open_corners = []
+        for corner in CORNERS:
+            if self.grid[corner] == EMPTY:
+                open_corners.append(corner)
+        if open_corners:
+            return open_corners.pop()
+
+    def play_on_side(self):
+        """ Play on any open side. """
+        open_sides = []
+        for side in SIDES:
+            if self.grid[side] == EMPTY:
+                open_sides.append(side)
+        # TODO: We assume by by this eight and final option in the strategy
+        # that there is somewhere to play on a side -- is that valid?
+        return open_sides.pop()
+
     def next_position(self):
         """
         The strategy for never losing Tic-tac-toe; choose the first available
@@ -100,84 +175,20 @@ class Player(object):
         # code this late.)
 
         if self.grid.is_turn(self.x) and self.grid.positions():
-            # TODO: Abstract options 1 and 2 into a method. All the same code
-            # except the mark.
-            # 1. Form a winning sequence.
-            for position in self.grid.positions():
-                for seq in WINNING_SEQUENCES:
-                    if position in seq:
-                        l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(self.x) and l[1] in self.grid.positions(self.x):
-                            return position
-
-            # 2. Prevent the opponent from forming a winning sequence.
-            for position in self.grid.positions():
-                for seq in WINNING_SEQUENCES:
-                    if position in seq:
-                        l = [x for x in seq if x != position]
-                        if l[0] in self.grid.positions(self.o) and l[1] in self.grid.positions(self.o):
-                            return position
-
-            # TODO: Abstract options 3 and 4 into a method. All the same code
-            # except the mark.
-            # 3. Fork.
-            for position in self.grid.positions():
-                for seq in WINNING_SEQUENCES:
-                    if position in seq:
-                        l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(self.o) and l[1] not in self.grid.positions(self.o):
-                            if l[0] in self.grid.positions(self.x) or l[1] in self.grid.positions(self.x):
-                                for seq2 in WINNING_SEQUENCES:
-                                    if position in seq2 and seq != seq2:
-                                        l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(self.o) and l2[1] not in self.grid.positions(self.o):
-                                            if l2[0] in self.grid.positions(self.x) or l2[1] in self.grid.positions(self.x):
-                                                return position
-
-            # 4. Block the opponent's fork.
-            for position in self.grid.positions():
-                for seq in WINNING_SEQUENCES:
-                    if position in seq:
-                        l = [x for x in seq if x != position]
-                        if l[0] not in self.grid.positions(self.x) and l[1] not in self.grid.positions(self.x):
-                            if l[0] in self.grid.positions(self.o) or l[1] in self.grid.positions(self.o):
-                                for seq2 in WINNING_SEQUENCES:
-                                    if position in seq2 and seq != seq2:
-                                        l2 = [x for x in seq2 if x != position]
-                                        if l2[0] not in self.grid.positions(self.x) and l2[1] not in self.grid.positions(self.x):
-                                            if l2[0] in self.grid.positions(self.o) or l2[1] in self.grid.positions(self.o):
-                                                return position
-
-            # 5. Play in the center.
-            if self.grid[CENTER] == EMPTY:
-                return CENTER
-
-            # 6. Play in a corner opposite the opponent.
-            opponent_corners = []
-            for corner in CORNERS:
-                if self.grid[corner] == self.o:
-                    opponent_corners.append(corner)
-
-            for corner in opponent_corners:
-                d = dict(OPPOSITE_CORNERS)
-                d.update({v: k for k, v in d.items()})
-                if corner in d:
-                    return d[corner]
-
-            # 7. Play in a corner.
-            open_corners = []
-            for corner in CORNERS:
-                if self.grid[corner] == EMPTY:
-                    open_corners.append(corner)
-            if open_corners:
-                return open_corners.pop()
-
-            # 8. Finally, play on a side.
-            open_sides = []
-            for side in SIDES:
-                if self.grid[side] == EMPTY:
-                    open_sides.append(side)
-            return open_sides.pop()
+            strategic_options = (
+                self.form_winning_sequence,
+                self.prevent_winning_sequence,
+                self.create_fork,
+                self.prevent_fork,
+                self.play_in_center,
+                self.play_in_corner_opposite_opponent,
+                self.play_in_corner,
+                self.play_on_side,
+            )
+            for opt in strategic_options:
+                position = opt()
+                if position is not None:
+                    return position
 
         # There are no open positions or it is not our turn.
         return None
