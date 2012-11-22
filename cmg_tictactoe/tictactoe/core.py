@@ -3,6 +3,8 @@ import re
 EMPTY = u'_'
 X = u'x'
 O = u'o'
+
+# TODO: Consider making these properties of the Grid.
 NUM_POSITIONS = 9
 POSITIONS = tuple(xrange(NUM_POSITIONS))
 WINNING_SEQUENCES = (
@@ -79,6 +81,8 @@ class Player(object):
         self.grid = grid or Grid()
 
     def _complete_winning_sequence(self, mark):
+        # TODO: If possible, refactor this to be more readable and to fail
+        #       faster.
         for position in self.grid.positions():
             for seq in WINNING_SEQUENCES:
                 if position in seq:
@@ -93,6 +97,7 @@ class Player(object):
         return self._complete_winning_sequence(self.o)
 
     def _form_fork(self, mark):
+        # TODO: Refactor this to be more readable and to fail faster.
         oppo = self.o if mark is self.x else self.x
         for position in self.grid.positions():
             for seq in WINNING_SEQUENCES:
@@ -141,13 +146,15 @@ class Player(object):
         """ Play on any open side. """
         open_sides = [s for s in SIDES if self.grid[s] == EMPTY]
         # TODO: We assume by by this eight and final option in the strategy
-        # that there is somewhere to play on a side -- is that valid?
+        #       that there is somewhere to play on a side -- is that valid?
         return open_sides.pop()
 
     def next_position(self):
         """
+        Returns the next position that should be played.
+
         The strategy for never losing Tic-tac-toe; choose the first available
-        option.
+        option:
 
         1. Form a winning sequence.
         2. Prevent the opponent from forming a winning sequence.
@@ -160,11 +167,6 @@ class Player(object):
 
         Source: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
         """
-        # FIXME: This code is an abomination of nested, sharp-stick-in-your-eye
-        # pain. DRY it up and make it readable. Bale on the nesting and use
-        # some filter and or map functions. (This is what you get when writing
-        # code this late.)
-
         if self.grid.is_turn(self.x) and self.grid.positions():
             strategic_options = (
                 self.form_winning_sequence,
