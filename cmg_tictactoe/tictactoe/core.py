@@ -122,10 +122,7 @@ class Player(object):
 
     def play_in_corner_opposite_opponent(self):
         """ Play in a corner opposite the opponent. """
-        opponent_corners = []
-        for corner in CORNERS:
-            if self.grid[corner] == self.o:
-                opponent_corners.append(corner)
+        opponent_corners = [c for c in CORNERS if self.grid[c] == self.o]
 
         # TODO: Rethink this, and make it more obvious.
         for corner in opponent_corners:
@@ -136,19 +133,13 @@ class Player(object):
 
     def play_in_corner(self):
         """ Play in any open corner. """
-        open_corners = []
-        for corner in CORNERS:
-            if self.grid[corner] == EMPTY:
-                open_corners.append(corner)
+        open_corners = [c for c in CORNERS if self.grid[c] == EMPTY]
         if open_corners:
             return open_corners.pop()
 
     def play_on_side(self):
         """ Play on any open side. """
-        open_sides = []
-        for side in SIDES:
-            if self.grid[side] == EMPTY:
-                open_sides.append(side)
+        open_sides = [s for s in SIDES if self.grid[s] == EMPTY]
         # TODO: We assume by by this eight and final option in the strategy
         # that there is somewhere to play on a side -- is that valid?
         return open_sides.pop()
