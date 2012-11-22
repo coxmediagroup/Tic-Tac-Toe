@@ -17,7 +17,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from basic_extras.models import MetaBase
 
-from .core import EMPTY, X, O, NUM_POSITIONS, GRID_RE, Grid
+from .core import EMPTY, X, O, Grid
 
 
 class GridField(models.Field):
@@ -28,17 +28,17 @@ class GridField(models.Field):
 
     def __init__(self, *args, **kwargs):
         kwargs['default'] = Grid()
-        kwargs['max_length'] = NUM_POSITIONS
+        kwargs['max_length'] = Grid.NUM_POSITIONS
         kwargs['help_text'] = _(u'Positions 1-%(num)s, indicated as unplayed '
             'by "%(empty)s" and played by "%(x)s" or "%(o)s".') % {
-                'num': NUM_POSITIONS, 'empty': EMPTY, 'x': X, 'o': O}
+                'num': Grid.NUM_POSITIONS, 'empty': EMPTY, 'x': X, 'o': O}
         super(GridField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
         if isinstance(value, Grid):
             return value
 
-        if len(value) != NUM_POSITIONS or not GRID_RE.match(value):
+        if len(value) != Grid.NUM_POSITIONS or not Grid.GRID_RE.match(value):
             raise ValidationError('Invalid input for Grid instance.')
 
         return Grid(value)

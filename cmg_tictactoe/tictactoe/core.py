@@ -4,25 +4,6 @@ EMPTY = u'_'
 X = u'x'
 O = u'o'
 
-# TODO: Consider making these properties of the Grid.
-NUM_POSITIONS = 9
-POSITIONS = tuple(xrange(NUM_POSITIONS))
-WINNING_SEQUENCES = (
-    (0, 1, 2),
-    (3, 4, 5),
-    (6, 7, 8),
-    (0, 3, 6),
-    (1, 4, 7),
-    (2, 5, 8),
-    (0, 4, 8),
-    (2, 4, 6),
-)
-CENTER = 4
-SIDES = (1, 3, 5, 7)
-CORNERS = (0, 2, 6, 8)
-OPPOSITE_CORNERS = ((0, 8), (2, 6))
-GRID_RE = re.compile('[%s%s%s]{%s}' % (EMPTY, X, O, NUM_POSITIONS))
-
 
 class Grid(list):
     """
@@ -31,6 +12,23 @@ class Grid(list):
     Unplayed positions are represented by ``_``. Played positions are
     represented by ``x`` or ``o``.
     """
+    NUM_POSITIONS = 9
+    POSITIONS = tuple(xrange(NUM_POSITIONS))
+    WINNING_SEQUENCES = (
+        (0, 1, 2),
+        (3, 4, 5),
+        (6, 7, 8),
+        (0, 3, 6),
+        (1, 4, 7),
+        (2, 5, 8),
+        (0, 4, 8),
+        (2, 4, 6),
+    )
+    CENTER = 4
+    SIDES = (1, 3, 5, 7)
+    CORNERS = (0, 2, 6, 8)
+    OPPOSITE_CORNERS = ((0, 8), (2, 6))
+    GRID_RE = re.compile('[%s%s%s]{%s}' % (EMPTY, X, O, NUM_POSITIONS))
 
     # TODO: Remove pop, remove, reverse, and sort.
     # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
@@ -38,7 +36,9 @@ class Grid(list):
     # the state of the game (in-progress, complete) after an item is set.
     # And render the grid immutable if there is a winning sequence.
 
-    def __init__(self, positions=''.join([EMPTY for x in POSITIONS])):
+    def __init__(self, positions=None):
+        if positions is None:
+            positions = ''.join([EMPTY for x in self.POSITIONS])
         # TODO: Do some validation to only allow 9 items, no more, no less.
         super(Grid, self).__init__(positions)
 
@@ -47,12 +47,7 @@ class Grid(list):
 
     def positions(self, mark=EMPTY):
         """ Returns a list of all positions matching the given mark. """
-        positions = []
-        for position in POSITIONS:
-            if self[position] == mark:
-                positions.append(position)
-
-        return positions
+        return [p for p in self.POSITIONS if self[p] == mark]
 
     def is_complete(self):
         """
@@ -61,7 +56,7 @@ class Grid(list):
         This behavior will likely be changed to return True when the game has
         been won, which requires a winning sequence, not all positions filled.
         """
-        return self.count(X) + self.count(O) == NUM_POSITIONS
+        return self.count(X) + self.count(O) == self.NUM_POSITIONS
 
     def is_turn(self, mark):
         """ Return true if the given mark (X or O) is allowed to play. """
@@ -84,7 +79,7 @@ class Player(object):
         # TODO: If possible, refactor this to be more readable and to fail
         #       faster.
         for position in self.grid.positions():
-            for seq in WINNING_SEQUENCES:
+            for seq in self.grid.WINNING_SEQUENCES:
                 if position in seq:
                     other = [x for x in seq if x != position]
                     if other[0] in self.grid.positions(mark) and other[1] in self.grid.positions(mark):
@@ -100,12 +95,12 @@ class Player(object):
         # TODO: Refactor this to be more readable and to fail faster.
         oppo = self.o if mark is self.x else self.x
         for position in self.grid.positions():
-            for seq in WINNING_SEQUENCES:
+            for seq in self.grid.WINNING_SEQUENCES:
                 if position in seq:
                     l = [x for x in seq if x != position]
                     if l[0] not in self.grid.positions(oppo) and l[1] not in self.grid.positions(oppo):
                         if l[0] in self.grid.positions(mark) or l[1] in self.grid.positions(mark):
-                            for seq2 in WINNING_SEQUENCES:
+                            for seq2 in self.grid.WINNING_SEQUENCES:
                                 if position in seq2 and seq != seq2:
                                     l2 = [x for x in seq2 if x != position]
                                     if l2[0] not in self.grid.positions(oppo) and l2[1] not in self.grid.positions(oppo):
@@ -122,30 +117,30 @@ class Player(object):
 
     def play_in_center(self):
         """ Play in the center. """
-        if self.grid[CENTER] == EMPTY:
-            return CENTER
+        if self.grid[self.grid.CENTER] == EMPTY:
+            return self.grid.CENTER
 
     def play_in_corner_opposite_opponent(self):
         """ Play in a corner opposite the opponent. """
-        opponent_corners = [c for c in CORNERS if self.grid[c] == self.o]
+        opponent_corners = [c for c in self.grid.CORNERS if self.grid[c] == self.o]
 
         # TODO: Rethink this, and make it more obvious.
         for corner in opponent_corners:
-            d = dict(OPPOSITE_CORNERS)
+            d = dict(self.grid.OPPOSITE_CORNERS)
             d.update({v: k for k, v in d.items()})
             if corner in d:
                 return d[corner]
 
     def play_in_corner(self):
         """ Play in any open corner. """
-        open_corners = [c for c in CORNERS if self.grid[c] == EMPTY]
+        open_corners = [c for c in self.grid.CORNERS if self.grid[c] == EMPTY]
         if open_corners:
             return open_corners.pop()
 
     def play_on_side(self):
         """ Play on any open side. """
-        open_sides = [s for s in SIDES if self.grid[s] == EMPTY]
-        # TODO: We assume by by this eight and final option in the strategy
+        open_sides = [s for s in self.grid.SIDES if self.grid[s] == EMPTY]
+        # TODO: We assume by by this eighth and final option in the strategy
         #       that there is somewhere to play on a side -- is that valid?
         return open_sides.pop()
 
@@ -193,7 +188,7 @@ class Player(object):
         Returns the position played and the updated grid.
         """
         position = self.next_position()
-        if position in POSITIONS:
+        if position in self.grid.POSITIONS:
             self.grid[position] = self.x
 
         return position, self.grid
