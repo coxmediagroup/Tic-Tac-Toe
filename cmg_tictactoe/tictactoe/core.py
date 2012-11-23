@@ -140,8 +140,10 @@ class Player(object):
     def play_on_side(self):
         """ Play on any open side. """
         open_sides = [s for s in self.grid.SIDES if self.grid[s] == EMPTY]
-        # TODO: We assume by by this eighth and final option in the strategy
-        #       that there is somewhere to play on a side -- is that valid?
+        # We assume by this eighth and final option in the strategy that
+        # there is somewhere to play on a side -- if there is not then there
+        # is something wrong with one of the strategic options and we need to
+        # know about it. Thus, we do not handle any IndexError here.
         return open_sides.pop()
 
     def next_position(self):
