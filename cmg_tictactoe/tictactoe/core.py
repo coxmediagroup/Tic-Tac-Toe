@@ -94,20 +94,23 @@ class Player(object):
         return self._complete_winning_sequence(self.o)
 
     def _form_fork(self, mark):
-        # TODO: Refactor this to be more readable and to fail faster.
         oppo = self.o if mark is self.x else self.x
-        for position in self.grid.positions():
-            for seq in self.grid.WINNING_SEQUENCES:
-                if position in seq:
-                    l = [x for x in seq if x != position]
-                    if l[0] not in self.grid.positions(oppo) and l[1] not in self.grid.positions(oppo):
-                        if l[0] in self.grid.positions(mark) or l[1] in self.grid.positions(mark):
-                            for seq2 in self.grid.WINNING_SEQUENCES:
-                                if position in seq2 and seq != seq2:
-                                    l2 = [x for x in seq2 if x != position]
-                                    if l2[0] not in self.grid.positions(oppo) and l2[1] not in self.grid.positions(oppo):
-                                        if l2[0] in self.grid.positions(mark) or l2[1] in self.grid.positions(mark):
-                                            return position
+        # Build a list of all open positions that are within two winning
+        # sequences in which there are no opponent's marks and at least one
+        # position has already been marked by the current mark.
+        forks = [
+            pos for pos in self.grid.positions()
+            for seq in self.grid.WINNING_SEQUENCES
+            for seq2 in self.grid.WINNING_SEQUENCES
+            if pos in seq
+            and pos in seq2
+            and seq != seq2
+            and not [x for x in seq + seq2 if x in self.grid.positions(oppo)]
+            and [x for x in seq if x in self.grid.positions(mark)]
+            and [x for x in seq2 if x in self.grid.positions(mark)]
+        ]
+        if forks:
+            return forks.pop()
 
     def create_fork(self):
         """ Form two non-blocked lines of two. """
