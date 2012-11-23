@@ -81,8 +81,7 @@ class Player(object):
         for position in self.grid.positions():
             for seq in self.grid.WINNING_SEQUENCES:
                 if position in seq:
-                    other = [x for x in seq if x != position]
-                    if other[0] in self.grid.positions(mark) and other[1] in self.grid.positions(mark):
+                    if len([x for x in seq if x in self.grid.positions(mark)]) == 2:
                         return position
 
     def form_winning_sequence(self):
