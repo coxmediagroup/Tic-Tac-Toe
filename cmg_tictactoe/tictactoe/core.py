@@ -87,6 +87,8 @@ class Player(object):
         if finishers:
             return finishers.pop()
 
+        return None
+
     def form_winning_sequence(self):
         return self._complete_winning_sequence(self.x)
 
@@ -112,6 +114,8 @@ class Player(object):
         if forks:
             return forks.pop()
 
+        return None
+
     def create_fork(self):
         """ Form two non-blocked lines of two. """
         return self._form_fork(self.x)
@@ -124,6 +128,7 @@ class Player(object):
         """ Play in the center. """
         if self.grid[self.grid.CENTER] == EMPTY:
             return self.grid.CENTER
+        return None
 
     def play_in_corner_opposite_opponent(self):
         """ Play in a corner opposite the opponent. """
@@ -139,11 +144,14 @@ class Player(object):
             if d[corner] in self.grid.positions():
                 return d[corner]
 
+        return None
+
     def play_in_corner(self):
         """ Play in any open corner. """
         open_corners = [c for c in self.grid.CORNERS if self.grid[c] == EMPTY]
         if open_corners:
             return open_corners.pop()
+        return None
 
     def play_on_side(self):
         """ Play on any open side. """
