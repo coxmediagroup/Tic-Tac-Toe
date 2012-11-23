@@ -76,13 +76,16 @@ class Player(object):
         self.grid = grid or Grid()
 
     def _complete_winning_sequence(self, mark):
-        # TODO: If possible, refactor this to be more readable and to fail
-        #       faster.
-        for position in self.grid.positions():
-            for seq in self.grid.WINNING_SEQUENCES:
-                if position in seq:
-                    if len([x for x in seq if x in self.grid.positions(mark)]) == 2:
-                        return position
+        # Build a list of all open positions that are in a winning sequence in
+        # which the other two positions are already marked by the current mark.
+        finishers = [
+            pos for pos in self.grid.positions()
+            for seq in self.grid.WINNING_SEQUENCES
+            if pos in seq
+            and len([x for x in seq if x in self.grid.positions(mark)]) == 2
+        ]
+        if finishers:
+            return finishers.pop()
 
     def form_winning_sequence(self):
         return self._complete_winning_sequence(self.x)
