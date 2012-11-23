@@ -34,8 +34,17 @@ class PlayerTestCase(TestCase):
         self.assertEqual(player._complete_winning_sequence(player.x), 6)
 
     def test_form_fork(self):
-        # FIXME: Write tests for this.
-        pass
+        """ Test a sample of the possible fork setups. """
+        player = Player()
+        self.assertIsNone(player._form_fork(player.x))
+        player.grid = Grid(u'_x__ox_o_')
+        self.assertEqual(player._form_fork(player.x), 2)
+        player.grid = Grid(u'_o_xo__x_')
+        self.assertEqual(player._form_fork(player.x), 6)
+        player.grid = Grid(u'o__x__ox_')
+        self.assertEqual(player._form_fork(player.x), 4)
+        player.grid = Grid(u'_xox__o__')
+        self.assertEqual(player._form_fork(player.x), 4)
 
     def test_play_in_center(self):
         player = Player(grid=Grid(u'_________'))
