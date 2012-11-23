@@ -30,12 +30,6 @@ class Grid(list):
     OPPOSITE_CORNERS = ((0, 8), (2, 6))
     GRID_RE = re.compile('[%s%s%s]{%s}' % (EMPTY, X, O, NUM_POSITIONS))
 
-    # TODO: Remove pop, remove, reverse, and sort.
-    # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
-    # TODO: When item is being set, validate that it is _, x, or o. Also set
-    # the state of the game (in-progress, complete) after an item is set.
-    # And render the grid immutable if there is a winning sequence.
-
     def __init__(self, positions=None):
         if positions is None:
             positions = ''.join([EMPTY for x in self.POSITIONS])
@@ -65,6 +59,25 @@ class Grid(list):
         # Again we assume that X went first.
         x_turn = self.count(X) == self.count(O)
         return x_turn if mark == X else not x_turn
+
+    # TODO: Limit append, extend, insert to only allow up to NUM_POSITIONS.
+    # TODO: When item is being set, validate that it is _, x, or o. Also set
+    # the state of the game (in-progress, complete) after an item is set.
+    # And render the grid immutable if there is a winning sequence.
+
+    # Raise exceptions for these methods that would alter a Grid in a way
+    # that should not happen.
+    def pop(self, index=None):
+        raise AttributeError
+
+    def remove(self, index):
+        raise AttributeError
+
+    def reverse(self):
+        raise AttributeError
+
+    def sort(self):
+        raise AttributeError
 
 
 class Player(object):
