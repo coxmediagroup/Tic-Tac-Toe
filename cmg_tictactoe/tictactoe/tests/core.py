@@ -1,13 +1,37 @@
 from django.test import TestCase
 
-from ..core import Grid, Player
+from ..core import X, O, Grid, Player
 
 
 class GridTestCase(TestCase):
 
+    def test_positions(self):
+        grid = Grid()
+        self.assertItemsEqual(grid.positions(), [0, 1, 2, 3, 4, 5, 6, 7, 8])
+        self.assertItemsEqual(grid.positions(X), [])
+        self.assertItemsEqual(grid.positions(O), [])
+        grid = Grid(u'xo__x____')
+        self.assertItemsEqual(grid.positions(), [2, 3, 5, 6, 7, 8])
+        self.assertItemsEqual(grid.positions(X), [0, 4])
+        self.assertItemsEqual(grid.positions(O), [1])
+
     def test_is_complete(self):
         self.assertFalse(Grid('_ox______').is_complete())
         self.assertTrue(Grid('xoxoxoxox').is_complete())
+
+    def test_is_turn(self):
+        grid = Grid()
+        self.assertTrue(grid.is_turn(X))
+        self.assertFalse(grid.is_turn(O))
+        grid = Grid(u'xoxoxoxox')
+        self.assertFalse(grid.is_turn(X))
+        self.assertFalse(grid.is_turn(O))
+        grid = Grid(u'xoxoxoxo_')
+        self.assertTrue(grid.is_turn(X))
+        self.assertFalse(grid.is_turn(O))
+        grid = Grid(u'xox_xoxo_')
+        self.assertFalse(grid.is_turn(X))
+        self.assertTrue(grid.is_turn(O))
 
 
 class PlayerTestCase(TestCase):
