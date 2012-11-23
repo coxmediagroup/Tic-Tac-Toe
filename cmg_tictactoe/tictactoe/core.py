@@ -124,11 +124,14 @@ class Player(object):
         """ Play in a corner opposite the opponent. """
         opponent_corners = [c for c in self.grid.CORNERS if self.grid[c] == self.o]
 
-        # TODO: Rethink this, and make it more obvious.
+        # Build a dictionary with keys for every corner, with the value being
+        # the opposite corner.
+        d = dict(self.grid.OPPOSITE_CORNERS)
+        d.update({v: k for k, v in d.items()})
+
+        # Now return the first available corner opposite the opponent.
         for corner in opponent_corners:
-            d = dict(self.grid.OPPOSITE_CORNERS)
-            d.update({v: k for k, v in d.items()})
-            if corner in d:
+            if d[corner] in self.grid.positions():
                 return d[corner]
 
     def play_in_corner(self):
