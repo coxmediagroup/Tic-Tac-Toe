@@ -21,5 +21,5 @@ class GridFormField(forms.Field):
 
     def clean(self, value):
         # Remove the linebreaks that were previously added.
-        value = value.replace('\r\n', '')
+        value = value.replace('\r\n', '').lower()
         return super(GridFormField, self).clean(value)
