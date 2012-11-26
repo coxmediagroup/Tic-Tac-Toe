@@ -1,0 +1,26 @@
+.thumbnail-game {
+    text-align: center;
+    font-family: monospace;
+    line-height: 1.05;
+    letter-spacing: 20px;
+}
+.thumbnail-game:active,
+.thumbnail-game:hover {
+    text-decoration: none;
+}
+.thumbnail-game pre {
+}
+.thumbnail-game:active pre,
+.thumbnail-game:hover pre {
+    color: #005580;
+}
+
+#id_grid {
+    text-align: center;
+    font-size: 50px;
+    font-family: monospace;
+    line-height: 1.05;
+    letter-spacing: 20px;
+    height: 170px;
+    padding: 10px 0 10px 10px;
+}

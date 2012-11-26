@@ -2,12 +2,16 @@
 
 {% block title %}Game List{% endblock %}
 
-{% block content %}
+{% block page_header %}Game List{% endblock %}
+
+{% block primary %}
 {% if game_list %}
-<ul class="game-list">
-    {% for game in game_list %}
-    <li><a href="{% url 'tictactoe_game_update' pk=game.pk %}">{{ game.grid }}</a></li>
-    {% endfor %}
-</ul>
+    <ul class="game-list thumbnails">
+        {% for game in game_list %}
+        <li><a href="{% url 'tictactoe_game_update' pk=game.pk %}" class="thumbnail span2 thumbnail-game">
+            <pre>{{ game.grid.as_text|linebreaksbr }}</pre>
+        </a></li>
+        {% endfor %}
+    </ul>
 {% endif %}
 {% endblock %}

@@ -39,6 +39,11 @@ class Grid(list):
     def __unicode__(self):
         return ''.join([x for x in self])
 
+    def as_text(self):
+        string = self.__unicode__()
+        rows = [''.join(row) for row in string[:3], string[3:6], string[6:]]
+        return u'{0}\r\n{1}\r\n{2}'.format(*rows)
+
     def positions(self, mark=EMPTY):
         """ Returns a list of all positions matching the given mark. """
         return [p for p in self.POSITIONS if self[p] == mark]

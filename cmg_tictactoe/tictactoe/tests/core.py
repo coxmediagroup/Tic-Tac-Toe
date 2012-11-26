@@ -5,6 +5,10 @@ from ..core import X, O, Grid, Player
 
 class GridTestCase(TestCase):
 
+    def test_as_text(self):
+        grid = Grid()
+        self.assertEqual(grid.as_text(), u'___\r\n___\r\n___')
+
     def test_positions(self):
         grid = Grid()
         self.assertItemsEqual(grid.positions(), [0, 1, 2, 3, 4, 5, 6, 7, 8])
