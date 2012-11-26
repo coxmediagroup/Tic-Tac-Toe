@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block title %}Game {{ game.pk }}{% endblock %}
+
+{% block page_header %}Game {{ game.pk }} result{% endblock %}
+
+{% block primary %}
+    <div class="complete-game">
+        <pre>{{ game.grid.as_text }}</pre>
+    </div>
+    <p>
+        <span class="muted">Game {{ game.pk }}</span>
+        {# Mark the game as a success if it is complete, because we #}
+        {# assume our bot won. :D #}
+        <span class="pull-right label label-{{ game.grid.is_complete|yesno:'success,info' }}">{{ game.grid.is_complete|yesno:"Complete,In-progress" }}</span>
+    </p>
+{% endblock %}

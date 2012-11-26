@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en-us">
+{% load url from future %}
+<head>
+    <meta charset="utf-8" />
+    <title>{% block full_title %}{% block title %}{% endblock %} — {{ site.name }}{% endblock %}</title>
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="{{ STATIC_URL }}tictactoe/css/main.css" rel="stylesheet" media="screen" />
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="page" class="container">
+    <header class="well clearfix">
+        <h1><a href="{% url 'tictactoe_game_list' %}">Tic-tac-toe</a></h1>
+        <p>Prepare to lose …</p>
+        <p><a class="btn btn-primary btn-large pull-right game-start" href="{% url 'tictactoe_game_create' %}">Start new game</a></p>
+    </header>
+    {% block content %}
+        <div class="page-header">
+            <h2>{% block page_header %}Game List{% endblock %}</h2>
+        </div>
+
+        {% block primary %}
+        {% endblock %}
+
+        {% block secondary %}
+        {% endblock %}
+    {% endblock %}
+</div><!-- #page -->
+</body>
+</html>

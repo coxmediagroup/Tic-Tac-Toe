@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block title %}Game List{% endblock %}
+
+{% block page_header %}Game List{% endblock %}
+
+{% block primary %}
+{% if game_list %}
+    <ul class="game-list thumbnails">
+        {% for game in game_list %}
+        {# Ideally, one view will handle both game play and post-game viewing. #}
+        {# That will happen, but this is quicker for now. #}
+        {% url 'tictactoe_game_update' pk=game.pk as play_url %}
+        {% url 'tictactoe_game_detail' pk=game.pk as view_url %}
+        <li><a href="{% if game.grid.is_complete %}{{ view_url }}{% else %}{{ play_url }}{% endif %}" class="thumbnail span2 thumbnail-game {{ game.grid.is_complete|yesno:"game-complete" }}">
+            <pre>{{ game.grid.as_text|linebreaksbr }}</pre>
+            <p>
+                <span class="muted">Game {{ game.pk }}</span>
+                {# Mark the game as a success if it is complete, because we #}
+                {# assume our bot won. :D #}
+                <span class="pull-right label label-{{ game.grid.is_complete|yesno:'success,info' }}">{{ game.grid.is_complete|yesno:"Complete,In-progress" }}</span>
+            </p>
+        </a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No games yet. You ought to <a href="{% url 'tictactoe_game_create' %}">start one</a>!</p>
+{% endif %}
+
+{# TODO: Add pagination. #}
+{% endblock %}
