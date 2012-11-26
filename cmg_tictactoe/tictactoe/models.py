@@ -8,7 +8,6 @@ Because of the time constraints we are working in, we make a fiew assumptions.
 
 Future improvements:
 
-* Decouple the app and the solver. (See assumptions above.)
 * Allow users to view their game history.
 """
 
