@@ -5,7 +5,7 @@ pytz==2012f
 docutils==0.9.1
 
 # Apps and other packages.
--e git://github.com/benspaulding/django-basic-extras.git@f0622fa9fde3#egg=django-basic-extras
+-e git://github.com/benspaulding/django-basic-extras.git@b9d21efb3222#egg=django-basic-extras
 -e git://github.com/benspaulding/django-gcframe.git@f91e695f2f48#egg=django-gcframe
 
 # Development/testing packages.
