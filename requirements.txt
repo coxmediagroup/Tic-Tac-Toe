@@ -1,6 +1,5 @@
 # Core Django stuff.
-# Django==1.5.0  # Switch to this once it lands.
--e git://github.com/django/django.git@stable/1.5.x#egg=Django
+Django==1.4.2
 pytz==2012f
 docutils==0.9.1
 
