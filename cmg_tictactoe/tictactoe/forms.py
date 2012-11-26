@@ -12,6 +12,10 @@ class GridFormField(forms.Field):
     """
     widget = forms.widgets.Textarea
 
+    def __init__(self, *args, **kwargs):
+        super(GridFormField, self).__init__(*args, **kwargs)
+        self.help_text = u'Replace an underscore with an "o" and submit to play.'
+
     def prepare_value(self, value):
         # Split the grid into three rows so line breaks can be added. In the
         # interest of time we do this hack-of-a-grid instead of building an
