@@ -23,6 +23,20 @@ inspect it locally when I receive the request. This repo will be left
 solution-less for obvious reasons.)
 
 
+Installation & Setup
+--------------------
+
+1. ``git clone git://github.com/benspaulding/Tic-Tac-Toe.git``
+2. Create a virtual environment or add the new ``Tic-Tac-Toe`` directory to
+   your current one.
+3. ``cd Tic-Tac-Toe/``
+4. ``pip install -r requirements.txt``
+5. ``./manage.py test tictactoe``
+6. ``./manage.py syncdb``
+7. ``./manage.py runserver``
+8. Open a browser and try it out!
+
+
 Ben’s TODO
 ----------
 
@@ -32,5 +46,4 @@ Along with the FIXME and TODO notes in the code:
 * Create custom manager for game to access games based on status.
 * Install South.
 * Write initial data migration. (Setup my user, site, etc.)
-* Write brief docs on installation and setup.
 * Add travis-ci support.
