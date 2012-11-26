@@ -5,6 +5,7 @@ pytz==2012f
 docutils==0.9.1
 
 # Apps and other packages.
+django-forms-bootstrap==2.0.3.post1
 -e git://github.com/benspaulding/django-basic-extras.git@b9d21efb3222#egg=django-basic-extras
 -e git://github.com/benspaulding/django-gcframe.git@f91e695f2f48#egg=django-gcframe
 
