@@ -18,6 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 from basic_extras.models import MetaBase
 
 from .core import EMPTY, X, O, Grid
+from .forms import GridFormField
 
 
 class GridField(models.Field):
@@ -48,6 +49,11 @@ class GridField(models.Field):
 
     def get_internal_type(self):
         return 'CharField'
+
+    def formfield(self, **kwargs):
+        defaults = {'form_class': GridFormField}
+        defaults.update(kwargs)
+        return super(GridField, self).formfield(**defaults)
 
 
 class Game(MetaBase):
