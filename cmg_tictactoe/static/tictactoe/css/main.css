@@ -1,18 +1,32 @@
-.thumbnail-game {
-    text-align: center;
-    font-family: monospace;
-    line-height: 1.05;
-    letter-spacing: 20px;
+header.well {
+    position: relative;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
+.game-start {
+    top: 25px;
+    right: 15px;
+    position: absolute;
+}
+
 .thumbnail-game:active,
 .thumbnail-game:hover {
     text-decoration: none;
 }
 .thumbnail-game pre {
+    text-align: center;
+    line-height: 1.75;
+    letter-spacing: 15px;
 }
-.thumbnail-game:active pre,
-.thumbnail-game:hover pre {
+a.thumbnail-game:active pre,
+a.thumbnail-game:hover pre {
     color: #005580;
+}
+div.complete-game pre {
+    text-align: center;
+    font-size: 65px;
+    line-height: 1.25;
+    letter-spacing: 45px;
 }
 
 #id_grid {

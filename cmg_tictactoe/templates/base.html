@@ -10,9 +10,10 @@
 </head>
 <body>
 <div id="page" class="container">
-    <header>
-        <h1>Tic-tac-toe</h1>
+    <header class="well clearfix">
+        <h1><a href="{% url 'tictactoe_game_list' %}">Tic-tac-toe</a></h1>
         <p>Prepare to lose …</p>
+        <p><a class="btn btn-primary btn-large pull-right game-start" href="{% url 'tictactoe_game_create' %}">Start new game</a></p>
     </header>
     {% block content %}
         <div class="page-header">

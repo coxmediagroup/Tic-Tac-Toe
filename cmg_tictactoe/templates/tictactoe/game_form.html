@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
+{% load bootstrap_tags %}
+
 {% block title %}Playing game {{ game.pk }}{% endblock %}
 
-{% block content %}
-{{ game }}
+{% block page_header %}Game {{ game.pk }} in progress{% endblock %}
+
+{% block primary %}
 <form action="{% url 'tictactoe_game_update' pk=game.pk  %}" method="post" id="game-form">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <th>&nbsp;</th>
-            <td><button type="submit">Submit</button></td>
-        </tr>
-    </table>
+    {{ form|as_bootstrap }}
+    <p><button type="submit" class="btn btn-primary">Submit</button></p>
 </form>
 {% endblock %}
