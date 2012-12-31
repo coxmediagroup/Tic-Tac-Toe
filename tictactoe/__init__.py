@@ -86,3 +86,40 @@ class AIPlayer(Player):
 
         return selected_position
 
+
+# A singleton object could be used for the game, but it does't really
+# add anything other than some extra complication with the given requirements.
+def play_game(board, player1, player2):
+    """The main game loop/logic"""
+    import sys
+
+    def draw(board):
+        print chr(27) + "[2J"
+        for position, value in enumerate(board.tttboard):
+            if value is None:
+                sys.stdout.write(str(position))
+            else:
+                sys.stdout.write(str(value))
+
+            if (position + 1) % 3 != 0:
+                sys.stdout.write('|')
+            else:
+                print ''
+
+            if position == 2 or position == 5:
+                print '-' * 5
+
+    selection = None
+    while selection != 'q':
+        draw(board)
+
+        selection = raw_input('Pick a spot: ')
+
+
+
+if __name__ == '__main__':
+    player1 = AIPlayer('X')
+    player2 = Player('Y')
+    board = Board()
+
+    play_game(board, player1, player2)
