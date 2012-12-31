@@ -46,6 +46,32 @@ class AIPlayerTests(unittest.TestCase):
                           None, None, 'X']
         self.assertEqual(4, self.player.look_for_win(board))
 
+    def test_pick_open_position(self):
+
+        board = ttt.Board()
+
+        self.assertEqual(4, self.player.pick_open_position(board))
+
+        board.tttboard = [None, None, None,
+                          None, 'X', None,
+                          None, None, None]
+        self.assertEqual(0, self.player.pick_open_position(board))
+
+        board.tttboard = [None, None, None,
+                          None, 'Y', None,
+                          None, None, None]
+        self.assertEqual(0, self.player.pick_open_position(board))
+
+        board.tttboard = ['X', None, 'Y',
+                          None, 'X', None,
+                          'Y', 'X', 'Y']
+        self.assertEqual(1, self.player.pick_open_position(board))
+
+        board.tttboard = ['X', 'X', 'X',
+                          'X', 'X', 'X',
+                          'X', 'X', 'X']
+        self.assertRaises(IndexError, self.player.pick_open_position, board)
+
 
 if __name__ == '__main__':
     unittest.main()
