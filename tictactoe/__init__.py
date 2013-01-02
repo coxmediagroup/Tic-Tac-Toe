@@ -129,12 +129,41 @@ def play_game(board, player1, player2):
             if position == 2 or position == 5:
                 print '-' * 5
 
-    selection = None
-    while selection != 'q':
+    while True:
         draw(board)
 
-        selection = raw_input('Pick a spot: ')
+        if None not in board.tttboard:
+            print 'No more moves left.'
+            break
 
+        # ai player logic
+        aichoice = player1.look_for_win(board)
+        if aichoice is None:
+            aichoice = player1.look_for_win(board, player2)
+
+        if aichoice is None:
+            aichoice = player1.pick_open_position(board)
+
+        board.select_position(aichoice, player1)
+        draw(board)
+        if board.check_for_win(player1):
+            print "Computer Wins!"
+            break
+
+        if None not in board.tttboard:
+            print 'No more moves left.'
+            break
+
+        # player selection
+        selection = raw_input('Pick a spot: ')
+        if selection.lower() == 'q':
+            break
+
+        board.select_position(int(selection), player2)
+        if board.check_for_win(player2):
+            # Well, this isn't supposed to happen.
+            print "You Win!"
+            break
 
 
 if __name__ == '__main__':
