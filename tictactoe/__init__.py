@@ -50,16 +50,27 @@ class Player(object):
         """
 
         self.board_value = board_value  # the value which will represent the player behind the scenes
+        self.turn_count = 0
 
 class AIPlayer(Player):
     """An AI tic tac toe player"""
 
-    # High priority board positions in order that they should be selected
-    # if the position is open and there are no higher priorities such as
-    # a winning opening or blocking a win.
-    # This is the middle and then the 4 corners, the positions with the most
-    # opportunity for leading to a win.
-    POSITION_PRIORITY = (4, 0, 2, 6, 8)
+    # These are the positions to target in order
+    # after the first turn and any checks for wins/blocks
+    # Each list index aligns with the corresponding board position
+    STRATEGIES = [(4, 8, 2),
+                  (4, 8, 6, 2, 0),
+                  (4, 6, 0),
+                  (4, 0, 2, 6, 8),
+                  None, # should not happen, we ALWAYS get this first
+                  (4, 0, 2, 6, 8),
+                  (4, 2, 8),
+                  (4, 0, 2, 6, 8),
+                  (4, 0, 6)]
+
+    def __init__(self, board_value, *args, **kwargs):
+        super(AIPlayer, self).__init__(board_value, *args, **kwargs)
+        self.strategy = None
 
     def look_for_win(self, board, player=None):
         """Find a space which allows a win for the given player"""
@@ -98,13 +109,42 @@ class AIPlayer(Player):
         # default no priority position
         selected_position = open_positions[0]
 
-        for position in AIPlayer.POSITION_PRIORITY:
+        # Now some tests to implement logic to guarantee a win
+        # which depend on which turn it is and what position
+        # player2 started with
+
+        for position in self.strategy:
             if position in open_positions:
                 selected_position = position
                 break
 
 
         return selected_position
+
+    def take_turn(self, board, other_player):
+        """Implement the logic for a single turn of the AI player"""
+
+
+        # Always pick the middle box on the first round
+        position = 4 if self.turn_count == 0 else None
+
+        if self.turn_count == 1:
+            # On the second turn, after the human player has picked
+            # their first spot so we can determine our strategy
+            assert other_player.board_value in board.tttboard
+            self.strategy = AIPlayer.STRATEGIES[board.tttboard.index(other_player.board_value)]
+
+        if position is None:
+            position = self.look_for_win(board)
+
+        if position is None:
+            position = self.look_for_win(board, other_player)
+
+        if position is None:
+            position = self.pick_open_position(board)
+
+        self.turn_count += 1
+        return position
 
 
 # A singleton object could be used for the game, but it does't really
@@ -136,15 +176,9 @@ def play_game(board, player1, player2):
             print 'No more moves left.'
             break
 
-        # ai player logic
-        aichoice = player1.look_for_win(board)
-        if aichoice is None:
-            aichoice = player1.look_for_win(board, player2)
-
-        if aichoice is None:
-            aichoice = player1.pick_open_position(board)
-
+        aichoice = player1.take_turn(board, player2)
         board.select_position(aichoice, player1)
+
         draw(board)
         if board.check_for_win(player1):
             print "Computer Wins!"
