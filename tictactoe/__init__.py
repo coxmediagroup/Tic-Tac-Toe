@@ -154,6 +154,7 @@ def play_game(board, player1, player2):
     import sys
 
     def draw(board):
+        # ANSI code to clear the screen
         print chr(27) + "[2J"
         for position, value in enumerate(board.tttboard):
             if value is None:
@@ -169,7 +170,8 @@ def play_game(board, player1, player2):
             if position == 2 or position == 5:
                 print '-' * 5
 
-    while True:
+    playing = True
+    while playing:
         draw(board)
 
         if None not in board.tttboard:
@@ -189,15 +191,22 @@ def play_game(board, player1, player2):
             break
 
         # player selection
-        selection = raw_input('Pick a spot: ')
-        if selection.lower() == 'q':
-            break
+        while True:
+            selection = raw_input('Pick a spot: ')
+            if selection.lower() == 'q':
+                playing = False
+                break
 
-        board.select_position(int(selection), player2)
-        if board.check_for_win(player2):
-            # Well, this isn't supposed to happen.
-            print "You Win!"
-            break
+            try:
+                board.select_position(int(selection), player2)
+            except PositionAlreadyTakenError:
+                print 'That position is already taken.'
+            else:
+                if board.check_for_win(player2):
+                    # Well, this isn't supposed to happen.
+                    print "You Win!"
+                    playing = False
+                break
 
 
 if __name__ == '__main__':
