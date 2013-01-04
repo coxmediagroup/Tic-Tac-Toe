@@ -6,17 +6,18 @@ import sys
 class PositionAlreadyTakenError(Exception):
     pass
 
+
 class Board(object):
     """A tic tac toe board"""
 
-    wins = ((0,1,2), # rows
-            (3,4,5),
-            (6,7,8),
-            (0,3,6), # columns
-            (1,4,7),
-            (2,5,8),
-            (0,4,8), # diagonals
-            (2,4,6))
+    wins = ((0, 1, 2), # rows
+            (3, 4, 5),
+            (6, 7, 8),
+            (0, 3, 6), # columns
+            (1, 4, 7),
+            (2, 5, 8),
+            (0, 4, 8), # diagonals
+            (2, 4, 6))
 
     def __init__(self, *args, **kwargs):
         self.tttboard = [None, None, None,
@@ -32,6 +33,7 @@ class Board(object):
         self.tttboard[position] = player.board_value
 
     def check_for_win(self, player):
+        """Check the board to see if the player has won"""
         winner = False
         for group in Board.wins:
             if self.tttboard[group[0]] == player.board_value \
@@ -50,7 +52,8 @@ class Player(object):
         board_value should be a single character to display such as X or O.
         """
 
-        self.board_value = board_value  # the value which will represent the player behind the scenes
+        # the value which will represent the player behind the scenes
+        self.board_value = board_value
         self.turn_count = 0
 
 class AIPlayer(Player):
@@ -93,7 +96,7 @@ class AIPlayer(Player):
             if len(not_mine) == 1 and not_mine[0][1] is None:
                 # Maybe this should return the selection rather than
                 # modifying the board in here.  Decide later.
-                win_spot=not_mine[0][0]
+                win_spot = not_mine[0][0]
                 break
 
         return win_spot
@@ -130,7 +133,8 @@ class AIPlayer(Player):
             # On the second turn, after the human player has picked
             # their first spot so we can determine our strategy
             assert other_player.board_value in board.tttboard
-            self.strategy = AIPlayer.STRATEGIES[board.tttboard.index(other_player.board_value)]
+            player2_position = board.tttboard.index(other_player.board_value)
+            self.strategy = AIPlayer.STRATEGIES[player2_position]
 
         if position is None:
             position = self.look_for_win(board)
