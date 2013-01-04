@@ -1,6 +1,7 @@
 """
 A simple tic tac toe game where the computer always wins or at least ties.
 """
+import sys
 
 class PositionAlreadyTakenError(Exception):
     pass
@@ -106,12 +107,9 @@ class AIPlayer(Player):
 
         open_positions = [i for i, value in enumerate(board.tttboard) if value is None]
 
-        # default no priority position
+        # default no priority position then see if there's a position open
+        # which fits the chosen strategy
         selected_position = open_positions[0]
-
-        # Now some tests to implement logic to guarantee a win
-        # which depend on which turn it is and what position
-        # player2 started with
 
         for position in self.strategy:
             if position in open_positions:
@@ -147,28 +145,29 @@ class AIPlayer(Player):
         return position
 
 
+def draw(board):
+    """Draw the game board on screen"""
+    # ANSI code to clear the screen
+    print chr(27) + "[2J"
+    for position, value in enumerate(board.tttboard):
+        if value is None:
+            sys.stdout.write(str(position))
+        else:
+            sys.stdout.write(str(value))
+
+        if (position + 1) % 3 != 0:
+            sys.stdout.write('|')
+        else:
+            print ''
+
+        if position == 2 or position == 5:
+            print '-' * 5
+
+
 # A singleton object could be used for the game, but it does't really
 # add anything other than some extra complication with the given requirements.
 def play_game(board, player1, player2):
     """The main game loop/logic"""
-    import sys
-
-    def draw(board):
-        # ANSI code to clear the screen
-        print chr(27) + "[2J"
-        for position, value in enumerate(board.tttboard):
-            if value is None:
-                sys.stdout.write(str(position))
-            else:
-                sys.stdout.write(str(value))
-
-            if (position + 1) % 3 != 0:
-                sys.stdout.write('|')
-            else:
-                print ''
-
-            if position == 2 or position == 5:
-                print '-' * 5
 
     playing = True
     while playing:
