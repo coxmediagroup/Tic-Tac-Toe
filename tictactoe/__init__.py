@@ -4,6 +4,7 @@ A simple tic tac toe game where the computer always wins or at least ties.
 import sys
 
 class PositionAlreadyTakenError(Exception):
+    """The position on the tic tac toe board is already in use."""
     pass
 
 
