@@ -62,7 +62,8 @@ class AIPlayer(Player):
 
     # These are the positions to target in order
     # after the first turn and any checks for wins/blocks
-    # Each list index aligns with the corresponding board position
+    # Each list index aligns with the corresponding board position.
+    # These assume we go first and picked the middle spot.
     STRATEGIES = [(4, 8, 2),
                   (4, 8, 6, 2, 0),
                   (4, 6, 0),
@@ -196,7 +197,7 @@ def play_game(board, player1, player2):
 
         # player selection
         while True:
-            selection = raw_input('Pick a spot: ')
+            selection = raw_input('Pick a spot("q" to quit): ')
             if selection.lower() == 'q':
                 playing = False
                 break
