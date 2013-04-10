@@ -16,23 +16,32 @@
 
 
 
-function ai_move(moves, put_down) {
+function ai_move(moves, pt) {
 
-        moves[put_down] = "player";
 
-		// Uhh this can be awesome here (isn't now)
+        moves[pt] = "player";
+
+		var pl = new Array(0,0,0,0,0,0,0,0,0,0);
+		var ai = new Array(0,0,0,0,0,0,0,0,0,0);
+
+
 		var op = new Array()
-		for ( var x = 1; x <= moves.length; x++ )
-              if ( ! moves[x-1] ) 
-                   op.push(x)
-		op.sort()
+		for ( x = 1; x <= moves.length; x++ ) 
+               if ( moves[x-1] == "player" )
+		 	        pl[x] = x; 
+			else if ( !moves[x-1] )
+                      ai[x] = x;		 
 
 
+    pt++
+//console.log((pt%3))
 
-
-		console.log(op)
-        moves[ op[0]-1] = "ai";
-
+ 	var vert = ((pt+2)%3)+1;
+    if ( vert == 2 ) vert = -1
+    else if ( vert == 3 ) vert = -2
+//    console.log(vert)                                                                              
+                                //Checks vertical row           
+     moves[(ai[5] ||   ((pl[pt+3]||pl[pt-3])||(pl[pt+6]||pl[pt-6])) && (ai[pt+3]||ai[pt-3]||ai[pt+6]||ai[pt-6] )      )-1] = "ai";
 
 
 
