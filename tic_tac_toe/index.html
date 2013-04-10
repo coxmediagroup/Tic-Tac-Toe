@@ -33,7 +33,7 @@
 
 
 
-			    <div class="span8" style="background-color: #8B99B3;"> <!--Left large conatiner-->
+			    <div class="span7"> <!--Left large conatiner-->
 
 		            <div class="row-fluid">
   	      				<div class="span11 offset1"><!--Game area section-->
@@ -52,17 +52,17 @@
 
 
 
-            <div class="span4" style="background-color: #091425; color: #6a6969; position: fixed; right: 0;"> <!--Right large conatiner-->
+            <div class="span5" style="background-color: #091425; color: #6a6969; position: fixed; right: 0;"> <!--Right large conatiner-->
 	            <h2 style="text-align: center;">Game Management</h2>
                 <div class="span12">
 		            <header>
-                        <div id="Game_nav_tabs"></div>
+                        <div id="game_nav_tabs"></div>
  	                </header>
     		    </div>
                 <div class="span11 offset1">
 	                <div class="btn-group">
-	                    <button type="button" class="btn"><i class="icon-save"></i></button>
-	                    <button id="new-Game" type="button" class="btn"><i class="icon-plus"></i></button>
+	                    <button type="button" class="btn"><i class="icon-save"  style="font-size: 150%;"></i></button>
+	                    <button id="new-Game" type="button" class="btn"><i class="icon-plus"  style="font-size: 150%;"></i></button>
 	                </div>
 	            </div>
    	 	        <div class="span10 offset1"> <!-- Game collection structure-->
@@ -115,10 +115,9 @@
 
   <script type="text/template" id="game-board-template">
    <div id="game_container">
-	   <div class="span10">
-  	  	 <div class="field_name" style="text-align: center; padding: 20px 0 20px 0;"><%- GameName %></div>
-	   </div>
-	   <div class="span10">
+	   <div class="span10 offset1">
+
+	       <div class="field_name" style="padding: 20px 0 20px 40px;"><%- GameName %></div>
 
 		   <table>
    	 	     <tr><td id="sq0" class="square" number="0"></td>
@@ -136,6 +135,7 @@
 			 <td id="sq8" class="square" number="8"></td>
 			 </tr>
    		   </table>
+		   <br>
 	 </div>
   </div>
   </script>

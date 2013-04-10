@@ -23,8 +23,8 @@
 
 .highlight {
         width: 90%;
-        padding: 10px 0 10px 0;
-        background-color: #171717;
+        padding: 7px 0 8px 0;
+        background-color:   #052243;
         -webkit-border-radius: 8px;
         -moz-border-radius: 8px;
         -ms-border-radius: 8px;
@@ -54,7 +54,7 @@
 
 #Game-list li {
         position: relative;
-        font-size: 22px;
+        font-size: 32px;
         margin: 15px 0 15px 0;
 }
 
@@ -99,11 +99,6 @@
         list-style: none;
 }
 
-#edit-list li {
-        position: relative;
-        font-size: 23px;
-}
-
 #edit-list li:last-child {
         border-bottom: none;
 }
@@ -140,17 +135,10 @@
         cursor: pointer;
 }
 
-#edit-list li .edit_summery {
-        background-color: #e3e3e3;
-        width: 60%;
-        height: 70px;
-
-        }
-
 
 .field_name {
         position: relative;
-        font-size: 24px;
+        font-size: 32px;
 
 }
 
@@ -174,7 +162,7 @@
         text-decoration: none;
         background: rgba(0, 0, 0, 0.6);
         color: #abb1b3;
-        font-size: 12px;
+        font-size: 16px;
         margin-top: 8px;
         margin-bottom: 8px;
         padding: 0 10px 1px;
@@ -223,11 +211,14 @@
 
 	background: url('../images/o_lay_down.png') no-repeat;
 
-
-
 }
 
 
+#game_nav_tabs {
+
+	font-size: 160%;
+
+}
 
 
 

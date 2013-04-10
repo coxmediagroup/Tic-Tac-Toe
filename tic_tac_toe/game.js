@@ -205,38 +205,30 @@ $(function(){
     },
 
 
-	player_move: function (square) {
+	player_move: function (put_down) {
 
         var g = this.model.get('allMoves')
-        g[square] = "player";
-		var ai_play = ai_move(parseInt(square));
-        g[ai_play] = "ai";
+        g = ai_move(g, put_down)
         this.model.set('allMoves', g)
         this.model.allmoves_save(g);
 
   	    this.render();  // this is inefficient. Use element in playermove
-	//	return ai_play;
 
 	},
 
     playerMove: function(event) {
-       this.player_move(parseInt($(event.currentTarget).attr("number")))
-       this.$(event.currentTarget).addClass("playerSymbol");
+   	   var openArea = parseInt($(event.currentTarget).attr("number"))
+       if ( ! this.model.get('allMoves')[openArea] ) {
+	       this.player_move(openArea)
+    	   this.$(event.currentTarget).addClass("playerSymbol");
+		}
+	   
+
 		//$('#sq'+ai_play).addClass("aiSymbol");
 
     },
 
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -336,7 +328,7 @@ $(function(){
       var gameView = new playGameView({model: Game});
       this.$("#play-area").append(gameView.render().el);
       var navView = new GameNavTabView({model: Game}); // Make sure that the nav tabs are rendered
-      this.$("#Game_nav_tabs").html(navView.render().el);
+      this.$("#game_nav_tabs").html(navView.render().el);
  // every time a Game is created
   
     },

@@ -14,13 +14,29 @@
 */
 
 
-function ai_move(square) {
 
 
-	
+function ai_move(moves, put_down) {
+
+        moves[put_down] = "player";
+
+		// Uhh this can be awesome here (isn't now)
+		var op = new Array()
+		for ( var x = 1; x <= moves.length; x++ )
+              if ( ! moves[x-1] ) 
+                   op.push(x)
+		op.sort()
 
 
-    return square+1
+
+
+		console.log(op)
+        moves[ op[0]-1] = "ai";
+
+
+
+
+    return moves
 
 
     }
