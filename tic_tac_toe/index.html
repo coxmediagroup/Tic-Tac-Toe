@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+  <head>
+    <title>Game Creator</title>
+    <link href="img/black_comfy_chair.ico" rel="shortcut icon">
+    <meta name="description" content="A demo of Backbone.js and Bootstrap, Surgemcgee, Robert Steckroth."/>
+    <meta name="keywords" content="Backbone.js Bootstrap Surgemcgee Robert Steckroth" />
+
+    <link href="css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="css/font_awesome/font-awesome.min.css">
+    <link rel="stylesheet" href="css/game.css">
+
+    <link rel="stylesheet" href="css/game.css">
+
+    <script language="javascript" src="javascripts/json2.js" type="text/javascript"></script>
+    <script language="javascript" src="javascripts/jquery.js" type="text/javascript"></script>
+
+    <script language="javascript" src="javascripts/underscore.js" type="text/javascript"></script>
+    <script language="javascript" src="javascripts/backbone.js" type="text/javascript"></script>
+    <script language="javascript" src="javascripts/backbone.localStorage.js" type="text/javascript"></script>
+
+    <script src="javascripts/bootstrap-dropdown.js"></script>
+
+
+    <script language="javascript" src="javascripts/game_engine.js" type="text/javascript"></script>
+
+  </head>
+  <body>
+
+    <div id="Gameapp">
+	    <div class="container-fluid">
+		    <div class="row-fluid">
+
+
+
+			    <div class="span8" style="background-color: #BF4040;"> <!--Left large conatiner-->
+
+		            <div class="row-fluid">
+  	      				<div class="span11 offset1"><!--Game area section-->
+			
+                        	<section id="play_game_main">
+		  	              		<div id="play-area"></div>
+				            </section>
+				        </div><!--Game area section-->
+                   </div>
+               </div><!--Left large conatiner-->
+ 
+
+
+
+
+
+
+
+            <div class="span4" style="background-color: #0d0d0d; color: #6a6969; position: fixed; right: 0;"> <!--Right large conatiner-->
+	            <h2 style="text-align: center;">Game Management</h2>
+                <div class="span12">
+		            <header>
+                        <div id="Game_nav_tabs"></div>
+ 	                </header>
+    		    </div>
+                <div class="span11 offset1">
+	                <div class="btn-group">
+	                    <button type="button" class="btn"><i class="icon-save"></i></button>
+	                    <button id="new-Game" type="button" class="btn"><i class="icon-plus"></i></button>
+	                </div>
+	            </div>
+   	 	        <div class="span10 offset1"> <!-- Game collection structure-->
+	                <section id="main">
+		  	    		<ul id="Game-list"></ul>
+	               </section>
+	               <footer>
+	                 <a id="clear-selected"></a>
+	               </footer>
+                </div> <!--Game collection structure-->
+           </div> <!--Right large container-->
+		</div>
+    </div><!--Gameapp-->
+
+    <script language="javascript" src="game.js" type="text/javascript"></script>
+
+
+  <!-- Templates -->
+
+  <script type="text/template" id="Game-nav-tabs-template">
+		        <ul class="nav nav-tabs">
+	                  <li id="all_tab"><a href="#">All</a></li>
+	                  <li id="won_tab"><a href="#">Won</a></li>
+	                  <li id="lost_tab"><a href="#">Lost</a></li>
+	                </ul>
+  </script>
+
+  <script type="text/template" id="Game-tree-template">
+
+    <div class="important"><span <%= important ? 'class="icon-star"' : 'class="icon-star-empty"' %> ></span></div>
+    <div class="view">
+      <div class="toggle"><%- GameName %></div>
+    </div>
+   <input class="edit" type="text" value="<%- GameName %>" />
+
+  </script>
+
+  <script type="text/template" id="stats-template">
+    <small><i>
+    <%= isEditingName ? 'Hit enter to save Game</i> (Editing '+isEditingName+')' : 'Double click to edit a Game name' %>
+    </i></small>
+   
+    <% if (isActive) { %>
+      <a id="clear-selected" class="icon-remove"> remove <%= isActive %> selected <%= isActive == 1 ? 'item' : 'items' %></a>
+    <% } %>
+  </script>
+
+
+
+
+  <script type="text/template" id="game-edit-template">
+   <div id="edit_Game_container">
+   <div class="span10">
+  	 <div class="field_name" style="text-align: center; padding: 20px 0 20px 0;"><%- GameName %></div>
+   </div>
+   <div class="span10">
+
+   <table>
+	 <tr><td id="sq1" class="square" number="1"></td>
+		 <td id="sq2" class="square" number="2"></td>
+		 <td id="sq3" class="square" number="3"></td>
+	 </tr>
+
+	 <tr><td id="sq4" class="square" number="4"></td>
+		 <td id="sq5" class="square" number="5"></td>
+		 <td id="sq6" class="square" number="6"></td>
+	 </tr>
+
+	 <tr><td id="sq7" class="square" number="7"></td>
+		 <td id="sq8" class="square" number="8"></td>
+		 <td id="sq9" class="square" number="9"></td>
+	 </tr>
+	</table>
+
+
+
+   </div>
+
+
+   </div>
+   </div>
+  </script>
+
+
+
+  </body>
+</html>
+
+
+
+
