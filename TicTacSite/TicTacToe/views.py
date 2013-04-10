@@ -10,8 +10,13 @@ def index(request):
 
     # Divide the boardstring up into a proper 3x3 tic-tac-toe board.
     board = []
-    board.append(boardstring[:3])
-    board.append(boardstring[3:6])
-    board.append(boardstring[6:9])
+    row = []
+    for i in range(0,9):
+        # determine what the board would look like if the player moved here.
+        movestring = boardstring[:i] + 'o' + boardstring[i+1:]
+        row.append([boardstring[i],movestring])
+        if i % 3 == 2:
+            board.append(row)
+            row = []
     
     return render_to_response('tictactoe.html', {'board': board})

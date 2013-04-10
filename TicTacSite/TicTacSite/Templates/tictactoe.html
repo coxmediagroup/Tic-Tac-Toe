@@ -3,7 +3,13 @@
 {% for sublist in board %}
 	<p>
 	{% for inner in sublist %}
-	    {{ inner }}
+		{% if inner.0 != 'o' and inner.0 != 'x' %}
+			<a href='/?b={{ inner.1 }}'>
+		{% endif %}
+	    {{ inner.0 }}
+	    {% if inner.0 != 'o' and inner.0 != 'x' %}
+			</a>
+		{% endif %}
 	{% endfor %}
 	</p>
 {% endfor %}
