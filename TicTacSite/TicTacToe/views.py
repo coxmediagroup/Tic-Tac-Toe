@@ -1,12 +1,15 @@
 from django.shortcuts import render_to_response
 
+# Basic tic-tac-toe program, in Django.
+# Version 1.0
+# Matthew Carson.  Wed, April 10, 2013
+
 def index(request):
     output = ""
     title = ""
     game_over = 0
-    
-    # If we didn't get a board state, or got an invalid board state,
-    # then reset the board.
+
+    # load and verify the board state
     if "b" in request.GET and len(request.GET["b"]) == 9 and len(request.GET["b"].strip('ox-')) == 0:
         boardstring = request.GET["b"]
         if player_won(boardstring):
@@ -14,6 +17,7 @@ def index(request):
             title = "You probably cheated."
             game_over = 1
         else:
+            # If the player hasn't won, then determine and apply the AI's move
             ai_choice = determine_ai_move(boardstring)
             if ai_choice is not None:
                 ai_move = ai_choice[1]
@@ -26,6 +30,7 @@ def index(request):
             title = "A strange game.  The only winning move is not to play."
             game_over = 1
     else:
+        # If we're not continuing an old game, start a new one.
         boardstring = "---------"
         output = "Click on a space to start."
         title = "Shall we play a game?"
@@ -82,6 +87,7 @@ def ai_priority(space,b):
             return 1  # victory
         if b[pair[0]] == b[pair[1]] == 'o':
             return 2  # must take this space to block defeat
+        # Assess potential forks and distractions.
         if b[pair[0]] == 'x' and b[pair[1]] == '-':
             myfork_threat += 1
             if nonthreatening_space(pair[1],b):
@@ -96,7 +102,7 @@ def ai_priority(space,b):
     if myfork_threat > 1:
         return 3 # grab a fork
     if valid_distraction > 0:
-        return 4
+        return 4 # force the enemy to make a bad move, if we can
     if theirfork_threat > 1:
         return 5 # block enemy fork
     if len(adj) == 4:
