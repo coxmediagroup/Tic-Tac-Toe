@@ -1,23 +1,20 @@
 from django.shortcuts import render_to_response
 
-# Basic tic-tac-toe program, in Django.
-# Version 1.0
-# Matthew Carson.  Wed, April 10, 2013
-
 def index(request):
     output = ""
     title = ""
-    game_over = 0
-
-    # load and verify the board state
+    game_over = False
+    first_turn = False
+    
+    # If we didn't get a board state, or got an invalid board state,
+    # then reset the board.
     if "b" in request.GET and len(request.GET["b"]) == 9 and len(request.GET["b"].strip('ox-')) == 0:
         boardstring = request.GET["b"]
         if player_won(boardstring):
             output = "You won."
             title = "You probably cheated."
-            game_over = 1
+            game_over = True
         else:
-            # If the player hasn't won, then determine and apply the AI's move
             ai_choice = determine_ai_move(boardstring)
             if ai_choice is not None:
                 ai_move = ai_choice[1]
@@ -25,15 +22,15 @@ def index(request):
                 if ai_choice[0] == 1: # a priority 1 move means we won
                     output = "The computer has won."
                     game_over = 1
-        if game_over != 1 and '-' not in boardstring:
+        if game_over != True and '-' not in boardstring:
             output = "It's a draw."
             title = "A strange game.  The only winning move is not to play."
-            game_over = 1
+            game_over = True
     else:
-        # If we're not continuing an old game, start a new one.
         boardstring = "---------"
         output = "Click on a space to start."
         title = "Shall we play a game?"
+        first_turn = True
 
     # Divide the boardstring up into a proper 3x3 tic-tac-toe board.
     board = []
@@ -45,7 +42,7 @@ def index(request):
         if i % 3 == 2:
             board.append(row)
             row = []    
-    return render_to_response('tictactoe.html', {'board': board, 'output_text':output, 'game_over':game_over, 'title':title})
+    return render_to_response('tictactoe.html', {'board': board, 'output_text':output, 'game_over':game_over, 'title':title, 'first_turn':first_turn})
 
 def determine_ai_move(board):
     """Determines the AI's move for the given boardstring."""
@@ -87,7 +84,6 @@ def ai_priority(space,b):
             return 1  # victory
         if b[pair[0]] == b[pair[1]] == 'o':
             return 2  # must take this space to block defeat
-        # Assess potential forks and distractions.
         if b[pair[0]] == 'x' and b[pair[1]] == '-':
             myfork_threat += 1
             if nonthreatening_space(pair[1],b):
@@ -102,7 +98,7 @@ def ai_priority(space,b):
     if myfork_threat > 1:
         return 3 # grab a fork
     if valid_distraction > 0:
-        return 4 # force the enemy to make a bad move, if we can
+        return 4
     if theirfork_threat > 1:
         return 5 # block enemy fork
     if len(adj) == 4:
