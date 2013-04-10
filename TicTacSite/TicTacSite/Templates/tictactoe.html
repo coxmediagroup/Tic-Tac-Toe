@@ -4,11 +4,11 @@
 {% for sublist in board %}
 	<p style="font-size:20px">
 	{% for inner in sublist %}
-		{% if inner.0 != 'o' and inner.0 != 'x' %}
+		{% if inner.0 != 'o' and inner.0 != 'x' and game_over != 1 %}
 			<a href='/?b={{ inner.1 }}'>
 		{% endif %}
 	    {{ inner.0 }}
-	    {% if inner.0 != 'o' and inner.0 != 'x' %}
+	    {% if inner.0 != 'o' and inner.0 != 'x' and game_over != 1 %}
 			</a>
 		{% endif %}
 	{% endfor %}

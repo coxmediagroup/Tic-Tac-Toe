@@ -2,16 +2,27 @@ from django.shortcuts import render_to_response
 
 def index(request):
     output = ""
+    game_over = 0
     
     # If we didn't get a board state, or got an invalid board state,
     # then reset the board.
-    if "b" in request.GET and len(request.GET["b"]) == 9:
+    if "b" in request.GET and len(request.GET["b"]) == 9 and len(request.GET["b"].strip('ox-')) == 0:
         boardstring = request.GET["b"]
-        ai_choice = determine_ai_move(boardstring)
-        if ai_choice is not None:
-            ai_move = ai_choice[1]
-            output = "AI: " + str(ai_choice)
-            boardstring = boardstring[:ai_move] + 'x' + boardstring[ai_move+1:] 
+        if player_won(boardstring):
+            output = "You won.  Somehow.  You probably cheated."
+            game_over = 1
+        else:
+            ai_choice = determine_ai_move(boardstring)
+            if ai_choice is not None:
+                ai_move = ai_choice[1]
+                output = "AI: " + str(ai_choice)
+                boardstring = boardstring[:ai_move] + 'x' + boardstring[ai_move+1:]
+                if ai_choice[0] == 1: # a priority 1 move means we won
+                    output = "The computer has won."
+                    game_over = 1
+        if game_over != 1 and '-' not in boardstring:
+            output = "It's a draw."
+            game_over = 1
     else:
         boardstring = "---------"
         output = "Shall we play a game?"
@@ -26,7 +37,7 @@ def index(request):
         if i % 3 == 2:
             board.append(row)
             row = []    
-    return render_to_response('tictactoe.html', {'board': board, 'output_text':output})
+    return render_to_response('tictactoe.html', {'board': board, 'output_text':output, 'game_over':game_over})
 
 def determine_ai_move(board):
     """Determines the AI's move for the given boardstring."""
@@ -97,7 +108,8 @@ def ai_priority(space,b):
 
 def nonthreatening_space(space,b):
     """Determines if an enemy wouldn't threaten us by taking a specific space;
-    that is, returns true if it wouldn't win or make a fork for the enemy."""
+    that is, returns true if it wouldn't win or make a fork for the enemy.
+    This lets us know that we can distract the enemy by threatening that space ourselves."""
     adj = adjacent_pairs(space)
     fork_threat = 0
     for pair in adj:
@@ -109,3 +121,24 @@ def nonthreatening_space(space,b):
     if fork_threat > 1:
         return False
     return True
+
+def player_won(b):
+    """Checks if the player has won.  Hopefully this will never be necessary,
+    but it's included for completeness (and in case the player cheats.)
+    We don't have to check if the AI has won here,
+    since it already does that when it calculates its move."""
+    lines = (
+        (0,1,2),
+        (3,4,5),
+        (6,7,8),
+        (0,3,6),
+        (1,4,7),
+        (2,5,8),
+        (0,4,8),
+        (2,4,6),
+    )
+
+    for line in lines:
+        if b[line[0]] == b[line[1]] == b[line[2]] == 'o':
+            return True
+    return False
