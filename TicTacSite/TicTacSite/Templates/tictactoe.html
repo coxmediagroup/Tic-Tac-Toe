@@ -1,7 +1,8 @@
-</br></br></br></br>
+</br></br>
 <center>
+<a href='/'>Start Over</a></br></br>
 {% for sublist in board %}
-	<p>
+	<p style="font-size:20px">
 	{% for inner in sublist %}
 		{% if inner.0 != 'o' and inner.0 != 'x' %}
 			<a href='/?b={{ inner.1 }}'>
@@ -13,4 +14,5 @@
 	{% endfor %}
 	</p>
 {% endfor %}
+{{ output_text }}
 </center>

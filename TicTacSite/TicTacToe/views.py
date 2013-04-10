@@ -1,15 +1,20 @@
 from django.shortcuts import render_to_response
 
 def index(request):
+    output = ""
+    
     # If we didn't get a board state, or got an invalid board state,
     # then reset the board.
     if "b" in request.GET and len(request.GET["b"]) == 9:
         boardstring = request.GET["b"]
-        ai_move = determine_ai_move(boardstring)
-        if ai_move:
+        ai_choice = determine_ai_move(boardstring)
+        if ai_choice is not None:
+            ai_move = ai_choice[1]
+            output = "AI: " + str(ai_choice)
             boardstring = boardstring[:ai_move] + 'x' + boardstring[ai_move+1:] 
     else:
         boardstring = "---------"
+        output = "Shall we play a game?"
 
     # Divide the boardstring up into a proper 3x3 tic-tac-toe board.
     board = []
@@ -21,7 +26,7 @@ def index(request):
         if i % 3 == 2:
             board.append(row)
             row = []    
-    return render_to_response('tictactoe.html', {'board': board})
+    return render_to_response('tictactoe.html', {'board': board, 'output_text':output})
 
 def determine_ai_move(board):
     """Determines the AI's move for the given boardstring."""
@@ -33,7 +38,7 @@ def determine_ai_move(board):
     if len(moves) == 0:
         return 
     moves.sort()
-    return moves[0][1]
+    return moves[0]
         
 
 def adjacent_pairs(space):
@@ -57,29 +62,50 @@ def ai_priority(space,b):
     adj = adjacent_pairs(space)
     myfork_threat = 0
     theirfork_threat = 0
+    valid_distraction = 0
     for pair in adj:
         if b[pair[0]] == b[pair[1]] == 'x':
             return 1  # victory
         if b[pair[0]] == b[pair[1]] == 'o':
             return 2  # must take this space to block defeat
-        if ((b[pair[0]] == 'x' and b[pair[1]] == '-')
-         or (b[pair[0]] == '-' and b[pair[1]] == 'x')):
+        if b[pair[0]] == 'x' and b[pair[1]] == '-':
             myfork_threat += 1
+            if nonthreatening_space(pair[1],b):
+                valid_distraction = 1
+        elif b[pair[0]] == '-' and b[pair[1]] == 'x':
+            myfork_threat += 1
+            if nonthreatening_space(pair[0],b):
+                valid_distraction = 1
         if ((b[pair[0]] == 'o' and b[pair[1]] == '-')
          or (b[pair[0]] == '-' and b[pair[1]] == 'o')):
             theirfork_threat += 1
     if myfork_threat > 1:
         return 3 # grab a fork
+    if valid_distraction > 0:
+        return 4
     if theirfork_threat > 1:
-        return 4 # block enemy fork
+        return 5 # block enemy fork
     if len(adj) == 4:
-        return 5 # grab center space
-    if ((space == 1 and b[8] == 'o') or
-        (space == 8 and b[1] == 'o') or
+        return 6 # grab center space
+    if ((space == 0 and b[8] == 'o') or
+        (space == 8 and b[0] == 'o') or
         (space == 2 and b[6] == 'o') or
         (space == 6 and b[2] == 'o')):
-        return 6 # grab corner if opposite corner is taken
-    return 10 - len(adj) # finally, corners are worth more than sides
+        return 7 # grab corner if opposite corner is taken
+    return 11 - len(adj) # finally, corners are worth more than sides
     
 
-    
+def nonthreatening_space(space,b):
+    """Determines if an enemy wouldn't threaten us by taking a specific space;
+    that is, returns true if it wouldn't win or make a fork for the enemy."""
+    adj = adjacent_pairs(space)
+    fork_threat = 0
+    for pair in adj:
+        if b[pair[0]] == b[pair[1]] == 'o':
+            return False
+        if ((b[pair[0]] == 'o' and b[pair[1]] == '-')
+         or (b[pair[0]] == '-' and b[pair[1]] == 'o')):
+            fork_threat += 1
+    if fork_threat > 1:
+        return False
+    return True
