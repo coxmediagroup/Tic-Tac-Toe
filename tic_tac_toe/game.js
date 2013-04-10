@@ -2,8 +2,6 @@
 $(function(){
   // Game Model
 
-
-
   var Game = Backbone.Model.extend({
 
     defaults: function() {
@@ -14,13 +12,16 @@ $(function(){
         isEditingName: false,
         important: false,
         navTab: "all_tab",
-		boardGame: new Board()
+        allMoves: [false,false,false,false,false,false,false,false,false]
       };
     },
 
     initialize: function() {
       if ( !this.get("GameName") ) 
            this.set({"GameName": this.defaults().GameName});
+
+      if ( !this.get("allMoves") ) 
+           this.set({"allMoves": this.defaults().allMoves});
     
      },
 
@@ -33,11 +34,16 @@ $(function(){
     setEditingName: function() {
       this.save({isEditingName: true}); },
 
-//    saveGame: function() {
-  //    this.save({isEditingName: true}); },
+	allmoves_save: function(ar){
+		this.save({allMoves: ar});
+
+},
 
 
   });
+
+
+  
 
   // Game Collection
   // ---------------
@@ -77,11 +83,13 @@ $(function(){
       return Game.get('order');
     }
 
+
+
+
   });
 
   // Create our global collection of **Games**.
   var Games = new GameList;
-
   var GameView = Backbone.View.extend({
     tagName:  "li",
     // Cache the template function for a single item.
@@ -159,10 +167,13 @@ $(function(){
   });
 
 
+//      this.model.set('GameName', this.model.get("GameName")+" "+Games.indexOf(this.model))
+
+
 
   var playGameView = Backbone.View.extend({
-    tagName:  "li",
-    template: _.template($('#game-edit-template').html()),
+    tagName:  "div",
+    template: _.template($('#game-board-template').html()),
 
     events: {
       "click .square" : "playerMove"
@@ -180,26 +191,58 @@ $(function(){
     render: function() {
       if ( this.model.get('isActive') ) {
 	      this.$el.html(this.template(this.model.toJSON()) );
-	      this.input = this.$('.edit_summery'); }
+                    }
        else {
-              this.$('#edit_Game_container').remove(); }
-		var f = this.model.get('boardGame');
+              this.$('#game_container').remove(); }
+		var f = this.model.get('allMoves');
 		for ( var a = 0; a < 9; a++ ) 
-		      if ( f.player_moves[a] )
-    	           this.$('#sq'+a).addClass("playerSymbol");
+            if ( f[a] )
+                 if ( f[a] == "player" ) 
+                      this.$('#sq'+a).addClass("playerSymbol"); 
+                 else this.$('#sq'+a).addClass("aiSymbol"); 
+
       return this;
     },
 
-    // Switch this view into `"editing"` mode, displaying the input field.
+
+	player_move: function (square) {
+
+        var g = this.model.get('allMoves')
+        g[square] = "player";
+		var ai_play = ai_move(parseInt(square));
+        g[ai_play] = "ai";
+        this.model.set('allMoves', g)
+        this.model.allmoves_save(g);
+
+  	    this.render();  // this is inefficient. Use element in playermove
+	//	return ai_play;
+
+	},
+
     playerMove: function(event) {
- 	   var f = this.model.get('boardGame');
-       console.log(f.player_moves)
-	   f.ai_move($(event.currentTarget).attr("number"));
-   	   this.$(event.currentTarget).addClass("playerSymbol");
-       this.model.save({'boardGame': f});
+       this.player_move(parseInt($(event.currentTarget).attr("number")))
+       this.$(event.currentTarget).addClass("playerSymbol");
+		//$('#sq'+ai_play).addClass("aiSymbol");
+
     },
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -279,7 +322,6 @@ $(function(){
          }
       else {
              this.main.hide();
-             this.header.hide();
              this.footer.hide();
              this.playGame.hide(); // Turn off nav tabs if there are no Games
            }
@@ -291,10 +333,11 @@ $(function(){
     addOne: function(Game) {
       var treeView = new GameView({model: Game});
       this.$("#Game-list").append(treeView.render().el);
-      var editView = new playGameView({model: Game});
-      this.$("#play-area").append(editView.render().el);
+      var gameView = new playGameView({model: Game});
+      this.$("#play-area").append(gameView.render().el);
       var navView = new GameNavTabView({model: Game}); // Make sure that the nav tabs are rendered
-      this.$("#Game_nav_tabs").html(navView.render().el); // every time a Game is created
+      this.$("#Game_nav_tabs").html(navView.render().el);
+ // every time a Game is created
   
     },
 

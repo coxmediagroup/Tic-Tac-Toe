@@ -33,7 +33,7 @@
 
 
 
-			    <div class="span8" style="background-color: #BF4040;"> <!--Left large conatiner-->
+			    <div class="span8" style="background-color: #8B99B3;"> <!--Left large conatiner-->
 
 		            <div class="row-fluid">
   	      				<div class="span11 offset1"><!--Game area section-->
@@ -52,7 +52,7 @@
 
 
 
-            <div class="span4" style="background-color: #0d0d0d; color: #6a6969; position: fixed; right: 0;"> <!--Right large conatiner-->
+            <div class="span4" style="background-color: #091425; color: #6a6969; position: fixed; right: 0;"> <!--Right large conatiner-->
 	            <h2 style="text-align: center;">Game Management</h2>
                 <div class="span12">
 		            <header>
@@ -84,10 +84,10 @@
 
   <script type="text/template" id="Game-nav-tabs-template">
 		        <ul class="nav nav-tabs">
-	                  <li id="all_tab"><a href="#">All</a></li>
-	                  <li id="won_tab"><a href="#">Won</a></li>
-	                  <li id="lost_tab"><a href="#">Lost</a></li>
-	                </ul>
+	                  <li id="all_tab"><a href="">All</a></li>
+	                  <li id="won_tab"><a href="">Won</a></li>
+	                  <li id="lost_tab"><a href="">Lost</a></li>
+	            </ul>
   </script>
 
   <script type="text/template" id="Game-tree-template">
@@ -113,37 +113,31 @@
 
 
 
-  <script type="text/template" id="game-edit-template">
-   <div id="edit_Game_container">
-   <div class="span10">
-  	 <div class="field_name" style="text-align: center; padding: 20px 0 20px 0;"><%- GameName %></div>
-   </div>
-   <div class="span10">
+  <script type="text/template" id="game-board-template">
+   <div id="game_container">
+	   <div class="span10">
+  	  	 <div class="field_name" style="text-align: center; padding: 20px 0 20px 0;"><%- GameName %></div>
+	   </div>
+	   <div class="span10">
 
-   <table>
-	 <tr><td id="sq1" class="square" number="1"></td>
-		 <td id="sq2" class="square" number="2"></td>
-		 <td id="sq3" class="square" number="3"></td>
-	 </tr>
+		   <table>
+   	 	     <tr><td id="sq0" class="square" number="0"></td>
+	 		 <td id="sq1" class="square" number="1"></td>
+			 <td id="sq2" class="square" number="2"></td>
+			 </tr>
 
-	 <tr><td id="sq4" class="square" number="4"></td>
-		 <td id="sq5" class="square" number="5"></td>
-		 <td id="sq6" class="square" number="6"></td>
-	 </tr>
+			 <tr><td id="sq3" class="square" number="3"></td>
+			 <td id="sq4" class="square" number="4"></td>
+			 <td id="sq5" class="square" number="5"></td>
+			 </tr>
 
-	 <tr><td id="sq7" class="square" number="7"></td>
-		 <td id="sq8" class="square" number="8"></td>
-		 <td id="sq9" class="square" number="9"></td>
-	 </tr>
-	</table>
-
-
-
-   </div>
-
-
-   </div>
-   </div>
+			 <tr><td id="sq6" class="square" number="6"></td>
+			 <td id="sq7" class="square" number="7"></td>
+			 <td id="sq8" class="square" number="8"></td>
+			 </tr>
+   		   </table>
+	 </div>
+  </div>
   </script>
 
 

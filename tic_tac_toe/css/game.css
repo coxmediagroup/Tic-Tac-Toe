@@ -214,10 +214,14 @@
 
 }
 
-
 .playerSymbol {
 
 	background: url('../images/x_lay_down.png') no-repeat;
+}
+
+.aiSymbol {
+
+	background: url('../images/o_lay_down.png') no-repeat;
 
 
 

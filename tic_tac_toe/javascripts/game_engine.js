@@ -14,19 +14,16 @@
 */
 
 
-
-var Board = function () {
-
-	this.ai_move = function (square) {
-	    this.player_moves[square] = true
-     };
-
-    this.player_moves = [false,false,false,false,false,false,false,false,false];
-
-};
+function ai_move(square) {
 
 
+	
 
+
+    return square+1
+
+
+    }
 
 
 
