@@ -1,8 +1,9 @@
+<title>{{title}}</title>
 </br></br>
-<center>
-<a href='/'>Start Over</a></br></br>
+<p style="text-align:center">
+<a href='/'>Start Over</a></p>
 {% for sublist in board %}
-	<p style="font-size:20px">
+	<p style="font-size:20px;text-align:center">
 	{% for inner in sublist %}
 		{% if inner.0 != 'o' and inner.0 != 'x' and game_over != 1 %}
 			<a href='/?b={{ inner.1 }}'>
@@ -14,5 +15,4 @@
 	{% endfor %}
 	</p>
 {% endfor %}
-{{ output_text }}
-</center>
+<p style="text-align:center">{{ output_text }}</p>
