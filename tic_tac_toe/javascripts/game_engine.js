@@ -17,43 +17,23 @@
 
 
 function ai_move(moves, pt) {
-
-
         moves[pt] = "player";
-
 		var pl = new Array(0,0,0,0,0,0,0,0,0,0);
 		var ai = new Array(0,0,0,0,0,0,0,0,0,0);
-
-
-		var op = new Array()
+		var t = 0;
 		for ( x = 1; x <= moves.length; x++ ) 
                if ( moves[x-1] == "player" )
 		 	        pl[x] = x; 
 			else if ( !moves[x-1] )
-                      ai[x] = x;		 
+                      ai[x] = x; 		 
 
-
-    pt++
-//console.log((pt%3))
-
- 	var vert = ((pt+2)%3)+1;
-    if ( vert == 2 ) vert = -1
-    else if ( vert == 3 ) vert = -2
-//    console.log(vert)                                                                              
-                                //Checks vertical row           
-     moves[(ai[5] ||   ((pl[pt+3]||pl[pt-3])||(pl[pt+6]||pl[pt-6])) && (ai[pt+3]||ai[pt-3]||ai[pt+6]||ai[pt-6] )      )-1] = "ai";
-
-
-
-    return moves
-
-
+     pt++;
+     moves[(ai[5]||((pl[pt+3]||pl[pt-3])||(pl[pt+6]||pl[pt-6])) && (ai[pt+3]||ai[pt-3]||ai[pt+6]||ai[pt-6] )||ai[1]||ai[3]||ai[7]||ai[9]||ai.sort(function(a,b){return !a && b+(0.5 - Math.random());})[0] )-1]="ai";
+     return moves
     }
 
 
-
-
-
+// && 0.5 - Math.random();
 
 
 
