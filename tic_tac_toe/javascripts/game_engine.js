@@ -33,7 +33,7 @@ function ai_move(moves, pt) {
 		var f3 = ff-pt+2-(pt-ff+1);
         if ( pt == ff+2 ) { f2=-2; f3=-1; }
 	    pt++
-        moves[(ai[5]|| ( (pl[pt+f2]||pl[pt+f3])&&(ai[pt+f2]||ai[pt+f3]) ) ||   ((pl[pt+3]||pl[pt-3])||(pl[pt+6]||pl[pt-6]))&&(ai[pt+3]||ai[pt-3]||ai[pt+6]||ai[pt-6])    ||ai[1]||ai[3]||ai[9]||ai[7]||ai.sort(function(a,b){return !a && b+(0.5-Math.random())})[0] )-1]="ai";
+        moves[(ai[5]|| ( (pl[pt+f2]||pl[pt+f3])&&(ai[pt+f2]||ai[pt+f3]) ) ||   ((pl[pt+3]||pl[pt-3])||(pl[pt+6]||pl[pt-6]))&&(ai[pt+3]||ai[pt-3]||ai[pt+6]||ai[pt-6])    ||ai[1]||ai[3]||ai[7]||ai[9]||ai.sort(function(a,b){return !a && b+(0.5-Math.random())})[0] )-1]="ai";
 
         return moves
        }
