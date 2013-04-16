@@ -1,0 +1,27 @@
+/* Styles specific to the Tic Tac Toe index page */
+
+#mainContainer {
+    position: relative;
+    width: 310px;
+    left: 50%;
+    margin: 20px 0 0 -155px;
+    text-align: center;
+}
+
+.tile {
+    font-size: 90px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 100px;
+    cursor: pointer;
+    display: block;
+    float: left;
+    width:100px;
+    height: 100px;
+    border: 1px solid #e1e1e1;
+    color: #99c;
+}
+
+.humanTile {
+    color: #c99;
+}
