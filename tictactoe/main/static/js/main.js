@@ -44,7 +44,7 @@ viewModel = function() {
     self.getAIMove = function() {
         self.canPlaceMarker(false);
         $.ajax({
-            url: '/api/',
+            url: '/ai/',
             type: 'POST',
             data: ko.toJSON(self.markers),
             success: function(data) {
@@ -59,11 +59,11 @@ viewModel = function() {
                             toastr.success('AI has won the game.');
                             break;
                         default:
-                            toastr.info('The game has ended in a draw.');
+                            toastr.info('A strange game. The only winning move is not to play. How about a nice game of chess?');
                             break;
                     }
-                } else {
-                    // No winner, so place marker chosen by AI.
+                } 
+                if( data.AIMarker != null ) {
                     self.markers()[data.AIMarker].choose();
                 }
             }

@@ -15,13 +15,13 @@ def isWin(board):
            True if board in winning state. Else False
     """
     for i in range(3):
-        if len(set(board[i*3:i*3+3])) is  1 and board[i*3] is not '-': return True
+        if len(set(board[i*3:i*3+3])) == 1 and board[i*3] != '-': return True
     for i in range(3):
-       if (board[i] is board[i+3]) and (board[i] is  board[i+6]) and board[i] is not '-':
+       if (board[i] == board[i+3]) and (board[i] == board[i+6]) and board[i] != '-':
            return True
-    if board[0] is board[4] and board[4] is board[8] and board[4] is not '-':
+    if board[0] == board[4] == board[4] == board[8] == board[4] is not '-':
         return  True
-    if board[2] is board[4] and board[4] is board[6] and board[4] is not '-':
+    if board[2] == board[4] == board[4] == board[6] == board[4] is not '-':
         return  True
     return False
  
@@ -48,7 +48,7 @@ def nextMove(board,player):
         else: return 1,-1
     res_list=[]
     c= board.count('-')
-    if  c is 0:
+    if  c == 0:
         return 0,-1
     _list=[]
     for i in range(len(board)):
@@ -59,7 +59,7 @@ def nextMove(board,player):
         ret,move=nextMove(board,nextplayer)
         res_list.append(ret)
         board[i]='-'
-    if player is 'X':
+    if player == 'X':
         maxele=max(res_list)
         return maxele,_list[res_list.index(maxele)]
     else :

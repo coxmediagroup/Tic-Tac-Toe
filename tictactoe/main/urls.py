@@ -3,5 +3,5 @@ from main import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^api/$', views.processAJAXRequest, name='processAJAXRequest'),
+    url(r'^ai/$', views.processAJAXRequest, name='processAJAXRequest'),
 )

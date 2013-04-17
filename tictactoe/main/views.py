@@ -37,7 +37,6 @@ def processAJAXRequest(request):
     }
 
     boardMatrixList = getMatrixFromJSON(request)
-    testList = ['O','X','0','-','X','-','-','-','-']
 
     if isWin(boardMatrixList):
         # Human player is grand master of Tic Tac Toe and has won... somehow
@@ -61,6 +60,6 @@ def processAJAXRequest(request):
     boardMatrixList[AIMove[1]] = 'O'
     if isWin(boardMatrixList):
         responseDict['gameOver'] = True
-        responseDict['winner'] = '0'
+        responseDict['winner'] = 'O'
 
     return HttpResponse(json.dumps(responseDict), content_type='application/json') 
