@@ -42,18 +42,16 @@ viewModel = function() {
     };
     
     self.getAIMove = function() {
-        // One step at a time... UI, then AI. :)
-        /*self.canPlaceMarker(false);
+        self.canPlaceMarker(false);
         $.ajax({
-            url: '',
+            url: '/api/',
             type: 'POST',
             data: ko.toJSON(self.markers),
             success: function(data) {
-                dataParsed = $.parseJSON(data);
                 // We have a winner! End game and display notification.
-                if( dataParsed.gameOver ) {
+                if( data.gameOver ) {
                     self.gameIsOver(true);
-                    switch(dataParsed.winner) {
+                    switch(data.winner) {
                         case 'X':
                             toastr.success('You won... but HOW??'); // Inconceivable!
                             break;
@@ -66,10 +64,10 @@ viewModel = function() {
                     }
                 } else {
                     // No winner, so place marker chosen by AI.
-                    self.markers()[dataParsed.AIMarker].choose();
+                    self.markers()[data.AIMarker].choose();
                 }
             }
-        });*/
+        });
     };
     
     self.requestReset = function() {
