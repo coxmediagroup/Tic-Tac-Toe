@@ -3,9 +3,7 @@ My name is Mike Dunn.  I normally go by the handle eikonomega, but since this re
 I put it under a super secret codename 'eikonalpha' so that I don't advertise to my current
 employer that I'm interested in joining your team.
 
-##### Blah Blah Blah
-For more info on me you can visit:
-
+##### More About Me (Blah Blah Blah)
 1. [LinkedIn Profile](http://www.linkedin.com/profile/view?id=50728915&trk=tab_pro) / [Careers 2.0 Profile](http://careers.stackoverflow.com/eikonomega)
 2. [Real Github Account](https://github.com/eikonomega)
 3. [Development Blog](http://www.developerimprovethyself.com)
