@@ -18,8 +18,10 @@ def collect_player_symbol():
     print 'Great!'
     return player_symbol
 
-def collect_player_move():
-    print "It's your turn! To make a move, enter the x,y coordinates of space you want (ex. 0,2), or enter 'q' to quit at any time."
+def collect_player_move(player_symbol):
+    print ("It's your turn! You are {0}'s. To make a move, enter "
+           "the x,y coordinates of space you want (ex. 0,2), or "
+           "enter 'q' to quit at any time.".format(player_symbol))
 
     move = None
     while not move:
@@ -61,7 +63,7 @@ def start_game():
             print board.display_str
 
         if player_turn:
-            move = collect_player_move()
+            move = collect_player_move(player_symbol)
             if move.string == 'q':
                 print "Thanks for playing!"
                 sys.exit(0)
