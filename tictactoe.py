@@ -3,8 +3,6 @@ import sys
 
 from gameboard import GameBoard
 
-MOVE_PATTERN = "^(q|\(?(?P<x>[0-2]),?(?P<y>[0-2])\)?)$"
-
 def collect_player_symbol():
     print "Before we start, Would you like to be X's or O's? (x/o)"
 
@@ -20,17 +18,17 @@ def collect_player_symbol():
 
 def collect_player_move(player_symbol):
     print ("It's your turn! You are {0}'s. To make a move, enter "
-           "the x,y coordinates of space you want (ex. 0,2), or "
+           "the id/index of the space you want (ex. 5), or "
            "enter 'q' to quit at any time.".format(player_symbol))
 
     move = None
     while not move:
         move_input = raw_input().lower().strip()
-        move = re.match(MOVE_PATTERN, move_input)
+        move = re.match("^(q|[0-8])$", move_input)
         if not move:
-            print "'{0}' is not a valid move. Please use x,y coordinates. For example: 0,2".format(move_input)
+            print "'{0}' is not a valid move. Please use a single integer. For example: 5".format(move_input)
 
-    return move
+    return move.string
 
 def collect_yes_or_no(question):
     print '{0} (y/n)'.format(question)
@@ -53,28 +51,28 @@ def start_game():
     
     board = None
     while True:
-        if not board or not board.moves_available:
+        if not board:
             player_symbol = collect_player_symbol()
             player_turn = collect_yes_or_no('Would you like to have the first turn?')
             board = GameBoard('X' if player_symbol == 'O' else 'O')
             print ("Let's begin!\n"
                    "The image below is a view of the initial gameboard.  "
                    "As you can see, there are no X's or O's yet.")
-            print board.display_str
+            print board.display
 
         if player_turn:
             move = collect_player_move(player_symbol)
-            if move.string == 'q':
+            if move == 'q':
                 print "Thanks for playing!"
                 sys.exit(0)
 
-            board.make_move(int(move.group('x')), 
-                            int(move.group('y')), 
-                            player_symbol)
+            board.make_move_by_index(int(move), player_symbol)
+            print 'Nice move! Here is what the game board looks like now:'
         else:
             board.move()
-        
-        print board.display_str
+            print "Here is what the game board looks like after your opponent's move:"
+
+        print board.display
         
         if not board.moves_available:
             if board.winner:
@@ -85,6 +83,8 @@ def start_game():
             if not collect_yes_or_no('Would you like to play again?'):
                 print "Thanks for playing!"
                 sys.exit(0)
+
+            board = None
 
         player_turn = not player_turn
 
