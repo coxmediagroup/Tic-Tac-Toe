@@ -1,3 +1,16 @@
+## Greetings
+My name is Mike Dunn.  I normally go by the handle eikonomega, but since this repo is public, 
+I put it under a super secret codename 'eikonalpha' so that I don't advertise to my current
+employer that I'm interested in joining your team.
+
+##### Blah Blah Blah
+For more info on me you can visit:
+
+1. [LinkedIn Profile](http://www.linkedin.com/profile/view?id=50728915&trk=tab_pro) / [Careers 2.0 Profile](http://careers.stackoverflow.com/eikonomega)
+2. [Real Github Account](https://github.com/eikonomega)
+3. [Development Blog](http://www.developerimprovethyself.com)
+3. [SaaS Website](http://www.doulaexchange.com)
+
 ### Project Summary
 To create an interactive tic-tac-toe game in which the computer can never lose.  
 
@@ -18,9 +31,4 @@ I imagine many of your media sites would include.
 5. Demonstrate deployment experience by making the project available on the web via Heroku.
 6. Demonstrate the ability to write clearly and cohesively (I'm in trouble if I haven't accomplished this already).
 
-### Me and My Skillz
-For more info on me you can visit:
 
-1. [LinkedIn Profile](http://www.linkedin.com/profile/view?id=50728915&trk=tab_pro) / [Careers 2.0 Profile](http://careers.stackoverflow.com/eikonomega)
-2. [Development Blog](http://www.developerimprovethyself.com)
-3. [SaaS Website](http://www.doulaexchange.com)
