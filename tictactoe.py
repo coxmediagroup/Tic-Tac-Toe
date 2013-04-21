@@ -1,3 +1,12 @@
+'''
+Interactive script to play a single-player game of Tic-Tac-Toe
+against an AI opponent.
+
+To begin, run::
+
+    $ python tictactoe.py
+
+'''
 import re
 import sys
 
@@ -10,14 +19,15 @@ def collect_player_symbol():
     while player_symbol is None:
         player_symbol = raw_input().upper().strip()
         if player_symbol not in ('X', 'O'):
-            print "'{0}' is not a valid decision.  Please enter 'x' or 'o'.".format(player_symbol)
+            print ("'{0}' is not a valid decision.  "
+                   "Please enter 'x' or 'o'.".format(player_symbol))
             player_symbol = None
 
     print 'Great!'
     return player_symbol
 
 def collect_player_move(player_symbol):
-    print ("It's your turn! You are {0}'s. To make a move, enter "
+    print ("It's your turn! You are {0}'s.  To make a move, enter "
            "the id/index of the space you want (ex. 5), or "
            "enter 'q' to quit at any time.".format(player_symbol))
 
@@ -26,7 +36,8 @@ def collect_player_move(player_symbol):
         move_input = raw_input().lower().strip()
         move = re.match("^(q|[0-8])$", move_input)
         if not move:
-            print "'{0}' is not a valid move. Please use a single integer. For example: 5".format(move_input)
+            print ("'{0}' is not a valid move.  Please use a single integer. "
+                   "For example: 5".format(move_input))
 
     return move.string
 
@@ -41,7 +52,8 @@ def collect_yes_or_no(question):
         elif player_input in ('n', 'no'):
             answer = False
         else:
-            print "'{0}' is not a valid decision. Please enter 'y' or 'n'.".format(player_input)
+            print ("'{0}' is not a valid decision.  "
+                   "Please enter 'y' or 'n'.".format(player_input))
 
     print 'OK!'
     return answer
@@ -53,7 +65,7 @@ def start_game():
     while True:
         if not board:
             player_symbol = collect_player_symbol()
-            player_turn = collect_yes_or_no('Would you like to have the first turn?')
+            player_turn = collect_yes_or_no('Would you like the first move?')
             board = GameBoard('X' if player_symbol == 'O' else 'O')
             print ("Let's begin!\n"
                    "The image below is a view of the initial gameboard.  "

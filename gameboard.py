@@ -1,5 +1,21 @@
 class GameBoard(object):
+    '''
+    Abstraction of a Tic-Tac-Toe gameboard that provides
+    methods to manage moves, determine when there is a draw and
+    determine when there is a winner.
+    
+    The make_move_by_index() method is intended for input by human players.
+    The move() method is intended to automate a move by the gameboard itself.
+
+    '''
     def __init__(self, symbol):
+        '''
+        :param symbol: symbol the gameboard will use for it's moves
+        :type symbol: string
+
+        '''
+        assert symbol in ('X', 'O')
+
         self._symbol = symbol
         self._spaces = [1, 2, 4, 
                         8, 16, 32, 
@@ -111,8 +127,10 @@ class GameBoard(object):
             return self._make_move_by_value(self._critical_move, self._symbol)
         else:
             move = self._find_best_move()
-            return self._make_move_by_value(move, self._symbol)
-    
+            if move: return self._make_move_by_value(move, self._symbol)
+
+        return False
+
     def _make_move_by_value(self, value, symbol):
         '''
         Places a symbol on a space on the board
@@ -126,6 +144,9 @@ class GameBoard(object):
         :rtype: bool
 
         '''
+        assert value in self._spaces
+        assert symbol in ('X', 'O')
+
         if value in self._moves:
             return False
         
@@ -146,7 +167,7 @@ class GameBoard(object):
         4. Any edge space
         
         :returns: value of the best space available
-        :rtype: int
+        :rtype: int; None if there are no spaces available
 
         '''
         if 16 not in self._moves:
@@ -167,7 +188,7 @@ class GameBoard(object):
                 return space
 
         return None
-    
+
     def _space_taken(self, space, symbol):
         '''
         Determines whether or not one or more spaces 
