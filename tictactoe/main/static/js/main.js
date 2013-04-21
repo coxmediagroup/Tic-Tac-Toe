@@ -27,6 +27,10 @@ viewModel = function() {
     self.canPlaceMarker = ko.observable(true);
     
     self.chooseMarker = function(marker) {
+        if( self.gameIsOver() ) {
+           toastr.error('Game is over. Start new game, to place marker.');
+           return false; 
+        }
         if( self.canPlaceMarker()) {
             self.gameInProgress(true);
             self.canPlaceMarker(false);
@@ -34,10 +38,10 @@ viewModel = function() {
                 self.getAIMove();
             } else {
                 toastr.error('The tile you chose already contains a marker.');
+                self.canPlaceMarker(true);
             }
-            self.canPlaceMarker(true);
         } else {
-            toastr.warning('Wait for AI to make its move.');
+            toastr.error('Wait for AI to make its move.');
         }
     };
     
@@ -65,6 +69,7 @@ viewModel = function() {
                 } 
                 if( data.AIMarker != null ) {
                     self.markers()[data.AIMarker].choose();
+                    self.canPlaceMarker(true);
                 }
             }
         });
@@ -82,6 +87,7 @@ viewModel = function() {
     self.initializeGame = function() {
         self.markers.removeAll();
         self.gameInProgress(false);
+        self.canPlaceMarker(true);
         self.gameIsOver(false);
 
         // Push 9 new markers into markers observable array, to represent our game matrix.
