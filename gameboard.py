@@ -20,12 +20,21 @@ class GameBoard(object):
         self._spaces = [1, 2, 4, 
                         8, 16, 32, 
                         64, 128, 256]
-
         self._corners = [1, 4, 64, 256]
 
+        ''' 
+        "best corners" maps by index to the self._spaces structure.
+        Purpose illustrated by example:
+            If the human player takes space 32 (index 5), the AI player
+            will use this structure to determine which corners should
+            have high priority and try corners 1 and 64 before attempting
+            any others.
+        '''
         self._best_corners = [[256], [64, 256], 64,
                               [4, 256], [], [1, 64],
                               [4], [1, 4], [1]]
+        
+        ''' All "win" combinations keyed on their sums. '''
         wins = [[1, 2, 4],
               [8, 16, 32],
               [64, 128, 256],
@@ -36,8 +45,19 @@ class GameBoard(object):
               [4, 16, 64]]
         self._wins = dict([(sum(x), x) for x in wins])
 
+        ''' Move history '''
         self._moves = []
+        
+        ''' 
+        A "player snapshot" here is the sum of the values 
+        of the spaces owned by a player 
+        '''
         self._snapshots = {'X': 0, 'O': 0}
+        
+        ''' 
+        holds any move that is critical to a win 
+        or a block on the next move 
+        '''
         self._critical_move = None
 
     @property
