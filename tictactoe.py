@@ -1,5 +1,7 @@
 #Authored by: Ronald Braly
 
+import os
+
 PLAYER = ['X', 'O']
 
 def init_board():
@@ -22,7 +24,6 @@ def show_board(board):
     print row_str
 
 def get_input(board, player):
-  print "line 22"
   try:
     row_coord = input("Player %s: Enter Row (1,2, or 3)" %player)
     row_coord = int(row_coord) - 1
@@ -39,7 +40,7 @@ def get_input(board, player):
     coord = (row_coord, column_coord)
 
     if board[coord] != '-':
-      print "position %s has already been played." %str(coord)
+      print "position %s, %s has already been played." %(row_coord + 1, column_coord + 1)
       return None
 
     return coord
@@ -49,7 +50,24 @@ def get_input(board, player):
     return None
 
 def update_board(board, player, move_coord):
-  board[move_coord] = player  
+  board[move_coord] = player
+
+def is_game_over(board):
+  has_won, winning_player = player_has_won(board)
+  if has_won:
+    return (True, winning_player)
+  if no_more_moves(board):
+    return (True, "tie")
+  return (False, None)
+
+def player_has_won(board):
+  return False, ''
+
+def no_more_moves(board):
+  if '-' in board.values():
+    return False
+  return True
+  
 
 def run():
 
@@ -58,14 +76,28 @@ def run():
   show_board(board)
   curr_turn = 0
   curr_player = PLAYER[curr_turn%2]
+  game_is_over = False
 
-  while move_coord:
-    move_coord = get_input(board, curr_player)
-    print ''
-    update_board(board, curr_player, move_coord)
+  while not game_is_over:
+    
+    os.system('clear')
     show_board(board)
+    print ''
+    move_coord = get_input(board, curr_player)
+    while not move_coord:
+      move_coord = get_input(board, curr_player)
+    update_board(board, curr_player, move_coord)
+    (game_is_over, winning_player) = is_game_over(board)
+    print str((game_is_over, winning_player))
+    if game_is_over:
+      break
     curr_turn += 1
     curr_player = PLAYER[curr_turn%2]
+
+  os.system('clear')
+  show_board(board)
+  print ''
+  print "Game Over. Winner is:  " + winning_player
 
 if __name__=="__main__":
   run()
