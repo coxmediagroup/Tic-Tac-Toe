@@ -2,7 +2,7 @@
 
 import os
 
-PLAYER = ['X', 'O']
+PLAYERS = ['X', 'O']
 CENTER = (1,1)
 CORNERS = [(0,0),(0,2),(2,0),(2,2)]
 DIAGONALS = [[(0,0),(1,1),(0,2)],[(2,0),(0,0),(2,2)]]
@@ -214,7 +214,7 @@ def run():
   board = init_board()
   show_board(board)
   curr_turn = 0
-  curr_player = PLAYER[curr_turn%2]
+  curr_player = PLAYERS[curr_turn%2]
   game_is_over = False
 
   while not game_is_over:
@@ -233,7 +233,7 @@ def run():
     if game_is_over:
       break
     curr_turn += 1
-    curr_player = PLAYER[curr_turn%2]
+    curr_player = PLAYERS[curr_turn%2]
     move_coord = None
 
   os.system('clear')
