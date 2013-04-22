@@ -61,6 +61,24 @@ def is_game_over(board):
   return (False, None)
 
 def player_has_won(board):
+
+  #check for three across
+  for i in range(3):
+    if (board[(i,0)] != '-'
+        and board[(i,0)] == board[(i,1)]
+        and board[(i,1)] == board[(i,2)]):
+      return True, board[(i,0)]
+
+  #check for three down
+  for i in range(3):
+    if (board[(0,i)] != '-'
+        and board[(0,i)] == board[(1,i)]
+        and board[(1,i)] == board[(2,i)]):
+      return True, board[(0,i)]
+
+  #check 3 diagonal
+  # punting for now
+
   return False, ''
 
 def no_more_moves(board):
