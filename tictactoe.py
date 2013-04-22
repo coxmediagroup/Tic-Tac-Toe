@@ -3,6 +3,9 @@
 import os
 
 PLAYER = ['X', 'O']
+CENTER = (1,1)
+CORNERS = [(0,0),(0,2),(2,0),(2,2)]
+DIAGONALS = [[(0,0),(1,1),(0,2)],[(2,0),(0,0),(2,2)]]
 
 def init_board():
   board = {(0,0):'-',
@@ -49,7 +52,108 @@ def get_player_input(board, player):
     print "invalid input"
     return None
 
-get_computer_input = get_player_input
+def get_computer_input(board, player):
+  '''
+  return a computer player's move based on applying rules to current board
+  '''
+  # Rule 1: Play winning move
+  # Rule 2: Block other player
+  # Rule 3: Play strongest move
+
+  # Rule 1: if player already has 2 spaces in same line and 3rd space is open in that line, use it
+  # 1a: check for 2 across
+  for i in range(3):
+    print "i = " + str(i)
+    count = 0
+    for j in range(3):
+      print "j = " + str(j)
+      if board[i,j] != player and board[i,j] != '-':
+        # move to next row
+        break
+      if board[i,j] == player: count = count + 1
+    if count == 2:
+      row_coord = i
+      for j in range(3):
+        if board[i,j] == '-':
+          column_coord = j
+          return (row_coord, column_coord)
+
+  # 1b: check for 2 down
+  for i in range(3):
+    print "i = " + str(i)
+    count = 0
+    for j in range(3):
+      print "j = " + str(j)
+      if board[j,i] != player and board[j,i] != '-':
+        # move to next row
+        break
+      if board[j,i] == player: count = count + 1
+    if count == 2:
+      row_coord = i
+      for j in range(3):
+        if board[j,i] == '-':
+          column_coord = j
+          return (row_coord, column_coord)
+
+  # 1c still punting on diagonals
+
+  # Rule 2: if player already has 2 spaces in same line block them
+  # 2a: check for 2 across
+  for i in range(3):
+    print "i = " + str(i)
+    count = 0
+    for j in range(3):
+      print "j = " + str(j)
+      if board[i,j] == player:
+        # move to next row
+        break
+      if board[i,j] != player and board[i,j] != '-': count = count + 1
+    if count == 2:
+      row_coord = i
+      for j in range(3):
+        if board[i,j] == '-':
+          column_coord = j
+          return (row_coord, column_coord)
+
+  # 2b: check for 2 down
+  for i in range(3):
+    print "i = " + str(i)
+    count = 0
+    for j in range(3):
+      print "j = " + str(j)
+      if board[j,i] == player:
+        # move to next row
+        break
+      if board[j,i] != player and board[j,i] != '-': count = count + 1
+    if count == 2:
+      row_coord = i
+      for j in range(3):
+        if board[j,i] == '-':
+          column_coord = j
+          return (row_coord, column_coord)
+
+  # 2c still punting on diagonals
+
+  #Rule 3
+  # 3a take center
+  if board[CENTER] == '-':
+    return CENTER
+
+  # 3b take corner
+  for corner in CORNERS:
+    if board[corner] == '-':
+      return corner
+
+  # 3c take anything
+  for coord in board.keys():
+    if coord not in CORNERS + [CENTER]:
+      if board[coord] != '-':
+        return coord
+
+  #should not get here
+
+  return None      
+  
 
 def update_board(board, player, move_coord):
   board[move_coord] = player
