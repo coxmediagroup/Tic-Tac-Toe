@@ -76,8 +76,16 @@ def player_has_won(board):
         and board[(1,i)] == board[(2,i)]):
       return True, board[(0,i)]
 
-  #check 3 diagonal
-  # punting for now
+  #check for three diagonal
+    if (board[(0,0)] != '-'
+        and board[(0,0)] == board[(1,1)]
+        and board[(1,1)] == board[(2,2)]):
+      return True, board[(0,0)]
+
+    if (board[(0,2)] != '-'
+        and board[(0,2)] == board[(1,1)]
+        and board[(1,1)] == board[(2,0)]):
+      return True, board[(0,2)] 
 
   return False, ''
 
