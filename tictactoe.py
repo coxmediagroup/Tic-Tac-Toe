@@ -13,6 +13,14 @@ import sys
 from gameboard import GameBoard
 
 def collect_player_symbol():
+    '''
+    Continuously prompts the user for the symbol ('X' or 'O') 
+    they would like to use for the following game
+    
+    :returns: symbol the user chose
+    :rtype: string
+    
+    '''
     print "Before we start, Would you like to be X's or O's? (x/o)"
 
     player_symbol = None
@@ -27,6 +35,17 @@ def collect_player_symbol():
     return player_symbol
 
 def collect_player_move(player_symbol):
+    '''
+    Continuously prompts the user for their next move (0-index based).
+    The user may also enter a 'q' to signal that they'd like to quit.
+    
+    :param player_symbol: the symbol the user is using
+    :type player_symbol: string
+    :returns: 0-based index if the user wants to make a move; 
+        'q' if the user wants to quit the game
+    :rtype: string
+    
+    '''
     print ("It's your turn! You are {0}'s.  To make a move, enter "
            "the id/index of the space you want (ex. 5), or "
            "enter 'q' to quit at any time.".format(player_symbol))
@@ -42,6 +61,15 @@ def collect_player_move(player_symbol):
     return move.string
 
 def collect_yes_or_no(question):
+    '''
+    Continuously prompts the user any yes or no question
+    
+    :param question: question to ask the user
+    :type question: string
+    :returns: user's response
+    :rtype: bool
+
+    '''
     print '{0} (y/n)'.format(question)
 
     answer = None
@@ -59,6 +87,7 @@ def collect_yes_or_no(question):
     return answer
 
 def start_game():
+    ''' Runs the main game loop until the user explicitly quits '''
     print 'Welcome to Tic-Tac-Toe!'
     
     board = None
