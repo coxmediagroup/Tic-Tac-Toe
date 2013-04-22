@@ -23,15 +23,15 @@ def show_board(board):
       row_str = row_str + board[(i,j)]
     print row_str
 
-def get_input(board, player):
+def get_player_input(board, player):
   try:
-    row_coord = input("Player %s: Enter Row (1,2, or 3)" %player)
+    row_coord = raw_input("Player %s, Enter Row (1,2, or 3): " %player)
     row_coord = int(row_coord) - 1
     if row_coord not in range(3):
       print "invalid input"
       return None
 
-    column_coord = input("Player %s: Enter Column (1,2, or 3)" %player)
+    column_coord = raw_input("Player %s, Enter Column (1,2, or 3):" %player)
     column_coord = int(column_coord) - 1
     if column_coord not in range(3):
       print "invalid input"
@@ -40,7 +40,7 @@ def get_input(board, player):
     coord = (row_coord, column_coord)
 
     if board[coord] != '-':
-      print "position %s, %s has already been played." %(row_coord + 1, column_coord + 1)
+      print "position %s,%s has already been played." %(row_coord + 1, column_coord + 1)
       return None
 
     return coord
@@ -48,6 +48,8 @@ def get_input(board, player):
   except:
     print "invalid input"
     return None
+
+get_computer_input = get_player_input
 
 def update_board(board, player, move_coord):
   board[move_coord] = player
@@ -97,7 +99,14 @@ def no_more_moves(board):
 
 def run():
 
-  move_coord = True
+  os.system('clear')
+  computer_player = raw_input("Enter which player is computer, 'X' or 'O' (any other selection will exit):  ")
+  computer_player = computer_player.upper()
+  if computer_player not in ['X', 'O']:
+    print "exiting"
+    return
+
+  move_coord = None
   board = init_board()
   show_board(board)
   curr_turn = 0
@@ -109,9 +118,11 @@ def run():
     os.system('clear')
     show_board(board)
     print ''
-    move_coord = get_input(board, curr_player)
     while not move_coord:
-      move_coord = get_input(board, curr_player)
+      if curr_player == computer_player:
+        move_coord = get_computer_input(board, curr_player)
+      else:
+        move_coord = get_player_input(board, curr_player)
     update_board(board, curr_player, move_coord)
     (game_is_over, winning_player) = is_game_over(board)
     print str((game_is_over, winning_player))
@@ -119,6 +130,7 @@ def run():
       break
     curr_turn += 1
     curr_player = PLAYER[curr_turn%2]
+    move_coord = None
 
   os.system('clear')
   show_board(board)
