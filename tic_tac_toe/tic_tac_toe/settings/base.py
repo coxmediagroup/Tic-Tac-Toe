@@ -157,4 +157,4 @@ LOGGING = {
 }
 
 
-LOGIN_REDIRECT_URL = '/tictactoe'
+LOGIN_REDIRECT_URL = '/tictactoe/play'
