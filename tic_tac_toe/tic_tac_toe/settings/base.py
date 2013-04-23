@@ -115,7 +115,11 @@ DJANGO_APPS = (
     # 'django.contrib.admindocs',
 )
 
-INSTALLED_APPS = DJANGO_APPS
+THIRD_PARTY_APPS = (
+    'south',
+)
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
