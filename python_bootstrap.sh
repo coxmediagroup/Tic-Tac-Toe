@@ -2,7 +2,10 @@
 
 apt-get update
 apt-get -y install python-pip
-pip install virtualenv
+pip install -i https://restricted.crate.io/ virtualenv
 
 mkdir /home/vagrant/.virtualenv
-virtualenv -v --distribute /home/vagrant/.virtualenv/tic_tac_toe
+sudo virtualenv -v --distribute /home/vagrant/.virtualenv/tic_tac_toe
+
+source /home/vagrant/.virtualenv/tic_tac_toe/bin/activate
+pip install -i https://restricted.crate.io/ django==1.4.5. django-tastypie south
