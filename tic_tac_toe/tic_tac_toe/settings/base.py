@@ -1,29 +1,22 @@
-# Django settings for doulaexchange_env project.
+# Django settings for tic_tac_toe project.
 import os
 import dj_database_url
 from unipath import Path
 
 PROJECT_DIR = Path(__file__).ancestor(3)
 
-DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Michael Dunn', 'mike@doulaexchange.com'),
+    ('Michael Dunn', 'mike@eikonomega.com'),
 )
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'app9377449@heroku.com'
-EMAIL_HOST_PASSWORD = 'ob1wankenob1'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['.doulaexchange.com','www.doulaexchange.com']
-
 DATABASES = {
     'default': {} # Must create this so that it can be overridden below.
-}
+    }
 
 DATABASES['default'] = dj_database_url.config()
 
@@ -50,6 +43,8 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = PROJECT_DIR.child("media")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
@@ -61,8 +56,6 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-
-#STATIC_ROOT = ''
 STATIC_ROOT = PROJECT_DIR.child("collectstaticfiles")
 
 # URL prefix for static files.
@@ -83,7 +76,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'rp-k#rafh5%2q^z^jq(ec+pv&amp;9fk$yh1p6&amp;5%l$$ay-htht!n5'
+SECRET_KEY = 'hnx-j4uc2c^h7m1s16v-2hsao#@!i!$#+$8z!*!o*1lr_e+yus'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -92,18 +85,7 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    "payments.context_processors.payments_settings",)
-
 MIDDLEWARE_CLASSES = (
-    'sslify.middleware.SSLifyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -113,10 +95,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'doulaexchange_env.urls'
+ROOT_URLCONF = 'tic_tac_toe.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'doulaexchange_env.wsgi.application'
+WSGI_APPLICATION = 'tic_tac_toe.wsgi.application'
 
 TEMPLATE_DIRS = (
     PROJECT_DIR.child("templates"),
@@ -130,25 +112,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'south',
-    'tastypie',
-    'payments',
-    'django_forms_bootstrap',
-    'doulaexchange_env',
-    'user_management',
-    'user_directory',
-    'about_us',
-    'homepage',
-    'analytics',
-    'communications',
-    
 )
-
-# Extended User Model
-AUTH_PROFILE_MODULE = 'user_management.Person'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -178,30 +145,3 @@ LOGGING = {
         },
     }
 }
-
-
-#django-stripe-payments configuration
-PAYMENTS_PLANS = {
-    "monthly": {
-        "stripe_plan_id": "pro-monthly",
-        "name": "Web App Pro ($25/month)",
-        "description": "The monthly subscription plan to WebApp",
-        "price": 25,
-        "currency": "usd",
-        "interval": "month"
-    },
-    "yearly": {
-        "stripe_plan_id": "pro-yearly",
-        "name": "Web App Pro ($199/year)",
-        "description": "The annual subscription plan to WebApp",
-        "price": 199,
-        "currency": "usd",
-        "interval": "year"
-    }
-}
-
-STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", 
-                                   "pk_test_EC86Fy5voER8wNGdlKXSAkqD")
-
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", 
-                                   "sk_test_CaYqpQbp2zJjAkHCKlvyUuBc")
