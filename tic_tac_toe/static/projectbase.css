@@ -1,0 +1,57 @@
+/* Styled HTML Tags */
+
+html {
+	font-family: 'Source Sans Pro', sans-serif;
+    background-image: url("default_background_tile.png");
+}
+
+h1 {
+    font-size: 3em;
+    color: ghostwhite;
+    margin: 0em 0em .25em 0em;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: ghostwhite;
+    margin: 0em 0em .25em 0em;
+}
+
+p {
+    color: lightgray;
+    margin: 0em 0em 1em 0em;
+}
+
+td {
+    color: gray;
+}
+
+form {
+    border-radius: 5px;
+    background-color: #2d2d2e;
+    padding: .5em 1em .5em 1em;
+}
+
+.errorlist{
+    border-radius: 5px;
+    background-color: darkred;
+    color: ghostwhite;
+    padding: .5em;
+    margin: 1em 0em 0em 0em;
+}
+
+#main_content {
+
+	padding: 1em 1em 1em 1em;
+	font-size: .8em;
+	border-radius: 5px;
+    background-color: #212122;
+}
+
+#site_header {
+    position: fixed;
+    top: 5em;
+    left: 0em;
+}
+
+#privacy_policy {}
