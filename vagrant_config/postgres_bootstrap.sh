@@ -1,13 +1,6 @@
 apt-get update
 apt-get install -y postgresql-9.1
-
-
-# Create data directory
-#mkdir -p /usr/local/postgres/data
-#chown postgres /usr/local/postgres/data
-
-# Tell postgres to use data directory
-#sudo -u postgres /usr/lib/postgresql/9.1/bin/pg_ctl -D /usr/local/postgres/data initdb
+apt-get install -y postgresql-server-dev-9.1
 
 sudo -u postgres psql -c "CREATE ROLE tic_tac_toe SUPERUSER LOGIN PASSWORD 'tic_tac_toe'"
 sudo -u postgres psql -c 'CREATE DATABASE tic_tac_toe OWNER = tic_tac_toe'
