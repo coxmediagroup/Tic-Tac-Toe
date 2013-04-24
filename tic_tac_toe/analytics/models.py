@@ -1,3 +1,23 @@
 from django.db import models
 
-# Create your models here.
+
+class Event(models.Model):
+
+    EVENT_TYPE_CHOICES = (
+        ('TIC_TAC_TOE_START', 'User Started A Tic-Tac-Toe Game'),
+        ('TIC_TAC_TOE_FINISH', 'User Finished A Tic-Tac-Toe Game'),
+        ('USER_REGISTRATION_START', 'User Started Registration'),
+        ('USER_REGISTRATION_FINISH', 'User Completed Registration'),
+    )
+
+    event_type = models.CharField(max_length=100, choices=EVENT_TYPE_CHOICES)
+    event_timestamp = models.DateTimeField(auto_now_add=True)
+    event_model = models.CharField(max_length=100, default="None")
+    event_model_id = models.IntegerField(default="0")
+    event_url = models.CharField(max_length=100, default="None")
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.event_type, self.event_timestamp)
+
+    class Meta:
+        ordering = ['event_timestamp']
