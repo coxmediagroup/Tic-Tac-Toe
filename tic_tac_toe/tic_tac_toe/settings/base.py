@@ -120,6 +120,7 @@ THIRD_PARTY_APPS = (
 )
 
 CUSTOM_APPS = (
+    'homepage',
     'user_management',
     'communications',
     'analytics'

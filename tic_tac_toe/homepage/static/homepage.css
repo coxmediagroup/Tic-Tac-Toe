@@ -1,0 +1,48 @@
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+#main_content {
+	max-width: 80%;
+    min-width: 25em;
+}
+
+#user_registration {
+    min-height: 10em;
+    min-width: 20em;
+    width: 40%;
+    background-color: #2d2d2e;
+    border-radius: 5px;
+    padding: .5em 1em .5em 1em;
+    margin: .25em;
+    display: inline-block;
+    vertical-align: top;
+    transition: all .5s;
+}
+
+#user_registration:hover {
+    background-color: #850e01;
+    transition: all .5s;
+}
+
+#user_login {
+    min-height: 10em;
+    min-width: 20em;
+    width: 40%;
+    margin: .25em;
+    background-color: #2d2d2e;
+    border-radius: 5px;
+    padding: .5em 1em .5em 1em;
+    display: inline-block;
+    vertical-align: top;
+    transition: all .5s;
+}
+
+#user_login:hover {
+    background-color: #850e01;
+    transition: all .5s;
+}

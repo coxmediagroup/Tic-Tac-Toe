@@ -1,4 +1,7 @@
 /* Styled HTML Tags */
+a {
+    color: #850e01;
+}
 
 html {
 	font-family: 'Source Sans Pro', sans-serif;
@@ -41,11 +44,10 @@ form {
 }
 
 #main_content {
-
 	padding: 1em 1em 1em 1em;
-	font-size: .8em;
-	border-radius: 5px;
+	margin: 5em 15em 5em 15em;
     background-color: #212122;
+    border-radius: 5px;
 }
 
 #site_header {
