@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 
-from forms import UserForm
+from .forms import UserForm
+from analytics.models import Event
 
 
 def user_registration(request):
@@ -14,7 +15,7 @@ def user_registration(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/tictactoe/play')
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
 
         user_form = UserForm(request.POST)
 
@@ -28,27 +29,36 @@ def user_registration(request):
             new_user.last_name = user_form.cleaned_data['last_name']
             new_user.save()
 
+            analytics_event = Event(
+                event_type='USER_REGISTRATION_FINISH',
+                event_url=request.path,
+                event_model=new_user.__class__.__name__,
+                event_model_id=new_user.id
+            )
+
+            analytics_event.save()
+
             user = authenticate(
                 username=user_form.cleaned_data['username'],
                 password=user_form.cleaned_data['password'])
             login(request, user)
 
-            # analytics_event = Event(
-            #                     event_type='DOULA_REGISTERED',
-            #                     event_url=request.path,
-            #                     event_model=new_doula.__class__.__name__,
-            #                     event_model_id=new_doula.id
-            #                 )
-            # analytics_event.save()
-
-            return HttpResponseRedirect('/tictactoe/play') # Redirect after POST
+            return HttpResponseRedirect('/tictactoe/play')  # Redirect after POST
 
         else:
-            form_message = ('There are errors in some form fields, please fix '
-            'them and resubmit.')
+            form_message = (
+                'There are errors in some form fields, please fix '
+                'them and resubmit.')
 
     else:
         user_form = UserForm()
+
+        analytics_event = Event(
+            event_type='USER_REGISTRATION_START',
+            event_url=request.path,
+            event_model=User.__name__
+        )
+        analytics_event.save()
 
     template = loader.get_template('registration.html')
     context = RequestContext(
