@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 
 from .forms import UserForm
 from analytics.models import Event
+from communications.communications import EmailCommunication
 
 
 def user_registration(request):
@@ -35,8 +36,15 @@ def user_registration(request):
                 event_model=new_user.__class__.__name__,
                 event_model_id=new_user.id
             )
-
             analytics_event.save()
+
+            email_message = EmailCommunication(
+                'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
+                [new_user.email],
+                '//Registration Confirmation',
+                'email/player_registration.html',
+                {'first_name': new_user.first_name})
+            email_message.send_message()
 
             user = authenticate(
                 username=user_form.cleaned_data['username'],
