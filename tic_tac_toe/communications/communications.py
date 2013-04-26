@@ -23,7 +23,26 @@ class _Communication(object):
 
     def send_message(self):
         """
-        Provide a stub to be implemented by class descentants.
+        Provide a stub to be implemented by class descendants.
 
         """
         raise NotImplementedError
+
+
+class EmailCommunication(_Communication):
+    """
+    Provide functionality to send text & html email messages.
+
+    This class ultimately derives it power from the Django mail module.
+    For it to work correctly, all related settings must have appropriate
+    values.  More info: https://docs.djangoproject.com/en/1.5/topics/email
+
+    """
+    def send_message(self):
+        message = mail.EmailMultiAlternatives(
+            self.subject,
+            self.message,
+            self.sender,
+            self.recipient_list)
+        message.attach_alternative(self.message, "text/html")
+        message.send()
