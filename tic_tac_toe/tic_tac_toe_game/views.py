@@ -7,7 +7,8 @@ from analytics.models import Event
 
 def game(request):
 
-    
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/usermanagement/login')
 
     template = loader.get_template('game.html')
     context = RequestContext(request)
