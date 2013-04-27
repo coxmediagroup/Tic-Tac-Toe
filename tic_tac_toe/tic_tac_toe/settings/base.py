@@ -131,7 +131,8 @@ CUSTOM_APPS = (
     'homepage',
     'user_management',
     'communications',
-    'analytics'
+    'analytics',
+    'tic_tac_toe_game',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
