@@ -8,6 +8,8 @@ class Event(models.Model):
         ('TIC_TAC_TOE_FINISH', 'User Finished A Tic-Tac-Toe Game'),
         ('USER_REGISTRATION_START', 'User Started Registration'),
         ('USER_REGISTRATION_FINISH', 'User Completed Registration'),
+        ('USER_LOGIN_START', 'User Started Log In'),
+        ('USER_LOGIN_FINISH', 'User Completed Log In')
     )
 
     event_type = models.CharField(max_length=100, choices=EVENT_TYPE_CHOICES)
