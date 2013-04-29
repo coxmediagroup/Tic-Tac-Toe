@@ -31,8 +31,8 @@
                     // code to run if the request succeeds;
                     // the response is passed to the function
                     success: function( json ) {
-                        $( "#section_" + json.player ).addClass("player_selected");
-                        $( "#section_" + json.computer ).addClass("computer_selected");
+                        $( "#section_" + json.player_move ).addClass("player_selected");
+                        $( "#section_" + json.computer_move ).addClass("computer_selected");
                     },
 
                     // code to run if the request fails; the raw request and
