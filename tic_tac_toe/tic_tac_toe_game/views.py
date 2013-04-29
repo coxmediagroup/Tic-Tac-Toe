@@ -37,6 +37,15 @@ def process_player_move(request):
         player_moves = request.session['player_moves']
         computer_moves = request.session['computer_moves']
 
+        # Does current move attempt to take already occupied space?
+        if int(request.POST['id']) in player_moves or computer_moves:
+            json_response = {
+                'ERROR': 'That space is already taken.'
+            }
+        else:
+            player_moves.append(int(request.POST['id']))
+            request.session['player_moves'] = player_moves
+
         json_response = {
             'player_move': int(request.POST['id']),
             'computer_move': int(request.POST['id']) + 2
