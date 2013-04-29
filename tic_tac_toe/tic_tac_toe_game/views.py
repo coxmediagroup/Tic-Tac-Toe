@@ -1,3 +1,5 @@
+import json
+
 from django.template import loader
 from django.template.context import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
@@ -22,6 +24,19 @@ def game(request):
     analytics_event.save()
 
     return HttpResponse(template.render(context))
+
+
+def process_player_move(request):
+    if request.is_ajax():
+
+        moves = {
+            'player': int(request.POST['id']),
+            'computer': int(request.POST['id']) + 5
+        }
+
+        return HttpResponse(
+            json.dumps(moves),
+            mimetype="application/json")
 
 
 def results(request):
