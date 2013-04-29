@@ -54,6 +54,7 @@ form:hover {
 	margin: 5em 15em 5em 15em;
     background-color: #212122;
     border-radius: 5px;
+    min-width: 25em;
 }
 
 #site_header {
