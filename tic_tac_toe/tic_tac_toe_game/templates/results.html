@@ -1,0 +1,25 @@
+{% extends "tictactoegamebase.html" %}
+{% block title %}Game Results | Tic/ Tac/ Toe/{% endblock %}
+
+{% block meta_tags %}
+	{{ block.super }}
+	<META NAME="Description" CONTENT="Game Results Page for Tic/ Tac/ Toe/">
+{% endblock %}
+
+{% block main_content %}
+
+	<h1>// Tic-Tac-Toe Results</h1>
+
+	<section class="instructions">
+	<p>
+        <h2>Instructions</h2>
+        <p>Please fill out all the fields below.  <br />
+           If you get an error, just try again.  <br />
+           We promise, this will eventually solve the problem.</p>
+	</p>
+    </section>
+
+	{{ block.super }}
+	
+{% endblock %}
+

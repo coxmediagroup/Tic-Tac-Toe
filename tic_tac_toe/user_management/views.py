@@ -14,7 +14,7 @@ def user_registration(request):
     form_message = None
 
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/tictactoe/play')
+        return HttpResponseRedirect('/tic_tac_toe/game')
 
     if request.method == 'POST':
 
@@ -51,7 +51,7 @@ def user_registration(request):
                 password=user_form.cleaned_data['password'])
             login(request, user)
 
-            return HttpResponseRedirect('/tictactoe/play')  # Redirect after POST
+            return HttpResponseRedirect('/tic_tac_toe/game')  # Redirect after POST
 
         else:
             form_message = (

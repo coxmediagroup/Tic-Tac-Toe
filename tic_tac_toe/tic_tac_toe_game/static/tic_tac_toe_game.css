@@ -1,0 +1,54 @@
+/* Class Based Selectors */
+
+.game_board_section {
+    background-color: #2d2d2e;
+    border: ghostwhite solid thin;
+    width: 8em;
+    height: 8em;
+    transition: all .5s;
+}
+
+.game_board_section:hover {
+    background-color: #39393a;
+    transition: all .5s;
+}
+
+.player_selected {
+    background: url("/static/x.png") no-repeat center;
+}
+
+.computer_selected {
+    background: url("/static/o.png") no-repeat center;
+}
+
+/* ID Based Selectors */
+
+#error_message {
+    background-color: #850e01;
+    border-radius: 5px;
+    color: ghostwhite;
+    display: none;
+    padding: .5em 1em .5em 1em;
+
+}
+
+#game_board {
+    border-radius: 5px;
+    background-color: #2d2d2e;
+    padding: .5em 1em .5em 1em;
+    margin-top: 2em;
+    width: 25em;
+    height: 25em;
+}
+
+#main_content {
+    /* Overrides projectbase.css */
+	max-width: 50%;
+}
+
+#privacy_policy {
+    border-radius: 5px;
+    background-color: #2d2d2e;
+    padding: .5em 1em .5em 1em;
+    margin-top: 2em;
+}
