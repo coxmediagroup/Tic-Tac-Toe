@@ -1,3 +1,5 @@
+/* Class Based Selectors */
+
 .game_board_section {
     background-color: #2d2d2e;
     border: ghostwhite solid thin;
@@ -19,6 +21,16 @@
     background: url("/static/o.png") no-repeat center;
 }
 
+/* ID Based Selectors */
+
+#error_message {
+    background-color: #850e01;
+    border-radius: 5px;
+    color: ghostwhite;
+    display: none;
+    padding: .5em 1em .5em 1em;
+
+}
 
 #game_board {
     border-radius: 5px;
