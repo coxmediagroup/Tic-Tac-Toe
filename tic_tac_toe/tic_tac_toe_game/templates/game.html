@@ -3,12 +3,12 @@
 
 {% block meta_tags %}
 	{{ block.super }}
-	<META NAME="Description" CONTENT="Registration Page for Tic/ Tac/ Toe/">
+	<META NAME="Description" CONTENT="Game Page for Tic/ Tac/ Toe/">
 {% endblock %}
 
 {% block main_content %}
 
-	<h1>// USER REGISTRATION</h1>
+	<h1>// Tic-Tac-Toe</h1>
 
 	<section class="instructions">
 	<p>
@@ -19,12 +19,17 @@
 	</p>
     </section>
 
-    <form method="post" action="/usermanagement/registration/">
-
-	    {% csrf_token %}
-	    {{ registration_form.as_p }}
-	    <input type="submit" value="Register" />
-	</form>
+    <section id="game_board">
+        <canvas class="board_section" id="section_1"></canvas>
+        <canvas class="board_section" id="section_2"></canvas>
+        <canvas class="board_section" id="section_3"></canvas>
+        <canvas class="board_section" id="section_4"></canvas>
+        <canvas class="board_section" id="section_5"></canvas>
+        <canvas class="board_section" id="section_6"></canvas>
+        <canvas class="board_section" id="section_7"></canvas>
+        <canvas class="board_section" id="section_8"></canvas>
+        <canvas class="board_section" id="section_9"></canvas>
+    </section>
 
 	{{ block.super }}
 	

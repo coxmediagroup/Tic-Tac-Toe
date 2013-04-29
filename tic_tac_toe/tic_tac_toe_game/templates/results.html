@@ -1,14 +1,14 @@
 {% extends "tictactoegamebase.html" %}
-{% block title %}Game In Progress | Tic/ Tac/ Toe/{% endblock %}
+{% block title %}Game Results | Tic/ Tac/ Toe/{% endblock %}
 
 {% block meta_tags %}
 	{{ block.super }}
-	<META NAME="Description" CONTENT="Registration Page for Tic/ Tac/ Toe/">
+	<META NAME="Description" CONTENT="Game Results Page for Tic/ Tac/ Toe/">
 {% endblock %}
 
 {% block main_content %}
 
-	<h1>// USER REGISTRATION</h1>
+	<h1>// Tic-Tac-Toe Results</h1>
 
 	<section class="instructions">
 	<p>
@@ -18,13 +18,6 @@
            We promise, this will eventually solve the problem.</p>
 	</p>
     </section>
-
-    <form method="post" action="/usermanagement/registration/">
-
-	    {% csrf_token %}
-	    {{ registration_form.as_p }}
-	    <input type="submit" value="Register" />
-	</form>
 
 	{{ block.super }}
 	
