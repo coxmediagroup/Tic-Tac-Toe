@@ -23,19 +23,27 @@ def game(request):
     )
     analytics_event.save()
 
+    # Retrieve past moves from session.
+    request.session['player_moves'] = []
+    request.session['computer_moves'] = []
+
     return HttpResponse(template.render(context))
 
 
 def process_player_move(request):
     if request.is_ajax():
 
-        moves = {
-            'player': int(request.POST['id']),
-            'computer': int(request.POST['id']) + 5
+        # Get previous computer/player moves from session.
+        player_moves = request.session['player_moves']
+        computer_moves = request.session['computer_moves']
+
+        json_response = {
+            'player_move': int(request.POST['id']),
+            'computer_move': int(request.POST['id']) + 2
         }
 
         return HttpResponse(
-            json.dumps(moves),
+            json.dumps(json_response),
             mimetype="application/json")
 
 
