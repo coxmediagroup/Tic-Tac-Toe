@@ -8,7 +8,11 @@ from analytics.models import Event
 
 
 def game(request):
+    """
+    Display blank game board, reset session variables, and record a game
+    start event.
 
+    """
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/usermanagement/login')
 
@@ -31,6 +35,10 @@ def game(request):
 
 
 def process_player_move(request):
+    """
+    Process Ajax requests received from client.
+
+    """
     if request.is_ajax():
 
         # Get previous computer/player moves from session.
@@ -49,9 +57,11 @@ def process_player_move(request):
                 break
 
         else:
+            # Add new moves into player/computer move lists.
             player_moves.append(int(request.POST['id']))
             computer_moves.append(int(request.POST['id']) + 2)
 
+            # Re-set session variables with updated lists.
             request.session['player_moves'] = player_moves
             request.session['computer_moves'] = computer_moves
 
@@ -60,11 +70,18 @@ def process_player_move(request):
                 'computer_move': computer_moves[-1]
             }
 
-
-
         return HttpResponse(
             json.dumps(json_response),
             mimetype="application/json")
+
+
+def next_computer_move():
+    """
+    Determine the next move for the computer to make in order to bring
+    complete destruction and utter humiliation to the player.
+
+    """
+    pass
 
 
 def results(request):
