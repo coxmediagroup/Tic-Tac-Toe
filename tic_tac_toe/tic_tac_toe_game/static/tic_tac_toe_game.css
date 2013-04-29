@@ -11,6 +11,15 @@
     transition: all .5s;
 }
 
+.player_selected {
+    background: url("/static/x.png") no-repeat center;
+}
+
+.computer_selected {
+    background: url("/static/o.png") no-repeat center;
+}
+
+
 #game_board {
     border-radius: 5px;
     background-color: #2d2d2e;
