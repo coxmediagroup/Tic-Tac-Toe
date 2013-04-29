@@ -41,7 +41,10 @@ def process_player_move(request):
         for move_list in [player_moves, computer_moves]:
             if int(request.POST['id']) in move_list:
                 json_response = {
-                    'error_message': 'That space is already taken.'
+                    'error_message': (
+                        "You seem to lack a basic understanding "
+                        "of the rules. You can't pick a previously "
+                        "selected space.")
                 }
                 break
 
