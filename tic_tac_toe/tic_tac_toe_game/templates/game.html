@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block main_content %}
+
+
+
     <script>
         var TicTacToeEngineConnector = {
             respondToPlayerMove: function(squareId) {
@@ -28,14 +31,8 @@
                     // code to run if the request succeeds;
                     // the response is passed to the function
                     success: function( json ) {
-                        if (json.error_message) {
-                            $( "#error_message" ).text(json.error_message);
-                            $( "#error_message" ).slideDown();
-                        } else {
-                            $( "#error_message" ).slideUp();
-                            $( "#section_" + json.player_move ).addClass("player_selected");
-                            $( "#section_" + json.computer_move ).addClass("computer_selected");
-                        }
+                        $( "#section_" + json.player_move ).addClass("player_selected");
+                        $( "#section_" + json.computer_move ).addClass("computer_selected");
                     },
 
                     // code to run if the request fails; the raw request and
@@ -140,12 +137,10 @@
 	<section class="instructions">
 	<p>
         <h2>Instructions</h2>
-        <p>You go, then we go.  You lose, we snicker. <br />Repeat.</p>
+        <p>Please fill out all the fields below.  <br />
+           If you get an error, just try again.  <br />
+           We promise, this will eventually solve the problem.</p>
 	</p>
-    </section>
-
-    <section id="error_message">
-        This message should not be visible.
     </section>
 
     <table id="game_board">
