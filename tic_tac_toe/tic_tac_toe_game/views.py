@@ -10,7 +10,6 @@ from communications.communications import EmailCommunication
 from .game_engine import GameEngine
 
 
-
 def game(request):
     """
     Display blank game board, reset session variables, and record a game
@@ -40,7 +39,13 @@ def game(request):
 
 def process_player_move(request):
     """
-    Process Ajax requests received from client.
+    Process Ajax requests received from client containing player moves.
+
+    The method requires the HTTPRequest object to be an ajax request to
+    function properly (it won't do anything otherwise).
+
+    The method is a little long and could probably be broken up.  In lieu
+    of that, it has numerous comments.
 
     """
     if request.is_ajax():
@@ -78,6 +83,7 @@ def process_player_move(request):
             # Re-save computer move list into session.
             request.session['computer_moves'] = computer_moves
 
+            # What to do if the game is over and the computer won.
             if game_status == "Game Over (Computer Win)":
                 email_message = EmailCommunication(
                     'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
@@ -96,6 +102,7 @@ def process_player_move(request):
 
                 analytics_event.save()
 
+            # What to do if the game is over and ended in a draw.
             elif game_status == "Draw":
                 email_message = EmailCommunication(
                     'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
@@ -114,7 +121,7 @@ def process_player_move(request):
 
                 analytics_event.save()
 
-            # Return most recent moves to the client.
+            # Return most recent moves and game status to the client.
             json_response = {
                 'player_move': player_moves[-1],
                 'player_moves': player_moves,
