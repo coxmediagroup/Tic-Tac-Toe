@@ -22,8 +22,6 @@ game status (Keep Going, Game Over, etc.)
 and any other necessary changes (like a game over message).
 
 """
-import random
-
 
 class GameEngine(object):
     GAME_WINNING_COMBINATIONS = (
@@ -48,17 +46,21 @@ class GameEngine(object):
         complete destruction and utter humiliation to the player.
 
         """
-        if not self.open_squares.__len__():
-            return False
 
-        for move_list in (self.computers_move_history,
-                          self.players_move_history):
+        # Choosing to not evaluate each methods return value as they come in
+        # results in unnecessary processing, but the syntax is cleaner.
+        winning_move = self.check_for_winning_move(self.computers_move_history)
+        blocking_move = self.check_for_winning_move(self.players_move_history)
+        normal_move = self.normal_move()
 
-            next_move = self.check_for_winning_move(move_list)
-            if next_move:
-                return next_move
-
-        return self.normal_move()
+        if winning_move:
+            return winning_move, "Game Over (Computer Win)"
+        elif blocking_move:
+            return blocking_move, "Continue (Player Blocked)"
+        elif normal_move:
+            return normal_move, "Continue"
+        else:
+            return False, "Draw"
 
     def check_for_winning_move(self, move_history_to_evaluate):
         """
@@ -90,8 +92,11 @@ class GameEngine(object):
         """
         Determine if a given square is still available for selection.
 
+        Generate set of open squares by comparing player and computer
+        move histories to GAME_SQUARES constant and then compare a
+        given square_id to this set.
+
         """
-        # Determine which spots are still open.
         open_squares = set(
             self.computers_move_history +
             self.players_move_history).symmetric_difference(
@@ -102,8 +107,17 @@ class GameEngine(object):
 
     def normal_move(self):
         """
+        Determine next computer move under normal (not game winning or
+        win blocking) circumstances.
 
+        In the normal move scenario, the computer determines which move to
+        make by picking an open square which is a member in the highest number
+        of potential winning combinations.
 
+        Squares are chosen in this order:
+            [5]: Member of 5 winning combinations.
+            [1, 3, 7, 9]: Each a member of 3 winning combinations.
+            [2, 4, 6, 8]: Each a member of 2 winning combinations.
 
         """
         corner_squares = [1, 3, 7, 9]
