@@ -32,7 +32,7 @@ without sinking to far down into the rabbit hole of feature sprawl.
 5. Demonstrate deployment experience by making the project available on the web via Heroku.
 6. Demonstrate the ability to write clearly and cohesively (I'm in trouble if I haven't accomplished this already).
 
-For additional information on my development process, etc., please see the readme.md files within the various app directories.
+For additional information on my development process, etc., please see the __init__.py/readme.md files within the various sub-directories.
 
 
 
