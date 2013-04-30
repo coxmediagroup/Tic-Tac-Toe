@@ -11,13 +11,22 @@ from communications.communications import EmailCommunication
 
 
 def user_registration(request):
-    form_message = None
+    """
+    Provide user registration form and process completed forms.
 
+    In typical Django fashion, this view provides and processes a single
+    form.  In this case, a user registration form.
+
+    """
+
+    # Redirect user to game if already logged in.
     if request.user.is_authenticated():
         return HttpResponseRedirect('/tic_tac_toe/game')
 
-    if request.method == 'POST':
+    form_message = None
 
+    # User has submitted the form.
+    if request.method == 'POST':
         user_form = UserForm(request.POST)
 
         if user_form.is_valid(): # All validation rules pass
@@ -58,6 +67,7 @@ def user_registration(request):
                 'There are errors in some form fields, please fix '
                 'them and resubmit.')
 
+    # User has not yet submitted the form.
     else:
         user_form = UserForm()
 
