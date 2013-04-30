@@ -129,4 +129,4 @@ def process_player_move(request):
 
 
 def results(request):
-    pass
+    raise NotImplementedError

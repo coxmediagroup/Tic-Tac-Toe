@@ -24,6 +24,10 @@ and any other necessary changes (like a game over message).
 """
 
 class GameEngine(object):
+    """
+    Contains the logic of the Tic-Tac-Toe game.
+
+    """
     GAME_WINNING_COMBINATIONS = (
         (1, 2, 3), (4, 5, 6), (7, 8, 9),  # Rows Wins
         (1, 4, 7), (2, 5, 8), (3, 6, 9),  # Column Wins
@@ -32,6 +36,14 @@ class GameEngine(object):
     GAME_SQUARES = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     def __init__(self, players_move_history, computers_move_history):
+        """
+        Initialize the class.
+
+        Store parameters as internal properties and evaluate which
+        squares are currently open on the board for reference by other
+        methods.
+
+        """
         self.players_move_history = players_move_history
         self.computers_move_history = computers_move_history
 
