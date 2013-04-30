@@ -4,8 +4,9 @@ from django.db import models
 class Event(models.Model):
 
     EVENT_TYPE_CHOICES = (
-        ('TIC_TAC_TOE_START', 'User Started A Tic-Tac-Toe Game'),
-        ('TIC_TAC_TOE_FINISH', 'User Finished A Tic-Tac-Toe Game'),
+        ('TIC_TAC_TOE_START', 'User Started a Tic-Tac-Toe Game'),
+        ('TIC_TAC_TOE_FINISH_LOST', 'User Finish a Tic-Tac-Toe Game with a Loss'),
+        ('TIC_TAC_TOE_FINISH_DRAW', 'User Finish a Tic-Tac-Toe Game with a Loss'),
         ('USER_REGISTRATION_START', 'User Started Registration'),
         ('USER_REGISTRATION_FINISH', 'User Completed Registration'),
         ('USER_LOGIN_START', 'User Started Log In'),
