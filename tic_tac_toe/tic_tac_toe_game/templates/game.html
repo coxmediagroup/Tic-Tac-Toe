@@ -1,0 +1,59 @@
+{% extends "tictactoegamebase.html" %}
+{% block title %}Game In Progress | Tic/ Tac/ Toe/{% endblock %}
+
+{% block meta_tags %}
+	{{ block.super }}
+	<META NAME="Description" CONTENT="Game Page for Tic/ Tac/ Toe/">
+{% endblock %}
+
+{% block main_content %}
+    <script src="{{ STATIC_URL }}DjangoAjax.js"></script>
+    <script src="{{ STATIC_URL }}TicTacToeEngineConnector.js"></script>
+
+	<h1>// Tic-Tac-Toe</h1>
+
+	<section class="instructions">
+	<p>
+        <h2>Instructions</h2>
+        <p>You go, then we go.  You lose, we snicker. <br />Repeat.</p>
+	</p>
+    </section>
+
+    <section id="error_message">
+        This message should not be visible.
+    </section>
+
+    <section id="status_message">
+        <h3>Status Message</h3>
+        <p>This message should not be visible.</p>
+        <a class="button" href="/tic_tac_toe/game">Play Again</a>
+    </section>
+
+    <table id="game_board">
+        <tr>
+            <td class="game_board_section" id="section_1"></td>
+            <td class="game_board_section" id="section_2"></td>
+            <td class="game_board_section" id="section_3"></td>
+        </tr>
+        <tr>
+            <td class="game_board_section" id="section_4"></td>
+            <td class="game_board_section" id="section_5"></td>
+            <td class="game_board_section" id="section_6"></td>
+        </tr>
+        <tr>
+            <td class="game_board_section" id="section_7"></td>
+            <td class="game_board_section" id="section_8"></td>
+            <td class="game_board_section" id="section_9"></td>
+        </tr>
+    </table>
+
+	{{ block.super }}
+
+    <script>
+        $(document).ready(function() {
+            TicTacToeEngineConnector.connectClickListeners();
+        });
+    </script>
+
+{% endblock %}
+

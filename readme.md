@@ -19,6 +19,7 @@ without sinking to far down into the rabbit hole of feature sprawl.
 ##### Project Targets
 
 1. Demonstrate a knowledge of Git/Github through frequent commits/expressive messages and feature branches.
+  1. The features branches existed only on my local machine, but you can see their merge history in the timeline.
 2. Demonstrate an awareness and appreciation of creating/using a shared development environment by wrapping the project within a [Vagrant](http://www.vagrantup.com/) VM.
 3. Demonstrate knowledge of Python/Django by implementing the following functionalities within specific apps:
   1. User Registration / Management
@@ -30,5 +31,9 @@ without sinking to far down into the rabbit hole of feature sprawl.
   2. Tasty-Pie (for API development)
 5. Demonstrate deployment experience by making the project available on the web via Heroku.
 6. Demonstrate the ability to write clearly and cohesively (I'm in trouble if I haven't accomplished this already).
+
+For additional information on my development process, etc., please see the __init__.py/readme.md files within the various sub-directories.
+
+
 
 

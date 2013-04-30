@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}projectbase.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" />
+
+        <!-- Web Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+{#<script type="text/javascript" id="google_analytics">#}
+{##}
+{#  var _gaq = _gaq || [];#}
+{#  _gaq.push(['_setAccount', 'UA-36541886-1']);#}
+{#  _gaq.push(['_trackPageview']);#}
+{##}
+{#  (function() {#}
+{#    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;#}
+{#    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';#}
+{#    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);#}
+{#  })();#}
+{##}
+{#</script>#}
+
+    {% block meta_tags %}
+        <meta name="keywords" content="tic_tac_toe" />
+    {% endblock %}
+
+    {% block additional_head_items %} <!--  Populated via inheritance. -->
+    {% endblock %}
+
+    <title>{% block title %}A Page Within the User Registration App{% endblock %}</title>
+
+</head>
+
+<body>
+    <section id="site_header">
+        <a href="/">
+			<img alt="Tic Tac Toe | Can you win with your smarts, smarts, smarts?" src="{{ STATIC_URL }}logo.png">
+		</a>
+    </section>
+
+    <section id="main_content">
+        {% block main_content %} <!-- Stuff will come in here. --> {% endblock %}
+    </section>
+
+</body>
+</html>

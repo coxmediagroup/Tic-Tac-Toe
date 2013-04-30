@@ -1,0 +1,6 @@
+.vagrant
+.idea
+*.pyc
+development.py
+setup.py
+test.py

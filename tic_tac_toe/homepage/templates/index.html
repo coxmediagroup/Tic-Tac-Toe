@@ -1,0 +1,46 @@
+{% extends "projectbase.html" %}
+{% block title %}Homepage | Tic/ Tac/ Toe/{% endblock %}
+
+{% block meta_tags %}
+	{{ block.super }}
+	<META NAME="Description" CONTENT="Homepage for Tic/ Tac/ Toe/.">
+{% endblock %}
+
+{% block additional_head_items %}
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}homepage.css">
+{% endblock %}
+
+{% block main_content %}
+    <h1>// WELCOME</h1>
+    <p>You've stumbled upon the Hotel California of Tic-Tac-Toe games.</p>
+    <p>
+        Let me give it to you straight.  You're not going to win this game. <br />
+        If you do, I've failed in the basic requirement of this exercise
+        and probably won't get the job I'm applying for.
+    </p>
+
+    <p>But assuming that you ARE going to be losing a lot, I've tried to
+    make the rest of the experience as pleasant as possible. <br />
+    If you've got any thoughts on how to make this better/funnier, I'd
+    love to hear them.  My email: <a href="mailto:mike@eikonomega.com">
+            mike@eikonomega.com
+    </a>
+    </p>
+
+    <a href="/usermanagement/registration/">
+        <section id="user_registration" class="hover">
+            <h2>// NEW PLAYER</h2>
+            <p>If you haven't played before, start here.</p>
+        </section>
+    </a>
+
+    <a href="/usermanagement/login/">
+        <section id="user_login" class="hover">
+                <h2>// RETURNING PLAYER</h2>
+                <p>If you've here before, start here. </p>
+                <p>You may also want to consider therapy to figure out why you came
+                back.</p>
+        </section>
+    </a>
+
+{% endblock %}
