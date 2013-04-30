@@ -35,6 +35,25 @@
                             $( "#error_message" ).slideUp();
                             $( "#section_" + json.player_move ).addClass("player_selected");
                             $( "#section_" + json.computer_move ).addClass("computer_selected");
+
+                            switch (json.game_status) {
+                                case "Draw":
+                                    $("#status_message").find("h3").text("// TIE GAME");
+                                    $("#status_message").find("p").text(
+                                        "Not bad Whippersnapper!  You " +
+                                        "didn't lose.  That's quite an " +
+                                        "accomplishment for you.")
+                                    $( "#status_message" ).slideDown();
+                                    break;
+                                case "Game Over (Computer Win)":
+                                    $("#status_message").find("h3").text("// YOU LOST");
+                                    $("#status_message").find("p").text(
+                                        "You win some, you lose some. " +
+                                        "Actually, you're never going to win " +
+                                        "some.")
+                                    $( "#status_message" ).slideDown();
+                            }
+
                         }
                     },
 
@@ -146,6 +165,11 @@
 
     <section id="error_message">
         This message should not be visible.
+    </section>
+
+    <section id="status_message">
+        <h3>Status Message</h3>
+        <p>This message should not be visible.</p>
     </section>
 
     <table id="game_board">

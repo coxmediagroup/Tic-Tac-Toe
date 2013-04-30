@@ -29,7 +29,14 @@
     color: ghostwhite;
     display: none;
     padding: .5em 1em .5em 1em;
+}
 
+#status_message {
+    background-color: #008519;
+    border-radius: 5px;
+    color: ghostwhite;
+    display: none;
+    padding: .5em 1em .5em 1em;
 }
 
 #game_board {
