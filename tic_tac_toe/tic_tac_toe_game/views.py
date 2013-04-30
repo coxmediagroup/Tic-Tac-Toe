@@ -6,9 +6,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from analytics.models import Event
 
+from .game_engine import GameEngine
+
 
 def game(request):
+    """
+    Display blank game board, reset session variables, and record a game
+    start event.
 
+    """
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/usermanagement/login')
 
@@ -31,6 +37,10 @@ def game(request):
 
 
 def process_player_move(request):
+    """
+    Process Ajax requests received from client.
+
+    """
     if request.is_ajax():
 
         # Get previous computer/player moves from session.
@@ -49,18 +59,31 @@ def process_player_move(request):
                 break
 
         else:
+            # Add new move player to move history.
             player_moves.append(int(request.POST['id']))
-            computer_moves.append(int(request.POST['id']) + 2)
 
+            # Re-save player move list into session.
             request.session['player_moves'] = player_moves
+
+            # Determine next computer move and add it to move history.
+            game_engine = GameEngine(
+                request.session['player_moves'],
+                request.session['computer_moves'])
+
+            next_computer_move, game_status = game_engine.next_computer_move()
+            computer_moves.append(next_computer_move)
+
+            # Re-save computer move list into session.
             request.session['computer_moves'] = computer_moves
 
+            # Return most recent moves to the client.
             json_response = {
                 'player_move': player_moves[-1],
-                'computer_move': computer_moves[-1]
+                'player_moves': player_moves,
+                'computer_move': computer_moves[-1],
+                'computer_moves': computer_moves,
+                'game_status': game_status
             }
-
-
 
         return HttpResponse(
             json.dumps(json_response),
