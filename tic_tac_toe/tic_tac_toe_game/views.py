@@ -5,8 +5,10 @@ from django.template.context import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 
 from analytics.models import Event
+from communications.communications import EmailCommunication
 
 from .game_engine import GameEngine
+
 
 
 def game(request):
@@ -75,6 +77,25 @@ def process_player_move(request):
 
             # Re-save computer move list into session.
             request.session['computer_moves'] = computer_moves
+
+            if game_status == "Game Over (Computer Win)":
+                email_message = EmailCommunication(
+                'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
+                [request.user.email],
+                '//OH SNAP!',
+                'email/lost_game.html',
+                {'first_name': request.user.first_name})
+
+                email_message.send_message()
+
+                analytics_event = Event(
+                event_type='TIC_TAC_TOE_FINISH_LOST',
+                event_url=request.path,
+                event_model=request.user.__class__.__name__,
+                event_model_id=request.user.id
+                )
+
+                analytics_event.save()
 
             # Return most recent moves to the client.
             json_response = {
