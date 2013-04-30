@@ -16,6 +16,8 @@ My goal is to present the game within the context of a Django website that imple
 I imagine many of your media sites would include.  My hope is to clearly demonstrate my potential as a full-stack developer
 without sinking to far down into the rabbit hole of feature sprawl.
 
+### Project Site: [r2smart4u.herokuapp.com](r2smart4u.herokuapp.com)
+
 ##### Project Targets
 
 1. Demonstrate a knowledge of Git/Github through frequent commits/expressive messages and feature branches.
