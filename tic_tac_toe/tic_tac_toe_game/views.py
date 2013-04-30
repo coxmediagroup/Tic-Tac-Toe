@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from analytics.models import Event
 
+from .game_engine import GameEngine
+
 
 def game(request):
     """
@@ -57,31 +59,35 @@ def process_player_move(request):
                 break
 
         else:
-            # Add new moves into player/computer move lists.
+            # Add new move player to move history.
             player_moves.append(int(request.POST['id']))
-            computer_moves.append(int(request.POST['id']) + 2)
 
-            # Re-set session variables with updated lists.
+            # Re-save player move list into session.
             request.session['player_moves'] = player_moves
+
+            # Determine next computer move and add it to move history.
+            game_engine = GameEngine(
+                request.session['player_moves'],
+                request.session['computer_moves'])
+
+            next_computer_move, game_status = game_engine.next_computer_move()
+            computer_moves.append(next_computer_move)
+
+            # Re-save computer move list into session.
             request.session['computer_moves'] = computer_moves
 
+            # Return most recent moves to the client.
             json_response = {
                 'player_move': player_moves[-1],
-                'computer_move': computer_moves[-1]
+                'player_moves': player_moves,
+                'computer_move': computer_moves[-1],
+                'computer_moves': computer_moves,
+                'game_status': game_status
             }
 
         return HttpResponse(
             json.dumps(json_response),
             mimetype="application/json")
-
-
-def next_computer_move():
-    """
-    Determine the next move for the computer to make in order to bring
-    complete destruction and utter humiliation to the player.
-
-    """
-    pass
 
 
 def results(request):
