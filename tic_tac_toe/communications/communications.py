@@ -4,11 +4,12 @@ from django.template.loader import render_to_string
 
 class _Communication(object):
     """
-    Parent class from which EmailCommunication and SMSCommunication are
-    derived.
+    Parent abstract class from which EmailCommunication and SMSCommunication
+    are derived.
 
-    Provides a common constructor for descendants a the send_message
-    method stub.
+    The most important thing about this class is the constructor method
+    that it provides to its descendants.  It provides the ability to
+    leverage Django's template objects in communications.
 
     """
 
@@ -38,7 +39,16 @@ class EmailCommunication(_Communication):
     values.  More info: https://docs.djangoproject.com/en/1.5/topics/email
 
     """
+
     def send_message(self):
+        """
+        Send an email message with plain text and html versions.
+
+        It's important to note that while these method will send a
+        plain-text version of the message, the html tags are not being
+        stripped and so the message will be quite ugly.
+
+        """
         message = mail.EmailMultiAlternatives(
             self.subject,
             self.message,
@@ -46,3 +56,17 @@ class EmailCommunication(_Communication):
             self.recipient_list)
         message.attach_alternative(self.message, "text/html")
         message.send()
+
+
+class SMSCommunication(_Communication):
+    """
+    Provide functionality to send sms messages.
+
+    """
+
+    def send_message(self):
+        """
+        Needs implementation.
+
+        """
+        raise NotImplementedError
