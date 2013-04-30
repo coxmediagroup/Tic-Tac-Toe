@@ -82,7 +82,10 @@ class GameEngine(object):
         combinations.  If a combination is found where 2 out of 3
         squares have been selected, see if the 3rd is still available.
 
-        If it is, return it.
+        It is important to note that this method is used to determine if
+        there is a winning move for the computer to make AND if there
+        is a winning move that the human player could make on his/her
+        next turn.
 
         """
         for winning_combination in GameEngine.GAME_WINNING_COMBINATIONS:
@@ -99,23 +102,6 @@ class GameEngine(object):
                 # See if last element is selectable. If so, return it.
                 if next_move in self.open_squares:
                     return next_move
-
-    def is_square_open(self, square_id):
-        """
-        Determine if a given square is still available for selection.
-
-        Generate set of open squares by comparing player and computer
-        move histories to GAME_SQUARES constant and then compare a
-        given square_id to this set.
-
-        """
-        open_squares = set(
-            self.computers_move_history +
-            self.players_move_history).symmetric_difference(
-                GameEngine.GAME_SQUARES)
-
-        if square_id in open_squares:
-            return True
 
     def normal_move(self):
         """
