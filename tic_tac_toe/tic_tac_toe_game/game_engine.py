@@ -24,11 +24,12 @@ and any other necessary changes (like a game over message).
 """
 import random
 
+
 class GameEngine(object):
     GAME_WINNING_COMBINATIONS = (
-        (1, 2, 3), (4, 5, 6), (7, 8, 9), # Rows Wins
-        (1, 4, 7), (2, 5, 8), (3, 6, 9), # Column Wins
-        (1, 5, 9), (3, 5, 7))               # Diagonal Wins
+        (1, 2, 3), (4, 5, 6), (7, 8, 9),  # Rows Wins
+        (1, 4, 7), (2, 5, 8), (3, 6, 9),  # Column Wins
+        (1, 5, 9), (3, 5, 7))             # Diagonal Wins
 
     GAME_SQUARES = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -47,6 +48,9 @@ class GameEngine(object):
         complete destruction and utter humiliation to the player.
 
         """
+        if not self.open_squares.__len__():
+            return False
+
         for move_list in (self.computers_move_history,
                           self.players_move_history):
 
@@ -54,7 +58,7 @@ class GameEngine(object):
             if next_move:
                 return next_move
 
-        return self.random_move()
+        return self.normal_move()
 
     def check_for_winning_move(self, move_history_to_evaluate):
         """
@@ -96,11 +100,22 @@ class GameEngine(object):
         if square_id in open_squares:
             return True
 
-    def random_move(self):
+    def normal_move(self):
         """
 
 
 
         """
-        list_of_open_squares = list(self.open_squares).remove([1,2,3])
-        return random.choice(list_of_open_squares)
+        corner_squares = [1, 3, 7, 9]
+        middle_squares = [2, 4, 6, 8]
+
+        if 5 in self.open_squares:
+            return 5
+        else:
+            for possible_move in corner_squares:
+                if possible_move in self.open_squares:
+                    return possible_move
+
+            for possible_move in middle_squares:
+                if possible_move in self.open_squares:
+                    return possible_move
