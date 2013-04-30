@@ -53,11 +53,11 @@
     background-color: #2d2d2e;
     padding: .5em 1em .5em 1em;
     margin-top: 2em;
-    width: 25em;
+
     height: 25em;
 }
 
 #main_content {
     /* Overrides projectbase.css */
-	max-width: 50%;
+	width: 25em;
 }
