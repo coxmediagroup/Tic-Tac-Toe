@@ -2,6 +2,12 @@ from django.db import models
 
 
 class Event(models.Model):
+    """
+    The Event model is the only model with the Analytics app.  Developers
+    can easily customize the type of analytic 'events' that are available by
+    adding entries to the EVENT_TYPE_CHOICES tuple.
+
+    """
 
     EVENT_TYPE_CHOICES = (
         ('TIC_TAC_TOE_START', 'User Started a Tic-Tac-Toe Game'),
