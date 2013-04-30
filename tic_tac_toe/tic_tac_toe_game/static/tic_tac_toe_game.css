@@ -1,5 +1,14 @@
 /* Class Based Selectors */
 
+.button {
+    background-color: #39393a;
+    color: ghostwhite;
+    border-radius: inherit;
+    padding: .25em;
+    margin: 0em 0em 2em 0em;
+    text-decoration: none;
+}
+
 .game_board_section {
     background-color: #2d2d2e;
     border: ghostwhite solid thin;
@@ -32,7 +41,7 @@
 }
 
 #status_message {
-    background-color: #008519;
+    background-color: #850e01;
     border-radius: 5px;
     color: ghostwhite;
     display: none;
