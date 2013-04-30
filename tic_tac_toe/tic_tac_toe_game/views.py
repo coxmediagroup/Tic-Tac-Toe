@@ -112,6 +112,8 @@ def process_player_move(request):
                     event_model=request.user.__class__.__name__,
                     event_model_id=request.user.id)
 
+                analytics_event.save()
+
             # Return most recent moves to the client.
             json_response = {
                 'player_move': player_moves[-1],
