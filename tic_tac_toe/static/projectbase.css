@@ -20,6 +20,12 @@ h2 {
     margin: 0em 0em .25em 0em;
 }
 
+h3 {
+    font-size: 1.25em;
+    color: ghostwhite;
+    margin: 0em 0em .25em 0em;
+}
+
 p {
     color: lightgray;
     margin: 0em 0em 1em 0em;
