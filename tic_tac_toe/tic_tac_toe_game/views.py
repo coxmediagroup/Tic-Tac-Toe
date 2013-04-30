@@ -80,22 +80,37 @@ def process_player_move(request):
 
             if game_status == "Game Over (Computer Win)":
                 email_message = EmailCommunication(
-                'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
-                [request.user.email],
-                '//OH SNAP!',
-                'email/lost_game.html',
-                {'first_name': request.user.first_name})
+                    'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
+                    [request.user.email],
+                    '//OH SNAP!',
+                    'email/lost_game.html',
+                    {'first_name': request.user.first_name})
 
                 email_message.send_message()
 
                 analytics_event = Event(
-                event_type='TIC_TAC_TOE_FINISH_LOST',
-                event_url=request.path,
-                event_model=request.user.__class__.__name__,
-                event_model_id=request.user.id
-                )
+                    event_type='TIC_TAC_TOE_FINISH_LOST',
+                    event_url=request.path,
+                    event_model=request.user.__class__.__name__,
+                    event_model_id=request.user.id)
 
                 analytics_event.save()
+
+            elif game_status == "Draw":
+                email_message = EmailCommunication(
+                    'grand-chiefain-of-the-moose-people@RGamesR2Smart4U.com',
+                    [request.user.email],
+                    '//YOU ALMOST WON!',
+                    'email/draw_game.html',
+                    {'first_name': request.user.first_name})
+
+                email_message.send_message()
+
+                analytics_event = Event(
+                    event_type='TIC_TAC_TOE_FINISH_DRAW',
+                    event_url=request.path,
+                    event_model=request.user.__class__.__name__,
+                    event_model_id=request.user.id)
 
             # Return most recent moves to the client.
             json_response = {
