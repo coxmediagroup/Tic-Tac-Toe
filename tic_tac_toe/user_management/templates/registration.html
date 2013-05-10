@@ -1,0 +1,46 @@
+{% extends "usermanagementbase.html" %}
+{% block title %}Registration | Tic/ Tac/ Toe/{% endblock %}
+
+{% block meta_tags %}
+	{{ block.super }}
+	<META NAME="Description" CONTENT="Registration Page for Tic/ Tac/ Toe/">
+{% endblock %}
+
+{#{% block additional_head_items %}#}
+{#	<script>#}
+{#    $(function() {#}
+{#        $( "#id_certification_start_date" ).datepicker({#}
+{#            changeMonth: true,#}
+{#            changeYear: true,#}
+{#            dateFormat: "yy-mm-dd"#}
+{#        });#}
+{#    });#}
+{#    </script>#}
+{#	#}
+{#	{{ block.super }}#}
+{#{% endblock %}#}
+
+{% block main_content %}
+
+	<h1>// USER REGISTRATION</h1>
+
+	<section class="instructions">
+	<p>
+        <h2>Instructions</h2>
+        <p>Please fill out all the fields below.  <br />
+           If you get an error, just try again.  <br />
+           We promise, this will eventually solve the problem.</p>
+	</p>
+    </section>
+
+    <form method="post" action="/usermanagement/registration/">
+
+	    {% csrf_token %}
+	    {{ registration_form.as_p }}
+	    <input type="submit" value="Register" />
+	</form>
+
+	{{ block.super }}
+	
+{% endblock %}
+
