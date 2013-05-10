@@ -1,20 +1,7 @@
-## Greetings
-My name is Mike Dunn.  I normally go by the handle eikonomega, but since this repo is public, 
-I put it under a super secret codename 'eikonalpha' so that I don't advertise to my current
-employer that I'm interested in joining your team.
-
-##### More About Me (Blah Blah Blah)
-1. [LinkedIn Profile](http://www.linkedin.com/profile/view?id=50728915&trk=tab_pro) / [Careers 2.0 Profile](http://careers.stackoverflow.com/eikonomega)
-2. [Real Github Account](https://github.com/eikonomega)
-3. [Development Blog](http://www.developerimprovethyself.com)
-3. [SaaS Website](http://www.doulaexchange.com)
-
 ### Project Summary
 To create an interactive tic-tac-toe game in which the computer can never lose.  
 
-My goal is to present the game within the context of a Django website that implements many of the features that
-I imagine many of your media sites would include.  My hope is to clearly demonstrate my potential as a full-stack developer
-without sinking to far down into the rabbit hole of feature sprawl.
+My goal is to present the game within the context of a Django website that implements a variety of common features.
 
 ### Project Site: [r2smart4u.herokuapp.com](http://r2smart4u.herokuapp.com)
 
