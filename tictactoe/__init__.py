@@ -15,6 +15,21 @@ class Board(object):
     __first_player = None
     __winner = None
 
+    def __repr__(self):
+        substitutions = {
+            self.EMPTY: " ",
+            self.NAUGHT: "o",
+            self.CROSS: "x",
+        }
+
+        return ("{0} | {1} | {2}\n"
+                "=========\n"
+                "{3} | {4} | {5}\n"
+                "=========\n"
+                "{6} | {7} | {8}\n"
+        ).format(*map(lambda v: substitutions[v], self.cells))
+
+
     @classmethod
     def __empty_board(cls):
         return [cls.EMPTY, ] * 9
@@ -83,6 +98,7 @@ class Board(object):
         return self.__cells[int(item)]
 
     def __setitem__(self, key, value):
+        # TODO: test for valid values (``Board.CROSS``, or ``Board.NAUGTH``, but never ``Board.EMPTY``)
         if self.__cells[key] is not self.EMPTY:
             raise ex.NonEmptyCellError
 
