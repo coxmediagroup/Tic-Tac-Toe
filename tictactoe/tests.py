@@ -50,6 +50,21 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(game.winner, x)
         self.assertEqual(ctx.exception.winner, x)
 
+    def test_game_board_cannot_be_modified_once_it_has_been_won(self):
+        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        game = Board([x, _, o,
+                      x, o, x,
+                      _, o, _],
+                     first_player=x)
+        with self.assertRaises(ex.GameOver):
+            game[6] = x
+
+        with self.assertRaises(ex.GameOver):
+            # this change should be rolled back
+            game[8] = o
+
+        self.assertEqual(game[8], game.EMPTY)
+
 
 class NaughtBotTests(unittest.TestCase):
     """

@@ -13,6 +13,7 @@ class Board(object):
     EMPTY = None
     __cells = None
     __first_player = None
+    __winner = None
 
     @classmethod
     def __empty_board(cls):
@@ -63,11 +64,13 @@ class Board(object):
 
     @property
     def winner(self):
-        for group in self.groupings:
-            if group.count(self.NAUGHT) == 3:
-                return self.NAUGHT
-            elif group.count(self.CROSS) == 3:
-                return self.CROSS
+        if self.__winner is None:
+            for group in self.groupings:
+                if group.count(self.NAUGHT) == 3:
+                    self.__winnner = self.NAUGHT
+                elif group.count(self.CROSS) == 3:
+                    self.__winner = self.CROSS
+        return self.__winner
 
     def __getitem__(self, item):
         # ensure we only get a single int argument (not a slice).
@@ -77,13 +80,17 @@ class Board(object):
         if self.__cells[key] is not self.EMPTY:
             raise ex.NonEmptyCellError
 
-        # note who placed the first mark on the board
         if self.__first_player is None:
+            # note who placed the first mark on the board
             self.__first_player = value
+        elif self.winner:
+            # if there's a winner already, raise out before the assignment is made
+            raise ex.GameOver(winner=self.winner)
 
         original_val = self.__cells[key]
 
         try:
+
             self.__cells[key] = value
 
             crosses = self.__cells.count(self.CROSS)
