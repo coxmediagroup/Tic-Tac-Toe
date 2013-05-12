@@ -21,15 +21,20 @@ class Board(object):
     def __init__(self, cells=None, first_player=None):
         """
         :param cells: list of cell states
-        :param first_player: set who made the first mark on the board
+        :param first_player: sets who made the first mark on the board (required
+                             when cells is not None).
         """
-        self.__first_player = None
-        if cells is not None and first_player is None:
-            raise ex.FirstPlayerRequiredError("first_player is required when setting cells")
-        elif cells is None and first_player:
+        if cells is None:
+            # when cells is None, we start with an empty board (and therefore
+            # can't have a first player).
             first_player = None
+            cells = self.__empty_board()
+        elif first_player is None:
+            raise ex.FirstPlayerRequiredError("first_player is required when setting cells")
 
-        self.__cells = cells if cells is not None else self.__empty_board()
+        self.__first_player = first_player
+        self.__cells = cells
+
         if len(self.__cells) != 9:
             raise ex.SizeError("Unexpected Board size. Board must have 9 cells.")
 
