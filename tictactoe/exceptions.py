@@ -25,3 +25,12 @@ class NonEmptyCellError(MoveError):
 
 class DoubleMoveError(MoveError):
     """Raised when a player tries to mark a cell out of turn."""
+
+
+class GameOver(TicTacToeError):
+    """Raised when the game is over. Caller should share who the winner is."""
+    winner = None
+
+    def __init__(self, winner):
+        assert winner is not None
+        self.winner = winner

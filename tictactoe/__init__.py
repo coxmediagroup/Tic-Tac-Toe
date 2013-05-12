@@ -1,7 +1,9 @@
 """
 Implementation for the game ``Board`` and ``naught_bot`` that will play the game
 """
-from .exceptions import SizeError, DoubleMoveError, NonEmptyCellError, FirstPlayerRequiredError
+import itertools
+from . import exceptions as ex
+
 
 class Board(object):
     """The board enforces the game rules."""
@@ -23,31 +25,55 @@ class Board(object):
         """
         self.__first_player = None
         if cells is not None and first_player is None:
-            raise FirstPlayerRequiredError("first_player is required when setting cells")
+            raise ex.FirstPlayerRequiredError("first_player is required when setting cells")
         elif cells is None and first_player:
             first_player = None
 
         self.__cells = cells if cells is not None else self.__empty_board()
         if len(self.__cells) != 9:
-            raise SizeError("Unexpected Board size. Board must have 9 cells.")
+            raise ex.SizeError("Unexpected Board size. Board must have 9 cells.")
 
     @property
     def cells(self):
         return (cell for cell in self.__cells)
 
-    @staticmethod
-    def __coords_to_index(x, y):
-        return (x * 3) + y
+    @property
+    def rows(self):
+        for row in ((0, 1, 2), (3, 4, 5), (6, 7, 8)):
+            yield [self.__cells[i] for i in row]
+
+    @property
+    def columns(self):
+        for column in ((0, 3, 6), (1, 4, 7), (2, 5, 8)):
+            yield [self.__cells[i] for i in column]
+
+    @property
+    def diagonals(self):
+        for diagonal in ((0, 4, 8), (2, 4, 6)):
+            yield [self.__cells[i] for i in diagonal]
+
+    @property
+    def groupings(self):
+        return itertools.chain(self.rows, self.columns, self.diagonals)
+
+    @property
+    def winner(self):
+        for group in self.groupings:
+            if group.count(self.NAUGHT) == 3:
+                return self.NAUGHT
+            elif group.count(self.CROSS) == 3:
+                return self.CROSS
 
     def __getitem__(self, item):
-        return self.__cells[item]
+        # ensure we only get a single int argument (not a slice).
+        return self.__cells[int(item)]
 
     def __setitem__(self, key, value):
         if self.__cells[key] is not self.EMPTY:
-            raise NonEmptyCellError
+            raise ex.NonEmptyCellError
 
         # note who placed the first mark on the board
-        if self.__cells.count(self.EMPTY) == 9:
+        if self.__first_player is None:
             self.__first_player = value
 
         original_val = self.__cells[key]
@@ -67,17 +93,16 @@ class Board(object):
                                           and value != self.__first_player)
             gap_too_large = max(crosses, naughts) - min(crosses, naughts) > 1
             if  gap_too_large or lead_belongs_to_player_two:
-                raise DoubleMoveError
+                raise ex.DoubleMoveError
 
-        except DoubleMoveError as exc:
+            if self.winner:
+                raise ex.GameOver(winner=self.winner)
+
+        except ex.DoubleMoveError:
             # we are try/excepting so the assignment to the cells list is
             # rolled back, but we still want the exception to bubble up.
             self.__cells[key] = original_val
-            raise exc
-
-
-
-
+            raise
 
 
 def naught_bot(board):
