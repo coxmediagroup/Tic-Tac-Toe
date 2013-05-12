@@ -40,6 +40,10 @@ class Board(object):
             raise ex.SizeError("Unexpected Board size. Board must have 9 cells.")
 
     @property
+    def first_player(self):
+        return self.__first_player
+
+    @property
     def cells(self):
         return (cell for cell in self.__cells)
 
@@ -67,9 +71,11 @@ class Board(object):
         if self.__winner is None:
             for group in self.groupings:
                 if group.count(self.NAUGHT) == 3:
-                    self.__winnner = self.NAUGHT
+                    self.__winner = self.NAUGHT
+                    break
                 elif group.count(self.CROSS) == 3:
                     self.__winner = self.CROSS
+                    break
         return self.__winner
 
     def __getitem__(self, item):
@@ -83,16 +89,14 @@ class Board(object):
         if self.__first_player is None:
             # note who placed the first mark on the board
             self.__first_player = value
-        elif self.winner:
+        elif self.winner is not None:
             # if there's a winner already, raise out before the assignment is made
             raise ex.GameOver(winner=self.winner)
 
         original_val = self.__cells[key]
 
         try:
-
             self.__cells[key] = value
-
             crosses = self.__cells.count(self.CROSS)
             naughts = self.__cells.count(self.NAUGHT)
 
@@ -107,9 +111,8 @@ class Board(object):
             if  gap_too_large or lead_belongs_to_player_two:
                 raise ex.DoubleMoveError
 
-            if self.winner:
+            if self.winner is not None:
                 raise ex.GameOver(winner=self.winner)
-
         except ex.DoubleMoveError:
             # we are try/excepting so the assignment to the cells list is
             # rolled back, but we still want the exception to bubble up.

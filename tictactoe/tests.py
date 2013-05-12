@@ -38,7 +38,7 @@ class BoardTests(unittest.TestCase):
             game[2] = game.NAUGHT
 
 
-    def test_game_knows_when_someone_wins(self):
+    def test_game_knows_when_cross_wins(self):
         x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
         game = Board([x, _, o,
                       x, o, x,
@@ -49,6 +49,18 @@ class BoardTests(unittest.TestCase):
 
         self.assertEqual(game.winner, x)
         self.assertEqual(ctx.exception.winner, x)
+
+    def test_game_knows_when_naught_wins(self):
+        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        game = Board([o, _, x,
+                      o, x, o,
+                      _, x, _],
+                     first_player=o)
+        with self.assertRaises(ex.GameOver) as ctx:
+            game[6] = o
+
+        self.assertEqual(game.winner, o)
+        self.assertEqual(ctx.exception.winner, o)
 
     def test_game_board_cannot_be_modified_once_it_has_been_won(self):
         x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
@@ -70,10 +82,11 @@ class NaughtBotTests(unittest.TestCase):
     """
     Tests demonstrating naught_bot's decision-making process.
     """
-    def test_knows_if_it_went_first(self):
-        raise NotImplementedError
+    def test_knows_how_to_open_first(self):
+        game = Board()
+        self.assertEqual(naught_bot(game), 4)
 
-    def test_knows_if_it_went_second(self):
+    def test_knows_how_to_open_second(self):
         raise NotImplementedError
 
     def test_knows_when_to_block(self):
