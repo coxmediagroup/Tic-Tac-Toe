@@ -78,7 +78,7 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(game[8], game.EMPTY)
 
 
-class NaughtBotTests(unittest.TestCase):
+class NaughtBotStartsTests(unittest.TestCase):
     """
     Tests demonstrating naught_bot's decision-making process.
     """
@@ -86,8 +86,13 @@ class NaughtBotTests(unittest.TestCase):
         game = Board()
         self.assertEqual(naught_bot(game), 4)
 
-    def test_knows_how_to_open_second(self):
-        raise NotImplementedError
+    def test_human_marks_edge(self):
+        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        game = Board([_, _, _,
+                      x, o, _,
+                      _, _, _],
+                     first_player=o)
+        self.assertIn(naught_bot(game), (2, 8))
 
     def test_knows_when_to_block(self):
         raise NotImplementedError

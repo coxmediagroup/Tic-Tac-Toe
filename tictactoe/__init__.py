@@ -29,7 +29,6 @@ class Board(object):
                 " {6} | {7} | {8} \n"
         ).format(*map(lambda v: substitutions[v], self.cells))
 
-
     @classmethod
     def __empty_board(cls):
         return [cls.EMPTY, ] * 9
@@ -98,7 +97,9 @@ class Board(object):
         return self.__cells[int(item)]
 
     def __setitem__(self, key, value):
-        # TODO: test for valid values (``Board.CROSS``, or ``Board.NAUGTH``, but never ``Board.EMPTY``)
+        if value not in (self.NAUGHT, self.CROSS):
+            raise ValueError
+
         if self.__cells[key] is not self.EMPTY:
             raise ex.NonEmptyCellError
 
@@ -141,3 +142,6 @@ def naught_bot(board):
     :param board: A :class:`Board` instance evaluate.
     :returns: index of the cell it intends to mark.
     """
+    if list(board.cells).count(board.EMPTY) == 9:
+        # this is the opening move
+        return 4  # take the center cell
