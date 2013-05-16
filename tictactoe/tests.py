@@ -86,16 +86,29 @@ class NaughtBotStartsTests(unittest.TestCase):
         game = Board()
         self.assertEqual(naught_bot(game), 4)
 
-    def test_human_marks_edge(self):
+    def test_knows_when_to_block(self):
         x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
         game = Board([_, _, _,
-                      x, o, _,
-                      _, _, _],
-                     first_player=o)
-        self.assertIn(naught_bot(game), (2, 8))
+                      x, x, _,
+                      o, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (5,))
+        game = Board([o, _, _,
+                      _, x, _,
+                      x, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (2,))
 
-    def test_knows_when_to_block(self):
-        raise NotImplementedError
+        game = Board([o, _, o,
+                      x, x, _,
+                      x, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (5,))
 
-    def test_knows_when_to_push_for_a_win(self):
-        raise NotImplementedError
+    def test_knows_when_to_attack(self):
+        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        game = Board([o, _, _,
+                      _, x, _,
+                      o, _, x],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (3,))
