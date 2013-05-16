@@ -116,8 +116,32 @@ class Computer(Player):
     """
 
     def go(self, game):
-        """Determine the best possible next move based on current
-        board conditions.
+        """Determine the best possible next move based on current board
+        conditions. This algorithm will choose the first possible of the
+        following possibilities:
+
+        1) If there is a winning move available (2 marks in a line with the
+            third space in the same line available), take it.
+        2) If the opponent will have a winning move available on their next
+            turn, take the space that would give your opponent the win.
+        3) Create a fork if possible. (Where a fork is the condition that
+            you have two unbroken lines of two, simultaneously creating two
+            possible win conditions on your next move.)
+        4) Can you prevent your opponent from creating a fork on their next
+            move? This can be accomplished by first possible of the following:
+            - Creating a possible win scenario on your next move, forcing
+                your opponent to block such that their act of blocking will
+                not create a fork for them.
+            - Choose the space where the opponent would need to play in order
+                to create the fork.
+        5) Choose the center space.
+        6) Choose an empty corner opposite and diagonal from a corner already
+            claimed by the opponent.
+        7) Choose any empty corner space.
+        8) Choose any empty side space (non-corner edge).
+
+        If the first possible of these steps is always chosen, optimal play
+        will result in a win or draw for the computer every time.
         """
         #TODO: sooo, this just grabs the first open square it can right now...
         game.toggle_turn()
