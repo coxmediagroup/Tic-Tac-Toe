@@ -46,14 +46,14 @@ class Game(object):
         or if a player has achieved a win scenario.
         """
         #TODO: Yeah, this checks full board but not win scenario yet...
-        return len(self.board) == self.board.size ** 2
+        return self.board.unused() == []
 
     def run(self):
         """Start taking turns. This assumes that the board and players
         have been appropriately setup in __init__.
         """
         print "Game is starting..."
-        while not game.over():
+        while not self.over():
             self.next_player.go(self)
 
 
@@ -130,10 +130,13 @@ class Board(object):
     and provides functional access.
     """
 
-    def __init__(self, size=3):
+    __size = 3
+
+    def __init__(self):
         """Create a Square for each open space on a 3x3 grid."""
-        self.size = size
-        self.squares = [Square(x, y) for x in range(size) for y in range(size)]
+        self.squares = [Square(x, y)
+                        for x in range(self.__size)
+                        for y in range(self.__size)]
 
     def square(self, x, y):
         """Retrieve a Square given an (X,Y) coordinate pair."""
@@ -142,10 +145,6 @@ class Board(object):
     def unused(self):
         """Return a list containing all unclaimed Squares."""
         return [i for i in self.squares if i.mark not in ('X', 'O')]
-
-    def __len__(self):
-        """Calculate the number of claimed Squares on the Board."""
-        return len([s for s in self.squares if s.mark in ('X', 'O')])
 
     def __str__(self):
         """Print a human-friendly version of the Board
