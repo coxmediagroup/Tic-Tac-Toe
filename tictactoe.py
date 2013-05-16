@@ -79,7 +79,7 @@ class Human(Player):
         """
 
         game.toggle_turn()
-        move_loc = ''
+        move_loc = None
 
         print game.board
         print('Where would you like to move?')
@@ -87,7 +87,8 @@ class Human(Player):
         err = ''
         while move_loc not in game.board.unused():
             print err
-            move_loc = self.move_prompt(game)
+            x, y = self.move_prompt(game)
+            move_loc = game.board.square(x, y)
             err = '\nInvalid Selection. Try again.\n'
         move_loc.mark = self.symbol
 
@@ -105,8 +106,7 @@ class Human(Player):
         while y not in ('0', '1', '2'):
             y = raw_input('%s--> Select a Y coordinate: ' % prefix)
             prefix = '(Invalid Input) '
-        x, y = int(x), int(y)
-        return game.board.square(x, y)
+        return (int(x), int(y))
 
 
 class Computer(Player):
