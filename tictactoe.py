@@ -62,8 +62,9 @@ class Player(object):
     """A base class for Human and Computer player classes."""
 
     def __init__(self, symbol=''):
-        """Store the symbol ('X' or 'O') for the Player."""
+        """Store the symbol ('X' or 'O') for the Player and opponent."""
         self.symbol = symbol
+        self.opponent_symbol = 'O' if self.symbol == 'X' else 'X'
 
 
 class Human(Player):
@@ -142,9 +143,33 @@ class Computer(Player):
 
         If the first possible of these steps is always chosen, optimal play
         will result in a win or draw for the computer every time.
+
+        Attribution: http://wikipedia.org/wiki/Tic-tac-toe#Strategy
+        Note: Although it is actually optimal for the computer to choose the
+        center as the first move (if able) which creates more possibilities
+        for a forced win by X, this progam follows the above algorithm stictly
+        which still results in a draw in optimal play by O and a win in
+        suboptimal play by O. The expectations for the program are that the
+        computer will 'never lose'. This holds but the algorithm could
+        certainly be improved to win a greater number of times or to do so in
+        a faster or more efficient manner.
         """
+
         #TODO: sooo, this just grabs the first open square it can right now...
         game.toggle_turn()
+
+        win = game.board.winning_moves(self.symbol)
+        if win:
+            return
+
+        block = game.board.winning_moves(self.opponent_symbol)
+        if block:
+            return
+
+        fork = game.board.fork_available(self.symbol)
+        if fork:
+            return
+
         game.board.unused()[0].mark = self.symbol
 
 
@@ -155,6 +180,7 @@ class Board(object):
     """
 
     __size = 3
+    __indices = (0, 1, 2)
 
     def __init__(self):
         """Create a Square for each open space on a 3x3 grid."""
@@ -166,23 +192,64 @@ class Board(object):
         """Retrieve a Square given an (X,Y) coordinate pair."""
         return [i for i in self.squares if i.x == x and i.y == y].pop()
 
+    def used(self):
+        """Return a list of all squares that have already been claimed"""
+        return [i for i in self.squares if i not in self.unused()]
+
     def unused(self):
         """Return a list containing all unclaimed Squares."""
-        return [i for i in self.squares if i.mark not in ('X', 'O')]
+        return [i for i in self.squares if i.empty()]
+
+    def winning_moves(self, symbol=''):
+
+        """Return a list of all moves which will result in a win for player
+        represented by symbol. Return an empty list if none exist.
+        """
+        #TODO the diagonals
+
+        res = []
+
+        cols = [[s for s in self.squares if
+                 s in self.used() and s.x == i and s.mark == symbol]
+                for i in range(3)]
+        for i, col in enumerate(cols):
+            if len(col) == 2:
+                j = (set(self.__indices) - set(s.y for s in col)).pop()
+                sq = self.square(i, j)
+                if sq in self.unused():
+                    res.append(sq)
+
+        rows = [[s for s in self.squares if
+                 s in self.used() and s.y == i and s.mark == symbol]
+                for i in range(3)]
+        for i, row in enumerate(rows):
+            if len(row) == 2:
+                j = (set(self.__indices) - set(s.x for s in row)).pop()
+                sq = self.square(j, i)
+                if sq in self.unused():
+                    res.append(sq)
+
+        return res
+
+    def fork_available(self, symbol=''):
+        """Return a list of all moves which will result in creating a fork
+        for player represented by symbol. Fork here is determined as the
+        existance of two separate, simultaneous threats to win. Return an
+        empty list if none exist.
+        """
+        #TODO
+        return []
 
     def __str__(self):
         """Print a human-friendly version of the Board
         to be shown between turns.
         """
         res = ['\n    0   1   2\n']
-        res.append(' 0  %s | %s | %s\n' %
-                   (self.square(0, 0), self.square(1, 0), self.square(2, 0)))
-        res.append('   ---+---+---\n')
-        res.append(' 1  %s | %s | %s\n' %
-                   (self.square(0, 1), self.square(1, 1), self.square(2, 1)))
-        res.append('   ---+---+---\n')
-        res.append(' 2  %s | %s | %s\n' %
-                   (self.square(0, 2), self.square(1, 2), self.square(2, 2)))
+
+        sub = [' %d  %s | %s | %s\n' %
+               ((j,) + tuple(self.square(i, j)
+               for i in range(3))) for j in range(3)]
+        res.append('   ---+---+---\n'.join(sub))
 
         return ''.join(res)
 
@@ -196,6 +263,10 @@ class Square(object):
         self.x = x
         self.y = y
         self.mark = mark
+
+    def empty(self):
+        """Return a bool representing if this square has not been claimed"""
+        return self.mark == ' '
 
     def __str__(self):
         """Print the mark for this Square ('X','O' or ' ')."""
