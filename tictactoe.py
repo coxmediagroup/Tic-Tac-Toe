@@ -1,5 +1,10 @@
 class Game(object):
-    """Represents the game, maintains game board and manages game loop"""
+
+    """A tic tac toe game.
+    Represents the game, maintains game board, two players
+    and manages game loop along with who should play next.
+    """
+
     def __init__(self):
         print "Welcome to Tic Tac Toe!"
         self.board = Board()
@@ -37,11 +42,19 @@ class Game(object):
 
 
 class Player(object):
+
+    """A base class for Human and Computer player classes."""
+
     def __init__(self, symbol=''):
         self.symbol = symbol
 
 
 class Human(Player):
+
+    """Represents data and functionality for human players.
+    Handles data input and validation for user interaction.
+    """
+
     def go(self, game):
         game.toggle_turn()
         move_loc = ''
@@ -72,13 +85,22 @@ class Human(Player):
 
 
 class Computer(Player):
+
+    """Represents the computer player in tic tac toe.
+    Stores data pertinent to this player and contains logic for move selection.
+    """
+
     def go(self, game):
         game.toggle_turn()
         game.board.unused()[0].mark = self.symbol
 
 
 class Board(object):
-    """Represents current state of game board and provides functional access"""
+
+    """Represents the current state of the game's board
+    and provides functional access.
+    """
+
     def __init__(self, size=3):
         self.size = size
         self.squares = [Square(x, y) for x in range(size) for y in range(size)]
@@ -95,7 +117,7 @@ class Board(object):
     def __str__(self):
         """
         Print a human-friendly version of the board
-        to be shown between turns
+        to be shown between turns.
         """
         res = ['\n    0   1   2\n']
         res.append(' 0  %s | %s | %s\n' %
@@ -111,7 +133,9 @@ class Board(object):
 
 
 class Square(object):
-    """Represents one location on the game board"""
+
+    """Represents one location on the game board, its location and mark."""
+
     def __init__(self, x, y, mark=' '):
         self.x = x
         self.y = y
