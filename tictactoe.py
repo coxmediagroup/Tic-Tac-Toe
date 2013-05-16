@@ -6,11 +6,16 @@ class Game(object):
     """
 
     def __init__(self):
+        """Create the game board and determine play order."""
         print "Welcome to Tic Tac Toe!"
         self.board = Board()
         self.init_players()
 
     def init_players(self):
+        """Query the user about turn order and create Players appropriately.
+        The first player is always represented by X regardless if the first
+        player is human or computer. Likewise with player 2, represented by O.
+        """
         selection = ''
         prefix = ''
         suffix = '--> Would you like to play first or second? (1 or 2): '
@@ -27,15 +32,26 @@ class Game(object):
             self.next_player = self.computer
 
     def toggle_turn(self):
+        """Swap next_player to mark who should play next
+        (not who is playing currently). This must be called
+        by Player and its subclasses as the first step in a turn.
+        """
         if self.next_player is self.human:
             self.next_player = self.computer
         else:
             self.next_player = self.human
 
     def over(self):
+        """Determine if the game is over, by checking if the board is full
+        or if a player has achieved a win scenario.
+        """
+        #TODO: Yeah, this checks full board but not win scenario yet...
         return len(self.board) == self.board.size ** 2
 
     def run(self):
+        """Start taking turns. This assumes that the board and players
+        have been appropriately setup in __init__.
+        """
         print "Game is starting..."
         while not game.over():
             self.next_player.go(self)
@@ -46,6 +62,7 @@ class Player(object):
     """A base class for Human and Computer player classes."""
 
     def __init__(self, symbol=''):
+        """Store the symbol ('X' or 'O') for the Player."""
         self.symbol = symbol
 
 
@@ -56,6 +73,11 @@ class Human(Player):
     """
 
     def go(self, game):
+
+        """Take a turn. Ask the user for input, keep asking until
+        the user chooses one that is untaken then mark that square.
+        """
+
         game.toggle_turn()
         move_loc = ''
 
@@ -70,6 +92,9 @@ class Human(Player):
         move_loc.mark = self.symbol
 
     def move_prompt(self, game):
+        """Ask a user for (X,Y) coordinates that are valid, (i.e. on the
+        board) then get that square from the game board and return.
+        """
         x = ''
         y = ''
         prefix = ''
@@ -91,6 +116,10 @@ class Computer(Player):
     """
 
     def go(self, game):
+        """Determine the best possible next move based on current
+        board conditions.
+        """
+        #TODO: sooo, this just grabs the first open square it can right now...
         game.toggle_turn()
         game.board.unused()[0].mark = self.symbol
 
@@ -102,21 +131,24 @@ class Board(object):
     """
 
     def __init__(self, size=3):
+        """Create a Square for each open space on a 3x3 grid."""
         self.size = size
         self.squares = [Square(x, y) for x in range(size) for y in range(size)]
 
     def square(self, x, y):
+        """Retrieve a Square given an (X,Y) coordinate pair."""
         return [i for i in self.squares if i.x == x and i.y == y].pop()
 
     def unused(self):
+        """Return a list containing all unclaimed Squares."""
         return [i for i in self.squares if i.mark not in ('X', 'O')]
 
     def __len__(self):
+        """Calculate the number of claimed Squares on the Board."""
         return len([s for s in self.squares if s.mark in ('X', 'O')])
 
     def __str__(self):
-        """
-        Print a human-friendly version of the board
+        """Print a human-friendly version of the Board
         to be shown between turns.
         """
         res = ['\n    0   1   2\n']
@@ -137,11 +169,13 @@ class Square(object):
     """Represents one location on the game board, its location and mark."""
 
     def __init__(self, x, y, mark=' '):
+        """Store coordinates and mark for this Square."""
         self.x = x
         self.y = y
         self.mark = mark
 
     def __str__(self):
+        """Print the mark for this Square ('X','O' or ' ')."""
         return self.mark
 
 if __name__ == '__main__':
