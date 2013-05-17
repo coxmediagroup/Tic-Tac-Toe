@@ -205,7 +205,6 @@ class Board(object):
         """Return a list of all moves which will result in a win for player
         represented by symbol. Return an empty list if none exist.
         """
-        #TODO the diagonals
 
         res = []
 
