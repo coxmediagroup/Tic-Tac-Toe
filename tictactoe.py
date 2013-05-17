@@ -160,10 +160,12 @@ class Computer(Player):
 
         win = game.board.winning_moves(self.symbol)
         if win:
+            win.pop().mark = self.symbol
             return
 
         block = game.board.winning_moves(self.opponent_symbol)
         if block:
+            block.pop().mark = self.symbol
             return
 
         fork = game.board.fork_available(self.symbol)
