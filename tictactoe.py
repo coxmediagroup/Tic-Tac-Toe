@@ -209,8 +209,7 @@ class Board(object):
 
         res = []
 
-        cols = [[s for s in self.squares if
-                 s in self.used() and s.x == i and s.mark == symbol]
+        cols = [[s for s in self.squares if s.x == i and s.mark == symbol]
                 for i in range(3)]
         for i, col in enumerate(cols):
             if len(col) == 2:
@@ -219,8 +218,7 @@ class Board(object):
                 if sq in self.unused():
                     res.append(sq)
 
-        rows = [[s for s in self.squares if
-                 s in self.used() and s.y == i and s.mark == symbol]
+        rows = [[s for s in self.squares if s.y == i and s.mark == symbol]
                 for i in range(3)]
         for i, row in enumerate(rows):
             if len(row) == 2:
@@ -228,6 +226,22 @@ class Board(object):
                 sq = self.square(j, i)
                 if sq in self.unused():
                     res.append(sq)
+
+        tl_diag = [s for s in self.squares if s.x == s.y and s.mark == symbol]
+        if len(tl_diag) == 2:
+            i = (set(self.__indices) - set(s.x for s in tl_diag)).pop()
+            sq = self.square(i, i)
+            if sq in self.unused():
+                res.append(sq)
+
+        tr_diag_ind = tuple((2 - x, x) for x in range(3))
+        tr_diag = [s for s in self.squares if
+                   (s.x, s.y) in tr_diag_ind and s.mark == symbol]
+        if len(tr_diag) == 2:
+            i, j = (set(tr_diag_ind) - set((s.x, s.y) for s in tr_diag)).pop()
+            sq = self.square(i, j)
+            if sq in self.unused():
+                res.append(sq)
 
         return res
 
