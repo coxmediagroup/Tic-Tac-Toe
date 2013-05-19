@@ -9,6 +9,10 @@ class Command(NoArgsCommand):
     args = None
     help = 'Start a new game of Tic Tac Toe'
 
+    def clear_stdout(self, stream):
+        # clears the terminal (I had no idea how to do this so I googled).
+        self.stdout.write(chr(27) + "[2J")
+
     def handle_noargs(self, **options):
         board = Board()
         try:
@@ -19,7 +23,7 @@ class Command(NoArgsCommand):
                         idx = int(user_selection)
                         assert 8 >= idx >= 0, "cell must be 0-8"
                         board[int(user_selection)] = board.CROSS
-                        self.stdout.write(chr(27) + "[2J")
+                        self.clear_stdout()
                         self.stdout.write(str(board))
                         break
                     except (AssertionError, TypeError, ex.TicTacToeError) as exc:
@@ -28,9 +32,10 @@ class Command(NoArgsCommand):
                             sys.exit(0)
 
                         self.stderr.write(str(exc))
-
+                # after the player's mark is set, let the bot look at the board.
                 board[naught_bot(board)] = board.NAUGHT
-                self.stdout.write(chr(27) + "[2J")
+                # then re-render the board
+                self.clear_stdout()
                 self.stdout.write(str(board))
         except KeyboardInterrupt:
             self.stderr.write("\nExiting...")

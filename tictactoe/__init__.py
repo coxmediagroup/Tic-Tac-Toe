@@ -31,7 +31,7 @@ class Board(object):
                 " {3} | {4} | {5} \n"
                 "===========\n"
                 " {6} | {7} | {8} \n"
-        ).format(*map(lambda v: substitutions[v], self.cells))
+                ).format(*map(lambda v: substitutions[v], self.cells))
 
     __str__ = __repr__
 
@@ -51,13 +51,15 @@ class Board(object):
             first_player = None
             cells = self.__empty_board()
         elif first_player is None:
-            raise ex.FirstPlayerRequiredError("first_player is required when setting cells")
+            raise ex.FirstPlayerRequiredError("first_player is required when "
+                                              "setting cells for initial state")
 
         self.__first_player = first_player
         self.__cells = cells
 
         if len(self.__cells) != 9:
-            raise ex.SizeError("Unexpected Board size. Board must have 9 cells.")
+            raise ex.SizeError("Unexpected Board size. "
+                               "Board must have 9 cells.")
 
     @property
     def first_player(self):
@@ -105,7 +107,6 @@ class Board(object):
         except TypeError:
             # otherwise ensure we only get a single int argument (not a slice).
             return self.__cells[int(item)]
-
 
     def __setitem__(self, key, value):
         if value not in (self.NAUGHT, self.CROSS):
@@ -180,8 +181,3 @@ def naught_bot(board):
             scores[idx] += 1
 
     return max(scores.iteritems(), key=lambda t: t[1])[0]
-
-
-
-
-
