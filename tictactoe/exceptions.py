@@ -38,10 +38,9 @@ class GameOver(TicTacToeError):
     winner = None
 
     def __init__(self, winner):
-        assert winner is not None
         self.winner = winner
 
     def __str__(self):
         if self.winner is None:
-            return "Game Over. It's a Draw!"
-        return ("Game Over. %s Wins!" % ("X" if self.winner else "O"))
+            return "It's a Draw!"
+        return ("%s Wins!" % ("X" if self.winner else "O"))

@@ -12,18 +12,15 @@ EMPTY = None
 class Board(object):
     """The board enforces the game rules."""
 
-    NAUGHT = NAUGHT
-    CROSS = CROSS
-    EMPTY = EMPTY
     __cells = None
     __first_player = None
     __winner = None
 
     def __repr__(self):
         substitutions = {
-            self.EMPTY: " ",
-            self.NAUGHT: "o",
-            self.CROSS: "x",
+            EMPTY: " ",
+            NAUGHT: "o",
+            CROSS: "x",
         }
 
         return (" {0} | {1} | {2} \n"
@@ -37,7 +34,7 @@ class Board(object):
 
     @classmethod
     def __empty_board(cls):
-        return [cls.EMPTY, ] * 9
+        return [EMPTY, ] * 9
 
     def __init__(self, cells=None, first_player=None):
         """
@@ -90,11 +87,11 @@ class Board(object):
         if self.__winner is None:
             for cells in self.groupings:
                 group = self[cells]
-                if group.count(self.NAUGHT) == 3:
-                    self.__winner = self.NAUGHT
+                if group.count(NAUGHT) == 3:
+                    self.__winner = NAUGHT
                     break
-                elif group.count(self.CROSS) == 3:
-                    self.__winner = self.CROSS
+                elif group.count(CROSS) == 3:
+                    self.__winner = CROSS
                     break
         return self.__winner
 
@@ -109,10 +106,10 @@ class Board(object):
             return self.__cells[int(item)]
 
     def __setitem__(self, key, value):
-        if value not in (self.NAUGHT, self.CROSS):
+        if value not in (NAUGHT, CROSS):
             raise ValueError
 
-        if self.__cells[key] is not self.EMPTY:
+        if self.__cells[key] is not EMPTY:
             raise ex.NonEmptyCellError(key)
 
         if self.__first_player is None:
@@ -127,8 +124,8 @@ class Board(object):
 
         try:
             self.__cells[key] = value
-            crosses = self.__cells.count(self.CROSS)
-            naughts = self.__cells.count(self.NAUGHT)
+            crosses = self.__cells.count(CROSS)
+            naughts = self.__cells.count(NAUGHT)
 
             # First player should always be the player to "lead" the mark count
             # (if the counts are equal, the next move belongs to the first
@@ -141,8 +138,9 @@ class Board(object):
             if  gap_too_large or lead_belongs_to_player_two:
                 raise ex.DoubleMoveError
 
-            if self.winner is not None:
+            if self.winner is not None or self.__cells.count(EMPTY) == 0:
                 raise ex.GameOver(winner=self.winner)
+
         except ex.DoubleMoveError:
             # we are try/excepting so the assignment to the cells list is
             # rolled back, but we still want the exception to bubble up.
@@ -169,15 +167,11 @@ def naught_bot(board):
             if values.count(EMPTY) == 1 and values.count(mark) == 2:
                 return cells[values.index(EMPTY)]
 
-    scores = dict.fromkeys(xrange(0, 9), 0)
     corners = (0, 2, 6, 8)
-    for idx, val in enumerate(board.cells):
-        if val is not EMPTY:
-            continue
+    # corners are generally better targets than edges
+    if board[corners].count(EMPTY) > 0:
+        return next(idx for (idx, val) in enumerate(board.cells)
+                    if idx in corners and val is EMPTY)
+    # if there are no corners free, just pick the first available open cell
+    return next(idx for idx, val in enumerate(board.cells) if val is EMPTY)
 
-        elif idx in corners:
-            scores[idx] += 3
-        else:
-            scores[idx] += 1
-
-    return max(scores.iteritems(), key=lambda t: t[1])[0]

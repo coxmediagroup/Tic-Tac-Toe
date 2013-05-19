@@ -1,6 +1,6 @@
 import unittest
 from . import exceptions as ex
-from . import Board, naught_bot
+from . import Board, naught_bot, NAUGHT, CROSS, EMPTY
 
 
 class BoardTests(unittest.TestCase):
@@ -9,37 +9,37 @@ class BoardTests(unittest.TestCase):
     """
     def test_board_is_empty_by_default(self):
         game = Board()
-        self.assertTrue(all(cell is game.EMPTY for cell in game.cells))
+        self.assertTrue(all(cell is EMPTY for cell in game.cells))
 
     def test_board_needs_to_know_who_marked_first_when_setting_initial_state(self):
         with self.assertRaises(ex.FirstPlayerRequiredError):
-            Board([Board.EMPTY, ] * 9)
+            Board([EMPTY, ] * 9)
 
     def test_board_must_have_nine_cells(self):
         for count in xrange(0, 8):
             with self.assertRaises(ex.SizeError):
-                Board([Board.EMPTY, ] * count, first_player=Board.NAUGHT)
+                Board([EMPTY, ] * count, first_player=NAUGHT)
 
     def test_board_raises_when_marking_a_non_empty_cell(self):
         game = Board()
-        game[0] = game.NAUGHT
+        game[0] = NAUGHT
 
         with self.assertRaises(ex.NonEmptyCellError):
-            game[0] = game.CROSS
+            game[0] = CROSS
 
     def test_game_wont_allow_two_moves_in_a_row_from_either_player(self):
         game = Board()
-        game[0] = game.CROSS
+        game[0] = CROSS
         with self.assertRaises(ex.DoubleMoveError):
-            game[1] = game.CROSS
+            game[1] = CROSS
 
-        game[1] = game.NAUGHT
+        game[1] = NAUGHT
         with self.assertRaises(ex.DoubleMoveError):
-            game[2] = game.NAUGHT
+            game[2] = NAUGHT
 
 
     def test_game_knows_when_cross_wins(self):
-        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([x, _, o,
                       x, o, x,
                       _, o, _],
@@ -51,7 +51,7 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(ctx.exception.winner, x)
 
     def test_game_knows_when_naught_wins(self):
-        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([o, _, x,
                       o, x, o,
                       _, x, _],
@@ -62,8 +62,21 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(game.winner, o)
         self.assertEqual(ctx.exception.winner, o)
 
+    def test_game_knows_when_there_is_a_draw(self):
+        x, o, _ = CROSS, NAUGHT, EMPTY
+        game = Board([o, x, _,
+                      x, x, o,
+                      o, o, x],
+                     first_player=x)
+        with self.assertRaises(ex.GameOver) as ctx:
+            game[2] = x
+
+        self.assertEqual(game.winner, None)
+        self.assertEqual(ctx.exception.winner, None)
+        self.assertIn('draw', str(ctx.exception).lower())
+
     def test_game_board_cannot_be_modified_once_it_has_been_won(self):
-        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([x, _, o,
                       x, o, x,
                       _, o, _],
@@ -75,10 +88,10 @@ class BoardTests(unittest.TestCase):
             # this change should be rolled back
             game[8] = o
 
-        self.assertEqual(game[8], game.EMPTY)
+        self.assertEqual(game[8], EMPTY)
 
 
-class NaughtBotStartsTests(unittest.TestCase):
+class NaughtBotTests(unittest.TestCase):
     """
     Tests demonstrating naught_bot's decision-making process.
     """
@@ -87,7 +100,7 @@ class NaughtBotStartsTests(unittest.TestCase):
         self.assertEqual(naught_bot(game), 4)
 
     def test_knows_when_to_block(self):
-        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([_, _, _,
                       x, x, _,
                       o, _, _],
@@ -105,7 +118,7 @@ class NaughtBotStartsTests(unittest.TestCase):
         self.assertIn(naught_bot(game), (7,))
 
     def test_knows_when_to_attack(self):
-        x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
+        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([o, _, x,
                       _, o, _,
                       x, x, _],
