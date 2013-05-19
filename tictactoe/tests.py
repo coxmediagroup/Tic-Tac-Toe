@@ -98,17 +98,16 @@ class NaughtBotStartsTests(unittest.TestCase):
                       x, _, _],
                      first_player=x)
         self.assertIn(naught_bot(game), (2,))
-
-        game = Board([o, _, o,
-                      x, x, _,
+        game = Board([o, x, o,
+                      _, x, _,
                       x, _, _],
                      first_player=x)
-        self.assertIn(naught_bot(game), (5,))
+        self.assertIn(naught_bot(game), (7,))
 
     def test_knows_when_to_attack(self):
         x, o, _ = Board.CROSS, Board.NAUGHT, Board.EMPTY
-        game = Board([o, _, _,
-                      _, x, _,
-                      o, _, x],
+        game = Board([o, _, x,
+                      _, o, _,
+                      x, x, _],
                      first_player=x)
-        self.assertIn(naught_bot(game), (3,))
+        self.assertIn(naught_bot(game), (8,))
