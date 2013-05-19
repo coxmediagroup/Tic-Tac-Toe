@@ -17,6 +17,12 @@ class SizeError(TicTacToeError):
 class MoveError(TicTacToeError):
     """General Exception raised when a move can't be made legally."""
 
+    def __init__(self, cell=None):
+        self.cell = cell
+
+    def __str__(self):
+        return "Unable to mark: %s" % self.cell
+
 
 class NonEmptyCellError(MoveError):
     """Raised when a player tries to mark a cell that has already been marked.
@@ -34,3 +40,8 @@ class GameOver(TicTacToeError):
     def __init__(self, winner):
         assert winner is not None
         self.winner = winner
+
+    def __str__(self):
+        if self.winner is None:
+            return "Game Over. It's a Draw!"
+        return ("Game Over. %s Wins!" % ("X" if self.winner else "O"))
