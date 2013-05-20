@@ -1,3 +1,6 @@
+from itertools import combinations
+
+
 class Game(object):
 
     """A tic tac toe game.
@@ -158,16 +161,19 @@ class Computer(Player):
         #TODO: sooo, this just grabs the first open square it can right now...
         game.toggle_turn()
 
+        """Algorithm Step 1"""
         win = game.board.winning_moves(self.symbol)
         if win:
             win.pop().mark = self.symbol
             return
 
+        """Algorithm Step 2"""
         block = game.board.winning_moves(self.opponent_symbol)
         if block:
             block.pop().mark = self.symbol
             return
 
+        """Algorithm Step 3"""
         fork = game.board.fork_available(self.symbol)
         if fork:
             return
@@ -251,9 +257,25 @@ class Board(object):
         for player represented by symbol. Fork here is determined as the
         existance of two separate, simultaneous threats to win. Return an
         empty list if none exist.
+
+        Do so with the following process: find all squares marked with symbol.
+        Consider each pairwise grouping of these squares. For each pair,
+        determine their intersection point. If the row, column or diagonal
+        for each square in the pair has any other items in it, discard the
+        pair. Otherwise add the square at the intersection as a fork.
         """
-        #TODO
-        return []
+        res = []
+        pairs = self.pairwise_squares(symbol)
+
+
+
+        return res
+
+    def pairwise_squares(self, symbol=''):
+        """Get all squares marked with symbol and return a list of
+        pairwise matchings of them.
+        """
+        return combinations([s for s in self.squares if s.mark == symbol], 2)
 
     def __str__(self):
         """Print a human-friendly version of the Board
