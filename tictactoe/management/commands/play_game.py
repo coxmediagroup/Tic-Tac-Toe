@@ -6,7 +6,7 @@ from tictactoe import exceptions as ex
 
 class Command(NoArgsCommand):
     args = None
-    help = 'Start a new game of Tic Tac Toe'
+    help = 'Would you like to play a game?'
 
     def clear_stdout(self):
         # clears the terminal (I had no idea how to do this so I googled).
@@ -23,7 +23,7 @@ class Command(NoArgsCommand):
             while True:
                 while True:
                     try:
-                        user_selection = raw_input("\nEnter a valid open cell number:")
+                        user_selection = raw_input("\nEnter a cell number:")
                         idx = int(user_selection)
                         assert 8 >= idx >= 0, "cell must be 0-8"
                         self.board[int(user_selection)] = CROSS
