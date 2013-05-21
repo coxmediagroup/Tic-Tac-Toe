@@ -1,0 +1,10 @@
+<form action="{% url "make-mark" %}">
+  {% csrf_token %}
+  {% for idx, val in cells %}
+    <div class="{% if val == NAUGHT%}naught{% elif val == CROSS %}cross{% endif %}">
+    {% if val == EMPTY %}
+      <input type="submit" name="cell" value="{{ idx }}"/>
+    {% endif %}
+    </div>
+  {% endfor %}
+</form>
