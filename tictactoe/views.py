@@ -31,7 +31,7 @@ class BoardMixin(object):
 
 class PlayGameView(BoardMixin, TemplateView):
     """Front page allows the user to start a new game."""
-    template_name = 'game.html'
+    template_name = 'play-game.html'
 
     def get_context_data(self, **kwargs):
         context = super(PlayGameView, self).get_context_data(**kwargs)
