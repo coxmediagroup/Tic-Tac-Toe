@@ -1,10 +1,30 @@
-<form action="{% url "make-mark" %}">
+<html>
+<head>
+  <style type="text/css">
+
+  </style>
+</head>
+<body></body>
+</html>
+
+<form action="{% url "make-mark" %}" method="post">
   {% csrf_token %}
+  <div>
   {% for idx, val in cells %}
-    <div class="{% if val == NAUGHT%}naught{% elif val == CROSS %}cross{% endif %}">
+    <span class="{% if val == NAUGHT%}naught{% elif val == CROSS %}cross{% endif %}">
     {% if val == EMPTY %}
       <input type="submit" name="cell" value="{{ idx }}"/>
+    {% elif val == CROSS %}
+      X
+    {% elif val == NAUGHT %}
+      O
     {% endif %}
-    </div>
+    </span>
+    {% if forloop.counter|divisibleby:3 %}
+  </div>
+  <div>
+    {% endif %}
+
   {% endfor %}
+  </div>
 </form>

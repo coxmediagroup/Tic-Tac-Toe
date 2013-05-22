@@ -1,0 +1,11 @@
+<h1>
+Game Over:
+{% if winner == NAUGHT %}
+  O Wins!
+{% elif winner == CROSS %}
+  X Wins! <-- never gonna happen -->
+{% else %}
+  It's a Draw!
+{% endif %}
+</h1>
+<h2><a href="{% url 'play-game' %}">Play again</a></h2>

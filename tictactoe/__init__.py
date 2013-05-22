@@ -95,6 +95,9 @@ class Board(object):
                     break
         return self.__winner
 
+    def game_is_over(self):
+        return self.winner is not None or self.__cells.count(EMPTY) == 0
+
     def __getitem__(self, item):
 
         try:
@@ -138,7 +141,7 @@ class Board(object):
             if  gap_too_large or lead_belongs_to_player_two:
                 raise ex.DoubleMoveError
 
-            if self.winner is not None or self.__cells.count(EMPTY) == 0:
+            if self.game_is_over():
                 raise ex.GameOver(winner=self.winner)
 
         except ex.DoubleMoveError:
