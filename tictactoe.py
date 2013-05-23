@@ -193,8 +193,8 @@ class Computer(Player):
             return
 
         """Algorithm Step 5"""
-        if game.board.square(2, 2).empty():
-            game.board.square(2, 2).mark = self.symbol
+        if game.board.square(1, 1).empty():
+            game.board.square(1, 1).mark = self.symbol
             return
 
         """Algorithm Step 6"""
@@ -219,6 +219,7 @@ class Computer(Player):
         open_spots = game.board.unused()
         if open_spots:
             open_spots.pop().mark = self.symbol
+            return
 
 
 class Board(object):
