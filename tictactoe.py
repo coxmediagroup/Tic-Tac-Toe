@@ -209,12 +209,16 @@ class Computer(Player):
                 other_corner.mark = self.symbol
                 return
 
-        #TODO: finish steps 7-8, remove the line that grabs any open square
-        """
-        7) Choose any empty corner space.
-        8) Choose any empty side space (non-corner edge).
-        """
+        """Algorithm Step 7"""
+        open_corners = [i for i in game.board.corners() if i.empty()]
+        if open_corners:
+            open_corners.pop().mark = self.symbol
+            return
 
+        """Algorithm Step 8"""
+        open_spots = game.board.unused()
+        if open_spots:
+            open_spots.pop().mark = self.symbol
 
 class Board(object):
 
