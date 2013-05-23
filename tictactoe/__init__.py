@@ -80,6 +80,9 @@ class Board(object):
 
     @property
     def groupings(self):
+        """combines the index generators returned by
+        ``rows``, ``columns``, and ``diagonals`` to simplify searching through
+        the board for win opportunities."""
         return itertools.chain(self.rows, self.columns, self.diagonals)
 
     @property
