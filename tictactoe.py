@@ -133,10 +133,10 @@ class Computer(Player):
             possible win conditions on your next move.)
         4) Can you prevent your opponent from creating a fork on their next
             move? This can be accomplished by first possible of the following:
-            - Creating a possible win scenario on your next move, forcing
+            a) Creating a possible win scenario on your next move, forcing
                 your opponent to block such that their act of blocking will
                 not create a fork for them.
-            - Choose the space where the opponent would need to play in order
+            b) Choose the space where the opponent would need to play in order
                 to create the fork.
         5) Choose the center space.
         6) Choose an empty corner opposite and diagonal from a corner already
@@ -158,7 +158,6 @@ class Computer(Player):
         a faster or more efficient manner.
         """
 
-        #TODO: sooo, this just grabs the first open square it can right now...
         game.toggle_turn()
 
         """Algorithm Step 1"""
@@ -179,6 +178,21 @@ class Computer(Player):
             fork.pop().mark = self.symbol
             return
 
+        """Algorithm Step 4a"""
+        opp_fork = set(game.board.fork_available(self.opponent_symbol))
+        force_moves = set(game.board.force_opponent())
+
+        force_opp = force_moves - opp_fork
+        if force_opp:
+            force_opp.pop().mark = self.symbol
+            return
+
+        """Algorithm Step 4b"""
+        if opp_fork:
+            opp_fork.pop().mark = self.symbol
+            return
+
+        #TODO: finish steps 5-8, remove the line that grabs any open square
         game.board.unused()[0].mark = self.symbol
 
 
@@ -251,6 +265,17 @@ class Board(object):
             if sq in self.unused():
                 res.append(sq)
 
+        return res
+
+    def force_opponent(self, symbol=''):
+        """Return a list of all moves which, if taken, would require a block
+        from the other player in order to prevent player with symbol from
+        winning on the next turn. Empty list if none exist.
+        """
+        res = []
+        for sq in filter(lambda x: x.mark == symbol, self.squares):
+            for i in self.lines_of_sight(sq, True):
+                res.append(i)
         return res
 
     def fork_available(self, symbol=''):
