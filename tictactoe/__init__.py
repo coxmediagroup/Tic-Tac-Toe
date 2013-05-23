@@ -160,13 +160,13 @@ def naught_bot(board):
         # always take the center if it's open
         return 4
 
+    # Test for naught first since a win is better than a block
+    for mark in (NAUGHT, CROSS):
     # Critical cells are those that have 1 empty and 2 of the same mark, they
     # should be addressed first.
-    for cells in board.groupings:
-        values = board[cells]
+        for cells in board.groupings:
+            values = board[cells]
 
-        # Test for naught first since a win is better than a block
-        for mark in (NAUGHT, CROSS):
             if values.count(EMPTY) == 1 and values.count(mark) == 2:
                 return cells[values.index(EMPTY)]
 

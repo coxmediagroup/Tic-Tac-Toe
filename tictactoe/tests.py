@@ -125,6 +125,12 @@ class NaughtBotTests(unittest.TestCase):
                      first_player=x)
         self.assertIn(naught_bot(game), (8,))
 
+        game = Board([x, o, _,
+                      x, o, _,
+                      _, _, x],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (7,))
+
     def test_prioritize_edge(self):
         """
         This test is for a hole I found during testing. The bot's
