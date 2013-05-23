@@ -176,6 +176,7 @@ class Computer(Player):
         """Algorithm Step 3"""
         fork = game.board.fork_available(self.symbol)
         if fork:
+            fork.pop().mark = self.symbol
             return
 
         game.board.unused()[0].mark = self.symbol
@@ -255,21 +256,59 @@ class Board(object):
     def fork_available(self, symbol=''):
         """Return a list of all moves which will result in creating a fork
         for player represented by symbol. Fork here is determined as the
-        existance of two separate, simultaneous threats to win. Return an
-        empty list if none exist.
+        existance of two separate, simultaneous uninterrupted sequences of
+        two. Return an empty list if none exist.
 
-        Do so with the following process: find all squares marked with symbol.
-        Consider each pairwise grouping of these squares. For each pair,
-        determine their intersection point. If the row, column or diagonal
-        for each square in the pair has any other items in it, discard the
-        pair. Otherwise add the square at the intersection as a fork.
+        Do so with the following process: Consider each pairwise grouping
+        of squares marked with symbol. For each pair, determine the
+        intersection points of their lines of sight. If the row, column or
+        diagonal for each square in the pair has any other items in it,
+        discard the pair. Otherwise add the square at the intersection as a
+        fork location.
         """
         res = []
+        los = {sq: self.lines_of_sight(sq, solo=True)
+               for sq in self.squares if sq.mark == symbol}
         pairs = self.pairwise_squares(symbol)
 
-
+        for pair in pairs:
+            res.extend(los[pair[0]] & los[pair[1]])
 
         return res
+
+    def lines_of_sight(self, sq, solo=False):
+        """Given a square instance, return a set containing the squares of
+        the lines of sight from the original square in each direction, not to
+        include partial diagonals (i.e. diagonals must go through the
+        center). This will not include the originally passed square.
+
+        If solo is passed as True, do not include squares from lines of
+        sight that contain more than one item in them.
+        """
+        res = []
+        diags = [(0, 0), (1, 1), (2, 2)]
+        rdiags = [(0, 2), (1, 1), (2, 0)]
+
+        row = [self.square(sq.x, i) for i in range(3)]
+        if not solo or (len(filter(lambda x: x.mark != ' ', row)) == 1):
+            res.extend(row)
+        col = [self.square(i, sq.y) for i in range(3)]
+        if not solo or (len(filter(lambda x: x.mark != ' ', col)) == 1):
+            res.extend(col)
+
+        """There is almost definitely a "smarter" way to do this but
+        Simple is better than complex... right?
+        """
+        if (sq.x, sq.y) in diags:
+            diag = [self.square(i[0], i[1]) for i in diags]
+            if not solo or (len(filter(lambda x: x.mark != ' ', diag)) == 1):
+                res.extend(diag)
+        if (sq.x, sq.y) in rdiags:
+            rdiag = [self.square(i[0], i[1]) for i in rdiags]
+            if not solo or (len(filter(lambda x: x.mark != ' ', rdiag)) == 1):
+                res.extend(rdiag)
+
+        return set([i for i in res if i is not sq])
 
     def pairwise_squares(self, symbol=''):
         """Get all squares marked with symbol and return a list of
