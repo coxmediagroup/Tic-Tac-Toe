@@ -128,14 +128,14 @@ class NaughtBotTests(unittest.TestCase):
     def test_prioritize_edge(self):
         """
         This test is for a hole I found during testing. The bot's
-        selection process that allowed me to win.
+        selection process allowed me to win.
 
         The winning sequence for me was:
         X: 2, 6, 8, 5 <-- X wins (but shouldn't be able to)
         O: 4, 0, 7
 
         In order to prevent this win, the bot should have selected an edge cell
-        during it's 2nd move.
+        during the bot's 2nd move.
         """
         x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([_, _, x,
@@ -144,10 +144,8 @@ class NaughtBotTests(unittest.TestCase):
                      first_player=x)
         # by blocking on the edge we can prevent a win for X 2 moves ahead
         self.assertIn(naught_bot(game), (1, 3, 5, 7))
-
         game = Board([x, _, _,
                       _, o, _,
                       _, _, x],
                      first_player=x)
-        # by blocking on the edge we can prevent a win for X 2 moves ahead
         self.assertIn(naught_bot(game), (1, 3, 5, 7))
