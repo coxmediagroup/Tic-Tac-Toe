@@ -242,7 +242,7 @@ class Board(object):
 
     def used(self):
         """Return a list of all squares that have already been claimed"""
-        return [i for i in self.squares if i not in self.unused()]
+        return [i for i in self.squares if not i.empty()]
 
     def unused(self):
         """Return a list containing all unclaimed Squares."""
@@ -267,7 +267,7 @@ class Board(object):
             if len(col) == 2:
                 j = (set(self.__indices) - set(s.y for s in col)).pop()
                 sq = self.square(i, j)
-                if sq in self.unused():
+                if sq.empty():
                     res.append(sq)
 
         rows = [[s for s in self.squares if s.y == i and s.mark == symbol]
@@ -276,14 +276,14 @@ class Board(object):
             if len(row) == 2:
                 j = (set(self.__indices) - set(s.x for s in row)).pop()
                 sq = self.square(j, i)
-                if sq in self.unused():
+                if sq.empty():
                     res.append(sq)
 
         tl_diag = [s for s in self.squares if s.x == s.y and s.mark == symbol]
         if len(tl_diag) == 2:
             i = (set(self.__indices) - set(s.x for s in tl_diag)).pop()
             sq = self.square(i, i)
-            if sq in self.unused():
+            if sq.empty():
                 res.append(sq)
 
         tr_diag_ind = tuple((2 - x, x) for x in range(3))
@@ -292,7 +292,7 @@ class Board(object):
         if len(tr_diag) == 2:
             i, j = (set(tr_diag_ind) - set((s.x, s.y) for s in tr_diag)).pop()
             sq = self.square(i, j)
-            if sq in self.unused():
+            if sq.empty():
                 res.append(sq)
 
         return res
