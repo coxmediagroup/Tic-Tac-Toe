@@ -199,7 +199,7 @@ class Computer(Player):
 
         """Algorithm Step 6"""
         opp_corners = [i for i in game.board.corners()
-                       if i.mark == self.opponent_mark]
+                       if i.mark == self.opponent_symbol]
         if opp_corners:
             sq = opp_corners.pop()
             x = 2 if sq.x == 0 else 0
