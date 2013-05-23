@@ -171,8 +171,12 @@ def naught_bot(board):
                 return cells[values.index(EMPTY)]
 
     corners = (0, 2, 6, 8)
+    edges = (1, 3, 5, 7)
     # corners are generally better targets than edges
-    if board[corners].count(EMPTY) > 0:
+    if board[4] is NAUGHT and list(board[corners]).count(CROSS) > 1:
+        return next(idx for (idx, val) in enumerate(board.cells)
+                    if idx in edges and val is EMPTY)
+    elif board[corners].count(EMPTY) > 0:
         return next(idx for (idx, val) in enumerate(board.cells)
                     if idx in corners and val is EMPTY)
     # if there are no corners free, just pick the first available open cell
