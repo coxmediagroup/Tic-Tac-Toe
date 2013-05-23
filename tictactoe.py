@@ -200,12 +200,17 @@ class Computer(Player):
         """Algorithm Step 6"""
         opp_corners = [i for i in game.board.corners()
                        if i.mark == self.opponent_mark]
+        if opp_corners:
+            sq = opp_corners.pop()
+            x = 2 if sq.x == 0 else 0
+            y = 2 if sq.y == 0 else 0
+            other_corner = game.board.square(x, y)
+            if other_corner.empty():
+                other_corner.mark = self.symbol
+                return
 
-
-        #TODO: finish steps 6-8, remove the line that grabs any open square
+        #TODO: finish steps 7-8, remove the line that grabs any open square
         """
-        6) Choose an empty corner opposite and diagonal from a corner already
-            claimed by the opponent.
         7) Choose any empty corner space.
         8) Choose any empty side space (non-corner edge).
         """
