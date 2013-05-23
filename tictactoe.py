@@ -179,13 +179,19 @@ class Computer(Player):
             return
 
         """Algorithm Step 4a"""
-        opp_fork = set(game.board.fork_available(self.opponent_symbol))
-        force_moves = set(game.board.force_opponent())
+        opp_fork = game.board.fork_available(self.opponent_symbol)
+        force_moves = game.board.force_opponent(self.symbol)
 
-        force_opp = force_moves - opp_fork
-        if force_opp:
-            force_opp.pop().mark = self.symbol
-            return
+        for attempt in force_moves:
+            attempt.mark = self.symbol  # try taking the move
+            need_blocking = game.board.winning_moves(self.symbol)
+            good_move = True
+            for sq in need_blocking:
+                if sq in opp_fork:
+                    good_move = False
+            if good_move:
+                return
+            attempt.mark = ' '  # undo the move if the block gives a fork
 
         """Algorithm Step 4b"""
         if opp_fork:
