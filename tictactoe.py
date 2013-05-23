@@ -220,6 +220,7 @@ class Computer(Player):
         if open_spots:
             open_spots.pop().mark = self.symbol
 
+
 class Board(object):
 
     """Represents the current state of the game's board
