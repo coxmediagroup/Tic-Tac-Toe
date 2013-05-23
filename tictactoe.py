@@ -192,8 +192,23 @@ class Computer(Player):
             opp_fork.pop().mark = self.symbol
             return
 
-        #TODO: finish steps 5-8, remove the line that grabs any open square
-        game.board.unused()[0].mark = self.symbol
+        """Algorithm Step 5"""
+        if game.board.square(2, 2).empty():
+            game.board.square(2, 2).mark = self.symbol
+            return
+
+        """Algorithm Step 6"""
+        opp_corners = [i for i in game.board.corners()
+                       if i.mark == self.opponent_mark]
+
+
+        #TODO: finish steps 6-8, remove the line that grabs any open square
+        """
+        6) Choose an empty corner opposite and diagonal from a corner already
+            claimed by the opponent.
+        7) Choose any empty corner space.
+        8) Choose any empty side space (non-corner edge).
+        """
 
 
 class Board(object):
@@ -222,6 +237,11 @@ class Board(object):
     def unused(self):
         """Return a list containing all unclaimed Squares."""
         return [i for i in self.squares if i.empty()]
+
+    def corners(self):
+        """Return a list containing all corner Squares."""
+        return [i for i in self.squares if (i.x, i.y)
+                in [(0, 0), (2, 2), (0, 2), (2, 0)]]
 
     def winning_moves(self, symbol=''):
 
@@ -314,23 +334,23 @@ class Board(object):
         diags = [(0, 0), (1, 1), (2, 2)]
         rdiags = [(0, 2), (1, 1), (2, 0)]
 
-        row = [self.square(sq.x, i) for i in range(3)]
-        if not solo or (len(filter(lambda x: x.mark != ' ', row)) == 1):
-            res.extend(row)
-        col = [self.square(i, sq.y) for i in range(3)]
-        if not solo or (len(filter(lambda x: x.mark != ' ', col)) == 1):
+        col = [self.square(sq.x, i) for i in range(3)]
+        if not solo or (len(filter(lambda x: not x.empty(), col)) == 1):
             res.extend(col)
+        row = [self.square(i, sq.y) for i in range(3)]
+        if not solo or (len(filter(lambda x: not x.empty(), row)) == 1):
+            res.extend(row)
 
         """There is almost definitely a "smarter" way to do this but
         Simple is better than complex... right?
         """
         if (sq.x, sq.y) in diags:
             diag = [self.square(i[0], i[1]) for i in diags]
-            if not solo or (len(filter(lambda x: x.mark != ' ', diag)) == 1):
+            if not solo or (len(filter(lambda x: not x.empty(), diag)) == 1):
                 res.extend(diag)
         if (sq.x, sq.y) in rdiags:
             rdiag = [self.square(i[0], i[1]) for i in rdiags]
-            if not solo or (len(filter(lambda x: x.mark != ' ', rdiag)) == 1):
+            if not solo or (len(filter(lambda x: not x.empty(), rdiag)) == 1):
                 res.extend(rdiag)
 
         return set([i for i in res if i is not sq])
