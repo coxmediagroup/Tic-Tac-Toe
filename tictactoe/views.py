@@ -30,22 +30,33 @@ class BoardMixin(object):
 
 
 class PlayGameView(BoardMixin, TemplateView):
-    """Front page allows the user to start a new game."""
+    """Front page allows the user to start a new game and play to the end."""
     template_name = 'play-game.html'
+
+    @staticmethod
+    def __rows(board):
+        """
+        :return: generator of sets of 3 cells
+        """
+        cells = list(enumerate(board.cells))
+        yield cells[0:3]
+        yield cells[3:6]
+        yield cells[6:9]
 
     def get_context_data(self, **kwargs):
         context = super(PlayGameView, self).get_context_data(**kwargs)
-        context['cells'] = enumerate(self.get_board().cells)
+        board = self.get_board()
+        context['cells'] = self.__rows(board)
         context['NAUGHT'] = NAUGHT
         context['CROSS'] = CROSS
         context['EMPTY'] = EMPTY
-        return context
+        context['board_is_empty'] = all(cell is EMPTY for cell in board.cells)
+        context['game_is_over'] = board.game_is_over()
+        context['winner'] = board.winner
 
-    def get(self, request, *args, **kwargs):
         if self.get_board().game_is_over():
-            return redirect(reverse('game-over'))
-        else:
-            return super(PlayGameView, self).get(request, *args, **kwargs)
+            self.reset_board()
+        return context
 
 
 class MarkForm(forms.Form):
@@ -74,27 +85,7 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
         except GameOver as exc:
             LOG.exception(exc)
             LOG.exception(exc.message)
-            return redirect(reverse('game-over'))
         finally:
             self.save_board(board)
 
         return redirect(reverse('play-game'))
-
-
-class GameOverView(BoardMixin, TemplateView):
-    template_name = 'game-over.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(GameOverView, self).get_context_data(**kwargs)
-        context['winner'] = self.get_board().winner
-        context['NAUGHT'] = NAUGHT
-        context['CROSS'] = CROSS
-        return context
-
-    def get(self, request, *args, **kwargs):
-        resp = super(GameOverView, self).get(request, *args, **kwargs)
-        try:
-            self.reset_board()
-        except KeyError:
-            return redirect(reverse('play-game'))
-        return resp
