@@ -92,10 +92,8 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
         try:
             board[form.cleaned_data["cell"]] = CROSS
             board[naught_bot(board)] = NAUGHT
-            response = redirect(reverse('play-game'))
         except TicTacToeError as exc:
             LOG.exception(exc)
-            LOG.exception(str(exc))
         finally:
             self.save_board(board)
 
@@ -111,5 +109,7 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
                 # display the win/draw board state so we reset right away.
                 if board.game_is_over():
                     self.reset_board()
+            else:
+                response = redirect(reverse('play-game'))
 
         return response
