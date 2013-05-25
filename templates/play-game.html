@@ -54,6 +54,10 @@
 
 <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
 <script src="{{ STATIC_URL }}js/tictactoe.js"></script>
-
+<script>
+!(function ($){
+  var game = new Board("#board");
+}(jQuery));
+</script>
 </body>
 </html>

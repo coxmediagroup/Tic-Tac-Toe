@@ -1,12 +1,14 @@
+import json
 import logging
 from django import forms
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormMixin, ProcessFormView
 from tictactoe import Board, NAUGHT, CROSS, EMPTY, naught_bot
-from tictactoe.exceptions import GameOver
+from tictactoe.exceptions import TicTacToeError
 
 LOG = logging.getLogger('tictactoe.views')
 
@@ -79,13 +81,29 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
     def form_valid(self, form):
         board = self.get_board()
         LOG.debug(form.cleaned_data["cell"])
+
+        # Normally I frown on initializing names prior to entering a
+        # block where it might be defined so that it can safely be referenced
+        # afterward, but meh.
+        # Hi haters.
+        exc = None
+
         try:
             board[form.cleaned_data["cell"]] = CROSS
             board[naught_bot(board)] = NAUGHT
-        except GameOver as exc:
+            response = redirect(reverse('play-game'))
+        except TicTacToeError as exc:
             LOG.exception(exc)
             LOG.exception(exc.message)
         finally:
             self.save_board(board)
 
-        return redirect(reverse('play-game'))
+            if self.request.is_ajax():
+                response = HttpResponse(json.dumps({
+                    'cells': list(board.cells),
+                    'game_is_over': board.game_is_over(),
+                    'winner': board.winner,
+                    'error': getattr(exc, 'message', None)
+                    }), content_type='application/json')
+
+        return response
