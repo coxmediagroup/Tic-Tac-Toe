@@ -89,6 +89,9 @@ For example::
 How To Play
 -----------
 
+Web
+^^^
+
 With your virtualenv activated, issue the command ``python manage.py runserver``::
 
     (demo)owen@gaff:~/projects/Tic-Tac-Toe$ python manage.py runserver
@@ -111,5 +114,18 @@ changes between the server and client, however this is a progressive enhancement
 designed to reduce response time, and number of requests made to the server.
 You should have a *virtually identical* game experience should you choose to
 disable javascript in your browser.
+
+CLI
+^^^
+
+There is also a cli game, but this is far less polished. It was designed
+primarily for my prototyping process to verify the board logic.
+
+To start a game, issue ``python manage.py play_game`` in your terminal.
+
+Once the game has begun, you may mark cells by entering their 0-based
+numbers (0-8).
+
+``CTRL-C`` can be used to quit a game in progress.
 
 .. _virtualenv: https://virtualenv.readthedocs.org/en/latest/
