@@ -1,4 +1,4 @@
-djang-tic-tac-toe
+django-tic-tac-toe
 =================
 
 Installation
