@@ -18,9 +18,13 @@ body {
     margin: 0;
 }
 
-.game-start .game-end,
-.game-end .game-start {
+body .game-start,
+body .game-end {
     display: none;
+}
+body.game-start .game-start,
+body.game-end .game-end {
+    display: inherit;
 }
 
 #board {

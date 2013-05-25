@@ -12,24 +12,25 @@
     {% endif %}">
 
 <div id="header">
-  {% if game_is_over %}
+
     <div class="game-end">
     <h1>
       Game Over:
+      <span>
       {% if winner == NAUGHT %}
-        <span>O</span> Wins!
+        O Wins!
       {% elif winner == CROSS %}
-        <span>X</span> Wins! <!-- never gonna happen -->
+        X Wins! <!-- never gonna happen -->
       {% else %}
         It's a Draw!
       {% endif %}
+      </span>
     </h1>
     <h2><a href="{% url 'play-game' %}">Play again</a></h2>
     </div>
 
-  {% elif board_is_empty %}
     <h1 class="game-start">Make the first mark</h1>
-  {% endif %}
+
 </div>
 
   <form action="{% url "make-mark" %}" method="post" id="board">
@@ -56,7 +57,8 @@
 <script src="{{ STATIC_URL }}js/tictactoe.js"></script>
 <script>
 !(function ($){
-  var game = new Board("#board");
+  "use strict";
+  new tictactoe.Board("#board");
 }(jQuery));
 </script>
 </body>

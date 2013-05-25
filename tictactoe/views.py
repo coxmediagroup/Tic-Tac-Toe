@@ -83,10 +83,11 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
         LOG.debug(form.cleaned_data["cell"])
 
         # Normally I frown on initializing names prior to entering a
-        # block where it might be defined so that it can safely be referenced
+        # block where it *might* be defined so that it can safely be referenced
         # afterward, but meh.
         # Hi haters.
-        exc = None
+        exc = ""
+        response = None
 
         try:
             board[form.cleaned_data["cell"]] = CROSS
@@ -94,16 +95,21 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
             response = redirect(reverse('play-game'))
         except TicTacToeError as exc:
             LOG.exception(exc)
-            LOG.exception(exc.message)
+            LOG.exception(str(exc))
         finally:
             self.save_board(board)
 
             if self.request.is_ajax():
                 response = HttpResponse(json.dumps({
                     'cells': list(board.cells),
-                    'game_is_over': board.game_is_over(),
+                    'gameIsOver': board.game_is_over(),
                     'winner': board.winner,
-                    'error': getattr(exc, 'message', None)
+                    'error': str(exc) or None,
                     }), content_type='application/json')
+
+                # When working with ajax, we don't need a page reload to
+                # display the win/draw board state so we reset right away.
+                if board.game_is_over():
+                    self.reset_board()
 
         return response
