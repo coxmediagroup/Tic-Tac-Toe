@@ -16,7 +16,7 @@ class BoardTests(unittest.TestCase):
             Board([EMPTY, ] * 9)
 
     def test_board_must_have_nine_cells(self):
-        for count in xrange(0, 8):
+        for count in range(0, 8):
             with self.assertRaises(ex.SizeError):
                 Board([EMPTY, ] * count, first_player=NAUGHT)
 

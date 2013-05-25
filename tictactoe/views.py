@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin, ProcessFormView
 from tictactoe import Board, NAUGHT, CROSS, EMPTY, naught_bot
 from tictactoe.exceptions import TicTacToeError
@@ -20,7 +20,7 @@ class BoardMixin(object):
         cells = self.request.session.get('cells', None)
         if cells is None:
             return Board()
-            # The first player param is a formality at this point since the
+        # The first player param is a formality at this point since the
         # human always goes first (right now).
         return Board(cells=cells, first_player=CROSS)
 
@@ -82,18 +82,14 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
         board = self.get_board()
         LOG.debug(form.cleaned_data["cell"])
 
-        # Normally I frown on initializing names prior to entering a
-        # block where it *might* be defined so that it can safely be referenced
-        # afterward, but meh.
-        # Hi haters.
-        exc = ""
-        response = None
-
         try:
             board[form.cleaned_data["cell"]] = CROSS
             board[naught_bot(board)] = NAUGHT
         except TicTacToeError as exc:
             LOG.exception(exc)
+            # stash the human part of the exception on the request
+            # so we can send it back with ajax requests (if needed)
+            self.request.__error__ = str(exc)
         finally:
             self.save_board(board)
 
@@ -102,11 +98,11 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
                     'cells': list(board.cells),
                     'gameIsOver': board.game_is_over(),
                     'winner': board.winner,
-                    'error': str(exc) or None,
+                    'error': getattr(self.request, '__error__', None),
                     }), content_type='application/json')
-
-                # When working with ajax, we don't need a page reload to
-                # display the win/draw board state so we reset right away.
+                # When ajax'ing, we can reset the board without a new page
+                # reload since we're updating the board state with the response
+                # we're about to send back.
                 if board.game_is_over():
                     self.reset_board()
             else:

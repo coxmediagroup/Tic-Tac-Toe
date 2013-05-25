@@ -1,7 +1,12 @@
-import sys
 from django.core.management.base import NoArgsCommand
 from tictactoe import Board, naught_bot, NAUGHT, CROSS
 from tictactoe import exceptions as ex
+
+try:
+    # python 2/3 compat
+    input = raw_input
+except NameError:
+    pass
 
 
 class Command(NoArgsCommand):
@@ -23,7 +28,7 @@ class Command(NoArgsCommand):
             while True:
                 while True:
                     try:
-                        user_selection = raw_input("\nEnter a cell number:")
+                        user_selection = input("\nEnter a cell number:")
                         idx = int(user_selection)
                         assert 8 >= idx >= 0, "cell must be 0-8"
                         self.board[int(user_selection)] = CROSS
