@@ -8,10 +8,12 @@ class Game(object):
     and manages game loop along with who should play next.
     """
 
-    def __init__(self):
+    def __init__(self, order=''):
         """Create the game board and determine play order."""
-        print "Welcome to Tic Tac Toe!"
+        if not order:
+            print "Welcome to Tic Tac Toe!"
         self.board = Board()
+        self.order = order
         self.init_players()
 
     def init_players(self):
@@ -19,7 +21,7 @@ class Game(object):
         The first player is always represented by X regardless if the first
         player is human or computer. Likewise with player 2, represented by O.
         """
-        selection = ''
+        selection = self.order
         prefix = ''
         suffix = '--> Would you like to play first or second? (1 or 2): '
         while selection not in ('1', '2'):
@@ -206,50 +208,50 @@ class Computer(Player):
                  self.step5, self.step6, self.step7, self.step8]
 
         for step in steps:
-            attempt = step()
+            attempt = step(game.board)
             if attempt:
                 return
 
-    def step1(self):
+    def step1(self, board):
         """Get a list of winning moves for me. If the list is non empty,
         make the move and return True."""
-        win = game.board.winning_moves(self.symbol)
+        win = board.winning_moves(self.symbol)
         if win:
             win.pop().mark = self.symbol
             return True
 
-    def step2(self):
+    def step2(self, board):
         """If the other player has a winning move available for their next
         turn, take it before they can and return True if possible.
         """
-        block = game.board.winning_moves(self.opponent_symbol)
+        block = board.winning_moves(self.opponent_symbol)
         if block:
             block.pop().mark = self.symbol
             return True
 
-    def step3(self):
+    def step3(self, board):
         """If there is an available move which will create a fork, take it
         and return True. A fork implies two unobstructed sequences of two
         squares which could result in a win.
         """
-        fork = game.board.fork_available(self.symbol)
+        fork = board.fork_available(self.symbol)
         if fork:
             fork.pop().mark = self.symbol
             return True
 
-    def step4(self):
+    def step4(self, board):
         """Attempt to block the other player from creating a fork. Do this
         either by (a) forcing they other player to make a move in a square that
         does not give them a fork or (b) play directly on a square that they
         would need in order to create a fork.
         """
-        opp_fork = game.board.fork_available(self.opponent_symbol)
-        force_moves = game.board.force_opponent(self.symbol)
+        opp_fork = board.fork_available(self.opponent_symbol)
+        force_moves = board.force_opponent(self.symbol)
 
         '''4a'''
         for attempt in force_moves:
             attempt.mark = self.symbol  # try taking the move
-            need_blocking = game.board.winning_moves(self.symbol)
+            need_blocking = board.winning_moves(self.symbol)
             good_move = True
             for sq in need_blocking:
                 if sq in opp_fork:
@@ -263,39 +265,39 @@ class Computer(Player):
             opp_fork.pop().mark = self.symbol
             return True
 
-    def step5(self):
+    def step5(self, board):
         """If the middle is open, take it and return True."""
-        if game.board.square(1, 1).empty():
-            game.board.square(1, 1).mark = self.symbol
+        if board.square(1, 1).empty():
+            board.square(1, 1).mark = self.symbol
             return True
 
-    def step6(self):
+    def step6(self, board):
         """If there is an open corner, opposite from a corner already occupied
         by the opponent, take the open corner and return True.
         """
-        opponent_corners = [i for i in game.board.corners()
+        opponent_corners = [i for i in board.corners()
                             if i.mark == self.opponent_symbol]
         for sq in opponent_corners:
             anti_x = 2 if sq.x == 0 else 0
             anti_y = 2 if sq.y == 0 else 0
-            other_corner = game.board.square(anti_x, anti_y)
+            other_corner = board.square(anti_x, anti_y)
             if other_corner.empty():
                 other_corner.mark = self.symbol
                 return True
 
-    def step7(self):
+    def step7(self, board):
         """Take any open corner and return True."""
-        open_corners = [i for i in game.board.corners() if i.empty()]
+        open_corners = [i for i in board.corners() if i.empty()]
         if open_corners:
             open_corners.pop().mark = self.symbol
             return True
 
-    def step8(self):
+    def step8(self, board):
         """Take any open spot and return True. This works as step8 because
         we have already taken the middle if available and any corner that
         would be available. The only open squares left will be middle edges.
         """
-        open_spots = game.board.unused()
+        open_spots = board.unused()
         if open_spots:
             open_spots.pop().mark = self.symbol
             return True
