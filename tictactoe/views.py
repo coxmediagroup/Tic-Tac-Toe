@@ -99,7 +99,7 @@ class MakeMarkView(BoardMixin, FormMixin, ProcessFormView):
                     'gameIsOver': board.game_is_over(),
                     'winner': board.winner,
                     'error': getattr(self.request, '__error__', None),
-                    }), content_type='application/json')
+                }), content_type='application/json')
                 # When ajax'ing, we can reset the board without a new page
                 # reload since we're updating the board state with the response
                 # we're about to send back.

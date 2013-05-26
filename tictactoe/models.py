@@ -1,3 +1,1 @@
-from django.db import models
-
-# Create your models here.
+"""django requires "apps" to have a models.py, or at least it used to..."""

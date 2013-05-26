@@ -6,7 +6,8 @@ class TicTacToeError(Exception):
 
 
 class FirstPlayerRequiredError(TicTacToeError):
-    """Raised when cells are passed to a new Board, but the first_player is not.
+    """Raised when cells are passed to a new Board, but the first_player is
+    not.
     """
 
 
@@ -43,4 +44,4 @@ class GameOver(TicTacToeError):
     def __str__(self):
         if self.winner is None:
             return "It's a Draw!"
-        return ("%s Wins!" % ("X" if self.winner else "O"))
+        return "%s Wins!" % ("X" if self.winner else "O")

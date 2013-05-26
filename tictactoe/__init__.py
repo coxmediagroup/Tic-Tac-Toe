@@ -40,8 +40,8 @@ class Board(object):
     def __init__(self, cells=None, first_player=None):
         """
         :param cells: list of cell states
-        :param first_player: sets who made the first mark on the board (required
-                             when cells is not None).
+        :param first_player: sets who made the first mark on the board
+                            (required when cells is not None).
         """
         if cells is None:
             # when cells is None, we start with an empty board (and therefore
@@ -49,8 +49,9 @@ class Board(object):
             first_player = None
             cells = self.__empty_board()
         elif first_player is None:
-            raise ex.FirstPlayerRequiredError("first_player is required when "
-                                              "setting cells for initial state")
+            raise ex.FirstPlayerRequiredError("first_player is required "
+                                              "when setting cells for initial "
+                                              "state")
 
         self.__first_player = first_player
         self.__cells = cells
@@ -142,7 +143,7 @@ class Board(object):
             lead_belongs_to_player_two = (crosses != naughts
                                           and value != self.__first_player)
             gap_too_large = max(crosses, naughts) - min(crosses, naughts) > 1
-            if  gap_too_large or lead_belongs_to_player_two:
+            if gap_too_large or lead_belongs_to_player_two:
                 raise ex.DoubleMoveError
 
             if self.game_is_over():
@@ -181,13 +182,12 @@ def naught_bot(board):
     # "flank" the bot and create 2 win opportunities (thus making it
     # impossbile for the bot to block).
     # In this situation, mark the cell in the corner opposite the player.
-    if (board[4] is NAUGHT and
-        board[corners].count(CROSS) == board[edges].count(CROSS) == 1):
+    flanking = (board[corners].count(CROSS) == board[edges].count(CROSS) == 1)
+    if board[4] is NAUGHT and flanking:
         crossed_corner = next(
             idx for (idx, val) in zip(corners, board[corners]) if val is CROSS)
         # subtracting 8 and forcing unsigned should get us the opposite corner
         return abs(crossed_corner - 8)
-
 
     # General cell selection (for when there isn't a more specific threat).
     # Corners are generally better targets than edges
@@ -199,4 +199,3 @@ def naught_bot(board):
                     if idx in corners and val is EMPTY)
     # if there are no corners free, just pick the first available open cell
     return next(idx for idx, val in enumerate(board.cells) if val is EMPTY)
-

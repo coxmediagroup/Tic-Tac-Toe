@@ -11,7 +11,7 @@ class BoardTests(unittest.TestCase):
         game = Board()
         self.assertTrue(all(cell is EMPTY for cell in game.cells))
 
-    def test_board_needs_to_know_who_marked_first_when_setting_initial_state(self):
+    def test_board_requires_first_player_when_setting_initial_state(self):
         with self.assertRaises(ex.FirstPlayerRequiredError):
             Board([EMPTY, ] * 9)
 
@@ -36,7 +36,6 @@ class BoardTests(unittest.TestCase):
         game[1] = NAUGHT
         with self.assertRaises(ex.DoubleMoveError):
             game[2] = NAUGHT
-
 
     def test_game_knows_when_cross_wins(self):
         x, o, _ = CROSS, NAUGHT, EMPTY
