@@ -155,3 +155,41 @@ class NaughtBotTests(unittest.TestCase):
                       _, _, x],
                      first_player=x)
         self.assertIn(naught_bot(game), (1, 3, 5, 7))
+
+    def test_prioritize_CORRECT_corner(self):
+        """
+        Another gap found during testing. The bot's
+        selection process allowed the player to win.
+
+        The winning sequence for me was:
+        X: 0, 7, 6, 3 <-- X wins (but shouldn't be able to)
+        O: 4, 2, 8
+
+        In order to prevent this win, the bot should have selected the corner
+        opposite the player's first mark (I think).
+        """
+        x, o, _ = CROSS, NAUGHT, EMPTY
+        game = Board([x, _, _,
+                      _, o, _,
+                      _, x, _],
+                     first_player=x)
+
+        self.assertIn(naught_bot(game), (8, ))
+
+        game = Board([_, _, x,
+                      _, o, _,
+                      _, x, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (6, ))
+
+        game = Board([_, x, _,
+                      _, o, _,
+                      _, _, x],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (0, ))
+
+        game = Board([_, x, _,
+                      _, o, _,
+                      x, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (2, ))
