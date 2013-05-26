@@ -1,5 +1,6 @@
 """
-Implementation for the game ``Board`` and ``naught_bot`` that will play the game
+Implementation for the game ``Board`` and the ``naught_bot`` that will play
+the game.
 """
 import itertools
 from . import exceptions as ex
@@ -10,7 +11,7 @@ EMPTY = None
 
 
 class Board(object):
-    """The board enforces the game rules."""
+    """Defines and enforces the game rules."""
 
     __cells = None
     __first_player = None
@@ -160,13 +161,13 @@ def naught_bot(board):
     :returns: index of the cell it intends to mark.
     """
     if board[4] is EMPTY:
-        # always take the center if it's open
+        # Always take the center if it's open
         return 4
 
     # Test for naught first since a win is better than a block
     for mark in (NAUGHT, CROSS):
-    # Critical cells are those that have 1 empty and 2 of the same mark, they
-    # should be addressed first.
+        # Critical cells are those that have 1 empty and 2 of the same mark,
+        # they should be addressed first.
         for cells in board.groupings:
             values = board[cells]
 
@@ -175,7 +176,21 @@ def naught_bot(board):
 
     corners = (0, 2, 6, 8)
     edges = (1, 3, 5, 7)
-    # corners are generally better targets than edges
+
+    # When the player selects a corner and an edge, they may be setting up to
+    # "flank" the bot and create 2 win opportunities (thus making it
+    # impossbile for the bot to block).
+    # In this situation, mark the cell in the corner opposite the player.
+    if (board[4] is NAUGHT and
+        board[corners].count(CROSS) == board[edges].count(CROSS) == 1):
+        crossed_corner = next(
+            idx for (idx, val) in zip(corners, board[corners]) if val is CROSS)
+        # subtracting 8 and forcing unsigned should get us the opposite corner
+        return abs(crossed_corner - 8)
+
+
+    # General cell selection (for when there isn't a more specific threat).
+    # Corners are generally better targets than edges
     if board[4] is NAUGHT and list(board[corners]).count(CROSS) > 1:
         return next(idx for (idx, val) in enumerate(board.cells)
                     if idx in edges and val is EMPTY)
