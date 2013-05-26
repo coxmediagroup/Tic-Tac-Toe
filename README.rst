@@ -8,6 +8,8 @@ The installation of this software assumes you posses a working knowledge of
 virtualenv_, limited exposure to python web development, and are familiar with
 the operation of the shell application appropriate for your operating system.
 
+This software was tested on, and known to work on, **Python 2.7.3** and **3.2.3**.
+
 .. note: Examples shown assume you are working with a UNIX-style shell (OSX,
          Linux, etc) rather than a cmd-style (``cmd``, ``powershell``, etc)
          like those found on Windows systems. For Windows systems, you may have
