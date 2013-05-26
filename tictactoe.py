@@ -92,11 +92,13 @@ class Game(object):
             self.next_player.go(self)
             cont = self.over()
         if cont == 'D':
-            print '\n--------------------\n        DRAW\n--------------------'
+            print '\n--------------------'
+            print '        DRAW\n--------------------'
         elif cont == self.computer.symbol:
-            print '\n--------------------\n      You LOST\n--------------------'
+            print '\n--------------------'
+            print'      You LOST\n--------------------'
         elif cont == self.human.symbol:
-            print '\n--------------------\n\tYou WON... did you cheat?\n--------------------'
+            print '\nYou WON... did you cheat?\n'
 
         print self.board
 
@@ -200,29 +202,51 @@ class Computer(Player):
         """
 
         game.toggle_turn()
+        steps = [self.step1, self.step2, self.step3, self.step4,
+                 self.step5, self.step6, self.step7, self.step8]
 
-        """Algorithm Step 1"""
+        for step in steps:
+            attempt = step()
+            if attempt:
+                return
+
+    def step1(self):
+        """Get a list of winning moves for me. If the list is non empty,
+        make the move and return True."""
         win = game.board.winning_moves(self.symbol)
         if win:
             win.pop().mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 2"""
+    def step2(self):
+        """If the other player has a winning move available for their next
+        turn, take it before they can and return True if possible.
+        """
         block = game.board.winning_moves(self.opponent_symbol)
         if block:
             block.pop().mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 3"""
+    def step3(self):
+        """If there is an available move which will create a fork, take it
+        and return True. A fork implies two unobstructed sequences of two
+        squares which could result in a win.
+        """
         fork = game.board.fork_available(self.symbol)
         if fork:
             fork.pop().mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 4a"""
+    def step4(self):
+        """Attempt to block the other player from creating a fork. Do this
+        either by (a) forcing they other player to make a move in a square that
+        does not give them a fork or (b) play directly on a square that they
+        would need in order to create a fork.
+        """
         opp_fork = game.board.fork_available(self.opponent_symbol)
         force_moves = game.board.force_opponent(self.symbol)
 
+        '''4a'''
         for attempt in force_moves:
             attempt.mark = self.symbol  # try taking the move
             need_blocking = game.board.winning_moves(self.symbol)
@@ -231,42 +255,50 @@ class Computer(Player):
                 if sq in opp_fork:
                     good_move = False
             if good_move:
-                return
+                return True
             attempt.mark = ' '  # undo the move if the block gives a fork
 
-        """Algorithm Step 4b"""
+        '''4b'''
         if opp_fork:
             opp_fork.pop().mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 5"""
+    def step5(self):
+        """If the middle is open, take it and return True."""
         if game.board.square(1, 1).empty():
             game.board.square(1, 1).mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 6"""
-        opp_corners = [i for i in game.board.corners()
-                       if i.mark == self.opponent_symbol]
-        if opp_corners:
-            sq = opp_corners.pop()
-            x = 2 if sq.x == 0 else 0
-            y = 2 if sq.y == 0 else 0
-            other_corner = game.board.square(x, y)
+    def step6(self):
+        """If there is an open corner, opposite from a corner already occupied
+        by the opponent, take the open corner and return True.
+        """
+        opponent_corners = [i for i in game.board.corners()
+                            if i.mark == self.opponent_symbol]
+        for sq in opponent_corners:
+            anti_x = 2 if sq.x == 0 else 0
+            anti_y = 2 if sq.y == 0 else 0
+            other_corner = game.board.square(anti_x, anti_y)
             if other_corner.empty():
                 other_corner.mark = self.symbol
-                return
+                return True
 
-        """Algorithm Step 7"""
+    def step7(self):
+        """Take any open corner and return True."""
         open_corners = [i for i in game.board.corners() if i.empty()]
         if open_corners:
             open_corners.pop().mark = self.symbol
-            return
+            return True
 
-        """Algorithm Step 8"""
+    def step8(self):
+        """Take any open spot and return True. This works as step8 because
+        we have already taken the middle if available and any corner that
+        would be available. The only open squares left will be middle edges.
+        """
         open_spots = game.board.unused()
         if open_spots:
             open_spots.pop().mark = self.symbol
-            return
+            return True
 
 
 class Board(object):
