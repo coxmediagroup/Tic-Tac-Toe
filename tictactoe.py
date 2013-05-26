@@ -46,18 +46,59 @@ class Game(object):
 
     def over(self):
         """Determine if the game is over, by checking if the board is full
-        or if a player has achieved a win scenario.
+        or if a player has achieved a win scenario. If there is a winner,
+        return the mark of the winning player or 'D' for a draw.
         """
-        #TODO: Yeah, this checks full board but not win scenario yet...
-        return self.board.unused() == []
+        diag_coords = [(0, 0), (1, 1), (2, 2)]
+        rdiag_coords = [(2, 0), (1, 1), (0, 2)]
+        winner = False
+
+        full = self.board.unused() == []
+        rows = [[self.board.square(i, j) for i in range(3)] for j in range(3)]
+        cols = [[self.board.square(i, j) for j in range(3)] for i in range(3)]
+        diag = [s for s in self.board.squares if (s.x, s.y) in diag_coords]
+        rdiag = [s for s in self.board.squares if (s.x, s.y) in rdiag_coords]
+
+        for row in rows:
+            if (row[0].mark == row[1].mark == row[2].mark and
+                    row[0].mark != ' '):
+                winner = row[0].mark
+
+        for col in cols:
+            if (col[0].mark == col[1].mark == col[2].mark and
+                    col[0].mark != ' '):
+                winner = col[0].mark
+
+        if (diag[0].mark == diag[1].mark == diag[2].mark and
+                diag[0].mark != ' '):
+            winner = diag[0].mark
+
+        if (rdiag[0].mark == rdiag[1].mark == rdiag[2].mark and
+                rdiag[0].mark != ' '):
+            winner = rdiag[0].mark
+
+        if full and not winner:
+            winner = 'D'
+
+        return winner
 
     def run(self):
         """Start taking turns. This assumes that the board and players
         have been appropriately setup in __init__.
         """
         print "Game is starting..."
-        while not self.over():
+        cont = self.over()
+        while not cont:
             self.next_player.go(self)
+            cont = self.over()
+        if cont == 'D':
+            print '\n--------------------\n        DRAW\n--------------------'
+        elif cont == self.computer.symbol:
+            print '\n--------------------\n      You LOST\n--------------------'
+        elif cont == self.human.symbol:
+            print '\n--------------------\n\tYou WON... did you cheat?\n--------------------'
+
+        print self.board
 
 
 class Player(object):
@@ -409,6 +450,7 @@ class Square(object):
     def __str__(self):
         """Print the mark for this Square ('X','O' or ' ')."""
         return self.mark
+
 
 if __name__ == '__main__':
     game = Game()
