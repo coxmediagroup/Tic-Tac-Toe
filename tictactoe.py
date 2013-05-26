@@ -214,36 +214,39 @@ class Computer(Player):
 
     def step1(self, board):
         """Get a list of winning moves for me. If the list is non empty,
-        make the move and return True."""
+        make the move and return the square played."""
         win = board.winning_moves(self.symbol)
         if win:
-            win.pop().mark = self.symbol
-            return True
+            sq = win.pop()
+            sq.mark = self.symbol
+            return sq
 
     def step2(self, board):
         """If the other player has a winning move available for their next
-        turn, take it before they can and return True if possible.
+        turn, take it before they can and return a the square played if able.
         """
         block = board.winning_moves(self.opponent_symbol)
         if block:
-            block.pop().mark = self.symbol
-            return True
+            sq = block.pop()
+            sq.mark = self.symbol
+            return sq
 
     def step3(self, board):
         """If there is an available move which will create a fork, take it
-        and return True. A fork implies two unobstructed sequences of two
-        squares which could result in a win.
+        and return the square played. A fork implies two unobstructed
+        sequences of two squares which could result in a win.
         """
         fork = board.fork_available(self.symbol)
         if fork:
-            fork.pop().mark = self.symbol
-            return True
+            sq = fork.pop()
+            sq.mark = self.symbol
+            return sq
 
     def step4(self, board):
         """Attempt to block the other player from creating a fork. Do this
         either by (a) forcing they other player to make a move in a square that
         does not give them a fork or (b) play directly on a square that they
-        would need in order to create a fork.
+        would need to create a fork. Return the square if a move is taken.
         """
         opp_fork = board.fork_available(self.opponent_symbol)
         force_moves = board.force_opponent(self.symbol)
@@ -257,23 +260,25 @@ class Computer(Player):
                 if sq in opp_fork:
                     good_move = False
             if good_move:
-                return True
+                return attempt
             attempt.mark = ' '  # undo the move if the block gives a fork
 
         '''4b'''
         if opp_fork:
-            opp_fork.pop().mark = self.symbol
-            return True
+            sq = opp_fork.pop()
+            sq.mark = self.symbol
+            return sq
 
     def step5(self, board):
-        """If the middle is open, take it and return True."""
-        if board.square(1, 1).empty():
-            board.square(1, 1).mark = self.symbol
-            return True
+        """If the middle is open, take it and return that square."""
+        center = board.square(1, 1)
+        if center.empty():
+            center.mark = self.symbol
+            return center
 
     def step6(self, board):
         """If there is an open corner, opposite from a corner already occupied
-        by the opponent, take the open corner and return True.
+        by the opponent, take the open corner and return the square.
         """
         opponent_corners = [i for i in board.corners()
                             if i.mark == self.opponent_symbol]
@@ -283,24 +288,26 @@ class Computer(Player):
             other_corner = board.square(anti_x, anti_y)
             if other_corner.empty():
                 other_corner.mark = self.symbol
-                return True
+                return other_corner
 
     def step7(self, board):
-        """Take any open corner and return True."""
+        """Take any open corner and return the square."""
         open_corners = [i for i in board.corners() if i.empty()]
         if open_corners:
-            open_corners.pop().mark = self.symbol
-            return True
+            sq = open_corners.pop()
+            sq.mark = self.symbol
+            return sq
 
     def step8(self, board):
-        """Take any open spot and return True. This works as step8 because
-        we have already taken the middle if available and any corner that
-        would be available. The only open squares left will be middle edges.
+        """Take any open spot and return that square. This works as step 8
+        because we have already taken the middle if available and any corner
+        that would be available. Nothing will be left but non-corner edges.
         """
         open_spots = board.unused()
         if open_spots:
-            open_spots.pop().mark = self.symbol
-            return True
+            sq = open_spots.pop()
+            sq.mark = self.symbol
+            return sq
 
 
 class Board(object):
