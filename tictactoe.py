@@ -318,6 +318,9 @@ class Board(object):
 
     __size = 3
     __indices = (0, 1, 2)
+    __diags = [(0, 0), (1, 1), (2, 2)]
+    __rdiags = [(0, 2), (1, 1), (2, 0)]
+    __corner_indices = [(0, 0), (2, 2), (0, 2), (2, 0)]
 
     def __init__(self):
         """Create a Square for each open space on a 3x3 grid."""
@@ -340,7 +343,7 @@ class Board(object):
     def corners(self):
         """Return a list containing all corner Squares."""
         return [i for i in self.squares if (i.x, i.y)
-                in [(0, 0), (2, 2), (0, 2), (2, 0)]]
+                in self.__corner_indices]
 
     def winning_moves(self, symbol=''):
 
@@ -351,34 +354,35 @@ class Board(object):
         res = []
 
         cols = [[s for s in self.squares if s.x == i and s.mark == symbol]
-                for i in range(3)]
+                for i in self.__indices]
         for i, col in enumerate(cols):
-            if len(col) == 2:
+            if len(col) == len(self.__indices) - 1:
                 j = (set(self.__indices) - set(s.y for s in col)).pop()
                 sq = self.square(i, j)
                 if sq.empty():
                     res.append(sq)
 
         rows = [[s for s in self.squares if s.y == i and s.mark == symbol]
-                for i in range(3)]
+                for i in self.__indices]
         for i, row in enumerate(rows):
-            if len(row) == 2:
+            if len(row) == len(self.__indices) - 1:
                 j = (set(self.__indices) - set(s.x for s in row)).pop()
                 sq = self.square(j, i)
                 if sq.empty():
                     res.append(sq)
 
         tl_diag = [s for s in self.squares if s.x == s.y and s.mark == symbol]
-        if len(tl_diag) == 2:
+        if len(tl_diag) == len(self.__indices) - 1:
             i = (set(self.__indices) - set(s.x for s in tl_diag)).pop()
             sq = self.square(i, i)
             if sq.empty():
                 res.append(sq)
 
-        tr_diag_ind = tuple((2 - x, x) for x in range(3))
+        tr_diag_ind = tuple((len(self.__indices) - 1 - x, x)
+                            for x in self.__indices)
         tr_diag = [s for s in self.squares if
                    (s.x, s.y) in tr_diag_ind and s.mark == symbol]
-        if len(tr_diag) == 2:
+        if len(tr_diag) == len(self.__indices) - 1:
             i, j = (set(tr_diag_ind) - set((s.x, s.y) for s in tr_diag)).pop()
             sq = self.square(i, j)
             if sq.empty():
@@ -430,10 +434,8 @@ class Board(object):
         sight that contain more than one item in them.
         """
         res = []
-        diags = [(0, 0), (1, 1), (2, 2)]
-        rdiags = [(0, 2), (1, 1), (2, 0)]
 
-        col = [self.square(sq.x, i) for i in range(3)]
+        col = [self.square(sq.x, i) for i in self.__indices]
         if not solo or (len(filter(lambda x: not x.empty(), col)) == 1):
             res.extend(col)
         row = [self.square(i, sq.y) for i in range(3)]
@@ -443,12 +445,12 @@ class Board(object):
         """There is almost definitely a "smarter" way to do this but
         Simple is better than complex... right?
         """
-        if (sq.x, sq.y) in diags:
-            diag = [self.square(i[0], i[1]) for i in diags]
+        if (sq.x, sq.y) in self.__diags:
+            diag = [self.square(i[0], i[1]) for i in self.__diags]
             if not solo or (len(filter(lambda x: not x.empty(), diag)) == 1):
                 res.extend(diag)
-        if (sq.x, sq.y) in rdiags:
-            rdiag = [self.square(i[0], i[1]) for i in rdiags]
+        if (sq.x, sq.y) in self.__rdiags:
+            rdiag = [self.square(i[0], i[1]) for i in self.__rdiags]
             if not solo or (len(filter(lambda x: not x.empty(), rdiag)) == 1):
                 res.extend(rdiag)
 
