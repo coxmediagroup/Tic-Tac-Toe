@@ -152,5 +152,164 @@ class TestSquare(unittest.TestCase):
         self.assertEquals(sq.empty(), False)
 
 
+class TestComputer(unittest.TestCase):
+    def setUp(self):
+        self.game = Game('1')
+        self.cpu = self.game.computer
+        self.square = self.game.board.square
+
+    def testStep1(self):
+        '''
+         O | O |
+        ---+---+---
+         O |   |
+        ---+---+---
+         X | X |
+        '''
+        self.square(0, 0).mark = 'O'
+        self.square(0, 1).mark = 'O'
+        self.square(0, 2).mark = 'X'
+        self.square(1, 0).mark = 'O'
+        self.square(1, 2).mark = 'X'
+        sq20 = self.square(2, 0)
+
+        self.assertIs(self.cpu.step1(self.game.board), sq20)
+        self.assertFalse(self.cpu.step1(self.game.board))
+
+    def testStep2(self):
+        '''
+         O | O |
+        ---+---+---
+         O |   |
+        ---+---+---
+         X | X |
+        '''
+        self.square(0, 0).mark = 'O'
+        self.square(0, 1).mark = 'O'
+        self.square(0, 2).mark = 'X'
+        self.square(1, 0).mark = 'O'
+        self.square(1, 2).mark = 'X'
+        sq22 = self.square(2, 2)
+
+        self.assertIs(self.cpu.step2(self.game.board), sq22)
+        self.assertFalse(self.cpu.step2(self.game.board))
+
+    def testStep3(self):
+        '''
+         O |   | X
+        ---+---+---
+           |   | O
+        ---+---+---
+           |   |
+        '''
+        self.square(0, 0).mark = 'O'
+        self.square(2, 1).mark = 'O'
+        self.square(2, 0).mark = 'X'
+        sq01 = self.square(0, 1)
+        sq11 = self.square(1, 1)
+
+        self.assertIn(self.cpu.step3(self.game.board), [sq01, sq11])
+
+        self.setUp()
+
+        '''
+         O |   |
+        ---+---+---
+           |   |
+        ---+---+---
+           |   | O
+        '''
+        self.square(0, 0).mark = 'O'
+        self.square(2, 2).mark = 'O'
+
+        sq20 = self.square(2, 0)
+        sq02 = self.square(0, 2)
+
+        self.assertIn(self.cpu.step3(self.game.board), [sq02, sq20])
+        self.assertIn(self.cpu.step3(self.game.board), [sq02, sq20])
+        self.assertFalse(self.cpu.step3(self.game.board))
+
+    def testStep4(self):
+        '''
+         O |   |
+        ---+---+---
+           |   |
+        ---+---+---
+           |   |
+        '''
+        self.square(0, 0).mark = 'O'
+        sq10 = self.square(1, 0)
+        sq20 = self.square(2, 0)
+        sq11 = self.square(1, 1)
+        sq22 = self.square(2, 2)
+        sq01 = self.square(0, 1)
+        sq02 = self.square(0, 2)
+
+        li = [sq10, sq20, sq11, sq22, sq01, sq02]
+        self.assertIn(self.cpu.step4(self.game.board), li)
+
+        sq10.mark = 'X'
+        li = [sq01, sq02, sq11, sq22]
+        self.assertIn(self.cpu.step4(self.game.board), li)
+
+        sq22.mark = 'X'
+        li = [sq01, sq02]
+        self.assertIn(self.cpu.step4(self.game.board), li)
+
+        self.setUp()
+
+        '''
+         X |   |
+        ---+---+---
+           |   |
+        ---+---+---
+         X |   |
+        '''
+        self.square(0, 0).mark = 'X'
+        self.square(0, 2).mark = 'X'
+        sq11 = self.square(1, 1)
+        sq20 = self.square(2, 0)
+        sq22 = self.square(2, 2)
+
+        li = [sq11, sq20, sq22]
+        self.assertIn(self.cpu.step4(self.game.board), li)
+
+    def testStep5(self):
+        sq11 = self.square(1, 1)
+
+        self.assertIs(self.cpu.step5(self.game.board), sq11)
+        self.assertFalse(self.cpu.step5(self.game.board))
+
+    def testStep6(self):
+        self.square(0, 0).mark = 'X'
+        self.square(2, 0).mark = 'O'
+        sq22 = self.square(2, 2)
+
+        self.assertEqual(self.cpu.step6(self.game.board), sq22)
+
+    def testStep7(self):
+        self.square(0, 0).mark = 'X'
+        self.square(2, 0).mark = 'O'
+        sq22 = self.square(2, 2)
+        sq02 = self.square(0, 2)
+
+        self.assertIn(self.cpu.step7(self.game.board), [sq22, sq02])
+        self.assertIn(self.cpu.step7(self.game.board), [sq22, sq02])
+        for sq in self.game.board.corners():
+            self.assertFalse(sq.empty())
+
+    def testStep8(self):
+        for sq in self.game.board.squares:
+            sq.mark = 'X'
+        sq10 = self.square(1, 0)
+        sq22 = self.square(2, 2)
+        sq10.mark = ' '
+        sq22.mark = ' '
+
+        self.assertIn(self.cpu.step8(self.game.board), [sq22, sq10])
+        self.assertIn(self.cpu.step8(self.game.board), [sq22, sq10])
+        self.assertEqual(self.game.board.unused(), [])
+
+
 if __name__ == '__main__':
     unittest.main()
