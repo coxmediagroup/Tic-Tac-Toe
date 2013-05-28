@@ -183,7 +183,22 @@ def naught_bot(board):
     # impossbile for the bot to block).
     # In this situation, mark the cell in the corner opposite the player.
     flanking = (board[corners].count(CROSS) == board[edges].count(CROSS) == 1)
-    if board[4] is NAUGHT and flanking:
+
+    # The double edge play is when the player selects 2 edges with an open
+    # corner in between them. The bot needs to plug the corner asap to
+    # prevent a flank in the next move.
+    double_edge_play = (board[edges].count(CROSS) == 2)
+    if board[4] is NAUGHT and double_edge_play:
+        # Kind of an odd approach, but I found that adding the 2 indexes and
+        # subtracting 4 gave us the corner index nestled in between them.
+        sum_idx = sum(
+            idx for (idx, val) in zip(edges, board[edges]) if val is CROSS)
+        corner = abs(sum_idx - 4)
+
+        if board[corner] is EMPTY:
+            return corner
+
+    elif board[4] is NAUGHT and flanking:
         crossed_corner = next(
             idx for (idx, val) in zip(corners, board[corners]) if val is CROSS)
         # subtracting 8 and forcing unsigned should get us the opposite corner
@@ -191,7 +206,7 @@ def naught_bot(board):
 
     # General cell selection (for when there isn't a more specific threat).
     # Corners are generally better targets than edges
-    if board[4] is NAUGHT and list(board[corners]).count(CROSS) > 1:
+    elif board[4] is NAUGHT and list(board[corners]).count(CROSS) > 1:
         return next(idx for (idx, val) in enumerate(board.cells)
                     if idx in edges and val is EMPTY)
     elif board[corners].count(EMPTY) > 0:

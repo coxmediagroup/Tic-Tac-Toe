@@ -192,3 +192,41 @@ class NaughtBotTests(unittest.TestCase):
                       x, _, _],
                      first_player=x)
         self.assertIn(naught_bot(game), (2, ))
+
+    def test_block_double_edge_scenario(self):
+        """
+        This time I'm not sure how to beat the player, but let's work through
+        it..
+
+        The winning sequence for me was:
+        X: 7, 5, 8, 2 <-- X wins (but shouldn't be able to)
+        O: 4, 0, 6
+
+        In order to prevent this win, the bot should have selected the corner
+        the corner in between the 2 edges selected in moves 1, and 2.
+        """
+        x, o, _ = CROSS, NAUGHT, EMPTY
+        game = Board([_, _, _,
+                      _, o, x,
+                      _, x, _],
+                     first_player=x)
+
+        self.assertIn(naught_bot(game), (8, ))
+
+        game = Board([_, _, _,
+                      x, o, _,
+                      _, x, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (6, ))
+
+        game = Board([_, x, _,
+                      x, o, _,
+                      _, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (0, ))
+
+        game = Board([_, x, _,
+                      _, o, x,
+                      _, _, _],
+                     first_player=x)
+        self.assertIn(naught_bot(game), (2, ))
