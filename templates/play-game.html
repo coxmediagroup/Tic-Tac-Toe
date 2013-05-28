@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <link href="{{ STATIC_URL }}css/tictactoe.css" rel="stylesheet" type="text/css">
+</head>
+<body class="
+    {% if game_is_over %}
+    game-end
+    {% elif board_is_empty %}
+    game-start
+    {% endif %}">
+
+<div id="header">
+
+    <div class="game-end">
+    <h1>
+      Game Over:
+      <span>
+      {% if winner == NAUGHT %}
+        O Wins!
+      {% elif winner == CROSS %}
+        X Wins! <!-- never gonna happen -->
+      {% else %}
+        It's a Draw!
+      {% endif %}
+      </span>
+    </h1>
+    <h2><a href="{% url 'play-game' %}">Play again</a></h2>
+    </div>
+
+    <h1 class="game-start">Make the first mark</h1>
+
+</div>
+
+  <form action="{% url "make-mark" %}" method="post" id="board">
+    {% csrf_token %}
+
+    {% for row in cells %}
+      <div>
+      {% for idx, val in row %}
+        <span class="cell">
+        {% if val == EMPTY and not game_is_over %}
+          <button type="submit" name="cell" value="{{ idx }}"><span>X</span></button>
+        {% elif val == CROSS %}
+        X
+        {% elif val == NAUGHT %}
+        O
+        {% endif %}
+        </span>
+      {% endfor %}
+      </div>
+    {% endfor %}
+  </form>
+
+<script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}js/tictactoe.js"></script>
+<script>
+!(function ($){
+  "use strict";
+  new tictactoe.Board("#board");
+}(jQuery));
+</script>
+</body>
+</html>

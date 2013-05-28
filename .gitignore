@@ -1,0 +1,5 @@
+*.py[cdo]
+*.swp
+/.idea
+/*.iml
+/*.db
