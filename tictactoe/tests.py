@@ -2,6 +2,8 @@ import unittest
 from . import exceptions as ex
 from . import Board, naught_bot, NAUGHT, CROSS, EMPTY
 
+x, o, _ = CROSS, NAUGHT, EMPTY
+
 
 class BoardTests(unittest.TestCase):
     """
@@ -38,7 +40,6 @@ class BoardTests(unittest.TestCase):
             game[2] = NAUGHT
 
     def test_game_knows_when_cross_wins(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([x, _, o,
                       x, o, x,
                       _, o, _],
@@ -50,7 +51,6 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(ctx.exception.winner, x)
 
     def test_game_knows_when_naught_wins(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([o, _, x,
                       o, x, o,
                       _, x, _],
@@ -62,7 +62,6 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(ctx.exception.winner, o)
 
     def test_game_knows_when_there_is_a_draw(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([o, x, _,
                       x, x, o,
                       o, o, x],
@@ -75,7 +74,6 @@ class BoardTests(unittest.TestCase):
         self.assertIn('draw', str(ctx.exception).lower())
 
     def test_game_board_cannot_be_modified_once_it_has_been_won(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([x, _, o,
                       x, o, x,
                       _, o, _],
@@ -99,7 +97,6 @@ class NaughtBotTests(unittest.TestCase):
         self.assertEqual(naught_bot(game), 4)
 
     def test_knows_when_to_block(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([_, _, _,
                       x, x, _,
                       o, _, _],
@@ -117,7 +114,6 @@ class NaughtBotTests(unittest.TestCase):
         self.assertIn(naught_bot(game), (7,))
 
     def test_knows_when_to_attack(self):
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([o, _, x,
                       _, o, _,
                       x, x, _],
@@ -142,7 +138,6 @@ class NaughtBotTests(unittest.TestCase):
         In order to prevent this win, the bot should have selected an edge cell
         during the bot's 2nd move.
         """
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([_, _, x,
                       _, o, _,
                       x, _, _],
@@ -167,7 +162,6 @@ class NaughtBotTests(unittest.TestCase):
         In order to prevent this win, the bot should have selected the corner
         opposite the player's first mark (I think).
         """
-        x, o, _ = CROSS, NAUGHT, EMPTY
         game = Board([x, _, _,
                       _, o, _,
                       _, x, _],
@@ -205,7 +199,7 @@ class NaughtBotTests(unittest.TestCase):
         In order to prevent this win, the bot should have selected the corner
         the corner in between the 2 edges selected in moves 1, and 2.
         """
-        x, o, _ = CROSS, NAUGHT, EMPTY
+
         game = Board([_, _, _,
                       _, o, x,
                       _, x, _],
