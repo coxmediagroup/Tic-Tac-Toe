@@ -9,3 +9,27 @@ If you don't want to broadcast your intentions by forking this, feel free to clo
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
 (Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+
+
+Requirements:
+Python 2.7
+
+Running:
+$ python tictactoe.py
+
+About:
+This naively follows a known algorithm for winning tic tac toe based on the conditions of the board at any given time. The details for the process are from http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy and can be summed up with:
+
+1) If a winning move is available, take it.
+2) If your opponent has a winning move available, take it to block.
+3) If you can create a fork which will give two opportunities to win, do so.
+4) Attempt to block your opponent from creating a fork by doing one of the following:
+    a) Create a winning move which will require a block where the act of blocking does not create a fork for your opponent.
+    b) Simply play in the square that would allow your opponent to create a fork.
+5) Play the center if possible.
+6) If your opponent has taken a corner where the opposite corner is open, take it.
+7) Play any empty corner.
+8) Play any empty edge.
+
+The computer will always take the most advantageous available space based on the above rules which will result in either a win or draw for the computer player every game.
+
