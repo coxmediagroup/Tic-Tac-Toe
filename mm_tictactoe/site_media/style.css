@@ -1,0 +1,276 @@
+body {
+    background:url(/site_media/bg2.png);
+    background-attachment:fixed;
+    background-position:center;
+}
+
+header {
+    background-image: -webkit-gradient(
+        linear, 
+        0% 0%, 
+        0% 100%, 
+        from(#367f3f), 
+        to(#367f3f), 
+        color-stop(.5,#4fb34b)
+    );
+
+    background-image:-moz-linear-gradient(
+            top, 
+            #367f3f,
+            #4fb34b, 
+            #367f3f);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#367f3f', endColorstr='#4fb34b');
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    width: 100%;
+    height: 44px;
+    text-align: center;
+    color: #ffffff;
+    padding-top: 10px;
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+
+nav {
+    height: 44px;
+    width: 100%;
+    background-image: -webkit-gradient(
+            linear, 
+            0% 0%, 
+            0% 100%, 
+            from(#54b850),
+            to(#54b850),
+            color-stop(0.5,#6fce93)
+        );
+    background-image:-moz-linear-gradient(
+            top, 
+            #54b850, 
+            #6fce93,
+            #54b850);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54b850', endColorstr='#6fce93');
+}
+
+nav ul {
+    height: 100%;
+    width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav ul li {
+    display: inline-block;
+    position: relative;
+    float: left;
+    width: 106px;
+    height: 100%;
+    border: 1px solid #999999;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    
+}
+
+#navHome {
+    background-image: url(/site_media/Actions-go-home-icon.png);
+}
+
+#navHome:hover:after
+{
+    display: block;
+    content: "Home";
+    position: absolute;
+    font-weight: bold;
+    text-align: center;
+    height: 105px;
+    line-height: 105px;
+    width: 100%;
+    z-index:1000;
+}
+
+#navHome.selected {
+    background-image: url(/site_media/Actions-go-home-icon.png),
+        -webkit-gradient(
+            linear, 
+            0% 0%, 
+            0% 100%, 
+            from(#367f3f), 
+            to(#367f3f), 
+            color-stop(.5,#4fb34b)
+        );
+
+    background-image: url(/site_media/Actions-go-home-icon.png),
+        -moz-linear-gradient(
+            top, 
+            #367f3f,
+            #4fb34b, 
+            #367f3f
+        );
+}
+
+#navNewGame {
+    background-image: url(/site_media/Actions-games-solve-icon.png);
+}
+
+#navNewGame:hover:after
+{
+    display: block;
+    content: "New Game";
+    position: absolute;
+    font-weight: bold;
+    text-align: center;
+    line-height: 105px;
+    width: 100%;
+    z-index:1000;
+}
+
+#navNewGame.selected {
+    background-image: url(/site_media/Actions-games-solve-icon.png),
+        -webkit-gradient(
+            linear, 
+            0% 0%, 
+            0% 100%, 
+            from(#367f3f), 
+            to(#367f3f), 
+            color-stop(.5,#4fb34b)
+        );
+
+    background-image: url(/site_media/Actions-games-solve-icon.png),
+        -moz-linear-gradient(
+            top, 
+            #367f3f,
+            #4fb34b, 
+            #367f3f
+        );
+}
+
+#navCurGame {
+    background-image: url(/site_media/black-chess-icon.png);
+}
+
+#navCurGame:hover:after
+{
+    display: block;
+    content: "Current Game";
+    position: absolute;
+    font-weight: bold;
+    text-align: center;
+    height: 105px;
+    line-height: 105px;
+    width: 100%;
+    z-index:1000;
+}
+
+#navCurGame.selected {
+    background-image: url(/site_media/black-chess-icon.png),
+        -webkit-gradient(
+            linear, 
+            0% 0%, 
+            0% 100%, 
+            from(#367f3f), 
+            to(#367f3f), 
+            color-stop(.5,#4fb34b)
+        );
+
+    background-image: url(/site_media/black-chess-icon.png),
+        -moz-linear-gradient(
+            top, 
+            #367f3f,
+            #4fb34b, 
+            #367f3f
+        );
+}
+
+section#gameSection {
+}
+
+section#gameSection table#gameBoard {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section {
+    -webkit-transition-property: opacity;
+    -webkit-transition-delay: 0.25s;
+    -webkit-transition-duration: 1.0s;
+    -webkit-transition-timing-function: ease;
+    
+    -moz-transition-property: opacity;
+    -moz-transition-delay: 0.25s;
+    -moz-transition-duration: 1.0s;
+    -moz-transition-timing-function: ease;
+    
+    transition-property: opacity;
+    transition-delay: 0.25s;
+    transition-duration: 1.0s;
+    transition-timing-function: ease;
+    
+    z-index: 0;
+    position: absolute;
+    width: 100%;
+    display: block;
+    opacity: 0;
+}
+
+section.obscured {
+    z-index: 100;
+    opacity: 0.1;
+}
+
+section.active {
+    z-index: 100;
+    opacity: 1;
+}
+
+#gameEndMessage {
+    text-align:center;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+table#gameBoard tr td {
+    border: 1px solid black;
+    height: 92px;
+    width: 92px;
+}
+
+@-webkit-keyframes 'piecedrop' {
+    0% {
+        -webkit-transform: scale(2);
+    }
+    100% {
+        -webkit-transform: scale(1);
+    }
+}
+
+div.x {
+    background: url('/site_media/x.png');
+    height: 90px;
+    width: 90px;
+}
+
+div.o {
+    background: url('/site_media/o.png');
+    height: 90px;
+    width: 90px;
+}
+
+div#animated.o {
+    -webkit-animation: piecedrop;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-iteration-count: 1;
+}
+
+input.blank, div.blank {
+    background: url('/site_media/blank.png');
+    height: 90px;
+    width: 90px;
+}
+

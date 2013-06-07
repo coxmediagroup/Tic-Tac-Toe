@@ -1,0 +1,15 @@
+{% extends "site.html" %}
+
+{% block pagetitle %}Home{% endblock %}
+{% block title %}Home{% endblock %}
+{% block primary %}
+
+<form method="post" action="/login/">
+{% csrf_token %}
+<input name="playerName" type="text" value="anonymous" />
+<input type="submit" value="Login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}
+

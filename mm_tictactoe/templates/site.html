@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Tic Tac Toe - {%block pagetitle %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/site_media/homeScreenIcon.png" />
+    <link rel="apple-touch-icon-precomposed" href="/site_media/homeScreenIcon.png" />
+    
+    <link rel="stylesheet" href="/site_media/html5reset.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="/site_media/style.css" type="text/css" media="screen" />
+  </head>
+  <body>
+    <header>Tic Tac Toe</header>
+    <nav>
+      <ul>
+          <li id="navHome" onclick="navClicked(event)"></li>
+          <li id="navNewGame" onclick="navClicked(event)"></li>
+          <li id="navCurGame" onclick="navClicked(event)"></li>
+      </ul>
+    </nav>
+    <div id="content">
+      <div id="primary">
+        <h1>{% block title %}{% endblock %}</h1>
+        {% block primary %}{% endblock %}
+      </div>
+    </div>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.6.1.js"></script>
+    <script type="text/javascript" src="/site_media/script.js"></script>
+    <script type="text/javascript" src="/site_media/bookmark_bubble.js"></script>
+  </body>
+</html>
+
+

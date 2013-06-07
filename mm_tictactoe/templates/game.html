@@ -1,0 +1,41 @@
+{% extends "site.html" %}
+
+{% block pagetitle %}Game{% endblock %}
+{% block primary %}
+
+    {% csrf_token %}
+    <section id="gameSection" class="active">
+    <table id="gameBoard">
+        <tr>
+    {% for index in game.board %}
+    {% if forloop.counter0 > 0 and forloop.counter0|divisibleby:3 %}
+        </tr>
+        <tr>
+    {% endif %}
+    {% if index == game.X %}
+        <td>
+            <div class="x" id="{{ forloop.counter0 }}"></div>
+        </td>
+    {% else %} {% if index == game.O %}
+        <td>
+            <div class="o" id="{{ forloop.counter0 }}"></div>
+        </td>
+    {% else %} {% if ended %}
+        <td> 
+            <div class="blank" id="{{ forloop.counter0 }}"></div>
+        </td>
+    {% else %}
+        <td>
+            <div class="blank" id="{{ forloop.counter0 }}"></div>
+        </td>
+    {% endif %} {% endif %} {% endif %}
+    {% endfor %}
+        </tr>
+    </table>
+    </section>
+    <section id="gameEndSection" class="">
+        <div id="gameEndMessage"></div>
+    </section>
+
+{% endblock %}
+
