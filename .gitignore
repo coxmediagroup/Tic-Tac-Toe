@@ -1,3 +1,5 @@
+tictactoe/settings/local.py
+
 *.py[cod]
 
 # C extensions
