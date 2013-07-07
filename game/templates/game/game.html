@@ -1,9 +1,9 @@
 <html>
 <head>
 	<title>Game Time</title>
+  <script src="{{STATIC_URL}}js/jquery.js"></script>
 </head>
 <body>
-  
 </body>
 <SCRIPT>
 
@@ -59,48 +59,45 @@ function check()
 {
   if(sqr1 == " X " && sqr2 == " X " && sqr3 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
+    //alert("You Win!")
+    //reset()
   } 
   else if(sqr4 == " X " && sqr5 == " X " && sqr6 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
+    //alert("You Win!")
+    //reset()
   } 
   else if(sqr7 == " X " && sqr8 == " X " && sqr9 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
+    //alert("You Win!")
+    //reset()
   }
   else if(sqr1 == " X " && sqr5 == " X " && sqr9 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else if(sqr1 == " X " && sqr4 == " X " && sqr7 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else if(sqr2 == " X " && sqr5 == " X " && sqr8 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else if(sqr3 == " X " && sqr6 == " X " && sqr9 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else if(sqr1 == " X " && sqr5 == " X " && sqr9 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else if(sqr3 == " X " && sqr5 == " X " && sqr7 == " X ")
   {
-    alert("You Win!")
-    reset()
+    window.location.href = "http://localhost:8000/game/loser";
   }
   else
   {
