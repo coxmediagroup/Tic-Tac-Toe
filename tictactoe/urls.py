@@ -8,6 +8,6 @@ from .views import HomepageView
 urlpatterns = patterns('',
 
     url(r'^$', HomepageView.as_view(), name='home'),
-    url(r'^game/', include('game.urls')),
+    url(r'^game/', include('game.urls', namespace='game')),
     url(r'^admin/', include(admin.site.urls)),
 )
