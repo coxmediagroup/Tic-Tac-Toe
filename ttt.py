@@ -32,7 +32,7 @@ def main():
         print "n) new game"
         print "p) print the board"
         print "q) quit"
-        print "1-9) make the given move"
+        print "0-8) make the given move"
         print ""
         print "Enter your selection: "
         selection = raw_input()
