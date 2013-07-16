@@ -75,6 +75,31 @@ class Board(object):
         best_moves = max(move_dict)
         return move_dict[best_moves][0]
 
+    def get_winner(self):
+        """
+        Get the winner of the game represented by this L{Board}, if there is one.
+
+        @return: The winner
+        @rtype: str
+        """
+        for wm in self.WIN_MOVES:
+            if wm - self.x_positions == set():
+                return "X"
+            if wm - self.o_positions == set():
+                return "O"
+
+    @property
+    def is_playable(self):
+        """
+        Return True if the current board is playable (i.e. there is no winner and there are unplayed spaces).
+
+        @return: True if the current board is playable, otherwise False
+        @rtype: bool
+        """
+        if self.get_winner() in ("X", "O"):
+            return False
+        return bool(set(xrange(0, 9)) - self.x_positions - self.o_positions)
+
     @classmethod
     def get_winning_moves(cls, my_positions, other_positions):
         """
