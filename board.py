@@ -212,18 +212,14 @@ class Board(object):
         """
         Print the Tic-Tac-Toe board to the console in standard format.
         """
-        print "     |     |     "
-        print " {0} | {1} | {2} ".format(self.get_mark(0), self.get_mark(1), self.get_mark(2))
-        print "     |     |     "
-        print "-----|-----|-----"
-        print "     |     |     "
-        print " {0} | {1} | {2} ".format(self.get_mark(3), self.get_mark(4), self.get_mark(5))
-        print "     |     |     "
-        print "-----|-----|-----"
-        print "     |     |     "
-        print " {0} | {1} | {2} ".format(self.get_mark(6), self.get_mark(7), self.get_mark(8))
-        print "     |     |     "
-        if self.is_playable:
-            return
-        winner = self.get_winner()
-        print "\nWinner: {0}".format(winner or "KITTY")
+        lines = ["     |     |     "]
+        lines.append(" {0} | {1} | {2} ".format(self.get_mark(0), self.get_mark(1), self.get_mark(2)))
+        lines.extend(["     |     |     ", "-----|-----|-----", "     |     |     "])
+        lines.append(" {0} | {1} | {2} ".format(self.get_mark(3), self.get_mark(4), self.get_mark(5)))
+        lines.extend(["     |     |     ", "-----|-----|-----", "     |     |     "])
+        lines.append(" {0} | {1} | {2} ".format(self.get_mark(6), self.get_mark(7), self.get_mark(8)))
+        lines.append("     |     |     ")
+        if not self.is_playable:
+            lines.append("")
+            lines.append("Winner: {0}".format(self.get_winner() or "KITTY"))
+        print "\n".join(lines)
