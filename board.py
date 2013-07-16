@@ -34,6 +34,47 @@ class Board(object):
         set_to_add = self.x_positions if mark in ('X', 'x') else self.o_positions
         set_to_add.add(absolute_pos)
 
+    def _find_best_move(self, mark):
+        """
+        Try and find the 'best' move for the given C{mark}, which should either be 'X' or 'O'.
+
+        @param mark: The mark to compute the best move for ('X' or 'O')
+        @type mark: str
+        @return: The absolute position of the best move for C{mark} (0-8).
+        @rtype: int
+        """
+        if mark in ('X', 'x'):
+            get_my_pos = lambda board: board.x_positions
+            get_other_pos = lambda board: board.o_positions
+        else:
+            get_my_pos = lambda board: board.o_positions
+            get_other_pos = lambda board: board.x_positions
+
+        my_positions = get_my_pos(self)
+        other_positions = get_other_pos(self)
+        unplayed_positions = set(xrange(0, 9)) - my_positions - other_positions
+
+        if len(unplayed_positions) == 0:
+            error_msg = "The board has already been filled!"
+            raise TicTacToeError(error_msg, errorcodes.NO_POSITIONS_AVAILABLE)
+
+        # Assemble a dictionary whose keys are the number of moves resulting in a win and whose values are
+        # a list of corresponding unplayed positions.
+        move_dict = {}
+        for position in unplayed_positions:
+            possible_board = Board()
+            for x_pos in self.x_positions:
+                possible_board.add_mark(x_pos, 'X')
+            for o_pos in self.o_positions:
+                possible_board.add_mark(o_pos, 'O')
+            possible_board.add_mark(position, mark)
+            my_new_pos = get_my_pos(possible_board)
+            other_new_pos = get_other_pos(possible_board)
+            future_moves = possible_board.get_winning_moves(my_new_pos, other_new_pos)
+            move_dict.setdefault(len(future_moves), []).append(position)
+        best_moves = max(move_dict)
+        return move_dict[best_moves][0]
+
     @classmethod
     def get_winning_moves(cls, my_positions, other_positions):
         """
