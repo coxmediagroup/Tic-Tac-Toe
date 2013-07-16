@@ -59,8 +59,12 @@ class Board(object):
             raise TicTacToeError(error_msg, errorcodes.NO_POSITIONS_AVAILABLE)
 
         # Determine my positions, the other set of positions, and who is/was first.
-        my_positions = self.x_positions if mark in ('X', 'x') else self.o_positions
-        other_positions = self.o_positions if mark in ('X', 'x') else self.x_positions
+        if mark in ('X', 'x'):
+            my_positions = self.x_positions
+            other_positions = self.o_positions
+        else:
+            my_positions = self.o_positions
+            other_positions = self.x_positions
         i_was_first = len(other_positions) <= len(my_positions)
 
         # If I can make a winning move, return its position.
