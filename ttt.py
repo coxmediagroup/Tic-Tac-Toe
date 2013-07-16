@@ -1,21 +1,9 @@
 #!/usr/bin/env python
-
-
-def print_board():
-    print "   |   |   "
-    print " X | O |   "
-    print "   |   |   "
-    print "---|---|---"
-    print "   |   |   "
-    print " O | X | O "
-    print "   |   |   "
-    print "---|---|---"
-    print "   |   |   "
-    print " X |   | O "
-    print "   |   |   "
+from board import Board
 
 
 def main():
+    game_board = Board()
     while True:
         print "Classic Console Tic-Tac-Toe"
         print ""
@@ -28,7 +16,7 @@ def main():
         if selection in ("q", "Q"):
             break
         elif selection in ("p", "P"):
-            print_board()
+            game_board.print_board()
 
 
 if __name__ == "__main__":
