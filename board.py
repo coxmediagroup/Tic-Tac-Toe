@@ -20,7 +20,7 @@ class Board(object):
     def add_mark(self, absolute_pos, mark):
         """
         Add the given mark to this Tic-Tac-Toe board. The mark should be an X or an O.
-        
+
         @param absolute_pos: The absolute position (0-8) to mark on the board
         @type absolute_pos: int
         @param mark: The letter to mark on the board
