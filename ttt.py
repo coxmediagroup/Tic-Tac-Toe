@@ -31,6 +31,28 @@ def is_user_first():
             print "Dice are tied, rolling again..."
 
 
+def take_turn(game_board, position, user_mark):
+    """
+    Take a single turn by adding C{user_mark} to C{position} on the given C{game_board}. If the board remains
+    playable after that, the computer will automatically take a turn using its AI to find the next move.
+
+    @param game_board: The game board to take the turn on
+    @type game_board: L{board.Board}
+    @param position: The absolute position to mark
+    @type position: int
+    @param user_mark: The letter to mark on the board
+    @type user_mark: str
+    """
+    try:
+        game_board.add_mark(position, user_mark)
+    except TicTacToeError as err:
+        print err
+        return
+    if game_board.is_playable:
+        other_mark = "O" if user_mark in ('x', "X") else "X"
+        game_board.add_mark(game_board.find_next_move(other_mark), other_mark)
+
+
 def main():
     """
     Run the main program!
@@ -58,13 +80,7 @@ def main():
                 game_board.add_mark(game_board.find_next_move("X"), "X")
         elif selection in ('0', '1', '2', '3', '4', '5', '6', '7', '8'):
             position = int(selection)
-            try:
-                game_board.add_mark(position, "O")
-            except TicTacToeError as err:
-                print err
-                continue
-            if game_board.is_playable:
-                game_board.add_mark(game_board.find_next_move("X"), "X")
+            take_turn(game_board, position, "O")
 
 
 if __name__ == "__main__":
