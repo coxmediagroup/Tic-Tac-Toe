@@ -10,6 +10,9 @@ class Board(object):
     Class to represent a Tic-Tac-Toe game board.
     """
 
+    # All of the combinations of moves (in terms of absolute position) that will determine the winner.
+    WIN_MOVES = [{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}]
+
     def __init__(self):
         self.x_positions = set()
         self.o_positions = set()
@@ -30,6 +33,30 @@ class Board(object):
             raise TicTacToeError(error_msg, errorcodes.POSITION_ALREADY_SELECTED)
         set_to_add = self.x_positions if mark in ('X', 'x') else self.o_positions
         set_to_add.add(absolute_pos)
+
+    @classmethod
+    def get_winning_moves(cls, my_positions, other_positions):
+        """
+        Get a list of moves that can be made by the target player (whose positions are given by
+        C{my_positions}) in order to win the current game.
+
+        @param my_positions: The set of positions for the player whose winning moves are being found
+        @type my_positions: set
+        @param other_positions: The set of positions for the player's opponent
+        @type other_positions: set
+        @return: A list of possible moves the target player can make to win the game
+        @rtype: list [int]
+        """
+        possible_moves = []
+        for wm in cls.WIN_MOVES:
+            missing = wm - my_positions
+            if len(missing) != 1:
+                continue
+            my_win = missing.pop()
+            if my_win in other_positions:
+                continue
+            possible_moves.append(my_win)
+        return possible_moves
 
     def get_mark(self, absolute_pos):
         """
