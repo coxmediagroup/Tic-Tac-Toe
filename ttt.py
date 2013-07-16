@@ -10,7 +10,10 @@ def main():
         print "Make a selection:"
         print ""
         print "n) new game"
+        print "p) print the board"
         print "q) quit"
+        print "1-9) make the given move"
+        print ""
         print "Enter your selection: "
         selection = raw_input()
         if selection in ("q", "Q"):
