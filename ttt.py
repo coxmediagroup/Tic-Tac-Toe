@@ -1,10 +1,19 @@
 #!/usr/bin/env python
+"""
+Main program to run Tic-Tac-Toe on the console.
+"""
 from board import Board
-import random
 from errors import TicTacToeError
+import random
 
 
 def is_user_first():
+    """
+    Roll two simulated dice until one is greater than the other. Whoever has the highest roll is first.
+
+    @return: True if the user is first, otherwise False (if the computer is first).
+    @rtype: bool
+    """
     while True:
         user_dice = random.randrange(1, 7)
         comp_dice = random.randrange(1, 7)
@@ -23,6 +32,9 @@ def is_user_first():
 
 
 def main():
+    """
+    Run the main program!
+    """
     game_board = Board()
     while True:
         print "Classic Console Tic-Tac-Toe"
