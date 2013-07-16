@@ -60,8 +60,8 @@ class Board(object):
 
     def get_mark(self, absolute_pos):
         """
-        Return an 'X', an 'O', or a blank space, depending on whether or not C{absolute_pos} is occupied, and
-        who is occupying it.
+        Return an 'X' or an 'O' (surrounded by spaces) or the absolute position (surrounded by parentheses)
+        depending on whether or not C{absolute_pos} is occupied, and/or who is occupying it.
 
         @param absolute_pos: The absolute position (0-8) whose mark we want to retrieve
         @type absolute_pos: int
@@ -69,24 +69,23 @@ class Board(object):
         @rtype: str
         """
         if absolute_pos in self.x_positions:
-            return "X"
+            return " X "
         elif absolute_pos in self.o_positions:
-            return "O"
-        return " "
+            return " O "
+        return "({0})".format(absolute_pos)
 
     def print_board(self):
         """
         Print the Tic-Tac-Toe board to the console in standard format.
         """
-        print "   |   |   "
+        print "     |     |     "
         print " {0} | {1} | {2} ".format(self.get_mark(0), self.get_mark(1), self.get_mark(2))
-        print "   |   |   "
-        print "---|---|---"
-        print "   |   |   "
+        print "     |     |     "
+        print "-----|-----|-----"
+        print "     |     |     "
         print " {0} | {1} | {2} ".format(self.get_mark(3), self.get_mark(4), self.get_mark(5))
-        print "   |   |   "
-        print "---|---|---"
-        print "   |   |   "
+        print "     |     |     "
+        print "-----|-----|-----"
+        print "     |     |     "
         print " {0} | {1} | {2} ".format(self.get_mark(6), self.get_mark(7), self.get_mark(8))
-        print "   |   |   "
-
+        print "     |     |     "
