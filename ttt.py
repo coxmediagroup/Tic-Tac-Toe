@@ -20,6 +20,8 @@ def main():
             break
         elif selection in ("p", "P"):
             game_board.print_board()
+        elif selection in ("n", "N"):
+            game_board = Board()
 
 
 if __name__ == "__main__":
