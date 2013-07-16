@@ -155,3 +155,7 @@ class Board(object):
         print "     |     |     "
         print " {0} | {1} | {2} ".format(self.get_mark(6), self.get_mark(7), self.get_mark(8))
         print "     |     |     "
+        if self.is_playable:
+            return
+        winner = self.get_winner()
+        print "\nWinner: {0}".format(winner or "KITTY")
