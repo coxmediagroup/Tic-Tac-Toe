@@ -33,6 +33,9 @@ class Board(object):
         @param mark: The letter to mark on the board
         @type mark: str
         """
+        if not self.is_playable:
+            error_msg = "Board is not playable (game over)"
+            raise TicTacToeError(error_msg, errorcodes.NO_POSITIONS_AVAILABLE)
         if absolute_pos in self.x_positions or absolute_pos in self.o_positions:
             error_fmt = "Position {0} is already selected by {1}"
             prev_selection = 'X' if absolute_pos in self.x_positions else 'O'
@@ -50,6 +53,11 @@ class Board(object):
         @return: The absolute position (0-8) of the best possible move for the given mark
         @rtype: int
         """
+        # Sanity check: make sure we can actually make a play before trying to figure out what it is.
+        if not self.is_playable:
+            error_msg = "The board has already been filled!"
+            raise TicTacToeError(error_msg, errorcodes.NO_POSITIONS_AVAILABLE)
+
         # Determine my positions, the other set of positions, and who is/was first.
         my_positions = self.x_positions if mark in ('X', 'x') else self.o_positions
         other_positions = self.o_positions if mark in ('X', 'x') else self.x_positions
@@ -107,18 +115,10 @@ class Board(object):
             get_my_pos = lambda board: board.o_positions
             get_other_pos = lambda board: board.x_positions
 
-        my_positions = get_my_pos(self)
-        other_positions = get_other_pos(self)
-        unplayed_positions = set(xrange(0, 9)) - my_positions - other_positions
-
-        if len(unplayed_positions) == 0:
-            error_msg = "The board has already been filled!"
-            raise TicTacToeError(error_msg, errorcodes.NO_POSITIONS_AVAILABLE)
-
         # Assemble a dictionary whose keys are the number of moves resulting in a win and whose values are
         # a list of corresponding unplayed positions.
         move_dict = {}
-        for position in unplayed_positions:
+        for position in self.unplayed_positions:
             possible_board = Board()
             for x_pos in self.x_positions:
                 possible_board.add_mark(x_pos, 'X')
@@ -160,9 +160,9 @@ class Board(object):
         @return: True if the current board is playable, otherwise False
         @rtype: bool
         """
-        if self.get_winner() in ("X", "O"):
+        if self.get_winner() in ("X", "O") or len(self.unplayed_positions) == 0:
             return False
-        return bool(set(xrange(0, 9)) - self.x_positions - self.o_positions)
+        return True
 
     @classmethod
     def get_winning_moves(cls, my_positions, other_positions):
