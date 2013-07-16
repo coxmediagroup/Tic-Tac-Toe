@@ -44,6 +44,15 @@ def main():
             game_board = Board()
             if not is_user_first():
                 game_board.add_mark(game_board.find_next_move("X"), "X")
+        elif selection in ('0', '1', '2', '3', '4', '5', '6', '7', '8'):
+            position = int(selection)
+            try:
+                game_board.add_mark(position, "O")
+            except TicTacToeError as err:
+                print err
+                continue
+            if game_board.is_playable:
+                game_board.add_mark(game_board.find_next_move("X"), "X")
 
 
 if __name__ == "__main__":
