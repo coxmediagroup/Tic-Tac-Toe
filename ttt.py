@@ -1,5 +1,25 @@
 #!/usr/bin/env python
 from board import Board
+import random
+from errors import TicTacToeError
+
+
+def is_user_first():
+    while True:
+        user_dice = random.randrange(1, 7)
+        comp_dice = random.randrange(1, 7)
+        print "Rolling dice to see who goes first..."
+        print ""
+        print "You rolled {0}".format(user_dice)
+        print "Computer rolled {0}".format(comp_dice)
+        if user_dice > comp_dice:
+            print "User is first"
+            return True
+        elif user_dice < comp_dice:
+            print "Computer is first"
+            return False
+        else:
+            print "Dice are tied, rolling again..."
 
 
 def main():
