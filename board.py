@@ -146,6 +146,13 @@ class Board(object):
                 return "O"
 
     @property
+    def unplayed_positions(self):
+        """
+        Return the set of positions which have not yet been played by either side.
+        """
+        return set(xrange(0, 9)) - self.x_positions - self.o_positions
+
+    @property
     def is_playable(self):
         """
         Return True if the current board is playable (i.e. there is no winner and there are unplayed spaces).
