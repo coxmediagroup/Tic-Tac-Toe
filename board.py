@@ -3,6 +3,7 @@ Class to represent a Tic-Tac-Toe game board.
 """
 from errors import TicTacToeError
 import errorcodes
+import random
 
 
 class Board(object):
@@ -12,6 +13,9 @@ class Board(object):
 
     # All of the combinations of moves (in terms of absolute position) that will determine the winner.
     WIN_MOVES = [{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}]
+
+    # The corners of the game board, in counterclockwise order.
+    CORNERS = [0, 6, 8, 2]
 
     def __init__(self):
         self.x_positions = set()
@@ -33,6 +37,54 @@ class Board(object):
             raise TicTacToeError(error_msg, errorcodes.POSITION_ALREADY_SELECTED)
         set_to_add = self.x_positions if mark in ('X', 'x') else self.o_positions
         set_to_add.add(absolute_pos)
+
+    def find_next_move(self, mark):
+        """
+        Given the mark ('X' or 'O') of the desired side, find the best next move that side can make.
+
+        @param mark: The mark of the desired side ('X' or 'O')
+        @type mark: str
+        @return: The absolute position (0-8) of the best possible move for the given mark
+        @rtype: int
+        """
+        # Determine my positions, the other set of positions, and who is/was first.
+        my_positions = self.x_positions if mark in ('X', 'x') else self.o_positions
+        other_positions = self.o_positions if mark in ('X', 'x') else self.x_positions
+        i_was_first = len(other_positions) <= len(my_positions)
+
+        # If I can make a winning move, return its position.
+        my_win_moves = self.get_winning_moves(my_positions, other_positions)
+        if my_win_moves != []:
+            return my_win_moves[0]
+
+        # If I can block my opponent from winning, return the first such position that will do so.
+        # (there should be at most 1 such position if/when the computer calls this)
+        my_block_moves = self.get_winning_moves(other_positions, my_positions)
+        if my_block_moves != []:
+            return my_block_moves[0]
+
+        # If my opponent went first, play the middle square if it hasn't already been played.
+        if not i_was_first and 4 not in my_positions and 4 not in other_positions:
+            return 4
+
+        # If I'm first and no one has taken a turn, pick one of the corner squares.
+        if i_was_first and len(my_positions) == 0 and len(other_positions) == 0:
+            return random.choice(self.CORNERS)
+
+        # If I'm first and this is my second turn, determine if my opponent picked an adjacent corner.
+        # If so, pick the opposite corner. Otherwise, pick any of the adjacent corners.
+        if i_was_first and len(other_positions) == 1 and list(my_positions)[0] in self.CORNERS:
+            my_index = self.CORNERS.index(list(my_positions)[0])
+            adj_corners = (self.CORNERS[(my_index - 1) % 4], self.CORNERS[(my_index + 1) % 4])
+            opposite_corner = self.CORNERS[(my_index + 2) % 4]
+            other_pos = list(other_positions)[0]
+            if other_pos in adj_corners:
+                return opposite_corner
+            else:
+                return random.choice(adj_corners)
+
+        # If none of the above are true, try brute-forcing the next best move.
+        return self._find_best_move(mark)
 
     def _find_best_move(self, mark):
         """
