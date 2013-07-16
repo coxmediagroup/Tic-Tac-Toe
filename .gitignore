@@ -1,0 +1,48 @@
+# Python compiled/bytecode files
+*.py[cod]
+
+# Package/build-related files and directories
+*.egg-info
+*.egg
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+__pycache__
+
+# Coverage-related files
+.coverage
+.tox
+nosetests.xml
+cover/
+
+# IDE-specific files
+.project
+.pydevproject
+.mr.developer.cfg
+
+# Generated documentation files
+src/reports/html/
+doc/
+
+# Settings file
+.settings
+
+# Generated logs
+*.log
+
+# Output files that will vary based on inputs
+*.csv
+*.json
+
+# Temporary files
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
