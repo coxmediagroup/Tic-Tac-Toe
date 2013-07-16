@@ -42,6 +42,8 @@ def main():
             game_board.print_board()
         elif selection in ("n", "N"):
             game_board = Board()
+            if not is_user_first():
+                game_board.add_mark(game_board.find_next_move("X"), "X")
 
 
 if __name__ == "__main__":
