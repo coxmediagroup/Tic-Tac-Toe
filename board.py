@@ -18,6 +18,9 @@ class Board(object):
     CORNERS = [0, 6, 8, 2]
 
     def __init__(self):
+        """
+        Create a new Tic-Tac-Toe game board by initializing the sets of X and O positions.
+        """
         self.x_positions = set()
         self.o_positions = set()
 
@@ -95,6 +98,8 @@ class Board(object):
         @return: The absolute position of the best move for C{mark} (0-8).
         @rtype: int
         """
+        # Create 2 temporary functions to get our positions or those of our opponent, depending on the mark
+        # we were passed.
         if mark in ('X', 'x'):
             get_my_pos = lambda board: board.x_positions
             get_other_pos = lambda board: board.o_positions
