@@ -34,7 +34,7 @@ class Board(object):
         @type mark: str
         """
         if absolute_pos in self.x_positions or absolute_pos in self.o_positions:
-            error_fmt = "Position already selected: {0} ({1})"
+            error_fmt = "Position {0} is already selected by {1}"
             prev_selection = 'X' if absolute_pos in self.x_positions else 'O'
             error_msg = error_fmt.format(absolute_pos, prev_selection)
             raise TicTacToeError(error_msg, errorcodes.POSITION_ALREADY_SELECTED)
