@@ -138,10 +138,11 @@ class Board(object):
                 return spaces[index]
 
         # Check diagonals
-        if spaces[index] != False and \
-           ((spaces[0] == spaces[4] and spaces[0] == spaces[8]) or \
-            (spaces[2] == spaces[4] and spaces[2] == spaces[6])):
-            return spaces[index]
+        if spaces[0] != False and spaces[0] == spaces[4] and spaces[0] == spaces[8]:
+            return spaces[0]
+
+        if spaces[2] != False and spaces[2] == spaces[4] and spaces[2] == spaces[6]:
+            return spaces[2]
 
         return False
 
