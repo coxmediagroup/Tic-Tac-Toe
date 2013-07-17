@@ -74,6 +74,8 @@ prompted.
     current = 0
     while board.endgame() == False:
         player[current].turn()
+        print
+        board.draw()
 
         # Switch to next player
         current = (current + 1)%2
