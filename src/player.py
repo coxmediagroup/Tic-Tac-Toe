@@ -33,9 +33,9 @@ class Computer(Player):
         #
         # then 1st player can win.
         #
-        # The alternative strategy is to firt check if the human has a winning
-        # position and to block that.  If not, try to find the best position we
-        # can.
+        # The alternative strategy is to first check to see if we can win.  If
+        # not, then we check if the human has a winning position and to block that.
+        # If not, try to find the best position we can.
 
         if self.__winning:
             # We will try the ONLY chance of winning strategy
@@ -71,26 +71,23 @@ class Computer(Player):
             pos = self._board.match_nummarks(self._mark, 2)
             if len(pos):
                 self._setmark(pos[0])
-
-            # Get list of winning positions for Human
-            win_pos = self._board.match_nummarks(["X", "O"][self._first], 2)
-
-            if len(win_pos):
-                # Human can win, must block
-                self._setmark(win_pos[0])
             else:
-                self._setmark(self.__bestpos())
+                # Get list of winning positions for Human
+                win_pos = self._board.match_nummarks(["X", "O"][self._first], 2)
+
+                if len(win_pos):
+                    # Human can win, must block
+                    self._setmark(win_pos[0])
+                else:
+                    self._setmark(self.__bestpos())
 
     def __bestpos(self):
         """Find the best position to mark"""
 
         # The best position would be if there are already 2 computer marks in a
-        # row, column, or diagonal and the third space is empty.  Second best
-        # would be 1 computer mark and the other two spaces empty.  Otherwise,
-        # try for (in this order):
-        #   - a non-corner, non-center space
-        #   - a non-center space
-        #   - first available space
+        # row, column, or diagonal and the third space is empty.  If not, we go
+        # for center.  If center isn't available, we just go for the first
+        # available empty space.
 
         pos = self._board.match_nummarks(self._mark, 2)
 
@@ -104,7 +101,6 @@ class Computer(Player):
         # Find the first available empty space
         for pos in xrange(9):
             if self._board.is_empty(pos):
-                print "First Avail"
                 return pos
 
 class Human(Player):
