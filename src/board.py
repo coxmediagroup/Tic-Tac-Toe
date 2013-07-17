@@ -61,10 +61,10 @@ class Board(object):
 
         # Check columns
         for index in xrange(3):
-            self._get_empty_pos(xrange(index, 8, 3), mark, nummarks, numempties, empty_pos)
+            self._get_empty_pos(xrange(index, 9, 3), mark, nummarks, numempties, empty_pos)
 
         # Check diagonals
-        self._get_empty_pos(xrange(0, 8, 4), mark, nummarks, numempties, empty_pos)
+        self._get_empty_pos(xrange(0, 9, 4), mark, nummarks, numempties, empty_pos)
         self._get_empty_pos(xrange(2, 8, 2), mark, nummarks, numempties, empty_pos)
 
         return empty_pos
