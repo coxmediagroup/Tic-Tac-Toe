@@ -8,6 +8,7 @@ from optparse import OptionParser
 import os
 import sys
 
+from board import Board
 from player import Computer, Human
 
 __author__    = "Adam Stein"
@@ -47,6 +48,9 @@ if __name__ == "__main__":
     # Create the computer & human player instances
     computer = Computer(not options.humanstart)
     human = Human(options.humanstart)
+
+    # Create the board
+    board = Board()
 
     sys.exit(0)
 
