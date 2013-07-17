@@ -32,3 +32,61 @@ class Board(object):
 
         print
 
+    def endgame(self):
+        """We are at the end of the game if we have a winner or tie"""
+
+        # First check if we have a winner
+        if self.winner() == False:
+            # No winner, check for tie
+            return self.tie()
+        else:
+            return True
+
+    def tie(self):
+        """Return True if there is a tie game, False if not"""
+
+        empty = filter(lambda value: value == False, self.spaces)
+
+        # I realize winner() is called twice in rapid succession,
+        # once in endgame() and then again here since endgame()
+        # calles tie().  If this were a real product and winner()
+        # took any real time to run, we would have to optimize
+        # so that it wasn't called twice (cache the result from
+        # the first time perhaps and/or rearrange the IF statements).
+        #
+        # This being a simple game and winner() running fast enough
+        # not to notice, should I invest the time?  I made the
+        # tradeoff (time to code vs speed of execution) to not worry
+        # about it.
+        #
+        # It is still useful to comment about potential problems,
+        # and so is documented here.
+        return len(empty) == 0 and not self.winner()
+
+    def winner(self):
+        """Return the mark of the winner, False if no winner"""
+
+        spaces = self.spaces
+
+        # Check rows
+        for index in xrange(0, 9, 3):
+            if spaces[index] != False and \
+               spaces[index] == spaces[index + 1] and \
+               spaces[index] == spaces[index + 2]:
+                return True
+
+        # Check columns
+        for index in xrange(3):
+            if spaces[index] != False and \
+               spaces[index] == spaces[index + 3] and \
+               spaces[index] == spaces[index + 6]:
+                return True
+
+        # Check diagonals
+        if spaces[index] != False and \
+           ((spaces[0] == spaces[4] and spaces[0] == spaces[8]) or \
+            (spaces[2] == spaces[4] and spaces[2] == spaces[6])):
+            return True
+
+        return False
+

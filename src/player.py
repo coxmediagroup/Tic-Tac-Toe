@@ -1,7 +1,8 @@
 import sys
 
 class Player(object):
-    def __init__(self, first):
+    def __init__(self, board, first):
+        self.__board = board
         self.__first = first
 
         # Set the mark used by this player (player who goes first is

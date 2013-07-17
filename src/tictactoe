@@ -45,12 +45,38 @@ if __name__ == "__main__":
     # Parse command line options
     (options, args) = parse_args()
 
-    # Create the computer & human player instances
-    computer = Computer(not options.humanstart)
-    human = Human(options.humanstart)
-
     # Create the board
     board = Board()
+
+    # Create the computer & human player instances
+    computer = Computer(board, not options.humanstart)
+    human = Human(board, options.humanstart)
+
+    # Give instructions to the user
+    print """
+Welcome to a friendly game of Tic-Tac-Toe.  Your objective is to beat the
+computer.  The computer's objective is to ruin your self-esteem.
+
+Choose which space to put your mark in by entering the number of the space when
+prompted.
+    """
+
+    if options.humanstart:
+        print "I see you have opted to go first.  Good luck, you'll need it."
+
+        player = [human, computer]
+    else:
+        print "I see you have opted to let the computer go first.  Let the game begin."
+
+        player = [computer, human]
+
+    # Keep taking turns until we reached the end game (there is a win or tie)
+    current = 0
+    while board.endgame() == False:
+        player[current].turn()
+
+        # Switch to next player
+        current = (current + 1)%2
 
     sys.exit(0)
 
