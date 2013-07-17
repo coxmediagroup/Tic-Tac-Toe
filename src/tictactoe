@@ -80,5 +80,17 @@ prompted.
         # Switch to next player
         current = (current + 1)%2
 
+    # See what the final status is an comment to the user
+    winner = board.winner()
+    if winner == False:
+        # No winner, had a tie
+        print "\nThe match ended in a draw.  Better luck next time."
+    elif winner == computer.mark:
+        # Computer won
+        print "\nThe computer won the match.  Now hang your head in shame."
+    else:
+        # Human won -- THIS IS NOT POSSIBLE!
+        print "\nYou won the match.  Self-destruct sequence initiated..."
+
     sys.exit(0)
 

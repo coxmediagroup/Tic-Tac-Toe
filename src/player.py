@@ -7,10 +7,10 @@ class Player(object):
 
         # Set the mark used by this player (player who goes first is
         # always 'X' -- official rules)
-        self._mark = ["O", "X"][first]
+        self.mark = ["O", "X"][first]
 
     def _setmark(self, pos):
-        self._board.setmark(pos, self._name, self._mark)
+        self._board.setmark(pos, self._name, self.mark)
 
     def turn(self):
         print >> sys.stderr, "need to override turn()"
@@ -68,7 +68,7 @@ class Computer(Player):
             # Execute the alternative strategy
 
             # If we can win, do it now
-            pos = self._board.match_nummarks(self._mark, 2)
+            pos = self._board.match_nummarks(self.mark, 2)
             if len(pos):
                 self._setmark(pos[0])
             else:
@@ -89,7 +89,7 @@ class Computer(Player):
         # for center.  If center isn't available, we just go for the first
         # available empty space.
 
-        pos = self._board.match_nummarks(self._mark, 2)
+        pos = self._board.match_nummarks(self.mark, 2)
 
         if len(pos):
             return pos[0]
@@ -116,7 +116,7 @@ class Human(Player):
             self._board.draw()
             print
 
-        print "It's your turn.  Enter the value of the position to put an '%c'." % self._mark
+        print "It's your turn.  Enter the value of the position to put an '%c'." % self.mark
 
         # Keep asking for a space to mark until we get a valid answer
         while True:

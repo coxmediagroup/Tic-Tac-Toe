@@ -128,20 +128,20 @@ class Board(object):
             if spaces[index] != False and \
                spaces[index] == spaces[index + 1] and \
                spaces[index] == spaces[index + 2]:
-                return True
+                return spaces[index]
 
         # Check columns
         for index in xrange(3):
             if spaces[index] != False and \
                spaces[index] == spaces[index + 3] and \
                spaces[index] == spaces[index + 6]:
-                return True
+                return spaces[index]
 
         # Check diagonals
         if spaces[index] != False and \
            ((spaces[0] == spaces[4] and spaces[0] == spaces[8]) or \
             (spaces[2] == spaces[4] and spaces[2] == spaces[6])):
-            return True
+            return spaces[index]
 
         return False
 
