@@ -8,6 +8,8 @@ from optparse import OptionParser
 import os
 import sys
 
+from player import Computer, Human
+
 __author__    = "Adam Stein"
 __copyright__ = "Copyright 2013"
 __email__     = "adam@csh.rit.edu"
@@ -42,6 +44,9 @@ if __name__ == "__main__":
     # Parse command line options
     (options, args) = parse_args()
 
-    sys.exit(0)
+    # Create the computer & human player instances
+    computer = Computer(not options.humanstart)
+    human = Human(options.humanstart)
 
+    sys.exit(0)
 
