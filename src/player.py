@@ -31,7 +31,8 @@ class Computer(Player):
         #   3) 1st player puts his mark in opposite corner on 2nd turn
         #   4) 2nd player puts his mark in any empty corner on 2nd turn
         #
-        # then 1st player can win.
+        # then 1st player can win.  We don't have to worry if the human tries
+        # to do that to us since the alternative strategy will defeat it.
         #
         # The alternative strategy is to first check to see if we can win.  If
         # not, then we check if the human has a winning position and to block that.
@@ -112,7 +113,7 @@ class Human(Player):
         print
 
         # Show the board if going first
-        if self._first:
+        if self._first and self._board.numturn == 1:
             self._board.draw()
             print
 
