@@ -16,14 +16,14 @@ board_template ="""
 
 X='X'
 O='O'
-STALEMATE=E=' '
+STALEMATE='STALEMATE'
 
 class Board(object):
     """docstring for ClassName"""
     def __init__(self):
-        self._spaces = [[E,E,E],
-                        [E,E,E],
-                        [E,E,E]]
+        self._spaces = [[1,2,3],
+                        [4,5,6],
+                        [7,8,9]]
 
     def __repr__(self):
         return pformat(self._spaces)
@@ -31,6 +31,8 @@ class Board(object):
     def __str__(self):
         return board_template.format(*self._spaces)
 
+    def cells(self):
+        return (c for r in self._spaces for c in r )
 
     def rows(self): #"yield from" is not available until 3.3
         return (tuple(row) for row in self._spaces)
@@ -46,15 +48,15 @@ class Board(object):
         return chain(self.rows(), self.cols(), self.diags())
 
     def move(self, player, row, col):
-        assert self._spaces[row][col] == E
+        assert self._spaces[row][col] not in (X,O)
         self._spaces[row][col] = player
 
     def check_win(self):
         for rcd in self.rows_cols_diags():
             if (rcd[0] == rcd[1] == rcd[2]) and rcd[0] in (X,O):
                 return rcd[0]
-        for space in (c for r in self._spaces for c in r ):
-            if space == E:
+        for space in self.cells():
+            if space not in (X,O):
                 break
         else:
             return STALEMATE
