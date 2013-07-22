@@ -1,4 +1,5 @@
 import board
+from board import X ,O, E, STALEMATE
 def test_rows_cols_diags():
     b = board.Board()
     b._spaces = [[1,2,3],
@@ -11,7 +12,6 @@ def test_rows_cols_diags():
                       (1, 5, 9), (7, 5, 3)], str(l)
 
 def test_win():
-    from board import X ,O, STALEMATE, EMPTY as E
     b = board.Board()
     b._spaces = [[E,E,E],
                  [E,E,E],
@@ -37,6 +37,24 @@ def test_win():
                  [X,X,O],
                  [O,O,X]]
     assert b.check_win() is STALEMATE
+
+def test_str():
+    b = board.Board()
+    b._spaces = [[O,X,O],
+                 [X,E,O],
+                 [O,O,X]]
+    assert str(b) == '\n  0   1   2\n0 O | X | O\n -----------\n1 X |   | O\n-----------\n2 O | O | X\n'
+
+    print repr(b)
+
+def test_move():
+    b = board.Board()
+    b.move(X, 0, 0)
+    assert b._spaces == [[X,E,E],
+                         [E,E,E],
+                         [E,E,E]], str(b._spaces)
+
+
 
 
 

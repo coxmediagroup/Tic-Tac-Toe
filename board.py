@@ -6,27 +6,31 @@ from itertools import chain
 from pprint import pformat
 
 board_template ="""
- {0[0]} | {0[1]} | {0[2]}
+  0   1   2
+0 {0[0]} | {0[1]} | {0[2]}
+ -----------
+1 {1[0]} | {1[1]} | {1[2]}
 -----------
- {1[0]} | {1[1]} | {1[2]}
------------
- {2[0]} | {2[1]} | {2[2]}
+2 {2[0]} | {2[1]} | {2[2]}
 """
 
 X='X'
 O='O'
-STALEMATE=EMPTY=' '
+STALEMATE=E=' '
 
 class Board(object):
     """docstring for ClassName"""
     def __init__(self):
-        self._spaces = [[EMPTY]*3]*3
+        self._spaces = [[E,E,E],
+                        [E,E,E],
+                        [E,E,E]]
 
     def __repr__(self):
         return pformat(self._spaces)
 
     def __str__(self):
         return board_template.format(*self._spaces)
+
 
     def rows(self): #"yield from" is not available until 3.3
         return (tuple(row) for row in self._spaces)
@@ -41,8 +45,8 @@ class Board(object):
     def rows_cols_diags(self): #"yield from" is not available until 3.3
         return chain(self.rows(), self.cols(), self.diags())
 
-    def play(self, player, row, col):
-        assert self._spaces[row][col] == EMPTY
+    def move(self, player, row, col):
+        assert self._spaces[row][col] == E
         self._spaces[row][col] = player
 
     def check_win(self):
@@ -50,7 +54,7 @@ class Board(object):
             if (rcd[0] == rcd[1] == rcd[2]) and rcd[0] in (X,O):
                 return rcd[0]
         for space in (c for r in self._spaces for c in r ):
-            if space == EMPTY:
+            if space == E:
                 break
         else:
             return STALEMATE
