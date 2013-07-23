@@ -17,3 +17,10 @@ class board(object):
         self.board = [['-','-','-'],
                       ['-','-','-'],
                       ['-','-','-']]
+    def print_board(self):
+        """
+        print current board state
+        """
+        print self.board[0]
+        print self.board[1]
+        print self.board[2]
