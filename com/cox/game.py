@@ -11,6 +11,5 @@ class game(object):
         selection = ''
         choices = ['O','X']
         while not (selection == 'X' or selection == 'O'):
-            print('choose X or O')
-            selection = input().upper()
+            selection = raw_input('Choose X OR O').upper()
         self.board = board.board(human=selection, computer= choices.remove(selection))
