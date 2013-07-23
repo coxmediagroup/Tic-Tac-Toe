@@ -39,7 +39,7 @@ class board(object):
         mark position for a player on the board
         """
         row,col = list(position)
-        self.board[row][col] = self.players[player]
+        self.board[int(row)][int(col)] = self.players[player]
     
     def is_winner(self, player):
         """
