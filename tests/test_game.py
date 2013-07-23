@@ -20,8 +20,10 @@ class Test(unittest.TestCase):
 
     def test_select_letters(self):
         self.game.select_letters()
-
+        
+    def test_toss(self):
+        head_tail = self.game.toss()
+        assert(head_tail == 'computer')
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
