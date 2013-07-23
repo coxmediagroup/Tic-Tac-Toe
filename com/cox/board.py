@@ -38,8 +38,12 @@ class board(object):
         """
         mark position for a player on the board
         """
+        row,col = list(position)        
+        self.board[int(row)][int(col)] = self.players[player]    
+    
+    def is_space_available(self,position):
         row,col = list(position)
-        self.board[int(row)][int(col)] = self.players[player]
+        return (self.board[int(row)][int(col)] == '-')
     
     def is_winner(self, player):
         """
@@ -56,5 +60,13 @@ class board(object):
                 (self.board[0][0] == self.players[player] and self.board[1][1] == self.players[player] and self.board[2][2] == self.players[player]) or
                 (self.board[0][2] == self.players[player] and self.board[1][1] == self.players[player] and self.board[2][0] == self.players[player])
                 )
-        
-        
+    
+    def is_board_full(self):
+        """
+        check if board is full
+        """
+        for i in range(3):
+            for j in range(3):
+                if self.is_space_available(str(i)+str(j)):
+                    return False
+        return True

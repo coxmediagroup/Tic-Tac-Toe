@@ -16,8 +16,8 @@ class Test(unittest.TestCase):
         self.board.print_board()
     
     def test_letter_selection(self):
-        assert(self.board.players.get('human')=='O')
-        assert(self.board.players.get('computer')=='X')
+        self.assertTrue(self.board.players.get('human')=='O')
+        self.assertTrue(self.board.players.get('computer')=='X')
         
     def test_move(self):
         self.board.move('human', '00')
@@ -33,6 +33,12 @@ class Test(unittest.TestCase):
         self.assertTrue(self.board.is_winner(player))
         self.board.board[0][2] = '-'
         self.assertFalse(self.board.is_winner(player))
+    
+    def test_is_board_full(self):
+        for i in range(3):
+            for j in range(3):
+                self.board.board[i][j] = 'X'
+        self.assertTrue(self.board.is_board_full())
 
 
 if __name__ == "__main__":
