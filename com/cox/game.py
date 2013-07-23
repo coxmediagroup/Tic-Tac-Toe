@@ -8,7 +8,9 @@ class game(object):
         self.board = None
     
     def select_letters(self):
-        selection = input("choose your letter: O or X ?").upper()
+        selection = ''
         choices = ['O','X']
-        if selection in choices:
-            self.board = board.board(human=selection, computer= choices.remove(selection))
+        while not (selection == 'X' or selection == 'O'):
+            print('choose X or O')
+            selection = input().upper()
+        self.board = board.board(human=selection, computer= choices.remove(selection))
