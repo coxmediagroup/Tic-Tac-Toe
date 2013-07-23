@@ -10,7 +10,7 @@ class board(object):
     '''
 
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         '''
         initialize board as two-d list
         '''
@@ -18,6 +18,9 @@ class board(object):
                       ['-','-','-'],
                       ['-','-','-']
                       ]
+        self.human_letter = kwargs.get('human', '')
+        self.computer_letter = kwargs.get('computer', '')
+    
     def print_board(self):
         """
         print current board state
