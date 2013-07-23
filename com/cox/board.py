@@ -18,8 +18,9 @@ class board(object):
                       ['-','-','-'],
                       ['-','-','-']
                       ]
-        self.human_letter = kwargs.get('human', '')
-        self.computer_letter = kwargs.get('computer', '')
+        self.players = {'human': kwargs.get('human', ''),
+                        'computer': kwargs.get('computer', '')
+                        }
     
     def print_board(self):
         """
@@ -32,3 +33,28 @@ class board(object):
         print(' ' + self.board[1][0] + ' | ' + self.board[1][1] + ' | ' + self.board[1][2])        
         print('-----------')        
         print(' ' + self.board[0][0] + ' | ' + self.board[0][1] + ' | ' + self.board[0][2])
+    
+    def move(self, player, position):
+        """
+        mark position for a player on the board
+        """
+        row,col = list(position)
+        self.board[row][col] = self.players[player]
+    
+    def is_winner(self, player):
+        """
+        checks the board for the winning pattern
+        for a player
+        player =  computer or human        
+        """
+        return ((self.board[0][0] == self.players[player] and self.board[0][1] == self.players[player] and self.board[0][2] == self.players[player]) or
+                (self.board[1][0] == self.players[player] and self.board[1][1] == self.players[player] and self.board[1][2] == self.players[player]) or
+                (self.board[2][0] == self.players[player] and self.board[2][1] == self.players[player] and self.board[2][2] == self.players[player]) or
+                (self.board[0][0] == self.players[player] and self.board[1][0] == self.players[player] and self.board[2][0] == self.players[player]) or
+                (self.board[0][1] == self.players[player] and self.board[1][1] == self.players[player] and self.board[2][1] == self.players[player]) or
+                (self.board[0][2] == self.players[player] and self.board[1][2] == self.players[player] and self.board[2][2] == self.players[player]) or
+                (self.board[0][0] == self.players[player] and self.board[1][1] == self.players[player] and self.board[2][2] == self.players[player]) or
+                (self.board[0][2] == self.players[player] and self.board[1][1] == self.players[player] and self.board[2][0] == self.players[player])
+                )
+        
+        

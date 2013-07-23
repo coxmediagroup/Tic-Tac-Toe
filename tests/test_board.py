@@ -16,8 +16,8 @@ class Test(unittest.TestCase):
         self.board.print_board()
     
     def test_letter_selection(self):
-        assert(self.board.human_letter=='O')
-        assert(self.board.computer_letter=='X')
+        assert(self.board.players.get('human')=='O')
+        assert(self.board.players.get('computer')=='X')
 
 
 if __name__ == "__main__":
