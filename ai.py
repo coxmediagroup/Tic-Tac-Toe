@@ -41,7 +41,8 @@ class ComputerPlayer(Player):
                     if c not in (X,O):
                         count[c] += 1
         max_index = index_of_max_value(count)
-        if max_index > 1:
+
+        if count[max_index] > 1:
             return max_index
         else:
             return None
