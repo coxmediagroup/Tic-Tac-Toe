@@ -55,7 +55,12 @@ grid = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 player1 = raw_input("Please enter player 1's name: ")
 player2 = raw_input("Please enter player 2's name: ")
 
+#counts how many inputs have been made. The maximum should be four since there is only 9 spots in total
+
+timesPlayed = 0
+
 while not win(grid,'O') and not win(grid,'X') and not tie(grid):
+   timesPlayed += 1
    input1 = get_input(grid, player1);
    grid[input1-1] = 'O'
    input2 = get_input(grid, player2);
@@ -64,7 +69,7 @@ while not win(grid,'O') and not win(grid,'X') and not tie(grid):
       congrats(player1)
    if win(grid,'X'):
       congrats(player2)
-   if tie(grid):
+   if tie(grid) or timesPlayed == 4:
       print "Tied"
    printGrid(grid)
 
