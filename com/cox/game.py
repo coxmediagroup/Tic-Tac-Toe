@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 from com.cox import board
 
 class game(object):
@@ -53,10 +54,28 @@ class game(object):
         pick computer's next move
         """
         #check if computer can win in next move, pick that move
-        #check if human can win in next move, if pick that move so to block him 
-        #now take center box if available
-        #else take one of the corner box
-        #else just pick random available
+        secret_board = deepcopy(self.board)
+        for move in self.available_moves():
+            secret_board.move(move)
+            if secret_board.is_winner():
+                return move
+        #check if human can win in next move, if pick that move so to block him
+        secret_board2 = deepcopy(self.board)
+        for move2 in self.available_moves():
+            secret_board2.move(move2)
+            if secret_board2.is_winner():
+                return move2
+        #take center box if available
+        if self.board.is_space_available(self.center):
+            return self.center
+        #take one of the corner box
+        for crn in self.corners:
+            if self.board.is_space_available(crn):
+                return crn
+        #just pick random available
+        for poss_mv in self.possible_moves:
+            if self.board.is_space_available(poss_mv):
+                return poss_mv
         
     
     def play(self):
