@@ -70,3 +70,11 @@ class board(object):
                 if self.is_space_available(str(i)+str(j)):
                     return False
         return True
+    
+    def reset(self):
+        """
+        reset all positions
+        """
+        for i in range(3):
+            for j in range(3):
+                self.board[i][j] = '*'

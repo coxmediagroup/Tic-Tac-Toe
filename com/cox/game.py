@@ -12,17 +12,20 @@ class game(object):
         self.corners = ['00','02','20','22']
         self.center = '11'
     
-    def select_letters(self):
-        selection = ''
+    def select_letters(self):        
         choices = ['O','X']
-        while not (selection == 'X' or selection == 'O'):
+        while(True):
+        #while not (selection == 'X' or selection == 'O'):
             selection = raw_input('Choose X OR O').upper()
-        self.board = board.board(human=selection, computer= choices.remove(selection))
+            if selection in choices:
+                choices.remove(selection)
+                self.board = board.board(human=selection, computer= choices[0])
+                break
     
     
     def toss(self):
         # coin flip
-        if random.randint(0, 1) == 0:
+        if random.randint(0, 1):
             return 'computer'
         else:
             return 'computer' #change this to human, to make fair game.
@@ -40,6 +43,7 @@ class game(object):
         valid_move = False
         next_move = ""        
         while not valid_move:
+            self.board.print_board()
             next_move = raw_input("your turn buddy!")
             if next_move in self.possible_moves:
                 self.board.is_space_available(next_move)
@@ -53,17 +57,17 @@ class game(object):
         """
         pick computer's next move
         """
-        #check if computer can win in next move, pick that move
-        secret_board = deepcopy(self.board)
-        for move in self.available_moves():
-            secret_board.move(move)
-            if secret_board.is_winner():
+        #check if computer can win in next move, pick that move        
+        for move in self.possible_moves:
+            secret_board = deepcopy(self.board)
+            secret_board.move("computer", move)
+            if secret_board.is_winner("computer"):
                 return move
-        #check if human can win in next move, if pick that move so to block him
-        secret_board2 = deepcopy(self.board)
-        for move2 in self.available_moves():
-            secret_board2.move(move2)
-            if secret_board2.is_winner():
+        #check if human can win in next move, if pick that move so to block him        
+        for move2 in self.possible_moves:
+            secret_board2 = deepcopy(self.board)
+            secret_board2.move("computer", move2)
+            if secret_board2.is_winner("human"):
                 return move2
         #take center box if available
         if self.board.is_space_available(self.center):
@@ -83,23 +87,37 @@ class game(object):
         play the game
         """
         print "Let's play Tic Tac Toe" 
-        gm.select_letters()       
+        gm.select_letters()
+        #set the next turn by a coin toss
+        turn = gm.toss()
+        print "{0} will go first".format(turn)       
         while(True):
-            #set the next turn by a coin toss
-            turn = gm.toss()
-            print "{0} will go first".format(turn)            
             if turn == 'human':
                 print self.available_moves()
                 #move for human
                 mv = self.choose_move()
                 if self.board.is_space_available(mv):
-                    self.board.move("human", mv)                    
-                
+                    self.board.move(turn, mv)
                 #if human won : break
+                if self.board.is_winner(turn):
+                    self.board.print_board()
+                    print "congratulations You have won."
+                    break
+                if self.board.is_board_full():
+                    print "It's a tie."
                 turn = 'computer'        
             else:
                 #move for computer
+                mv = self.get_computer_move()
+                if self.board.is_space_available(mv):
+                    self.board.move(turn, mv)
                 #if computer won : break
+                if self.board.is_winner(turn):
+                    self.board.print_board()
+                    print "Computer has won."
+                    break
+                if self.board.is_board_full():
+                    print "It's a tie."
                 turn = 'human'
             
 if __name__== "__main__":
