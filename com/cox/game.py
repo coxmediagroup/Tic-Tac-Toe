@@ -22,3 +22,8 @@ class game(object):
             return 'computer'
         else:
             return 'computer' #change this to human, to make fair game.
+    def play(self):
+        """
+        play the game
+        """
+        

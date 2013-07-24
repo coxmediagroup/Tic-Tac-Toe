@@ -14,9 +14,9 @@ class board(object):
         '''
         initialize board as two-d list
         '''
-        self.board = [['-','-','-'],
-                      ['-','-','-'],
-                      ['-','-','-']
+        self.board = [['*','*','*'],
+                      ['*','*','*'],
+                      ['*','*','*']
                       ]
         self.players = {'human': kwargs.get('human', ''),
                         'computer': kwargs.get('computer', '')
@@ -43,7 +43,7 @@ class board(object):
     
     def is_space_available(self,position):
         row,col = list(position)
-        return (self.board[int(row)][int(col)] == '-')
+        return (self.board[int(row)][int(col)] == '*')
     
     def is_winner(self, player):
         """
