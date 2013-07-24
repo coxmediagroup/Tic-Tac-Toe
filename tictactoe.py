@@ -3,28 +3,15 @@ This is a Tic-Tac-Toe game
 Enjoy!!
 """
 import itertools
+from ai import ComputerPlayer, Player
 from board import Board, X, O, STALEMATE
-class HumanPlayer(object):
-    """docstring for Player"""
-    input_map = {
-                    "1":(0,0), "2":(0,1), "3":(0,2),
-                    "4":(1,0), "5":(1,1), "6":(1,2),
-                    "7":(2,0), "8":(2,1), "9":(2,2),
-                }
-    def __init__(self, player_symbol):
-        self.player_symbol = player_symbol
-    def move(self, board):
+
+class HumanPlayer(Player):
+    def select_move(self, board):
         print "Enter a move for %s:" % self.player_symbol
         available = [str(c) for c in board.cells() if c not in (X, O)]
-        s = take_input("Space", available)
-        r,c = self.input_map[s]
-        print "Player %s is playing at (%s,%s)" %(self.player_symbol, r, c)
-        board.move(self.player_symbol, r, c)
+        return take_input("Space", available)
 
-class ComputerPlayer(object):
-    def __init__(self, player_symbol):
-        self.player_symbol = player_symbol
-        raise Exception("Stub not implemented")
 
 def take_input(prompt, options):
     while True:

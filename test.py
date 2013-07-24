@@ -42,8 +42,6 @@ def test_str():
                  [O,O,X]]
     assert str(b) == '\n  0   1   2\n0 O | X | O\n -----------\n1 X | 5 | O\n-----------\n2 O | O | X\n'
 
-    print repr(b)
-
 def test_move():
     b = board.Board()
     b.move(X, 0, 0)
