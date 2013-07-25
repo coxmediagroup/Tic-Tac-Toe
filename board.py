@@ -5,6 +5,9 @@ The Tic Tac Toe Board
 from itertools import chain
 from pprint import pformat
 
+def empty(s):
+    return s not in (X,O)
+
 board_template ="""
   0   1   2
 0 {0[0]} | {0[1]} | {0[2]}
@@ -54,7 +57,7 @@ class Board(object):
         except KeyError, e:
             raise IndexError("Invalid Cell Key")
         self._spaces[r][c]
-        assert self._spaces[r][c] not in (X,O)
+        assert empty(self._spaces[r][c])
         self._spaces[r][c] = player
 
     def cells(self):
@@ -78,7 +81,7 @@ class Board(object):
             if (rcd[0] == rcd[1] == rcd[2]) and rcd[0] in (X,O):
                 return rcd[0]
         for space in self.cells():
-            if space not in (X,O):
+            if empty(space):
                 break
         else:
             return STALEMATE

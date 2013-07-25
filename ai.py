@@ -1,7 +1,7 @@
-from board import X, O
+from board import empty, X, O
 
 def first_free_space(spaces):
-    return (c for c in spaces if (c not in (X,O))).next()
+    return (c for c in spaces if empty(c)).next()
 
 def index_of_max_value(iterable):
     return iterable.index(max(iterable))
@@ -26,6 +26,10 @@ class ComputerPlayer(Player):
         return None
 
     def _find_fork(self, board, me, you):
+        """
+        Find lines with one of my marks and no others
+        select a space with the maximum overlap of said lines
+        """
         count = [None, 0,0,0, 0,0,0, 0,0,0]
         for rcd in board.rows_cols_diags():
             if rcd.count(me) == 1 and rcd.count(you)==0:
@@ -39,18 +43,19 @@ class ComputerPlayer(Player):
             return None
 
     def _setup_win(self, board, me, you):
+        """Make 2 in a row"""
         for rcd in board.rows_cols_diags():
             if rcd.count(me) == 1 and rcd.count(you)==0:
                 return first_free_space(rcd) #Get first free spot
 
     def _opposite_corner(self, board, me, you):
-        if board[1] is you and board[9] not in (X,O):
+        if board[1] is you and empty(board[9]):
             return 9
-        if board[9] is you and board[1] not in (X,O):
+        if board[9] is you and empty(board[1]):
             return 1
-        if board[3] is you and board[7] not in (X,O):
+        if board[3] is you and empty(board[7]):
             return 7
-        if board[7] is you and board[3] not in (X,O):
+        if board[7] is you and empty(board[3]):
             return 3
         return None
 

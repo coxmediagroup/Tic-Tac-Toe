@@ -4,12 +4,12 @@ Enjoy!!
 """
 import itertools
 from ai import ComputerPlayer, Player
-from board import Board, X, O, STALEMATE
+from board import Board, X, O, STALEMATE, empty
 
 class HumanPlayer(Player):
     def select_move(self, board):
         print "Enter a move for %s:" % self.player_symbol
-        available = [str(c) for c in board.cells() if c not in (X, O)]
+        available = [str(c) for c in board.cells() if empty(c)]
         return int(take_input("Space", available))
 
 def take_input(prompt, options):
@@ -52,7 +52,7 @@ def  tic_tac_toe():
         winner = board.check_win()
         if winner:
             break
-    if winner not in (X,O):
+    if winner == STALEMATE:
         print "Stale Mate"
         print "A curious game."
         print "The only way to win is not to play."
