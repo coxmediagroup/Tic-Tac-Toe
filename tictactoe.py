@@ -10,8 +10,7 @@ class HumanPlayer(Player):
     def select_move(self, board):
         print "Enter a move for %s:" % self.player_symbol
         available = [str(c) for c in board.cells() if c not in (X, O)]
-        return take_input("Space", available)
-
+        return int(take_input("Space", available))
 
 def take_input(prompt, options):
     while True:

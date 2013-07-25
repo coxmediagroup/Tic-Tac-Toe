@@ -8,23 +8,15 @@ def index_of_max_value(iterable):
 
 class Player(object):
     """docstring for Player"""
-    input_map = {
-                    "1":(0,0), "2":(0,1), "3":(0,2),
-                    "4":(1,0), "5":(1,1), "6":(1,2),
-                    "7":(2,0), "8":(2,1), "9":(2,2),
-                }
     def __init__(self, player_symbol):
         self.player_symbol = player_symbol
 
     def move(self, board):
         s = self.select_move(board)
-        r,c = self.input_map[str(s)]
-        print "Player %s is playing at (%s,%s)" %(self.player_symbol, r, c)
-        board.move(self.player_symbol, r, c)
+        print "Player %s is playing at (%s)" %(self.player_symbol, s)
+        board[s] = self.player_symbol
 
 class ComputerPlayer(Player):
-
-    opposing_corners= {1:9, 3:7, 7:3, 9:1}
 
     def _find_win(self, board, me, you):
         """Find a line that is a possible one move win for 'me'"""
@@ -41,7 +33,6 @@ class ComputerPlayer(Player):
                     if c not in (X,O):
                         count[c] += 1
         max_index = index_of_max_value(count)
-
         if count[max_index] > 1:
             return max_index
         else:
@@ -53,13 +44,13 @@ class ComputerPlayer(Player):
                 return first_free_space(rcd) #Get first free spot
 
     def _opposite_corner(self, board, me, you):
-        if board._spaces[0][0] is you and board._spaces[2][2] not in (X,O):
+        if board[1] is you and board[9] not in (X,O):
             return 9
-        if board._spaces[2][2] is you and board._spaces[0][0] not in (X,O):
+        if board[9] is you and board[1] not in (X,O):
             return 1
-        if board._spaces[0][2] is you and board._spaces[2][0] not in (X,O):
+        if board[3] is you and board[7] not in (X,O):
             return 7
-        if board._spaces[2][0] is you and board._spaces[0][2] not in (X,O):
+        if board[7] is you and board[3] not in (X,O):
             return 3
         return None
 
@@ -70,7 +61,7 @@ class ComputerPlayer(Player):
 
         """
 
-        print "pondering...."
+        print "%s is pondering...." % self.player_symbol
 
         me = self.player_symbol
         you = X if self.player_symbol is O else O

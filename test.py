@@ -2,10 +2,6 @@ import board
 from board import X ,O, STALEMATE
 def test_rows_cols_diags():
     b = board.Board()
-    b._spaces = [[1,2,3],
-                 [4,5,6],
-                 [7,8,9]]
-
     l = list(b.rows_cols_diags())
     assert l == [(1, 2, 3), (4, 5, 6), (7, 8, 9),
                  (1, 4, 7), (2, 5, 8), (3, 6, 9),
@@ -44,7 +40,7 @@ def test_str():
 
 def test_move():
     b = board.Board()
-    b.move(X, 0, 0)
+    b[1] = X
     assert b._spaces == [[X,2,3],
                          [4,5,6],
                          [7,8,9]], str(b._spaces)
