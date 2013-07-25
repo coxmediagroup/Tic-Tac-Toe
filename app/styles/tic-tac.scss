@@ -1,0 +1,51 @@
+.tic-tac {
+  height: 480px;
+  
+  .new-row {
+    margin-left: 0;
+  }
+  
+  .end-row {
+    margin-right: 0;
+  }
+  
+  div {
+    height: 31.91489%;
+    width: 31.91489%;
+    margin: 1.02383%;
+    display: table-cell;
+    float: left;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: middle;
+    background-color: gray;
+    font-size: 3.2em;
+    font-weight: bold;
+    line-height: 3.2em;
+  }
+  
+  .empty {
+    display: block;
+    margin: auto;
+    &:after {
+      color: white;
+      content: 'Click To Move';
+    }
+  }
+  
+  .o {
+    display: inline-block;
+    &:after {
+      color: white;
+      content: 'O';
+    }
+  }
+  
+  .x {
+    display: inline-block;
+    &:after {
+      color: white;
+      content: 'X';
+    }
+  }
+}

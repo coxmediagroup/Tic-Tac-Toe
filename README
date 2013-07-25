@@ -7,3 +7,20 @@ Intructions:
 If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
 
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+
+=====================
+Instructions to play:
+
+Probably install NVM - https://github.com/creationix/nvm
+Install and use NodeJS version 10.12
+Go to project directory > npm install
+> grunt server
+
+Notes:
+
+TicTacBoard object has too much going on but figured we could refactor later (mainly taking out the ai logic and putting that somewhere else).
+Only tested in Firefox and Chrome.
+Does not use a lick of Django though I am willing to maybe save finished games or do some other type of logic in django upon further direction.
+Test cases don't cover much but are there only to serve as an example.
+
+Thanks for looking my name is CJ Goldsmith ( carlos.j.goldsmith@gmail.com ) and I was originally contacted by recruiter fareeha@technisoftconsulting.com

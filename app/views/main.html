@@ -1,0 +1,10 @@
+<div>
+  <div style='width:100%; float: left;'>
+    <h1 class='pull-left'>Tic Tac Toe</h1><button class='btn pull-right' ng-click='reset()'>Reset</button>
+  </div>
+  <div class='tic-tac'>
+    <div ng-repeat='block in board.board' ng-class='{"new-row":newRow($index),"end-row":endRow($index)}' ng-click='select(block)'>
+      <span class='{{block.cls}}'></span>
+    </div>
+  </div>
+</div>
