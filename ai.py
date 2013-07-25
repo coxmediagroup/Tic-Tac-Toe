@@ -29,6 +29,9 @@ class ComputerPlayer(Player):
         """
         Find lines with one of my marks and no others
         select a space with the maximum overlap of said lines
+
+        This will create a board where we can win with 2 different
+        single moves.
         """
         count = [None, 0,0,0, 0,0,0, 0,0,0]
         for rcd in board.rows_cols_diags():
@@ -128,12 +131,14 @@ class ComputerPlayer(Player):
             return move
 
         #Take an edge
-        print "Considering taking an edge corner..."
+        print "Considering taking an edge ..."
         available_edge = [c for c in board.cells() if c in (2,4,6,8)]
         if available_edge:
             move = available_edge[0]
             print "moving at %s" % move
             return move
+
+        assert False, "No free squares, stalemate detection failed"
 
 
 

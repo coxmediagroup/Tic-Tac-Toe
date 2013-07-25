@@ -1,6 +1,10 @@
 """
 This is a Tic-Tac-Toe game
 Enjoy!!
+
+candidate: Matthew Scouten
+Resume: http://goo.gl/Bfk69u
+
 """
 import itertools
 from ai import ComputerPlayer, Player

@@ -1,5 +1,16 @@
 import board
 from board import X ,O, STALEMATE
+"""
+If this was going to be a long lived project with maintnence demands, It would need more testing
+
+It would need error condition tests for __*etitem__ functions in board
+Tests for the functions in ai, especially the more complex sub functions
+More coverage in general
+
+As it is, everything except error conditions got covered while
+manully testing the program as a whole.
+"""
+
 def test_rows_cols_diags():
     b = board.Board()
     l = list(b.rows_cols_diags())
