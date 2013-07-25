@@ -96,16 +96,16 @@ class ComputerPlayer(Player):
             print "moving at %s" % move
             return move
 
-        #Setup Win
-        print "Considering setting up a Win..."
-        move = self._setup_win(board, me, you)
+        #Block Opponents Fork
+        print "Considering blocking a fork..."
+        move = self._find_fork(board, you, me)
         if move:
             print "moving at %s" % move
             return move
 
-        #Block Opponents Fork
-        print "Considering blocking a fork..."
-        move = self._find_fork(board, you, me)
+        #Setup Win
+        print "Considering setting up a Win..."
+        move = self._setup_win(board, me, you)
         if move:
             print "moving at %s" % move
             return move
