@@ -1,9 +1,61 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send us a pull request.
+Tic Tac Toe
+-----------
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+An implementation of the Tic-Tac-Toe game.
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+The game may be played by starting the server; 
+
+>./manage.py runserver
+
+This simple game has no actual User Interface, just a rudimentary front-end.
+Note: In this game, the player is always Xs and the AI is always Os.
+
+To "play" the game, navigate to:
+
+http://localhost:8000/new-game/
+
+This will create a game board, and (roughly half the time) the AI will go first.
+The user will see a representation of the game board, values, and the ID of this game board.
+
+To make a move, navigate to
+http://localhost:8000/player-move/?board={"11":V,"12":V,"13":V,...}&id=ID
+
+Valid values for V are:
+	'o'
+	'x'
+	'null' - an empty square.
+
+This interface, while not truly REST-ful, does approach REST-architecture.
+So, to make a move, we return a full represenation of the board state to the server.
+
+For example:
+http://localhost:8000/new-game/
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+ O |   |  
+   |   |
+
+{"11": "o", "13": "null", "12": "null", "21": "null", "22": "null", "23": "null", "33": "null", "32": "null", "31": "null", "id": 47}
+
+So, to make a move as a player, I would repeat the above, with slight modification:
+http://localhost:8000/player-move/?board={"11": "o", "13": "null", "12": "null", "21": "null", "22": "null", "23": "null", "33": "x", "32": "null", "31": "null"}&id=47
+
+To play a game to completion, just continue to push represenations to /player-move/
+
+Note: The display is very simple, but provides a representation of the board both visually and textually, for ease of copy-paste.
+
+Things to do: (were this a real application)
+--------------------------------------------
+- if REST, re-work squares to be endpoints, and boards to rely on them
+- build back-end such that it doesn't allow user to state of old moves
+  return/display error if user tries to modify a square someone has already used
+- create a nice, friendly template and form to allow quick, easy games
+
+
