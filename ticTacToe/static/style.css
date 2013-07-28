@@ -1,0 +1,23 @@
+.center {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+.splashText {
+	font-weight: bold;
+	font-size: 1.75em;
+	margin-top: 8em;
+}
+.splashButton {
+	font-weight: bold;
+	font-size: 1.5em;
+	background-color: #3860e3;
+	box-shadow: inset 0em 0.05em 0em 0em #97c4fe;
+	border-radius: 0.33em;
+	border: 0.075em solid #337fed;
+	display: inline-block;
+	color: #ffffff;
+	padding: 0.25em 0.5em;
+	margin: 0.5em;
+	text-decoration: none;
+}

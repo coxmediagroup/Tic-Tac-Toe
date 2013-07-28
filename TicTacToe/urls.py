@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'ticTacToe.views.index'),
-    url(r'^newgame$', 'ticTacToe.views.newGame')
+    url(r'^newgame$', 'ticTacToe.views.newGame'),
+    url(r'^game/(?P<gameId>\d+)*/$', 'ticTacToe.views.game')
 )

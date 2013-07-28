@@ -1,8 +1,11 @@
 from django.http import HttpResponse
+from django.template import Context, loader
 
 def index(request):
 	'''Default page'''
-	return HttpResponse('Start a new game?')
+	t = loader.get_template('index.html')
+	c = Context({})
+	return HttpResponse(t.render(c))
 
 def newGame(request):
 	'''Creates and redirects to new game instance'''
@@ -10,7 +13,11 @@ def newGame(request):
 
 def game(request, gameId):
 	'''Loads a game and displays to user'''
-	return HttpResponse('not yet defined')
+	t = loader.get_template('game.html')
+	c = Context({
+		'gameId': gameId
+	})
+	return HttpResponse(t.render(c))
 
 def move(request, gameId, positionX, positionY):
 	'''Applies player move to game'''
