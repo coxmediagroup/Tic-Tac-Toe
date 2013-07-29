@@ -1,31 +1,33 @@
 from django.db import models
 
-# Create your models here.
-class Players(models.Model):
-	id = models.AutoField(primary_key = True)
-	name = models.CharField(max_length = 100)
-	
-	def __unicode__(self):
-		return self.name + ' (id: ' + str(self.id) + ')' 
-
 class Games(models.Model):
 	id = models.AutoField(primary_key = True)
-	playerOne = models.ForeignKey(Players, related_name = 'Player1')
-	playerTwo = models.ForeignKey(Players, related_name = 'Player2')
 	startTime = models.DateTimeField()
 	
 	def __unicode__(self):
-		return playerTwo.name + ' vs ' + playerTwo.name + ' (id: ' + \
-			str(self.id) + ')'
+		return 'game (id: ' + str(self.id) + ')'
+		
+	def _getStatus(self):
+		'''calculate if there is a winner'''
+		#todo: logic
+		return 'incomplete'
+		
+	status = property(_getStatus)
 
 class Moves(models.Model):
 	id = models.AutoField(primary_key = True)
 	game = models.ForeignKey(Games)
-	player = models.ForeignKey(Players)
+	player = models.BooleanField()
 	positionX = models.IntegerField()
 	poxitionY = models.IntegerField()
 	timestamp = models.DateTimeField()
 	
 	def __unicode__(self):
-		return player.name + ' took [' + str(self.positionX) + ', ' + \
-			str(self.positionY) + '] (id: ' + str(self.id) + ')' 
+		if player == True:
+			playerName = 'Player'
+		else:
+			playerName = 'Computer'
+		
+		return playerName + ' took [' + str(self.positionX) + ', ' + \
+			str(self.positionY) + '] (move.id: ' + str(self.id) + \
+			', game.id: ' + str(game) + ')' 

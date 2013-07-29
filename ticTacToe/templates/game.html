@@ -6,52 +6,58 @@
 		</div>
 		<br>
 		{# this could probably be done more elegantly in a loop #}
-		<a href='/move/999/0/0'>
+		<a href='/move/{{gameId}}/0/0'>
 			<div class='gameButton'>
 				<div class='blankMarker'>_</div>
 			</div>
 		</a>
-		<a href='/move/999/0/1'>
+		<a href='/move/{{gameId}}/0/1'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
-		<a href='/move/999/0/2'>
+		<a href='/move/{{gameId}}/0/2'>
 			<div class='gameButton'>
 				<div class='oMarker'>O</div>
 			</div>
 		</a>
 		<br>
-		<a href='/move/999/1/0'>
+		<a href='/move/{{gameId}}/1/0'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
-		<a href='/move/999/1/1'>
+		<a href='/move/{{gameId}}/1/1'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
-		<a href='/move/999/1/2'>
+		<a href='/move/{{gameId}}/1/2'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
 		<br>
-		<a href='/move/999/2/0'>
+		<a href='/move/{{gameId}}/2/0'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
-		<a href='/move/999/2/1'>
+		<a href='/move/{{gameId}}/2/1'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
-		<a href='/move/999/2/2'>
+		<a href='/move/{{gameId}}/2/2'>
 			<div class='gameButton'>
 				<div class='xMarker'>X</div>
 			</div>
 		</a>
+	{% if status != 'incomplete' %}
+		<br>
+		<div class='status'>
+			{{status}}
+		</div>
+	{% endif %}
 	</div>
 {% endblock %}

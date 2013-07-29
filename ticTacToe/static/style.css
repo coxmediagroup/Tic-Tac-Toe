@@ -55,6 +55,11 @@
 	margin-bottom: 1em;
 	font-size: 1.25em;
 }
+.status {
+	margin-top: 1em;
+	font-size: 2em;
+	font-weight: bold;
+}
 a {
 	text-decoration: none;
 }
