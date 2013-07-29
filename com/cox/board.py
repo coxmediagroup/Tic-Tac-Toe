@@ -5,15 +5,16 @@ Created on Jul 22, 2013
 '''
 
 class board(object):
-    '''
+    """
     class that represents board
-    '''
+    """
 
 
     def __init__(self, **kwargs):
-        '''
+        """
         initialize board as two-d list
-        '''
+        and set default value on each positions
+        """
         self.board = [['*','*','*'],
                       ['*','*','*'],
                       ['*','*','*']
@@ -24,10 +25,8 @@ class board(object):
     
     def print_board(self):
         """
-        print current board state
-        """        
-        # This function prints out the board that it was passed.
-        # "board" is a list of 10 strings representing the board (ignore index 0)        
+        print all markings on the board 
+        """    
         print(' ' + self.board[2][0] + ' | ' + self.board[2][1] + ' | ' + self.board[2][2])        
         print('-----------')        
         print(' ' + self.board[1][0] + ' | ' + self.board[1][1] + ' | ' + self.board[1][2])        
@@ -42,6 +41,10 @@ class board(object):
         self.board[int(row)][int(col)] = self.players[player]    
     
     def is_space_available(self,position):
+        """
+        check a position on the board if it is
+        already marked
+        """
         row,col = list(position)
         return (self.board[int(row)][int(col)] == '*')
     
@@ -73,7 +76,7 @@ class board(object):
     
     def reset(self):
         """
-        reset all positions
+        reset all positions on the board
         """
         for i in range(3):
             for j in range(3):

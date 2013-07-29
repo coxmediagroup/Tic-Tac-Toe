@@ -12,7 +12,10 @@ class game(object):
         self.corners = ['00','02','20','22']
         self.center = '11'
     
-    def select_letters(self):        
+    def select_letters(self):
+        """
+        prompt human player to pick a letter
+        """        
         choices = ['O','X']
         while(True):
         #while not (selection == 'X' or selection == 'O'):
@@ -24,6 +27,10 @@ class game(object):
     
     
     def toss(self):
+        """
+        toss by virtual coin flip
+        to decide who goes first
+        """
         # coin flip
         if random.randint(0, 1):
             return 'computer'
@@ -32,7 +39,7 @@ class game(object):
     
     def available_moves(self):
         """
-        available moves
+        return available moves as list
         """
         return self.possible_moves
     
@@ -55,6 +62,8 @@ class game(object):
     def get_computer_move(self):
         """
         pick computer's next move
+        by virtually playing next move for computer
+        and human.
         """
         #check if computer can win in next move, pick that move        
         for move in self.possible_moves:
@@ -88,7 +97,7 @@ class game(object):
         """
         play the game
         """
-        print "Let's play Tic Tac Toe" 
+        print ("Let's play Tic Tac Toe") 
         gm.select_letters()
         #set the next turn by a coin toss
         turn = gm.toss()
