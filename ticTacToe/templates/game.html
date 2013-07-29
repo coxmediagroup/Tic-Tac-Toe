@@ -1,4 +1,57 @@
 {% extends "base.html" %}
 {% block body %}
-	id passed: {{gameId}}
+	<div class='center'>
+		<div class='header'>
+			You are <span style='color: red'>X</span>. Select your next space.
+		</div>
+		<br>
+		{# this could probably be done more elegantly in a loop #}
+		<a href='/move/999/0/0'>
+			<div class='gameButton'>
+				<div class='blankMarker'>_</div>
+			</div>
+		</a>
+		<a href='/move/999/0/1'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<a href='/move/999/0/2'>
+			<div class='gameButton'>
+				<div class='oMarker'>O</div>
+			</div>
+		</a>
+		<br>
+		<a href='/move/999/1/0'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<a href='/move/999/1/1'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<a href='/move/999/1/2'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<br>
+		<a href='/move/999/2/0'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<a href='/move/999/2/1'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+		<a href='/move/999/2/2'>
+			<div class='gameButton'>
+				<div class='xMarker'>X</div>
+			</div>
+		</a>
+	</div>
 {% endblock %}

@@ -21,3 +21,40 @@
 	margin: 0.5em;
 	text-decoration: none;
 }
+.gameButton {
+	display: inline-block;
+	background-color: #f9f9fa;
+	border-radius: 0.33em;
+	margin: 0.5em;
+	width: 5em;
+	height: 5em;
+}
+.xMarker {
+	color: red;
+	font-weight: bold;
+	font-size: 4em;
+	margin: auto;
+	padding: 0.05em;
+}
+.oMarker {
+	color: blue;
+	font-weight: bold;
+	font-size: 4em;
+	margin: auto;
+	padding: 0.05em;
+}
+.blankMarker {
+	color: #f9f9fa;
+	font-weight: bold;
+	font-size: 4em;
+	margin: auto;
+	padding: 0.05em;
+}
+.header {
+	margin-top: 2em;
+	margin-bottom: 1em;
+	font-size: 1.25em;
+}
+a {
+	text-decoration: none;
+}

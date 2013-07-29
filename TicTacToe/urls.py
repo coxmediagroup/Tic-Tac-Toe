@@ -16,5 +16,8 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'ticTacToe.views.index'),
     url(r'^newgame$', 'ticTacToe.views.newGame'),
-    url(r'^game/(?P<gameId>\d+)*/$', 'ticTacToe.views.game')
+    url(r'^game/(?P<gameId>\d+)/*$', 'ticTacToe.views.game'),
+    url(r'^move/(?P<gameId>\d+)/(?P<xPosition>\d+)/(?P<yPosition>\d+)/*$',
+		'ticTacToe.views.move'
+	)
 )

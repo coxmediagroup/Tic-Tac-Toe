@@ -19,7 +19,10 @@ def game(request, gameId):
 	})
 	return HttpResponse(t.render(c))
 
-def move(request, gameId, positionX, positionY):
+def move(request, gameId, xPosition, yPosition):
 	'''Applies player move to game'''
-	return HttpResponse('not yet defined')
+	#check to see if gameId is valid?
+	#add a move record to the table
+	#update game state, which also checks to see if there is a winner
+	return HttpResponse('received x: ' + xPosition + ', y: ' + yPosition)
 
