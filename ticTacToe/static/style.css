@@ -29,14 +29,14 @@
 	width: 5em;
 	height: 5em;
 }
-.xMarker {
+.XMarker {
 	color: red;
 	font-weight: bold;
 	font-size: 4em;
 	margin: auto;
 	padding: 0.05em;
 }
-.oMarker {
+.OMarker {
 	color: blue;
 	font-weight: bold;
 	font-size: 4em;

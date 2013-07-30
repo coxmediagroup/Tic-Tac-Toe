@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^$', 'ticTacToe.views.index'),
     url(r'^newgame$', 'ticTacToe.views.newGame'),
     url(r'^game/(?P<gameId>\d+)/*$', 'ticTacToe.views.game'),
-    url(r'^move/(?P<gameId>\d+)/(?P<xPosition>\d+)/(?P<yPosition>\d+)/*$',
+    url(r'^move/(?P<gameId>\d+)/(?P<xPosition>\d+)/(?P<yPosition>\d+)/(?P<playerMark>\D+)/*$',
 		'ticTacToe.views.move'
 	)
 )
