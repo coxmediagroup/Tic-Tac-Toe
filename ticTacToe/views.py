@@ -12,21 +12,23 @@ def index(request):
 
 def newGame(request):
 	'''Creates and redirects to new game instance'''
-	g = Games(startTime = datetime.now())
-	g.save()
-	return HttpResponseRedirect(reverse('ticTacToe.views.game', args = (g.id,)))
+	newOne = Games(startTime = datetime.now())
+	newOne.save()
+	return HttpResponseRedirect(reverse('ticTacToe.views.game',
+		args = (newOne.id,)
+	))
 
 def game(request, gameId):
 	'''Loads a game and displays to user'''
 	try:
-		g = Games.objects.get(id = gameId)
+		currentGame = Games.objects.get(id = gameId)
 	except:
 		return HttpResponse('There was an error loading game ' + gameId)
 
 	template = loader.get_template('game.html')
 	context = Context({
 		'gameId': gameId,
-		'status': g.status
+		'status': currentGame.status
 	})
 	return HttpResponse(template.render(context))
 
