@@ -19,7 +19,7 @@ class Moves(models.Model):
 	game = models.ForeignKey(Games)
 	player = models.BooleanField()
 	positionX = models.IntegerField()
-	poxitionY = models.IntegerField()
+	positionY = models.IntegerField()
 	timestamp = models.DateTimeField()
 	
 	def __unicode__(self):
