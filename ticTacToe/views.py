@@ -27,7 +27,20 @@ def game(request, gameId):
 
 	#load game spaces
 	gameSpaces = loadGameSpaces(gameId)
-	
+
+	#check game state
+	#import pdb; pdb.set_trace()
+	winner = checkForWinner(gameSpaces)
+	if winner == 'X':
+		currentGame.status = 'X Wins'
+	elif winner == 'O':
+		currentGame.status = 'O Wins'
+	elif winner == 'draw':
+		currentGame.status = 'The game was a draw'
+	else:
+		currentGame.status = 'incomplete'
+	currentGame.save()
+
 	template = loader.get_template('game.html')
 	context = Context({
 		'gameId': gameId,
@@ -68,9 +81,9 @@ def move(request, gameId, xPosition, yPosition, playerMark):
 
 def loadGameSpaces(gameId):
 	'''Creates list of game spaces'''
-	
+
 	spaceList = []
-	
+
 	for x in range(0, 3):
 		for y in range(0, 3):
 			try:
@@ -79,7 +92,7 @@ def loadGameSpaces(gameId):
 					positionX = x,
 					positionY = y
 				)
-				
+
 				if currentMove.player:
 					mark = 'X'
 				else:
@@ -89,17 +102,48 @@ def loadGameSpaces(gameId):
 
 			newSpace = Space(mark, x, y)
 			spaceList.append(newSpace)
-			
+
 		newSpace = Space('newline', 0, 0)
 		spaceList.append(newSpace)
-	
+
 	return spaceList
-	
+
+def checkForWinner(gameSpaces):
+	'''Checks game state for a winner'''
+
+	lineCombos = [
+		[0, 1, 2],
+		[4, 5, 6],
+		[8, 9, 10],
+		[0, 4, 8],
+		[1, 5, 9],
+		[2, 6, 10],
+		[0, 5, 10],
+		[2, 5, 8]
+	]
+
+	#check for a winning line
+	for combo in lineCombos:
+		if gameSpaces[combo[0]].mark == gameSpaces[combo[1]].mark == gameSpaces[combo[2]].mark:
+			mark = gameSpaces[combo[0]].mark
+			if mark != 'blank':
+				return mark
+
+	#check for a draw
+	draw = True
+	for space in gameSpaces:
+		if space.mark == 'blank':
+			draw = False
+	if draw:
+		return 'draw'
+	else:
+		return 'incomplete'
 
 class Space:
 	'''Represents a space on the game board'''
-	
+
 	def __init__(self, markType, xValue, yValue):
 		self.x = xValue
 		self.y = yValue
 		self.mark = markType
+
