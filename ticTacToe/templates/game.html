@@ -7,11 +7,15 @@
 		<br>
 		{% for space in gameSpaces %}
 			{% if space.mark == 'blank' %}
+				{% if status == 'incomplete' %}
 				<a href='/move/{{gameId}}/{{space.x}}/{{space.y}}/x'>
+				{% endif %}
 					<div class='gameButton'>
 						<div class='blankMarker'>_</div>
 					</div>
+				{% if status == 'incomplete' %}
 				</a>
+				{% endif %}
 			{% elif space.mark == 'newline' %}
 				<br>
 			{% else %}
@@ -24,6 +28,10 @@
 		<div class='status'>
 			{{status}}
 		</div>
+		<br>
+		<a href="/newgame">
+			<div class='splashButton'>New Game</div>
+		</a>
 	{% endif %}
 	</div>
 {% endblock %}
