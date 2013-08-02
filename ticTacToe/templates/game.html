@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+	<div class='center'>
+		<div class='header'>
+			You are <span style='color: red'>X</span>. Select your next space.
+		</div>
+		<br>
+		{% for space in gameSpaces %}
+			{% if space.mark == 'blank' %}
+				{% if status == 'incomplete' %}
+				<a href='/move/{{gameId}}/{{space.x}}/{{space.y}}/x'>
+				{% endif %}
+					<div class='gameButton'>
+						<div class='blankMarker'>_</div>
+					</div>
+				{% if status == 'incomplete' %}
+				</a>
+				{% endif %}
+			{% elif space.mark == 'newline' %}
+				<br>
+			{% else %}
+				<div class='gameButton'>
+					<div class='{{space.mark}}Marker'>{{space.mark}}</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% if status != 'incomplete' %}
+		<div class='status'>
+			{{status}}
+		</div>
+		<br>
+		<a href="/newgame">
+			<div class='splashButton'>New Game</div>
+		</a>
+	{% endif %}
+	</div>
+{% endblock %}
