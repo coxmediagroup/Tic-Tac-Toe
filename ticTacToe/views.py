@@ -29,7 +29,6 @@ def game(request, gameId):
 	gameSpaces = loadGameSpaces(gameId)
 
 	#check game state
-	#import pdb; pdb.set_trace()
 	winner = checkForWinner(gameSpaces)
 	if winner == 'X':
 		currentGame.status = 'X Wins'
@@ -41,6 +40,12 @@ def game(request, gameId):
 		currentGame.status = 'incomplete'
 	currentGame.save()
 
+	#check if CPU player needs to make a move
+	if currentGame.playerTurn == False and currentGame.status == 'incomplete':
+		url = '/move/' + str(gameId) + '/' + npcMove(gameSpaces) + '/o'
+		return HttpResponseRedirect(url)
+
+	#display board
 	template = loader.get_template('game.html')
 	context = Context({
 		'gameId': gameId,
@@ -53,8 +58,9 @@ def move(request, gameId, xPosition, yPosition, playerMark):
 	'''Applies player move to game'''
 
 	#check to see if gameId is valid
-	currentGame = Games.objects.filter(id = gameId)
-	if currentGame.exists() == False or	currentGame[0].status != 'incomplete':
+	try:
+		currentGame = Games.objects.get(pk = gameId)
+	except:
 		return HttpResponse('Invalid game specified')
 
 	#check to make sure position has not already been claimed
@@ -68,13 +74,17 @@ def move(request, gameId, xPosition, yPosition, playerMark):
 
 	#add a move record to the table
 	newMove = Moves(
-		game = currentGame[0],
+		game = currentGame,
 		player = (playerMark == 'x'),
 		positionX = xPosition,
 		positionY = yPosition,
 		timestamp = datetime.now()
 	)
 	newMove.save()
+
+	#update whose turn it is
+	currentGame.playerTurn = not currentGame.playerTurn
+	currentGame.save()
 
 	#reload the game page
 	return HttpResponseRedirect(reverse('ticTacToe.views.game', args = (gameId,)))
@@ -111,16 +121,7 @@ def loadGameSpaces(gameId):
 def checkForWinner(gameSpaces):
 	'''Checks game state for a winner'''
 
-	lineCombos = [
-		[0, 1, 2],
-		[4, 5, 6],
-		[8, 9, 10],
-		[0, 4, 8],
-		[1, 5, 9],
-		[2, 6, 10],
-		[0, 5, 10],
-		[2, 5, 8]
-	]
+	lineCombos = getLineCombos()
 
 	#check for a winning line
 	for combo in lineCombos:
@@ -138,6 +139,104 @@ def checkForWinner(gameSpaces):
 		return 'draw'
 	else:
 		return 'incomplete'
+
+def getLineCombos():
+	return [
+		[0, 1, 2],
+		[4, 5, 6],
+		[8, 9, 10],
+		[0, 4, 8],
+		[1, 5, 9],
+		[2, 6, 10],
+		[0, 5, 10],
+		[2, 5, 8]
+	]
+
+def npcMove(gameSpaces):
+	lineCombos = getLineCombos()
+	target = ''
+
+	#first, try and take the center
+	if gameSpaces[5].mark == 'blank':
+		target = '1/1'
+
+	#next, see if you can win within one move
+	if target == '':
+		for line in lineCombos:
+			claimedSpaces = 0
+
+			for index in line:
+				if gameSpaces[index].mark == 'O':
+					claimedSpaces = claimedSpaces + 1
+
+			if claimedSpaces == 2:
+				for index in line:
+					if gameSpaces[index].mark == 'blank':
+						target = getXY(index)
+						break
+
+	#now, check if human player can win in one move and attempt block
+	if target == '':
+		for line in lineCombos:
+			claimedSpaces = 0
+
+			for index in line:
+				if gameSpaces[index].mark == 'X':
+					claimedSpaces = claimedSpaces + 1
+
+			if claimedSpaces == 2:
+				for index in line:
+					if gameSpaces[index].mark == 'blank':
+						target = getXY(index)
+						break
+
+	#then, try and grab a corner
+	from random import choice
+	#import pdb; pdb.set_trace()
+	if target == '':
+		corners = [0, 2, 8, 10]
+		while corners != []:
+			corner = choice(corners)
+
+			if gameSpaces[corner].mark == 'blank':
+				target = getXY(corner)
+				break
+
+			corners.remove(corner)
+
+	#lastly, claim a side piece
+	if target == '':
+		sides = [1, 4, 6, 9]
+		while sides != []:
+			side = choice(sides)
+
+			if gameSpaces[side].mark == 'blank':
+				target = getXY(side)
+				break
+
+			sides.remove(side)
+
+	return target
+
+def getXY(spaceIndex):
+	if spaceIndex == 0:
+		return '0/0'
+	elif spaceIndex == 1:
+		return '0/1'
+	elif spaceIndex == 2:
+		return '0/2'
+	elif spaceIndex == 4:
+		return '1/0'
+	elif spaceIndex == 5:
+		return '1/1'
+	elif spaceIndex == 6:
+		return '1/2'
+	elif spaceIndex == 8:
+		return '2/0'
+	elif spaceIndex == 9:
+		return '2/1'
+	else:
+		return '2/2'
 
 class Space:
 	'''Represents a space on the game board'''
