@@ -1,59 +1,15 @@
 <!doctype html>
 <meta charset=utf-8>
 <title>Tic Tac Toe Challenge</title>
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0; }
-  #container {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 50px auto 0;
-    text-align: center;
-    width: 600px; }
-  #board {
-    height: 600px;
-    width: 100%; }
-  #board li {
-    float: left;
-    border-color: #000;
-    border-style: solid;
-    border-width: 0 4px 4px 0;
-    cursor: pointer;
-    font-size: 140pt;
-    height: 33.3%;
-    line-height: 100%;
-    list-style: none;
-    text-align: center;
-    width: 33.3%; }
-  #board li.marked {
-    cursor: not-allowed }
-  #board li:nth-child(3n) {
-    border-right-width: 0; }
-  #board li:nth-child(7),
-  #board li:nth-child(8),
-  #board li:nth-child(9) {
-    border-bottom-width: 0; }
-</style>
+<link rel=stylesheet href=main.css>
+
 <div id=container>
   <h1>Tic Tac Toe Challenge</h1>
   <ul id=board>
-    <li class=marked>×
-    <li>×
-    <li>
-    <li>
-    <li>○
-    <li>
-    <li>
-    <li>○
-    <li>
+    <li><li><li>
+    <li><li><li>
+    <li><li><li>
   </div>
 </div>
-<script>
-  var board = document.getElementById('board');
-  board.addEventListener('click', function (e) {
-    if (e.target.className === 'marked') return;
-    e.target.innerHTML = '○';
-    e.target.className = 'marked';
-  });
-</script>
+
+<script src=main.js></script>
