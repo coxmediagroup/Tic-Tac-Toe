@@ -19,12 +19,15 @@
     border-color: #000;
     border-style: solid;
     border-width: 0 4px 4px 0;
+    cursor: pointer;
     font-size: 140pt;
     height: 33.3%;
     line-height: 100%;
     list-style: none;
     text-align: center;
     width: 33.3%; }
+  #board li.marked {
+    cursor: not-allowed }
   #board li:nth-child(3n) {
     border-right-width: 0; }
   #board li:nth-child(7),
@@ -35,7 +38,7 @@
 <div id=container>
   <h1>Tic Tac Toe Challenge</h1>
   <ul id=board>
-    <li>×
+    <li class=marked>×
     <li>×
     <li>
     <li>
@@ -46,3 +49,11 @@
     <li>
   </div>
 </div>
+<script>
+  var board = document.getElementById('board');
+  board.addEventListener('click', function (e) {
+    if (e.target.className === 'marked') return;
+    e.target.innerHTML = '○';
+    e.target.className = 'marked';
+  });
+</script>
