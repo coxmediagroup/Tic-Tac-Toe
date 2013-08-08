@@ -3,37 +3,37 @@
 <title>Tic Tac Toe Challenge</title>
 <link rel=stylesheet href=main.css>
 
-<div id=container>
-  <h1>Tic Tac Toe Challenge</h1>
+<div id=container class=turn-player1>
+  <h1>Tic Tac Toe</h1>
   <table id=players>
     <thead>
       <tr>
-        <th>Player
-        <th>Type
-        <th>Win
-        <th>Loss
-        <th>Draw
+        <th>
+        <th class=stats-w title=Wins>W
+        <th class=stats-l title=Losses>L
+        <th class=stats-d title=Draws>D
+        <th>
     <tbody>
-      <tr id=player1>
-        <th>Player 1 (×):
+      <tr id=player1 class=current>
+        <th class=player1>Player 1
+        <td class=stats-w>0
+        <td class=stats-l>0
+        <td class=stats-d>0
         <td>
           <select>
             <option>Human</option>
             <option>AI</option>
           </select>
-        <td>0
-        <td>0
-        <td>0
       <tr id=player2>
-        <th>Player 2 (○):
+        <th class=player2>Player 2
+        <td class=stats-w>0
+        <td class=stats-l>0
+        <td class=stats-d>0
         <td>
           <select>
             <option>Human</option>
             <option>AI</option>
           </select>
-        <td>0
-        <td>0
-        <td>0
   </table>
   <ul id=board>
     <li><li><li>

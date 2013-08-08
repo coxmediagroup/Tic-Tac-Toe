@@ -6,30 +6,71 @@
 #container {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 50px auto 0;
-  text-align: center;
-  width: 600px; }
+  line-height: 14pt;
+  width: 700px; }
+
+h1, #players {
+  float: left;
+  width: 50%; }
+
+#players {
+  border-collapse: collapse;
+  margin: 0 auto;
+  text-align: left; }
+
+#players td,
+#players th {
+  padding: 5px; }
 
 #players .current {
   font-weight: 700; }
 
+.player1 {
+  color: red; }
+
+.player2 {
+  color: blue; }
+
 #board {
-  height: 600px;
+  border: 1px solid #000;
+  clear: both;
+  height: 700px;
   width: 100%; }
 
 #board li {
   float: left;
   border-color: #000;
   border-style: solid;
-  border-width: 0 4px 4px 0;
+  border-width: 0 5px 5px 0;
   cursor: pointer;
-  font-size: 140pt;
+  font-size: 180pt;
   height: 33.3%;
-  line-height: 100%;
+  line-height: 180px;
   list-style: none;
+  overflow: hidden;
   text-align: center;
   width: 33.3%; }
 
+.turn-player1 #player1 th,
+.turn-player1 #player1 td,
+.turn-player1 li:hover {
+  background: red }
+
+.turn-player1 #player1 th,
+.turn-player1 #player1 td {
+  color: white }
+
+.turn-player2 #player2 th,
+.turn-player2 #player2 td,
+.turn-player2 li:hover {
+  background: blue }
+
+.turn-player2 #player2 th,
+.turn-player2 #player2 td {
+  color: white }
+
 #board li.marked {
+  background: white;
   cursor: not-allowed }
 
 #board li:nth-child(3n) {
