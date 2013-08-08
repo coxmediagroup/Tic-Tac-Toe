@@ -1,23 +1,33 @@
 (function () {
 
-  var elBoard = document.getElementById('board');
-  var isThinking = false;
-  var x = '×', o = '○';
-  var board = [[], [], []];
-  var size = 3;
+  // for simple native jquery-style code
+  var $ = document.querySelectorAll.bind(document);
+  Element.prototype.on = Element.prototype.addEventListener;
 
-  elBoard.addEventListener('click', function (e) {
-    if (isThinking || e.target.className === 'marked') return;
-    var index = Array.prototype.indexOf.call(elBoard.children, e.target);
-    var x = Math.floor(index / size);
-    var y = index % size;
-    e.target.innerHTML = o;
-    e.target.className = 'marked';
-    board[x][y] = o;
-    move(x, y);
+  var elBoard = $('#board')[0];
+  var player1 = { symbol: '×', w: 0, l: 0, d: 0, el: $('#player1')[0], isHuman: true },
+      player2 = { symbol: '○', w: 0, l: 0, d: 0, el: $('#player2')[0], isHuman: true };
+  var currentPlayer = player1;
+  var board = [[], [], []];
+
+  elBoard.on('click', function (e) {
+    if (!currentPlayer.isHuman || e.target.className === 'marked') return;
+    mark(e.target);
   });
 
-  function move(x, y) {
+  function mark(elSquare) {
+    var index = Array.prototype.indexOf.call(elBoard.children, elSquare);
+    var coords = locate(index);
+    elSquare.innerHTML = board[coords.x][coords.y] = currentPlayer.symbol;
+    elSquare.className = 'marked';
+    currentPlayer.el.className = '';
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+    currentPlayer.el.className = 'current';
+  }
+
+  // Gets coordinates from the index
+  function locate(index) {
+    return { x: Math.floor(index / board.length), y: index % board.length };
   }
 
 }());

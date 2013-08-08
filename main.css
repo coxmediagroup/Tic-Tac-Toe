@@ -9,6 +9,9 @@
   text-align: center;
   width: 600px; }
 
+#players .current {
+  font-weight: 700; }
+
 #board {
   height: 600px;
   width: 100%; }
