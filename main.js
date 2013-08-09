@@ -1,15 +1,20 @@
 (function () {
 
-  function Player(symbol, el, isHuman) {
+  var currentPlayer = null;
+  var waitingPlayer = null;
+  var player1 = null;
+  var player2 = null;
+
+  function Player(number, symbol, el, isHuman) {
+    console.log(this);
+    this.number = number;
     this.symbol = symbol;
     this.el = el;
     this.isHuman = isHuman || true;
-    this.wins = 0;
-    this.losses = 0;
-    this.draws = 0;
     this._elWins = el.children[1];
     this._elLosses = el.children[2];
     this._elDraws = el.children[3];
+    this.reset();
   }
 
   Player.prototype = {
@@ -24,6 +29,7 @@
     addWin: function () {
       this.wins++;
       this._elWins.innerHTML = this.wins;
+      waitingPlayer.addLoss();
     },
     addLoss: function () {
       this.losses++;
@@ -32,98 +38,89 @@
     addDraw: function () {
       this.draws++;
       this._elDraws.innerHTML = this.elDraws;
+      waitingPlayer.addDraw();
+    },
+    startTurn: function () {
+      if (currentPlayer) currentPlayer.el.className = '';
+      board.el.className = 'turn-player' + this.number;
+      waitingPlayer = this === player1 ? player2 : player1;
+      currentPlayer = this;
+      currentPlayer.el.className = 'current';
+      if (!this.isHuman) console.log('simulate');
     }
   };
 
-  function Board(el, size) {
-    this.el = el;
-    this.size = size || 3;
-    this.players = [
-      new Player('&times;', document.getElementById('player1')),
-      new Player('○', document.getElementById('player2'))
-    ];
-    this.reset();
-
-    var _this = this;
-    this.el.addEventListener('click', function (e) {
-      if (!_this.players[_this.currentPlayer].isHuman ||
-          e.target.className.indexOf('marked') !== -1)
-        return;
-      _this.mark(Array.prototype.indexOf.call(this.children, e.target));
-    });
-  }
-
-  Board.prototype = {
-    mark: function (index) {
-      var square = this.el.children[index];
-      square.innerHTML = this.players[this.currentPlayer].symbol;
-      square.className = 'marked player' + (this.currentPlayer + 1);
-      this.squares[index] = this.currentPlayer;
-      this.turns += 1;
-      if (this.isWinningMove(index)) {
-        this.players[this.currentPlayer].addWin();
-        this.players[this.currentPlayer === 0 ? 1 : 0].addLoss();
-        this.reset();
-      } else if (this.turns === board.length) {
-        this.players[0].addDraw();
-        this.players[1].addDraw();
-        this.reset();
+  var board = {
+    el: document.getElementById('board'),
+    mark: function (x, y, el) {
+      el.innerHTML = currentPlayer.symbol;
+      el.className = 'marked player' + currentPlayer.number;
+      board.marks[x][y] = currentPlayer.number;
+      board.turns += 1;
+      if (board.isWin(x, y)) {
+        currentPlayer.addWin();
+        board.reset();
+      } else if (this.turns === 9) {
+        currentPlayer.addDraw();
+        board.reset();
       } else {
-        this.next();
+        waitingPlayer.startTurn();
       }
-    },
-    next: function (index) {
-      this.currentPlayer = index ? index : this.currentPlayer === 0 ? 1 : 0;
-      this.players[this.currentPlayer].el.className = '';
-      document.getElementById('container').className = 'turn-player' + (this.currentPlayer + 1);
     },
     reset: function () {
-      console.log('reset');
-      this.currentPlayer = 0;
-      this.turns = 0;
-      this.squares = new Array(this.size^2);
-      for (var i=this.el.children.length; i--;) {
-        var square = this.el.children[i];
-        square.className = square.innerHTML = '';
+      player1.startTurn();
+      board.turns = 0;
+      board.marks = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]];
+      for (var i=board.el.children.length; i--;) {
+        board.el.children[i].className =
+        board.el.children[i].innerHTML = '';
       }
     },
-    isWinningMove: function (index) {
-      var x = index % this.size, y = Math.floor(index / this.size);
+    isWin: function (x, y) {
+      var i, square;
 
       // check for win at col
-      for (var i=this.size; i--;) {
-        if (this.squares[i * this.size + x] !== this.currentPlayer) break;
+      for (i=3; i--;) {
+        if (board.marks[x][i] !== currentPlayer.number) break;
         if (i === 0) return true;
       }
 
       // check for win at row
-      for (var i=this.size; i--;) {
-        if (this.squares[y * this.size + i] !== this.currentPlayer) break;
+      for (i=3; i--;) {
+        if (board.marks[i][y] !== currentPlayer.number) break;
         if (i === 0) return true;
       }
 
       // check for diagonal win
       if (x === y) {
-        for (var i=this.size; i--;) {
-          if (this.squares[i * (this.size + 1)] !== this.currentPlayer) break;
+        for (i=3; i--;) {
+          if (board.marks[i][i] !== currentPlayer.number) break;
           if (i === 0) return true;
         }
       }
 
       // check for anti-diagonal
-      for (var i=this.size; i--;) {
-        var t = (i + 1) * (this.size - 1);
-        if (this.squares[(i + 1) * (this.size - 1)] !== this.currentPlayer) break;
+      for (i=3; i--;) {
+        if (board.marks[i][2 - i] !== currentPlayer.number) break;
         if (i === 0) return true;
       }
 
       return false;
     }
+
   };
 
-  window.onload = function () {
-    var board = new Board(document.getElementById('board'));
-  };
+  player1 = new Player(1, '×', document.getElementById('player1'));
+  player2 = new Player(2, '○', document.getElementById('player2'));
 
+  board.reset();
+  board.el.addEventListener('click', function (e) {
+    // disallow humans to make marks while computer is thinking
+    if (!currentPlayer.isHuman || e.target.className.indexOf('marked') !== -1)
+      return;
+    var index = Array.prototype.indexOf.call(this.children, e.target);
+    var x = index % 3, y = Math.floor(index / 3);
+    board.mark(x, y, e.target);
+  });
 
 }());
