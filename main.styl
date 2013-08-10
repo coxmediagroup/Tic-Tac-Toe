@@ -32,16 +32,7 @@ h1, #players
 .player2
   color blue
 
-@keyframes red-winner
-  from
-    background red
-    color white
-  to
-    background white
-    color red
-
 #board
-  border 1px solid #000
   clear both
   height 700px
   width 100%
@@ -61,17 +52,19 @@ h1, #players
     width 33.3%
 
     &.marked
-      background white !important
       cursor not-allowed
 
-    &.winner
+      &, &:hover
+        background white !important
+
+    &.winner, &.draw
       color white
 
       &.player1
-        background red
+        background red !important
 
       &.player2
-        background blue
+        background blue !important
 
     &:nth-child(3n)
       border-right-width 0

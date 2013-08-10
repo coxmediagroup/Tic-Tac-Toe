@@ -6,26 +6,16 @@ h1,#players{float:left;width:50%}
 #players .current{font-weight:700}
 .player1{color:#f00}
 .player2{color:#00f}
-#board{border:1px solid #000;clear:both;height:700px;width:100%;}
+#board{clear:both;height:700px;width:100%;}
 #board li{float:left;border-color:#000;border-style:solid;border-width:0 5px 5px 0;cursor:pointer;font-size:180pt;height:33.3%;line-height:180px;list-style:none;overflow:hidden;text-align:center;width:33.3%;}
-#board li.marked{background:#fff !important;cursor:not-allowed}
-#board li.winner{color:#fff;}
-#board li.winner.player1{background:#f00}
-#board li.winner.player2{background:#00f}
+#board li.marked{cursor:not-allowed;}
+#board li.marked,#board li.marked:hover{background:#fff !important}
+#board li.winner,#board li.draw{color:#fff;}
+#board li.winner.player1,#board li.draw.player1{background:#f00 !important}
+#board li.winner.player2,#board li.draw.player2{background:#00f !important}
 #board li:nth-child(3n){border-right-width:0}
 #board li:nth-child(7),#board li:nth-child(8),#board li:nth-child(9){border-bottom-width:0}
 #board.turn-player1 li:hover{background:#f00}
 #player1.current th,#player1.current td{background:#f00;color:#fff}
 #board.turn-player2 li:hover{background:#00f}
 #player2.current th,#player2.current td{background:#00f;color:#fff}
-@-moz-keyframes red-winner{0%{background:#f00;color:#fff}
-100%{background:#fff;color:#f00}
-}@-webkit-keyframes red-winner{0%{background:#f00;color:#fff}
-100%{background:#fff;color:#f00}
-}@-o-keyframes red-winner{0%{background:#f00;color:#fff}
-100%{background:#fff;color:#f00}
-}@-ms-keyframes red-winner{0%{background:#f00;color:#fff}
-100%{background:#fff;color:#f00}
-}@keyframes red-winner{0%{background:#f00;color:#fff}
-100%{background:#fff;color:#f00}
-}
