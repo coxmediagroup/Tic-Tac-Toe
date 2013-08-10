@@ -1,6 +1,6 @@
 (function () {
 
-  var botDelay = 0;
+  var botVsBotDelay = 500;
   var resetDelay = 1000;
   var currentPlayer = null;
   var waitingPlayer = null;
@@ -16,6 +16,13 @@
     this._elLosses = el.children[2];
     this._elDraws = el.children[3];
     this.reset();
+    var toggle = this.el.getElementsByTagName('input')[0];
+    var _this = this;
+    toggle.addEventListener('click', function (e) {
+      _this.isHuman = !_this.isHuman;
+      _this.reset();
+      board.reset();
+    });
   }
 
   Player.prototype = {
@@ -49,13 +56,14 @@
       currentPlayer.el.className = 'current';
       if (!this.isHuman) {
         // if the bot is going first, randomize the start position
-        console.log(board.turns);
         if (board.turns === 0) {
           board.mark(Math.floor(Math.random() * 9));
-        } else {
+        } else if (!waitingPlayer.isHuman) {
           setTimeout(function () {
             board.mark(sim.minimax(2)[1]);
-          }, botDelay);
+          }, botVsBotDelay);
+        } else {
+          board.mark(sim.minimax(2)[1]);
         }
       }
     }
@@ -68,7 +76,6 @@
 
     // current player adds their marks at index
     mark: function (index, el) {
-      console.log(index);
       el = el || board.el.children[index];
       el.innerHTML = currentPlayer.symbol;
       el.className = 'marked player' + currentPlayer.number;
@@ -112,6 +119,7 @@
   };
 
   var sim = {
+    // http://goo.gl/tuYAOM
     minimax: function (depth, player) {
       player = player || currentPlayer;
       var bestScore = player === currentPlayer ? -Infinity : Infinity;
@@ -179,6 +187,7 @@
       }
       return score;
     },
+    // gets the first win by the current player and returns the indexes
     getWin: function () {
       for (var i=board.wins.length; i--;) {
         for (var z=3; z--;) {
@@ -190,9 +199,8 @@
     }
   };
 
-
-  player1 = new Player(1, '×', document.getElementById('player1'), false);
-  player2 = new Player(2, '○', document.getElementById('player2'));
+  player1 = new Player(1, '×', document.getElementById('player1'));
+  player2 = new Player(2, '○', document.getElementById('player2'), false);
 
   board.reset();
 
