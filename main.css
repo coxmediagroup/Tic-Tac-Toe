@@ -1,6 +1,7 @@
 *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0}
 #container{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:50px auto 0;line-height:14pt;width:700px}
 h1,#players{float:left;width:50%}
+h1{line-height:90px}
 #players{border-collapse:collapse;margin:0 auto;text-align:left;}
 #players td,#players th{padding:5px}
 #players .current{font-weight:700}
