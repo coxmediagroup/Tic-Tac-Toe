@@ -1,12 +1,13 @@
+import random
+from random import choice
 from mainProgram import *
-from random import *
 
 def checkwin():
     """
 Verifies if winning set is complete
     """
     x = 0
-    for i in winningSets:
+    for i in winningSets2:
         for s in aiSelections:
             if s in i:
                 x = x + 1
@@ -16,7 +17,7 @@ Verifies if winning set is complete
         if x == 3:
             print 'You lose'
             break
-    for i in winningSets:
+    for i in winningSets2:
         for s in playerSelections:
             if s in i:
                 x = x + 1
@@ -40,13 +41,14 @@ def selectSpace():
         print '----------'
         print board[6], '|', board[7], '|', board[8]
         selection = (int(raw_input("What space would you like select 1-9: ")) - 1)
-        if board[selection] != 'x' or board[selection] != 'o':
+        if board[selection] == 'x' or board[selection] == 'o':
             print 'Spot is already taken, please choose another spot'
         else :
             board2.remove(board[selection])
-            board[selection] == 'x'
+            board[selection] = 'x'
             playerSelections.append(selection)
-            board2.remove()
+            for i in winningSets:
+                i.remove(selection)
 
 
 def ai():
@@ -59,10 +61,12 @@ def ai():
 # All possible ways of winning always equals 15
     startChoice = [0, 6, 2, 8]
     random.shuffle(startChoice)
+    closestWinner = 4
     if 'x' in board or 'o' in board:
         if 0 in playerSelections or 6 in playerSelections or 2 in playerSelections or 8 in playerSelections and 4 not in playerSelections:
-            board[4] == 'o'
-            aiSelections.append[4]
+            board2.pop(4)
+            board[4] = 'o'
+            aiSelections.append(board[4])
         else:
             countPlayer = len(playerSelections)
             if countPlayer == 1:
@@ -70,23 +74,36 @@ def ai():
                     for s in playerSelections:
                         if s in i:
                             i.remove(s)
-                            aiChoice = choice(i)
+                            aiChoice = int(choice(i))
+                            print aiChoice
                             for position, item in enumerate(board):
                                 if item == aiChoice:
-                                    board[position] == 'o'
-            if countPlayer > 2:
+                                    board2.pop(position)
+                                    aiSelections.append(board[position])
+                                    board[position] = 'o'
+                                    continue
+                                    
+            if countPlayer > 1:
+                for i in winningSets:
+                    for s in playerSelections:
+                        if s in i:
+                            i.remove(s)
+                for r in winningSets:
+                    if len(r) < closestWinner:
+                        closestWinner = len(r)
+                        bestChance = r
+                aiChoice2 = int(choice(bestChance))
+                for position, item in enumerate(board):
+                    if item == aiChoice2:
+                        board2.pop(position)
+                        aiSelections.append(board[position])
+                        board[position] = 'o'
+                
+
 
 
 
     else:
         board2.remove(board[startChoice[0]])
-        board[startChoice[0]] == 'o'
+        board[startChoice[0]] = 'o'
         aiSelections.append(board[startChoice[0]])
-
-
-
-
-
-
-
-        
