@@ -1,0 +1,52 @@
+.container {
+    max-width: 800px;
+    text-align: center;
+    margin: auto;
+}
+
+.container2 {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.dummy {
+    margin-top: 100%;
+}
+
+.board {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+table.tictactoe {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100%;
+}
+
+table.tictactoe tr td {
+    border: 3px solid black;
+    width: 33.3333%;
+    height: 33.3333%;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 100px;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+img {
+    border: 0;
+}
+
+@media all and (max-width: 600px) {
+    img {
+        width: 50%;
+    }
+}
