@@ -1,0 +1,14 @@
+table.tictactoe {
+    height: 800px;
+    width: 800px;
+    border-collapse: collapse;
+}
+
+table.tictactoe tr td {
+    border: 3px solid black;
+    width: 33.3333%;
+    height: 33.3333%;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 100px;
+}

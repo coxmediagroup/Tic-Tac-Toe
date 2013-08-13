@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Zero Fun Tic-Tac-Toe</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}" />
+</head>
+<body>
+    <h1>Zero Fun Tic-Tac-Toe</h1>
+    <p>Try to beat me in tic-tac-toe. I'll even let you go first!</p>
+    <button class="try-again">Try Again</button>
+
+    <table class="tictactoe">
+        <tr>
+            <td id="c1" data-number="1"></td>
+            <td id="c2" data-number="2"></td>
+            <td id="c3" data-number="3"></td>
+        </tr>
+        <tr>
+            <td id="c4" data-number="4"></td>
+            <td id="c5" data-number="5"></td>
+            <td id="c6" data-number="6"></td>
+        </tr>
+        <tr>
+            <td id="c7" data-number="7"></td>
+            <td id="c8" data-number="8"></td>
+            <td id="c9" data-number="9"></td>
+        </tr>
+    </table>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+    var next_move_url = '{% url 'game:next_move' %}';
+    var reset_url = '{% url 'game:reset' %}';
+</script>
+<script src="{% static 'js/game.js' %}"></script>
+
+</body>
+</html>
