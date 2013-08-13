@@ -40,9 +40,13 @@ EMPTY_GAME = {
 }
 
 
-def JsonResponse(request, game):
+def JsonResponse(request, game, winning_combo=None):
     request.session['game'] = game
-    return HttpResponse(json.dumps(game), mimetype='application/json')
+    rval = {
+        'game': game,
+        'winning_combo': winning_combo,
+    }
+    return HttpResponse(json.dumps(rval), mimetype='application/json')
 
 
 def moves(game):
@@ -81,6 +85,8 @@ def next_move(request):
         return JsonResponse(request, game)
     else:
         # Look for a potential winning combo to block or win
+        play = None
+        winning = None
         for combo in WINNING_COMBOS:
             x_count = 0
             o_count = 0
@@ -94,9 +100,15 @@ def next_move(request):
                     empty = num
             blank_count = 3 - x_count - o_count
             if blank_count == 1:
-                if x_count == 2 or o_count == 2:
-                    game[empty] = 'o'
-                    return JsonResponse(request, game)
+                if o_count == 2:
+                    winning = combo
+                    play = empty
+                    break
+                if x_count == 2:
+                    play = empty
+        if play:
+            game[play] = 'o'
+            return JsonResponse(request, game, winning)
 
         # Or pick a neighboring cell
         neighbors = list(NEIGHBORS[clicked])

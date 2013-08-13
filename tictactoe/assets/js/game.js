@@ -13,14 +13,19 @@ $('td').click(function(){
 
 $('.try-again').click(function(){
     $.get(reset_url, {}, function(data){
-        $('td').html('');
+        $('td').html('').removeClass('highlight');
     });
 });
 
 function load_game(game_data) {
-    $.each(game_data, function(index, value){
+    $.each(game_data['game'], function(index, value){
         $('#c' + index).html(value);
     });
+    if (game_data['winning_combo']) {
+        $.each(game_data['winning_combo'], function(index, value){
+            $('#c' + value).addClass('highlight');
+        });
+    }
 }
 
 // On load, reset game

@@ -12,3 +12,7 @@ table.tictactoe tr td {
     text-align: center;
     font-size: 100px;
 }
+
+.highlight {
+    background-color: yellow;
+}
