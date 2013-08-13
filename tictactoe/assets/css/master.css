@@ -40,3 +40,13 @@ table.tictactoe tr td {
 .highlight {
     background-color: yellow;
 }
+
+img {
+    border: 0;
+}
+
+@media all and (max-width: 600px) {
+    img {
+        width: 50%;
+    }
+}

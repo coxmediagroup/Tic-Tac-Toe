@@ -1,7 +1,7 @@
 $('td').click(function(){
     var val = $(this).html();
     if (val) {
-        alert('This square contains an ' + val + '. Please try another square.');
+        alert('This square occupied. Please try another square.');
     }
     else {
         var clicked = $(this).data('number');

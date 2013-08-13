@@ -1,11 +1,13 @@
 import json
 import random
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 
-X = 'X'
-O = 'O'
+
+X = '<img src="{}img/x.png" alt="X" />'.format(settings.STATIC_URL)
+O = '<img src="{}img/o.png" alt="O" />'.format(settings.STATIC_URL)
 BLANK = ''
 
 WINNING_COMBOS = (
