@@ -16,7 +16,17 @@ def getUserInput():
 
 
 def checkForWin(board):
-    return False
+    output = False
+    #check rows
+    for x in range(0, 9, 3):
+        print("%s-%s-%s" % (board[x], board[x+1], board[x+2]))
+        if board[x] == board[x+1] == board[x+2] and board[x] is not None:
+            print("Winner: %s" % board[x])
+            return True
+            break
+    #check cols
+    #check diags
+    return output
 
 
 def playGame():
