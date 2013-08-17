@@ -7,6 +7,7 @@ import sys
 
 from ai import randomPlayer
 
+
 def _showValue(v, pos):
     """Displays a pretty board so the user knows where to place their marker.
     Please note that this is where the board numbers come from and they are off
@@ -21,8 +22,13 @@ def showBoard(board):
 
 
 def getUserInput():
-    print("Where would you like place your O?   (q to quit)")
-    return raw_input()
+    output = None
+    while(output is None):
+        print("Where would you like place your O?   (q to quit)")
+        output = raw_input()
+        if output not in '123456789q':
+            output = None
+    return output
 
 
 def checkForWin(board):
