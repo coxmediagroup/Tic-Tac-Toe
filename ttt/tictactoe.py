@@ -18,13 +18,19 @@ def getUserInput():
 def checkForWin(board):
     output = False
     #check rows
-    for x in range(0, 9, 3):
+    for x in xrange(0, 9, 3):
         print("%s-%s-%s" % (board[x], board[x+1], board[x+2]))
         if board[x] == board[x+1] == board[x+2] and board[x] is not None:
-            print("Winner: %s" % board[x])
+            print("Winner (row): %s" % board[x])
             return True
             break
     #check cols
+    for x in xrange(0, 3):
+        print("%s\n%s\n%s" % (board[x], board[x+3], board[x+6]))
+        if board[x] == board[x+3] == board[x+6] and board[x] is not None:
+            print("Winner (column): %s" % board[x])
+            return True
+            break
     #check diags
     return output
 

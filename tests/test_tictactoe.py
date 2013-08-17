@@ -27,6 +27,12 @@ class TestCheckForWin():
                  1, 1, 0]
         assert_equal(True, checkForWin(board))
 
+    def test_checkForWin_last_column_win(self):
+        board = [1, 0, 0,
+                 1, 1, 0,
+                 0, 1, 0]
+        assert_equal(True, checkForWin(board))
+
     def test_checkForWin_diagonal_win(self):
         board = [1, 0, 1,
                  0, 1, 0,
