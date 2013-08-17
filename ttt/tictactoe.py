@@ -1,9 +1,11 @@
 """Play a game of tic-tac-toe
+
 Nick Loadholtes <nick@ironboundsoftware.com
 """
 
 import sys
 
+from ai import randomPlayer
 
 def _showValue(v, pos):
     """Displays a pretty board so the user knows where to place their marker.
@@ -15,11 +17,11 @@ def _showValue(v, pos):
 def showBoard(board):
     b = board
     for x in xrange(0, 9, 3):
-        print("%s-%s-%s" % (_showValue(b, x), _showValue(b, x+1), _showValue(b, x+2)))
+        print("\t\t%s-%s-%s" % (_showValue(b, x), _showValue(b, x+1), _showValue(b, x+2)))
 
 
 def getUserInput():
-    print("Where would you like place your O?")
+    print("Where would you like place your O?   (q to quit)")
     return raw_input()
 
 
@@ -48,7 +50,7 @@ def checkForWin(board):
     return False
 
 
-def playGame():
+def playGame(computer_player):
     #Setup board
     board = [None for x in range(9)]
     #Display start text/rules/etc
@@ -56,7 +58,6 @@ def playGame():
 You can play as O. Just enter the number of the cell where you want to place your marker. \
 (Enter q if you want to give up and quit.)\n\n""")
     while(True):
-        #start loop
         #display board
         showBoard(board)
         #get input
@@ -70,6 +71,7 @@ You can play as O. Just enter the number of the cell where you want to place you
             print("Whoops, it looks like you won.")
             break
         #make move
+        computer_player(board)
         #check for win
         if(checkForWin(board)):
             print("Once again, I am victorious.")
@@ -79,4 +81,5 @@ if __name__ == '__main__':
     print("Starting")
     args = sys.argv
     # print("args seen:" + str(args))
-    playGame()
+    computer_player = randomPlayer #NOTE: Hard coded for the moment
+    playGame(computer_player)
