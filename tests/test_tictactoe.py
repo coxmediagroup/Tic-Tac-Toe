@@ -39,6 +39,12 @@ class TestCheckForWin():
                  0, 1, 1]
         assert_equal(True, checkForWin(board))
 
+    def test_checkForWin_diagonal_win_other_diag(self):
+        board = [1, 0, 0,
+                 0, 0, 0,
+                 0, 1, 1]
+        assert_equal(True, checkForWin(board))
+
     def test_checkForWin_false_because_of_tie(self):
         board = [1, 0, 1,
                  0, 1, 0,

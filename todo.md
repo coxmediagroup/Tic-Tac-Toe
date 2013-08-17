@@ -7,6 +7,7 @@
  b. Basic input code
  c. Basic drawing code
  d. "AI" code
+ e. ~~Check for a win (cols, rows, diag, deadlock)~~ - This one is important, we need to know if we won or not.
  
 3. Commit early and often, with good messages.
 4. Push your code back to GitHub and send us a pull request.
