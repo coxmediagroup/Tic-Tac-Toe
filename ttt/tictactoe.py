@@ -16,6 +16,13 @@ def getUserInput():
 
 
 def playGame():
+    #Setup board
+    #Display start text/rules/etc
+    #start loop
+    #display board
+    #get input
+    #make move
+
     pass
 
 if __name__ == '__main__':
