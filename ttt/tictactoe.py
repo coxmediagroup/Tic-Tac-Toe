@@ -44,7 +44,11 @@ def checkForWin(board):
 
 def playGame():
     #Setup board
+    board = [None for x in range(9)]
     #Display start text/rules/etc
+    print("""\n\nWelcome to this little tic-tac-toe game. I (the computer) will play as X. \
+You can play as O. Just enter the number of the cell where you want to place your marker. \
+(Enter q if you want to give up and quit.)\n\n""")
     #start loop
     #display board
     #get input
@@ -56,5 +60,5 @@ def playGame():
 if __name__ == '__main__':
     print("Starting")
     args = sys.argv
-    print("args seen:" + str(args))
+    # print("args seen:" + str(args))
     playGame()
