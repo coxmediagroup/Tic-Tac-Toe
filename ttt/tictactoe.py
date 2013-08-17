@@ -4,15 +4,21 @@ Nick Loadholtes <nick@ironboundsoftware.com
 
 import sys
 
-BOARD = []
+
+def _showValue(v, pos):
+    "Displays a pretty board so the user knows where to place their marker"
+    return v[pos] if v[pos] is not None else pos
 
 
-def showBoard():
-    pass
+def showBoard(board):
+    b = board
+    for x in xrange(0, 9, 3):
+        print("%s-%s-%s" % (_showValue(b, x), _showValue(b, x+1), _showValue(b, x+2)))
 
 
 def getUserInput():
-    pass
+    print("Where would you like place your O?")
+    
 
 
 def checkForWin(board):
@@ -51,7 +57,9 @@ You can play as O. Just enter the number of the cell where you want to place you
 (Enter q if you want to give up and quit.)\n\n""")
     #start loop
     #display board
+    showBoard(board)
     #get input
+    getUserInput()
     #check for win
     #make move
     #check for win
