@@ -24,7 +24,6 @@ def getUserInput():
 
 
 def checkForWin(board):
-    output = False
     #check rows
     for x in xrange(0, 9, 3):
         if board[x] == board[x+1] == board[x+2] and board[x] is not None:
@@ -39,13 +38,14 @@ def checkForWin(board):
             break
     #check diags
     #TODO: Might be a better way to do this check
-    if board[0] == board[4] == board[8] and board[x] is not None:
+    if board[0] == board[4] == board[8] and board[0] is not None:
         print("Winner (diagonal 1): %s" % board[0])
+        showBoard(board)
         return True
-    if board[2] == board[4] == board[6] and board[x] is not None:
-        print("Winner (diagonal 1): %s" % board[0])
+    if board[2] == board[4] == board[6] and board[2] is not None:
+        print("Winner (diagonal 2): %s" % board[0])
         return True
-    return output
+    return False
 
 
 def playGame():
