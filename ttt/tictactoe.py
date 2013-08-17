@@ -15,14 +15,19 @@ def getUserInput():
     pass
 
 
+def checkForWin():
+    return False
+
+
 def playGame():
     #Setup board
     #Display start text/rules/etc
     #start loop
     #display board
     #get input
+    #check for win
     #make move
-
+    #check for win
     pass
 
 if __name__ == '__main__':
