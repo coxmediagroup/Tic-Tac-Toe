@@ -15,7 +15,7 @@ def getUserInput():
     pass
 
 
-def checkForWin():
+def checkForWin(board):
     return False
 
 
