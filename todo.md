@@ -4,9 +4,11 @@
  a. Create basic project structure
    a1. ~~Tests folder~~
    a2. ~~src folder~~
- b. Basic input code
- c. Basic drawing code
+ b. ~~Basic input code~~
+ c. ~~Basic drawing code~~
  d. "AI" code
+  d1. ~~random~~
+  d2. Never looses
  e. ~~Check for a win (cols, rows, diag, deadlock)~~ - This one is important, we need to know if we won or not.
  
 3. Commit early and often, with good messages.
