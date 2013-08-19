@@ -29,6 +29,9 @@ def _scoreBoard(board):
         cell = board[x]
         if cell is None:
             wp_SCORES[x] += 1
+        #unoccupied coners get an extra point
+        if x in (0, 2, 6, 8):
+            wp_SCORES[x] += 1
 
 
 def winningPlayer(board):

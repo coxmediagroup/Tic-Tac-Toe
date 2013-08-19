@@ -17,7 +17,7 @@ def test_randomPlayer_fills_in_at_least_one():
 def test_scoreBoard_start():
     b = [None for x in range(0, 9)]
     _scoreBoard(b)
-    assert_equal([2, 1, 1, 1, 1, 1, 1, 1, 1], wp_SCORES)
+    assert_equal([3, 1, 2, 1, 1, 1, 2, 1, 2], wp_SCORES)
 
 
 def test_scoreBoard_third_move():
