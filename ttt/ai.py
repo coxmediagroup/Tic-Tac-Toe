@@ -8,8 +8,6 @@ Nick Loadholtes <nick@ironboundsoftware.com>
 
 import random
 
-wp_SCORES = [1, 0, 0, 0, 0, 0, 0, 0, 0] #Seeded so we go for the first corner
-
 
 def randomPlayer(board):
     """Literally just look for an empty spot and put
@@ -25,13 +23,15 @@ def _scoreBoard(board):
     there's a good reason (winning move, prevent opponent winning more) then
     bump the score again. The objective is the cell with the highest probability
     of winning the game should get the highest score."""
+    wp_SCORES = [1] + [0 for x in xrange(0, 8)]
     for x in xrange(0, 9):
         cell = board[x]
         if cell is None:
             wp_SCORES[x] += 1
         #unoccupied coners get an extra point
-        if x in (0, 2, 6, 8):
+        if cell is None and x in (0, 2, 6, 8):
             wp_SCORES[x] += 1
+    return wp_SCORES
 
 
 def winningPlayer(board):
@@ -40,15 +40,16 @@ def winningPlayer(board):
     the opposing player from going down a lot of forks in the game tree.
     """
     #Offense and defense scan
-    _scoreBoard(board)
+    wp_scores = _scoreBoard(board)
 
     #Look at the scores, figure out where the hotspot is
     high_score = -1
     target = 1
     for x in xrange(0, 9):
-        if wp_SCORES[x] > high_score:
-            high_score = wp_SCORES[x]
+        if wp_scores[x] > high_score:
+            high_score = wp_scores[x]
             target = x
 
     #make a move
     board[target] = 'X'
+    return wp_scores
