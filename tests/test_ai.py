@@ -28,7 +28,5 @@ def test_scoreBoard_third_move():
 
 def test_winningPlayer_first_move():
     b = [None for x in range(0, 9)]
-    # import ipdb; ipdb.set_trace()
     winningPlayer(b)
-    # print(wp_SCORES)
     assert_equal(['X', None, None, None, None, None, None, None, None], b)

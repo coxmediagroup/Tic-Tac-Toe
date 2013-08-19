@@ -31,6 +31,10 @@ def _scoreBoard(board):
         #unoccupied coners get an extra point
         if cell is None and x in (0, 2, 6, 8):
             wp_SCORES[x] += 1
+    #Cleanup any mis-scored cells
+    for x in xrange(0, 9):
+        if board[x] is not None:
+            wp_SCORES[x] = 0
     return wp_SCORES
 
 
