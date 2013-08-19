@@ -20,6 +20,12 @@ def test_scoreBoard_start():
     assert_equal([2, 1, 1, 1, 1, 1, 1, 1, 1], wp_SCORES)
 
 
+def test_scoreBoard_third_move():
+    b = ['X', None, 'O', None, None, None, None, None, None]
+    _scoreBoard(b)
+    assert_equal([2, 2, 1, 3, 3, 3, 3, 3, 3], wp_SCORES)
+
+
 def test_winningPlayer_first_move():
     b = [None for x in range(0, 9)]
     winningPlayer(b)
