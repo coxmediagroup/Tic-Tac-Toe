@@ -8,6 +8,8 @@ Nick Loadholtes <nick@ironboundsoftware.com>
 
 import random
 
+wp_SCORES = [3, 1, 1, 1, 1, 1, 1, 1, 1] #Seeded so we go for the first corner
+
 
 def randomPlayer(board):
     """Literally just look for an empty spot and put
@@ -19,4 +21,20 @@ def randomPlayer(board):
 
 
 def winningPlayer(board):
-    pass
+    """Referencing the wikipedia page (http://en.wikipedia.org/wiki/Tic-tac-toe)
+    it seems like the best strategy is to take a corner first which prevents
+    the opposing player from going down a lot of forks in the game tree.
+    """
+    #Offense and defense scan
+    
+
+    #Look at the scores, figure out where the hotspot is
+    high_score = -1
+    target = 1
+    for x in wp_SCORES:
+        if wp_SCORES[x] > high_score:
+            high_score = wp_SCORES[x]
+            target = x
+
+    #make a move
+    board[target] = 'X'
