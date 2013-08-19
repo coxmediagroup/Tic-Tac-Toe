@@ -37,12 +37,12 @@ def winningPlayer(board):
     the opposing player from going down a lot of forks in the game tree.
     """
     #Offense and defense scan
-
+    _scoreBoard(board)
 
     #Look at the scores, figure out where the hotspot is
     high_score = -1
     target = 1
-    for x in wp_SCORES:
+    for x in xrange(0, 9):
         if wp_SCORES[x] > high_score:
             high_score = wp_SCORES[x]
             target = x
