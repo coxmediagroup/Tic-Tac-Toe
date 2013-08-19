@@ -5,10 +5,16 @@ Nick Loadholtes <nick@ironboundsoftware.com>
 """
 from nose.tools import assert_equal, assert_true
 
-from ttt.ai import randomPlayer
+from ttt.ai import randomPlayer, _scoreBoard, wp_SCORES
 
 
 def test_randomPlayer_fills_in_at_least_one():
     board = [None for x in range(0, 9)]
     randomPlayer(board)
     assert_true('X' in board)
+
+
+def test_scoreBoard():
+    b = [None for x in range(0, 9)]
+    _scoreBoard(b)
+    assert_equal([2, 1, 1, 1, 1, 1, 1, 1, 1], wp_SCORES)

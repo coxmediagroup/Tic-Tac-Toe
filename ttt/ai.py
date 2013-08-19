@@ -8,7 +8,7 @@ Nick Loadholtes <nick@ironboundsoftware.com>
 
 import random
 
-wp_SCORES = [3, 1, 1, 1, 1, 1, 1, 1, 1] #Seeded so we go for the first corner
+wp_SCORES = [1, 0, 0, 0, 0, 0, 0, 0, 0] #Seeded so we go for the first corner
 
 
 def randomPlayer(board):
@@ -20,13 +20,24 @@ def randomPlayer(board):
     board[pos] = 'X'
 
 
+def _scoreBoard(board):
+    """Interate through the board and bump the score for each empty cell. If
+    there's a good reason (winning move, prevent opponent winning more) then
+    bump the score again. The objective is the cell with the highest probability
+    of winning the game should get the highest score."""
+    for x in xrange(0, 9):
+        cell = board[x]
+        if cell is None:
+            wp_SCORES[x] += 1
+
+
 def winningPlayer(board):
     """Referencing the wikipedia page (http://en.wikipedia.org/wiki/Tic-tac-toe)
     it seems like the best strategy is to take a corner first which prevents
     the opposing player from going down a lot of forks in the game tree.
     """
     #Offense and defense scan
-    
+
 
     #Look at the scores, figure out where the hotspot is
     high_score = -1
