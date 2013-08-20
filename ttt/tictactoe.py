@@ -5,7 +5,7 @@ Nick Loadholtes <nick@ironboundsoftware.com
 
 import sys
 
-from ai import randomPlayer
+from ai import randomPlayer, winningPlayer
 
 
 def _showValue(v, pos):
@@ -21,12 +21,17 @@ def showBoard(board):
         print("\t\t%s-%s-%s" % (_showValue(b, x), _showValue(b, x+1), _showValue(b, x+2)))
 
 
-def getUserInput():
+def getUserInput(board):
     output = None
     while(output is None):
         print("Where would you like place your O?   (q to quit)")
         output = raw_input()
         if output not in '123456789q':
+            output = None
+        try:
+            if output is not 'q' and board[int(output) - 1] is not None:
+                output = None
+        except Exception:
             output = None
     return output
 
@@ -64,10 +69,16 @@ def playGame(computer_player):
 You can play as O. Just enter the number of the cell where you want to place your marker. \
 (Enter q if you want to give up and quit.)\n\n""")
     while(True):
+        #make move
+        computer_player(board)
+        #check for win
+        if(checkForWin(board)):
+            print("Once again, I am victorious.")
+            break
         #display board
         showBoard(board)
         #get input
-        pos = getUserInput()
+        pos = getUserInput(board)
         if pos == 'q':
             print("Quitting!")
             break
@@ -76,16 +87,10 @@ You can play as O. Just enter the number of the cell where you want to place you
         if(checkForWin(board)):
             print("Whoops, it looks like you won.")
             break
-        #make move
-        computer_player(board)
-        #check for win
-        if(checkForWin(board)):
-            print("Once again, I am victorious.")
-            break
 
 if __name__ == '__main__':
     print("Starting")
     args = sys.argv
     # print("args seen:" + str(args))
-    computer_player = randomPlayer #NOTE: Hard coded for the moment
+    computer_player = winningPlayer #randomPlayer #NOTE: Hard coded for the moment
     playGame(computer_player)
