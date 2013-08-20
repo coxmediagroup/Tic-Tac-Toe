@@ -17,17 +17,42 @@ def randomPlayer(board):
         pos = random.randrange(0, 9)
     board[pos] = 'X'
 
+#'Pre-computed' neighborhood map
+NEIGHBORS = {0: [1, 3, 4],
+    1: [0, 4, 2],
+    2: [1, 4, 5],
+    3: [0, 4, 6],
+    4: [0, 1, 2, 3, 5, 6, 7, 8],
+    5: [2, 4, 8],
+    6: [3, 4, 7],
+    7: [6, 4, 8],
+    8: [7, 4, 5]}
+
 
 def _scoreBoard(board):
     """Interate through the board and bump the score for each empty cell. If
     there's a good reason (winning move, prevent opponent winning more) then
     bump the score again. The objective is the cell with the highest probability
-    of winning the game should get the highest score."""
+    of winning the game should get the highest score.
+
+    The heuristic is this:
+     +1 point if the cell is empty
+     +1 point if the cell is a corner
+     +1 point if the cell is next to one of our marks
+     -1 point if the cell is next to an oppenent's mark
+    """
     wp_SCORES = [1] + [0 for x in xrange(0, 8)]
     for x in xrange(0, 9):
         cell = board[x]
         if cell is None:
             wp_SCORES[x] += 1
+            #Check the neighbors
+            neighbors = NEIGHBORS[x]
+            for y in neighbors:
+                if board[y] == 'X':
+                    wp_SCORES[x] += 1
+                if board[y] == 'O':
+                    wp_SCORES[x] -= 1
         #unoccupied coners get an extra point
         if cell is None and x in (0, 2, 6, 8):
             wp_SCORES[x] += 1

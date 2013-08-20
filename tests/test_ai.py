@@ -23,7 +23,7 @@ def test_scoreBoard_start():
 def test_scoreBoard_third_move():
     b = ['X', None, 'O', None, None, None, None, None, None]
     output = _scoreBoard(b)
-    assert_equal([0, 1, 0, 1, 1, 1, 2, 1, 2], output)
+    assert_equal([0, 1, 0, 2, 1, 0, 2, 1, 2], output)
 
 
 def test_winningPlayer_first_move():
