@@ -22,51 +22,60 @@
 		$(".alert").remove();
 
 		$("#button-0").on("click", function(event){
-			if(gameBoard[0] == 0);
-			gameBoard[0] = 1;
-			processGameFrame();
+			if(gameBoard[0] == 0){
+				gameBoard[0] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-1").on("click", function(event){
-			if(gameBoard[1] == 0);
-			gameBoard[1] = 1;
-			processGameFrame();
+			if(gameBoard[1] == 0){
+				gameBoard[1] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-2").on("click", function(event){
-			if(gameBoard[2] == 0);
-			gameBoard[2] = 1;
-			processGameFrame();
+			if(gameBoard[2] == 0){
+				gameBoard[2] = 1;
+				processGameFrame();
+			}
 		});
 
 		$("#button-3").on("click", function(event){
-			if(gameBoard[3] == 0);
-			gameBoard[3] = 1;
-			processGameFrame();
+			if(gameBoard[3] == 0){
+				gameBoard[3] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-4").on("click", function(event){
-			if(gameBoard[4] == 0);
-			gameBoard[4] = 1;
-			processGameFrame();
+			if(gameBoard[4] == 0){
+				gameBoard[4] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-5").on("click", function(event){
-			if(gameBoard[5] == 0);
-			gameBoard[5] = 1;
-			processGameFrame();
+			if(gameBoard[5] == 0){
+				gameBoard[5] = 1;
+				processGameFrame();
+			}
 		});
 
 		$("#button-6").on("click", function(event){
-			if(gameBoard[6] == 0);
-			gameBoard[6] = 1;
-			processGameFrame();
+			if(gameBoard[6] == 0){
+				gameBoard[6] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-7").on("click", function(event){
-			if(gameBoard[7] == 0);
-			gameBoard[7] = 1;
-			processGameFrame();
+			if(gameBoard[7] == 0){
+				gameBoard[7] = 1;
+				processGameFrame();
+			}
 		});
 		$("#button-8").on("click", function(event){
-			if(gameBoard[8] == 0);
-			gameBoard[8] = 1;
-			processGameFrame();
+			if(gameBoard[8] == 0){
+				gameBoard[8] = 1;
+				processGameFrame();
+			}
 		});
 	
 		function processGameFrame(){
