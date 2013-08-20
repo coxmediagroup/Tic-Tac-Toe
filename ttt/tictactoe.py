@@ -58,6 +58,9 @@ def checkForWin(board):
     if board[2] == board[4] == board[6] and board[2] is not None:
         print("Winner (diagonal 2): %s" % board[0])
         return True
+    #Check for empty spots
+    if None not in board:
+        return True
     return False
 
 
@@ -70,12 +73,13 @@ You can play as O. Just enter the number of the cell where you want to place you
 (Enter q if you want to give up and quit.)\n\n""")
     while(True):
         #make move
-        computer_player(board)
+        showBoard(computer_player(board))
         #check for win
         if(checkForWin(board)):
             print("Once again, I am victorious.")
             break
         #display board
+        print("\n")
         showBoard(board)
         #get input
         pos = getUserInput(board)

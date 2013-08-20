@@ -41,7 +41,8 @@ def _scoreBoard(board):
      +1 point if the cell is next to one of our marks
      -1 point if the cell is next to an oppenent's mark
     """
-    wp_SCORES = [1] + [0 for x in xrange(0, 8)]
+    wp_SCORES = [0 for x in xrange(0, 9)]
+    wp_SCORES[4] = 10
     for x in xrange(0, 9):
         cell = board[x]
         if cell is None:
@@ -50,12 +51,12 @@ def _scoreBoard(board):
             neighbors = NEIGHBORS[x]
             for y in neighbors:
                 if board[y] == 'X':
-                    wp_SCORES[x] += 1
+                    wp_SCORES[x] += 2
                 if board[y] == 'O':
-                    wp_SCORES[x] -= 1
+                    wp_SCORES[x] += 1
         #unoccupied coners get an extra point
         if cell is None and x in (0, 2, 6, 8):
-            wp_SCORES[x] += 1
+            wp_SCORES[x] += 2
     #Cleanup any mis-scored cells
     for x in xrange(0, 9):
         if board[x] is not None:
