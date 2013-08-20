@@ -1,9 +1,11 @@
 (function(){
   var compFirstMove = -1;
   var playerFirstMove = -1;
-  playGame();
+  // randomly pick who gets to go first
+  var playerStart = Math.floor(Math.random()*2)
+  playGame(playerStart);
 
-  function playGame(){
+  function playGame(playerStart){
     // -1 means computer won, 1 means player won, 2 means tie
     var winner = 0;
     var gameBoard = new Array();
@@ -21,6 +23,12 @@
     gameBoard[8] = 0;
     updateBoard(gameBoard);
     $(".alert").remove();
+
+    if(!playerStart){
+      // if not player start, let the computer go first!
+      gameBoard = getComputerMove(gameBoard);
+      updateBoard(gameBoard);
+    }
 
     $("#button-0").on("click", function(event){
       if(gameBoard[0] == 0){
