@@ -155,9 +155,9 @@
       return gameBoard;
     }
 
-    // pick a corner except when first move was the center
     if(compFirstMove == 4){
       if(playerFirstMove == 1 || playerFirstMove == 3 || playerFirstMove == 5 || playerFirstMove == 7){
+        // check for player picking adjoining edges and take the corner inbetween
         if(gameBoard[1] == 1 && gameBoard[3] == 1 && gameBoard[0] == 0){
           gameBoard[0] = -1;
           return gameBoard;
@@ -172,6 +172,7 @@
           return gameBoard;
         } 
       } else {
+        // player picked a corner first and we grabed the center, so lets pick an edge next
         if(gameBoard[1] == 0){
           gameBoard[1] = -1;
           return gameBoard;
@@ -187,6 +188,7 @@
         }
       }
     } else {
+      // player picked the center so lets grab a corner
       if(gameBoard[0] == 0){
         gameBoard[0] = -1;
         if(compFirstMove == -1){
@@ -205,7 +207,7 @@
       }
     }
 
-    // pick a remaining spot
+    // pick a remaining spot favoring corners
     if(gameBoard[0] == 0){
       gameBoard[0] = -1;
       return gameBoard;
