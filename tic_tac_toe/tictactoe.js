@@ -132,6 +132,18 @@
 			} else if(gameBoard[7] == 0){
 				gameBoard[7] = -1;
 				return gameBoard;
+			} else if(gameBoard[0] == 0){
+				gameBoard[0] = -1;
+				return gameBoard;
+			} else if(gameBoard[2] == 0){
+				gameBoard[2] = -1;
+				return gameBoard;
+			} else if(gameBoard[6] == 0){
+				gameBoard[6] = -1;
+				return gameBoard;
+			} else if(gameBoard[8] == 0){
+				gameBoard[8] = -1;
+				return gameBoard;
 			}
 		} else {
 			if(gameBoard[0] == 0){
