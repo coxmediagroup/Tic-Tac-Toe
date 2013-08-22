@@ -46,14 +46,12 @@ def checkForWin(board):
             showBoard(board)
             print("Winner (row %s): %s\n%s" % (x+1, board[x], WIN_MESSAGES[board[x]]))
             return True
-            break
     #check cols
     for x in xrange(0, 3):
         if board[x] == board[x+3] == board[x+6] and board[x] is not None:
             showBoard(board)
             print("Winner (column %s): %s\n%s" % (x+1, board[x], WIN_MESSAGES[board[x]]))
             return True
-            break
     #check diags
     if board[0] == board[4] == board[8] and board[0] is not None:
         showBoard(board)
@@ -100,6 +98,9 @@ You can play as O. Just enter the number of the cell where you want to place you
 if __name__ == '__main__':
     print("Starting")
     args = sys.argv
-    # print("args seen:" + str(args))
-    computer_player = winningPlayer #randomPlayer #NOTE: Hard coded for the moment
+    if len(args) == 2:
+        ai = randomPlayer
+    else:
+        ai = winningPlayer
+    computer_player = ai
     playGame(computer_player)
