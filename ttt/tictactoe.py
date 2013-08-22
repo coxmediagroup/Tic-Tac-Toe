@@ -8,6 +8,9 @@ import sys
 from ai import randomPlayer, winningPlayer
 
 
+WIN_MESSAGES = {"X": "Once again, I am victorious.", "O": "Whoops, it looks like you won."}
+
+
 def _showValue(v, pos):
     """Displays a pretty board so the user knows where to place their marker.
     Please note that this is where the board numbers come from and they are off
@@ -40,26 +43,30 @@ def checkForWin(board):
     #check rows
     for x in xrange(0, 9, 3):
         if board[x] == board[x+1] == board[x+2] and board[x] is not None:
-            print("Winner (row %s): %s" % (x, board[x]))
+            showBoard(board)
+            print("Winner (row %s): %s\n%s" % (x+1, board[x], WIN_MESSAGES[board[x]]))
             return True
             break
     #check cols
     for x in xrange(0, 3):
         if board[x] == board[x+3] == board[x+6] and board[x] is not None:
-            print("Winner (column %s): %s" % (x, board[x]))
+            showBoard(board)
+            print("Winner (column %s): %s\n%s" % (x+1, board[x], WIN_MESSAGES[board[x]]))
             return True
             break
     #check diags
-    #TODO: Might be a better way to do this check
     if board[0] == board[4] == board[8] and board[0] is not None:
-        print("Winner (diagonal 1): %s" % board[0])
         showBoard(board)
+        print("Winner (diagonal 1): %s\n%s" % (board[0], WIN_MESSAGES[board[0]]))
         return True
     if board[2] == board[4] == board[6] and board[2] is not None:
-        print("Winner (diagonal 2): %s" % board[0])
+        showBoard(board)
+        print("Winner (diagonal 2): %s\n%s" % (board[0], WIN_MESSAGES[board[x]]))
         return True
     #Check for empty spots
     if None not in board:
+        showBoard(board)
+        print("We have tied!")
         return True
     return False
 
@@ -76,7 +83,6 @@ You can play as O. Just enter the number of the cell where you want to place you
         computer_player(board)
         #check for win
         if(checkForWin(board)):
-            print("Once again, I am victorious.")
             break
         #display board
         print("\n")
@@ -89,7 +95,6 @@ You can play as O. Just enter the number of the cell where you want to place you
         board[int(pos)-1] = 'O'
         #check for win
         if(checkForWin(board)):
-            print("Whoops, it looks like you won.")
             break
 
 if __name__ == '__main__':

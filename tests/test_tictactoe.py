@@ -9,6 +9,11 @@ from ttt.tictactoe import checkForWin, getUserInput
 class TestCheckForWin():
     def setUp(self):
         self.board = []
+        self.messages_patch = patch.dict('ttt.tictactoe.WIN_MESSAGES', {1: "", 0: ""})
+        self.messages = self.messages_patch.start()
+
+    def tearDown(self):
+        self.messages_patch.stop()
 
     def test_checkForWin_row_win(self):
         board = [1, 1, 1,
