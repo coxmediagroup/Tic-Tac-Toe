@@ -1,9 +1,8 @@
 from nose.tools import assert_equal
-#from mock import Mock
 from mock import patch
 
 
-from ttt.tictactoe import checkForWin, getUserInput
+from ttt.tictactoe import checkForWin, getUserInput, playGame, winningPlayer
 
 
 class TestCheckForWin():
@@ -62,7 +61,7 @@ class TestCheckForWin():
 
     def test_checkForWin_diagonal_win_other_diag(self):
         board = [1, 0, 0,
-                 0, 0, 0,
+                 1, 0, 0,
                  0, 1, 1]
         assert_equal(True, checkForWin(board))
 
@@ -93,3 +92,23 @@ class TestGetUserInput():
             output = getUserInput(board)
             assert_equal('1', output)
             assert_equal(3, len(ri.call_args_list))
+
+
+class TestPlayGame():
+    @patch('__builtin__.raw_input')
+    def test_loose(self, ri):
+        inputs = ['4', '7']
+        ri.side_effect = lambda: inputs.pop()
+        playGame(winningPlayer)
+
+    @patch('__builtin__.raw_input')
+    def test_quit(self, ri):
+        inputs = ['4', 'q']
+        ri.side_effect = lambda: inputs.pop()
+        playGame(winningPlayer)
+
+    @patch('__builtin__.raw_input')
+    def test_computer_win_diag(self, ri):
+        inputs = ['3', '4', '8']
+        ri.side_effect = lambda: inputs.pop()
+        playGame(winningPlayer)

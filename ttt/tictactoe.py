@@ -96,11 +96,9 @@ You can play as O. Just enter the number of the cell where you want to place you
             break
 
 if __name__ == '__main__':
-    print("Starting")
     args = sys.argv
     if len(args) == 2:
         ai = randomPlayer
     else:
         ai = winningPlayer
-    computer_player = ai
-    playGame(computer_player)
+    playGame(ai)
