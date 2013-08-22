@@ -71,7 +71,8 @@ class TestCheckForWin():
 class TestGetUserInput():
 
     def _check_result(self, value):
-        assert_equal(value, getUserInput())
+        board = [None for x in range(0, 9)]
+        assert_equal(value, getUserInput(board))
 
     def test_getUserInput_good_keys(self):
         with patch('__builtin__.raw_input') as ri:
@@ -83,6 +84,7 @@ class TestGetUserInput():
         with patch('__builtin__.raw_input') as ri:
             inputs = ['1', 'd', 'x']
             ri.side_effect = lambda: inputs.pop()
-            output = getUserInput()
+            board = [None for x in range(0, 9)]
+            output = getUserInput(board)
             assert_equal('1', output)
             assert_equal(3, len(ri.call_args_list))
