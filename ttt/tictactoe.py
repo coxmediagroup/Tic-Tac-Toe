@@ -73,7 +73,7 @@ You can play as O. Just enter the number of the cell where you want to place you
 (Enter q if you want to give up and quit.)\n\n""")
     while(True):
         #make move
-        showBoard(computer_player(board))
+        computer_player(board)
         #check for win
         if(checkForWin(board)):
             print("Once again, I am victorious.")

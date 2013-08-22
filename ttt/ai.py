@@ -18,15 +18,15 @@ def randomPlayer(board):
     board[pos] = 'X'
 
 #'Pre-computed' neighborhood map
-NEIGHBORS = {0: [1, 3, 4],
-    1: [0, 4, 2],
-    2: [1, 4, 5],
-    3: [0, 4, 6],
-    4: [0, 1, 2, 3, 5, 6, 7, 8],
-    5: [2, 4, 8],
-    6: [3, 4, 7],
-    7: [6, 4, 8],
-    8: [7, 4, 5]}
+NEIGHBORS = {0: [[1, 4], [3, 6]],
+    1: [[0, 2], [4, 7]],
+    2: [[0, 1], [5, 8], [4, 6]],
+    3: [[0, 6], [4, 5]],
+    4: [[0, 8], [1, 7], [2, 6], [3, 5]],
+    5: [[2, 8], [3, 4]],
+    6: [[0, 3], [4, 2], [7, 8]],
+    7: [[6, 8], [1, 4]],
+    8: [[6, 7], [4, 0], [2, 5]]}
 
 
 def _scoreBoard(board):
@@ -36,27 +36,38 @@ def _scoreBoard(board):
     of winning the game should get the highest score.
 
     The heuristic is this:
+     +1 point for the top right corner (our preferred starting spot)
      +1 point if the cell is empty
      +1 point if the cell is a corner
-     +1 point if the cell is next to one of our marks
-     -1 point if the cell is next to an oppenent's mark
+     +55 points if we have a win situation
+     +50 points to block (we prefer a win so it is higher)
+     +5 points if there's a X in the neighborhood
+     -3 points if there is a mixture of X and O in the neighborhood
+
+     The last one is intended to prevent "low priority" cells from getting
+     the move (especially if there's a strategic move that would get missed).
     """
-    wp_SCORES = [0 for x in xrange(0, 9)]
-    wp_SCORES[4] = 10
+    wp_SCORES = [1] + [0 for x in xrange(0, 8)]
     for x in xrange(0, 9):
         cell = board[x]
         if cell is None:
             wp_SCORES[x] += 1
             #Check the neighbors
             neighbors = NEIGHBORS[x]
-            for y in neighbors:
-                if board[y] == 'X':
-                    wp_SCORES[x] += 2
-                if board[y] == 'O':
-                    wp_SCORES[x] += 1
+            for n in neighbors:
+                if board[n[0]] == board[n[1]] and board[n[0]] == 'X':
+                    wp_SCORES[x] += 55
+                if board[n[0]] == board[n[1]] and board[n[0]] == 'O':
+                    wp_SCORES[x] += 50
+                if board[n[0]] == 'X' or board[n[1]] == 'X':
+                    wp_SCORES[x] += 5
+                if board[n[1]] == 'X' and board[n[0]] == 'O':
+                    wp_SCORES[x] -= 3
+                if board[n[0]] == 'X' and board[n[1]] == 'O':
+                    wp_SCORES[x] -= 3
         #unoccupied coners get an extra point
         if cell is None and x in (0, 2, 6, 8):
-            wp_SCORES[x] += 2
+            wp_SCORES[x] += 1
     #Cleanup any mis-scored cells
     for x in xrange(0, 9):
         if board[x] is not None:
