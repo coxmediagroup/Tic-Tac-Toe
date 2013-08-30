@@ -41,11 +41,27 @@ def computerTurn(status, turn):
                 return status.replace('8', 'X')
             else:
                 return status.replace('3', 'X') + 'V'
-        elif status[8] is 'X':
-            pass
+        else:
+            if status[1] is 'O':
+                return status.replace('7', 'X')
+            elif status[2] is 'O':
+                return status.replace('6', 'X')
+            elif status[3] is 'O':
+                return status.replace('5', 'X')
+            elif status[5] is 'O':
+                return status.replace('3', 'X')
+            elif status[6] is 'O':
+                return status.replace('2', 'X')
+            else:
+                return status.replace('1', 'X')
 
     elif turn is 4:
-        if status[2] is 'X' and status[4] is 'X':
+        if status[1] is 'X' and status[8] is 'X':
+            if status[2] is 'O':
+                return status.replace('6', 'X')
+            else:
+                return status.replace('2', 'X') + 'V'
+        elif status[2] is 'X' and status[4] is 'X':
             if status[1] is 'O':
                 return status.replace('6', 'X') + 'V'
             else:
@@ -56,22 +72,73 @@ def computerTurn(status, turn):
             else:
                 return status.replace('3', 'X') + 'V'
         elif status[2] is 'X' and status[8] is 'X':
-            if status[5] is 'O':
-                return status.replace('4', 'X') + 'V'
+            if status[4] is 'O':
+                if status[1] is 'O':
+                    return status.replace('5', 'X') + 'V'
+                else:
+                    return status.replace('1', 'X') + 'V'
             else:
-                return status.replace('5', 'X') + 'V'
+                if status[5] is 'O':
+                    return status.replace('4', 'X') + 'V'
+                else:
+                    return status.replace('5', 'X') + 'V'
+        elif status[3] is 'X' and status[8] is 'X':
+            if status[6] is 'O':
+                return status.replace('2', 'X')
+            else:
+                return status.replace('6', 'X') + 'V'
         elif status[4] is 'X' and status[6] is 'X':
             if status[3] is 'O':
                 return status.replace('2', 'X') + 'V'
             else:
                 return status.replace('3', 'X') + 'V'
-        elif status[6] is 'X' and status[8] is 'X':
-            if status[7] is 'O':
-                return status.replace('4', 'X') + 'V'
+        elif status[5] is 'X' and status[8] is 'X':
+            if status[2] is 'O':
+                return status.replace('6', 'X')
             else:
-                return status.replace('7', 'X') + 'V'
+                return status.replace('2', 'X') + 'V'
+        elif status[6] is 'X' and status[8] is 'X':
+            if status[4] is 'O':
+                if status[3] is 'O':
+                    return status.replace('7', 'X') + 'V'
+                else:
+                    return status.replace('3', 'X') + 'V'
+            else:
+                if status[7] is 'O':
+                    return status.replace('4', 'X') + 'V'
+                else:
+                    return status.replace('7', 'X') + 'V'
+        elif status[7] is 'X' and status[8] is 'X':
+            if status[6] is 'O':
+                return status.replace('2', 'X')
+            else:
+                return status.replace('6', 'X') + 'V'
 
-    return status
+    else:
+        if status[1] is '1':
+            status = status.replace('1', 'X')
+            if status[0] is 'X' and status[2] is 'X':
+                return status + 'V'
+            else:
+                return status + 'T'
+        elif status[3] is '3':
+            status = status.replace('3', 'X')
+            if status[0] is 'X' and status[6] is 'X':
+                return status + 'V'
+            else:
+                return status + 'T'
+        elif status[5] is '5':
+            status = status.replace('5', 'X')
+            if status[2] is 'X' and status[8] is 'X':
+                return status + 'V'
+            else:
+                return status + 'T'
+        elif status[7] is '7':
+            status = status.replace('7', 'X')
+            if status[6] is 'X' and status[8] is 'X':
+                return status + 'V'
+            else:
+                return status + 'T'
 
 def userTurn(status):
     move = '?'
@@ -85,7 +152,13 @@ def userTurn(status):
     return status.replace(move, 'O')
 
 def testWinner(status):
-    return len(status) is 10
+    if len(status) is 10:
+        if status[9] is 'V':
+            print 'The computer is victorious!'
+        else:
+            print 'You managed to tie.'
+        return True
+    return False
 
 def main():
     status = '012345678'
@@ -101,7 +174,6 @@ availible space you wish to place your marker."""
         status = computerTurn(status, turn)
         printStatus(status)
         if testWinner(status):
-            print 'The computer is Victorious'
             break
 
         status = userTurn(status)
