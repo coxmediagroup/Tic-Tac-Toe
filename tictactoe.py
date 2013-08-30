@@ -1,3 +1,5 @@
+import time
+
 def printStatus(status):
     print '\n {} | {} | {}\n-----------\n {} | {} | {}\n-----------\n {} | {} | {}'.format(
         status[0], status[1], status[2],
@@ -169,16 +171,25 @@ Where the computer always wins!
 
 The rules are simple; simply type in the number of the
 availible space you wish to place your marker."""
-    printStatus(status)
     while True:
-        status = computerTurn(status, turn)
-        printStatus(status)
-        if testWinner(status):
-            break
+        action = raw_input("(N)ew Game, (Q)uit:\n")
+        if action is 'N' or action is 'n':
+            printStatus(status)
+            while True:
+                status = computerTurn(status, turn)
+                time.sleep(0.5)
+                printStatus(status)
+                if testWinner(status):
+                    break
 
-        status = userTurn(status)
-        printStatus(status)
-        turn += 1
+                status = userTurn(status)
+                printStatus(status)
+                turn += 1
+        elif action is 'Q' or action is 'q':
+            print 'Goodbye'
+            break
+        else:
+            print 'Invalid Command'
 
 if __name__ == "__main__":
     main()
