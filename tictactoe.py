@@ -166,7 +166,7 @@ def main():
     print """Welcome to Unfair Tic-Tac-Toe!
 Where the computer always wins!
 
-The rules are simple; simply type in the number of the
+The rules are easy; simply type in the number of the
 availible space you wish to place your marker."""
     while True:
         action = raw_input("(N)ew Game, (Q)uit:\n")
