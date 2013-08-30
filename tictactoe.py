@@ -59,9 +59,14 @@ class Grid:
              
     #basic randomly generated bot move
     def BotMove(self):
-        index = random.choice(self.moves)
+        #this is a strategy position, take it if empty
+        if 4 in self.moves:
+            self.squares[4] = '0'
+            index = 4
+        else:
+            index = random.choice(self.moves)
+            self.squares[index] = 'O'       
         print 'computer made a random move on square %s ' % index
-        self.squares[index] = 'O'       
         
     def AnalyzeBoard(self):
         #update available moves 
