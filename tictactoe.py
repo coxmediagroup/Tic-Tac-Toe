@@ -7,38 +7,40 @@ def printStatus(status):
 def computerTurn(status, turn):
     print "Computer's Turn"
     if turn is 1:
-        return status.replace('1', 'X')
+        return status.replace('0', 'X')
+
     elif turn is 2:
         if status[2] is 'O':
-            return status.replace('7', 'X')
+            return status.replace('6', 'X')
         elif status[4] is 'O':
-            return status.replace('9', 'X')
-        elif status[6] is 'O':
-            return status.replace('7', 'X')
-        elif status[8] is 'O':
-            return status.replace('3', 'X')
+            return status.replace('8', 'X')
+        elif status[6] is 'O' or status[8] is 'O':
+            return status.replace('2', 'X')
         else:
-            return status.replace('5', 'X')
+            return status.replace('4', 'X')
+
     elif turn is 3:
         if status[4] is 'X':
-            if status[8] is '9':
-                return status.replace('9', 'X') + 'V'
-            else:
+            if status[8] is 'O':
                 if status[1] is 'O' or status[7] is 'O':
-                    return status.replace('7', 'X')
+                    return status.replace('6', 'X')
                 elif status[3] is 'O' or status[5] is 'O':
-                    return status.replace('3', 'X')
+                    return status.replace('2', 'X')
+            else:
+                return status.replace('8', 'X') + 'V'
+
     elif turn is 4:
         if status[4] is 'X' and status[6] is 'X':
-            if status[3] is '4':
-                return status.replace('4', 'X') + 'V'
+            if status[3] is 'O':
+                return status.replace('2', 'X') + 'V'
             else:
                 return status.replace('3', 'X') + 'V'
         elif status[4] is 'X' and status[2] is 'X':
-            if status[1] is '2':
-                return status.replace('2', 'X') + 'V'
+            if status[1] is 'O':
+                return status.replace('6', 'X') + 'V'
             else:
-                return status.replace('7', 'X') + 'V'
+                return status.replace('1', 'X') + 'V'
+
     return status
 
 def userTurn(status):
@@ -56,7 +58,7 @@ def testWinner(status):
     return len(status) is 10
 
 def main():
-    status = '123456789'
+    status = '012345678'
     turn = 1
 
     print """Welcome to Unfair Tic-Tac-Toe!
