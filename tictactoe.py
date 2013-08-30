@@ -163,9 +163,6 @@ def testWinner(status):
     return False
 
 def main():
-    status = '012345678'
-    turn = 1
-
     print """Welcome to Unfair Tic-Tac-Toe!
 Where the computer always wins!
 
@@ -174,6 +171,8 @@ availible space you wish to place your marker."""
     while True:
         action = raw_input("(N)ew Game, (Q)uit:\n")
         if action is 'N' or action is 'n':
+            status = '012345678'
+            turn = 1
             printStatus(status)
             while True:
                 status = computerTurn(status, turn)
