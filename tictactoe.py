@@ -6,7 +6,14 @@ def printStatus(status):
 
 def computerTurn(status):
     print "Computer's Turn"
-    pass
+    if status == '123456789':
+        return 'X23456789'
+    elif status == 'XO3456789':
+        return 'XO34X6789'
+    elif status == 'XOO4X6789':
+        return 'XOO4X678XV'
+    else:
+        return status
 
 def userTurn(status):
     move = '?'
