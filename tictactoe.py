@@ -22,7 +22,10 @@ def computerTurn(status, turn):
     elif turn is 3:
         if status[2] is 'X':
             if status[1] is 'O':
-                pass
+                if status[6] is 'O':
+                    return status.replace('8', 'X')
+                else:
+                    return status.replace('6', 'X')
             else:
                 return status.replace('1', 'X') + 'V'
         elif status[4] is 'X':
@@ -35,23 +38,38 @@ def computerTurn(status, turn):
                 return status.replace('8', 'X') + 'V'
         elif status[6] is 'X':
             if status[3] is 'O':
-                pass
+                return status.replace('8', 'X')
             else:
                 return status.replace('3', 'X') + 'V'
         elif status[8] is 'X':
             pass
 
     elif turn is 4:
-        if status[4] is 'X' and status[6] is 'X':
-            if status[3] is 'O':
-                return status.replace('2', 'X') + 'V'
-            else:
-                return status.replace('3', 'X') + 'V'
-        elif status[4] is 'X' and status[2] is 'X':
+        if status[2] is 'X' and status[4] is 'X':
             if status[1] is 'O':
                 return status.replace('6', 'X') + 'V'
             else:
                 return status.replace('1', 'X') + 'V'
+        elif status[2] is 'X' and status[6] is 'X':
+            if status[3] is 'O':
+                return status.replace('4', 'X') + 'V'
+            else:
+                return status.replace('3', 'X') + 'V'
+        elif status[2] is 'X' and status[8] is 'X':
+            if status[5] is 'O':
+                return status.replace('4', 'X') + 'V'
+            else:
+                return status.replace('5', 'X') + 'V'
+        elif status[4] is 'X' and status[6] is 'X':
+            if status[3] is 'O':
+                return status.replace('2', 'X') + 'V'
+            else:
+                return status.replace('3', 'X') + 'V'
+        elif status[6] is 'X' and status[8] is 'X':
+            if status[7] is 'O':
+                return status.replace('4', 'X') + 'V'
+            else:
+                return status.replace('7', 'X') + 'V'
 
     return status
 
