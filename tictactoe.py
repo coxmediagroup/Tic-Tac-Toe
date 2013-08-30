@@ -42,7 +42,6 @@ class Grid:
         for item in row:
             #print 'current item is %s' % self.squares[item]
             if self.squares[item] == 'X':
-                #print 'i found an x'
                 count['player'] += 1
             if self.squares[item] == 'O':
                 count['bot'] += 1
@@ -71,7 +70,6 @@ class Grid:
         computer_moved = False
         for row in rows:
             count = self.CheckRow(row)
-            #print count['player']
             if(count['player'] == 3):
                 self.ShowBoard();
                 print 'You have won!'
