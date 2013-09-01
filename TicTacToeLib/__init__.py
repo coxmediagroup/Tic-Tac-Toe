@@ -28,3 +28,8 @@ class Board(object):
         
     def getGameBoard(self):
         return self.__gameboard
+    
+    def __isValidMove(self,pos):
+        return self.__gameboard[pos] == BLANK
+    
+

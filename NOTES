@@ -2,3 +2,6 @@ I moved my changes into a branch named new/game.
 
 For the AI I am using an algorithm described here:
 http://www.chessandpoker.com/tic_tac_toe_strategy.html
+
+Using Python 2.7
+
