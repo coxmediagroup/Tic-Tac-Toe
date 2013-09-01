@@ -9,31 +9,44 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board=TicTacToeLib.Board()
         self.player=TicTacToeLib.Player('X')
 
-    def testGetBoard(self):
+    # Board.getGameBoard()
+    def testGetGameBoard(self):
         self.assertEqual(self.blanktestboard, self.board.getGameBoard())
         
-    def testGetBoardFalse(self):
+    def testGetGameBoardFalse(self):
         self.blanktestboard[0]='X'
         self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
-        
+    
+    # Board.__isValidMove    
     def testIsValidMove(self):
         # ugly but I don't need this exposed
         self.assertTrue(self.board._Board__isValidMove(0))
 
     def testIsValidMoveFalse(self):
         # ugly but I don't need this exposed
-        #self.board._Board__gameboard[0]='X'
-        self.board.move(self.player,0)
+        self.board._Board__gameboard[0]='X'
+        # self.board.move(self.player,0)
         self.assertFalse(self.board._Board__isValidMove(0))
-        
+    
+    # Board.move()     
     def testMove(self):
-        self.blanktestboard[0]='X'
         self.assertTrue(self.board.move(self.player,0))
         
-    def testMoveMade(self):
+    def testMoveFalse(self):
+        self.board._Board__gameboard[0]='X'
+        self.assertFalse(self.board.move(self.player,0))
+    
+    # Board.move() + Board.getGameBoard()    
+    def testMoveMadeNE(self):
         self.board.move(self.player,0)
-        self.assertNotEqual(self.blanktestboard, self.board.getGameBoard()) 
+        self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
         
+    def testMoveMadeEQ(self):
+        self.blanktestboard[0] = 'X'
+        self.board.move(self.player,0)
+        self.assertEqual(self.blanktestboard, self.board.getGameBoard()) 
+    
+    #Player.__init__() tests    
     def testPlayer(self):
         self.assertTrue(self.player.piece == 'X')
     
