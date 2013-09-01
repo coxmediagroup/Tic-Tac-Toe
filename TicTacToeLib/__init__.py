@@ -37,6 +37,8 @@ class Board(object):
         if valid: self.__gameboard[pos] = player.piece
         return valid
     
+    def isBoardFull(self):
+        return BLANK not in self.__gameboard
 
 class Player(object):
     def __init__(self, piece):
