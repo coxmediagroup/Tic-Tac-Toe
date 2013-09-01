@@ -33,3 +33,6 @@ class Board(object):
         return self.__gameboard[pos] == BLANK
     
 
+class Player(object):
+    def __init__(self, piece):
+        self.piece = piece
