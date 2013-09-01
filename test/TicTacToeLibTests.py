@@ -20,7 +20,6 @@ class TicTacToeLibTests(unittest.TestCase):
         # ugly but I don't need this exposed
         self.assertTrue(self.board._Board__isValidMove(0))
 
-    # TODO Need to add a Board.move() to make the next test cleaner 
     def testIsValidMoveFalse(self):
         # ugly but I don't need this exposed
         #self.board._Board__gameboard[0]='X'

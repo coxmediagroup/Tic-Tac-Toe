@@ -32,6 +32,11 @@ class Board(object):
     def __isValidMove(self,pos):
         return self.__gameboard[pos] == BLANK
     
+    def move(self,player,pos):
+        valid = self.__isValidMove(pos)
+        if valid: self.__gameboard[pos] = player.piece
+        return valid
+    
 
 class Player(object):
     def __init__(self, piece):
