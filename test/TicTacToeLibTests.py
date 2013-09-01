@@ -46,12 +46,60 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,0)
         self.assertEqual(self.blanktestboard, self.board.getGameBoard()) 
     
-    #Player.__init__() tests    
+    #Player.__init__()    
     def testPlayer(self):
         self.assertTrue(self.player.piece == 'X')
     
     def testPlayerFalse(self):
         self.assertFalse(self.player.piece != 'X')
+        
+    #Board.isBoardFull()
+    def testIsBoardFullEmptyBoard(self):
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullOneMove(self):
+        self.board.move(self.player,0)
+        self.assertFalse(self.board.isBoardFull())
+        
+    def testIsBoardFullTwoMoves(self):
+        for i in range(2):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullThreeMoves(self):
+        for i in range(3):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullFourMove(self):
+        for i in range(4):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullFiveMoves(self):
+        for i in range(5):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullSixMoves(self):
+        for i in range(6):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullSevenMoves(self):
+        for i in range(7):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullEightMoves(self):
+        for i in range(8):
+            self.board.move(self.player,i)
+        self.assertFalse(self.board.isBoardFull())
+
+    def testIsBoardFullNineMoves(self):
+        for i in range(9):
+            self.board.move(self.player,i)
+        self.assertTrue(self.board.isBoardFull())
 
 
 if __name__ == "__main__":
