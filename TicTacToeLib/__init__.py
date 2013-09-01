@@ -13,18 +13,24 @@
      corners = [0,2,6,8]
      edges = [1,3,5,7]
      center = [4]
-     winning lines horizontal = [0,1,2], [3,4,5], [6,7,8]
+     winning lines horizontal = [0,1,2], [3,4,5], [6,7,8] 
      winning lines vertical = [0,3,6], [1,4,7], [2,5,8]
      winning lines diagonal = [0,4,8], [2,4,6] 
+     
+     the winning lines map out to slices:
+     horizontal=[0:3:1],[3:6:1],[6:9:1]
+     vertical=[0:7:3],[1:8:3],[2:9:3]
+     diagonal=[0:9:4],[2:7:2]
 '''
-GAME_BOARD_SIZE = 3*3
+GAME_BOARD_WIDTH = 3
+GAME_BOARD_SQUARE_SIZE = GAME_BOARD_WIDTH*GAME_BOARD_WIDTH
 BLANK = ''
-
+WINNING_LINE_SLICES = [[0,3,1]]
 # TODO Is naming clear?
 class Board(object):
     def __init__(self):
         # Create an empty board        
-        self.__gameboard = [BLANK] * (GAME_BOARD_SIZE)
+        self.__gameboard = [BLANK] * (GAME_BOARD_SQUARE_SIZE)
         
     def getGameBoard(self):
         return self.__gameboard
@@ -39,6 +45,17 @@ class Board(object):
     
     def isBoardFull(self):
         return BLANK not in self.__gameboard
+    
+    def isWinner(self, player):
+        # get the sliced list and see if count matches
+        for first,last,step in WINNING_LINE_SLICES:
+            line = self.__gameboard[first:last:step]
+            if line.count(player.piece) == GAME_BOARD_WIDTH:
+                return True
+            
+        return False
+            
+            
 
 class Player(object):
     def __init__(self, piece):

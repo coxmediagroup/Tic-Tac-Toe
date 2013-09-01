@@ -5,7 +5,7 @@ import TicTacToeLib
 class TicTacToeLibTests(unittest.TestCase):
 
     def setUp(self):
-        self.blanktestboard=[TicTacToeLib.BLANK]*TicTacToeLib.GAME_BOARD_SIZE
+        self.blanktestboard=[TicTacToeLib.BLANK]*TicTacToeLib.GAME_BOARD_SQUARE_SIZE
         self.board=TicTacToeLib.Board()
         self.player=TicTacToeLib.Player('X')
         self.player2=TicTacToeLib.Player('O')
@@ -112,7 +112,7 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertTrue(self.board.isWinner(self.player))
     
     #  | |     
-    def testIsWinnerFalseCaseOneFalseBlank(self):
+    def testIsWinnerFalseCaseOneBlank(self):
         self.assertFalse(self.board.isWinner(self.player))
     
     # O != X|X|X    
@@ -123,10 +123,17 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertFalse(self.board.isWinner(self.player2))
     
     # X != O|X|X
-    def testIsWinnerFalseCaseOneBlocked(self):
+    def testIsWinnerFalseCaseOneTwoPieces(self):
         self.board.move(self.player2,0)
         self.board.move(self.player,1)
         self.board.move(self.player,2)
+        self.assertFalse(self.board.isWinner(self.player))
+        
+    # X != O|X|O
+    def testIsWinnerFalseCaseOneSinglePiece(self):
+        self.board.move(self.player2,0)
+        self.board.move(self.player,1)
+        self.board.move(self.player2,2)
         self.assertFalse(self.board.isWinner(self.player))
         
         
