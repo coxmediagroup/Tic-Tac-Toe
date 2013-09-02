@@ -17,7 +17,6 @@ class TicTacToe(object):
             (0, 4, 8), # diagonals
             (2, 4, 6))
 
-
     def newGame(self):
         ''' Set up All Of The Things '''
         self.board = [None, None, None,
@@ -32,6 +31,7 @@ class TicTacToe(object):
 
     def newMove(self, player, position):
         self.board[position] = player
+        self.turn += 1
         self.drawBoard()
         self.checkForWin(player)
 
@@ -53,7 +53,6 @@ class TicTacToe(object):
         if None not in self.board and self.winner is None:
             self.winner = False
             self.isGameOver = True
-
 
 
     def humanMove(self, player):
@@ -95,12 +94,14 @@ class TicTacToe(object):
             if position == 2 or position == 5:
                 print '-' * 5
 
+        print '\n'
 
 
-class zorgAI():
 
-    def __init__(self, ttt):
-        self.ttt = ttt
+class zorgAI(TicTacToe):
+    # def __init__(self, ttt):
+    #     self = ttt
+
 
     def lookForWin(self, player):
         # Original by jmichalicek
@@ -108,11 +109,11 @@ class zorgAI():
 
         win_spot = None
         
-        for group in self.ttt.wins:
+        for group in self.wins:
             # creates a list of just the elements of the board which are
             # part of a specific win group and and not already owned by the player
             # and creates a list of tuples of the element and its value.
-            not_mine = [(i, val) for i, val in enumerate(self.ttt.board)
+            not_mine = [(i, val) for i, val in enumerate(self.board)
                         if i in group
                         and val != player]
 
@@ -126,11 +127,13 @@ class zorgAI():
 
         return win_spot
 
+
     def makeMove(self):
 
-        if self.ttt.turn is 1:
-            self.ttt.newMove('X', 0)
-            return self.ttt.board
+        ''' Make the first move, top left corner. '''
+        if self.turn is 1:
+            self.newMove('X', 0)
+            return self.board
 
         else:
 
@@ -138,210 +141,37 @@ class zorgAI():
             winningMove = self.lookForWin('X')
 
             if winningMove is not None:
-                self.ttt.newMove('X', winningMove)
-                return self.ttt.board
+                self.newMove('X', winningMove)
+                return self.board
 
 
             # Don't let the oponent win, ever.
             blockMove = self.lookForWin('O')
             
             if blockMove is not None:
-                self.ttt.newMove('X', blockMove)
-                return self.ttt.board
+                self.newMove('X', blockMove)
+                return self.board
 
 
             # Otherwise we're free to play a strategy.
-            if self.ttt.board[4] is None:
-                self.ttt.newMove('X', 4)
-            elif self.ttt.board[8] is None:
-                self.ttt.newMove('X', 8)
 
-            else: # Just go anywhere, we're here to stop them from winning.
-                for move, value in enumerate(self.ttt.board):
-                    if move is None:
-                        self.ttt.newMove('X', value)
+            return self.reallySimpleStrategy()
+            
 
+    def reallySimpleStrategy(self):
 
+        ''' Try for the diagnoal. '''
+        if self.board[4] is None:
+                self.newMove('X', 4)
+                return self.board
 
-def computerTurn(status, turn):
-    print "Zorg's Turn"
+        elif self.board[8] is None:
+            self.newMove('X', 8)
+            return self.board
 
+        else: # Just go anywhere, we're here to stop them from winning.
+            for key, value in enumerate(self.board):
+                if value is None:
+                    self.newMove('X', key)
+                    return self.board
 
-    if turn is 1:
-        status[0] = 'X'
-        return status
-
-    elif turn is 2:
-        if status[2] is 'O':
-            status[6] = 'X'
-            return status
-        elif status[4] is 'O':
-            status[8] = 'X'
-            return status
-        elif status[6] is 'O' or status[8] is 'O':
-            status[2] = 'X'
-            return status
-        else:
-            status[4] = 'X'
-            return status
-
-    elif turn is 3:
-        if status[2] is 'X':
-            if status[1] is 'O':
-                if status[6] is 'O':
-                    status[8] = 'X'
-                    return status
-                else:
-                    status[6] = 'X'
-                    return status
-            else:
-                status[1] = 'X' + 'V'
-                return status
-        elif status[4] is 'X':
-            if status[8] is 'O':
-                if status[1] is 'O' or status[7] is 'O':
-                    status[6] = 'X'
-                    return status
-                elif status[3] is 'O' or status[5] is 'O':
-                    status[2] = 'X'
-                    return status
-            else:
-                status[8] = 'X' + 'V'
-                return status
-        elif status[6] is 'X':
-            if status[3] is 'O':
-                status[8] = 'X'
-                return status
-            else:
-                status[3] = 'X' + 'V'
-                return status
-        else:
-            if status[1] is 'O':
-                status[7] = 'X'
-                return status
-            elif status[2] is 'O':
-                status[6] = 'X'
-                return status
-            elif status[3] is 'O':
-                status[5] = 'X'
-                return status
-            elif status[5] is 'O':
-                status[3] = 'X'
-                return status
-            elif status[6] is 'O':
-                status[2] = 'X'
-                return status
-            else:
-                status[1] = 'X'
-                return status
-
-    elif turn is 4:
-        if status[1] is 'X' and status[8] is 'X':
-            if status[2] is 'O':
-                status[6] = 'X'
-                return status
-            else:
-                status[2] = 'X' + 'V'
-                return status
-        elif status[2] is 'X' and status[4] is 'X':
-            if status[1] is 'O':
-                status[6] = 'X' + 'V'
-                return status
-            else:
-                status[1] = 'X' + 'V'
-                return status
-        elif status[2] is 'X' and status[6] is 'X':
-            if status[3] is 'O':
-                status[4] = 'X' + 'V'
-                return status
-            else:
-                status[3] = 'X' + 'V'
-                return status
-        elif status[2] is 'X' and status[8] is 'X':
-            if status[4] is 'O':
-                if status[1] is 'O':
-                    status[5] = 'X' + 'V'
-                    return status
-                else:
-                    status[1] = 'X' + 'V'
-                    return status
-            else:
-                if status[5] is 'O':
-                    status[4] = 'X' + 'V'
-                    return status
-                else:
-                    status[5] = 'X' + 'V'
-                    return status
-        elif status[3] is 'X' and status[8] is 'X':
-            if status[6] is 'O':
-                status[2] = 'X'
-                return status
-            else:
-                status[6] = 'X' + 'V'
-                return status
-        elif status[4] is 'X' and status[6] is 'X':
-            if status[3] is 'O':
-                status[2] = 'X' + 'V'
-                return status
-            else:
-                status[3] = 'X' + 'V'
-                return status
-        elif status[5] is 'X' and status[8] is 'X':
-            if status[2] is 'O':
-                status[6] = 'X'
-                return status
-            else:
-                status[2] = 'X' + 'V'
-                return status
-        elif status[6] is 'X' and status[8] is 'X':
-            if status[4] is 'O':
-                if status[3] is 'O':
-                    status[7] = 'X' + 'V'
-                    return status
-                else:
-                    status[3] = 'X' + 'V'
-                    return status
-            else:
-                if status[7] is 'O':
-                    status[4] = 'X' + 'V'
-                    return status
-                else:
-                    status[7] = 'X' + 'V'
-                    return status
-        elif status[7] is 'X' and status[8] is 'X':
-            if status[6] is 'O':
-                status[2] = 'X'
-                return status
-            else:
-                status[6] = 'X' + 'V'
-                return status
-
-    else:
-        if status[1] is '1':
-            atus = status[1] = 'X'
-            return status
-            if status[0] is 'X' and status[2] is 'X':
-                return status + 'V'
-            else:
-                return status + 'T'
-        elif status[3] is '3':
-            atus = status[3] = 'X'
-            return status
-            if status[0] is 'X' and status[6] is 'X':
-                return status + 'V'
-            else:
-                return status + 'T'
-        elif status[5] is '5':
-            atus = status[5] = 'X'
-            return status
-            if status[2] is 'X' and status[8] is 'X':
-                return status + 'V'
-            else:
-                return status + 'T'
-        elif status[7] is '7':
-            atus = status[7] = 'X'
-            return status
-            if status[6] is 'X' and status[8] is 'X':
-                return status + 'V'
-            else:
-                return status + 'T'

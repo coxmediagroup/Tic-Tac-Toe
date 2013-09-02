@@ -1,47 +1,52 @@
-from ai import computerTurn, TicTacToe, zorgAI
-
-def playNewGame():
-    ttt = TicTacToe()
-    ttt.newGame()
-
-    while True:
-        ttt.board = computerTurn(ttt.board, ttt.turn)
-        ttt.drawBoard()
-        if ttt.isGameOver():
-            break
-        ttt.humanMove()
-        ttt.turn += 1
-
+from ai import TicTacToe, zorgAI
 
 def playZorg():
-    ttt = TicTacToe()
-    ttt.newGame()
 
-    zorg = zorgAI(ttt)
+    zorg = zorgAI()
+    zorg.newGame()
 
     while True:
         zorg.makeMove()
-        ttt.drawBoard()
-        if ttt.isGameOver:
+        zorg.drawBoard()
+        if zorg.isGameOver:
             break
-        ttt.humanMove('O')
-        ttt.turn += 1
+        zorg.humanMove('O')
 
-    if ttt.winner:
-        print ttt.winner + ' has won!'
-
+    if zorg.winner:
+        print zorg.winner + ' has won!'
     else:
         print 'Tie game!'
 
+def playMultiplayer():
+    ttt = TicTacToe()
+    ttt.newGame()
+
+    while True:
+        print 'Player X may move'
+        ttt.humanMove('X')
+        if ttt.isGameOver:
+            break
+
+        print 'Player O may move'
+        ttt.humanMove('O')
+        if ttt.isGameOver:
+            break
+
+    if ttt.winner:
+        print ttt.winner + ' has won!'
+    else:
+        print 'Tie game!'
 
 def main():
     print """Welcome to Tic-Tac-Toe!"""
 
     while True:
-        action = raw_input("(N)ew Game, (Q)uit:\n")
-        if action is 'N' or action is 'n':
+        action = raw_input("Play (Z)org AI, Play (M)ultiplayer, (Q)uit:\n")
+        if action is 'Z' or action is 'z':
             # playNewGame()
             playZorg()
+        elif action is 'M' or action is 'm':
+            playMultiplayer()
         elif action is 'Q' or action is 'q':
             print 'Goodbye'
             break
