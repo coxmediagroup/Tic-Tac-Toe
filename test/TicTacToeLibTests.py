@@ -20,13 +20,16 @@ def checkIsBoardFull(numberOfMoves):
         board.move(player,i)
     return board.isBoardFull()
 
-def checkIsWinnerTrue(move_list):
+def checkIsWinnerVaildLine(move_list,isPlayerX=True):
     board=TicTacToeLib.Board()
     player=TicTacToeLib.Player('X')
+    player2=TicTacToeLib.Player('O')
     for i in move_list:
         board.move(player,i)
-    return board.isWinner(player)
-    
+    if isPlayerX:
+        return board.isWinner(player)
+    else:
+        return board.isWinner(player2)
 
 # any tests built with this class will have a test_ prefix
 class DynamicTestMaker(type):
@@ -49,10 +52,12 @@ class DynamicTestMaker(type):
                     testable = lambda self, func=method,arg=checkIsBoardFull(index): func(self,arg)
                     testable.__name__ = testable_name
                     attrs[testable_name] = testable
-            if method_name == '_test_IsWinnerTrue':
+            if ( method_name == '_test_IsWinnerTrue' or 
+                method_name == '_test_IsWinnerWrongPlayerFalse'):
                 for index, item in enumerate(WIN_LIST):
-                    testable_name = 'test{0}{1}'.format(testname,item[0])                        
-                    testable = lambda self, func=method,arg=checkIsWinnerTrue(item[1]): func(self,arg)
+                    testable_name = 'test{0}{1}'.format(testname,item[0])
+                    param = True if method_name=='_test_IsWinnerTrue' else False                        
+                    testable = lambda self, func=method,arg=checkIsWinnerVaildLine(item[1],param): func(self,arg)
                     testable.__name__ = testable_name
                     attrs[testable_name] = testable
 
@@ -132,12 +137,9 @@ class TicTacToeLibTests(unittest.TestCase):
     def _test_IsWinnerTrue(self,arg):
         self.assertTrue(arg)
 
-    # O != X|X|X    
-    def testIsWinnerFalseCaseOneWrongPlayer(self):
-        self.board.move(self.player,0)
-        self.board.move(self.player,1)
-        self.board.move(self.player,2)
-        self.assertFalse(self.board.isWinner(self.player2))
+    # O != X|X|X
+    def _test_IsWinnerWrongPlayerFalse(self, arg):
+        self.assertFalse(arg)
         
     # X != X| |O
     def testIsWinnerOneBlankOnePieceFalse(self):
