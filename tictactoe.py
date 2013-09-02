@@ -2,6 +2,9 @@ from ai import TicTacToe, zorgAI
 
 def playZorg(player1=True):
 
+    ''' play a game against the Zorg TicTacToe engine. '''
+    ''' We'll assume we get to move first, as player1 '''
+
     zorg = zorgAI()
     zorg.newGame()
 
@@ -31,9 +34,13 @@ def playZorg(player1=True):
     if zorg.winner:
         print zorg.winner + ' has won!'
     else:
-        print 'Tie game!'
+        print 'Zorg has not lost the game!'
+
 
 def playMultiplayer():
+
+    ''' Let the humans duke it out against each other. '''
+
     ttt = TicTacToe()
     ttt.newGame()
 
@@ -59,22 +66,26 @@ def main():
     print """Welcome to Tic-Tac-Toe!"""
 
     while True:
-        action = raw_input("Play (Z)org AI, (M)ultiplayer, or (Q)uit: ")
-        if action is 'Z' or action is 'z':
-            action = raw_input("Do you want to Move (1)st or (2)nd? ")
-            # playNewGame()
-            if action is '1':
+
+        action = raw_input("Who would you like to play? \n (Z)org AI,\n (H)uman Player, or \n (Q)uit: \n")
+        
+        if action.lower() == 'z':
+            action = raw_input("Do you want to Move 1st (y/n)? ")
+            
+            if action.lower()[:1] == 'y':
                 playZorg(False)
             else:
                 playZorg()
 
-        elif action is 'M' or action is 'm':
+        elif action.lower() == 'h':
             playMultiplayer()
-        elif action is 'Q' or action is 'q':
+
+        elif action.lower() == 'q':
             print 'Goodbye'
             break
+
         else:
-            print 'Invalid Command'
+            print 'I don\'t understand what you\'re trying to say. Options are Z, M, Q.'
 
 if __name__ == "__main__":
     main()

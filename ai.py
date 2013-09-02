@@ -18,6 +18,7 @@ class TicTacToe(object):
             (2, 4, 6))
 
     def newGame(self):
+
         ''' Set up All Of The Things '''
         self.board = [None, None, None,
                       None, None, None,
@@ -30,6 +31,7 @@ class TicTacToe(object):
 
 
     def newMove(self, player, position):
+
         self.board[position] = player
         self.turn += 1
         self.drawBoard()
@@ -37,6 +39,7 @@ class TicTacToe(object):
 
 
     def checkForWin(self, player):
+
         ''' Read the board and check to see if the game is over. '''
         # original by jmichalicek
         for group in self.wins:
@@ -56,10 +59,11 @@ class TicTacToe(object):
 
 
     def humanMove(self, player):
+
         # original by mindbane
         move = '?'
         while True:
-            move = raw_input("Select Move:\n")
+            move = raw_input("Choose your move:\n")
 
             try:
                 move = int(move)
@@ -75,8 +79,8 @@ class TicTacToe(object):
 
 
     def drawBoard(self):
+
         # original by jmichalicek
-        
         """Draw the game board on screen"""
         # ANSI code to clear the screen
         print chr(27) + "[2J"
@@ -99,11 +103,9 @@ class TicTacToe(object):
 
 
 class zorgAI(TicTacToe):
-    # def __init__(self, ttt):
-    #     self = ttt
-
 
     def lookForWin(self, player):
+
         # Original by jmichalicek
         """Find a space which allows a win for the given player"""
 
@@ -144,7 +146,6 @@ class zorgAI(TicTacToe):
                 self.newMove('X', winningMove)
                 return self.board
 
-
             # Don't let the oponent win, ever.
             blockMove = self.lookForWin('O')
             
@@ -152,31 +153,28 @@ class zorgAI(TicTacToe):
                 self.newMove('X', blockMove)
                 return self.board
 
-
-            # Otherwise we're free to play a strategy.
-
+            # Otherwise we're free to play a more interesting strategy.
             return self.reallySimpleStrategy()
             
 
     def reallySimpleStrategy(self):
-
 
         if self.turn == 4:
             # The meatbag must have moved first.
             # Check to make sure they're not going to beat us with sneaky tricks.
             if (self.board[0] == 'O' and self.board[8] == 'O') or (self.board[2] == 'O' and self.board[6] == 'O'): 
                 self.newMove('X', 1)
+                return self.board
 
         elif self.board[4] is None:
-                self.newMove('X', 4)
-                return self.board
+            self.newMove('X', 4)
+            return self.board
 
         elif self.board[8] is None:
             self.newMove('X', 8)
             return self.board
 
-        
-        else: # Just go anywhere, we're here to stop them from winning.
+        else: # Just go anywhere, we're here to stop them from winning, remember?
             for key, value in enumerate(self.board):
                 if value is None:
                     self.newMove('X', key)
