@@ -1,5 +1,7 @@
 Intructions:
 1. Fork this repo on GitHub
+   WW> "this" repo seemed ambiguous enough, so I cloned a fork and started with some code. I chose mindbane's fork, (https://github.com/coxmediagroup/Tic-Tac-Toe/pull/113), because it was a) the most recent pull request and b) it was an extremely simple solve compared to some of the pulls here. A simple command line game was exactly what I was thinking, so when I saw one at the top of the pull request stack, I couldn't resist standing on the shoulers of someone else's work... which is mostly what we do as software folks, anyways. 
+
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
 3. Commit early and often, with good messages.
 4. Push your code back to GitHub and send us a pull request.
