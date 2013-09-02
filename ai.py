@@ -1,5 +1,40 @@
+
+class TicTacToe(object):
+    def __init__(self,input):
+        self.newGame()
+
+    def newGame(self):
+        self.board = '012345678'
+        self.winner = None
+        self.turn = 1
+
+    def newMove(self, player, position):
+        self.board.replace(position, player)
+
+    def isGameOver(self):
+        if self.Winner is None:
+            return False
+
+        return True
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 def computerTurn(status, turn):
-    print "Computer's Turn"
+    print "Zorg's Turn"
+
+
     if turn is 1:
         return status.replace('0', 'X')
 

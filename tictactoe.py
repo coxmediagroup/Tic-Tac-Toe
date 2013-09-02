@@ -29,8 +29,6 @@ def userTurn(status):
     return status.replace(move, 'O')
 
 
-
-
 def playNewGame():
     status = '012345678'
     turn = 1
@@ -60,6 +58,7 @@ def main():
             break
         else:
             print 'Invalid Command'
+
 
 if __name__ == "__main__":
     main()
