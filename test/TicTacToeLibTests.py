@@ -1,8 +1,43 @@
 import unittest
 import TicTacToeLib
 
+number_list = ['EmptyBoard', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight']
+
+def checkIsBoardFull(numberOfMoves):
+    board=TicTacToeLib.Board()
+    player=TicTacToeLib.Player('X')
+    for i in range(numberOfMoves):
+        board.move(player,i)
+    return board.isBoardFull()
+
+# any tests built with this class will have a test_ prefix
+class DynamicTestMaker(type):
+
+    def __new__(cls, name, bases, attrs):
+        callables = dict([
+            (method_name, method) for (method_name, method) in attrs.items() if
+            method_name.startswith('_test')
+        ])
+
+        for method_name, method in callables.items():
+            assert callable(method)
+            _, _, testname = method_name.partition('_test')
+            
+            if method_name == '_test_IsBoardFull':
+                for index, item in enumerate(number_list):
+                    testable_name = 'test{0}{1}'.format(testname,item)
+                    if index > 0:
+                        testable_name = 'test{0}{1}Moves'.format(testname,item)                        
+                    testable = lambda self, func=method,arg=checkIsBoardFull(index): func(self,arg)
+                    testable.__name__ = testable_name
+                    attrs[testable_name] = testable
+
+        return type.__new__(cls, name, bases, attrs)
+
 
 class TicTacToeLibTests(unittest.TestCase):
+    __metaclass__ = DynamicTestMaker
+
 
     def setUp(self):
         self.blanktestboard=[TicTacToeLib.BLANK]*TicTacToeLib.GAME_BOARD_SQUARE_SIZE
@@ -55,54 +90,19 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertFalse(self.player.piece != 'X')
         
     #Board.isBoardFull()
-    def testIsBoardFullEmptyBoard(self):
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullOneMove(self):
-        self.board.move(self.player,0)
-        self.assertFalse(self.board.isBoardFull())
-        
-    def testIsBoardFullTwoMoves(self):
-        for i in range(2):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullThreeMoves(self):
-        for i in range(3):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullFourMove(self):
-        for i in range(4):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullFiveMoves(self):
-        for i in range(5):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullSixMoves(self):
-        for i in range(6):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullSevenMoves(self):
-        for i in range(7):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
-    def testIsBoardFullEightMoves(self):
-        for i in range(8):
-            self.board.move(self.player,i)
-        self.assertFalse(self.board.isBoardFull())
-
     def testIsBoardFullNineMoves(self):
         for i in range(9):
             self.board.move(self.player,i)
         self.assertTrue(self.board.isBoardFull())
+    
+    def _test_IsBoardFull(self, arg):
+        self.assertFalse(arg)
         
     # Board.isWinner()
+    #  | |     
+    def testIsWinnerBlankFalse(self):
+        self.assertFalse(self.board.isWinner(self.player))
+    
     # Case one = top horizontal line [0,1,2]
     # X|X|X
     def testIsWinnerTrueCaseOneTrue(self):
@@ -111,8 +111,10 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,2)
         self.assertTrue(self.board.isWinner(self.player))
     
-    #  | |     
-    def testIsWinnerFalseCaseOneBlank(self):
+    # X| |O
+    def testIsWinnerOneBlankOnePieceFalse(self):
+        self.board.move(self.player,0)
+        self.board.move(self.player,2)
         self.assertFalse(self.board.isWinner(self.player))
     
     # O != X|X|X    
