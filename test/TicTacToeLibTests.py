@@ -16,15 +16,15 @@ WIN_LIST =  [
 
 def checkIsBoardFull(numberOfMoves):
     board=TicTacToeLib.Board()
-    player=TicTacToeLib.Player('X')
+    player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
     for i in range(numberOfMoves):
         board.move(player,i)
     return board.isBoardFull()
 
 def checkIsWinnerVaildLine(move_list,isPlayerX=True):
     board=TicTacToeLib.Board()
-    player=TicTacToeLib.Player('X')
-    player2=TicTacToeLib.Player('O')
+    player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
+    player2=TicTacToeLib.Player(TicTacToeLib.PIECE_O)
     for i in move_list:
         board.move(player,i)
     if isPlayerX:
@@ -34,8 +34,8 @@ def checkIsWinnerVaildLine(move_list,isPlayerX=True):
     
 def checkIsWinnerFalse(move_list,x,o):
     board=TicTacToeLib.Board()
-    player=TicTacToeLib.Player('X')
-    player2=TicTacToeLib.Player('O')
+    player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
+    player2=TicTacToeLib.Player(TicTacToeLib.PIECE_O)
     shuffle(move_list)
     
     pos = 0
@@ -106,15 +106,15 @@ class TicTacToeLibTests(unittest.TestCase):
     def setUp(self):
         self.blanktestboard=[TicTacToeLib.BLANK]*TicTacToeLib.GAME_BOARD_SQUARE_SIZE
         self.board=TicTacToeLib.Board()
-        self.player=TicTacToeLib.Player('X')
-        self.player2=TicTacToeLib.Player('O')
+        self.player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
+        self.player2=TicTacToeLib.Player(TicTacToeLib.PIECE_O)
 
     # Board.getGameBoard()
     def testGetGameBoard(self):
         self.assertEqual(self.blanktestboard, self.board.getGameBoard())
         
     def testGetGameBoardFalse(self):
-        self.blanktestboard[0]='X'
+        self.blanktestboard[0]=TicTacToeLib.PIECE_X
         self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
     
     # Board.__isValidMove    
@@ -124,7 +124,7 @@ class TicTacToeLibTests(unittest.TestCase):
 
     def testIsValidMoveFalse(self):
         # ugly but I don't need this exposed
-        self.board._Board__gameboard[0]='X'
+        self.board._Board__gameboard[0]=TicTacToeLib.PIECE_X
         # self.board.move(self.player,0)
         self.assertFalse(self.board._Board__isValidMove(0))
     
@@ -133,7 +133,7 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertTrue(self.board.move(self.player,0))
         
     def testMoveFalse(self):
-        self.board._Board__gameboard[0]='X'
+        self.board._Board__gameboard[0]=TicTacToeLib.PIECE_X
         self.assertFalse(self.board.move(self.player,0))
     
     # Board.move() + Board.getGameBoard()    
@@ -142,22 +142,20 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
         
     def testMoveMadeEQ(self):
-        self.blanktestboard[0] = 'X'
+        self.blanktestboard[0] = TicTacToeLib.PIECE_X
         self.board.move(self.player,0)
         self.assertEqual(self.blanktestboard, self.board.getGameBoard()) 
     
     #Player.__init__()    
     def testPlayer(self):
-        self.assertTrue(self.player.piece == 'X')
+        self.assertTrue(self.player.piece == TicTacToeLib.PIECE_X)
     
     def testPlayerFalse(self):
-        self.assertFalse(self.player.piece != 'X')
+        self.assertFalse(self.player.piece != TicTacToeLib.PIECE_X)
         
     #Board.isBoardFull()
     def testIsBoardFullNineMoves(self):
-        for i in range(9):
-            self.board.move(self.player,i)
-        self.assertTrue(self.board.isBoardFull())
+        self.assertTrue(checkIsBoardFull(9))
     
     def _test_IsBoardFull(self, arg):
         self.assertFalse(arg)
@@ -204,29 +202,7 @@ class TicTacToeLibTests(unittest.TestCase):
     def _test_IsWinnerFalseB2_X0_O1(self, arg):
         self.assertFalse(arg)
     
-        
-    # X != X| |O
-    def testIsWinnerOneBlankOnePieceFalse(self):
-        self.board.move(self.player,0)
-        self.board.move(self.player2,2)
-        self.assertFalse(self.board.isWinner(self.player))
-        
-    # X != O|X|X
-    def testIsWinnerFalseCaseOneTwoPieces(self):
-        self.board.move(self.player2,0)
-        self.board.move(self.player,1)
-        self.board.move(self.player,2)
-        self.assertFalse(self.board.isWinner(self.player))
-        
-    # X != O|X|O
-    def testIsWinnerFalseCaseOneSinglePiece(self):
-        self.board.move(self.player2,0)
-        self.board.move(self.player,1)
-        self.board.move(self.player2,2)
-        self.assertFalse(self.board.isWinner(self.player))
-        
-        
-
+    
 
 if __name__ == "__main__":
     unittest.main()
