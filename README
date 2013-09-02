@@ -1,4 +1,4 @@
-Intructions:
+Instructions:
 1. Fork this repo on GitHub
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
 3. Commit early and often, with good messages.
@@ -9,11 +9,11 @@ Notes on this iteration:
 ======================
 
   Instruction 1, Fork "this" repo: Seems ambiguous enough! So I've cloned a fork and started with some working code. It's not very often that something gets started from complete and total scratch.
-  I chose mindbane's fork, (https://github.com/coxmediagroup/Tic-Tac-Toe/pull/113), because it was a) the most recent pull request and b) it was an extremely simple solve compared to some of the pulls here. A simple command line game was exactly what I was thinking, so when I saw one at the top of the pull request stack, I couldn't resist standing on the shoulers of someone else's work... which is mostly what we do as software folks, anyways. 
+  I chose mindbane's fork, (https://github.com/coxmediagroup/Tic-Tac-Toe/pull/113), because it was a) the most recent pull request and b) it was an extremely simple solve compared to some of the pulls here. A simple command line game was exactly what I was thinking, so when I saw one at the top of the pull request stack, I couldn't resist standing on the shoulders of someone else's work... which is mostly what we do as software folks, anyways. 
 
 Initial Review:
  A string doesn't really seem like a good data structure to hold the game board in. This probably needs to change depending on what sort of AI is available to plug in.
- The AI that mindbane put together solves every scenario that a human player can create, after the computer starts in position zero. While this is a totally reasonable solution to the challenge, it is somewhat brittle. If any of the game rules were to change, (for instance, if a human player had to move first) there are nearly 150 lines of an if/else block that would be obsoletted. 
+ The AI that mindbane put together solves every scenario that a human player can create, after the computer starts in position zero. While this is a totally reasonable solution to the challenge, it is somewhat brittle. If any of the game rules were to change, (for instance, if a human player had to move first) there are nearly 150 lines of an if/else block that would be obsoleted. 
 
 Refactor Strategy:
  1. Isolate the AI
@@ -25,8 +25,7 @@ Looking for another AI:
  https://github.com/jmichalicek/Tic-Tac-Toe seems like a more robust solution. He used a list to contain the board information, which makes more sense to me. (There's no such thing as an original idea, anyways). I pulled in a few of his methods, such as lookForWin, drawBoard, and his wins tuple was an efficient way to run checks on the current status of the game board.
 
 reallySimpleStrategy():
- A lot of the solutions that have been proposed have, in my opinion, gone well outside the scope of the test. If the goal is to never loose, there's no need to setup strategies to win. Just checking to see if the oponent has a winning move available gets you about 80% of the way to solving the problem. Couple that with attacking a single diagonal, and a guarantee that the computer gets the first move, and there shouldn't be a way to beat the computer. 
+ A lot of the solutions that have been proposed have, in my opinion, gone well outside the scope of the test. If the goal is to never loose, there's no need to setup strategies to win. Just checking to see if the opponent has a winning move available gets you about 80% of the way to solving the problem. Couple that with attacking a single diagonal, and a guarantee that the computer gets the first move, and there shouldn't be a way to beat the computer. 
 
 What if the human goes first ? 
- Adding a step to check to see if a human player has acquired two oposing corner positions, and then making a move not included in the reallySimpleStrategy() should make it possible to play a human to a tie, even if she moves first.
-
+ Adding a step to check to see if a human player has acquired two opposing corner positions, and then making a move not included in the reallySimpleStrategy() should make it possible to play a human to a tie, even if she moves first.
