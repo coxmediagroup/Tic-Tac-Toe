@@ -201,6 +201,15 @@ class TicTacToeLibTests(unittest.TestCase):
     # blank=2/X=0/O=1
     def _test_IsWinnerFalseB2_X0_O1(self, arg):
         self.assertFalse(arg)
+        
+    # AIPlayer().__init__()
+    def testAIPlayer(self):
+        self.aiPlayer = TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
+        self.assertTrue(self.aiplayer.piece == TicTacToeLib.PIECE_O)
+    
+    def testAIPlayerFalse(self):
+        self.aiPlayer = TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
+        self.assertFalse(self.aiplayer.piece != TicTacToeLib.PIECE_O)
     
     
 

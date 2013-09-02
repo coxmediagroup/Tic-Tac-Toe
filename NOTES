@@ -5,3 +5,6 @@ http://www.chessandpoker.com/tic_tac_toe_strategy.html
 
 Using Python 2.7
 
+UX will be done using pygame. 288x288 game board split into 9 - 96x96 rects
+64x64 player tiles. Drawing offset will be (+16, +16) from the upper left of 96x96 rect
+ 
