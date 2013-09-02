@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-                <head>
-                        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-			   
-			<meta http-equiv="X-UA-Compatible" content="IE=9">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">   
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
+		<link rel="stylesheet" href="css/ttt.css"> 
+	</head>
 
-			<link rel="stylesheet" href="css/ttt.css"> 
-                </head>
-
-                <body>
+	<body>
 		<div id="zero" class="tictac"> one</div>
 		<div id="one" class="tictac"> one</div>
 		<div id="two" class="tictac"> two</div>
@@ -18,151 +16,11 @@
 		<div id="six" class="tictac"> six</div>
 		<div id="seven" class="tictac"> seven</div>
 		<div id="eight" class="tictac"> eight</div>
-                 </body>
-		 <script> 
-		 var players=[{name:'foozie',squares:[]},{name:'hulk',squares:[]}]
-		
-		 var tictac={
+	</body>
 		 
-			activeplayer: players[0],
-			
-			switchplayer: function(){
-				tictac.chkwingroups()
-				if (tictac.activeplayer===players[0]){
-					tictac.activeplayer=players[1]
-				} else {
-					tictac.activeplayer=players[0]
-				}
-			},	
-			
-			chkwingroups: function(){
-				var wgl=tictac.wingroups.length 
-				while(wgl--){
-					var blk= tictac.chkforblock(tictac.wingroups[wgl])
-					if (blk !="noblock"){
-						if(tictac.usedsquares.indexOf(blk)===-1){
-					   console.log(tictac.activeplayer.name+ "needs to be blocked at: "+ blk)
-						}
-					}
-				}
-			},		
-			
-			chkforblock: function(wingroup){
-				var opensquares=[]
-				var wl=wingroup.length
-				while (wl--){
-					if (tictac.activeplayer.squares.indexOf(wingroup[wl]) ===-1){
-						opensquares.unshift(wingroup[wl])
-					}
-				}
-						
-				if (opensquares.length >1){
-		
-					opensquares=["noblock"]
-				}
-				
-				return opensquares[0]	
-			},			
-					
-			
-			squareclass:'tictac',
-			
-			centersquare:"four",
-			
-			corners:["zero","two","six","eight"],
-			
-			usedsquares:[],
-			
-			mksquares: function(){
-				this.squares=Array.prototype.slice.call(document.querySelectorAll('div.tictac'))
-				this.squares.map(this.addclick)
-			},
-			
-			addclick: function(el){ 
-				el.onclick=function(){ 
-				this.className=tictac.activeplayer.name;
-				tictac.activeplayer.squares.unshift(this.id)
-				tictac.usedsquares.unshift(this.id)
-				this.onclick="";
-				tictac.switchplayer()}
-			},		
-			
-	
-			// there are only eight way to win the game
-					//across	
-			wingroups:[	["zero","one","two"], 
-					["three","four","five"], 
-					["six","seven","eight"],
-					
-					//down	
-					["zero","three","six"],
-					["one","four","seven"],
-					["two","five","eight"], 
-			
-					//diagonal
-					["zero","four","eight"], 
-					["two","four","six"]  
-			],	
-		 
-		
-			setsquare: function(square){
-					var el=document.querySelector('#'+square)
-					el.className=activeplayer.name
-					switchplayers()
-			}		
-			
-					
-		}
-	tictac.mksquares()		
-	</script>					
+	<script src="js/ttt.js"></script>					
 						
 					
-        </html>
-	
-	
-	
-	
-	<!-- winning combinations
-	across:
-	
-	[one, two , three]
-	
-	[four , five , six]
-	
-	[seven, eight, nine]
-	
-	down:
-		
-	[one, four ,seven]
-	 
-	[two,five,eight]
-	
-	[three,six,nine]
-	
-	diagonal:
-	
-	[one, five,nine]
-	
-	[three,five seven]
-	
-	frequency table:
-	
-	3|2|3
-	2|4|2
-	3|2|3
-	 
-	
-	one: 3
-	two: 2
-	three:3
-	
-	four:2
-	five:4
-	six:2
-	
-	seven:3
-	eight:2
-	nine:3
-/>	
+</html>
 	
 	
