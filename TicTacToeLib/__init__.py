@@ -25,7 +25,7 @@
 GAME_BOARD_WIDTH = 3
 GAME_BOARD_SQUARE_SIZE = GAME_BOARD_WIDTH*GAME_BOARD_WIDTH
 BLANK = ''
-WINNING_LINE_SLICES = [[0,3,1]]
+WINNING_LINE_SLICES = [[0,3,1],[3,6,1],[6,9,1],[0,7,3],[1,8,3],[2,9,3],[0,9,4],[2,7,2]]
 # TODO Is naming clear?
 class Board(object):
     def __init__(self):
