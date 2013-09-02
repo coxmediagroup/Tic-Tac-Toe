@@ -1,21 +1,4 @@
-from ai import computerTurn
-
-
-def printBoard(status):
-    print '\n {} | {} | {}\n - - - - - \n {} | {} | {}\n - - - - - \n {} | {} | {}'.format(
-        status[0], status[1], status[2],
-        status[3], status[4], status[5],
-        status[6], status[7], status[8])
-
-def isGameOver(status):
-    if len(status) is 10:
-        if status[9] is 'V':
-            print 'The computer is victorious!'
-        else:
-            print 'You managed to tie.'
-        return True
-    return False
-
+from ai import computerTurn, TicTacToe
 
 def userTurn(status):
     move = '?'
@@ -30,20 +13,16 @@ def userTurn(status):
 
 
 def playNewGame():
-    status = '012345678'
-    turn = 1
-    printBoard(status)
+    ttt = TicTacToe()
+    ttt.printBoard()
     while True:
-        status = computerTurn(status, turn)
-        
-        printBoard(status)
-
-        if isGameOver(status):
+        ttt.board = computerTurn(ttt.board, ttt.turn)
+        ttt.printBoard()
+        if ttt.isGameOver():
             break
-
-        status = userTurn(status)
-        printBoard(status)
-        turn += 1
+        ttt.board = userTurn(ttt.board)
+        ttt.printBoard()
+        ttt.turn += 1
 
 
 def main():
@@ -62,3 +41,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+

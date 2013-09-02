@@ -1,6 +1,6 @@
 
 class TicTacToe(object):
-    def __init__(self,input):
+    def __init__(self):
         self.newGame()
 
     def newGame(self):
@@ -12,10 +12,22 @@ class TicTacToe(object):
         self.board.replace(position, player)
 
     def isGameOver(self):
-        if self.Winner is None:
+
+        # Temp hack to make sure everything's working...
+        if len(self.board) is 10:
+            self.winner = True
+
+        if self.winner is None:
             return False
 
         return True
+
+
+    def printBoard(self):
+        print '\n {} | {} | {}\n - - - - - \n {} | {} | {}\n - - - - - \n {} | {} | {}'.format(
+            self.board[0], self.board[1], self.board[2],
+            self.board[3], self.board[4], self.board[5],
+            self.board[6], self.board[7], self.board[8])
 
     
 
