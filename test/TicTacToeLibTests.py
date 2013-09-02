@@ -1,5 +1,6 @@
 import unittest
 import TicTacToeLib
+from random import shuffle
 
 NUMBER_LIST = ['EmptyBoard', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight']
 WIN_LIST =  [
@@ -30,6 +31,22 @@ def checkIsWinnerVaildLine(move_list,isPlayerX=True):
         return board.isWinner(player)
     else:
         return board.isWinner(player2)
+    
+def checkIsWinnerFalse(move_list,x,o):
+    board=TicTacToeLib.Board()
+    player=TicTacToeLib.Player('X')
+    player2=TicTacToeLib.Player('O')
+    shuffle(move_list)
+    
+    pos = 0
+    for _ in range(x):
+        board.move(player, move_list[pos])
+        pos+=1
+    for _ in range(o):
+        board.move(player2, move_list[pos])
+        pos+=1
+    
+    return board.isWinner(player)    
 
 # any tests built with this class will have a test_ prefix
 class DynamicTestMaker(type):
@@ -52,7 +69,7 @@ class DynamicTestMaker(type):
                     testable = lambda self, func=method,arg=checkIsBoardFull(index): func(self,arg)
                     testable.__name__ = testable_name
                     attrs[testable_name] = testable
-            if ( method_name == '_test_IsWinnerTrue' or 
+            elif ( method_name == '_test_IsWinnerTrue' or 
                 method_name == '_test_IsWinnerWrongPlayerFalse'):
                 for index, item in enumerate(WIN_LIST):
                     testable_name = 'test{0}{1}'.format(testname,item[0])
@@ -60,6 +77,24 @@ class DynamicTestMaker(type):
                     testable = lambda self, func=method,arg=checkIsWinnerVaildLine(item[1],param): func(self,arg)
                     testable.__name__ = testable_name
                     attrs[testable_name] = testable
+                    
+            elif method_name.startswith('_test_IsWinnerFalse'):
+                x=o=0
+                if method_name.endswith('_X1_O2'): x,o=1,2
+                elif method_name.endswith('_X2_O1'): x,o=2,1
+                elif method_name.endswith('_X1_O1'): x,o=1,1
+                elif method_name.endswith('_X2_O0'): x,o=2,0
+                elif method_name.endswith('_X0_O2'): x,o=0,2
+                elif method_name.endswith('_X1_O0'): x,o=1,0
+                elif method_name.endswith('_X0_O1'): x,o=0,1
+                
+                for index, item in enumerate(WIN_LIST):
+                    testable_name = 'test{0}{1}'.format(testname,item[0])                       
+                    testable = lambda self, func=method,arg=checkIsWinnerFalse(item[1],x,o): func(self,arg)
+                    testable.__name__ = testable_name
+                    attrs[testable_name] = testable    
+                    
+            
 
         return type.__new__(cls, name, bases, attrs)
 
@@ -140,11 +175,40 @@ class TicTacToeLibTests(unittest.TestCase):
     # O != X|X|X
     def _test_IsWinnerWrongPlayerFalse(self, arg):
         self.assertFalse(arg)
+    
+    # blank=0/X=1/O=2
+    def _test_IsWinnerFalseB0_X1_O2(self, arg):
+        self.assertFalse(arg)
+
+    # blank=0/X=2/O=1
+    def _test_IsWinnerFalseB0_X2_O1(self, arg):
+        self.assertFalse(arg)
+        
+    # blank=1/X=1/O=1
+    def _test_IsWinnerFalseB1_X1_O1(self, arg):
+        self.assertFalse(arg)
+        
+    # blank=1/X=2/O=0
+    def _test_IsWinnerFalseB1_X2_O0(self, arg):
+        self.assertFalse(arg)
+        
+    # blank=1/X=0/O=2
+    def _test_IsWinnerFalseB1_X0_O2(self, arg):
+        self.assertFalse(arg)
+        
+    # blank=2/X=1/O=0
+    def _test_IsWinnerFalseB2_X1_O0(self, arg):
+        self.assertFalse(arg)
+        
+    # blank=2/X=0/O=1
+    def _test_IsWinnerFalseB2_X0_O1(self, arg):
+        self.assertFalse(arg)
+    
         
     # X != X| |O
     def testIsWinnerOneBlankOnePieceFalse(self):
         self.board.move(self.player,0)
-        self.board.move(self.player,2)
+        self.board.move(self.player2,2)
         self.assertFalse(self.board.isWinner(self.player))
         
     # X != O|X|X
