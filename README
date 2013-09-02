@@ -1,11 +1,21 @@
 Intructions:
 1. Fork this repo on GitHub
-   WW> "this" repo seemed ambiguous enough, so I cloned a fork and started with some code. I chose mindbane's fork, (https://github.com/coxmediagroup/Tic-Tac-Toe/pull/113), because it was a) the most recent pull request and b) it was an extremely simple solve compared to some of the pulls here. A simple command line game was exactly what I was thinking, so when I saw one at the top of the pull request stack, I couldn't resist standing on the shoulers of someone else's work... which is mostly what we do as software folks, anyways. 
-
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
 3. Commit early and often, with good messages.
 4. Push your code back to GitHub and send us a pull request.
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+Notes on this version:
+======================
+
+  Instruction 1, Fork "this" repo: Seems ambiguous enough! So I've cloned a fork and started with some working code. It's not very often that something gets started from complete and total scratch.
+  I chose mindbane's fork, (https://github.com/coxmediagroup/Tic-Tac-Toe/pull/113), because it was a) the most recent pull request and b) it was an extremely simple solve compared to some of the pulls here. A simple command line game was exactly what I was thinking, so when I saw one at the top of the pull request stack, I couldn't resist standing on the shoulers of someone else's work... which is mostly what we do as software folks, anyways. 
+
+Initial Review:
+ A string is really not a good data structure to hold the game board in. This probably needs to change depending on what sort of AI is available to plug in.
+ The AI that mindbane put together solves every scenario that a human player can create, after the computer starts in position zero. While this is a totally reasonable solution to the challenge, it is somewhat brittle. If any of the game rules were to change, (for instance, if a human player had to move first) there are nearly 150 lines of an if/else block that would be obsoletted. 
+
+Refactor Strategy:
+ 1. Isolate the AI
+ 2. Create a TicTacToe object that will control the board.
+ 3. Replace the AI with a more robust version.
