@@ -160,8 +160,14 @@ class zorgAI(TicTacToe):
 
     def reallySimpleStrategy(self):
 
-        ''' Try for the diagnoal. '''
-        if self.board[4] is None:
+
+        if self.turn == 4:
+            # The meatbag must have moved first.
+            # Check to make sure they're not going to beat us with sneaky tricks.
+            if (self.board[0] == 'O' and self.board[8] == 'O') or (self.board[2] == 'O' and self.board[6] == 'O'): 
+                self.newMove('X', 1)
+
+        elif self.board[4] is None:
                 self.newMove('X', 4)
                 return self.board
 
@@ -169,6 +175,7 @@ class zorgAI(TicTacToe):
             self.newMove('X', 8)
             return self.board
 
+        
         else: # Just go anywhere, we're here to stop them from winning.
             for key, value in enumerate(self.board):
                 if value is None:
