@@ -1,0 +1,19 @@
+body { background:white;}
+
+div.tictac, div.hulk,div.foozie {width:21%;height:125px;box-shadow: 1px 1px 3px 1px black;position:absolute; }
+		 
+div.hulk { background-image:url(../img/hulk.jpg);background-repeat:no-repeat;}
+					
+div.foozie { background-image:url(../img/foozie.jpg);background-repeat:no-repeat;}
+
+#zero,#one,#two { top:50px;}
+
+#three, #four, #five { top:187px;}
+
+#six, #seven,#eight { top:324px;}
+
+#zero, #three, #six { left:10%;}
+
+#one,#four,#seven { left:33%;}
+
+#two,#five,#eight{left:56%;}
