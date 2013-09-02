@@ -85,7 +85,7 @@ def main():
             break
 
         else:
-            print 'I don\'t understand what you\'re trying to say. Options are Z, M, Q.'
+            print 'We don\'t understand what you\'re trying to say. Options are Z, M, Q.'
 
 if __name__ == "__main__":
     main()

@@ -159,12 +159,13 @@ class zorgAI(TicTacToe):
 
     def reallySimpleStrategy(self):
 
-        if self.turn == 4:
+        if self.turn == 4 \
+            and((self.board[0] == 'O' and self.board[8] == 'O') \
+                or (self.board[2] == 'O' and self.board[6] == 'O')):
             # The meatbag must have moved first.
-            # Check to make sure they're not going to beat us with sneaky tricks.
-            if (self.board[0] == 'O' and self.board[8] == 'O') or (self.board[2] == 'O' and self.board[6] == 'O'): 
-                self.newMove('X', 1)
-                return self.board
+            # Make sure they don't beat us with this sneaky trick.
+            self.newMove('X', 1)
+            return self.board
 
         elif self.board[4] is None:
             self.newMove('X', 4)
