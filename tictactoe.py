@@ -1,7 +1,8 @@
+
 import time
 
 def printStatus(status):
-    print '\n {} | {} | {}\n-----------\n {} | {} | {}\n-----------\n {} | {} | {}'.format(
+    print '\n {} | {} | {}\n - - - - - \n {} | {} | {}\n - - - - - \n {} | {} | {}'.format(
         status[0], status[1], status[2],
         status[3], status[4], status[5],
         status[6], status[7], status[8])
