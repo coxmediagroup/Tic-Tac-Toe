@@ -29,3 +29,8 @@ reallySimpleStrategy():
 
 What if the human goes first ? 
  Adding a step to check to see if a human player has acquired two opposing corner positions, and then making a move not included in the reallySimpleStrategy() should make it possible to play a human to a tie, even if she moves first.
+
+Update: Added the ability for the human to move first. Zorg still wins. 
+
+Why is the AI called Zorg? 
+ Why not? Computers are more fun when they have names. 
