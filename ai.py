@@ -7,9 +7,11 @@ class TicTacToe(object):
         self.board = '012345678'
         self.winner = None
         self.turn = 1
+        ttt.printBoard()
 
     def newMove(self, player, position):
-        self.board.replace(position, player)
+        self.board = self.board.replace(position, player)
+        self.printBoard()
 
     def isGameOver(self):
 
@@ -22,6 +24,16 @@ class TicTacToe(object):
 
         return True
 
+    def humanMove(self):
+        move = '?'
+        while True:
+            move = raw_input("Select Move:\n")
+            if move not in self.board or len(move) is not 1:
+                print "Invalid Move"
+            else:
+                break
+
+        self.newMove('O', move)
 
     def printBoard(self):
         print '\n {} | {} | {}\n - - - - - \n {} | {} | {}\n - - - - - \n {} | {} | {}'.format(
