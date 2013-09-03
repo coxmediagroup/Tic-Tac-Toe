@@ -1,4 +1,40 @@
-		 var players=[{name:'foozie',squares:[]},{name:'hulk',squares:[]}]
+		var foozie={name:'foozie',
+				squares:[]
+				}
+				
+		var hulk={
+			name:'hulk',
+			squares:[],
+			moves:["four","zero","two","six","eight","one","three","five","seven"],
+			
+			chkwingroups: function(){
+				var wgl=tictac.wingroups.length 
+				while(wgl--){
+					var blk= tictac.chkforblock(tictac.wingroups[wgl])
+					if (blk !="noblock"){
+						if(tictac.usedsquares.indexOf(blk)===-1){
+					   console.log(foozie.name+ "needs to be blocked at: "+ blk)
+						}
+					}
+				}
+			},
+			
+			chkforblock: function(wingroup){
+					var opensquares=[]
+					var wl=wingroup.length
+					while (wl--){
+						if (foozie.squares.indexOf(wingroup[wl]) ===-1){
+							opensquares.unshift(wingroup[wl])
+						}
+					}		
+					if (opensquares.length >1){
+						opensquares=["noblock"]
+					}
+					return opensquares[0]	
+			}
+				
+				
+		}
 		
 		 var tictac={
 		 
@@ -13,42 +49,9 @@
 				}
 			},	
 			
-			chkwingroups: function(){
-				var wgl=tictac.wingroups.length 
-				while(wgl--){
-					var blk= tictac.chkforblock(tictac.wingroups[wgl])
-					if (blk !="noblock"){
-						if(tictac.usedsquares.indexOf(blk)===-1){
-					   console.log(tictac.activeplayer.name+ "needs to be blocked at: "+ blk)
-						}
-					}
-				}
-			},		
-			
-			chkforblock: function(wingroup){
-				var opensquares=[]
-				var wl=wingroup.length
-				while (wl--){
-					if (tictac.activeplayer.squares.indexOf(wingroup[wl]) ===-1){
-						opensquares.unshift(wingroup[wl])
-					}
-				}
-						
-				if (opensquares.length >1){
-		
-					opensquares=["noblock"]
-				}
-				
-				return opensquares[0]	
-			},			
 					
-			
 			squareclass:'tictac',
-			
-			centersquare:"four",
-			
-			corners:["zero","two","six","eight"],
-			
+		
 			usedsquares:[],
 			
 			mksquares: function(){
