@@ -7,15 +7,42 @@
 			squares:[],
 			moves:["four","zero","two","six","eight","one","three","five","seven"],
 			
+			findmove: function(){
+				var i=0
+				var ml=hulk.moves.length
+				while (i< ml){
+					if (tictac.usedsquares.indexOf(hulk.moves[i]) !=-1){
+						i++
+					}else { 	
+						return hulk.moves[i]
+					}
+				}
+			},			
+			
+			picksquare: function(){
+				var sq=hulk.chkwingroups()
+				if (sq){
+					
+					console.log("sq ",sq)
+				}else{
+					console.log("no sq")
+					sq=hulk.findmove()
+				}	
+				tictac.setsquare(sq,hulk)		
+			},		
+					
+			
 			chkwingroups: function(){
 				var wgl=tictac.wingroups.length 
 				while(wgl--){
-					var blk= tictac.chkforblock(tictac.wingroups[wgl])
+					var blk= hulk.chkforblock(tictac.wingroups[wgl])
 					if (blk !="noblock"){
 						if(tictac.usedsquares.indexOf(blk)===-1){
-					   console.log(foozie.name+ "needs to be blocked at: "+ blk)
+							console.log(foozie.name+ "needs to be blocked at: "+ blk)
+							return blk
 						}
 					}
+					
 				}
 			},
 			
@@ -38,16 +65,6 @@
 		
 		 var tictac={
 		 
-			activeplayer: players[0],
-			
-			switchplayer: function(){
-				tictac.chkwingroups()
-				if (tictac.activeplayer===players[0]){
-					tictac.activeplayer=players[1]
-				} else {
-					tictac.activeplayer=players[0]
-				}
-			},	
 			
 					
 			squareclass:'tictac',
@@ -61,11 +78,9 @@
 			
 			addclick: function(el){ 
 				el.onclick=function(){ 
-				this.className=tictac.activeplayer.name;
-				tictac.activeplayer.squares.unshift(this.id)
-				tictac.usedsquares.unshift(this.id)
-				this.onclick="";
-				tictac.switchplayer()}
+				tictac.setsquare(this.id,foozie)
+				hulk.picksquare()
+				}
 			},		
 			
 	
@@ -86,10 +101,13 @@
 			],	
 		 
 		
-			setsquare: function(square){
+			setsquare: function(square,player){
 					var el=document.querySelector('#'+square)
-					el.className=activeplayer.name
-					switchplayers()
+					el.className=player.name
+					tictac.usedsquares.unshift(square)
+					player.squares.unshift(square)
+					el.onclick=""
+					
 			}		
 			
 					
