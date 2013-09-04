@@ -169,7 +169,7 @@ var tictac={
 		tictac.usedsquares=[]
 		foozie.squares=[]
 		hulk.squares=[]
-		document.title="Hulk Will Smash!"
+		document.title="Tic-Tac-Toe with Hulk "
 		tictac.mksquares()
 	},
 	
