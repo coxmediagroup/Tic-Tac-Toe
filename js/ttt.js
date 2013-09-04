@@ -16,9 +16,10 @@ var hulk={
 	findmove: function(){
 		var i=0
 		var ml=hulk.moves.length
+		var used=tictac.usedsquares.join()
 		while (i< ml){
-			if (tictac.usedsquares.indexOf(hulk.moves[i]) !=-1){
-				i++
+			if (used.match(hulk.moves[i])){
+				i++				
 			}else { 	
 				return hulk.moves[i]
 			}
@@ -44,10 +45,14 @@ var hulk={
 	//Hulk checks wingroups to see if a block is needed
 	chkwingroups: function(){
 		var wgl=tictac.wingroups.length 
+		
 		while(wgl--){
 			var blk= hulk.chkforblock(tictac.wingroups[wgl])
 			if (blk !="noblock"){
-				if(tictac.usedsquares.indexOf(blk)===-1){				
+				var used=tictac.usedsquares.join()
+				if (used.match(blk)){
+				;			
+				} else {
 					return blk
 				}
 			}
@@ -58,8 +63,11 @@ var hulk={
 	chkforblock: function(wingroup){
 		var opensquares=[]
 		var wl=wingroup.length
+		var fs=foozie.squares.join()
 		while (wl--){			
-			if (foozie.squares.indexOf(wingroup[wl]) ===-1){
+			if (fs.match(wingroup[wl])) {
+					;
+			}else{		
 				opensquares.unshift(wingroup[wl])
 			}
 		}		
@@ -72,15 +80,17 @@ var hulk={
 	chkforwin:function(wg){
 		var results=[]
 		var wl=wg.length
+		var hs=hulk.squares.join()
 		while(wl--){
-			if (hulk.squares.indexOf(wg[wl]) !==-1){
+			if (hs.match(wg[wl])){
 				results.unshift(wg[wl])
 			}
 		}	
 		if (results.length===3){
 		//If Hulk wins, remove onclick from empty squares
-			var dtt=Array.prototype.slice.call(document.getElementsByClassName("tictac"))
-			dtt.map(tictac.rmclick)
+			var wrap=document.getElementById("wrap")
+			var squares=Array.prototype.slice.call(wrap.children)	
+			squares.map(tictac.rmclick)
 			//highlight hulk winning squares
 			var rl=results.length
 			while(rl--){
@@ -125,7 +135,8 @@ var tictac={
 	],	
 		 	
 	mksquares: function(){
-		this.squares=Array.prototype.slice.call(document.getElementsByClassName('tictac'))
+		var wrap=document.getElementById("wrap")
+		this.squares=Array.prototype.slice.call(wrap.children)	
 		this.squares.map(this.addclick)
 	},
 			
