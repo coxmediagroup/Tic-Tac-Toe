@@ -17,8 +17,8 @@ var hulk={
 	name:'hulk',
 	squares:[],
 	//order in which Hulk makes moves
-	moves:["four","zero","two","six","eight","one","three","five","seven"],
-			
+	moves:["four","zero","six","two","eight","seven","one","three","five"],
+	
 	//if no block is needed, Hulk takes the first available move
 	findmove: function(){
 		var i=0
