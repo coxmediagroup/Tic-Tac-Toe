@@ -1,0 +1,53 @@
+@import "base";
+
+@include sticky-footer(25px, "#main-board", "#root_footer", "footer");
+
+#nav-header {
+	.navbar-inner {
+		@include border-radius(0);
+	}
+}
+.sign-block {
+	display: block;
+	margin: 0 auto;
+	width: 250px;
+	height: 200px;
+	padding-top: 50px;
+	.sign-selector {
+		.select-block {
+			float: left;
+			height: 80px;
+			margin: 0 10px;
+			width: 80px;
+		}
+	}
+}
+.X { 
+	background: url($img_folder+"X.png") no-repeat;
+	background-size: 100%;
+}
+.O { 
+	background: url($img_folder+"O.png") no-repeat;
+	background-size: 100%;
+}
+.game {
+	ul.board {
+		display: block;
+		height: 250px;
+		margin: 0 auto;
+		width: 250px;
+		li.square {
+			border: 1px solid #000;
+			float:left;
+			height: 80px;
+			width: 80px;
+		}
+	}
+}
+
+.alert {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	width: 260px;
+}
