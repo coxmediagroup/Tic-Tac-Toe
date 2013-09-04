@@ -2,9 +2,11 @@ body, a { background:black;color:white;font-size:31px;text-shadow:3px 2px 2px gr
 
 div.wrap {width:465px;height:465px;margin-left:auto;margin-right:auto;}
 
-div.tictac, div.hulk,div.foozie {width:150px;height:150px;box-shadow: 1px 1px 3px 3px black;float:left; background-image:url(../img/blank.jpg) }
+div.tictac, div.hulk,div.foozie {width:150px;height:150px;box-shadow: inset 1px 1px 3px 3px black;float:left; background-image:url(../img/blank.jpg) }
 		 
 div.hulk { background-image:url(../img/hulk.jpg);background-repeat:no-repeat;}
+
+div.win{box-shadow: inset 1px 1px 7px 9px green;}
 					
 div.foozie { background-image:url(../img/foozie.jpg);background-repeat:no-repeat;}
 

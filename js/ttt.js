@@ -1,11 +1,17 @@
 
+
+// Yes it's a global,and it should be a global.
+var nodearray= function(sel){
+	return Array.prototype.slice.call(document.querySelectorAll(sel))
+}
+
 //Human player
 var foozie={
 	name:'foozie',
 	squares:[]
 }
 
-//Computer		
+//Computer	
 		
 var hulk={
 	name:'hulk',
@@ -70,7 +76,7 @@ var hulk={
 		return opensquares[0]	
 	},
 			
-	chkwin:function(wg){
+	chkforwin:function(wg){
 		var results=[]
 		var wl=wg.length
 		while(wl--){
@@ -80,9 +86,15 @@ var hulk={
 		}	
 		if (results.length===3){
 		//If Hulk wins, remove onclick from empty squares
-			var dtt=Array.prototype.slice.call(document.querySelectorAll("div.tictac"))
+			var dtt=nodearray("div.tictac")
 			dtt.map(tictac.rmclick)
-					 									 
+			//highlight hulk winning squares
+			var rl=results.length
+			while(rl--){
+				var el=document.querySelector("#"+results[rl])
+				el.className +=" win"
+			}
+			document.title="Hulk Wins!"				 				 
 		}		
 	},
 			
@@ -91,7 +103,7 @@ var hulk={
 		var wgl=tictac.wingroups.length 
 		while(wgl--){
 		var wg=tictac.wingroups[wgl]	
-			hulk.chkwin(wg)					
+			hulk.chkforwin(wg)					
 		}			
 	}	
 
@@ -103,23 +115,6 @@ var tictac={
 	squareclass:'tictac',
 		
 	usedsquares:[],
-			
-	mksquares: function(){
-		this.squares=Array.prototype.slice.call(document.querySelectorAll('div.tictac'))
-		this.squares.map(this.addclick)
-	},
-			
-	addclick: function(el){ 
-		el.onclick=function(){ 
-			tictac.setsquare(this.id,foozie)
-			setTimeout(hulk.picksquare,100)
-		}
-		
-	},		
-			
-	rmclick: function(el){
-		el.onclick=""
-	},	
 	
 	// there are only eight way to win the game
 			//across	
@@ -136,9 +131,25 @@ var tictac={
 			["zero","four","eight"], 
 			["two","four","six"]  
 	],	
-		 
-		 
+		 	
+	mksquares: function(){
+		this.squares=nodearray('div.tictac')
+		this.squares.map(this.addclick)
+	},
+			
+	addclick: function(el){ 
+		el.onclick=function(){ 
+			tictac.setsquare(this.id,foozie)
+			setTimeout(hulk.picksquare,100)
+		}
 		
+	},		
+			
+	rmclick: function(el){
+		el.onclick=""
+	},	
+	
+
 	setsquare: function(square,player){
 		var el=document.querySelector('#'+square)
 		el.className=player.name
@@ -153,19 +164,22 @@ var tictac={
 	},		
 			
 	resetboard: function(){
-		var squares=Array.prototype.slice.call(document.querySelectorAll("div.wrap div"))			
+		var squares=nodearray("div.wrap div")			
 		squares.map(tictac.resetsquare)
 		tictac.usedsquares=[]
 		foozie.squares=[]
 		hulk.squares=[]
+		document.title="Hulk Will Smash!"
 		tictac.mksquares()
+	},
+	
+	init: function(){
+		var ngd=document.querySelector("div.newgame")
+		ngd.onclick=tictac.resetboard	
+		tictac.resetboard()
 	}		
 
 }// end tictac 
 
-
-var ngd=document.querySelector("div.newgame")
-ngd.onclick=tictac.resetboard	
-
-
-tictac.resetboard()	
+tictac.init()
+	
