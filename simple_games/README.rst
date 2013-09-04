@@ -30,5 +30,7 @@ For production::
 Services expect a requirements.txt file in the root of projects.*
 
 Run the app::
+
     $ cd simple-games
+
     $ python manage.py runserver
