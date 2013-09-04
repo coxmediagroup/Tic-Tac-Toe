@@ -20,15 +20,19 @@
 			},			
 			
 			picksquare: function(){
-				var sq=hulk.chkwingroups()
-				if (sq){
-					
-					console.log("sq ",sq)
+				
+				var blk=hulk.chkwingroups()
+				if (blk){
+					var sq=blk
 				}else{
-					console.log("no sq")
-					sq=hulk.findmove()
-				}	
-				tictac.setsquare(sq,hulk)		
+				
+					if (hulk.findmove()){
+						var sq=hulk.findmove()
+					}	
+				}
+				if (sq){
+					tictac.setsquare(sq,hulk)
+				}			
 			},		
 					
 			
@@ -38,7 +42,7 @@
 					var blk= hulk.chkforblock(tictac.wingroups[wgl])
 					if (blk !="noblock"){
 						if(tictac.usedsquares.indexOf(blk)===-1){
-							console.log(foozie.name+ "needs to be blocked at: "+ blk)
+							
 							return blk
 						}
 					}
@@ -79,7 +83,7 @@
 			addclick: function(el){ 
 				el.onclick=function(){ 
 				tictac.setsquare(this.id,foozie)
-				hulk.picksquare()
+				setTimeout(hulk.picksquare,100)
 				}
 			},		
 			
