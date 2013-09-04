@@ -17,7 +17,7 @@ var hulk={
 	name:'hulk',
 	squares:[],
 	//order in which Hulk makes moves
-	moves:["four","zero","six","two","eight","seven","one","three","five"],
+	moves:["six","two","one","eight","seven","one","three","five"],
 	
 	//if no block is needed, Hulk takes the first available move
 	findmove: function(){
@@ -170,6 +170,7 @@ var tictac={
 		hulk.squares=[]
 		document.title="Tic-Tac-Toe with Hulk "
 		tictac.mksquares()
+		tictac.setsquare("four",hulk)
 	},
 	
 	init: function(){
