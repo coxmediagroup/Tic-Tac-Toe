@@ -43,6 +43,12 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+# django-compressor
+#-----------------------------------------------------------------------------
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
+
 ########## END CACHE CONFIGURATION
 
 

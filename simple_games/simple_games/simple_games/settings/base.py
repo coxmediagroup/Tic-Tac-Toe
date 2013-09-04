@@ -45,7 +45,7 @@ MANAGERS = ADMINS
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '',
         'USER': '',
         'PASSWORD': '',
@@ -100,6 +100,7 @@ STATICFILES_DIRS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
+    'compressor.finders.CompressorFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
@@ -126,6 +127,10 @@ FIXTURE_DIRS = (
     normpath(join(SITE_ROOT, 'fixtures')),
 )
 ########## END FIXTURE CONFIGURATION
+
+########## SESSION ENGINE CONFIGURATION
+SESSION_ENGINE = ('django.contrib.sessions.backends.cache')
+########## END SESSION ENGINE CONFIGURATION
 
 
 ########## TEMPLATE CONFIGURATION
@@ -183,6 +188,7 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sessions',
 
     # Useful template tags:
     # 'django.contrib.humanize',
@@ -193,12 +199,14 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    # Database migration helpers:
+    'compressor',
     'south',
+
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'tictactoe',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -243,3 +251,7 @@ LOGGING = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
 ########## END WSGI CONFIGURATION
+
+# django-compressor
+#-----------------------------------------------------------------------------
+COMPRESS_PARSER = 'compressor.parser.Html5LibParser'
