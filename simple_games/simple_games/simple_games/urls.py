@@ -6,15 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='base.html')),
-
-    # Examples:
-    # url(r'^$', 'simple_games.views.home', name='home'),
-    # url(r'^simple_games/', include('simple_games.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+    url(r'^$', TemplateView.as_view(template_name='home.html')),
+    url(r'^tictactoe/', include('tictactoe.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
