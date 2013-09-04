@@ -54,6 +54,7 @@
 					var opensquares=[]
 					var wl=wingroup.length
 					while (wl--){
+					
 						if (foozie.squares.indexOf(wingroup[wl]) ===-1){
 							opensquares.unshift(wingroup[wl])
 						}
@@ -62,7 +63,14 @@
 						opensquares=["noblock"]
 					}
 					return opensquares[0]	
-			}
+			},
+			
+			hulkwin: function(){
+			
+			}	
+
+
+
 				
 				
 		}
@@ -112,8 +120,21 @@
 					player.squares.unshift(square)
 					el.onclick=""
 					
-			}		
+			}, 
 			
-					
+			resetsquare: function(square){ 
+					square.className=tictac.squareclass
+			},		
+			
+			resetboard: function(){
+				var squares=Array.prototype.slice.call(document.querySelectorAll("div.wrap div"))			
+				squares.map(tictac.resetsquare)
+				tictac.usedsquares=[]
+				foozie.squares=[]
+				hulk.squares=[]
+				tictac.mksquares()
+			}		
 		}
-	tictac.mksquares()		
+	tictac.resetboard()
+	var ngd=document.querySelector("div.newgame")
+	ngd.onclick=tictac.resetboard		
