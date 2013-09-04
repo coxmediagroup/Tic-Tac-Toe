@@ -10,7 +10,7 @@ div.tictac, div.hulk,div.foozie {width:150px;height:150px;box-shadow: inset 0px 
 		 
 div.hulk { background-image:url(../img/hulk.jpg);background-repeat:no-repeat;}
 
-div.win{box-shadow: inset 0px 0px 3px 5px lime;}
+div.win{box-shadow: inset  0px 0px 3px 5px lime;}
 					
 div.foozie { background-image:url(../img/foozie.jpg);background-repeat:no-repeat;}
 

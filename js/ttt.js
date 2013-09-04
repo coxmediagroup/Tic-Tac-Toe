@@ -94,7 +94,6 @@ var hulk={
 				var el=document.querySelector("#"+results[rl])
 				el.className +=" win"
 			}
-			document.title="Hulk Wins!"				 				 
 		}		
 	},
 			
