@@ -1,10 +1,3 @@
-
-
-// Yes it's a global,and it should be a global.
-var nodearray= function(sel){
-	return Array.prototype.slice.call(document.querySelectorAll(sel))
-}
-
 //Human player
 var foozie={
 	name:'foozie',
@@ -17,8 +10,8 @@ var hulk={
 	name:'hulk',
 	squares:[],
 	//order in which Hulk makes moves
-	moves:["six","two","one","eight","seven","one","three","five"],
-	
+	moves:["four","six","two","eight","zero","seven","one","three","five","four"],
+			
 	//if no block is needed, Hulk takes the first available move
 	findmove: function(){
 		var i=0
@@ -86,12 +79,12 @@ var hulk={
 		}	
 		if (results.length===3){
 		//If Hulk wins, remove onclick from empty squares
-			var dtt=nodearray("div.tictac")
+			var dtt=Array.prototype.slice.call(document.getElementsByClassName("tictac"))
 			dtt.map(tictac.rmclick)
 			//highlight hulk winning squares
 			var rl=results.length
 			while(rl--){
-				var el=document.querySelector("#"+results[rl])
+				var el=document.getElementById(results[rl])
 				el.className +=" win"
 			}
 		}		
@@ -132,7 +125,7 @@ var tictac={
 	],	
 		 	
 	mksquares: function(){
-		this.squares=nodearray('div.tictac')
+		this.squares=Array.prototype.slice.call(document.getElementsByClassName('tictac'))
 		this.squares.map(this.addclick)
 	},
 			
@@ -150,7 +143,7 @@ var tictac={
 	
 
 	setsquare: function(square,player){
-		var el=document.querySelector('#'+square)
+		var el=document.getElementById(square)
 		el.className=player.name
 		tictac.usedsquares.unshift(square)
 		player.squares.unshift(square)
@@ -163,23 +156,25 @@ var tictac={
 	},		
 			
 	resetboard: function(){
-		var squares=nodearray("div.wrap div")			
+		var wrap=document.getElementById("wrap")
+		var squares=Array.prototype.slice.call(wrap.children)		
 		squares.map(tictac.resetsquare)
 		tictac.usedsquares=[]
 		foozie.squares=[]
 		hulk.squares=[]
 		document.title="Tic-Tac-Toe with Hulk "
 		tictac.mksquares()
-		tictac.setsquare("four",hulk)
+ 		tictac.setsquare("four",hulk)
 	},
 	
 	init: function(){
-		var ngd=document.querySelector("div.newgame")
+		var ngd=document.getElementById("newgame")
 		ngd.onclick=tictac.resetboard	
 		tictac.resetboard()
-	}		
-
+ tictac.setsquare("four",hulk)
+	}
 }// end tictac 
 
 tictac.init()
+
 	

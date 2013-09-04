@@ -4,7 +4,7 @@ a {color:white;}
 
 div {font-size:31px;text-align:center;text-shadow:3px 2px 2px gray;font-family: 'Sans';}
 
-div.wrap {width:465px;height:465px;margin-left:auto;margin-right:auto;}
+#wrap {width:465px;height:465px;margin-left:auto;margin-right:auto;}
 
 div.tictac, div.hulk,div.foozie {width:150px;height:150px;box-shadow: inset 0px 0px 3px 5px black;float:left; background-image:url(../img/blank.jpg) }
 		 
@@ -14,4 +14,4 @@ div.win{box-shadow: inset  0px 0px 3px 5px lime;}
 					
 div.foozie { background-image:url(../img/foozie.jpg);background-repeat:no-repeat;}
 
-div.newgame{width:465px; margin-left:auto; margin-right:auto;}
+#newgame{width:465px; margin-left:auto; margin-right:auto;}
