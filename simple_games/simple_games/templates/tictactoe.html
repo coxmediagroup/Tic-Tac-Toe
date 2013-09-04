@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{%block game-title%} TicTacToe {% endblock game-title %}
+{%block game-name%} TicTacToe {% endblock game-name %}
+{% block content %}
+<div class="game" ng:controller="TicTacToeController">
+	<div class="sign-block">
+		<a ng-click="setGame('O');" class="sign-selector" href="#"><div class="select-block O"></div></a>
+    	<a ng-click="setGame('X');" class="sign-selector" href="#"><div class="select-block X"></div></a>
+	</div>
+	<ul class="board" show="gamelife">
+		{% for k in board %}
+    	<li class="square {{ k }}" ng-click="makeMove({{forloop.counter}})"></li>
+    	{% endfor %}
+	</ul>
+	<div class="alert alert-info" ng-show="message" ><[message]></div>
+	<div class="alert alert-block" ng-show="winner" ><[winner]></div>
+</div>
+
+{% endblock content %}
