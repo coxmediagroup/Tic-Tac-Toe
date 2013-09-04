@@ -19,3 +19,9 @@ build
 
 #saas cache
 *.sass-cache
+
+#css
+simple_games/static/css/*
+
+# cache of the compressor
+simple_games/assets
