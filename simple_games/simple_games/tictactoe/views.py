@@ -18,7 +18,7 @@ class TicTacToeViewController(TemplateView):
     def get(self, request, *args, **kwargs):
 
         if "move" in kwargs:
-            player_move = int(kwargs.get('move'))-1
+            player_move = int(kwargs.get('move'))
             player_sign = request.session['player_sign']
             game_board = request.session['board']
             message = ''
