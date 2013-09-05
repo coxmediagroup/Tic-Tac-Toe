@@ -36,7 +36,7 @@ class Board(object):
         self.__gameboard = [BLANK] * (GAME_BOARD_SQUARE_SIZE)
         
     def getGameBoard(self):
-        return self.__gameboard
+        return list(self.__gameboard)
     
     def __isValidMove(self,pos):
         return self.__gameboard[pos] == BLANK
@@ -66,5 +66,8 @@ class Player(object):
 class AIPlayer(Player):
     def __init__(self, piece):
         super(AIPlayer, self).__init__(piece)
+        self.__gameboard = []
         
+    def setGameBoard(self, gameboard):
+        self.__gameboard = gameboard
         
