@@ -108,6 +108,7 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board=TicTacToeLib.Board()
         self.player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
         self.player2=TicTacToeLib.Player(TicTacToeLib.PIECE_O)
+        self.aiplayer=TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
 
     # Board.getGameBoard()
     def testGetGameBoard(self):
@@ -204,11 +205,9 @@ class TicTacToeLibTests(unittest.TestCase):
         
     # AIPlayer().__init__()
     def testAIPlayer(self):
-        self.aiPlayer = TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
         self.assertTrue(self.aiplayer.piece == TicTacToeLib.PIECE_O)
     
     def testAIPlayerFalse(self):
-        self.aiPlayer = TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
         self.assertFalse(self.aiplayer.piece != TicTacToeLib.PIECE_O)
     
     

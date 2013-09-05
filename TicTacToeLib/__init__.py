@@ -59,7 +59,12 @@ class Board(object):
         return False
             
             
-
 class Player(object):
     def __init__(self, piece):
         self.piece = piece
+        
+class AIPlayer(Player):
+    def __init__(self, piece):
+        super(AIPlayer, self).__init__(piece)
+        
+        
