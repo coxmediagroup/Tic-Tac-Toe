@@ -41,6 +41,7 @@ var hulk={
 		}
 		hulk.didhulkwin()			
 	},		
+	
 					
 	//Hulk checks wingroups to see if a block is needed
 	chkwingroups: function(){
@@ -84,20 +85,24 @@ var hulk={
 		while(wl--){
 			if (hs.match(wg[wl])){
 				results.unshift(wg[wl])
-			}
-		}	
-		if (results.length===3){
-		//If Hulk wins, remove onclick from empty squares
-			var wrap=document.getElementById("wrap")
-			var squares=Array.prototype.slice.call(wrap.children)	
-			squares.map(tictac.rmclick)
-			//highlight hulk winning squares
-			var rl=results.length
-			while(rl--){
-				var el=document.getElementById(results[rl])
-				el.className +=" win"
-			}
-		}		
+			}else{
+			}	
+			if (results.length===3){
+				var wrap=document.getElementById("wrap")
+				var squares=Array.prototype.slice.call(wrap.children)	
+				
+				var sl=squares.length
+				while(sl--){
+					tictac.rmclick(squares[sl])
+				}	
+				//highlight hulk winning squares
+				var rl=results.length
+				while(rl--){
+					var el=document.getElementById(results[rl])
+					el.className +=" win"
+				}
+			}		
+		}
 	},
 			
 	// Calls hulk.chkwin on each wingroup to see if Hulk won.  
@@ -137,7 +142,11 @@ var tictac={
 	mksquares: function(){
 		var wrap=document.getElementById("wrap")
 		this.squares=Array.prototype.slice.call(wrap.children)	
-		this.squares.map(this.addclick)
+		var sl=this.squares.length
+				while(sl--){
+					tictac.addclick(this.squares[sl])
+				}	
+		
 	},
 			
 	addclick: function(el){ 
@@ -168,8 +177,11 @@ var tictac={
 			
 	resetboard: function(){
 		var wrap=document.getElementById("wrap")
-		var squares=Array.prototype.slice.call(wrap.children)		
-		squares.map(tictac.resetsquare)
+		var squares=Array.prototype.slice.call(wrap.children)
+		var sl=squares.length
+		while (sl--){		
+			tictac.resetsquare(squares[sl])
+		}
 		tictac.usedsquares=[]
 		foozie.squares=[]
 		hulk.squares=[]
