@@ -10,19 +10,42 @@ var hulk={
 	name:'hulk',
 	squares:[],
 	//order in which Hulk makes moves
-	moves:["four","zero","two","six","eight","seven","one","three","five"],
+	moves:["zero","two","six","eight","seven","one","three","five"],
  	//if no block is needed, Hulk takes the first available move
 	findmove: function(){
-		var i=0
-		var ml=hulk.moves.length
 		var used=tictac.usedsquares.join()
-		while (i< ml){
-			if (used.match(hulk.moves[i])){
-				i++				
-			}else { 	
-				return hulk.moves[i]
+		var sel=null
+		if (foozie.squares.length===1 && foozie.squares[0] !="four"){
+			sel="four"
+			console.log("first check "+sel)
+
+			return sel
+			
+		}	
+		if (hulk.squares[0] ==="four" && hulk.squares.length===1){
+				var ml=tictac.middles.length
+				while(ml--){
+					var mid=tictac.middles[ml]
+					if (!used.match(mid)){
+						sel=mid
+						console.log("second check "+sel)
+						return sel	
+					}
+						
+				}
+				
 			}
-		}
+				var i=0
+				var hml=hulk.moves.length
+				while (i< hml){
+				if (used.match(hulk.moves[i])){
+					i++				
+				}else { 	
+					sel= hulk.moves[i]
+					return sel
+				}
+			}
+			
 	},			
 			
 	picksquare: function(){
@@ -124,6 +147,10 @@ var tictac={
 		
 	usedsquares:[],
 	
+	corners:["zero","two","six","eight"],
+	
+	middles:["one","three","five","seven"],
+	
 	// there are only eight way to win the game
 			//across	
 	wingroups:[	["zero","one","two"], 
@@ -196,6 +223,8 @@ var tictac={
 		hulk.squares=[]
 		document.title="Tic-Tac-Toe with Hulk "
 		tictac.mkclicks()
+		//var s=hulk.moves[Math.floor((Math.random()*hulk.moves.length))]
+		//tictac.setsquare(s,hulk)
 	},
 	
 	init: function(){
