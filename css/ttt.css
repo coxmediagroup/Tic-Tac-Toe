@@ -2,15 +2,15 @@ body{ background:black;}
 
 a {color:white;}
 
-div {font-size:31px;text-align:center;text-shadow:3px 2px 2px gray;font-family: 'Sans';}
+div {font-size:2.5em;text-align:center;text-shadow:3px 2px 2px gray;font-family: 'Sans';}
 
-#wrap {width:465px;height:465px;margin-left:auto;margin-right:auto;}
+#wrap {width:475px;height:475px;margin-left:auto;margin-right:auto;}
 
-div.tictac, div.hulk,div.foozie {width:150px;height:150px;box-shadow: inset 0px 0px 3px 5px black;float:left; background-image:url(../img/blank.jpg) }
+div.tictac, div.hulk,div.foozie {width:150px;height:150px;border:3px solid black;float:left; background-image:url(../img/blank.jpg) }
 		 
 div.hulk { background-image:url(../img/hulk.jpg);background-repeat:no-repeat;}
 
-div.win{box-shadow: inset  0px 0px 3px 5px lime;}
+div.win{border: 3px solid lime;}
 					
 div.foozie { background-image:url(../img/foozie.jpg);background-repeat:no-repeat;}
 
