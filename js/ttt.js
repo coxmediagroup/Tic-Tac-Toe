@@ -17,10 +17,7 @@ var hulk={
 		var sel=null
 		if (foozie.squares.length===1 && foozie.squares[0] !="four"){
 			sel="four"
-			console.log("first check "+sel)
-
-			return sel
-			
+			return sel			
 		}	
 		if (hulk.squares[0] ==="four" && hulk.squares.length===1){
 				var ml=tictac.middles.length
@@ -28,12 +25,9 @@ var hulk={
 					var mid=tictac.middles[ml]
 					if (!used.match(mid)){
 						sel=mid
-						console.log("second check "+sel)
 						return sel	
-					}
-						
+					}		
 				}
-				
 			}
 				var i=0
 				var hml=hulk.moves.length
@@ -178,7 +172,7 @@ var tictac={
 	addclick: function(el){ 
 		el.onclick=function(){ 
 			tictac.setsquare(this.id,foozie)
-			setTimeout(hulk.picksquare,100)
+			setTimeout(hulk.picksquare,400)
 		}
 		
 	},		
@@ -195,6 +189,7 @@ var tictac={
 	setsquare: function(square,player){
 		var el=document.getElementById(square)
 		el.className=player.name
+		backslide(el)
 		tictac.usedsquares.unshift(square)
 		player.squares.unshift(square)
 		el.onclick=null
@@ -236,6 +231,30 @@ var tictac={
 	}
 	
 }// end tictac 
+
+
+var swing=function( p ) {
+		return 0.57 - Math.cos( p*Math.PI ) / 1.7;
+	}
+var backslide=function(el){
+	var chunk=3.1
+	o="0"
+	slidein()
+	function slidein(){
+		o=parseFloat(o)+chunk
+		el.style.backgroundSize=o+"%"	
+		if (o < 100 ){
+			setTimeout(slidein,swing(1-o))
+		
+		}	
+
+	}
+
+	
+}	
+
+
+
 
 tictac.init()
 
