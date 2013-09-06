@@ -204,19 +204,28 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertFalse(arg)
         
     # AIPlayer().__init__()
-    def testAIPlayer(self):
+    def testAIPlayerEQ(self):
         self.assertEqual(self.aiplayer.piece, TicTacToeLib.PIECE_O)
     
     def testAIPlayerNE(self):
         self.assertNotEqual(self.aiplayer.piece, TicTacToeLib.PIECE_X)
         
-    def testAIPlayerSetBoard(self):
+    def testAIPlayerSetBoardEQ(self):
         self.aiplayer.setGameBoard(self.board.getGameBoard())
         self.assertEqual(self.board.getGameBoard(), self.aiplayer._AIPlayer__gameboard)
     def testAIPlayerSetBoardNE(self):
         self.aiplayer.setGameBoard(self.board.getGameBoard())
         self.board.move(self.player, 0)
         self.assertNotEqual(self.board.getGameBoard(), self.aiplayer._AIPlayer__gameboard)
+    
+    # AIPlayer.__hasMadeInitialMove will be True after AI Player's first move
+    def testAIPlayerHasMadeInitialMoveF(self):
+        self.assertFalse(self.aiplayer._AIPlayer__hasMadeInitialMove)
+        
+    def testAIPlayerHasMadeInitialMoveT(self):
+        self.aiplayer.moveAI()
+        self.assertTrue(self.aiplayer._AIPlayer__hasMadeInitialMove)
+
     
 
 if __name__ == "__main__":

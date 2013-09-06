@@ -67,7 +67,11 @@ class AIPlayer(Player):
     def __init__(self, piece):
         super(AIPlayer, self).__init__(piece)
         self.__gameboard = []
+        self.__hasMadeInitialMove = False
         
     def setGameBoard(self, gameboard):
         self.__gameboard = gameboard
         
+    def moveAI(self):
+        # this should probably require a gameboard?
+        self.__hasMadeInitialMove = True
