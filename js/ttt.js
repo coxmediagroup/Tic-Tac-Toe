@@ -189,7 +189,7 @@ var tictac={
 	setsquare: function(square,player){
 		var el=document.getElementById(square)
 		el.className=player.name
-		backslide(el)
+		frontslide(el)
 		tictac.usedsquares.unshift(square)
 		player.squares.unshift(square)
 		el.onclick=null
@@ -210,8 +210,10 @@ var tictac={
 			
 	resetboard: function(){
 		var sl=tictac.squares.length
+		var to=103
 		while (sl--){		
-			tictac.resetsquare(tictac.squares[sl])
+			setTimeout(tictac.resetsquare,to,tictac.squares[sl])
+			to+=89
 		}
 		tictac.usedsquares=[]
 		foozie.squares=[]
@@ -234,10 +236,10 @@ var tictac={
 
 
 var swing=function( p ) {
-		return 0.57 - Math.cos( p*Math.PI ) / 1.7;
+		return 0.57 - Math.cos( p*Math.PI ) / 1.21;
 	}
-var backslide=function(el){
-	var chunk=3.1
+var frontslide=function(el){
+	var chunk=2.75
 	o="0"
 	slidein()
 	function slidein(){
@@ -247,10 +249,9 @@ var backslide=function(el){
 			setTimeout(slidein,swing(1-o))
 		
 		}	
-
 	}
 
-	
+
 }	
 
 
