@@ -75,3 +75,6 @@ class AIPlayer(Player):
     def moveAI(self):
         # this should probably require a gameboard?
         self.__hasMadeInitialMove = True
+        
+    def __getTotalMovesMade(self):
+        return (GAME_BOARD_SQUARE_SIZE-self.__gameboard.count(BLANK))

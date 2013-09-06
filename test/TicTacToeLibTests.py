@@ -225,6 +225,39 @@ class TicTacToeLibTests(unittest.TestCase):
     def testAIPlayerHasMadeInitialMoveT(self):
         self.aiplayer.moveAI()
         self.assertTrue(self.aiplayer._AIPlayer__hasMadeInitialMove)
+        
+    def testAIPlayerGetTotalMovesMadeEQZero(self):
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertEqual(0,self.aiplayer._AIPlayer__getTotalMovesMade())
+        
+    def testAIPlayerGetTotalMovesMadeEQOne(self):
+        self.board.move(self.player, 0)
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertEqual(1,self.aiplayer._AIPlayer__getTotalMovesMade())
+        
+    def testAIPlayerGetTotalMovesMadeEQTwo(self):
+        self.board.move(self.player, 0)
+        self.board.move(self.player, 1)
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertEqual(2,self.aiplayer._AIPlayer__getTotalMovesMade())
+
+    
+    def testAIPlayerGetTotalMovesMadeNEZero(self):
+        self.board.move(self.player, 0)
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertNotEqual(0,self.aiplayer._AIPlayer__getTotalMovesMade())
+        
+    def testAIPlayerGetTotalMovesMadeNEOne(self):
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertNotEqual(1,self.aiplayer._AIPlayer__getTotalMovesMade())
+
+        
+    def testAIPlayerGetTotalMovesMadeNETwo(self):
+        self.board.move(self.player, 0)
+        self.aiplayer.setGameBoard(self.board.getGameBoard())
+        self.assertNotEqual(2,self.aiplayer._AIPlayer__getTotalMovesMade())
+
+        
 
     
 
