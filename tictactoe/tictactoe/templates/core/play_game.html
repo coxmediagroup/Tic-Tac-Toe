@@ -11,15 +11,19 @@
     $(document).ready(function() {
         $("#hidden_board").val("{{ json_board_str }}");
         $("#message_text").text("Your turn. Click on a box to make a move");
+        $('#new_game').click(function() {
+            window.location.href = '/';
+            return false;
+        });
         $(".box").click(function() {
             var html = $(this).html();
 
             if (html.length == 0) {
-                var html_str = "<img class='box_image' src=\'{% static 'images/circle2.jpg' %}\'/>"
+                var html_str = "<img class='box_image' src=\'{% static 'images/circle_blue.png' %}\'/>"
                 $(this).html(html_str);
                 $("#message_text").text("");
                 $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") , game_history_id : {{ game_history_id }} },function(data, textStatus){
-                        var html_str = "<img class='box_image' src=\'{% static 'images/cross.gif' %}\'/>"
+                        var html_str = "<img class='box_image' src=\'{% static 'images/red_cross.png' %}\'/>"
                         $("#box_" + data.box).html(html_str);
                         $("#hidden_board").val(data.board);
                         if (data.game_over == "1" )
@@ -28,18 +32,25 @@
                             $('.box').off('click');
                             $('#played').text(parseInt($('#played').text()) + 1)
                             $('#won').text(parseInt($('#won').text()) + 1)
+                            $('#box_'+data.winning_combination_1).css("background-color", "yellow");
+                            $('#box_'+data.winning_combination_2).css("background-color", "yellow");
+                            $('#box_'+data.winning_combination_3).css("background-color", "yellow");
                         }
                         else {
                             if (data.game_over == "2" ) {
                                 $("#message_text").text("The computer won!");  
+                                $("#message_text").css('font-size', 35);
                                 $('.box').off('click');
                                 $('#played').text(parseInt($('#played').text()) + 1)
                                 $('#lost').text(parseInt($('#lost').text()) + 1)
-
+                                $('#box_'+data.winning_combination_1).css("background-color", "yellow");
+                                $('#box_'+data.winning_combination_2).css("background-color", "yellow");
+                                $('#box_'+data.winning_combination_3).css("background-color", "yellow")
                             } 
                             else {
                                 if (data.game_over == "3") {
                                     $("#message_text").text("It's a tie!");
+                                    $("#message_text").css('font-size', 35);
                                     $('.box').off('click');
                                     $('#played').text(parseInt($('#played').text()) + 1)
                                     $('#tied').text(parseInt($('#tied').text()) + 1)
@@ -62,7 +73,7 @@
 
 {% block body %}
     <a class="logout" href="/logout/">logout</a>
-    <h2 class="game_header">Welcome {{ user }}, Let's play Tic Tac Toe!</h2>
+    <h2 class="game_header clear">Welcome {{ user }}, Let's play Tic Tac Toe!</h2>
     <div id="message_text"></div>
     <div id="game_board">
     {% for box in board %}
@@ -72,7 +83,8 @@
         {% endif %}
     {% endfor %}
     </div>
-    <h2 class="game_header"> Your Game History</h2>
+    <input type="button" id="new_game" value="New Game" class="new_game"></input>
+    <h2 class="game_history_header clear"> Your Game History</h2>
     <div class="history_table">
         <table >
             <thead>
@@ -81,7 +93,6 @@
                     <th>Won</th>
                     <th>Lost</th>
                     <th>Tied</th>
-                    <th>Not completed</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,7 +101,6 @@
                     <td id="won">{{ won }}</td>
                     <td id="lost">{{ lost }}</td>
                     <td id="tied">{{ tied }}</td>
-                    <td id="not_completed">{{ not_completed }}</td>
                 </tr>
             </tbody>
         </table>

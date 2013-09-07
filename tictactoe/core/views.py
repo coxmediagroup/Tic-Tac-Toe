@@ -17,12 +17,10 @@ def play_game(request):
     game_history = GameHistory.objects.create(player=user)
 
     all_games = GameHistory.objects.filter(player=user)
-    context['played'] = all_games.count()
+    context['played'] = all_games.exclude(status='in_progress').count()
     context['won'] = all_games.filter(status='won').count()
     context['lost'] = all_games.filter(status='lost').count()
-    context['tied'] = all_games.filter(status='tied').count()
-    context['not_completed'] = all_games.filter(status='in_progress').count()
-    
+    context['tied'] = all_games.filter(status='tied').count()    
 
     context['user'] = user
     context['game_history_id'] = game_history.id
@@ -32,26 +30,37 @@ def play_game(request):
 
 @login_required
 def make_move(request):
-    board = json.loads(request.GET['board'])
-    box = int(request.GET['box'].replace("box_",""))
-    game_history_id = request.GET['game_history_id']
+    try:
+        board = json.loads(request.GET['board'])
+        box = int(request.GET['box'].replace("box_",""))
+        game_history_id = request.GET['game_history_id']
 
-    game = Game(board)
-    game.make_move(box, PLAYER)
-    game_over = game.check_game_over()
-    if not game_over:
-        box = game.best_next_move(COMPUTER)
-        game.make_move(box, COMPUTER)
-        game_over = game.check_game_over()
+        game = Game(board)
+        game.make_move(box, PLAYER)
+        print 1
+        game_over, winning_combination = game.check_game_over()
+        print 2
+        if not game_over:
+            box = game.best_next_move(COMPUTER)
+            game.make_move(box, COMPUTER)
+            game_over, winning_combination = game.check_game_over()
+            print 3
+        if game_over:
+            game_history = GameHistory.objects.get(pk=game_history_id)
+            game_history.finish_game(game_over)
+        print 4
+        result = {}
+        result['box'] = str(box)
+        result['game_over'] = game_over
+        result['board'] = json.dumps(game.get_board())
 
-    if game_over:
-        game_history = GameHistory.objects.get(pk=game_history_id)
-        game_history.finish_game(game_over)
-    
-    result = {}
-    result['box'] = str(box)
-    result['game_over'] = game_over
-    result['board'] = json.dumps(game.get_board())
+        # set winning combinations for highlighting
+        if winning_combination:
+            result['winning_combination_1'] = str(winning_combination[0])
+            result['winning_combination_2'] = str(winning_combination[1])
+            result['winning_combination_3'] = str(winning_combination[2])
+    except Exception as error:
+        print error
     return HttpResponse(json.dumps(result), mimetype='application/json')
 
 @login_required

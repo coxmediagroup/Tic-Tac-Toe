@@ -19,11 +19,14 @@ body {
     padding-left: 150px;
 }
 
-.game_header {
+.clear {
     clear: both;
 }
+.game_history_header {
+    margin-bottom: 5px;
+}
 #game_board,#message_text {
-    margin-left: 17px;
+    margin-left: 70px;
 }
 
 .box {
@@ -42,7 +45,7 @@ body {
 #message_text {
     color: red;
     font-weight:bold;
-    font-size:15px;
+    font-size:16px;
 }
 
 .clear {
@@ -53,7 +56,8 @@ body {
     width:320px;
     box-shadow: 10px 10px 5px #888888;
     border:1px solid #000000;
-    margin-left: 17px;  
+    margin-left: 70px;  
+    margin-top: 0px;  
 }
 .history_table table {
     width:100%;
@@ -91,3 +95,12 @@ body {
 
 }
 
+#new_game {
+    margin-left: 180px;
+    margin-top: 20px;
+    -webkit-appearance: none;
+    background-color: red;
+    height: 30px;
+    font-size: 16px;
+    font-weight:bold;
+}

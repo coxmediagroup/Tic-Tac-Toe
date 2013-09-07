@@ -21,13 +21,13 @@ class Game(object):
         None - Not over, 1 - 0 wins, 2 - X wins, 3 - tie game
         '''
         if not self.get_blank_boxes():
-            return NO_RESULT
+            return NO_RESULT, None
 
-        result = self.check_win()
+        result, winning_combination = self.check_win()
         if result:
-            return result
+            return result, winning_combination
         else:
-            return None
+            return None, None
 
     def check_win(self):
         '''
@@ -36,11 +36,13 @@ class Game(object):
         '''
 
         result = None
+        winning_combination = None
         for combination in WINNING_COMBINATIONS:
             if self.board[combination[0]] and self.board[combination[0]] == self.board[combination[1]] == self.board[combination[2]]:
                 result = self.board[combination[0]]
+                winning_combination = combination
                 break
-        return result
+        return result, winning_combination
 
     def get_blank_boxes(self):
         '''
@@ -50,10 +52,11 @@ class Game(object):
 
     def check_move_for_win(self, box, value):
         '''
-        Virtually make a move and see if the payer wins
+        Virtually make a move and see if the player wins
         '''
         self.make_move(box, value)
-        result = self.check_win() == value
+        result, winning_combination = self.check_win()
+        result = result == value
         self.reset_move(box)
         return result
 
@@ -106,7 +109,7 @@ class Game(object):
         self.make_move(box, current_value)
 
         # Check if this move finished the game
-        result = self.check_win()
+        result, winning_combination = self.check_win()
         if result:
             if result == current_value:
                 return 1 # Player won
