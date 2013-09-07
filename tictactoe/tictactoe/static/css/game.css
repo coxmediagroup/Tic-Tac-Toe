@@ -1,0 +1,22 @@
+.box {
+    float: left;
+    border: solid 5px #C6C6C6;
+    height: 100px;
+    width: 100px;
+}
+
+.box_image {
+    height: 80px;
+    width: 80px;
+    margin: 7px;
+}
+
+#message_text {
+    color: red;
+    font-weight:bold;
+    font-size:17px;
+}
+
+.clear {
+    clear: both;
+}

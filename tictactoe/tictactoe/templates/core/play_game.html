@@ -18,7 +18,7 @@
                 var html_str = "<img class='box_image' src=\'{% static 'images/circle2.jpg' %}\'/>"
                 $(this).html(html_str);
                 $("#message_text").text("Computer's turn");
-                $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") },function(data, textStatus){
+                $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") , game_history_id : {{ game_history_id }} },function(data, textStatus){
                         var html_str = "<img class='box_image' src=\'{% static 'images/cross.gif' %}\'/>"
                         $("#box_" + data.box).html(html_str);
                         $("#hidden_board").val(data.board);
@@ -26,16 +26,23 @@
                         {
                             $("#message_text").text("You won!");
                             $('.box').off('click');
+                            $('#played').text(parseInt($('#played').text()) + 1)
+                            $('#won').text(parseInt($('#won').text()) + 1)
                         }
                         else {
                             if (data.game_over == "2" ) {
                                 $("#message_text").text("The computer won!");  
                                 $('.box').off('click');
+                                $('#played').text(parseInt($('#played').text()) + 1)
+                                $('#lost').text(parseInt($('#lost').text()) + 1)
+
                             } 
                             else {
                                 if (data.game_over == "3") {
                                     $("#message_text").text("It's a tie!");
                                     $('.box').off('click');
+                                    $('#played').text(parseInt($('#played').text()) + 1)
+                                    $('#tied').text(parseInt($('#tied').text()) + 1)
                                 }
                             }
                         }
@@ -63,5 +70,27 @@
             <br class="clear"/>
         {% endif %}
     {% endfor %}
+    <br/>
+    <h2> Your Game History</h2>
+    <table>
+        <thead>
+            <th>
+                <td>Played</td>
+                <td>Won</td>
+                <td>Lost</td>
+                <td>Tied</td>
+                <td>Not completed</td>
+            </th>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="played">{{ played }}</td>
+                <td id="won">{{ won }}</td>
+                <td id="lost">{{ lost }}</td>
+                <td id="tied">{{ tied }}</td>
+                <td id="not_completed">{{ not_completed }}</td>
+            </tr>
+        </tbody>
+    </table>
     <input id="hidden_board" type="hidden" values=""/>
 {% endblock %}
