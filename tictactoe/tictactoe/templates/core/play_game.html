@@ -17,7 +17,7 @@
             if (html.length == 0) {
                 var html_str = "<img class='box_image' src=\'{% static 'images/circle2.jpg' %}\'/>"
                 $(this).html(html_str);
-                $("#message_text").text("Computer's turn");
+                $("#message_text").text("");
                 $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") , game_history_id : {{ game_history_id }} },function(data, textStatus){
                         var html_str = "<img class='box_image' src=\'{% static 'images/cross.gif' %}\'/>"
                         $("#box_" + data.box).html(html_str);
@@ -61,36 +61,39 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Tic Tac Toe</h1>
-    <p>Welcome {{ user }}</p>    
+    <a class="logout" href="/logout/">logout</a>
+    <h2 class="game_header">Welcome {{ user }}, Let's play Tic Tac Toe!</h2>
     <div id="message_text"></div>
+    <div id="game_board">
     {% for box in board %}
         <div class="box" id="box_{{ forloop.counter0 }}"></div>
         {% if forloop.counter|divisibleby:3 %}
             <br class="clear"/>
         {% endif %}
     {% endfor %}
-    <br/>
-    <h2> Your Game History</h2>
-    <table>
-        <thead>
-            <th>
-                <td>Played</td>
-                <td>Won</td>
-                <td>Lost</td>
-                <td>Tied</td>
-                <td>Not completed</td>
-            </th>
-        </thead>
-        <tbody>
-            <tr>
-                <td id="played">{{ played }}</td>
-                <td id="won">{{ won }}</td>
-                <td id="lost">{{ lost }}</td>
-                <td id="tied">{{ tied }}</td>
-                <td id="not_completed">{{ not_completed }}</td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
+    <h2 class="game_header"> Your Game History</h2>
+    <div class="history_table">
+        <table >
+            <thead>
+                <tr>
+                    <th>Played</th>
+                    <th>Won</th>
+                    <th>Lost</th>
+                    <th>Tied</th>
+                    <th>Not completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="played">{{ played }}</td>
+                    <td id="won">{{ won }}</td>
+                    <td id="lost">{{ lost }}</td>
+                    <td id="tied">{{ tied }}</td>
+                    <td id="not_completed">{{ not_completed }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <input id="hidden_board" type="hidden" values=""/>
 {% endblock %}

@@ -55,7 +55,7 @@ def make_move(request):
     return HttpResponse(json.dumps(result), mimetype='application/json')
 
 @login_required
-def logout(request):
+def logout_user(request):
     """
     Log users out and re-direct them to the main page.
     """

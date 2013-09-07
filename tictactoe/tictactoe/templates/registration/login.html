@@ -1,14 +1,17 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% comment %}
   Main page to authenticate users.
 {% endcomment %}
 
 {% block head %}
   <title>Tic Tac Toe | Login</title>
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" type="text/css" />
 {% endblock %}
 
 {% block body %}
   <header>
+    <br/><br/><br/><br/>    
     <h1>Tic Tac Toe</h1>
     <h2>Please login to play</h2>
   </header>
