@@ -2,11 +2,15 @@ WINNING_COMBINATIONS = ( (0, 1, 2), (3, 4, 5), (6, 7, 8),
                          (0, 3, 6), (1, 4, 7), (2, 5, 8),
                          (0, 4, 8), (2, 4, 6)
                        )
-
+# Box related constants
 BLANK = 0
+CENTER_BOX = 4
+
+# Result related constants
 PLAYER = 1
 COMPUTER = 2
 NO_RESULT = 3
+
 
 class Game(object):
 
@@ -87,6 +91,10 @@ class Game(object):
             if self.check_move_for_win(box, self.toggle_marker(value)):
                 return box
 
+        # If the center box is available use that
+        if CENTER_BOX in valid_boxes:
+            return CENTER_BOX
+
         # save a copy of the board since it will get modifed during evaluate move
         board_copy = list(self.board)
 
@@ -106,6 +114,10 @@ class Game(object):
 
 
     def evaluate_move(self, box, original_value, current_value):
+        """
+        Evaluate a particular move (current_value) for a box. Return score based
+        on if its good or not for the computer (original_value) 
+        """
         self.make_move(box, current_value)
 
         # Check if this move finished the game

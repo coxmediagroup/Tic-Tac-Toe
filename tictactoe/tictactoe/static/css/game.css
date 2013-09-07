@@ -9,7 +9,6 @@ html {
 }
 
 body {
-    /*display: table-cell;*/
     vertical-align: middle;
     font-family:Comic Sans MS;
     background-image:url('/static/images/background1.png'); 
