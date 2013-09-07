@@ -1,15 +1,67 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block head %}
   <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" type="text/css" />
+  <script src="{% static 'js/jquery-1.10.2.min.js'%}"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $("#hidden_board").val("{{ json_board_str }}");
+        $("#message_text").text("Your turn. Click on a box to make a move");
+        $(".box").click(function() {
+            var html = $(this).html();
+
+            if (html.length == 0) {
+                var html_str = "<img class='box_image' src=\'{% static 'images/circle2.jpg' %}\'/>"
+                $(this).html(html_str);
+                $("#message_text").text("Computer's turn");
+                $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") },function(data, textStatus){
+                        var html_str = "<img class='box_image' src=\'{% static 'images/cross.gif' %}\'/>"
+                        $("#box_" + data.box).html(html_str);
+                        $("#hidden_board").val(data.board);
+                        if (data.game_over == "1" )
+                        {
+                            $("#message_text").text("You won!");
+                            $('.box').off('click');
+                        }
+                        else {
+                            if (data.game_over == "2" ) {
+                                $("#message_text").text("The computer won!");  
+                                $('.box').off('click');
+                            } 
+                            else {
+                                if (data.game_over == "3") {
+                                    $("#message_text").text("It's a tie!");
+                                    $('.box').off('click');
+                                }
+                            }
+                        }
+                });
+
+
+            }
+            else {
+                $("#message_text").text("Please select an empty box");
+            }
+
+        });
+
+    });
+  </script>
 {% endblock %}
 
 {% block body %}
-  <header>
-      <h1>Tic Tac Toe</h1>
-  </header>
-
-  <section>
-      <p>Welcome to Tic Tac Toe</p>
-  </section>
+    <h1>Tic Tac Toe</h1>
+    <p>Welcome {{ user }}</p>    
+    <div id="message_text"></div>
+    {% for box in board %}
+        <div class="box" id="box_{{ forloop.counter0 }}"></div>
+        {% if forloop.counter|divisibleby:3 %}
+            <br class="clear"/>
+        {% endif %}
+    {% endfor %}
+    <input id="hidden_board" type="hidden" values=""/>
 {% endblock %}

@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
     # Main/Game page 
     (r'^$', 'core.views.play_game'),    
+    (r'^make_move/$', 'core.views.make_move'),    
 
     # Login / logout.
     (r'^login/$', 'django.contrib.auth.views.login'),
