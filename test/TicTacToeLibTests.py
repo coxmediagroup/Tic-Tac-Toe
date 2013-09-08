@@ -121,13 +121,13 @@ class TicTacToeLibTests(unittest.TestCase):
     # Board.__isValidMove    
     def testIsValidMove(self):
         # ugly but I don't need this exposed
-        self.assertTrue(self.board._Board__isValidMove(0))
+        self.assertTrue(self.board.isValidMove(0))
 
     def testIsValidMoveFalse(self):
         # ugly but I don't need this exposed
         self.board._Board__gameboard[0]=TicTacToeLib.PIECE_X
         # self.board.move(self.player,0)
-        self.assertFalse(self.board._Board__isValidMove(0))
+        self.assertFalse(self.board.isValidMove(0))
     
     # Board.move()     
     def testMove(self):
@@ -209,53 +209,53 @@ class TicTacToeLibTests(unittest.TestCase):
     
     def testAIPlayerNE(self):
         self.assertNotEqual(self.aiplayer.piece, TicTacToeLib.PIECE_X)
-        
-    def testAIPlayerSetBoardEQ(self):
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertEqual(self.board.getGameBoard(), self.aiplayer._AIPlayer__gameboard)
-    def testAIPlayerSetBoardNE(self):
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.board.move(self.player, 0)
-        self.assertNotEqual(self.board.getGameBoard(), self.aiplayer._AIPlayer__gameboard)
-    
+            
     # AIPlayer.__hasMadeInitialMove will be True after AI Player's first move
     def testAIPlayerHasMadeInitialMoveF(self):
         self.assertFalse(self.aiplayer._AIPlayer__hasMadeInitialMove)
         
     def testAIPlayerHasMadeInitialMoveT(self):
-        self.aiplayer.moveAI()
+        self.aiplayer.move(self.board)
         self.assertTrue(self.aiplayer._AIPlayer__hasMadeInitialMove)
+    
+    # Board.getTotalMovesMade    
+    def testBoardGetTotalMovesMadeEQZero(self):
+        self.assertEqual(0,self.board.getTotalMovesMade())
         
-    def testAIPlayerGetTotalMovesMadeEQZero(self):
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertEqual(0,self.aiplayer._AIPlayer__getTotalMovesMade())
-        
-    def testAIPlayerGetTotalMovesMadeEQOne(self):
+    def testBoardGetTotalMovesMadeEQOne(self):
         self.board.move(self.player, 0)
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertEqual(1,self.aiplayer._AIPlayer__getTotalMovesMade())
+        self.assertEqual(1,self.board.getTotalMovesMade())
         
-    def testAIPlayerGetTotalMovesMadeEQTwo(self):
+    def testBoardGetTotalMovesMadeEQTwo(self):
         self.board.move(self.player, 0)
         self.board.move(self.player, 1)
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertEqual(2,self.aiplayer._AIPlayer__getTotalMovesMade())
+        self.assertEqual(2,self.board.getTotalMovesMade())
 
     
-    def testAIPlayerGetTotalMovesMadeNEZero(self):
+    def testBoardGetTotalMovesMadeNEZero(self):
         self.board.move(self.player, 0)
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertNotEqual(0,self.aiplayer._AIPlayer__getTotalMovesMade())
+        self.assertNotEqual(0,self.board.getTotalMovesMade())
         
-    def testAIPlayerGetTotalMovesMadeNEOne(self):
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertNotEqual(1,self.aiplayer._AIPlayer__getTotalMovesMade())
+    def testBoardGetTotalMovesMadeNEOne(self):
+        self.assertNotEqual(1,self.board.getTotalMovesMade())
+        
+    def testBoardGetTotalMovesMadeNETwo(self):
+        self.board.move(self.player, 0)
+        self.assertNotEqual(2,self.board.getTotalMovesMade())
+        
+    #AIPlayer.moveAI(board)   
+    def testAIPlayerMoveFirstMoveOffense(self):
+        self.assertEqual(0,self.aiplayer.move(self.board))
+        
+    def testAIPlayerMoveFirstMoveDefenseHumanPlaysNonCenter(self):
+        self.board.move(self.player,0)
+        self.assertEqual(4,self.aiplayer.move(self.board))
+        
+    def testAIPlayerMoveFirstMoveDefenseHumanPlaysCenter(self):
+        self.board.move(self.player,4)
+        self.assertEqual(0,self.aiplayer.move(self.board))
+        
 
-        
-    def testAIPlayerGetTotalMovesMadeNETwo(self):
-        self.board.move(self.player, 0)
-        self.aiplayer.setGameBoard(self.board.getGameBoard())
-        self.assertNotEqual(2,self.aiplayer._AIPlayer__getTotalMovesMade())
 
         
 

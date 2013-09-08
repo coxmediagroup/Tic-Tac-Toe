@@ -1,4 +1,5 @@
 #TODO Is TicTacToeEngine a better name?
+import copy
 
 '''        
     Going to prematurely optimize here by turning a 2D structure into 1D.
@@ -38,11 +39,11 @@ class Board(object):
     def getGameBoard(self):
         return list(self.__gameboard)
     
-    def __isValidMove(self,pos):
+    def isValidMove(self,pos):
         return self.__gameboard[pos] == BLANK
     
     def move(self,player,pos):
-        valid = self.__isValidMove(pos)
+        valid = self.isValidMove(pos)
         if valid: self.__gameboard[pos] = player.piece
         return valid
     
@@ -57,7 +58,9 @@ class Board(object):
                 return True
             
         return False
-            
+
+    def getTotalMovesMade(self):
+        return (GAME_BOARD_SQUARE_SIZE-self.__gameboard.count(BLANK))            
             
 class Player(object):
     def __init__(self, piece):
@@ -66,15 +69,29 @@ class Player(object):
 class AIPlayer(Player):
     def __init__(self, piece):
         super(AIPlayer, self).__init__(piece)
-        self.__gameboard = []
+        #self.__gameboard = []
         self.__hasMadeInitialMove = False
         
-    def setGameBoard(self, gameboard):
-        self.__gameboard = gameboard
+    #def setGameBoard(self, gameboard):
+    #    self.__gameboard = gameboard
         
-    def moveAI(self):
+    def move(self, board):
         # this should probably require a gameboard?
-        self.__hasMadeInitialMove = True
+        _board = copy.deepcopy(board)
+        move = -1
+        if not self.__hasMadeInitialMove:
+            if _board.getTotalMovesMade() == 0:
+                move = 0 # Always Upper Left for 1st move
+            else:
+                # if center is available take it else take first corner
+                if _board.isValidMove(4): 
+                    move = 4
+                elif _board.isValidMove(0):
+                    move = 0
+                else:
+                    move = -1
+                
+            if move != -1:
+                self.__hasMadeInitialMove = True
+        return move
         
-    def __getTotalMovesMade(self):
-        return (GAME_BOARD_SQUARE_SIZE-self.__gameboard.count(BLANK))
