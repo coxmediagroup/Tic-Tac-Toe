@@ -3,6 +3,9 @@ I moved my changes into a branch named new/game.
 For the AI I am using an algorithm described here:
 http://www.chessandpoker.com/tic_tac_toe_strategy.html
 
+in conjunction with the strategy outlined in the Tic Tac Toe wikipedia article:
+http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+
 Using Python 2.7
 
 UX will be done using pygame. 288x288 game board split into 9 - 96x96 rects
