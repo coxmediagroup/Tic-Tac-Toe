@@ -17,7 +17,7 @@ WIN_LIST =  [
 def checkIsBoardFull(numberOfMoves):
     board=TicTacToeLib.Board()
     player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
-    for i in range(numberOfMoves):
+    for i in xrange(numberOfMoves):
         board.move(player,i)
     return board.isBoardFull()
 
@@ -39,10 +39,10 @@ def checkIsWinnerFalse(move_list,x,o):
     shuffle(move_list)
     
     pos = 0
-    for _ in range(x):
+    for _ in xrange(x):
         board.move(player, move_list[pos])
         pos+=1
-    for _ in range(o):
+    for _ in xrange(o):
         board.move(player2, move_list[pos])
         pos+=1
     
@@ -295,13 +295,21 @@ class TicTacToeLibTests(unittest.TestCase):
     def testfindFirstWinningMoveTrue(self):
         self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
         self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
-        self.assertEqual(TicTacToeLib.UPPER_EDGE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.player))
+        self.assertEqual(TicTacToeLib.UPPER_EDGE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.aiplayer2))
     
     #Board.findFirstWinningMove(piece) O| |O vs X    
     def testfindFirstWinningMoveNone(self):
         self.board.move(self.player2,TicTacToeLib.UPPER_LEFT_CORNER)
         self.board.move(self.player2,TicTacToeLib.UPPER_RIGHT_CORNER)
-        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.player))
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.aiplayer2))
+    
+    def testfindFirstWinningMoveEmptyBoard(self):
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.aiplayer2))
+    
+    def testfindFirstWinningMoveFullBoard(self):
+        for i in xrange(TicTacToeLib.GAME_BOARD_SQUARE_SIZE):
+            self.board.move(self.player, i)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.aiplayer2))
     
     #AIPlayer.__checkForWin O| |O vs O
     def testCheckForWinTrue(self):
