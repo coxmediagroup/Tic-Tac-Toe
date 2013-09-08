@@ -335,7 +335,66 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
         self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__checkForBlock(self.board))
 
-            
+    #AIPlayer.__findFork
+    # X|O|X
+    #  | | 
+    # O| | 
+    # if X next move fork at lower right corner
+    # if O next move fork at lower edge
+
+    def testFindForkTrue1(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.LOWER_RIGHT_CORNER, self.aiplayer2._AIPlayer__findFork(self.board,self.aiplayer2))
+        
+    def testFindForkTrue2(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.LOWER_EDGE, self.aiplayer._AIPlayer__findFork(self.board,self.aiplayer))
+    
+    # X|O|X
+    #  | |
+    # O|X| 
+    # O should have no fork
+    def testFindForkNoMove(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.LOWER_EDGE)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer._AIPlayer__findFork(self.board,self.aiplayer))
+    
+    # same board setup and results expected as __findFork
+    def testCheckForForkTrue1(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.LOWER_RIGHT_CORNER, self.aiplayer2._AIPlayer__checkForFork(self.board))
+        
+    def testCheckForForkTrue2(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.LOWER_EDGE, self.aiplayer._AIPlayer__checkForFork(self.board))
+    
+    # X|O|X
+    #  | |
+    # O|X| 
+    # O should have no fork
+    def testCheckForForkNoMove(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_EDGE)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.LOWER_EDGE)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer._AIPlayer__checkForFork(self.board))
+    
     # TODO tests for getFork() getOpponentFork() ? 
 
         

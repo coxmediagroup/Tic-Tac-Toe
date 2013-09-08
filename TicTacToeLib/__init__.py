@@ -129,4 +129,29 @@ class AIPlayer(Player):
         return self.__findFirstWinningMove(board, self) 
     
     def __checkForBlock(self, board):
-        return self.__findFirstWinningMove(board, Player( self.__opponentPiece()))   
+        return self.__findFirstWinningMove(board, Player( self.__opponentPiece()))
+    
+    def __findFork(self,board,player):
+        _move = NO_MOVE
+        for future_move in xrange(GAME_BOARD_SQUARE_SIZE):
+            if board.isValidMove(future_move):
+                _board = copy.deepcopy(board)
+                _board.move(player, future_move)
+                # now count possible winning moves
+                possible_wins = 0
+                for x in xrange(GAME_BOARD_SQUARE_SIZE):
+                    if _board.isValidMove(x):
+                        _winboard = copy.deepcopy(_board)
+                        _winboard.move(player,x)
+                        if _winboard.isWinner(player):
+                            possible_wins += 1
+                
+                print possible_wins
+                if possible_wins > 1:
+                    return future_move
+        
+        return _move
+    
+    def __checkForFork(self,board):
+        return self.__findFork(board, self)
+    
