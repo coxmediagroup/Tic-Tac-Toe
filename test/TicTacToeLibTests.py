@@ -402,18 +402,32 @@ class TicTacToeLibTests(unittest.TestCase):
     def testValidMoveListZeroMoves(self):
         testlist = [0,1,2,3,4,5,6,7,8]
         self.assertEqual(testlist,self.board.validMoveList())
+    
+    def testValidMoveListZeroMovesNotEqual(self):
+        testlist = []
+        self.assertNotEqual(testlist,self.board.validMoveList())
         
     def testValidMoveListNineMoves(self):
         testlist = []
         for i in xrange(TTTL.GAME_BOARD_SQUARE_SIZE):
             self.board.move(self.player,i)
         self.assertEqual(testlist,self.board.validMoveList())
+        
+    def testValidMoveListNineMovesNotEqual(self):
+        testlist = [0,1,2,3,4,5,6,7,8]
+        for i in xrange(TTTL.GAME_BOARD_SQUARE_SIZE):
+            self.board.move(self.player,i)
+        self.assertNotEqual(testlist,self.board.validMoveList())
 
     def testValidMoveListOneMoveCenter(self):
         testlist = [0,1,2,3,5,6,7,8]
         self.board.move(self.player,TTTL.CENTER)
         self.assertEqual(testlist,self.board.validMoveList())
         
+    def testValidMoveListOneMoveCenterNotEqual(self):
+        testlist = [0,1,2,3,4,5,6,7,8]
+        self.board.move(self.player,TTTL.CENTER)
+        self.assertNotEqual(testlist,self.board.validMoveList())
 
     
 
