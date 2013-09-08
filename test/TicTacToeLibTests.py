@@ -109,6 +109,7 @@ class TicTacToeLibTests(unittest.TestCase):
         self.player=TicTacToeLib.Player(TicTacToeLib.PIECE_X)
         self.player2=TicTacToeLib.Player(TicTacToeLib.PIECE_O)
         self.aiplayer=TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_O)
+        self.aiplayer2=TicTacToeLib.AIPlayer(TicTacToeLib.PIECE_X)
 
     # Board.getGameBoard()
     def testGetGameBoard(self):
@@ -277,9 +278,57 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,TicTacToeLib.CENTER)
         self.assertEqual(TicTacToeLib.INVALID_MOVE, self.aiplayer.move(self.board))
 
+    #AIPlayer.__opponentPiece()
+    def testAIPlayerOpponentPieceOTrue(self):
+        self.assertEqual(TicTacToeLib.PIECE_O,self.aiplayer2._AIPlayer__opponentPiece())
 
-        
-    # TODO tests for getWinningMove() getBlock() getFork() getOpponentFork() ? 
+    def testAIPlayerOpponentPieceOFalse(self):
+        self.assertNotEqual(TicTacToeLib.PIECE_O,self.aiplayer._AIPlayer__opponentPiece())
+
+    def testAIPlayerOpponentPieceXTrue(self):
+        self.assertEqual(TicTacToeLib.PIECE_X,self.aiplayer._AIPlayer__opponentPiece())
+
+    def testAIPlayerOpponentPieceXFalse(self):
+        self.assertNotEqual(TicTacToeLib.PIECE_X,self.aiplayer2._AIPlayer__opponentPiece())
+    
+    #Board.findFirstWinningMove(piece) X| |X vs X
+    def testfindFirstWinningMoveTrue(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.UPPER_EDGE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.player))
+    
+    #Board.findFirstWinningMove(piece) O| |O vs X    
+    def testfindFirstWinningMoveNone(self):
+        self.board.move(self.player2,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__findFirstWinningMove(self.board, self.player))
+    
+    #AIPlayer.__checkForWin O| |O vs O
+    def testCheckForWinTrue(self):
+        self.board.move(self.player2,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.UPPER_EDGE, self.aiplayer._AIPlayer__checkForWin(self.board))
+    
+    #AIPlayer.__checkForWin O| |O vs X    
+    def testCheckForWinNone(self): 
+        self.board.move(self.player2,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__checkForWin(self.board))
+
+    #AIPlayer.__checkForBlock X| |X vs. O
+    def testCheckForBlockTrue(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.UPPER_EDGE, self.aiplayer._AIPlayer__checkForBlock(self.board))
+    
+    #AIPlayer.__checkForBlock X| |X vs. X    
+    def testCheckForBlockNone(self):
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.UPPER_RIGHT_CORNER)
+        self.assertEqual(TicTacToeLib.NO_MOVE, self.aiplayer2._AIPlayer__checkForBlock(self.board))
+
+            
+    # TODO tests for getFork() getOpponentFork() ? 
 
         
 

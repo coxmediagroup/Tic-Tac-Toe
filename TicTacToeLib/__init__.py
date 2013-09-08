@@ -38,7 +38,7 @@ RIGHT_EDGE = 5
 LOWER_LEFT_CORNER = 6
 LOWER_EDGE = 7
 LOWER_RIGHT_CORNER = 8
-INVALID_MOVE = -1
+NO_MOVE = INVALID_MOVE = -1
 
 # TODO Is naming clear?
 class Board(object):
@@ -68,6 +68,7 @@ class Board(object):
                 return True
             
         return False
+    
 
     def getTotalMovesMade(self):
         return (GAME_BOARD_SQUARE_SIZE-self.__gameboard.count(BLANK))            
@@ -106,5 +107,26 @@ class AIPlayer(Player):
             elif board.isValidMove(UPPER_LEFT_CORNER):
                 _move = UPPER_LEFT_CORNER
         return _move
+    
+    def __opponentPiece(self):
+        return PIECE_O if (self.piece == PIECE_X) else PIECE_X
 
+    def __findFirstWinningMove(self, board, player):
+        _move = NO_MOVE
+        _valid_moves = []
+        for i in xrange(GAME_BOARD_SQUARE_SIZE):
+            if board.isValidMove(i): _valid_moves.append(i)
+            
+        for future_move in _valid_moves:
+            _board = copy.deepcopy(board)
+            _board.move(player, future_move)
+            if _board.isWinner(player):
+                return future_move
         
+        return _move
+    
+    def __checkForWin(self, board):
+        return self.__findFirstWinningMove(board, self) 
+    
+    def __checkForBlock(self, board):
+        return self.__findFirstWinningMove(board, Player( self.__opponentPiece()))   
