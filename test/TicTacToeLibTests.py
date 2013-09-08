@@ -242,6 +242,24 @@ class TicTacToeLibTests(unittest.TestCase):
     def testBoardGetTotalMovesMadeNETwo(self):
         self.board.move(self.player, 0)
         self.assertNotEqual(2,self.board.getTotalMovesMade())
+
+    #AIPlayer.__initialMove(board)   
+    def testAIPlayerInitialMoveOffense(self):
+        self.assertEqual(0,self.aiplayer._AIPlayer__initialMove(self.board))
+        
+    def testAIPlayerInitialMoveDefenseHumanPlaysNonCenter(self):
+        self.board.move(self.player,0)
+        self.assertEqual(4,self.aiplayer._AIPlayer__initialMove(self.board))
+        
+    def testAIPlayerInitialMoveDefenseHumanPlaysCenter(self):
+        self.board.move(self.player,4)
+        self.assertEqual(0,self.aiplayer._AIPlayer__initialMove(self.board))
+        
+    def testAIPlayerInitialMoveInvalid(self):
+        self.board.move(self.player,0)
+        self.board.move(self.player,4)
+        self.assertEqual(-1, self.aiplayer._AIPlayer__initialMove(self.board))
+
         
     #AIPlayer.moveAI(board)   
     def testAIPlayerMoveFirstMoveOffense(self):
@@ -254,8 +272,14 @@ class TicTacToeLibTests(unittest.TestCase):
     def testAIPlayerMoveFirstMoveDefenseHumanPlaysCenter(self):
         self.board.move(self.player,4)
         self.assertEqual(0,self.aiplayer.move(self.board))
-        
+    def testAIPlayerMoveFirstMoveInvalid(self):
+        self.board.move(self.player,0)
+        self.board.move(self.player,4)
+        self.assertEqual(-1, self.aiplayer.move(self.board))
 
+
+        
+    # TODO tests for getWinningMove() getBlock() getFork() getOpponentFork() ? 
 
         
 

@@ -80,18 +80,21 @@ class AIPlayer(Player):
         _board = copy.deepcopy(board)
         move = -1
         if not self.__hasMadeInitialMove:
-            if _board.getTotalMovesMade() == 0:
-                move = 0 # Always Upper Left for 1st move
-            else:
-                # if center is available take it else take first corner
-                if _board.isValidMove(4): 
-                    move = 4
-                elif _board.isValidMove(0):
-                    move = 0
-                else:
-                    move = -1
-                
+            move = self.__initialMove(_board)    
             if move != -1:
                 self.__hasMadeInitialMove = True
         return move
+    
+    def __initialMove(self, board):
+        _move = -1
+        if board.getTotalMovesMade() == 0:
+            _move = 0 # Always Upper Left for 1st move
+        elif board.getTotalMovesMade() == 1:
+            # if center is available take it else take first corner
+            if board.isValidMove(4): 
+                _move = 4
+            elif board.isValidMove(0):
+                _move = 0
+        return _move
+
         
