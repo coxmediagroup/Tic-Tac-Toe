@@ -119,11 +119,8 @@ class AIPlayer(Player):
 
     def __findFirstWinningMove(self, board, player):
         _move = NO_MOVE
-        _valid_moves = []
-        for i in xrange(GAME_BOARD_SQUARE_SIZE):
-            if board.isValidMove(i): _valid_moves.append(i)
             
-        for future_move in _valid_moves:
+        for future_move in board.validMoveList():
             _board = copy.deepcopy(board)
             _board.move(player, future_move)
             if _board.isWinner(player):
@@ -137,24 +134,23 @@ class AIPlayer(Player):
     def __checkForBlock(self, board):
         return self.__findFirstWinningMove(board, Player( self.__opponentPiece()))
     
+    #TODO is there a better algorithm for this? 
     def __findFork(self,board,player):
         _move = NO_MOVE
-        for future_move in xrange(GAME_BOARD_SQUARE_SIZE):
-            if board.isValidMove(future_move):
-                _board = copy.deepcopy(board)
-                _board.move(player, future_move)
-                # now count possible winning moves
-                possible_wins = 0
-                for x in xrange(GAME_BOARD_SQUARE_SIZE):
-                    if _board.isValidMove(x):
-                        _winboard = copy.deepcopy(_board)
-                        _winboard.move(player,x)
-                        if _winboard.isWinner(player):
-                            possible_wins += 1
-                
-                print possible_wins
-                if possible_wins > 1:
-                    return future_move
+        for future_move in board.validMoveList():
+            _board = copy.deepcopy(board)
+            _board.move(player, future_move)
+            # now count possible winning moves
+            possible_wins = 0
+            for future_move_plus in _board.validMoveList():
+                _winning_board = copy.deepcopy(_board)
+                _winning_board.move(player,future_move_plus)
+                if _winning_board.isWinner(player):
+                    possible_wins += 1
+            
+            print possible_wins
+            if possible_wins > 1:
+                return future_move
         
         return _move
     
