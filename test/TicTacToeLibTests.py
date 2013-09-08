@@ -118,33 +118,32 @@ class TicTacToeLibTests(unittest.TestCase):
         self.blanktestboard[0]=TicTacToeLib.PIECE_X
         self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
     
-    # Board.__isValidMove    
+    # Board.isValidMove    
     def testIsValidMove(self):
-        # ugly but I don't need this exposed
-        self.assertTrue(self.board.isValidMove(0))
+        self.assertTrue(self.board.isValidMove(TicTacToeLib.UPPER_LEFT_CORNER))
 
     def testIsValidMoveFalse(self):
         # ugly but I don't need this exposed
-        self.board._Board__gameboard[0]=TicTacToeLib.PIECE_X
+        self.board._Board__gameboard[TicTacToeLib.UPPER_LEFT_CORNER]=TicTacToeLib.PIECE_X
         # self.board.move(self.player,0)
-        self.assertFalse(self.board.isValidMove(0))
+        self.assertFalse(self.board.isValidMove(TicTacToeLib.UPPER_LEFT_CORNER))
     
     # Board.move()     
     def testMove(self):
-        self.assertTrue(self.board.move(self.player,0))
+        self.assertTrue(self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER))
         
     def testMoveFalse(self):
-        self.board._Board__gameboard[0]=TicTacToeLib.PIECE_X
-        self.assertFalse(self.board.move(self.player,0))
+        self.board._Board__gameboard[TicTacToeLib.UPPER_LEFT_CORNER]=TicTacToeLib.PIECE_X
+        self.assertFalse(self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER))
     
     # Board.move() + Board.getGameBoard()    
     def testMoveMadeNE(self):
-        self.board.move(self.player,0)
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
         self.assertNotEqual(self.blanktestboard, self.board.getGameBoard())
         
     def testMoveMadeEQ(self):
         self.blanktestboard[0] = TicTacToeLib.PIECE_X
-        self.board.move(self.player,0)
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
         self.assertEqual(self.blanktestboard, self.board.getGameBoard()) 
     
     #Player.__init__()    
@@ -223,59 +222,60 @@ class TicTacToeLibTests(unittest.TestCase):
         self.assertEqual(0,self.board.getTotalMovesMade())
         
     def testBoardGetTotalMovesMadeEQOne(self):
-        self.board.move(self.player, 0)
+        self.board.move(self.player, TicTacToeLib.UPPER_LEFT_CORNER)
         self.assertEqual(1,self.board.getTotalMovesMade())
         
     def testBoardGetTotalMovesMadeEQTwo(self):
-        self.board.move(self.player, 0)
-        self.board.move(self.player, 1)
+        self.board.move(self.player, TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player, TicTacToeLib.UPPER_EDGE)
         self.assertEqual(2,self.board.getTotalMovesMade())
 
     
     def testBoardGetTotalMovesMadeNEZero(self):
-        self.board.move(self.player, 0)
+        self.board.move(self.player, TicTacToeLib.UPPER_LEFT_CORNER)
         self.assertNotEqual(0,self.board.getTotalMovesMade())
         
     def testBoardGetTotalMovesMadeNEOne(self):
         self.assertNotEqual(1,self.board.getTotalMovesMade())
         
     def testBoardGetTotalMovesMadeNETwo(self):
-        self.board.move(self.player, 0)
+        self.board.move(self.player, TicTacToeLib.UPPER_LEFT_CORNER)
         self.assertNotEqual(2,self.board.getTotalMovesMade())
 
     #AIPlayer.__initialMove(board)   
     def testAIPlayerInitialMoveOffense(self):
-        self.assertEqual(0,self.aiplayer._AIPlayer__initialMove(self.board))
+        self.assertEqual(TicTacToeLib.UPPER_LEFT_CORNER,self.aiplayer._AIPlayer__initialMove(self.board))
         
     def testAIPlayerInitialMoveDefenseHumanPlaysNonCenter(self):
-        self.board.move(self.player,0)
-        self.assertEqual(4,self.aiplayer._AIPlayer__initialMove(self.board))
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.CENTER,self.aiplayer._AIPlayer__initialMove(self.board))
         
     def testAIPlayerInitialMoveDefenseHumanPlaysCenter(self):
-        self.board.move(self.player,4)
-        self.assertEqual(0,self.aiplayer._AIPlayer__initialMove(self.board))
+        self.board.move(self.player,TicTacToeLib.CENTER)
+        self.assertEqual(TicTacToeLib.UPPER_LEFT_CORNER,self.aiplayer._AIPlayer__initialMove(self.board))
         
     def testAIPlayerInitialMoveInvalid(self):
-        self.board.move(self.player,0)
-        self.board.move(self.player,4)
-        self.assertEqual(-1, self.aiplayer._AIPlayer__initialMove(self.board))
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.CENTER)
+        self.assertEqual(TicTacToeLib.INVALID_MOVE, self.aiplayer._AIPlayer__initialMove(self.board))
 
         
     #AIPlayer.moveAI(board)   
     def testAIPlayerMoveFirstMoveOffense(self):
-        self.assertEqual(0,self.aiplayer.move(self.board))
+        self.assertEqual(TicTacToeLib.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
         
     def testAIPlayerMoveFirstMoveDefenseHumanPlaysNonCenter(self):
-        self.board.move(self.player,0)
-        self.assertEqual(4,self.aiplayer.move(self.board))
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.assertEqual(TicTacToeLib.CENTER,self.aiplayer.move(self.board))
         
     def testAIPlayerMoveFirstMoveDefenseHumanPlaysCenter(self):
-        self.board.move(self.player,4)
-        self.assertEqual(0,self.aiplayer.move(self.board))
+        self.board.move(self.player,TicTacToeLib.CENTER)
+        self.assertEqual(TicTacToeLib.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
+    
     def testAIPlayerMoveFirstMoveInvalid(self):
-        self.board.move(self.player,0)
-        self.board.move(self.player,4)
-        self.assertEqual(-1, self.aiplayer.move(self.board))
+        self.board.move(self.player,TicTacToeLib.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TicTacToeLib.CENTER)
+        self.assertEqual(TicTacToeLib.INVALID_MOVE, self.aiplayer.move(self.board))
 
 
         

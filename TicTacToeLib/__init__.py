@@ -29,6 +29,16 @@ BLANK = ''
 WINNING_LINE_SLICES = [[0,3,1],[3,6,1],[6,9,1],[0,7,3],[1,8,3],[2,9,3],[0,9,4],[2,7,2]]
 PIECE_X = 'X'
 PIECE_O = 'O'
+UPPER_LEFT_CORNER = 0
+UPPER_EDGE = 1
+UPPER_RIGHT_CORNER = 2
+LEFT_EDGE = 3
+CENTER = 4
+RIGHT_EDGE = 5
+LOWER_LEFT_CORNER = 6
+LOWER_EDGE = 7
+LOWER_RIGHT_CORNER = 8
+INVALID_MOVE = -1
 
 # TODO Is naming clear?
 class Board(object):
@@ -78,23 +88,23 @@ class AIPlayer(Player):
     def move(self, board):
         # this should probably require a gameboard?
         _board = copy.deepcopy(board)
-        move = -1
+        move = INVALID_MOVE
         if not self.__hasMadeInitialMove:
             move = self.__initialMove(_board)    
-            if move != -1:
+            if move != INVALID_MOVE:
                 self.__hasMadeInitialMove = True
         return move
     
     def __initialMove(self, board):
         _move = -1
         if board.getTotalMovesMade() == 0:
-            _move = 0 # Always Upper Left for 1st move
+            _move = UPPER_LEFT_CORNER # Always Upper Left for 1st move
         elif board.getTotalMovesMade() == 1:
             # if center is available take it else take first corner
-            if board.isValidMove(4): 
-                _move = 4
-            elif board.isValidMove(0):
-                _move = 0
+            if board.isValidMove(CENTER): 
+                _move = CENTER
+            elif board.isValidMove(UPPER_LEFT_CORNER):
+                _move = UPPER_LEFT_CORNER
         return _move
 
         
