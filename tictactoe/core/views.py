@@ -1,11 +1,11 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+from core.forms import SignupForm
 from core.game import Game, PLAYER, COMPUTER
 from core.models import GameHistory
 
@@ -84,3 +84,19 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+def sign_up(request):
+    """
+    Sign up new user, log them in and redirect to new game
+    """
+    context = {}
+    if request.POST:
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            username, password = form.save()
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return HttpResponseRedirect("/")
+    else:
+        form = SignupForm()
+    context['form'] = form    
+    return render_to_response('registration/sign_up.html', context, context_instance=RequestContext(request))
