@@ -76,7 +76,7 @@ class Game(object):
 
     def best_next_move(self, value):
         """
-        Return the next best move for the current board
+        Return the next best move for the current board. Value is PLAYER or COMPUTER
         """
 
         valid_boxes = self.get_blank_boxes()
@@ -95,21 +95,18 @@ class Game(object):
         if CENTER_BOX in valid_boxes:
             return CENTER_BOX
 
-        # save a copy of the board since it will get modifed during evaluate move
-        board_copy = list(self.board)
-
         # Evalute each valid move and find the one with the highest score
         selected_box = valid_boxes[0]
         max_score = -1
         for box in valid_boxes:
+            # save a copy of the board since it will get modifed during evaluate move
+            board_copy = list(self.board)
             score = self.evaluate_move(box, value, value)
             if score >= max_score:
                 max_score = score
                 selected_box = box
-
-        #change the board back
-        self.board = board_copy
-
+            #change the board back
+            self.board = board_copy
         return selected_box
 
 
@@ -120,25 +117,34 @@ class Game(object):
         """
         self.make_move(box, current_value)
 
-        # Check if this move finished the game
+        # Check if this move finished the game        
         result, winning_combination = self.check_win()
         if result:
-            if result == current_value:
-                return 1 # Player won
+            if result == original_value:
+                return 1  # Computer won
             else:
-                return -1 # Opponent won
+                return -1 # Player won
         
         # Game drawn
         if not self.get_blank_boxes():
             return 0
 
-        opponent_results = [self.evaluate_move(box, original_value, self.toggle_marker(current_value)) for box in self.get_blank_boxes()]
+        # change turn and evaluate the remaining available options
+        current_value = self.toggle_marker(current_value)
+        opponent_results = []
+        for box in self.get_blank_boxes():
+            # save a copy of the board since it will get modifed during evaluate move
+            board_copy = list(self.board)
+            opponent_results.append(self.evaluate_move(box, original_value, current_value))
+            # change the board back
+            self.board = board_copy
+
 
         if original_value == current_value:
-            # Computer is playing. Opponent is human so choose the worst possible outcome for the computer
+            # Computer is playing. Choose the outcome where computer wins
             return max(opponent_results)
         else:
-            # human is playing. Again choose the worst possible outcome for computer
+            # human is playing. Choose the option where human wins (computer loses)
             return min(opponent_results)
 
 
