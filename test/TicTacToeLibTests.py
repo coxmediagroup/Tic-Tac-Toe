@@ -397,6 +397,22 @@ class TicTacToeLibTests(unittest.TestCase):
     
     # TODO tests for getFork() getOpponentFork() ? 
 
+    # Board.validMoveList()
+    # check zero moves, nine moves, one move
+    def testValidMoveListZeroMoves(self):
+        testlist = [0,1,2,3,4,5,6,7,8]
+        self.assertEqual(testlist,self.board.validMoveList())
+        
+    def testValidMoveListNineMoves(self):
+        testlist = []
+        for i in xrange(TicTacToeLib.GAME_BOARD_SQUARE_SIZE):
+            self.board.move(self.player,i)
+        self.assertEqual(testlist,self.board.validMoveList())
+
+    def testValidMoveListOneMoveCenter(self):
+        testlist = [0,1,2,3,5,6,7,8]
+        self.board.move(self.player,TicTacToeLib.CENTER)
+        self.assertEqual(testlist,self.board.validMoveList())
         
 
     

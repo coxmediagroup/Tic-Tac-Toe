@@ -52,6 +52,12 @@ class Board(object):
     def isValidMove(self,pos):
         return self.__gameboard[pos] == BLANK
     
+    def validMoveList(self):
+        _valid_moves = []
+        for i in xrange(GAME_BOARD_SQUARE_SIZE):
+            if self.isValidMove(i): _valid_moves.append(i)
+        return _valid_moves
+    
     def move(self,player,pos):
         valid = self.isValidMove(pos)
         if valid: self.__gameboard[pos] = player.piece
