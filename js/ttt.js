@@ -243,7 +243,7 @@ var frontslide=function(el){
 	slidein()
 	function slidein(){
 		o=parseFloat(o)+chunk
-		el.style.backgroundSize=o+"%"	
+		el.style.backgroundSize=o+"% 100%"	
 		if (o < 100 ){
 			setTimeout(slidein,swing(1-o))
 		
