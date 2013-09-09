@@ -1,6 +1,6 @@
-WINNING_COMBINATIONS = ( (0, 1, 2), (3, 4, 5), (6, 7, 8), 
-                         (0, 3, 6), (1, 4, 7), (2, 5, 8),
-                         (0, 4, 8), (2, 4, 6)
+WINNING_COMBINATIONS = ( (0, 1, 2), (3, 4, 5), (6, 7, 8), # rows
+                         (0, 3, 6), (1, 4, 7), (2, 5, 8), # columns
+                         (0, 4, 8), (2, 4, 6)             # diagonal
                        )
 # Box related constants
 BLANK = 0
@@ -22,7 +22,7 @@ class Game(object):
 
     def check_game_over(self):
         '''
-        None - Not over, 1 - 0 wins, 2 - X wins, 3 - tie game
+        returns None: Game not over, 1: PLAYER wins, 2: COMPUTER wins, 3: Game tied
         '''
         if not self.get_blank_boxes():
             return NO_RESULT, None
@@ -112,8 +112,8 @@ class Game(object):
 
     def evaluate_move(self, box, original_value, current_value):
         """
-        Evaluate a particular move (current_value) for a box. Return score based
-        on if its good or not for the computer (original_value) 
+        Evaluate a particular move for the player or computer (current_value) for a box. Return score based on
+        if the Player wins (-1), computer wins (+1) or tie (0)
         """
         self.make_move(box, current_value)
 

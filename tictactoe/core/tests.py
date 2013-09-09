@@ -3,7 +3,7 @@ from random import choice
 
 from core.game import Game, COMPUTER, PLAYER, NO_RESULT
 
-NUMBER_OF_GAMES = 100
+NUMBER_OF_GAMES = 1000
 
 class GameTest(TestCase):
     def test_game_result(self):

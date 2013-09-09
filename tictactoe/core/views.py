@@ -68,12 +68,8 @@ def make_move(request):
     result['board'] = json.dumps(game.get_board())
 
     # set winning combinations for highlighting
-    if winning_combination:
-        result['winning_combination_1'] = str(winning_combination[0])
-        result['winning_combination_2'] = str(winning_combination[1])
-        result['winning_combination_3'] = str(winning_combination[2])
-
     result['winning_combination'] = winning_combination
+
     return HttpResponse(json.dumps(result), mimetype='application/json')
 
 @login_required
