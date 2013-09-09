@@ -40,6 +40,7 @@ LOWER_EDGE = 7
 LOWER_RIGHT_CORNER = 8
 NO_MOVE = INVALID_MOVE = -1
 CORNERS = [UPPER_LEFT_CORNER,UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER,LOWER_RIGHT_CORNER]
+OPPOSITE_CORNERS = [[UPPER_LEFT_CORNER,LOWER_RIGHT_CORNER],[UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER]]
 
 # TODO Is naming clear?
 class Board(object):
@@ -130,10 +131,8 @@ class AIPlayer(Player):
         if move != NO_MOVE: return move
         
         # 6. check for opposite corner
-        '''
         move = self.__checkForOppositeCorner(_board)
         if move != NO_MOVE: return move
-        '''
         
         # 7. Play empty corner
         move = self.__checkForEmptyCorner(_board)
@@ -210,5 +209,26 @@ class AIPlayer(Player):
     def __checkForEmptyCorner(self,board):
         _emptyCornerList = [i for i in CORNERS if i in board.validMoveList()]
         return NO_MOVE if len(_emptyCornerList) == 0 else _emptyCornerList[0]
+    
+    def __checkForOppositeCorner(self, board):
+        gameBoard = board.getGameBoard()
+        validMoves = board.validMoveList()
+        for corners in OPPOSITE_CORNERS:
+            if ((corners[0] not in validMoves) 
+            and (gameBoard[corners[0]]==self.__opponentPiece()) 
+            and (corners[1] in validMoves)):
+                return corners[1]
+            
+            if ((corners[1] not in validMoves) 
+            and (gameBoard[corners[1]]==self.__opponentPiece()) 
+            and (corners[0] in validMoves)):
+                return corners[0]
+            
+        return NO_MOVE
+            
+                
+                
+                
+            
         
         

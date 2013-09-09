@@ -506,6 +506,101 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
         self.assertNotEqual(TTTL.LOWER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
 
+    # Going to check 2nd moves
+    # Offense (Player O first)
+    # Case 1:
+    # X| | 
+    #  |O| 
+    #  | | 
+    # According to the algorithm opposite corner will be picked
+    def testAIPlayerMove2ndMoveOffenseCase1EQ(self):
+        self.board.move(self.aiplayer, self.aiplayer.move(self.board))
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.assertEqual(TTTL.LOWER_RIGHT_CORNER,self.aiplayer.move(self.board))
+    
+    # Case 2:
+    #  |X| 
+    #  |O| 
+    #  | | 
+    # According to the algorithm first empty corner will be picked
+    def testAIPlayerMove2ndMoveOffenseCase2EQ(self):
+        self.board.move(self.aiplayer, self.aiplayer.move(self.board))
+        self.board.move(self.player, TTTL.UPPER_EDGE)
+        self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
+    
+    
+    # Defense (Player X first AI == O)
+    # Case 1:
+    # X| |X 
+    #  |O| 
+    #  | | 
+    # Case 1 X needs win blocked
+    def testAIPlayerMove2ndMoveDefenseCase1EQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.aiplayer, self.aiplayer.move(self.board))
+        self.board.move(self.player, TTTL.UPPER_RIGHT_CORNER)
+        self.assertEqual(TTTL.UPPER_EDGE,self.aiplayer.move(self.board))
+    
+    # Case 2:
+    # X| | 
+    #  |O| 
+    #  | |X
+    # X needs to have fork blocked with move to an edge (UPPER_EDGE)
+    
+    # Case 3:
+    # X| | 
+    #  |O| 
+    #  |X| 
+    # X needs to have fork blocked with move to an edge (LEFT_EDGE)
+    
+    # AIPlayer.__checkForOppositeCorner
+    # X upper left O goes lower right
+    def testCheckForOppositeCorner1EQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.assertEqual(TTTL.LOWER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    # X lr O goes ul
+    def testCheckForOppositeCorner2EQ(self):
+        self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
+        self.assertEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    # X ur O goes ll
+    def testCheckForOppositeCorner3EQ(self):
+        self.board.move(self.player, TTTL.UPPER_RIGHT_CORNER)
+        self.assertEqual(TTTL.LOWER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    # X ll O goes ur
+    def testCheckForOppositeCorner4EQ(self):
+        self.board.move(self.player, TTTL.LOWER_LEFT_CORNER)
+        self.assertEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    # NO_MOVE
+    def testCheckForOppositeCornerFullEQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+
+    def testCheckForOppositeCorner1NEQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.assertNotEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    def testCheckForOppositeCorner2NEQ(self):
+        self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
+        self.assertNotEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    
+    def testCheckForOppositeCorner3NEQ(self):
+        self.board.move(self.player, TTTL.UPPER_RIGHT_CORNER)
+        self.assertNotEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+    # AIPlayer.__checkForOppositeCorner
+    # X upper left O goes lower right
+    def testCheckForOppositeCorner4NEQ(self):
+        self.board.move(self.player, TTTL.LOWER_LEFT_CORNER)
+        self.assertNotEqual(TTTL.LOWER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
+
+    def testCheckForOppositeCornerFullNEQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
+        self.assertNotEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
 
 
 if __name__ == "__main__":
