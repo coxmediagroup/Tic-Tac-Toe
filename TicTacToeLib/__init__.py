@@ -39,6 +39,7 @@ LOWER_LEFT_CORNER = 6
 LOWER_EDGE = 7
 LOWER_RIGHT_CORNER = 8
 NO_MOVE = INVALID_MOVE = -1
+CORNERS = [UPPER_LEFT_CORNER,UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER,LOWER_RIGHT_CORNER]
 
 # TODO Is naming clear?
 class Board(object):
@@ -94,14 +95,61 @@ class AIPlayer(Player):
         
     def move(self, board):
         # this should probably require a gameboard?
+        # switching to wikipedia algorithm
+        # 1. Play for win
+        # 2. Play for block
+        # 3. Play for fork
+        # 4. Play for block of potential opponent fork
+        # 5. Play center
+        # 6. Play opposite corner from opponent
+        # 7. Play empty corner
+        # 8. Play empty edge
         _board = copy.deepcopy(board)
         move = INVALID_MOVE
-        if not self.__hasMadeInitialMove:
-            move = self.__initialMove(_board)    
-            if move != INVALID_MOVE:
-                self.__hasMadeInitialMove = True
+        
+        # 1. check for win
+        move = self.__checkForWin(_board)
+        if move != NO_MOVE: return move
+        
+        # 2. check for block
+        move = self.__checkForBlock(_board)
+        if move != NO_MOVE: return move
+        
+        # 3. check for fork
+        move = self.__checkForFork(_board)
+        if move != NO_MOVE: return move
+        
+        # 4. check for fork block
+        '''
+        move = self.__blockFork(_board)
+        if move != NO_MOVE: return move
+        '''
+        
+        # 5. check for center
+        move = self.__checkForCenter(_board)
+        if move != NO_MOVE: return move
+        
+        # 6. check for opposite corner
+        '''
+        move = self.__checkForOppositeCorner(_board)
+        if move != NO_MOVE: return move
+        '''
+        
+        # 7. Play empty corner
+        move = self.__checkForEmptyCorner(_board)
+        if move != NO_MOVE: return move
+        
+        # 8. Play empty edge
+        '''
+        move = self.__checkForEmptyEdge(_board)
+        if move != NO_MOVE: return move
+        '''
+
+        
+        
         return move
-    
+        
+        
     def __initialMove(self, board):
         _move = -1
         if board.getTotalMovesMade() == 0:
@@ -147,8 +195,7 @@ class AIPlayer(Player):
                 _winning_board.move(player,future_move_plus)
                 if _winning_board.isWinner(player):
                     possible_wins += 1
-            
-            print possible_wins
+
             if possible_wins > 1:
                 return future_move
         
@@ -156,4 +203,12 @@ class AIPlayer(Player):
     
     def __checkForFork(self,board):
         return self.__findFork(board, self)
+
+    def __checkForCenter(self,board):
+        return CENTER if board.isValidMove(CENTER) else NO_MOVE
     
+    def __checkForEmptyCorner(self,board):
+        _emptyCornerList = [i for i in CORNERS if i in board.validMoveList()]
+        return NO_MOVE if len(_emptyCornerList) == 0 else _emptyCornerList[0]
+        
+        

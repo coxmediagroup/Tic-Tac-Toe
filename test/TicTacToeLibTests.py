@@ -209,7 +209,8 @@ class TicTacToeLibTests(unittest.TestCase):
     
     def testAIPlayerNE(self):
         self.assertNotEqual(self.aiplayer.piece, TTTL.PIECE_X)
-            
+    
+    '''        
     # AIPlayer.__hasMadeInitialMove will be True after AI Player's first move
     def testAIPlayerHasMadeInitialMoveF(self):
         self.assertFalse(self.aiplayer._AIPlayer__hasMadeInitialMove)
@@ -217,7 +218,8 @@ class TicTacToeLibTests(unittest.TestCase):
     def testAIPlayerHasMadeInitialMoveT(self):
         self.aiplayer.move(self.board)
         self.assertTrue(self.aiplayer._AIPlayer__hasMadeInitialMove)
-    
+    '''
+        
     # Board.getTotalMovesMade    
     def testBoardGetTotalMovesMadeEQZero(self):
         self.assertEqual(0,self.board.getTotalMovesMade())
@@ -263,7 +265,7 @@ class TicTacToeLibTests(unittest.TestCase):
         
     #AIPlayer.moveAI(board)   
     def testAIPlayerMoveFirstMoveOffense(self):
-        self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
+        self.assertEqual(TTTL.CENTER,self.aiplayer.move(self.board))
         
     def testAIPlayerMoveFirstMoveDefenseHumanPlaysNonCenter(self):
         self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
@@ -273,11 +275,13 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,TTTL.CENTER)
         self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
     
+    '''
     def testAIPlayerMoveFirstMoveInvalid(self):
         self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
         self.board.move(self.player,TTTL.CENTER)
         self.assertEqual(TTTL.INVALID_MOVE, self.aiplayer.move(self.board))
-
+    '''
+        
     #AIPlayer.__opponentPiece()
     def testAIPlayerOpponentPieceOTrue(self):
         self.assertEqual(TTTL.PIECE_O,self.aiplayer2._AIPlayer__opponentPiece())
@@ -394,8 +398,6 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player2,TTTL.LOWER_LEFT_CORNER)
         self.board.move(self.player,TTTL.LOWER_EDGE)
         self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForFork(self.board))
-    
-    # TODO tests for getFork() getOpponentFork() ? 
 
     # Board.validMoveList()
     # check zero moves, nine moves, one move
@@ -428,8 +430,83 @@ class TicTacToeLibTests(unittest.TestCase):
         testlist = [0,1,2,3,4,5,6,7,8]
         self.board.move(self.player,TTTL.CENTER)
         self.assertNotEqual(testlist,self.board.validMoveList())
+        
+    def testCheckForCenterNoMovesEQ(self):
+        self.assertEqual(TTTL.CENTER, self.aiplayer._AIPlayer__checkForCenter(self.board))
+        
+    def testCheckForCenterOneMoveEQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.assertEqual(TTTL.CENTER, self.aiplayer._AIPlayer__checkForCenter(self.board))
 
-    
+    def testCheckForCenterOneMoveCenterNEQ(self):
+        self.board.move(self.player, TTTL.CENTER)
+        self.assertNotEqual(TTTL.CENTER, self.aiplayer._AIPlayer__checkForCenter(self.board))
+
+    def testCheckForCenterOneMoveCenterEQ(self):
+        self.board.move(self.player, TTTL.CENTER)
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForCenter(self.board))
+
+    def testCheckForEmptyCornerNoMovesEQ(self):
+        self.assertEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerOneMoveEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.assertEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerTwoMovesEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.assertEqual(TTTL.LOWER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+        
+    def testCheckForEmptyCornerThreeMovesEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.assertEqual(TTTL.LOWER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerFourMovesEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_RIGHT_CORNER)
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerNoMovesNEQ(self):
+        self.assertNotEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerOneMoveNEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.assertNotEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerTwoMovesNEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.assertNotEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+        
+    def testCheckForEmptyCornerThreeMovesNEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.assertNotEqual(TTTL.LOWER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerFourMovesNEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_RIGHT_CORNER)
+        self.assertNotEqual(TTTL.LOWER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerTwoMovesNonAdjacentEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.assertEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+    def testCheckForEmptyCornerTwoMovesNonAdjacentNEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_LEFT_CORNER)
+        self.assertNotEqual(TTTL.LOWER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForEmptyCorner(self.board))
+
+
 
 if __name__ == "__main__":
     unittest.main()
