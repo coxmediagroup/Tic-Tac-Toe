@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'C:/Users/kingartjr/Documents/Projects/mysite/mysite.db',                      # Or path to database file if using sqlite3.
+        'NAME': 'C:/Users/kingartjr/Documents/GitHub/Tic-Tac-Toe/mysite/mysite.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -128,7 +128,7 @@ INSTALLED_APPS = (
 )
 
 TEMPLATE_DIRS = (
-    'C:\\Users\\kingartjr\\Documents\\Projects\\mysite\\templates\\', # Change this to your own directory.
+    'C:\\Users\\kingartjr\\Documents\\github\\tic-tac-toe\\mysite\\templates\\', # Change this to your own directory.
 )
 
 # A sample logging configuration. The only tangible logging
