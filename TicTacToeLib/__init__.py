@@ -143,20 +143,7 @@ class AIPlayer(Player):
         
         
         return move
-        
-        
-    def __initialMove(self, board):
-        _move = -1
-        if board.getTotalMovesMade() == 0:
-            _move = UPPER_LEFT_CORNER # Always Upper Left for 1st move
-        elif board.getTotalMovesMade() == 1:
-            # if center is available take it else take first corner
-            if board.isValidMove(CENTER): 
-                _move = CENTER
-            elif board.isValidMove(UPPER_LEFT_CORNER):
-                _move = UPPER_LEFT_CORNER
-        return _move
-    
+            
     def __opponentPiece(self):
         return PIECE_O if (self.piece == PIECE_X) else PIECE_X
 
@@ -180,6 +167,7 @@ class AIPlayer(Player):
     #TODO is there a better algorithm for this? 
     def __findFork(self,board,player):
         _move = NO_MOVE
+
         for future_move in board.validMoveList():
             _board = copy.deepcopy(board)
             _board.move(player, future_move)
@@ -190,7 +178,8 @@ class AIPlayer(Player):
                 _winning_board.move(player,future_move_plus)
                 if _winning_board.isWinner(player):
                     possible_wins += 1
-
+                    
+            # two possible winning moves makes a fork
             if possible_wins > 1:
                 return future_move
         
@@ -228,7 +217,6 @@ class AIPlayer(Player):
     
     def __blockFork(self,board):
         opponent = Player(self.__opponentPiece())
-        #print opponent.piece
         if self.__findFork(board, opponent) == NO_MOVE:
             return NO_MOVE
         
@@ -243,22 +231,27 @@ class AIPlayer(Player):
                 #print "MOVE",future_move,"BLOCK",opponent_block 
                 _board.move(opponent,opponent_block)
                 
-                # if we created a fork
+                # if we created a fork we can move on
                 if self.__checkForWin(_board) != NO_MOVE:
                     return future_move
                 
-                # TODO go over this again and comment
-                # check for a block that doesn't result in a win or opponent fork
+                # another possible look ahead
                 ai_block = self.__checkForBlock(_board)
-                #print "AI_BLOCK", ai_block
+                
+                # no forks and nothing to block == good move
                 if ai_block == NO_MOVE and self.__findFork(_board, opponent)==NO_MOVE:
                     return future_move
                     
+                # do the next look ahead    
                 if ai_block != NO_MOVE:
                     _board.move(self, ai_block)
+                    # redundant?
                     if ((self.__checkForBlock(_board) == NO_MOVE) and 
                         (self.__findFork(_board, opponent)==NO_MOVE)):
                         return future_move
+                    
+            # No way to force opponent into block
+            # Let's see if we broke the fork and didn't set up a win
             elif ((self.__checkForBlock(_board) == NO_MOVE) and 
                   (self.__findFork(_board, opponent)==NO_MOVE)):
                 return future_move
