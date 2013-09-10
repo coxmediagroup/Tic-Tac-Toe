@@ -1,6 +1,6 @@
 import unittest
 import TicTacToeLib as TTTL
-from random import shuffle
+from random import shuffle,choice
 
 NUMBER_LIST = ['EmptyBoard', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight']
 WIN_LIST =  [
@@ -677,6 +677,71 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player2,TTTL.LOWER_EDGE)
         self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__blockFork(self.board))
         
+    # test to make sure AI plays to a draw
+    def testGameplay(self):
+        gameover = False
+        winner = TTTL.BLANK
+        while not gameover:
+            self.board.move(self.aiplayer2,self.aiplayer2.move(self.board))
+            print self.board.getGameBoard()
+            if self.board.isWinner(self.aiplayer2): 
+                winner = self.aiplayer2.piece
+            elif not self.board.isBoardFull(): 
+                self.board.move(self.aiplayer,self.aiplayer.move(self.board))
+                print self.board.getGameBoard()
+                if self.board.isWinner(self.aiplayer): 
+                    winner = self.aiplayer.piece
+            
+            if winner != TTTL.BLANK or self.board.isBoardFull():
+                gameover = True
+                
+        self.assertEqual(TTTL.BLANK, winner)
+
+    # test to make sure AI plays to a draw
+    # make ai O player start with an edge first
+    def testGameplayRandomEdge(self):
+        gameover = False
+        winner = TTTL.BLANK
+        self.board.move(self.player2,choice(TTTL.EDGES))
+        while not gameover:
+            self.board.move(self.aiplayer2,self.aiplayer2.move(self.board))
+            print self.board.getGameBoard()
+            if self.board.isWinner(self.aiplayer2): 
+                winner = self.aiplayer2.piece
+            elif not self.board.isBoardFull(): 
+                self.board.move(self.aiplayer,self.aiplayer.move(self.board))
+                print self.board.getGameBoard()
+                if self.board.isWinner(self.aiplayer): 
+                    winner = self.aiplayer.piece
+            
+            if winner != TTTL.BLANK or self.board.isBoardFull():
+                gameover = True
+                
+        self.assertEqual(TTTL.BLANK, winner)
+
+    # test to make sure AI plays to a draw
+    # make ai O player start with an edge first
+    def testGameplayRandomCorner(self):
+        gameover = False
+        winner = TTTL.BLANK
+        self.board.move(self.player2,choice(TTTL.CORNERS))
+        while not gameover:
+            self.board.move(self.aiplayer2,self.aiplayer2.move(self.board))
+            print self.board.getGameBoard()
+            if self.board.isWinner(self.aiplayer2): 
+                winner = self.aiplayer2.piece
+            elif not self.board.isBoardFull(): 
+                self.board.move(self.aiplayer,self.aiplayer.move(self.board))
+                print self.board.getGameBoard()
+                if self.board.isWinner(self.aiplayer): 
+                    winner = self.aiplayer.piece
+            
+            if winner != TTTL.BLANK or self.board.isBoardFull():
+                gameover = True
+                
+        self.assertEqual(TTTL.BLANK, winner)
+
+            
         
 if __name__ == "__main__":
     unittest.main()
