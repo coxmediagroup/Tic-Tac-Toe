@@ -591,8 +591,7 @@ class TicTacToeLibTests(unittest.TestCase):
     def testCheckForOppositeCorner3NEQ(self):
         self.board.move(self.player, TTTL.UPPER_RIGHT_CORNER)
         self.assertNotEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
-    # AIPlayer.__checkForOppositeCorner
-    # X upper left O goes lower right
+
     def testCheckForOppositeCorner4NEQ(self):
         self.board.move(self.player, TTTL.LOWER_LEFT_CORNER)
         self.assertNotEqual(TTTL.LOWER_LEFT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
@@ -602,7 +601,72 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
         self.assertNotEqual(TTTL.UPPER_RIGHT_CORNER, self.aiplayer._AIPlayer__checkForOppositeCorner(self.board))
 
+    # X| | 
+    #  |O| 
+    #  | |X
+    # X needs to have fork blocked with move to an edge (UPPER_EDGE)
+    def testBlockForkCase1EQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player2, TTTL.CENTER)
+        self.board.move(self.player, TTTL.LOWER_RIGHT_CORNER)
+        self.assertEqual(TTTL.UPPER_EDGE, self.aiplayer._AIPlayer__blockFork(self.board))
 
+    # X| | 
+    #  |O| 
+    #  |X| 
+    # X needs to have fork blocked with move to an edge (RIGHT_EDGE)
+    def testBlockForkCase2EQ(self):
+        self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player2, TTTL.CENTER)
+        self.board.move(self.player, TTTL.LOWER_EDGE)
+        self.assertEqual(TTTL.RIGHT_EDGE, self.aiplayer._AIPlayer__blockFork(self.board))
+
+    # X|O|X
+    #  | | 
+    # O| | 
+    # if X block fork at center
+    def testBlockForkTrue1(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TTTL.UPPER_EDGE)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TTTL.LOWER_LEFT_CORNER)
+        self.assertEqual(TTTL.CENTER, self.aiplayer2._AIPlayer__blockFork(self.board))
+
+    #  |X| 
+    #  | |X
+    # O| | 
+    # O will block at upper left corner    
+    def testBlockForkTrue2(self):
+        self.board.move(self.player,TTTL.UPPER_EDGE)
+        self.board.move(self.player2,TTTL.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.RIGHT_EDGE)
+        self.assertEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__blockFork(self.board))
+    
+    # X|O|X
+    #  | |
+    # O|X| 
+    # O should have no fork
+    def testBlockForkNoMove(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.board.move(self.player2,TTTL.UPPER_EDGE)
+        self.board.move(self.player,TTTL.UPPER_RIGHT_CORNER)
+        self.board.move(self.player2,TTTL.LOWER_LEFT_CORNER)
+        self.board.move(self.player,TTTL.LOWER_EDGE)
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer2._AIPlayer__blockFork(self.board))        
+    
+    #  |X| 
+    # X|O| 
+    #  | |
+    def testBlockForkCase6(self):
+        self.board.move(self.player,TTTL.LEFT_EDGE)
+        self.board.move(self.player,TTTL.UPPER_EDGE)
+        self.board.move(self.player2, TTTL.CENTER) 
+        self.assertEqual(TTTL.UPPER_LEFT_CORNER, self.aiplayer._AIPlayer__blockFork(self.board))
+        
+    #TODO more test cases for BlockFork?
+    
+        
+        
 if __name__ == "__main__":
     unittest.main()
 

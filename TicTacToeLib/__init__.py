@@ -121,10 +121,8 @@ class AIPlayer(Player):
         if move != NO_MOVE: return move
         
         # 4. check for fork block
-        '''
         move = self.__blockFork(_board)
         if move != NO_MOVE: return move
-        '''
         
         # 5. check for center
         move = self.__checkForCenter(_board)
@@ -225,6 +223,47 @@ class AIPlayer(Player):
                 return corners[0]
             
         return NO_MOVE
+    
+    def __blockFork(self,board):
+        opponent = Player(self.__opponentPiece())
+        #print opponent.piece
+        if self.__findFork(board, opponent) == NO_MOVE:
+            return NO_MOVE
+        
+        # try to force opponent to block
+        # create list of moves that will force block
+        for future_move in board.validMoveList():
+            #print board.validMoveList()
+            _board = copy.deepcopy(board)
+            _board.move(self, future_move)
+            opponent_block = self.__checkForWin(_board) 
+            if  opponent_block != NO_MOVE:
+                #print "MOVE",future_move,"BLOCK",opponent_block 
+                _board.move(opponent,opponent_block)
+                
+                # if we created a fork
+                if self.__checkForWin(_board) != NO_MOVE:
+                    return future_move
+                
+                # TODO go over this again and comment
+                # check for a block that doesn't result in a win or opponent fork
+                ai_block = self.__checkForBlock(_board)
+                #print "AI_BLOCK", ai_block
+                if ai_block == NO_MOVE and self.__findFork(_board, opponent)==NO_MOVE:
+                    return future_move
+                    
+                if ai_block != NO_MOVE:
+                    _board.move(self, ai_block)
+                    if ((self.__checkForBlock(_board) == NO_MOVE) and 
+                        (self.__findFork(_board, opponent)==NO_MOVE)):
+                        return future_move
+            elif ((self.__checkForBlock(_board) == NO_MOVE) and 
+                  (self.__findFork(_board, opponent)==NO_MOVE)):
+                return future_move
+                            
+        return NO_MOVE
+
+
             
                 
                 
