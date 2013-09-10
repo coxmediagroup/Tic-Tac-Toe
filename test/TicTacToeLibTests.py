@@ -665,6 +665,17 @@ class TicTacToeLibTests(unittest.TestCase):
         
     #TODO more test cases for BlockFork?
     
+    # X| |  == UPPER_EDGE 
+    def testCheckForEmptyEdgeEQ(self):
+        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
+        self.assertEqual(TTTL.UPPER_EDGE, self.aiplayer._AIPlayer__checkForEmptyEdge(self.board))
+    
+    def testCheckForEmptyEdgeEQNoMove(self):
+        self.board.move(self.player,TTTL.LEFT_EDGE)
+        self.board.move(self.player,TTTL.UPPER_EDGE)
+        self.board.move(self.player,TTTL.RIGHT_EDGE)
+        self.board.move(self.player2,TTTL.LOWER_EDGE)
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer._AIPlayer__blockFork(self.board))
         
         
 if __name__ == "__main__":

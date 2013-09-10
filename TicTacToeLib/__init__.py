@@ -41,7 +41,7 @@ LOWER_RIGHT_CORNER = 8
 NO_MOVE = INVALID_MOVE = -1
 CORNERS = [UPPER_LEFT_CORNER,UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER,LOWER_RIGHT_CORNER]
 OPPOSITE_CORNERS = [[UPPER_LEFT_CORNER,LOWER_RIGHT_CORNER],[UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER]]
-
+EDGES = [UPPER_EDGE,LEFT_EDGE,RIGHT_EDGE,LOWER_EDGE]
 # TODO Is naming clear?
 class Board(object):
     def __init__(self):
@@ -106,7 +106,7 @@ class AIPlayer(Player):
         # 7. Play empty corner
         # 8. Play empty edge
         _board = copy.deepcopy(board)
-        move = INVALID_MOVE
+        # move = INVALID_MOVE
         
         # 1. check for win
         move = self.__checkForWin(_board)
@@ -137,10 +137,8 @@ class AIPlayer(Player):
         if move != NO_MOVE: return move
         
         # 8. Play empty edge
-        '''
         move = self.__checkForEmptyEdge(_board)
         if move != NO_MOVE: return move
-        '''
 
         
         
@@ -207,6 +205,10 @@ class AIPlayer(Player):
     def __checkForEmptyCorner(self,board):
         _emptyCornerList = [i for i in CORNERS if i in board.validMoveList()]
         return NO_MOVE if len(_emptyCornerList) == 0 else _emptyCornerList[0]
+
+    def __checkForEmptyEdge(self,board):
+        _emptyEdgeList = [i for i in EDGES if i in board.validMoveList()]
+        return NO_MOVE if len(_emptyEdgeList) == 0 else _emptyEdgeList[0]
     
     def __checkForOppositeCorner(self, board):
         gameBoard = board.getGameBoard()
@@ -262,6 +264,7 @@ class AIPlayer(Player):
                 return future_move
                             
         return NO_MOVE
+
 
 
             
