@@ -171,8 +171,10 @@ var tictac={
 			
 	addclick: function(el){ 
 		el.onclick=function(){ 
+			tictac.rmclicks()
 			tictac.setsquare(this.id,foozie)
-			setTimeout(hulk.picksquare,800)
+			setTimeout(hulk.picksquare,200)
+			tictac.mkclicks()
 		}
 		
 	},		
