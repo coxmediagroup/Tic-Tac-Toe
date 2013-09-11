@@ -37,20 +37,27 @@ class TicTacToe:
         
 class Example(Frame):
     def __init__(self, parent):
-        self.game = TicTacToe();
         Frame.__init__(self, parent)   
          
         self.parent = parent
         
         self.initUI()
+        self.game = TicTacToe();
     def NewX(self):
+        self.player = 'X'
         print "New X\n"
     def NewO(self):
+        self.player = 'O'
         print "New O\n"
     def Play(self,x,y):
         print 'Play x={0:1d} y={1:1d}\n'.format(x,y)
-        self.Bboard[y][x].config(text="P")
+        self.game.play(self.player,x,y)
+        self.Bboard[y][x].config(text=self.game.getxy(x,y))
+        if self.game.win()!=' ':
+            self.status["text"] = "Winner"
     def initUI(self):
+        self.status = Label(self, text = "Status")
+        self.status.place(x=0,y=30)
         newgamex = Button(self, text = "New game X", command=self.NewX)
         newgamex.place(x=0,y=0)
         newgamey = Button(self, text = "New game O", command=self.NewO)
@@ -64,7 +71,7 @@ class Example(Frame):
 
         quitButton = Button(self, text="Quit",
             command=self.quit)
-        quitButton.place(x=150, y=150)
+        quitButton.place(x=150, y=0)
         #fred = Button(self)
         #fred["text"] = "hello"
         #fred.place(x=0,y=0)
