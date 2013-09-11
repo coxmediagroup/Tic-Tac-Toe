@@ -52,7 +52,9 @@ class Example(Frame):
         self.Bboard[y][x].config(text="P")
     def initUI(self):
         newgamex = Button(self, text = "New game X", command=self.NewX)
+        newgamex.place(x=0,y=0)
         newgamey = Button(self, text = "New game O", command=self.NewO)
+        newgamey.place(x=80,y=0)
         self.game = TicTacToe()
         self.parent.title("Tic Tac Toe")
         self.style = Style()
@@ -63,10 +65,10 @@ class Example(Frame):
         quitButton = Button(self, text="Quit",
             command=self.quit)
         quitButton.place(x=150, y=150)
-        fred = Button(self)
-        fred["text"] = "hello"
-        fred.place(x=0,y=0)
-        print fred
+        #fred = Button(self)
+        #fred["text"] = "hello"
+        #fred.place(x=0,y=0)
+        #print fred
         self.Bboard = [[Button(self,command=lambda: self.Play(0,0),width=1,text=" "),
                         Button(self,command=lambda: self.Play(1,0),width=1,text=" "),
                         Button(self,command=lambda: self.Play(2,0),width=1,text=" ")],
@@ -80,7 +82,7 @@ class Example(Frame):
         for ox in self.Bboard:
             y=0
             for oy in ox:
-                oy.place(y=30*x,x=30*y)
+                oy.place(y=30*x+50,x=30*y)
                 y = y + 1
             x = x + 1
 
@@ -94,7 +96,7 @@ def main():
         print game.win()+"Won the game"
     print game.printx();
     root = Tk()
-    root.geometry("250x150+300+300")
+    root.geometry("250x350+300+300")
     app = Example(root)
     root.mainloop()  
 
