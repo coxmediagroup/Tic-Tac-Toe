@@ -1,4 +1,4 @@
-define(['backbone', 'view/GameView', 'model/GameState'],
+define(['backbone', 'view/game/game', 'model/game/gamestate'],
     function(Backbone, GameView, GameState){
         return Backbone.Router.extend({
             routes : {
@@ -9,26 +9,29 @@ define(['backbone', 'view/GameView', 'model/GameState'],
             },
 
             initialize: function() {
-                this.gameView = new GameView;
                 this.gameState = new GameState;
+                this.gameView = new GameView({ model: this.gameState });
             },
 
             run: function() {
-                Backbone.history.start({pushState: true});
+                Backbone.history.start({
+                    pushState: true,
+                    root : 'C:/Users/ev0v2vn/tests/Tic-Tac-Toe/index.html'
+                });
             },
 
             newGame: function() {
-                this.gameState.delete();
+                this.gameState.destroy();
                 this.continueGame();
             },
 
             continueGame: function() {
-                this.gameState.load();
+                this.gameState.fetch();
                 this.gameView.render();
             },
 
             quitGame: function() {
-                this.gameState.delete();
+                this.gameState.save();
                 this.gameView.render();
             }
         })
