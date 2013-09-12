@@ -12,12 +12,16 @@ html,body {
 .container {
     float: left;
     width: 100%;
-    height: auto;
     border: black;
 }
 
-.board {
-
+#board {
+    float: left;
+    width: 60%;
+    margin-top: 1em;
+    margin-left: 17%;
+    border: 3px dotted black;
+    min-height: 800px;
 }
 
 .player {
