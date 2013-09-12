@@ -1,25 +1,27 @@
 requirejs.config({
     baseUrl: 'js/libs', //load stuff from libs by default
     paths: {
-        model: 'js/app/model', //setup model path
-        view: 'js/app/view', //setup view path,
-        controller: 'js/app/controller' //setup controller path
+        model: '../app/model', //setup model path
+        view: '../app/view', //setup view path,
+        controller: '../app/controller',
+        backbone: 'backbone',
+        underscore: 'underscore',
+        jquery: 'jquery-2.0.3'
     },
-    map: { //setup jquery to use noConflict
-        '*': {
-            'jquery': 'jquery-noconflict',
-            'backbone': 'backbone-noconflict',
-            'underscore': 'underscore-noconflict'
+    shim: {
+        underscore: {
+            exports: '_'
         },
-        'backbone': { 'backbone': 'backbone'},
-        'underscore': {'underscore': 'underscore'},
-        'jquery-noconflict': { 'jquery': 'jquery-2.0.3' }
+        backbone: {
+            deps: ['jquery', 'underscore'],
+            exports: 'Backbone'
+        }
     }
 });
 
 requirejs(['jquery', 'underscore', 'backbone', 'controller/applicationcontroller'],
-    function($, _, Backbone, AppController) {
-        var application = new AppController;
-        application.init();
+    function($, _, Backbone, App) {
+        var app = new App;
+        app.run();
     }
 );
