@@ -94,10 +94,12 @@ class GameBoard(pygame.sprite.Sprite):
         # this should never get called, but just in case    
         return TTTL.NO_MOVE
             
+    # have AI calculate and make it's move        
     def moveAI(self, aiplayer):
         idx = aiplayer.move(self.board)
         self.movePlayer(aiplayer, idx)
         
+    # general pupose method for placing a piece on the Board then GameBoard
     def movePlayer(self, player, idx):
         if idx != TTTL.NO_MOVE:
             if self.board.move(player, idx):
@@ -106,6 +108,7 @@ class GameBoard(pygame.sprite.Sprite):
         
         return False
  
+    # add a sprite representing the piece to the GameBoard
     def move(self, idx):
         if idx in xrange(9):
             piece = self.board.getGameBoard()[idx]
@@ -113,12 +116,14 @@ class GameBoard(pygame.sprite.Sprite):
                 x = self.cell_list[idx].left + self.rect.left
                 y = self.cell_list[idx].top + self.rect.top
                 self.pieces.add(Piece(piece,x,y))
-                
+        
+    # check to see if any of the game ending conditions have been met        
     def isGameOver(self, player1, player2):
         return ( self.board.isBoardFull() or 
                 self.board.isWinner(player1) or 
                 self.board.isWinner(player2) )
         
+    # Winner is X, O, or Draw?
     def getWinner(self, player1, player2):
         piece = TTTL.BLANK
         if self.board.isWinner(player1):
@@ -128,10 +133,12 @@ class GameBoard(pygame.sprite.Sprite):
         return piece
                                 
 
+# main game class that includes the game loop and event handling
 class Main(object):
     def __init__(self):
         self.setup()
         
+    # reusable setup method convenient for repeating play
     def setup(self):
         pygame.init()
         self.game_over = False
@@ -169,19 +176,24 @@ class Main(object):
         self.background = self.background.convert()
         self.screen.blit(self.background_image, (0, 0))
         pygame.display.flip()
-        
+    
+    # main drawing method    
     def draw(self):
         self.screen.blit(self.background_image, (0, 0))
         if self.game_state == STATE_CHOOSE:
             self.screen.blit(self.choose_dialog, (250, 150))
             self.box_buttons.update()
             self.box_buttons.draw(self.screen)
+        
+        # we want to keep drawing the game board even after the game ends
         if self.game_state == STATE_PLAY or self.game_state == STATE_GAME_OVER:
             self.boardGroup.update()
             self.boardGroup.draw(self.screen)
             self.game_board.pieces.update()
             self.game_board.pieces.draw(self.screen)
             
+            # Additional things to add for game over:
+            # show the winner as well as show the play again? question and buttons
             if self.game_state == STATE_GAME_OVER:
                 winner_text = ""
                 if self.winner == TTTL.BLANK:
@@ -205,57 +217,84 @@ class Main(object):
             
         pygame.display.flip()
     
+    # determine which piece has the next turn
     def nextTurn(self):
         return TTTL.PIECE_X if self.turn == TTTL.PIECE_O else TTTL.PIECE_O
-        
+    
+    # a wrapper around AI movement    
     def moveAI(self):
+        # if it is AI turn and a move hasn't been made
         if self.turn == self.aipiece and not self.moved:
             self.game_board.moveAI(self.aiplayer)
             self.moved = True
             self.turn = self.nextTurn()
-        
+    
+    # monolithic method to route a "click"    
     def processClick(self, state):
+        # At the start of the game we need to choose a piece 
         if state == STATE_CHOOSE:
+            # look through our list of buttons
             for button in self.box_buttons.sprites():
+                # see if our click collides with a button
                 if button.rect.collidepoint(self.click_pos):
+                    # player gets the piece clicked
                     self.player = TTTL.Player(button.name)
+                    
+                    # AI gets the opposite piece
                     self.aipiece = TTTL.PIECE_X if button.name == TTTL.PIECE_O else TTTL.PIECE_O
                     self.aiplayer = TTTL.AIPlayer(self.aipiece)
+                    
+                    # setup the logical board now that we are ready
                     self.game_board.board = TTTL.Board()
+                    
                     # randomly determine who goes first
                     self.turn = choice([TTTL.PIECE_X,TTTL.PIECE_O])
+                    
+                    # move to a ready state
                     self.game_state = STATE_PLAY
+                    
+                    # now that we have the correct button leave
                     return
 
+        # Handle human player movement
         if state == STATE_PLAY and self.turn != self.aipiece:
+            # check to see if our click collides with the GameBoard
             if self.game_board.rect.collidepoint(self.click_pos):
+                # get the cell number from the position of the click
                 idx = self.game_board.whichCell(self.click_pos)
+                # handle player movement
                 if self.game_board.movePlayer(self.player, idx):
                     self.turn = self.nextTurn()
                     self.moved = True
-                
+        
+        # game over - handle play again? yes/no        
         if state == STATE_GAME_OVER:
             for button in self.yn_buttons.sprites():
                 if button.rect.collidepoint(self.click_pos):
                     self.game_over = not button.yes
                     
+                    # if the user chose to play again reset everything
                     if not self.game_over:
                         self.setup()
 
 
     def event_loop(self):
         while not self.game_over:
+            # handle relevant input
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                # basic click logic - record position where button goes down    
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.clicked = True
                     self.click_pos = pygame.mouse.get_pos()
+                # finish click
                 if event.type == pygame.MOUSEBUTTONUP and self.clicked:
                     self.clicked = False
                     self.processClick(self.game_state)
-                       
+            
+            # moveAI if need be           
             if self.game_state == STATE_PLAY:
                 self.moveAI()
             
