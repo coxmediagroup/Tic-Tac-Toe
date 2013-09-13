@@ -3,16 +3,31 @@ import TicTacToeLib as TTTL
 from random import choice
 BG = "res/paper.png"
 CD = "res/choosedialog.png"
+PA = "res/playagain.png"
 XB = "res/xboxbutton.png"
 OB = "res/oboxbutton.png"
 XPC = "res/X96.png"
 OPC = "res/O96.png"
 BOARD = "res/board.png"
+YES = "res/yesbutton.png"
+NO = "res/nobutton.png"
 
 STATE_CHOOSE = 0
 STATE_PLAY = 1
 STATE_GAME_OVER = 2
 
+
+
+
+class YNButton(pygame.sprite.Sprite):
+    def __init__(self, img, x, y, yes = True):
+        super(YNButton, self).__init__()
+        self.yes = yes
+        temp_image = pygame.image.load(img)
+        self.size = (self.width, self.height) = (60,30)
+        self.image = pygame.transform.smoothscale(temp_image, self.size)
+        self.rect = pygame.Rect(x, y, self.width, self.height)
+        
 
 class BoxButton(pygame.sprite.Sprite):
     def __init__(self, img, name, x, y):
@@ -116,6 +131,7 @@ class Main(object):
         self.black = (0, 0, 0)
         self.background_image = pygame.image.load(BG)
         self.choose_dialog = pygame.image.load(CD)
+        self.playagain = pygame.image.load(PA)
         self.game_board = GameBoard(self.width/2-144,self.height/2-144)
         self.boardGroup = pygame.sprite.GroupSingle(self.game_board)
         self.game_state = STATE_CHOOSE
@@ -130,6 +146,13 @@ class Main(object):
         self.box_buttons = pygame.sprite.Group()
         self.box_buttons.add(BoxButton(XB, TTTL.PIECE_X, 255, 179))
         self.box_buttons.add(BoxButton(OB, TTTL.PIECE_O, 339,179))
+        
+        self.play_x = self.width/2-70
+        self.play_y = self.height-70
+        self.yn_buttons = pygame.sprite.Group()
+        self.yn_buttons.add(YNButton(YES, self.play_x+5, self.play_y+30-5));
+        self.yn_buttons.add(YNButton(NO, self.play_x+140-60-5, self.play_y+30-5, False))
+        
         self.setup_background()
     
     def setup_background(self):
@@ -165,6 +188,10 @@ class Main(object):
                     text = font.render(winner_text, 1, (10, 10, 10))
                     textpos = text.get_rect(centerx=self.screen.get_width()/2)
                     self.screen.blit(text, textpos)
+                
+                self.screen.blit(self.playagain,(self.play_x,self.play_y))
+                self.yn_buttons.update()
+                self.yn_buttons.draw(self.screen)
             
             
         pygame.display.flip()
@@ -197,6 +224,15 @@ class Main(object):
                 self.game_board.movePlayer(self.player, idx)
                 self.turn = self.nextTurn()
                 self.moved = True
+                
+        if state == STATE_GAME_OVER:
+            for button in self.yn_buttons.sprites():
+                if button.rect.collidepoint(self.click_pos):
+                    self.game_over = not button.yes
+                    
+                    if not self.game_over:
+                        self.setup()
+
 
     def event_loop(self):
         while not self.game_over:
