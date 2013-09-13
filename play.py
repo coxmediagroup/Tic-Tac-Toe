@@ -18,7 +18,7 @@ STATE_GAME_OVER = 2
 
 
 
-
+# Sprite for Yes/No buttons on Play Again? "dialog"
 class YNButton(pygame.sprite.Sprite):
     def __init__(self, img, x, y, yes = True):
         super(YNButton, self).__init__()
@@ -28,7 +28,7 @@ class YNButton(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(temp_image, self.size)
         self.rect = pygame.Rect(x, y, self.width, self.height)
         
-
+# Sprite for X/O buttons on Choose Piece "dialog"
 class BoxButton(pygame.sprite.Sprite):
     def __init__(self, img, name, x, y):
         super(BoxButton, self).__init__()
@@ -38,7 +38,7 @@ class BoxButton(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(temp_image, self.size)
         self.rect = pygame.Rect(x, y, self.width, self.height)
 
-        
+# Sprite for X/O pieces        
 class Piece(pygame.sprite.Sprite):
     def __init__(self, piece, x, y):
         super(Piece, self).__init__()
@@ -48,7 +48,7 @@ class Piece(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(temp_image, self.size)
         self.rect = pygame.Rect(x, y, self.width, self.height)
 
-        
+# Sprite class for game board that also stores the logical TTTL.Board         
 class GameBoard(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(GameBoard, self).__init__()
@@ -61,7 +61,8 @@ class GameBoard(pygame.sprite.Sprite):
         self.board = None
         
         self.pieces = pygame.sprite.Group()
-        
+    
+    # create a map for position to cell    
     def createCellList(self):
         cells = []
         x,y = 0,0
@@ -75,18 +76,23 @@ class GameBoard(pygame.sprite.Sprite):
                 x += self.cell_width
                 
         return cells            
-        
-    def getRelativePos(self, pos):
+    
+    # calculate the relative position in the board's rect    
+    def __getRelativePos(self, pos):
         absolute_x, absolute_y = pos
         relative_x = absolute_x - self.rect.left
         relative_y = absolute_y - self.rect.top
         return (relative_x, relative_y)
     
+    # determine which cell corresponds to the current position
     def whichCell(self, pos):
-        relative_pos = self.getRelativePos(pos)
+        relative_pos = self.__getRelativePos(pos)
         for idx, cell in enumerate(self.cell_list):
             if cell.collidepoint(relative_pos):
                 return idx
+        
+        # this should never get called, but just in case    
+        return TTTL.NO_MOVE
             
     def moveAI(self, aiplayer):
         idx = aiplayer.move(self.board)
@@ -96,6 +102,9 @@ class GameBoard(pygame.sprite.Sprite):
         if idx != TTTL.NO_MOVE:
             if self.board.move(player, idx):
                 self.move(idx)
+                return True
+        
+        return False
  
     def move(self, idx):
         if idx in xrange(9):
@@ -221,9 +230,9 @@ class Main(object):
         if state == STATE_PLAY and self.turn != self.aipiece:
             if self.game_board.rect.collidepoint(self.click_pos):
                 idx = self.game_board.whichCell(self.click_pos)
-                self.game_board.movePlayer(self.player, idx)
-                self.turn = self.nextTurn()
-                self.moved = True
+                if self.game_board.movePlayer(self.player, idx):
+                    self.turn = self.nextTurn()
+                    self.moved = True
                 
         if state == STATE_GAME_OVER:
             for button in self.yn_buttons.sprites():
