@@ -199,16 +199,18 @@ var tictac={
 	mkclicks: function(){
 		var sl=tictac.squares.length
 				while(sl--){
-					tictac.addclick(tictac.squares[sl])
+					if (!isin(tictac.squares[sl].id,tictac.usedsquares)){
+						
+						tictac.addclick(tictac.squares[sl])	
+					}
 				}	
-		
 	},
 			
 	addclick: function(el){ 
 		el.onclick=function(){ 
 			tictac.rmclicks()
 			tictac.setsquare(this.id,foozie)
-			setTimeout(hulk.picksquare,200)
+			setTimeout(hulk.picksquare,300)
 			tictac.mkclicks()
 		}
 		
@@ -225,12 +227,13 @@ var tictac={
 
 	setsquare: function(square,player){
 		var el=document.getElementById(square)
-		el.className=player.name
-		frontslide(el)
-		tictac.usedsquares.unshift(square)
-		player.squares.unshift(square)
-		el.onclick=null
-					
+		if (el){
+			el.className=player.name
+			frontslide(el)
+			tictac.usedsquares.unshift(square)
+			player.squares.unshift(square)
+			el.onclick=null
+		}			
 	}, 
 	
 	highlight: function(results){
@@ -290,6 +293,12 @@ var frontslide=function(el){
 
 }	
 
+var isin=function(avar,aray){
+	var astr=aray.join()
+	if (astr.match(avar)){
+		return avar
+	}
+}		
 
 
 
