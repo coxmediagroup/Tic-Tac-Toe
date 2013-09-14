@@ -22,13 +22,14 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
             },
 
             home: function() {
-                var homeView = new HomeView({ model : this.gameState.get('player') });
-                this.listenTo(homeView, 'game:new', this.newGame);
-                homeView.render();
+                this.homeView = new HomeView({ model : this.gameState.get('player') });
+                this.listenTo(this.homeView, 'game:new', this.newGame);
+                this.homeView.render();
             },
 
             newGame: function() {
                 this.gameState.destroy();
+                this.homeView.remove();
                 this.gameView.render();
             },
 

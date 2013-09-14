@@ -6,6 +6,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         events : {
             'click .cell': 'onCellClick'
         },
+        rendered: false,
 
         cellHtml: '<div class="cell cell-<%= board %> <%= playerType %>" data-row="<%= row %>" data-column="<%= column %>"></div>',
 
@@ -27,14 +28,27 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         initialize: function() {
-            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'change', this.update);
         },
 
         render: function() {
-            this.$el.empty();
-            this.$el.append(this.template());
-            this.delegateEvents();
+            if (!this.rendered) {
+                this.$el.html(this.template());
+                this.rendered = true;
+            }
             return this;
+        },
+
+        update: function() {
+            var gameBoard = this.model.get('boardState');
+            _.each(gameBoard, function(boardRow, i) {
+                _.each(boardRow, function(cell, j) {
+                    var cellCls = '.cell-' + this.indexToClass(i) + this.indexToClass(j);
+                    if (gameBoard[i][j] !== 0) {
+                        $(cellCls).addClass(gameBoard[i][j]).removeClass('none');
+                    }
+                }, this); //make sure we execute the code in the context of the view.
+            }, this);
         },
 
         indexToClass:  function(index) {
