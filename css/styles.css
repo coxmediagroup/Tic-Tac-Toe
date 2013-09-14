@@ -1,52 +1,43 @@
 html,body {
     width: 100%;
-    height: 100%;
-    min-width: 1024px;
+    font-family: Verdana arial sans-serif;
+    line-height: 16px;
 }
 .wrapper {
-    width: 96%;
-    height: 100%;
-    margin-left: 2%;
+    width: 100%;
+    height: 48em;
 }
 
-.container {
-    float: left;
-    width: 100%;
-    border: black;
-}
 
 #board {
-    float: left;
-    width: 60%;
-    margin-top: 1em;
-    margin-left: 17%;
+    height: 15em;
+    width: 240px;
+    margin-left: 300px;
     border: 3px dotted black;
-    min-height: 800px;
 }
 
 .player {
-    float: left;
     height: 2em;
     border: 1px solid black;
-    min-width: 300px;
+    width: 25%;
+    margin-left: 12.5%;
     background-color: red;
 }
 
-.player:first-child {
-    margin-left: 30%;
-    margin-right: 1%;
+.cell {
+    height: 50px;
+    width: 50px;
 }
 
 .input {
-    margin-left: 5px;
+    margin-left: 16px;
 }
 
 .input-container {
-    margin: 3px 0 0 10px;
+    margin: .1em 0 0 1%;
 }
 
 .field {
-    position: relative;
     padding: .4em 0 0 7em;
 }
 

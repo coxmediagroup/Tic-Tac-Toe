@@ -1030,7 +1030,6 @@
     setElement: function(element, delegate) {
       if (this.$el) this.undelegateEvents();
       this.$el = element instanceof Backbone.$ ? element : Backbone.$(element);
-      this.el = this.$el[0];
       if (delegate !== false) this.delegateEvents();
       return this;
     },

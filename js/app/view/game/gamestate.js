@@ -1,8 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'view/player/player', 'view/player/pcplayer'],
     function($, _, Backbone, BasePlayerView, PCPlayerView) {
         return Backbone.View.extend({
-            tagName: 'div',
-            className: 'container',
+            tagName: 'section',
+            id: 'gameState',
 
             initialize: function() {
                 this.computerView = new BasePlayerView({
@@ -14,8 +14,8 @@ define(['jquery', 'underscore', 'backbone', 'view/player/player', 'view/player/p
         },
 
         render: function() {
-            this.$el.append(this.playerView.render().el);
-            this.$el.append(this.computerView.render().el);
+            this.$el.append(this.playerView.render().$el);
+            this.$el.append(this.computerView.render().$el);
 
             return this;
         }
