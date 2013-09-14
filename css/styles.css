@@ -8,6 +8,13 @@ html,body {
     height: 48em;
 }
 
+.PC {
+    background-color: yellow;
+}
+
+.NPC {
+    background-color: blue;
+}
 
 #board {
     height: 15em;

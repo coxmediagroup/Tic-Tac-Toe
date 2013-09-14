@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             var gameBoard = this.model.get('boardState');
             _.each(gameBoard, function(boardRow, i) {
                 _.each(boardRow, function(cell, j) {
-                    var cellCls = '.cell-' + this.indexToClass(i) + this.indexToClass(j);
+                    var cellCls = '.cell-' + this.indexToClass(2*i) + this.indexToClass(2* j + 1);
                     if (gameBoard[i][j] !== 0) {
                         $(cellCls).addClass(gameBoard[i][j]).removeClass('none');
                     }
@@ -77,8 +77,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         onCellClick: function(cell) {
             if (this.model.get('player').get('isCurrent')) {
                 var boardState = this.model.get('boardState');
-                if (boardState[cell.target.dataset.row][cell.target.dataset.column] === 0) {
-                    boardState[cell.target.dataset.row][cell.target.dataset.column] = this.model.get('player').get('playerType');
+                var row = parseInt(cell.target.dataset.row);
+                var col = parseInt(cell.target.dataset.column);
+
+                if (boardState[row][col] === 0) {
+                    boardState[row][col] = this.model.get('player').get('playerType');
                     this.model.unset('boardState', { silent : true });
                     this.model.set('boardState', boardState);
                 }
