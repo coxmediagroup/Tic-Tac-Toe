@@ -12,8 +12,8 @@ html,body {
 #board {
     height: 15em;
     width: 240px;
-    margin-left: 300px;
-    border: 3px dotted black;
+    margin-left: 350px;
+    margin-top: 2em;
 }
 
 .player {
@@ -25,8 +25,54 @@ html,body {
 }
 
 .cell {
-    height: 50px;
-    width: 50px;
+    display: inline-block;
+    height: 76px;
+    margin: 0;
+    padding: 0;
+    width: 76px;
+    border: 1px solid orange;
+}
+
+.cell-tl {
+    border-left: none;
+    border-top: none;
+}
+
+.cell-tr {
+    border-top: none;
+    border-right: none;
+}
+
+.cell-tm {
+    border-top: none;
+    margin: 0 2px;
+}
+
+.cell-ml {
+    border-left: none;
+}
+
+.cell-mr {
+    border-right: none;
+}
+
+.cell-mm {
+    margin: 0 2px;
+}
+
+.cell-bl {
+    border-left: none;
+    border-bottom: none;
+}
+
+.cell-br {
+    border-bottom: none;
+    border-right: none;
+}
+
+.cell-bm {
+    border-bottom: none;
+    margin: 0 2px;
 }
 
 .input {

@@ -19,9 +19,9 @@ requirejs.config({
     }
 });
 
-requirejs(['controller/applicationcontroller'],
-    function(App) {
-        var app = new App;
-        app.run();
+requirejs(['controller/gamecontroller'],
+    function(Game) {
+        var game = new Game;
+        game.run();
     }
 );

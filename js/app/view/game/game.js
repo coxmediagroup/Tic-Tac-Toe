@@ -12,13 +12,13 @@ define(['jquery', 'underscore', 'backbone', 'view/game/gamestate', 'view/game/ga
                 this.gameBoardView = new GameBoardView({
                     model:  options.model
                 });
-        },
+            },
 
-        render: function() {
+            render: function() {
                 this.$el.append(this.gameStateView.render().$el).append(this.gameBoardView.render().$el);
-                $('body').append(this.$el);
+                $('body').html(this.$el);
 
                 return this;
-        }
+            }
     });
 });
