@@ -46,19 +46,21 @@ var hulk={
 	//After Celine smashed Hulk yesterday, Hulk is more aggressive at trying to win.
 		if (hulk.canhulkwin()==="win"){
 			return
-		}else{		
-			var blk=hulk.chkwingroups()
-			if (blk){
-				var sq=blk
-			}else{
-				if (hulk.findmove()){
-					var sq=hulk.findmove()
-				}	
-			}
-			if (sq){
-				tictac.setsquare(sq,hulk)
-			}
-		}	
+		}else if (hulk.chkwingroups()){
+			var sq=hulk.chkwingroups()
+				
+		}else if (hulk.chkmidgroups()){
+			var sq=hulk.chkmidgroups()
+				
+		}else{
+				 
+			var sq=hulk.findmove()
+					
+		}
+		
+		tictac.setsquare(sq,hulk)
+			
+	
 	},		
 	
 					
@@ -91,6 +93,33 @@ var hulk={
 		return opensquares[0]	
 	},
 	
+	chkmidgroups: function(){
+		var mgl=tictac.midgroups.length 
+		while(mgl--){
+			var blk= hulk.chkforcorners(tictac.midgroups[mgl])
+			if (blk !="nocorner"){
+				var used=tictac.usedsquares.join()
+				if (!used.match(blk)){
+					return blk
+				}
+			}			
+		}
+	},
+			
+	chkforcorners: function(midgroup){
+		var opensquares=[]
+		var ml=midgroup.length
+		var fs=foozie.squares.join()
+		while (ml--){			
+			if (!fs.match(midgroup[ml])) {	
+				opensquares.unshift(midgroup[ml])
+			}
+		}		
+		if (opensquares.length >1){
+			opensquares=["nocorner"]
+		}
+		return opensquares[0]	
+	},
 			
 	chkforwin:function(wg){
 		var results=[]
@@ -159,7 +188,13 @@ var tictac={
 			//diagonal
 			["zero","four","eight"], 
 			["two","four","six"]  
-	],	
+	],
+	
+	midgroups:[	["zero","one","three"],
+			["one","two","five"],
+			["three","six","seven"],
+			["seven","eight","five"]
+		],		
 		 	
 	mkclicks: function(){
 		var sl=tictac.squares.length
