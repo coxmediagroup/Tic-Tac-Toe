@@ -7,3 +7,42 @@ Intructions:
 If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
 
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+
+
+Adrian Thiele's Master Plan:
+
+Start Simple, and stay in scope.
+I realize this is a Python Developer position, and Python is my language of choice, 
+but I also know javascript, and it makes sense to handle the logic in Javascript. 
+I am going to get it running and working, and then create a django app.  
+  
+
+1. I set up a tic tac toe board, made it respond to clicks and switch players, 
+Hulk is the automated player, and Foozie is the human player. 
+I kept forgetting who was "x" and who was "o".
+
+2. I started inviting my friends over and then made them play tic tac toe with me.
+I wanted to find the patterns so that I could contruct logic to determine how Hulk, 
+the automated player, would determine his moves. Hulk's only goal is to not lose, 
+Hulk does not care if he wins, Hulk just wants to stop Foozie from winning. 
+Hulks first logic check is to see if he needs to block Foozie. 
+
+3. I found that there were only eight possible winning combinations of squares, 
+then I figured out the frequency a square appears in a winning combination. 
+If Hulk doesn't have to block Foozie, he uses the frequency table to determine 
+his best move. 
+
+frequency table:
+	
+	3|2|3
+	2|4|2
+	3|2|3
+
+
+
+
+
+
+
+
+
