@@ -13,7 +13,8 @@ var hulk={
 	moves:["zero","two","six","eight","seven","one","three","five"],
  	//if no block is needed, Hulk takes the first available move
 	findmove: function(){
-		var used=tictac.usedsquares.join()
+	
+		var used=tictac.usedsquares
 		var sel=null
 		if (foozie.squares.length===1 && foozie.squares[0] !="four"){
 			sel="four"
@@ -23,24 +24,25 @@ var hulk={
 				var ml=tictac.middles.length
 				while(ml--){
 					var mid=tictac.middles[ml]
-					if (!used.match(mid)){
+					if (!isin(mid,used)){
 						sel=mid
 						return sel	
 					}		
 				}
+		}
+
+		var i=0
+		var hml=hulk.moves.length
+		while (i< hml){
+			if (isin(hulk.moves[i],used)){
+				i++				
+			}else { 	
+				sel= hulk.moves[i]
+				return sel
 			}
-				var i=0
-				var hml=hulk.moves.length
-				while (i< hml){
-				if (used.match(hulk.moves[i])){
-					i++				
-				}else { 	
-					sel= hulk.moves[i]
-					return sel
-				}
-			}
-			
+		}	
 	},			
+			
 			
 	picksquare: function(){
 	//After Celine smashed Hulk yesterday, Hulk is more aggressive at trying to win.
@@ -50,17 +52,11 @@ var hulk={
 			var sq=hulk.chkwingroups()
 				
 		}else if (hulk.chkmidgroups()){
-			var sq=hulk.chkmidgroups()
-				
+			var sq=hulk.chkmidgroups()	
 		}else{
-				 
-			var sq=hulk.findmove()
-					
+			var sq=hulk.findmove()			
 		}
-		
-		tictac.setsquare(sq,hulk)
-			
-	
+		tictac.setsquare(sq,hulk)	
 	},		
 	
 					
@@ -70,20 +66,20 @@ var hulk={
 		while(wgl--){
 			var blk= hulk.chkforblock(tictac.wingroups[wgl])
 			if (blk !="noblock"){
-				var used=tictac.usedsquares.join()
-				if (!used.match(blk)){
+				var used=tictac.usedsquares
+				if (!isin(blk,used)){
 					return blk
 				}
 			}			
 		}
 	},
+
 			
 	chkforblock: function(wingroup){
 		var opensquares=[]
 		var wl=wingroup.length
-		var fs=foozie.squares.join()
 		while (wl--){			
-			if (!fs.match(wingroup[wl])) {	
+			if (!isin(wingroup[wl],foozie.squares)) {	
 				opensquares.unshift(wingroup[wl])
 			}
 		}		
@@ -92,26 +88,26 @@ var hulk={
 		}
 		return opensquares[0]	
 	},
+
 	
 	chkmidgroups: function(){
 		var mgl=tictac.midgroups.length 
 		while(mgl--){
 			var blk= hulk.chkforcorners(tictac.midgroups[mgl])
 			if (blk !="nocorner"){
-				var used=tictac.usedsquares.join()
-				if (!used.match(blk)){
+				if (!isin(blk,tictac.usedsquares)){
 					return blk
 				}
 			}			
 		}
 	},
+
 			
 	chkforcorners: function(midgroup){
 		var opensquares=[]
 		var ml=midgroup.length
-		var fs=foozie.squares.join()
 		while (ml--){			
-			if (!fs.match(midgroup[ml])) {	
+			if (!isin(midgroup[ml],foozie.squares)) {	
 				opensquares.unshift(midgroup[ml])
 			}
 		}		
@@ -120,18 +116,18 @@ var hulk={
 		}
 		return opensquares[0]	
 	},
+
 			
 	chkforwin:function(wg){
 		var results=[]
 		var unresults=[]
 		var wl=wg.length
-		var hs=hulk.squares.join()
 		while(wl--){
-			if (hs.match(wg[wl])){
+			if (isin(wg[wl],hulk.squares)){
 				results.unshift(wg[wl])
 			}else{
-				var us=tictac.usedsquares.join()
-				if (!us.match(wg[wl])){
+				
+				if (!isin(wg[wl],tictac.usedsquares)){
 					unresults.unshift(wg[wl])
 				}			
 			}
@@ -144,6 +140,7 @@ var hulk={
 			}		
 		}
 	},
+
 			
 	// Calls hulk.chkwin on each wingroup to see if Hulk won.  
 	canhulkwin: function(){
@@ -190,11 +187,13 @@ var tictac={
 			["two","four","six"]  
 	],
 	
+	
 	midgroups:[	["zero","one","three"],
 			["one","two","five"],
 			["three","six","seven"],
 			["seven","eight","five"]
 		],		
+	
 		 	
 	mkclicks: function(){
 		var sl=tictac.squares.length
@@ -259,8 +258,6 @@ var tictac={
 		hulk.squares=[]
 		document.title="Tic-Tac-Toe with Hulk "
 		tictac.mkclicks()
-		//var s=hulk.moves[Math.floor((Math.random()*hulk.moves.length))]
-		//tictac.setsquare(s,hulk)
 	},
 	
 	init: function(){
@@ -269,14 +266,14 @@ var tictac={
 		var ngd=document.getElementById("newgame")
 		ngd.onclick=tictac.resetboard	
 		tictac.resetboard()
-	}
-	
+	}	
 }// end tictac 
 
 
 var swing=function( p ) {
 		return 0.57 - Math.cos( p*Math.PI ) / 1.51;
-	}
+}
+	
 var frontslide=function(el){
 	var chunk=2.75
 	o="0"
@@ -286,11 +283,8 @@ var frontslide=function(el){
 		el.style.backgroundSize=o+"% 100%"	
 		if (o < 100 ){
 			setTimeout(slidein,swing(1-o))
-		
 		}	
 	}
-
-
 }	
 
 var isin=function(avar,aray){
