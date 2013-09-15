@@ -42,7 +42,8 @@ NO_MOVE = INVALID_MOVE = -1
 CORNERS = [UPPER_LEFT_CORNER,UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER,LOWER_RIGHT_CORNER]
 OPPOSITE_CORNERS = [[UPPER_LEFT_CORNER,LOWER_RIGHT_CORNER],[UPPER_RIGHT_CORNER,LOWER_LEFT_CORNER]]
 EDGES = [UPPER_EDGE,LEFT_EDGE,RIGHT_EDGE,LOWER_EDGE]
-# TODO Is naming clear?
+
+
 class Board(object):
     def __init__(self):
         # Create an empty board        
@@ -81,22 +82,19 @@ class Board(object):
     def getTotalMovesMade(self):
         return (GAME_BOARD_SQUARE_SIZE-self.__gameboard.count(BLANK))            
             
+# Base class that doesn't do much but will be used for the human player            
 class Player(object):
     def __init__(self, piece):
         self.piece = piece
         
+# Class for the AI controlled player 
 class AIPlayer(Player):
     def __init__(self, piece):
         super(AIPlayer, self).__init__(piece)
-        #self.__gameboard = []
         self.__hasMadeInitialMove = False
         
-    #def setGameBoard(self, gameboard):
-    #    self.__gameboard = gameboard
-        
     def move(self, board):
-        # this should probably require a gameboard?
-        # switching to wikipedia algorithm
+        # using the wikipedia algorithm
         # 1. Play for win
         # 2. Play for block
         # 3. Play for fork
@@ -137,16 +135,13 @@ class AIPlayer(Player):
         if move != NO_MOVE: return move
         
         # 8. Play empty edge
-        move = self.__checkForEmptyEdge(_board)
-        if move != NO_MOVE: return move
-
-        
-        
+        move = self.__checkForEmptyEdge(_board)        
         return move
             
     def __opponentPiece(self):
         return PIECE_O if (self.piece == PIECE_X) else PIECE_X
 
+    # return the first move that creates a win for the specified player
     def __findFirstWinningMove(self, board, player):
         _move = NO_MOVE
             
@@ -199,6 +194,7 @@ class AIPlayer(Player):
         _emptyEdgeList = [i for i in EDGES if i in board.validMoveList()]
         return NO_MOVE if len(_emptyEdgeList) == 0 else _emptyEdgeList[0]
     
+    # check to see if a an opponent occupies a corner and if so choose a caddy corner move
     def __checkForOppositeCorner(self, board):
         gameBoard = board.getGameBoard()
         validMoves = board.validMoveList()
@@ -215,6 +211,7 @@ class AIPlayer(Player):
             
         return NO_MOVE
     
+    # look ahead logic for forcing a block
     def __blockFork(self,board):
         opponent = Player(self.__opponentPiece())
         if self.__findFork(board, opponent) == NO_MOVE:
@@ -223,12 +220,10 @@ class AIPlayer(Player):
         # try to force opponent to block
         # create list of moves that will force block
         for future_move in board.validMoveList():
-            #print board.validMoveList()
             _board = copy.deepcopy(board)
             _board.move(self, future_move)
             opponent_block = self.__checkForWin(_board) 
-            if  opponent_block != NO_MOVE:
-                #print "MOVE",future_move,"BLOCK",opponent_block 
+            if  opponent_block != NO_MOVE: 
                 _board.move(opponent,opponent_block)
                 
                 # if we created a fork we can move on

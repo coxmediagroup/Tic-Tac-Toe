@@ -5,8 +5,10 @@ http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 
 Using Python 2.7
 
-UX will be done using pygame. 288x288 game board split into 9 - 96x96 rects
-64x64 player tiles. Drawing offset will be (+16, +16) from the upper left of 96x96 rect
+UX is done using pygame 1.9.2. 288x288 game board split into 9 - 96x96 rects
+96x96 player tiles. 
 
 Play again dialog - buttons 60x30
-Choose piece dialog 160x100 - butons 66x66 
+Choose piece dialog 160x100 - butons 66x66
+
+This was my first attempt at unit testing. I wasn't sure how to apply 
