@@ -19,52 +19,82 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             }
         },
 
-        TWO_CELL_MODIFIER_NPC: 10,
-        ONE_CELL_MODIFIER_NPC: 1,
-        EMPTY_CELL_MODIFIER: 0,
-        LOSING_BOARD_SCORE: -1000,
-        TWO_CELL_MODIFIER_PC: -10,
-        ONE_CELL_MODIFIER_PC: -1,
-
         simulate: function(gameState) {
-            var bestMove = this.bestPossibleMove(gameState);
+            var simulationState = gameState.clone();
+            simulationState.set('boardState', gameState.cloneBoard());
+            simulationState.set('currentPlayer', gameState.get('currentPlayer'));
+            simulationState.set('computer', gameState.get('computer'));
+            simulationState.set('player', gameState.get('player'));
+
+            var bestMove = this.bestPossibleMove(simulationState, 2).bestBoard; //only look ahead one move.
             gameState.unset('boardState', {silent: true});
             gameState.set('boardState', bestMove);
         },
 
-        bestPossibleMove: function(gameState) {
+        generateBoardsList: function(gameState) {
             var currentBoardState = gameState.get('boardState');
-            var bestBoard = undefined;
-            var bestScore = this.calculateBoardScore(currentBoardState);
+            var boardsList = [];
 
-            _.each(currentBoardState, function(row, rowIndex) {
-                _.each(row, function(col, colIndex) {
+            if (gameState.gameHasWinner()) {
+                return boardsList;
+            }
+
+            _.each(currentBoardState, function (row, rowIndex) {
+                _.each(row, function (col, colIndex) {
                     if (col === 0) {
-                        var newBoard = [];
-                        _.each(currentBoardState.slice(), function(rows) {
-                             newBoard.push(rows.slice());
-                        });
-                        newBoard[rowIndex][colIndex] = gameState.get('computer').get('playerType');
-                        var newScore = this.calculateBoardScore(newBoard);
-                        if (newScore <= bestScore || bestBoard === undefined) {
-                            bestBoard = newBoard;
-                            bestScore = newScore;
-                        }
+                        var newBoard = gameState.cloneBoard();
+                        newBoard[rowIndex][colIndex] = gameState.get('currentPlayer').get('playerType');
+                        boardsList.push(newBoard);
                     }
                 }, this);
             }, this);
 
-            return bestBoard;
+            return boardsList;
+        },
+
+        bestPossibleMove: function(gameState, depth) {
+            var boards = this.generateBoardsList(gameState);
+            var turnType = gameState.get('currentPlayer').get('playerType');
+            var bestScore = turnType === 'NPC' ? -1000000 : 1000000;     //effectively +infinity to -infinity
+            var currentBoardScore = 0;
+            var bestBoard = undefined;
+
+            if (depth === 0 || boards.length === 0) {
+                bestScore = this.calculateBoardScore(gameState.get('boardState'));
+                bestBoard = gameState.get('boardState');
+            } else {
+                for (var i = 0; i < boards.length; ++i) {
+                    if (turnType === 'NPC') {
+                        gameState.set('currentPlayer', gameState.get('player'));
+                        gameState.set('boardState', boards[i]);
+                        currentBoardScore = this.bestPossibleMove(gameState, depth - 1).bestScore;
+                        if (currentBoardScore > bestScore) {
+                            bestScore = currentBoardScore;
+                            bestBoard = boards[i];
+                        }
+                    } else {
+                        gameState.set('currentPlayer', gameState.get('computer'));
+                        gameState.set('boardState', boards[i]);
+                        currentBoardScore = this.bestPossibleMove(gameState, depth - 1).bestScore;
+                        if (currentBoardScore < bestScore) {
+                            bestScore = currentBoardScore;
+                            bestBoard = boards[i];
+                        }
+                    }
+                }
+            }
+
+            return { bestBoard: bestBoard, bestScore: bestScore };
         },
 
         calculateBoardScore: function(board) {
             var score = 0;
 
-            _.each(board, function(row, index, rowArray){
+            _.each(board, function(row){
                 var rowScore = 0;
                 var lastCol = 0;
                 var colAlike = 0;
-                _.each(row, function(col, colIndex, colArray) {
+                _.each(row, function(col) {
                     if (col !== 0) {
                         if (col === lastCol) {
                             colAlike++;
@@ -78,18 +108,18 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 score += rowScore;
             }, this);
 
-            for (var i = 0; i < 3; ++i) {
+            for (var k = 0; k < 3; ++k) {
                 var colScore = 0;
-                var lastCol = 0;
+                var lastCol1 = 0;
                 var colAlike = 0;
-                for (var j = 0; j < 3; ++j) {
-                    if (board[j][i] !== 0) {
-                        if (board[j][i] === lastCol) {
+                for (var m = 0; m < 3; ++m) {
+                    if (board[m][k] !== 0) {
+                        if (board[m][k] === lastCol1) {
                             colAlike++;
-                            colScore = this.VALUES[board[j][i]][colAlike.toString()];
+                            colScore = this.VALUES[board[m][k]][colAlike.toString()];
                         } else {
-                            colScore += this.VALUES[board[j][i]]['1'];
-                            lastCol = board[j][i];
+                            colScore += this.VALUES[board[m][k]]['1'];
+                            lastCol1 = board[m][k];
                         }
                     }
                 }
@@ -97,29 +127,29 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             }
             var diagnonalScore = 0;
             for (var j = 0; j < 3; ++j) {
-                var lastCol = 0;
+                var lastCol2 = 0;
                 if (board[j][j] !== 0) {
-                    if (board[j][j] === lastCol) {
+                    if (board[j][j] === lastCol2) {
                         colAlike++;
                         diagnonalScore = this.VALUES[board[j][j]][colAlike.toString()];
                     } else {
                         diagnonalScore += this.VALUES[board[j][j]]['1'];
-                        lastCol = board[j][j];
+                        lastCol2 = board[j][j];
                     }
                 }
             }
 
             score += diagnonalScore;
             diagnonalScore = 0;
-            for (var i = 2, j = 0; i >= 0; --i, j++) {
-                var lastCol = 0;
-                if (board[i][j] !== 0) {
-                    if (board[i][j] === lastCol) {
+            for (var i = 2, n = 0; i >= 0; --i, n++) {
+                var lastCol3 = 0;
+                if (board[i][n] !== 0) {
+                    if (board[i][n] === lastCol3) {
                         colAlike++;
-                        diagnonalScore = this.VALUES[board[i][j]][colAlike.toString()];
+                        diagnonalScore = this.VALUES[board[i][n]][colAlike.toString()];
                     } else {
-                        diagnonalScore += this.VALUES[board[i][j]]['1'];
-                        lastCol = board[i][j];
+                        diagnonalScore += this.VALUES[board[i][n]]['1'];
+                        lastCol3 = board[i][n];
                     }
                 }
             }

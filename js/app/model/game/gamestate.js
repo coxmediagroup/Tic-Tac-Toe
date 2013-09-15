@@ -69,12 +69,12 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
              var colAlike = 0;
 
              for (var j = 0; j < 3; ++j) {
-                 var lastCol = 0;
+                 var lastCell = 0;
                  if (board[j][j] !== 0) {
-                     if (board[j][j] === lastCol) {
+                     if (board[j][j] === lastCell) {
                          colAlike++;
                      } else {
-                         lastCol = board[j][j];
+                         lastCell = board[j][j];
                      }
                  }
              }
@@ -86,12 +86,12 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
              colAlike = 0;
 
              for (var i = 2, k = 0; i >= 0; --i, k++) {
-                 var lastCol = 0;
+                 var lastCellSeen = 0;
                  if (board[i][k] !== 0) {
-                     if (board[i][k] === lastCol) {
+                     if (board[i][k] === lastCellSeen) {
                          colAlike++;
                      } else {
-                         lastCol = board[i][k];
+                         lastCellSeen = board[i][k];
                      }
                  }
              }
@@ -100,13 +100,11 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
          },
 
          isGameOver: function() {
-             if (this.allMovesMade()) {
-                return true;
-             } else if (this.hasWinningRow() || this.hasWinningColumn() || this.hasWinningDiagonal()) {
-                return true;
-             } else {
-                 return false;
-             }
+             return this.allMovesMade() || this.gameHasWinner();
+         },
+
+         gameHasWinner: function() {
+            return this.hasWinningRow() || this.hasWinningColumn() || this.hasWinningDiagonal();
          },
 
          allMovesMade: function() {
@@ -121,6 +119,15 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
              }
 
              return true;
+         },
+
+         cloneBoard: function() {
+             var newBoard = [];
+             _.each(this.get('boardState').slice(), function (rows) {
+                 newBoard.push(rows.slice());
+             });
+
+             return newBoard;
          },
 
          sync: function(method, model, options) {
