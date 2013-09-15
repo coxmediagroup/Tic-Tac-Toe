@@ -49,7 +49,7 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
 
                 this.updateGameState();  //update the game state.
 
-                if (computer.get('isCurrent')) {  //if we're now the computer
+                if (computer.get('isCurrent') && !this.gameState.isGameOver()) {  //if we're now the computer
                     computer.simulate(this.gameState);
                 }
             },
@@ -57,15 +57,23 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
             updateGameState: function() {
                 var currentPlayer = this.gameState.get('currentPlayer');
 
-                if (currentPlayer.get('playerType') === 'NPC') {
-                    this.gameState.set('currentPlayer', this.gameState.get('player'), { silent: true });
-                    this.gameState.get('player').set('isCurrent', true);
-                    this.gameState.get('computer').set('isCurrent', false);
+                if (!this.gameState.isGameOver()) {
+                    if (currentPlayer.get('playerType') === 'NPC') {
+                        this.gameState.set('currentPlayer', this.gameState.get('player'), { silent: true });
+                        this.gameState.get('player').set('isCurrent', true);
+                        this.gameState.get('computer').set('isCurrent', false);
+                    } else {
+                        this.gameState.set('currentPlayer', this.gameState.get('computer'), { silent: true });
+                        this.gameState.get('player').set('isCurrent', false);
+                        this.gameState.get('computer').set('isCurrent', true);
+                    }
                 } else {
-                    this.gameState.set('currentPlayer', this.gameState.get('computer'), { silent: true });
-                    this.gameState.get('player').set('isCurrent', false);
-                    this.gameState.get('computer').set('isCurrent', true);
+                    this.stopListening(this.gameState, 'change', this.onGameUpdate);
                 }
+            },
+
+            isGameOver: function() {
+
             }
         })
     }
