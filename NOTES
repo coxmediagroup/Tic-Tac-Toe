@@ -9,7 +9,7 @@ UX is done using pygame 1.9.2. 288x288 game board split into 9 - 96x96 rects
 96x96 player tiles. 
 
 Play again dialog - buttons 60x30
-Choose piece dialog 160x100 - butons 66x66
+Choose piece dialog 160x100 - buttons 66x66
 
 This was my first attempt at unit testing.
 I was not sure how to apply unit tests to the pygame/UX stuff. 
