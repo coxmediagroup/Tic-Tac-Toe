@@ -24,12 +24,13 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
                  var lastCol = 0;
                  for (var j = 0; j < 3; ++j) {
                      if (board[i][j] !== 0) {
-                         if (board[i][j] === lastCol) {
+                         if (board[i][j] === lastCol || lastCol === 0) {
                              colAlike++;
                          } else {
                              lastCol = board[i][j];
                          }
                      }
+                     lastCol = board[i][j];
                  }
 
                  if (colAlike === 3) {
@@ -48,12 +49,11 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
                  var lastCol = 0;
                  for (var j = 0; j < 3; ++j) {
                      if (board[j][i] !== 0) {
-                         if (board[j][i] === lastCol) {
+                         if (board[j][i] === lastCol || lastCol === 0) {
                              colAlike++;
-                         } else {
-                             lastCol = board[j][i];
                          }
                      }
+                     lastCol = board[j][i];
                  }
 
                  if (colAlike === 3) {
@@ -67,16 +67,15 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
          hasWinningDiagonal: function() {
              var board = this.get('boardState');
              var colAlike = 0;
+             var lastCell = 0;
 
              for (var j = 0; j < 3; ++j) {
-                 var lastCell = 0;
                  if (board[j][j] !== 0) {
-                     if (board[j][j] === lastCell) {
+                     if (board[j][j] === lastCell || lastCell === 0) {
                          colAlike++;
-                     } else {
-                         lastCell = board[j][j];
                      }
                  }
+                 lastCell = board[j][j];
              }
 
              if (colAlike === 3) {
@@ -84,16 +83,15 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
              }
 
              colAlike = 0;
-
+             lastCell = 0;
              for (var i = 2, k = 0; i >= 0; --i, k++) {
-                 var lastCellSeen = 0;
                  if (board[i][k] !== 0) {
-                     if (board[i][k] === lastCellSeen) {
+                     if (board[i][k] === lastCell || lastCell === 0) {
                          colAlike++;
-                     } else {
-                         lastCellSeen = board[i][k];
                      }
                  }
+
+                 lastCell = board[i][k];
              }
 
              return colAlike === 3;
