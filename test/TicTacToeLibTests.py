@@ -244,24 +244,6 @@ class TicTacToeLibTests(unittest.TestCase):
     def testBoardGetTotalMovesMadeNETwo(self):
         self.board.move(self.player, TTTL.UPPER_LEFT_CORNER)
         self.assertNotEqual(2,self.board.getTotalMovesMade())
-
-    #AIPlayer.__initialMove(board)   
-    def testAIPlayerInitialMoveOffense(self):
-        self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer._AIPlayer__initialMove(self.board))
-        
-    def testAIPlayerInitialMoveDefenseHumanPlaysNonCenter(self):
-        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
-        self.assertEqual(TTTL.CENTER,self.aiplayer._AIPlayer__initialMove(self.board))
-        
-    def testAIPlayerInitialMoveDefenseHumanPlaysCenter(self):
-        self.board.move(self.player,TTTL.CENTER)
-        self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer._AIPlayer__initialMove(self.board))
-        
-    def testAIPlayerInitialMoveInvalid(self):
-        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
-        self.board.move(self.player,TTTL.CENTER)
-        self.assertEqual(TTTL.INVALID_MOVE, self.aiplayer._AIPlayer__initialMove(self.board))
-
         
     #AIPlayer.moveAI(board)   
     def testAIPlayerMoveFirstMoveOffense(self):
@@ -275,12 +257,11 @@ class TicTacToeLibTests(unittest.TestCase):
         self.board.move(self.player,TTTL.CENTER)
         self.assertEqual(TTTL.UPPER_LEFT_CORNER,self.aiplayer.move(self.board))
     
-    '''
     def testAIPlayerMoveFirstMoveInvalid(self):
-        self.board.move(self.player,TTTL.UPPER_LEFT_CORNER)
-        self.board.move(self.player,TTTL.CENTER)
-        self.assertEqual(TTTL.INVALID_MOVE, self.aiplayer.move(self.board))
-    '''
+        for i in xrange(9):
+            self.board.move(self.player,i)
+
+        self.assertEqual(TTTL.NO_MOVE, self.aiplayer.move(self.board))
         
     #AIPlayer.__opponentPiece()
     def testAIPlayerOpponentPieceOTrue(self):
