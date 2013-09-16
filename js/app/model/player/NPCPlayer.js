@@ -21,34 +21,32 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         simulate: function(gameState) {
-            var simulationState = gameState.clone();
+            var simulationState = gameState.clone(); //despite the API, this is not cloning the attributes, so the rest follows.
             simulationState.set('boardState', gameState.cloneBoard());
             simulationState.set('currentPlayer', gameState.get('currentPlayer'));
             simulationState.set('computer', gameState.get('computer'));
             simulationState.set('player', gameState.get('player'));
 
-            var bestMove = this.bestPossibleMove(simulationState, 2).bestBoard; //only look ahead one move.
-            gameState.unset('boardState', {silent: true});
-            gameState.set('boardState', bestMove);
+            var bestMove = this.bestPossibleMove(simulationState, 2).bestBoard; //only look ahead one move (this isn't chess).
+            gameState.unset('boardState', {silent: true}); //clear it silently.
+            gameState.set('boardState', bestMove); //update the state with the computer's move.
         },
 
+        //generates the the valid moves for the given boardState,
+        //or the empty list.
         generateBoardsList: function(gameState) {
-            var currentBoardState = gameState.get('boardState');
             var boardsList = [];
-
             if (gameState.gameHasWinner()) {
                 return boardsList;
             }
 
-            _.each(currentBoardState, function (row, rowIndex) {
-                _.each(row, function (col, colIndex) {
-                    if (col === 0) {
-                        var newBoard = gameState.cloneBoard();
-                        newBoard[rowIndex][colIndex] = gameState.get('currentPlayer').get('playerType');
-                        boardsList.push(newBoard);
-                    }
-                }, this);
-            }, this);
+            gameState.visitCells(function(boardRow, cell, rowIndex, colIndex){
+                if (cell === 0) {
+                    var newBoard = gameState.cloneBoard();
+                    newBoard[rowIndex][colIndex] = gameState.get('currentPlayer').get('playerType');
+                    boardsList.push(newBoard);
+                }
+            });
 
             return boardsList;
         },
@@ -60,7 +58,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             var currentBoardScore = 0;
             var bestBoard = undefined;
 
-            if (depth === 0 || boards.length === 0) {
+            if (depth === 0 || boards.length === 0) { //we have gone deep enough or we have a winning board
                 bestScore = this.calculateBoardScore(gameState.get('boardState'));
                 bestBoard = gameState.get('boardState');
             } else {
@@ -68,7 +66,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                     if (turnType === 'NPC') {
                         gameState.set('currentPlayer', gameState.get('player'));
                         gameState.set('boardState', boards[i]);
-                        currentBoardScore = this.bestPossibleMove(gameState, depth - 1).bestScore;
+                        currentBoardScore = this.bestPossibleMove(gameState, depth - 1).bestScore; //check the children
                         if (currentBoardScore > bestScore) {
                             bestScore = currentBoardScore;
                             bestBoard = boards[i];
@@ -85,12 +83,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 }
             }
 
-            return { bestBoard: bestBoard, bestScore: bestScore };
+            return { bestBoard: bestBoard, bestScore: bestScore }; //return this board/score pair
         },
 
-        calculateBoardScore: function(board) {
+        calculateRowScores: function(board) {
             var score = 0;
 
+            //Calculate the row scores
             for (var q = 0; q < 3; q++) {
                 var colScore = 0;
                 var lastCol1 = 0;
@@ -113,6 +112,59 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 score += colScore;
             }
 
+            return score;
+        },
+
+        calculateDiagonalScores: function(board) {
+            var score = 0;
+            //calculate diagonal scores
+            var diagonalScore = 0;
+            var lastCol2 = 0;
+            var colAlike = 0;
+            for (var j = 0; j < 3; ++j) {
+                if (board[j][j] !== 0) {
+                    if (board[j][j] === lastCol2) {
+                        colAlike++;
+                        diagonalScore = this.VALUES[board[j][j]][colAlike.toString()];
+                    } else if (colAlike > 0) {
+                        diagonalScore = 0;
+                        break;
+                    } else {
+                        diagonalScore += this.VALUES[board[j][j]]['1'];
+                        colAlike++;
+                        lastCol2 = board[j][j];
+                    }
+                }
+            }
+
+            score += diagonalScore;
+            diagonalScore = 0;
+            var lastCol3 = 0;
+            var colAlike = 0;
+            for (var i = 2, n = 0; i >= 0; --i, n++) {
+                if (board[i][n] !== 0) {
+                    if (board[i][n] === lastCol3) {
+                        colAlike++;
+                        diagonalScore = this.VALUES[board[i][n]][colAlike.toString()];
+                    } else if (colAlike > 0) {
+                        diagonalScore = 0;
+                        break;
+                    } else {
+                        diagonalScore += this.VALUES[board[i][n]]['1'];
+                        colAlike++;
+                        lastCol3 = board[i][n];
+                    }
+                }
+            }
+
+            score += diagonalScore;
+
+            return score;
+        },
+
+        calculateColumnScores: function(board) {
+            var score = 0;
+            //calculate column scores
             for (var k = 0; k < 3; ++k) {
                 var colScore = 0;
                 var lastCol1 = 0;
@@ -135,47 +187,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 score += colScore;
             }
 
+            return score;
+        },
 
-            var diagnonalScore = 0;
-            for (var j = 0; j < 3; ++j) {
-                var lastCol2 = 0;
-                var colAlike = 0;
-                if (board[j][j] !== 0) {
-                    if (board[j][j] === lastCol2) {
-                        colAlike++;
-                        diagnonalScore = this.VALUES[board[j][j]][colAlike.toString()];
-                    } else if (colAlike > 0) {
-                        diagnonalScore = 0;
-                        break;
-                    } else {
-                        diagnonalScore += this.VALUES[board[j][j]]['1'];
-                        colAlike++;
-                        lastCol2 = board[j][j];
-                    }
-                }
-            }
-
-            score += diagnonalScore;
-            diagnonalScore = 0;
-            for (var i = 2, n = 0; i >= 0; --i, n++) {
-                var lastCol3 = 0;
-                var colAlike = 0;
-                if (board[i][n] !== 0) {
-                    if (board[i][n] === lastCol3) {
-                        colAlike++;
-                        diagnonalScore = this.VALUES[board[i][n]][colAlike.toString()];
-                    } else if (colAlike > 0) {
-                        diagnonalScore = 0;
-                        break;
-                    } else {
-                        diagnonalScore += this.VALUES[board[i][n]]['1'];
-                        colAlike++;
-                        lastCol3 = board[i][n];
-                    }
-                }
-            }
-
-            score += diagnonalScore;
+        calculateBoardScore: function(board) {
+            var score = this.calculateRowScores(board);
+            score += this.calculateColumnScores(board);
+            score += this.calculateDiagonalScores(board);
 
             return score;
         }
