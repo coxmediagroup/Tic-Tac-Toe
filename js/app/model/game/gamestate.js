@@ -16,6 +16,15 @@ define(['jquery', 'underscore', 'backbone', 'model/player/player', 'model/player
             ]);
          },
 
+         visitCells: function(callback, scope) {
+             var gameBoard = this.get('boardState');
+             _.each(gameBoard, function(boardRow, i) {
+                 _.each(boardRow, function(cell, j) {
+                     callback.call(scope || this, boardRow, cell, i, j);
+                 }, this); //make sure we execute the code in the context of the view.
+             }, this);
+         },
+
          hasWinningRow: function() {
              var board = this.get('boardState');
 

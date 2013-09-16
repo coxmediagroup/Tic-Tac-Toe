@@ -69,11 +69,17 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
                     }
                 } else {
                     this.stopListening(this.gameState, 'change', this.onGameUpdate);
+                    this.gameState.get('currentPlayer').set('isWinner', true);
+                    if (this.gameState.allMovesMade() && !this.gameHasWinner()) {
+                        var type = this.gameState.get('currentPlayer').get('playerType');
+
+                        if (type === 'NPC') {
+                            this.gameState.get('player').set('isWinner', true);
+                        } else {
+                            this.gameState.get('computer').set('isWinner', true);
+                        }
+                    }
                 }
-            },
-
-            isGameOver: function() {
-
             }
         })
     }

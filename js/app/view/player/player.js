@@ -18,6 +18,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
         render: function() {
             this.$el.toggleClass('current', this.model.get('isCurrent'));
+            this.$el.toggleClass('winner', this.model.get('isWinner'));
             this.$el.html(this.template(this.model));
             return this;
         }

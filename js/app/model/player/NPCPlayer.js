@@ -3,19 +3,20 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         defaults: {
             isCurrent: false,
             playerName: 'Computer',
-            playerType: 'NPC'
+            playerType: 'NPC',
+            isWinner: false
         },
 
         VALUES: {
             PC: {
-                '2': -1000 ,
-                '1': -10,
-                '0': -1
+                '3': -1000 ,
+                '2': -10,
+                '1': -1
             },
             NPC: {
-                '2': 1000 ,
-                '1': 10,
-                '0': 1
+                '3': 1000 ,
+                '2': 10,
+                '1': 1
             }
         },
 
@@ -90,23 +91,27 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         calculateBoardScore: function(board) {
             var score = 0;
 
-            _.each(board, function(row){
-                var rowScore = 0;
-                var lastCol = 0;
+            for (var q = 0; q < 3; q++) {
+                var colScore = 0;
+                var lastCol1 = 0;
                 var colAlike = 0;
-                _.each(row, function(col) {
-                    if (col !== 0) {
-                        if (col === lastCol) {
+                for (var l = 0; l < 3; l++) {
+                    if (board[q][l] !== 0) {
+                        if (board[q][l] === lastCol1) {
                             colAlike++;
-                            rowScore = this.VALUES[col][colAlike.toString()];
+                            colScore = this.VALUES[board[q][l]][colAlike.toString()];
+                        } else if (colAlike > 0) {
+                            colScore = 0;
+                            break;
                         } else {
-                            rowScore += this.VALUES[col]['1'];
-                            lastCol = col;
+                            colScore += this.VALUES[board[q][l]]['1'];
+                            colAlike++;
+                            lastCol1 = board[q][l];
                         }
                     }
-                }, this);
-                score += rowScore;
-            }, this);
+                }
+                score += colScore;
+            }
 
             for (var k = 0; k < 3; ++k) {
                 var colScore = 0;
@@ -117,23 +122,34 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                         if (board[m][k] === lastCol1) {
                             colAlike++;
                             colScore = this.VALUES[board[m][k]][colAlike.toString()];
+                        } else if (colAlike > 0) {
+                            colScore = 0;
+                            break;
                         } else {
                             colScore += this.VALUES[board[m][k]]['1'];
+                            colAlike++;
                             lastCol1 = board[m][k];
                         }
                     }
                 }
                 score += colScore;
             }
+
+
             var diagnonalScore = 0;
             for (var j = 0; j < 3; ++j) {
                 var lastCol2 = 0;
+                var colAlike = 0;
                 if (board[j][j] !== 0) {
                     if (board[j][j] === lastCol2) {
                         colAlike++;
                         diagnonalScore = this.VALUES[board[j][j]][colAlike.toString()];
+                    } else if (colAlike > 0) {
+                        diagnonalScore = 0;
+                        break;
                     } else {
                         diagnonalScore += this.VALUES[board[j][j]]['1'];
+                        colAlike++;
                         lastCol2 = board[j][j];
                     }
                 }
@@ -143,12 +159,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             diagnonalScore = 0;
             for (var i = 2, n = 0; i >= 0; --i, n++) {
                 var lastCol3 = 0;
+                var colAlike = 0;
                 if (board[i][n] !== 0) {
                     if (board[i][n] === lastCol3) {
                         colAlike++;
                         diagnonalScore = this.VALUES[board[i][n]][colAlike.toString()];
+                    } else if (colAlike > 0) {
+                        diagnonalScore = 0;
+                        break;
                     } else {
                         diagnonalScore += this.VALUES[board[i][n]]['1'];
+                        colAlike++;
                         lastCol3 = board[i][n];
                     }
                 }

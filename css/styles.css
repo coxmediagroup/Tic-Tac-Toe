@@ -2,10 +2,22 @@ html,body {
     width: 100%;
     font-family: Verdana arial sans-serif;
     line-height: 16px;
+    background-color: #061633;
+    color: white;
 }
 .wrapper {
     width: 100%;
     height: 48em;
+}
+
+.homecontainer {
+    float: left;
+    margin-left: 10%;
+    margin-top: 10%;
+    height: 5em;
+    width: 20%;
+    border: 1px solid black;
+    box-shadow: .5em .25em .5em gray;
 }
 
 .PC {
@@ -21,14 +33,26 @@ html,body {
     width: 240px;
     margin-left: 350px;
     margin-top: 2em;
+    padding: 1em;
+    border: 2px groove darkorange;
 }
 
 .player {
-    height: 2em;
+    height: 5em;
     border: 1px solid black;
     width: 25%;
+    margin-top: 1em;
     margin-left: 12.5%;
     background-color: red;
+    box-shadow: .5em .25em .5em gray;
+}
+
+#NPC.field {
+    color: blue;
+}
+
+#PC.field {
+    color: yellow;
 }
 
 .cell {
@@ -91,9 +115,15 @@ html,body {
 }
 
 .field {
-    padding: .4em 0 0 7em;
+    padding: 1em 0 0 5em;
+    font-size: 2em;
 }
 
 .current {
     background-color: green;
+}
+
+.winner {
+    text-shadow: 1.3em 1.5em .07em blue, -1.3em -1.5em .07em blue;
+    border: 2px dotted orangered;
 }

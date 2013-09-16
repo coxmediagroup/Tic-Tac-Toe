@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
     return Backbone.View.extend({
         tagName: 'div',
-        className: 'container',
+        className: 'homecontainer',
         events: {
             'keypress #playerName' : 'onKeyPress',
             'blur #playerName': 'onInputChange'
@@ -25,7 +25,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         template: function() {
-            return _.template(this.templateHtml);
+            var html = '<h1>Shall we play a game? ... How about Global Thermonuclear War.</h1>';
+            html += _.template(this.templateHtml);
+            return html;
         },
 
         gameUpdate: function() {
@@ -33,7 +35,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         render: function() {
-            this.$el.html(this.template(this.model));
+            this.$el.html(this.template());
             $('body').html(this.$el);
             return this;
         }

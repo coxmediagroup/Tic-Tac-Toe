@@ -3,7 +3,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         defaults: {
             isCurrent: false,
             playerName: undefined,
-            playerType: undefined
+            playerType: undefined,
+            isWinner: false
         }
     });
 });
