@@ -60,9 +60,10 @@ function DecrementCookie(c_name) {
 function PlayerClickDivSet(c_name, player) {
 	if (ReadCookiePref("game_inprogress","no") == "yes") {
 		if (ReadCookiePref("whosmove","U") == "U") {
-			ClickDivSet(c_name, player);
-			setCookie("whosmove","C",365);
-			ComputerMove();
+			if (ClickDivSet(c_name, player)) {
+				setCookie("whosmove","C",365);
+				ComputerMove();
+			};
 		};
 	};
 };
@@ -92,6 +93,9 @@ function ClickDivSet(c_name, player) {
 				};
 			};
 		};
+		return true;
+	} else {
+		return false;
 	};
 };
 
