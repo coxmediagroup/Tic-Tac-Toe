@@ -3,8 +3,6 @@ I moved my changes into a branch named new/game.
 Using the strategy outlined in the Tic Tac Toe wikipedia article:
 http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 
-Using Python 2.7
-
 UX is done using pygame 1.9.2. 288x288 game board split into 9 - 96x96 rects
 96x96 player tiles. 
 
@@ -13,4 +11,15 @@ Choose piece dialog 160x100 - buttons 66x66
 
 This was my first attempt at unit testing.
 I was not sure how to apply unit tests to the pygame/UX stuff. 
+
+Unit tests tested via "python -m unittest discover -v"
+Unit tests tested via "nosetests"
+Unit tests tested via Eclipse IDE PyDev module "Run As Python unit-test"
+
+Tested using Eclipse IDE PyDev module running on OS X 10.7
+Tested on the command-line under OS X 10.7 and Windows 7 x64
+
+Using Python 2.7
+Requires PyGame 1.9.1
+ 
 
