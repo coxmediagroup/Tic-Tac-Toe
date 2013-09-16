@@ -260,6 +260,7 @@ window.onload = function() {
 			document.getElementById(c_name).setAttribute("style","color: #444d50;");		
 			document.getElementById(c_name).innerHTML = "H";
 			document.getElementById(c_name).onclick = (function(c_namea) { return function () { PlayerClickDivSet(c_namea, "X"); }; })(c_name);
+			setCookie(a_cnt.toString(),"H",365);
 		};
 		updateScore()
 		setCookie("whosmove","C",365);
