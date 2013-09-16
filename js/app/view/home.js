@@ -7,7 +7,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             'blur #playerName': 'onInputChange'
         },
 
-        templateHtml: '<label for="playerName">Player Name</label><input type="textbox" id="playerName" />',
+        templateHtml: '<input type="textbox" id="playerName">',
 
         initialize: function() {
             this.listenTo(this.model, "change", this.gameUpdate);
@@ -21,13 +21,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
         onInputChange: function(event) {
             var name = $(event.target).val();
-            this.model.set('playerName', name);
+            if (name !== '') {
+                this.model.set('playerName', name);
+            }
         },
 
         template: function() {
-            var html = '<h1>Shall we play a game? ... How about Global Thermonuclear War.</h1>';
-            html += _.template(this.templateHtml);
-            return html;
+            return _.template(this.templateHtml);
         },
 
         gameUpdate: function() {
@@ -35,7 +35,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         render: function() {
-            this.$el.html(this.template());
+            this.$el.append('<h3>Shall we play a game,&nbsp;' + this.templateHtml + '?</h3>');
+            this.$el.append('<h3>How about Global Thermonuclear War.</h3>');
             $('body').html(this.$el);
             return this;
         }

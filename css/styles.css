@@ -4,6 +4,8 @@ html,body {
     line-height: 16px;
     background-color: #061633;
     color: white;
+    margin: 0;
+    padding: 0;
 }
 .wrapper {
     width: 100%;
@@ -12,12 +14,14 @@ html,body {
 
 .homecontainer {
     float: left;
-    margin-left: 10%;
-    margin-top: 10%;
-    height: 5em;
+    margin-left: 20%;
+    margin-top: 5%;
+    min-width: 450px;
     width: 20%;
+    padding: 2em;
     border: 1px solid black;
-    box-shadow: .5em .25em .5em gray;
+    box-shadow: .5em .5em .5em #ccc;
+    color: gray;
 }
 
 .PC {
@@ -31,10 +35,10 @@ html,body {
 #board {
     height: 15em;
     width: 240px;
-    margin-left: 350px;
+    margin-left: 340px;
     margin-top: 2em;
     padding: 1em;
-    border: 2px groove darkorange;
+    border: 3px groove darkorange;
 }
 
 .player {
@@ -124,6 +128,6 @@ html,body {
 }
 
 .winner {
-    text-shadow: 1.3em 1.5em .07em blue, -1.3em -1.5em .07em blue;
-    border: 2px dotted orangered;
+    text-shadow: 1.3em 1.5em .07em, -1.3em -1.5em .07em;
+    border: 2px dotted darkorange;
 }

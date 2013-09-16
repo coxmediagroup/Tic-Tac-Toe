@@ -12,6 +12,7 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
                 this.gameState = new GameState;
                 this.gameView = new GameView({ model: this.gameState });
                 this.listenTo(this.gameState, 'change', this.onGameUpdate);
+                this.listenTo(this.gameState, 'game:restart', this.home);
             },
 
             run: function() {
@@ -70,7 +71,7 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
                 } else {
                     this.stopListening(this.gameState, 'change', this.onGameUpdate);
                     this.gameState.get('currentPlayer').set('isWinner', true);
-                    if (this.gameState.allMovesMade() && !this.gameHasWinner()) {
+                    if (this.gameState.allMovesMade() && !this.gameState.gameHasWinner()) {
                         var type = this.gameState.get('currentPlayer').get('playerType');
 
                         if (type === 'NPC') {
