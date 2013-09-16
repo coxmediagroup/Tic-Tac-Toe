@@ -115,7 +115,6 @@ function CheckForMove(move, player, aa, bb, cc) {
 	if (mymove != 0) {
 		return mymove;
 	};
-	//alert("" + aa.toString() + bb.toString() + cc.toString());
 	if ((mymove == 0) && (document.getElementById(aa.toString()).innerHTML == player) && (document.getElementById(bb.toString()).innerHTML == player)) {
 		mymove = IsMoveValid(cc);
 	};
@@ -179,7 +178,6 @@ function ComputerMove() {
 			};
 			ClickDivSet(mypick.toString(), "O");
 			setCookie("whosmove","U",365);
-			//alert("Users move!");
 		};
 	};
 };
@@ -231,7 +229,6 @@ function updateScore() {
 };
 
 window.onload = function() {
-	//var a_cnt = 0;
 	var c_name = "";
 	if (ReadCookiePref("game_inprogress","no") != "yes") {
 		setCookie("game_inprogress","no",365);
@@ -263,7 +260,6 @@ window.onload = function() {
 		setCookie("movesleft","9",365);
 		for (a_cnt = 1; a_cnt < 10; a_cnt++) {
 			c_name = a_cnt.toString();
-			//alert(c_name);
 			document.getElementById(c_name).setAttribute("style","color: #444d50;");		
 			document.getElementById(c_name).innerHTML = "H";
 			document.getElementById(c_name).onclick = (function(c_namea) { return function () { PlayerClickDivSet(c_namea, "X"); }; })(c_name);
