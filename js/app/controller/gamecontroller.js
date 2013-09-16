@@ -18,6 +18,7 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
             run: function() {
                 Backbone.history.start({
                     pushState: true,
+                    //this needs to be changed to the location of index.html
                     root : 'C:/Users/ev0v2vn/tests/Tic-Tac-Toe/index.html'
                 });
             },
