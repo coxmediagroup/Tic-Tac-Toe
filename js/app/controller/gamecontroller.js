@@ -2,17 +2,17 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
     function(Backbone, GameView, HomeView, GameState){
         return Backbone.Router.extend({
             routes : {
-                '': 'home',
-                'new': 'newGame',
-                'continue': 'continueGame',
-                'quit': 'quitGame'
+                '': 'home'
             },
 
             initialize: function() {
                 this.gameState = new GameState;
-                this.gameView = new GameView({ model: this.gameState });
+                this.bindListeners();
+            },
+
+            bindListeners: function() {
                 this.listenTo(this.gameState, 'change', this.onGameUpdate);
-                this.listenTo(this.gameState, 'game:restart', this.home);
+                this.listenTo(this.gameState, 'game:restart', this.restartGame);
             },
 
             run: function() {
@@ -28,19 +28,18 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
                 this.homeView.render();
             },
 
+            restartGame: function() {
+                var playerName = this.gameState.get('player').get('playerName');
+                this.gameState.clear({silent: true});
+                this.gameState = new GameState;
+                this.bindListeners();
+                this.gameState.get('player').set('playerName', playerName);
+                this.newGame();
+            },
+
             newGame: function() {
-                this.gameState.destroy();
+                this.gameView = new GameView({ model: this.gameState });
                 this.homeView.remove();
-                this.gameView.render();
-            },
-
-            continueGame: function() {
-                this.gameState.fetch();
-                this.gameView.render();
-            },
-
-            quitGame: function() {
-                this.gameState.save();
                 this.gameView.render();
             },
 
@@ -71,6 +70,7 @@ define(['backbone', 'view/game/game', 'view/home', 'model/game/gamestate'],
                 } else {
                     this.stopListening(this.gameState, 'change', this.onGameUpdate);
                     this.gameState.get('currentPlayer').set('isWinner', true);
+                    this.gameState.get('currentPlayer').set('isCurrent', false);
                     if (this.gameState.allMovesMade() && !this.gameState.gameHasWinner()) {
                         var type = this.gameState.get('currentPlayer').get('playerType');
 

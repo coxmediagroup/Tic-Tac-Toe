@@ -2,8 +2,8 @@ html,body {
     width: 100%;
     font-family: Verdana arial sans-serif;
     line-height: 16px;
-    background-color: #061633;
-    color: white;
+    background-color: #101040;
+    color: #b69366;
     margin: 0;
     padding: 0;
 }
@@ -20,12 +20,16 @@ html,body {
     width: 20%;
     padding: 2em;
     border: 1px solid black;
-    box-shadow: .5em .5em .5em #ccc;
-    color: gray;
+    box-shadow: .5em .5em .5em #6a6aaa;
+    color: #b6b066;
 }
 
 .PC {
     background-color: yellow;
+}
+
+.menu {
+    list-style: none;
 }
 
 .NPC {
@@ -39,6 +43,15 @@ html,body {
     margin-top: 2em;
     padding: 1em;
     border: 3px groove darkorange;
+}
+
+input {
+    margin: 0 5px;
+}
+
+button#restart {
+    margin-left: 12.5%;
+    margin-top: 1em;
 }
 
 .player {
@@ -55,8 +68,16 @@ html,body {
     color: blue;
 }
 
+.winner > #NPC.field {
+    color: #b69366;
+}
+
 #PC.field {
     color: yellow;
+}
+
+.winner > #PC.field {
+    color: #b69366;
 }
 
 .cell {
@@ -130,4 +151,5 @@ html,body {
 .winner {
     text-shadow: 1.3em 1.5em .07em, -1.3em -1.5em .07em;
     border: 2px dotted darkorange;
+    background-color: #423d05;
 }

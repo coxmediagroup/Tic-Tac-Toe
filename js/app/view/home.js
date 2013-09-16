@@ -35,7 +35,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         render: function() {
-            this.$el.append('<h3>Shall we play a game,&nbsp;' + this.templateHtml + '?</h3>');
+            this.$el.append('<h3>Shall we play a game,' + this.templateHtml + '?</h3>');
             this.$el.append('<h3>How about Global Thermonuclear War.</h3>');
             $('body').html(this.$el);
             return this;

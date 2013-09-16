@@ -15,7 +15,8 @@ define(['jquery', 'underscore', 'backbone', 'view/game/gamestate', 'view/game/ga
             },
 
             render: function() {
-                this.$el.append(this.gameStateView.render().$el).append(this.gameBoardView.render().$el);
+                this.$el.append(this.gameStateView.render().$el)
+                    .append(this.gameBoardView.render().$el);
                 $('body').html(this.$el);
 
                 return this;

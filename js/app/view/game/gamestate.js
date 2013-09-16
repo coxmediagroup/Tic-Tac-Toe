@@ -14,16 +14,18 @@ define(['jquery', 'underscore', 'backbone', 'view/player/player'],
                 this.playerView = new PlayerView({
                     model: this.model.get('player')
                 });
+
+                this.listenTo(this.model, 'change', function(){
+                    if (this.model.isGameOver()) {
+                        this.stopListening(this.model, 'change');
+                        this.$el.append('<button id="restart">Restart Game</button>');
+                    }
+                });
             },
 
             render: function() {
                 this.$el.append(this.playerView.render().$el);
                 this.$el.append(this.computerView.render().$el);
-
-                if (this.model.isGameOver()) {
-                    this.$el.append('<button id="restart">Restart Game</button>');
-                }
-
                 return this;
             },
 
