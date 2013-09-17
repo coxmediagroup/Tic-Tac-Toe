@@ -25,7 +25,7 @@ requestTemplate = Template( gameBoardMinified )
 requestInfo = {
 	'home': {
 		'title':"Welcome to Tic Tac Toe",
-		'body':"<h1>This is a test of the temp templating system.</h1>",
+		'body':"<h1>Tic-Tac-Toe</h1>",
 	},
 	'/json': {
 		'title':"",

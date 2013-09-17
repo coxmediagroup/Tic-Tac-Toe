@@ -9,11 +9,11 @@
 			the normal jQuery dollar sign classes with python's template
 			dollar sign. we'll use a different expression
 		-->
-		<script>
+		<script type="text/javascript">
 			var jQ = jQuery.noConflict();
 		</script>
 
-		<style>
+		<style type="text/css">
 			/* normally style would be in a different doc; here for convience */
 			/* todo: make the width, height variable by screen size */
 
@@ -179,13 +179,14 @@
 		A Tic Tac Toe (Knots &amp; Crosses) Example
 	</footer>
 	
-	<script>
+	<script type="text/javascript">
+			console.log('here');
 		/* 
 			normally behavior would be in a seperate file
 			however, for simplicity, we're including it in 
 			one file
 		*/
-		//define the initial state, which is an empty array
+		/* define the initial state, which is an empty array */
 		var initialState = ['-','-','-','-','-','-','-','-','-'];
 
 		function displayBoard( gameState ) {
@@ -197,7 +198,7 @@
 				= col 0 in row 1). Vital to remember we're 0 indexed
 			*/
 			for (var i=0; i < gameState.length; i++) {
-				//jQ('#board').append(i);
+				/* jQ('#board').append(i); */
 				console.log(i);
 			}
 		}
@@ -207,7 +208,7 @@
 			/* todo: we don't want this on EVERY cell, just the ones that aren't filled */
 			jQ('td').hover( function() {
 				console.log( 'entering ' + jQ(this).attr('id'));
-				// display the player's piece when hovering, but only if cell isn't taken
+				/* display the player's piece when hovering, but only if cell isn't taken */
 				if( ! jQ(this).hasClass('played')) {
 					jQ(this).append('<p>X</p>');
 					jQ("p",this).fadeIn('slow');
@@ -222,8 +223,8 @@
 
 			/* apply what the cell should do when clicked on  */
 			jQ('td').click( function() {
-				console.log('player clicked ' + jQ(this).attr('id'))
-				// set the cell contents to taken
+				console.log('player clicked ' + jQ(this).attr('id'));
+				/* set the cell contents to taken */
 				jQ(this).addClass("played");
 				/* todo: return board state to AI to play */
 			});
@@ -231,13 +232,14 @@
 
 		jQ(document).ready( function() {
 			console.log("ready!");
-			// render the playing board; on initial state there isn't much to show
+			/* render the playing board; on initial state there isn't much to show */
 			displayBoard( initialState );
 
-			// attach action elements to empty board slots
+			/* attach action elements to empty board slots */
 			applyEvents('board');
 
 		});
+
 	</script>	
 	</body>
 </html>
