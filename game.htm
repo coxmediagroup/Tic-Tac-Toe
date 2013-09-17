@@ -16,6 +16,57 @@
 		<style>
 			/* normally style would be in a different doc; here for convience */
 			/* todo: make the width, height variable by screen size */
+
+
+			/* --- Eric Meyer's infamous CSS reset --- */
+			html, body, div, span, applet, object, iframe,
+			h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+			a, abbr, acronym, address, big, cite, code,
+			del, dfn, em, img, ins, kbd, q, s, samp,
+			small, strike, strong, sub, sup, tt, var,
+			b, u, i, center,
+			dl, dt, dd, ol, ul, li,
+			fieldset, form, label, legend,
+			table, caption, tbody, tfoot, thead, tr, th, td,
+			article, aside, canvas, details, embed, 
+			figure, figcaption, footer, header, hgroup, 
+			menu, nav, output, ruby, section, summary,
+			time, mark, audio, video {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article, aside, details, figcaption, figure, 
+			footer, header, hgroup, menu, nav, section {
+				display: block;
+			}
+			body {
+				line-height: 1;
+			}
+			ol, ul {
+				list-style: none;
+			}
+			blockquote, q {
+				quotes: none;
+			}
+			blockquote:before, blockquote:after,
+			q:before, q:after {
+				content: '';
+				content: none;
+			}
+			/*
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+			*/
+			/* --- end Eric Meyer's infamous CSS reset --- */
+
+
 			body {
 				/* background gradient generated with http://www.colorzilla.com/gradient-editor/ */
 				/* background: #a90329; /* Old browsers */
@@ -33,11 +84,39 @@
 				font-family: "Lucida Console", Monaco, monospace;
 			}
 
+			footer {
+				margin-top:1em;
+				width:100%;
+				font-size:0.5em;
+				background: #fafafa;
+				color:#6d0019;
+			}
+
+			header {
+				margin-bottom:1em;
+				width:100%;
+				font-size:0.75em;
+			}
+
 			td {
 				width:100px;
 				height:100px;
 				border-radius:0.75em;
 				moz-border-radius:0.75em;
+				font-size:1em;
+				text-align:center;
+				vertical-align: middle;
+			}
+
+			td p {
+				font-size:2.5em;
+				color:#fefefe;
+				/* since we're fading in, initial display is off */
+				display:none;
+			}
+
+			.textBits {
+				padding:0.5em;
 			}
 
 			.v {
@@ -65,7 +144,6 @@
 			}
 
 			#board {
-				height:100%;
 				margin-right:auto;
 				margin-left:auto;
 				width:500px;
@@ -74,25 +152,32 @@
 	</head>
 	<body>
 
-	$body
+	<header class="textBits">
+		$body
+	</header>
 	<div id="board">
 		<table>
 			<tr id="row1">
-				<td class="l t"></td>
-				<td class="v"></td>
-				<td class="r t"></td>
+				<td class="l t" id="cell0"></td>
+				<td class="v" id="cell1"></td>
+				<td class="r t" id="cell2"></td>
 			</tr>
 			<tr id="row2">
-				<td class="h"></td>
-				<td class="h v"></td>
-				<td class="h"></td>
+				<td class="h" id="cell3"></td>
+				<td class="h v" id="cell4"></td>
+				<td class="h" id="cell5"></td>
 			</tr>
 			<tr id="row3">
-				<td class="l b"></td>
-				<td class="v"></td>
-				<td class="r b"></td>
+				<td class="l b" id="cell6"></td>
+				<td class="v" id="cell7"></td>
+				<td class="r b" id="cell8"></td>
 			</tr>
+		</table>
 	</div>
+
+	<footer class="textBits">
+		A Tic Tac Toe (Knots &amp; Crosses) Example
+	</footer>
 	
 	<script>
 		/* 
@@ -117,9 +202,41 @@
 			}
 		}
 
+		function applyEvents( boardDiv ) {
+			/* remember, the hover takes both mousein AND mouseout actions */
+			/* todo: we don't want this on EVERY cell, just the ones that aren't filled */
+			jQ('td').hover( function() {
+				console.log( 'entering ' + jQ(this).attr('id'));
+				// display the player's piece when hovering, but only if cell isn't taken
+				if( ! jQ(this).hasClass('played')) {
+					jQ(this).append('<p>X</p>');
+					jQ("p",this).fadeIn('slow');
+				}
+			},
+			function() {
+				console.log( 'leaving ' + jQ(this).attr('id'));
+				if( ! jQ(this).hasClass('played')) {
+					jQ(this).empty();
+				}
+			});
+
+			/* apply what the cell should do when clicked on  */
+			jQ('td').click( function() {
+				console.log('player clicked ' + jQ(this).attr('id'))
+				// set the cell contents to taken
+				jQ(this).addClass("played");
+				/* todo: return board state to AI to play */
+			});
+		}
+
 		jQ(document).ready( function() {
 			console.log("ready!");
+			// render the playing board; on initial state there isn't much to show
 			displayBoard( initialState );
+
+			// attach action elements to empty board slots
+			applyEvents('board');
+
 		});
 	</script>	
 	</body>
