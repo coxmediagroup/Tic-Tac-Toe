@@ -11,6 +11,8 @@
 myport = 8080
 from string import Template
 from wsgiref import util
+import urllib
+import ai
 
 
 # load syntax, behavior for the game board, make available to server
@@ -30,7 +32,11 @@ requestInfo = {
 	'/json': {
 		'title':"",
 		'body':'{"response":"Hello World"}',
-	},	
+	},
+	'/move': {
+		'title':"",
+		'body':'{"response":"Hello World"}',
+	},		
 }
 
 
@@ -47,6 +53,27 @@ def handle_request( environment, start_response ):
 		headers = [('Content-type',"application/json")]
 		start_response( status, headers )
 		response = requestInfo[ endPoint ][ 'body' ]
+	elif endPoint == '/move':
+		print "a move has been called"
+		# there should be a URL param, called 'state', which is current game state
+		rawState = environment["QUERY_STRING"]
+		# decode the URL encoded value
+		state = urllib.unquote( rawState ).decode('utf8')
+		# split the key from the value
+		state = state.split('=')
+		if len(state) > 1:
+			state = state[1].split(',')
+			#todo: the state should have a length of 9 items
+			tempResponse = ai.echoGameState( state )
+			print tempResponse
+		else:
+			#todo: need to handle error here
+			print "There has been an error."
+
+		# for test, just echo back the current game state
+		headers = [('Content-type',"application/json")]
+		start_response( status, headers )
+		response = tempResponse
 	else:
 		endPoint = 'home'
 

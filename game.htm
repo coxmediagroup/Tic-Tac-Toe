@@ -187,7 +187,7 @@
 			one file
 		*/
 		/* define the initial state, which is an empty array */
-		var initialState = ['-','-','-','-','-','-','-','-','-'];
+		var GAME_STATE = ['-','-','-','-','-','-','-','-','-'];
 
 		function displayBoard( gameState ) {
 			/*
@@ -226,14 +226,46 @@
 				console.log('player clicked ' + jQ(this).attr('id'));
 				/* set the cell contents to taken */
 				jQ(this).addClass("played");
-				/* todo: return board state to AI to play */
+				/* regardless of if they are 'X' or 'O', denote move made by player */
+				updateGameState( jQ(this).attr('id'), 'P' );
+				var endFlag = isEndGame();
+				if( !endFlag ) {
+					nextMove();
+				}
 			});
+		}
+
+		function isEndGame() {
+			/* determine if player has won or if it is a draw */
+			return false
+		}
+
+		function nextMove() {
+			/* pass gamestate to the AI */
+			/*var AIUrl = location.host + '/' + 'move';*/
+			var AIUrl = '/move';
+			console.log( AIUrl );
+			jQ.ajax( {
+				url: AIUrl,
+				data: {state:GAME_STATE.join(",")}
+			})
+			.done( function() {
+				console.log('just made a request');
+			});
+		}
+
+		function updateGameState( cellName, player ){
+			/* strip chars from cellName, convert to int to get index */
+			var index = parseInt( cellName.replace(/\D/g,''));
+			console.log(index);
+			GAME_STATE[index] = player;
+			console.log(GAME_STATE);
 		}
 
 		jQ(document).ready( function() {
 			console.log("ready!");
 			/* render the playing board; on initial state there isn't much to show */
-			displayBoard( initialState );
+			displayBoard( GAME_STATE );
 
 			/* attach action elements to empty board slots */
 			applyEvents('board');
