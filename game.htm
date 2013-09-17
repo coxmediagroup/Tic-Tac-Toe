@@ -1,6 +1,7 @@
-<!-- tic tac toe gameboard -->
+<!doctype html>
 <html>
 	<head>
+		<!-- tic tac toe gameboard -->
 		<title>$title</title>
 		<!-- including jQuery for DOM manipulation -->
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -11,10 +12,87 @@
 		<script>
 			var jQ = jQuery.noConflict();
 		</script>
+
+		<style>
+			/* normally style would be in a different doc; here for convience */
+			/* todo: make the width, height variable by screen size */
+			body {
+				/* background gradient generated with http://www.colorzilla.com/gradient-editor/ */
+				/* background: #a90329; /* Old browsers */
+				background: #6d0019; /* Old browsers */
+				background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 ); /* IE6-9 */
+
+				color:#fafafa;
+				font-size:36px;
+				font-family: "Lucida Console", Monaco, monospace;
+			}
+
+			td {
+				width:100px;
+				height:100px;
+				border-radius:0.75em;
+				moz-border-radius:0.75em;
+			}
+
+			.v {
+				border-left:0.2em dotted #fafafa;
+				border-right:0.2em dotted #fafafa;
+			}
+
+			.h {
+				border-top:0.2em dotted #fafafa;
+				border-bottom:0.2em dotted #fafafa;
+			}
+
+			.t {
+				border-top:0.2em dotted #fafafa;
+			}
+
+			.b {
+				border-bottom:0.2em dotted #fafafa;
+			}
+			.l {
+				border-left:0.2em dotted #fafafa;
+			}
+			.r {
+				border-right:0.2em dotted #fafafa;
+			}
+
+			#board {
+				height:100%;
+				margin-right:auto;
+				margin-left:auto;
+				width:500px;
+			}
+		</style>
 	</head>
 	<body>
 
 	$body
+	<div id="board">
+		<table>
+			<tr id="row1">
+				<td class="l t"></td>
+				<td class="v"></td>
+				<td class="r t"></td>
+			</tr>
+			<tr id="row2">
+				<td class="h"></td>
+				<td class="h v"></td>
+				<td class="h"></td>
+			</tr>
+			<tr id="row3">
+				<td class="l b"></td>
+				<td class="v"></td>
+				<td class="r b"></td>
+			</tr>
+	</div>
 	
 	<script>
 		/* 
@@ -22,8 +100,26 @@
 			however, for simplicity, we're including it in 
 			one file
 		*/
+		//define the initial state, which is an empty array
+		var initialState = ['-','-','-','-','-','-','-','-','-'];
+
+		function displayBoard( gameState ) {
+			/*
+				treat our 1D list as our gamestate; dividing the
+				array index by 3 and taking the int result gives us our row (for example, 0/3 = row 0, 1/3 = row 0, 3/3 = row
+				1) and taking the mod gives us the desired column
+				(again, 0 mod 3 = col 0, 1 mod 3 = col 1, and 3 mod 3
+				= col 0 in row 1). Vital to remember we're 0 indexed
+			*/
+			for (var i=0; i < gameState.length; i++) {
+				//jQ('#board').append(i);
+				console.log(i);
+			}
+		}
+
 		jQ(document).ready( function() {
 			console.log("ready!");
+			displayBoard( initialState );
 		});
 	</script>	
 	</body>
