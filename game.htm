@@ -1,0 +1,30 @@
+<!-- tic tac toe gameboard -->
+<html>
+	<head>
+		<title>$title</title>
+		<!-- including jQuery for DOM manipulation -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<!-- 
+			the normal jQuery dollar sign classes with python's template
+			dollar sign. we'll use a different expression
+		-->
+		<script>
+			var jQ = jQuery.noConflict();
+		</script>
+	</head>
+	<body>
+
+	$body
+	
+	<script>
+		/* 
+			normally behavior would be in a seperate file
+			however, for simplicity, we're including it in 
+			one file
+		*/
+		jQ(document).ready( function() {
+			console.log("ready!");
+		});
+	</script>	
+	</body>
+</html>

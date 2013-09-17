@@ -13,17 +13,15 @@ from string import Template
 from wsgiref import util
 
 
-# standard template for display
-requestTemplate = Template("""
-<html>
-	<head><title>$title</title></head>
-	<body>
-		$body
-	</body>
-</html>
-	""")
+# load syntax, behavior for the game board, make available to server
+with open("game.htm","r") as gameBoard:
+	gameBoardMinified = gameBoard.read().replace('\n', '')
+
+# standard html/js/css template for display
+requestTemplate = Template( gameBoardMinified )
 
 # define basic properties for various requests
+
 requestInfo = {
 	'home': {
 		'title':"Welcome to Tic Tac Toe",
