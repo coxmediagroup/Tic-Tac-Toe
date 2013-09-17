@@ -27,25 +27,34 @@ requestTemplate = Template("""
 requestInfo = {
 	'home': {
 		'title':"Welcome to Tic Tac Toe",
-		'body':"<h1>This is a test of the temp templating system.</h1>"
+		'body':"<h1>This is a test of the temp templating system.</h1>",
 	},
+	'/json': {
+		'title':"",
+		'body':'{"response":"Hello World"}',
+	},	
 }
 
 
 # handle requests is called when someone visits, builds output request
 def handle_request( environment, start_response ):
+	# default status and headers
 	status = '200 OK' #HTTP status
-	headers = [('Content-type',"text/html")]
 
 	# determine the request intent from the path
 	endPoint = environment["PATH_INFO"]
 	
 	# todo: for initial test, only returns the sample page
-	if not endPoint == 'home':
+	if endPoint == '/json':
+		headers = [('Content-type',"application/json")]
+		start_response( status, headers )
+		response = requestInfo[ endPoint ][ 'body' ]
+	else:
 		endPoint = 'home'
 
-	start_response( status, headers )
-	response = requestTemplate.substitute( **requestInfo[ endPoint ] )
+		headers = [('Content-type',"text/html")]
+		start_response( status, headers )
+		response = requestTemplate.substitute( **requestInfo[ endPoint ] )
 
 	return [response]
 
