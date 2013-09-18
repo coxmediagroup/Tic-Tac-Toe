@@ -1,10 +1,14 @@
 ﻿namespace TicTacToe.Core
 {
-    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
-    public class GameState
+    using TicTacToe.Core.Annotations;
+
+    public class GameState : INotifyPropertyChanged
     {
+        private IPlayer playerTurn;
+
         public IPlayer Player1 { get; internal set; }
         public IPlayer Player2 { get; internal set; }
         public GameBoard Board { get; internal set; }
@@ -12,7 +16,22 @@
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
         /// </summary>
-        public IPlayer PlayerTurn { get; internal set; }
+        public IPlayer PlayerTurn
+        {
+            get
+            {
+                return this.playerTurn;
+            }
+            internal set
+            {
+                if (Equals(value, this.playerTurn))
+                {
+                    return;
+                }
+                this.playerTurn = value;
+                this.OnPropertyChanged("PlayerTurn");
+            }
+        }
 
         /// <summary>
         /// Create a new <see cref="GameState"/> with 2 players
@@ -27,7 +46,21 @@
             Board = gameBoard;
 
             // Randomly picks who the starting player will be
+            // I think normally I would let the constructor of this class determine this
+            //    , but for the sake of this project I'll just decide here.
             PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? player1 : player2;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 
