@@ -20,6 +20,11 @@
                 ? this.GameState.Player2 
                 : this.GameState.Player1;
             this.Log("{0} Passes turn to {1}", this.Player, this.GameState.PlayerTurn);
+            if (this.GameState.PlayerTurn.OnTurn(GameState))
+            {
+                var action = new PassTurnGameAction(GameState, this.GameState.PlayerTurn);
+                this.GameState.PerformAction(action);
+            }
         }
     }
 }
