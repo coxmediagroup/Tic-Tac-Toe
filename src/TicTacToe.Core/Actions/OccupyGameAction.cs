@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Actions
 {
     using System;
     using System.Linq;

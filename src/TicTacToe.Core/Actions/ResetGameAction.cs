@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Actions
 {
     public class ResetGameAction : GameAction
     {

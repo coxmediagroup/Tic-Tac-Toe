@@ -5,7 +5,7 @@
         internal GameState GameState { get; set; }
         internal IPlayer Player { get; set; }
 
-        public GameAction(GameState state, IPlayer player)
+        protected GameAction(GameState state, IPlayer player)
         {
             this.GameState = state;
             this.Player = player;

@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Utils
 {
+    using System;
     using System.Security.Cryptography;
 
     /// <summary>
@@ -23,11 +22,7 @@ namespace TicTacToe.Core
                 }
                 lock (RngRandomSingletonLocker)
                 {
-                    if (Context == null)
-                    {
-                        Context = new RngRandom();
-                    }
-                    return Context;
+                    return Context ?? (Context = new RngRandom());
                 }
             }
         }
@@ -54,7 +49,7 @@ namespace TicTacToe.Core
         public Int32 Next(Int32 maxValue)
         {
             if (maxValue < 0) throw new ArgumentOutOfRangeException("maxValue");
-            return Next(0, maxValue);
+            return this.Next(0, maxValue);
         }
 
         /// <summary>

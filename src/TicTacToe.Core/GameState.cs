@@ -4,6 +4,7 @@
     using System.ComponentModel;
 
     using TicTacToe.Core.Annotations;
+    using TicTacToe.Core.Utils;
 
     public class GameState : INotifyPropertyChanged
     {

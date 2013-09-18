@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace TicTacToe
+﻿namespace TicTacToe
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

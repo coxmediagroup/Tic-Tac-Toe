@@ -1,8 +1,7 @@
-﻿namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Actions
 {
     using System;
     using System.Linq;
-    using System.Security;
 
     public class PassTurnGameAction : GameAction
     {
@@ -13,14 +12,14 @@
 
         public override void Do()
         {
-            if(GameState.PlayerTurn != Player)
+            if(this.GameState.PlayerTurn != this.Player)
                 throw new InvalidOperationException("Only the active player can pass the turn.");
-            if (GameState.GameActions.Last().Player != Player) 
+            if (this.GameState.GameActions.Last().Player != this.Player) 
                 throw new InvalidOperationException("Player must perform an action before passing their turn.");
-            GameState.PlayerTurn = GameState.PlayerTurn == GameState.Player1 
-                ? GameState.Player2 
-                : GameState.Player1;
-            Log("{0} Passes turn to {1}", Player, GameState.PlayerTurn);
+            this.GameState.PlayerTurn = this.GameState.PlayerTurn == this.GameState.Player1 
+                ? this.GameState.Player2 
+                : this.GameState.Player1;
+            this.Log("{0} Passes turn to {1}", this.Player, this.GameState.PlayerTurn);
         }
     }
 }
