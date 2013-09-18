@@ -1,8 +1,10 @@
 ﻿namespace TicTacToe.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
 
+    using TicTacToe.Core.Actions;
     using TicTacToe.Core.Annotations;
     using TicTacToe.Core.Utils;
 
@@ -118,10 +120,21 @@
 
         public void PerformAction(GameAction action)
         {
+            if (Status != GameStatus.Running && (action is ResetGameAction) == false)
+                throw new InvalidOperationException("Cannot do that action because the game is finished.");
             GameActions.Add(action);
             action.Do();
             OnPropertyChanged("GameActions");
             OnPropertyChanged("GameLog");
+            CheckGameState();
+        }
+
+        /// <summary>
+        /// Checks and updates the game state based on previous actions
+        /// </summary>
+        internal void CheckGameState()
+        {
+            
         }
 
         internal void Reset()
