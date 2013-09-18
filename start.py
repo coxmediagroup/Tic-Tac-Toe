@@ -27,7 +27,7 @@ requestTemplate = Template( gameBoardMinified )
 requestInfo = {
 	'home': {
 		'title':"Welcome to Tic Tac Toe",
-		'body':"<h1>Tic-Tac-Toe</h1>",
+		'body':"<h1>Tic-Tac-Toe!</h1><h2>Just try and win! Skynet dares ya!</h2>",
 	},
 	'/json': {
 		'title':"",
@@ -54,7 +54,6 @@ def handle_request( environment, start_response ):
 		start_response( status, headers )
 		response = requestInfo[ endPoint ][ 'body' ]
 	elif endPoint == '/move':
-		print "a move has been called"
 		# there should be a URL param, called 'state', which is current game state
 		rawState = environment["QUERY_STRING"]
 		# decode the URL encoded value
@@ -64,8 +63,7 @@ def handle_request( environment, start_response ):
 		if len(state) > 1:
 			state = state[1].split(',')
 			#todo: the state should have a length of 9 items
-			tempResponse = ai.echoGameState( state )
-			print tempResponse
+			tempResponse = ai.playToWin( state )
 		else:
 			#todo: need to handle error here
 			print "There has been an error."

@@ -92,6 +92,10 @@
 				color:#6d0019;
 			}
 
+			h2 {
+				font-size:0.7em;
+			}
+
 			header {
 				margin-bottom:1em;
 				width:100%;
@@ -180,7 +184,6 @@
 	</footer>
 	
 	<script type="text/javascript">
-			console.log('here');
 		/* 
 			normally behavior would be in a seperate file
 			however, for simplicity, we're including it in 
@@ -188,6 +191,8 @@
 		*/
 		/* define the initial state, which is an empty array */
 		var GAME_STATE = ['-','-','-','-','-','-','-','-','-'];
+		var AVATAR_PLAYER = 'X';
+		var AVATAR_COMPUTER = 'O';
 
 		function displayBoard( gameState ) {
 			/*
@@ -199,7 +204,19 @@
 			*/
 			for (var i=0; i < gameState.length; i++) {
 				/* jQ('#board').append(i); */
-				console.log(i);
+				if( gameState[i] == 'P') {
+					if( ! jQ('#cell' + i).hasClass('played')) {
+						jQ('#cell' + i).addClass("played");
+						jQ('#cell' + i).append('<p>' + AVATAR_PLAYER + '</p>');
+					}
+				}
+				else if( gameState[i] == 'C') {
+					if( ! jQ('#cell' + i).hasClass('played')) {
+						jQ('#cell' + i).addClass("played");
+						jQ('#cell' + i).append('<p>' + AVATAR_COMPUTER + '</p>');
+						jQ("p",'#cell' + i).fadeIn('slow');
+					}
+				}
 			}
 		}
 
@@ -207,15 +224,13 @@
 			/* remember, the hover takes both mousein AND mouseout actions */
 			/* todo: we don't want this on EVERY cell, just the ones that aren't filled */
 			jQ('td').hover( function() {
-				console.log( 'entering ' + jQ(this).attr('id'));
 				/* display the player's piece when hovering, but only if cell isn't taken */
 				if( ! jQ(this).hasClass('played')) {
-					jQ(this).append('<p>X</p>');
+					jQ(this).append('<p>' + AVATAR_PLAYER + '</p>');
 					jQ("p",this).fadeIn('slow');
 				}
 			},
 			function() {
-				console.log( 'leaving ' + jQ(this).attr('id'));
 				if( ! jQ(this).hasClass('played')) {
 					jQ(this).empty();
 				}
@@ -223,43 +238,146 @@
 
 			/* apply what the cell should do when clicked on  */
 			jQ('td').click( function() {
-				console.log('player clicked ' + jQ(this).attr('id'));
 				/* set the cell contents to taken */
 				jQ(this).addClass("played");
 				/* regardless of if they are 'X' or 'O', denote move made by player */
 				updateGameState( jQ(this).attr('id'), 'P' );
 				var endFlag = isEndGame();
 				if( !endFlag ) {
-					nextMove();
+					if( !isDraw() ) {
+						nextMove();
+					}
+					else {
+						var response = confirm('Aw, shucks. Looks like a draw. Play again?');
+						if( response == true ){
+							location.reload();
+						}
+					}
+				}
+				else {
+					var response = confirm("You... won? How embarassing. This isn't supposed to happend. Try again?");
+					if( response == true ){
+						location.reload();
+					}
 				}
 			});
 		}
 
 		function isEndGame() {
 			/* determine if player has won or if it is a draw */
+			/* first, determine if there is a win*/
+			if( 
+				GAME_STATE[0] == GAME_STATE[1]
+				&& GAME_STATE[1] == GAME_STATE[2]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[3] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[5]
+				&& (GAME_STATE[3] == 'P' || GAME_STATE[3] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[6] == GAME_STATE[7]
+				&& GAME_STATE[7] == GAME_STATE[8]
+				&& (GAME_STATE[6] == 'P' || GAME_STATE[6] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[0] == GAME_STATE[3]
+				&& GAME_STATE[3] == GAME_STATE[6]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[1] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[7]
+				&& (GAME_STATE[1] == 'P' || GAME_STATE[1] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[2] == GAME_STATE[5]
+				&& GAME_STATE[5] == GAME_STATE[8]
+				&& (GAME_STATE[2] == 'P' || GAME_STATE[2] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[0] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[8]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[2] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[6]
+				&& (GAME_STATE[2] == 'P' || GAME_STATE[2] == 'C')) 
+			{
+				return true;
+			}
+
 			return false
+		}
+
+		function isDraw() {
+			/* check to see if the game is a draw */
+			var drawFlag = true;
+			for(var i=0;i<GAME_STATE.length;i++){
+				if(GAME_STATE[i] == '-') {
+					drawFlag = false;
+				}
+			}
+
+			return drawFlag;
 		}
 
 		function nextMove() {
 			/* pass gamestate to the AI */
 			/*var AIUrl = location.host + '/' + 'move';*/
 			var AIUrl = '/move';
-			console.log( AIUrl );
 			jQ.ajax( {
 				url: AIUrl,
-				data: {state:GAME_STATE.join(",")}
+				data: {state:GAME_STATE.join(",")},
+				async: false,
+				success: function(text) {
+					response = text;
+					updateBoardFromAI( response );
+				}
 			})
 			.done( function() {
-				console.log('just made a request');
+				console.log('ajax call is finished');
 			});
 		}
+
+		function updateBoardFromAI( jsonResponse ) {
+			/* need to loop over the response */
+			for( var i =0; i< jsonResponse.length; i++) {
+				GAME_STATE[i] = jsonResponse[i]
+			}
+
+			displayBoard( GAME_STATE );
+			var aiWon = isEndGame();
+			if( aiWon ) {
+				var response = confirm("I won. Too bad. I was enjoying that. Again?");
+				if( response == true ){
+					location.reload();
+				}
+
+			}
+		}
+
 
 		function updateGameState( cellName, player ){
 			/* strip chars from cellName, convert to int to get index */
 			var index = parseInt( cellName.replace(/\D/g,''));
-			console.log(index);
 			GAME_STATE[index] = player;
-			console.log(GAME_STATE);
 		}
 
 		jQ(document).ready( function() {
@@ -269,7 +387,6 @@
 
 			/* attach action elements to empty board slots */
 			applyEvents('board');
-
 		});
 
 	</script>	
