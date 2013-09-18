@@ -6,7 +6,7 @@
     using TicTacToe.Core.Annotations;
     using TicTacToe.Core.Utils;
 
-    public class GameState : INotifyPropertyChanged
+    public class Game : INotifyPropertyChanged
     {
         private IPlayer playerTurn;
 
@@ -45,12 +45,12 @@
         }
 
         /// <summary>
-        /// Create a new <see cref="GameState"/> with 2 players
+        /// Create a new <see cref="Game"/> with 2 players
         /// </summary>
         /// <param name="player1">Player 1</param>
         /// <param name="player2">Player 2</param>
         /// <param name="gameBoard">Game board to use</param>
-        public GameState(IPlayer player1, IPlayer player2, GameBoard gameBoard)
+        public Game(IPlayer player1, IPlayer player2, GameBoard gameBoard)
         {
             GameLog = new List<string>();
             GameActions = new List<GameAction>();

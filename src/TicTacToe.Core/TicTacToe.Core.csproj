@@ -48,7 +48,7 @@
     <Compile Include="Actions\PassTurnGameAction.cs" />
     <Compile Include="GameAction.cs" />
     <Compile Include="GameBoard.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Actions\OccupyGameAction.cs" />

@@ -2,18 +2,18 @@
 {
     public abstract class GameAction
     {
-        internal GameState GameState { get; set; }
+        internal Game Game { get; set; }
         internal IPlayer Player { get; set; }
 
-        protected GameAction(GameState state, IPlayer player)
+        protected GameAction(Game state, IPlayer player)
         {
-            this.GameState = state;
+            this.Game = state;
             this.Player = player;
         }
 
         internal void Log(string message, params object[] args)
         {
-            this.GameState.GameLog.Add(string.Format(message,args));
+            this.Game.GameLog.Add(string.Format(message,args));
         }
 
         public abstract void Do();

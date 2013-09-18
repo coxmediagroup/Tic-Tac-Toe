@@ -2,14 +2,14 @@
 {
     public class ResetGameAction : GameAction
     {
-        public ResetGameAction(GameState state, IPlayer player)
+        public ResetGameAction(Game state, IPlayer player)
             : base(state, player)
         {
         }
 
         public override void Do()
         {
-            this.GameState.Reset();
+            this.Game.Reset();
             this.Log("{} Resets the game", this.Player);
         }
     }

@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="state">State of the game</param>
         /// <returns>True to end the turn, False otherwise. Human players would return False, while AI would return True.</returns>
-        public bool OnTurn(GameState state)
+        public bool OnTurn(Game state)
         {
             return false;
         }
