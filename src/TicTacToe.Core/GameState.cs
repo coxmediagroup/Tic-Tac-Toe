@@ -1,7 +1,7 @@
 ﻿namespace TicTacToe.Core
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
 
@@ -18,12 +18,12 @@
         /// <summary>
         /// List of actions taken during the game.
         /// </summary>
-        public List<GameAction> GameActions { get; internal set; }
+        public ObservableCollection<GameAction> GameActions { get; internal set; }
 
         /// <summary>
         /// Log of events that happen during the game.
         /// </summary>
-        public List<string> GameLog { get; internal set; }
+        public ObservableCollection<string> GameLog { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
@@ -53,8 +53,8 @@
         /// <param name="gameBoard">Game board to use</param>
         public GameState(IPlayer player1, IPlayer player2, GameBoard gameBoard)
         {
-            GameLog = new List<string>();
-            GameActions = new List<GameAction>();
+            GameLog = new ObservableCollection<string>();
+            GameActions = new ObservableCollection<GameAction>();
             Player1 = player1;
             Player2 = player2;
             Board = gameBoard;
@@ -63,6 +63,13 @@
             // I think normally I would let the constructor of this class determine this
             //    , but for the sake of this project I'll just decide here.
             PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? player1 : player2;
+        }
+
+        internal void Reset()
+        {
+            Board = new GameBoard();
+            PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
+            OnPropertyChanged("Board");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -81,10 +88,12 @@
     public abstract class GameAction
     {
         internal GameState GameState { get; set; }
+        internal IPlayer Player { get; set; }
 
-        public GameAction(GameState state)
+        public GameAction(GameState state, IPlayer player)
         {
             GameState = state;
+            Player = player;
         }
 
         internal void Log(string message, params object[] args)
@@ -99,9 +108,8 @@
     {
         internal int X { get; set; }
         internal int Y { get; set; }
-        internal IPlayer Player { get; set; }
 
-        public OccupyGameAction(IPlayer player, GameState state, int x, int y):base(state)
+        public OccupyGameAction(IPlayer player, GameState state, int x, int y):base(state, player)
         {
             if (state == null) throw new ArgumentException("state cannot be null.", "state");
             if (player == null) throw new ArgumentException("player cannot be null.", "player");
@@ -121,6 +129,20 @@
 
             GameState.Board.Occupy(Player, X, Y);
             Log("{0} Occupy's {1}:{2}",Player,X,Y);
+        }
+    }
+
+    public class ResetGameAction : GameAction
+    {
+        public ResetGameAction(GameState state, IPlayer player)
+            : base(state, player)
+        {
+        }
+
+        public override void Do()
+        {
+            GameState.Reset();
+            Log("{} Resets the game", Player);
         }
     }
 
