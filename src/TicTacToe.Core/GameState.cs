@@ -25,6 +25,9 @@
             Player1 = player1;
             Player2 = player2;
             Board = gameBoard;
+
+            // Randomly picks who the starting player will be
+            PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? player1 : player2;
         }
     }
 
