@@ -10,6 +10,12 @@
     {
         private IPlayer playerTurn;
 
+        private GameStatus status;
+
+        private GameWinStatus winStatus;
+
+        private IPlayer winner;
+
         public IPlayer Player1 { get; internal set; }
         public IPlayer Player2 { get; internal set; }
         public GameBoard Board { get; internal set; }
@@ -44,24 +50,70 @@
             }
         }
 
+        public GameStatus Status
+        {
+            get
+            {
+                return this.status;
+            }
+            internal set
+            {
+                if (value == this.status)
+                {
+                    return;
+                }
+                this.status = value;
+                this.OnPropertyChanged("Status");
+            }
+        }
+
+        public GameWinStatus WinStatus
+        {
+            get
+            {
+                return this.winStatus;
+            }
+            internal set
+            {
+                if (value == this.winStatus)
+                {
+                    return;
+                }
+                this.winStatus = value;
+                this.OnPropertyChanged("WinStatus");
+            }
+        }
+
+        public IPlayer Winner
+        {
+            get
+            {
+                return this.winner;
+            }
+            internal set
+            {
+                if (Equals(value, this.winner))
+                {
+                    return;
+                }
+                this.winner = value;
+                this.OnPropertyChanged("Winner");
+            }
+        }
+
         /// <summary>
         /// Create a new <see cref="Game"/> with 2 players
         /// </summary>
         /// <param name="player1">Player 1</param>
         /// <param name="player2">Player 2</param>
         /// <param name="gameBoard">Game board to use</param>
-        public Game(IPlayer player1, IPlayer player2, GameBoard gameBoard)
+        public Game(IPlayer player1, IPlayer player2)
         {
             GameLog = new List<string>();
             GameActions = new List<GameAction>();
             Player1 = player1;
             Player2 = player2;
-            Board = gameBoard;
-
-            // Randomly picks who the starting player will be
-            // I think normally I would let the constructor of this class determine this
-            //    , but for the sake of this project I'll just decide here.
-            PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? player1 : player2;
+            Reset();
         }
 
         public void PerformAction(GameAction action)
@@ -74,7 +126,13 @@
 
         internal void Reset()
         {
+            Status = GameStatus.Running;
+            WinStatus = GameWinStatus.None;
+            Winner = null;
             Board = new GameBoard();
+            // Randomly picks who the starting player will be
+            // I think normally I would let the constructor of this class determine this
+            //    , but for the sake of this project I'll just decide here.
             PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");
@@ -92,5 +150,18 @@
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+
+    public enum GameStatus
+    {
+        Running,
+        Finished
+    }
+
+    public enum GameWinStatus
+    {
+        None,
+        Win,
+        Tie
     }
 }
