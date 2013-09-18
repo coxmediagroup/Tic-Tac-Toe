@@ -1,5 +1,6 @@
 ﻿namespace TicTacToe.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -92,25 +93,34 @@
         }
 
         public abstract void Do();
-
-        public abstract void Undo();
     }
 
-    public class MoveGameAction : GameAction
+    public class OccupyGameAction : GameAction
     {
-        public MoveGameAction(IPlayer player, GameState state):base(state)
+        internal int X { get; set; }
+        internal int Y { get; set; }
+        internal IPlayer Player { get; set; }
+
+        public OccupyGameAction(IPlayer player, GameState state, int x, int y):base(state)
         {
-            
+            if (state == null) throw new ArgumentException("state cannot be null.", "state");
+            if (player == null) throw new ArgumentException("player cannot be null.", "player");
+            if (x >= GameState.Board.BoardPositions.First().Length)
+                throw new ArgumentException("x must be between 0 and " + GameState.Board.BoardPositions.First().Length, "x");
+            if (y >= GameState.Board.BoardPositions.First().Length)
+                throw new ArgumentException("y must be between 0 and " + GameState.Board.BoardPositions.Length, "y");
+            Player = player;
+            X = x;
+            Y = y;
         }
 
         public override void Do()
         {
-            throw new System.NotImplementedException();
-        }
+            if (GameState.Board.IsPositionOccupied(X, Y)) 
+                throw new InvalidOperationException("Position " + X + ":" + Y + " is already occupied.");
 
-        public override void Undo()
-        {
-            throw new System.NotImplementedException();
+            GameState.Board.Occupy(Player, X, Y);
+            Log("{0} Occupy's {1}:{2}",Player,X,Y);
         }
     }
 
@@ -125,6 +135,23 @@
         {
             //Create three rows of three board positions
             BoardPositions = Enumerable.Repeat(Enumerable.Repeat<IPlayer>(null, 3).ToArray(), 3).ToArray();
+        }
+
+        public bool IsPositionOccupied(int x, int y)
+        {
+            return BoardPositions[y][x] != null;
+        }
+
+        public void Occupy(IPlayer player, int x, int y)
+        {
+            if (IsPositionOccupied(x, y))
+                throw new InvalidOperationException("Position " + x + ":" + y + " is already occupied.");
+            BoardPositions[y][x] = player;
+        }
+
+        public void UnOccupy(int x, int y)
+        {
+            BoardPositions[y][x] = null;
         }
     }
 
@@ -149,6 +176,11 @@
         public bool OnTurn(GameState state)
         {
             return false;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 
