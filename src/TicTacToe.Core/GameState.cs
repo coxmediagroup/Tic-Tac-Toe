@@ -10,7 +10,7 @@
         public GameBoard Board { get; internal set; }
 
         /// <summary>
-        /// Gets the <see cref="Player"/> who's turn it is.
+        /// Gets the <see cref="IPlayer"/> who's turn it is.
         /// </summary>
         public IPlayer PlayerTurn { get; internal set; }
 
