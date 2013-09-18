@@ -33,12 +33,12 @@
         /// <summary>
         /// Positions and state of the board
         /// </summary>
-        public List<List<Player>> BoardPositions { get; internal set; }
+        public Player[][] BoardPositions { get; internal set; }
 
         public GameBoard()
         {
             //Create three rows of three board positions
-            BoardPositions = Enumerable.Repeat(Enumerable.Repeat<Player>(null, 3).ToList(),3).ToList();
+            BoardPositions = Enumerable.Repeat(Enumerable.Repeat<Player>(null, 3).ToArray(),3).ToArray();
         }
     }
 
