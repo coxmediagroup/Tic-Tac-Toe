@@ -1,5 +1,6 @@
 ﻿namespace TicTacToe.Core
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
 
@@ -12,6 +13,16 @@
         public IPlayer Player1 { get; internal set; }
         public IPlayer Player2 { get; internal set; }
         public GameBoard Board { get; internal set; }
+
+        /// <summary>
+        /// List of actions taken during the game.
+        /// </summary>
+        public List<GameAction> GameActions { get; internal set; }
+
+        /// <summary>
+        /// Log of events that happen during the game.
+        /// </summary>
+        public List<string> GameLog { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
@@ -41,6 +52,8 @@
         /// <param name="gameBoard">Game board to use</param>
         public GameState(IPlayer player1, IPlayer player2, GameBoard gameBoard)
         {
+            GameLog = new List<string>();
+            GameActions = new List<GameAction>();
             Player1 = player1;
             Player2 = player2;
             Board = gameBoard;
@@ -61,6 +74,43 @@
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+    }
+
+    public abstract class GameAction
+    {
+        internal GameState GameState { get; set; }
+
+        public GameAction(GameState state)
+        {
+            GameState = state;
+        }
+
+        internal void Log(string message, params object[] args)
+        {
+            GameState.GameLog.Add(string.Format(message,args));
+        }
+
+        public abstract void Do();
+
+        public abstract void Undo();
+    }
+
+    public class MoveGameAction : GameAction
+    {
+        public MoveGameAction(IPlayer player, GameState state):base(state)
+        {
+            
+        }
+
+        public override void Do()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Undo()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
