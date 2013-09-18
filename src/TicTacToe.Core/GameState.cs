@@ -5,14 +5,14 @@
 
     public class GameState
     {
-        public Player Player1 { get; internal set; }
-        public Player Player2 { get; internal set; }
+        public IPlayer Player1 { get; internal set; }
+        public IPlayer Player2 { get; internal set; }
         public GameBoard Board { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="Player"/> who's turn it is.
         /// </summary>
-        public Player PlayerTurn { get; internal set; }
+        public IPlayer PlayerTurn { get; internal set; }
 
         /// <summary>
         /// Create a new <see cref="GameState"/> with 2 players
@@ -20,7 +20,7 @@
         /// <param name="player1">Player 1</param>
         /// <param name="player2">Player 2</param>
         /// <param name="gameBoard">Game board to use</param>
-        public GameState(Player player1, Player player2, GameBoard gameBoard)
+        public GameState(IPlayer player1, IPlayer player2, GameBoard gameBoard)
         {
             Player1 = player1;
             Player2 = player2;
@@ -33,44 +33,51 @@
         /// <summary>
         /// Positions and state of the board
         /// </summary>
-        public Player[][] BoardPositions { get; internal set; }
+        public IPlayer[][] BoardPositions { get; internal set; }
 
         public GameBoard()
         {
             //Create three rows of three board positions
-            BoardPositions = Enumerable.Repeat(Enumerable.Repeat<Player>(null, 3).ToArray(),3).ToArray();
+            BoardPositions = Enumerable.Repeat(Enumerable.Repeat<IPlayer>(null, 3).ToArray(), 3).ToArray();
         }
     }
 
-    public class Player
+    public class HumanPlayer : IPlayer
     {
-        public IAi Ai { get; internal set; }
         public string Name { get; internal set; }
 
         /// <summary>
-        /// Create a human <see cref="Player"/>
+        /// Create a <see cref="HumanPlayer"/>
         /// </summary>
-        /// <param name="name">Name of the human <see cref="Player"/></param>
-        public Player(string name)
+        /// <param name="name">Name of the <see cref="HumanPlayer"/></param>
+        public HumanPlayer(string name)
         {
             Name = name;
         }
 
         /// <summary>
-        /// Create an non human <see cref="IAi"/> <see cref="Player"/>
+        /// Gets invoked when it's the <cref see="IPlayer"/>'s turn.
         /// </summary>
-        /// <param name="ai">An <see cref="IAi"/> instance</param>
-        public Player(IAi ai)
+        /// <param name="state">State of the game</param>
+        /// <returns>True to end the turn, False otherwise. Human players would return False, while AI would return True.</returns>
+        public bool OnTurn(GameState state)
         {
-            Name = ai.Name;
-            Ai = ai;
+            return false;
         }
     }
 
-    public interface IAi
+    public interface IPlayer
     {
-        string Name { get; set; }
+        /// <summary>
+        /// Name of the <cref see="IPlayer"/>
+        /// </summary>
+        string Name { get; }
 
-
+        /// <summary>
+        /// Gets invoked when it's the <cref see="IPlayer"/>'s turn.
+        /// </summary>
+        /// <param name="state">State of the game</param>
+        /// <returns>True to end the turn, False otherwise. Human players would return False, while AI would return True.</returns>
+        bool OnTurn(GameState state);
     }
 }
