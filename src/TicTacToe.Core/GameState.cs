@@ -65,6 +65,12 @@
             PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? player1 : player2;
         }
 
+        public void PerformAction(GameAction action)
+        {
+            GameActions.Add(action);
+            action.Do();
+        }
+
         internal void Reset()
         {
             Board = new GameBoard();
