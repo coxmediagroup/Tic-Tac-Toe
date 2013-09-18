@@ -1,6 +1,7 @@
 ﻿namespace TicTacToe.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
@@ -18,12 +19,12 @@
         /// <summary>
         /// List of actions taken during the game.
         /// </summary>
-        public ObservableCollection<GameAction> GameActions { get; internal set; }
+        public List<GameAction> GameActions { get; internal set; }
 
         /// <summary>
         /// Log of events that happen during the game.
         /// </summary>
-        public ObservableCollection<string> GameLog { get; internal set; }
+        public List<string> GameLog { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
@@ -53,8 +54,8 @@
         /// <param name="gameBoard">Game board to use</param>
         public GameState(IPlayer player1, IPlayer player2, GameBoard gameBoard)
         {
-            GameLog = new ObservableCollection<string>();
-            GameActions = new ObservableCollection<GameAction>();
+            GameLog = new List<string>();
+            GameActions = new List<GameAction>();
             Player1 = player1;
             Player2 = player2;
             Board = gameBoard;
@@ -69,6 +70,8 @@
         {
             GameActions.Add(action);
             action.Do();
+            OnPropertyChanged("GameActions");
+            OnPropertyChanged("GameLog");
         }
 
         internal void Reset()
@@ -76,6 +79,8 @@
             Board = new GameBoard();
             PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
             OnPropertyChanged("Board");
+            OnPropertyChanged("GameActions");
+            OnPropertyChanged("GameLog");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
