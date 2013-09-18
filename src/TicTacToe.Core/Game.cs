@@ -134,7 +134,21 @@
         /// </summary>
         internal void CheckGameState()
         {
-            
+            var boardWinner = Board.Winner();
+            if (boardWinner != null)
+            {
+                Status = GameStatus.Finished;
+                WinStatus = GameWinStatus.Win;
+                Winner = boardWinner;
+            }
+            else
+            {
+                if (!this.Board.IsFull())
+                    return;
+                this.Status = GameStatus.Finished;
+                this.WinStatus = GameWinStatus.Tie;
+                this.Winner = null;
+            }
         }
 
         internal void Reset()

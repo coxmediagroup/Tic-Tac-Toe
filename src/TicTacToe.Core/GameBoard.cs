@@ -28,9 +28,32 @@
             this.BoardPositions[y][x] = player;
         }
 
+        /// <summary>
+        /// Unoccupy a position
+        /// </summary>
+        /// <param name="x">X Position</param>
+        /// <param name="y">Y Position</param>
         public void UnOccupy(int x, int y)
         {
             this.BoardPositions[y][x] = null;
+        }
+
+        /// <summary>
+        /// Determines if the game board positions are all taken
+        /// </summary>
+        /// <returns>True if the board is full, otherwise false</returns>
+        public bool IsFull()
+        {
+            return BoardPositions.Any(x => x.Any(y => y == null)) == false;
+        }
+
+        /// <summary>
+        /// Checks to see who the winner is for the current board state
+        /// </summary>
+        /// <returns><cref see="IPlayer"/> if there is a winner, or null if there is a tie or no winner yet.</returns>
+        public IPlayer Winner()
+        {
+            return default(IPlayer);
         }
     }
 }
