@@ -18,8 +18,8 @@
 				Assert.AreEqual(3, row.Length);
             }
 
-            Assert.AreEqual(8, board.WinConditions.Length);
-            foreach (var row in board.WinConditions)
+            Assert.AreEqual(8, GameBoard.WinConditions.Length);
+            foreach (var row in GameBoard.WinConditions)
             {
 				Assert.AreEqual(3, row.Length);
             }

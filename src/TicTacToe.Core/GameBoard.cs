@@ -11,7 +11,7 @@
         /// </summary>
         public IPlayer[][] BoardPositions { get; internal set; }
 
-        internal int[][] WinConditions;
+        internal static int[][] WinConditions;
 
         public GameBoard()
         {
@@ -21,15 +21,18 @@
             this.BoardPositions[1] = new IPlayer[3];
             this.BoardPositions[2] = new IPlayer[3];
 
-            WinConditions = new int[8][];
-            WinConditions[0] = new[] { 0, 1, 2 };
-            WinConditions[1] = new[] { 3, 4, 5 };
-            WinConditions[2] = new[] { 6, 7, 8 };
-            WinConditions[3] = new[] { 0, 3, 6 };
-            WinConditions[4] = new[] { 1, 4, 7 };
-            WinConditions[5] = new[] { 2, 5, 8 };
-            WinConditions[6] = new[] { 0, 4, 8 };
-            WinConditions[7] = new[] { 2, 4, 6 };
+            if (WinConditions == null)
+            {
+                WinConditions = new int[8][];
+                WinConditions[0] = new[] { 0, 1, 2 };
+                WinConditions[1] = new[] { 3, 4, 5 };
+                WinConditions[2] = new[] { 6, 7, 8 };
+                WinConditions[3] = new[] { 0, 3, 6 };
+                WinConditions[4] = new[] { 1, 4, 7 };
+                WinConditions[5] = new[] { 2, 5, 8 };
+                WinConditions[6] = new[] { 0, 4, 8 };
+                WinConditions[7] = new[] { 2, 4, 6 };
+            }
         }
 
         public bool IsPositionOccupied(int x, int y)
