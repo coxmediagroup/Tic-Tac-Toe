@@ -144,6 +144,20 @@
         }
 
         [Test]
+        public void PerformAction_PassesTurn()
+        {
+            var game = BasicGame();
+            var testAction = A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.Player1 }));
+
+            game.PlayerTurn = game.Player1;
+			game.PerformAction(testAction);
+            Assert.AreEqual(game.Player2, game.PlayerTurn);
+            testAction.Player = game.Player2;
+            game.PerformAction(testAction);
+            Assert.AreEqual(game.Player1, game.PlayerTurn);
+        }
+
+        [Test]
         public void CheckGameState_SetsWin()
         {
             var game = BasicGame();

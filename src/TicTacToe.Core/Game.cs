@@ -132,6 +132,10 @@
             OnPropertyChanged("GameActions");
             OnPropertyChanged("GameLog");
             CheckGameState();
+            if (Status == GameStatus.Running)
+            {
+                PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+            }
         }
 
         /// <summary>
