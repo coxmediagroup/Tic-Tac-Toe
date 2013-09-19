@@ -142,5 +142,52 @@
 
             Assert.AreEqual(GameStatus.Finished, game.Status);
         }
+
+        [Test]
+        public void CheckGameState_SetsWin()
+        {
+            var game = Game();
+
+            game.Board.BoardPositions[0][0] = game.Player1;
+            game.Board.BoardPositions[1][0] = game.Player1;
+            game.Board.BoardPositions[2][0] = game.Player1;
+
+            Assert.Null(game.Winner);
+            Assert.AreEqual(GameStatus.Running, game.Status);
+            Assert.AreEqual(GameWinStatus.None, game.WinStatus);
+
+            game.CheckGameState();
+
+            Assert.AreEqual(game.Player1,game.Winner);
+            Assert.AreEqual(GameStatus.Finished, game.Status);
+            Assert.AreEqual(GameWinStatus.Win, game.WinStatus);
+        }
+
+        [Test]
+        public void CheckGameState_SetsTie()
+        {
+            var game = Game();
+
+            Assert.Null(game.Winner);
+            Assert.AreEqual(GameStatus.Running, game.Status);
+            Assert.AreEqual(GameWinStatus.None, game.WinStatus);
+
+            game.Board.BoardPositions[0][0] = game.Player1;
+            game.Board.BoardPositions[1][0] = game.Player2;
+            game.Board.BoardPositions[2][0] = game.Player1;
+            game.Board.BoardPositions[0][1] = game.Player2;
+            game.Board.BoardPositions[1][1] = game.Player1;
+            game.Board.BoardPositions[2][1] = game.Player1;
+            game.Board.BoardPositions[0][2] = game.Player2;
+            game.Board.BoardPositions[1][2] = game.Player1;
+            game.Board.BoardPositions[2][2] = game.Player2;
+
+            game.CheckGameState();
+
+            Assert.Null(game.Winner);
+            Assert.AreEqual(GameStatus.Finished, game.Status);
+            Assert.AreEqual(GameWinStatus.Tie, game.WinStatus);
+
+        }
     }
 }
