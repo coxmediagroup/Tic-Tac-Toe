@@ -11,11 +11,8 @@
     public class Game : INotifyPropertyChanged
     {
         private IPlayer playerTurn;
-
         private GameStatus status;
-
         private GameWinStatus winStatus;
-
         private IPlayer winner;
 
         public IPlayer Player1 { get; internal set; }
