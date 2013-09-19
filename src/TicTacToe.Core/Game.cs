@@ -123,6 +123,8 @@
                 throw new ArgumentOutOfRangeException("action", "action can not be null");
             if (Status != GameStatus.Running && (action is ResetGameAction) == false)
                 throw new InvalidOperationException("Cannot do that action because the game is finished.");
+            if ((action is ResetGameAction) == false && action.Player != PlayerTurn) 
+                throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
             GameActions.Add(action);
             action.Do();
             OnPropertyChanged("GameActions");
