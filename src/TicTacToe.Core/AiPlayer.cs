@@ -21,8 +21,7 @@
         /// Gets invoked when it's the <cref see="AiPlayer"/>'s turn.
         /// </summary>
         /// <param name="state">State of the game</param>
-        /// <returns>True to end the turn, False otherwise. Human players would return False, while AI would return True.</returns>
-        public bool OnTurn(Game state)
+        public void OnTurn(Game state)
         {
             // If board is empty, then we're going first, so pick the middle one always
             if (state.Board.IsEmpty())
@@ -30,7 +29,6 @@
                 var a = new OccupyGameAction(state, this, 1, 1);
 				state.PerformAction(a);
             }
-            return true;
         }
     }
 }

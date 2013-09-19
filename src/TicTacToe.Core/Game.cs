@@ -50,6 +50,7 @@
                 }
                 this.playerTurn = value;
                 this.OnPropertyChanged("PlayerTurn");
+                this.playerTurn.OnTurn(this);
             }
         }
 

@@ -11,14 +11,6 @@
         }
 
         [Test]
-        public void OnTurn_ReturnsFalse()
-        {
-            var p = new HumanPlayer("jim");
-            var res = p.OnTurn(null);
-            Assert.False(res);
-        }
-
-        [Test]
         public void ToString_ReturnsName()
         {
             var p = new HumanPlayer("jim");
