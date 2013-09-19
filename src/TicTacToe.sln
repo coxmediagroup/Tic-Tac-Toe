@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Core", "TicTacToe.Core\TicTacToe.Core.csproj", "{B726B1E0-16AA-4DE6-B785-65DFDA40AC9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.BattleOfTheBots", "TicTacToe.BattleOfTheBots\TicTacToe.BattleOfTheBots.csproj", "{148B75BE-AB72-499D-89E7-5A77D8432670}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{B726B1E0-16AA-4DE6-B785-65DFDA40AC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B726B1E0-16AA-4DE6-B785-65DFDA40AC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B726B1E0-16AA-4DE6-B785-65DFDA40AC9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{148B75BE-AB72-499D-89E7-5A77D8432670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{148B75BE-AB72-499D-89E7-5A77D8432670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{148B75BE-AB72-499D-89E7-5A77D8432670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{148B75BE-AB72-499D-89E7-5A77D8432670}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
