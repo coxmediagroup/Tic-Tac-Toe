@@ -9,14 +9,17 @@
     public class AiPlayer : IPlayer
     {
         public string Name { get; internal set; }
+		public GameWinStatus Focus { get; internal set; }
 
         /// <summary>
         /// Create a <see cref="AiPlayer"/>
         /// </summary>
         /// <param name="name">Name of the <see cref="AiPlayer"/></param>
-        public AiPlayer(string name)
+        /// <param name="focus">Choose what the Ai is more focused on achieving</param>
+        public AiPlayer(string name, GameWinStatus focus)
         {
             this.Name = name;
+            this.Focus = focus;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@
 			// I suppose we can brute force this sucker and see
 			//    how long it takes first.
 
-            var result = new PlayItOutResults(this, state.Board, state);
+            var result = new PlayItOutResults(this, state.Board, state, this.Focus);
             var nextMove = result.NextMove();
             int x, y;
 			state.Board.IndexToCoords(nextMove,out x,out y);
@@ -63,9 +66,11 @@
 			public IPlayer WinPlayer { get; internal set; }
 			public IPlayer Me { get; internal set; }
 			public Game Game { get; set; }
+			public GameWinStatus Focus { get; set; }
 
-            public PlayItOutResults(IPlayer movePlayer, GameBoard board, Game game)
+            public PlayItOutResults(IPlayer movePlayer, GameBoard board, Game game, GameWinStatus focus)
             {
+                Focus = focus;
                 Me = movePlayer;
                 Game = game;
                 Index = -1;
@@ -74,14 +79,15 @@
                 {
                     if (!board.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(i,i, Me, movePlayer, board, game);
+                        var res = new PlayItOutResults(i,i, Me, movePlayer, board, game, Focus);
 						Moves.Add(res);
                     }
                 }
             }
 
-            public PlayItOutResults(int startIdx, int idx, IPlayer me, IPlayer movePlayer, GameBoard board, Game game)
+            public PlayItOutResults(int startIdx, int idx, IPlayer me, IPlayer movePlayer, GameBoard board, Game game, GameWinStatus focus)
             {
+                Focus = focus;
                 StartIndex = startIdx;
                 Me = me;
                 Game = game;
@@ -112,7 +118,7 @@
                 {
                     if (!bclone.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(StartIndex,i, Me, newMovePlayer, bclone, Game);
+                        var res = new PlayItOutResults(StartIndex,i, Me, newMovePlayer, bclone, Game, Focus);
                         Moves.Add(res);
                     }
                 }
@@ -134,20 +140,44 @@
             internal int NextMove()
             {
                 var results = GetEndResult();
-                var winResults = results
-					.OrderBy(x=>x.Status)
-                    .GroupBy(x => x.StartIndex)
-					.Select(x=>new
-					           {
-					               WinCount=x.Count(y=>y.Status == GameWinStatus.Win),
-                                   TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
-                                   Results=x
-					           })
-                    .OrderByDescending(x=>x.TieCount)
-					.ThenBy(x=>x.WinCount)
-					.Where(x=>x.TieCount > 0)
-                    .ToArray();
-                return winResults.First().Results.First().StartIndex;
+                if (Focus == GameWinStatus.Tie)
+                {
+                    var winResults =
+                        results.OrderBy(x => x.Status)
+                            .GroupBy(x => x.StartIndex)
+                            .Select(
+                                x =>
+                                    new
+                                    {
+                                        WinCount = x.Count(y => y.Status == GameWinStatus.Win),
+                                        TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
+                                        Results = x
+                                    })
+                            .OrderByDescending(x => x.TieCount)
+                            .ThenBy(x => x.WinCount)
+                            .Where(x => x.TieCount > 0)
+                            .ToArray();
+                    return winResults.First().Results.First().StartIndex;
+                }
+				else if (Focus == GameWinStatus.Win)
+				{
+                    var winResults =
+                        results.OrderBy(x => x.Status)
+                            .GroupBy(x => x.StartIndex)
+                            .Select(
+                                x =>
+                                    new
+                                    {
+                                        WinCount = x.Count(y => y.Status == GameWinStatus.Win),
+                                        TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
+                                        Results = x
+                                    })
+                            .OrderByDescending(x => x.WinCount)
+                            .ThenBy(x => x.TieCount)
+                            .Where(x => x.TieCount > 0)
+                            .ToArray();
+                    return winResults.First().Results.First().StartIndex;
+				}
             }
 
             internal List<PlayItOutResults> GetEndResult()

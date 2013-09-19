@@ -17,8 +17,8 @@
 
             var resultList = new List<RunResult>();
 
-			var p1 = new AiPlayer("TimBot");
-            var p2 = new AiPlayer("JimBot");
+			var p1 = new AiPlayer("TimWinBot",GameWinStatus.Win);
+            var p2 = new AiPlayer("JimTieBot",GameWinStatus.Tie);
             for (var i = 0; i < 100; i++)
             {
                 var time = new Stopwatch();
@@ -26,7 +26,7 @@
                 var game = new Game(p1, p2);
                 game.Start();
                 time.Stop();
-                Console.WriteLine("[{0}ms]{1} - {2}",time.ElapsedMilliseconds, game.WinStatus, game.Winner);
+                //Console.WriteLine("[{0}ms]{1} - {2}",time.ElapsedMilliseconds, game.WinStatus, game.Winner);
 				resultList.Add(new RunResult(game.Winner,game.WinStatus,time.ElapsedMilliseconds));
             }
             Console.WriteLine("Done");
