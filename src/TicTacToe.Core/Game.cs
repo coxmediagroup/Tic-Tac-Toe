@@ -191,6 +191,7 @@
                 this.WinStatus = GameWinStatus.Tie;
                 this.Winner = null;
             }
+            this.ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
         }
 
         internal void Reset()
