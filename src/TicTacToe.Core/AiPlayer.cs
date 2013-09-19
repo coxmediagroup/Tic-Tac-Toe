@@ -4,6 +4,7 @@
     using System.Linq;
 
     using TicTacToe.Core.Actions;
+    using TicTacToe.Core.Utils;
 
     public class AiPlayer : IPlayer
     {
@@ -27,7 +28,11 @@
             // If board is empty, then we're going first, so pick the middle one always
             if (state.Board.IsEmpty())
             {
-                var a = new OccupyGameAction(state, this, 1, 1);
+				// For testing sakes, we're going to pick a random location
+				//   for now
+                var xx = RngRandom.Instance.Next(0, 3);
+                var yy = RngRandom.Instance.Next(0, 3);
+                var a = new OccupyGameAction(state, this, xx, yy);
 				state.PerformAction(a);
                 return;
             }
