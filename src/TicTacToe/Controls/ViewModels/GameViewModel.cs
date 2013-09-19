@@ -17,6 +17,8 @@ namespace TicTacToe.Controls.ViewModels
                 if (Equals(value, _xPlayer)) return;
                 _xPlayer = value;
                 OnPropertyChanged("XPlayer");
+                OnPropertyChanged("Player1X");
+                OnPropertyChanged("Player1O");
             }
         }
 
@@ -28,6 +30,26 @@ namespace TicTacToe.Controls.ViewModels
                 if (Equals(value, _oPlayer)) return;
                 _oPlayer = value;
                 OnPropertyChanged("OPlayer");
+                OnPropertyChanged("Player1X");
+                OnPropertyChanged("Player1O");
+            }
+        }
+
+        public bool Player1X
+        {
+            get
+            {
+                if (XPlayer == Game.Player1) return true;
+                return false;
+            }
+        }
+
+        public bool Player1O
+        {
+            get
+            {
+                if (OPlayer == Game.Player1) return true;
+                return false;
             }
         }
 

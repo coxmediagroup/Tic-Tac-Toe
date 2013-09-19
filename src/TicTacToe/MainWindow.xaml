@@ -10,6 +10,15 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
+        <StackPanel>
+            <Grid>
+                <Image Source="/Resources/cross.png" Stretch="None"
+                   Visibility="{Binding ElementName=self,Path=Vm.Player1X, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Image Source="/Resources/circle.png" Stretch="None"
+                   Visibility="{Binding ElementName=self,Path=Vm.Player1O, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
+            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
+        </StackPanel>
         <controls:GameBoard Grid.Column="1"/>
     </Grid>
 </Window>
