@@ -1,5 +1,6 @@
 ﻿namespace TicTacToe.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -159,8 +160,8 @@
                             .ToArray();
                     return winResults.First().Results.First().StartIndex;
                 }
-				else if (Focus == GameWinStatus.Win)
-				{
+                if (this.Focus == GameWinStatus.Win)
+                {
                     var winResults =
                         results.OrderBy(x => x.Status)
                             .GroupBy(x => x.StartIndex)
@@ -177,7 +178,8 @@
                             .Where(x => x.TieCount > 0)
                             .ToArray();
                     return winResults.First().Results.First().StartIndex;
-				}
+                }
+				throw new InvalidOperationException("Can not set the focus to None");
             }
 
             internal List<PlayItOutResults> GetEndResult()

@@ -10,14 +10,14 @@
         [Test]
         public void Constructor_FillsClass()
         {
-            var p = new AiPlayer("jim");
+            var p = new AiPlayer("jim", GameWinStatus.Tie);
             Assert.AreEqual("jim", p.Name);
         }
 
         [Test]
         public void ToString_ReturnsName()
         {
-            var p = new AiPlayer("jim");
+            var p = new AiPlayer("jim",GameWinStatus.Tie);
             Assert.AreEqual("jim", p.ToString());
         }
 
@@ -25,7 +25,7 @@
         public void OnTurn_WithEmptyBoard()
         {
             var p1 = new HumanPlayer("jim");
-            var p2 = new AiPlayer("tim");
+            var p2 = new AiPlayer("tim", GameWinStatus.Tie);
             var game = new Game(p1, p2);
 
             game.PlayerTurn = p2;
