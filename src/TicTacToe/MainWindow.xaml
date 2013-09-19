@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:TicTacToe.Controls"
-        Title="MainWindow" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-        x:Name="self">
+        Title="Tic Tac Toe" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
+        x:Name="self" Icon="Resources/icon.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
