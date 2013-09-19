@@ -25,7 +25,7 @@ namespace TicTacToe.Controls.ViewModels
         {
             get
             {
-                if (Player == GameVm.XPlayer)
+                if (Player == GameVm.Game.Player1)
                     return true;
                 return false;
             }
@@ -35,7 +35,7 @@ namespace TicTacToe.Controls.ViewModels
         {
             get
             {
-                if (Player == GameVm.OPlayer)
+                if (Player == GameVm.Game.Player2)
                     return true;
                 return false;
             }
