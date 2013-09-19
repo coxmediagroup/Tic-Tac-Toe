@@ -1,27 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TicTacToe.Controls.ViewModels;
+using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls
 {
     /// <summary>
     /// Interaction logic for GameBoard.xaml
     /// </summary>
-    public partial class GameBoard : UserControl
+    public partial class GameBoard : INotifyPropertyChanged
     {
+        public static readonly DependencyProperty VmProperty =
+            DependencyProperty.Register("Vm", typeof (GameBoardViewModel), typeof (GameBoard), new PropertyMetadata(default(GameBoardViewModel)));
+
+        public GameBoardViewModel Vm
+        {
+            get { return (GameBoardViewModel) GetValue(VmProperty); }
+            set { SetValue(VmProperty, value); }
+        }
         public GameBoard()
         {
             InitializeComponent();
+        }
+
+        public GameBoard(GameBoardViewModel vm)
+        {
+            Vm = vm;
+            InitializeComponent();   
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              Width="58" Height="64" x:Name="self"
              HorizontalAlignment="Left" VerticalAlignment="Top"
-             Cursor="Hand">
+             Cursor="Hand"  Background="#01FFFFFF" IsHitTestVisible="True">
     <Grid>
         <Image Source="../Resources/cross.png" Stretch="None"
                Visibility="{Binding ElementName=self,Path=Vm.ShowX, Converter={StaticResource BooleanToVisibilityConverter}}"/>

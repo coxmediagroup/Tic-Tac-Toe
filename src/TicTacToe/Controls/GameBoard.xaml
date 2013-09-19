@@ -6,25 +6,28 @@
              xmlns:controls="clr-namespace:TicTacToe.Controls"
              mc:Ignorable="d" 
              Width="315"
-             Height="290"
+             Height="290" x:Name="self"
              d:DesignHeight="300" d:DesignWidth="300" Background="#FF4E4C51">
     <Grid>
         <Image Source="../Resources/board.png" Stretch="None"></Image>
-        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-            <WrapPanel.Resources>
-                <Style TargetType="{x:Type controls:Position}">
-                    <Setter Property="Margin" Value="35,25,0,0" />
-                </Style>
-            </WrapPanel.Resources>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-            <controls:Position/>
-        </WrapPanel>
+        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Top"
+            ItemsSource="{Binding ElementName=self,Path=Vm.Positions}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" >
+                        <WrapPanel.Resources>
+                            <Style TargetType="{x:Type controls:Position}">
+                                <Setter Property="Margin" Value="35,25,0,0" />
+                            </Style>
+                        </WrapPanel.Resources>
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <controls:Position Vm="{Binding}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

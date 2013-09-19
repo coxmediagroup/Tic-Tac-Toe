@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using TicTacToe.Controls.ViewModels;
 using TicTacToe.Core.Annotations;
@@ -10,19 +11,14 @@ namespace TicTacToe.Controls
     /// </summary>
     public partial class Position : INotifyPropertyChanged
     {
-        private PositionViewModel _vm;
+        public static readonly DependencyProperty VmProperty =
+            DependencyProperty.Register("Vm", typeof (PositionViewModel), typeof (Position), new PropertyMetadata(default(PositionViewModel)));
 
         public PositionViewModel Vm
         {
-            get { return _vm; }
-            set
-            {
-                if (Equals(value, _vm)) return;
-                _vm = value;
-                OnPropertyChanged("Vm");
-            }
+            get { return (PositionViewModel) GetValue(VmProperty); }
+            set { SetValue(VmProperty, value); }
         }
-
         public Position()
         {
             InitializeComponent();

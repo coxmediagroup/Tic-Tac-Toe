@@ -1,18 +1,29 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 using TicTacToe.Core;
 using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
-    public class GameViewModel : INotifyPropertyChanged
+    public class GameViewModel : DependencyObject
     {
         public Game Game { get; set; }
+
+        public static readonly DependencyProperty GameBoardViewModelProperty =
+            DependencyProperty.Register("GameBoardViewModel", typeof (GameBoardViewModel), typeof (GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
+
+        public GameBoardViewModel GameBoardViewModel
+        {
+            get { return (GameBoardViewModel) GetValue(GameBoardViewModelProperty); }
+            set { SetValue(GameBoardViewModelProperty, value); }
+        }
 
         public GameViewModel()
         {
             Game = new Game(new HumanPlayer("Player 1"), new HumanPlayer("Player 2"));
             Game.PropertyChanged += GameOnPropertyChanged;
+            GameBoardViewModel = new GameBoardViewModel(this);
             var t = new System.Timers.Timer(1000);
             t.Elapsed += (sender, args) =>
             {

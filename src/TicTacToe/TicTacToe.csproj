@@ -87,6 +87,7 @@
     <Compile Include="Controls\Position.xaml.cs">
       <DependentUpon>Position.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ViewModels\GameBoardViewModel.cs" />
     <Compile Include="Controls\ViewModels\GameViewModel.cs" />
     <Compile Include="Controls\ViewModels\PositionViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
