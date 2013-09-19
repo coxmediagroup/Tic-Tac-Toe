@@ -34,6 +34,7 @@ namespace TicTacToe
         {
             this.Loaded -= OnLoaded;
             Vm = new GameViewModel();
+            Vm.Start();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

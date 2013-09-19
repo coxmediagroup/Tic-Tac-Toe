@@ -84,6 +84,11 @@ namespace TicTacToe.Controls.ViewModels
             Game = new Game(XPlayer, OPlayer);
         }
 
+        public void Start()
+        {
+            Game.Start();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
