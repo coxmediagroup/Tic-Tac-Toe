@@ -33,7 +33,7 @@
             Assert.AreEqual(GameStatus.Running, game.Status);
             Assert.AreEqual(GameWinStatus.None, game.WinStatus);
             Assert.Null(game.Winner);
-            Assert.NotNull(game.PlayerTurn);
+            Assert.Null(game.PlayerTurn);
         }
 
         [Test]
@@ -57,21 +57,17 @@
             Assert.AreEqual(GameStatus.Running, game.Status);
             Assert.AreEqual(GameWinStatus.None, game.WinStatus);
             Assert.Null(game.Winner);
-            Assert.NotNull(game.PlayerTurn);
+            Assert.Null(game.PlayerTurn);
             Assert.NotNull(game.Board);
         }
 
         [Test]
-        public void Reset_SetsTurnPlayerNext()
+        public void Start_SetsTurnPlayerNext()
         {
             var game = BasicGame();
+            Assert.Null(game.PlayerTurn);
+            game.Start();
             var cp = game.PlayerTurn;
-            for (var i = 0; i < 10; i++)
-            {
-                game.Reset();
-                Assert.AreNotEqual(cp, game.PlayerTurn);
-                cp = game.PlayerTurn;
-            }
         }
 
         [Test]
@@ -119,7 +115,8 @@
         public void PerformAction_CallsActionDo()
         {
             var game = BasicGame();
-            var testAction = A.Fake<GameAction>(x=>x.WithArgumentsForConstructor(new object[]{game,game.Player1}));
+            game.Start();
+            var testAction = A.Fake<GameAction>(x=>x.WithArgumentsForConstructor(new object[]{game,game.PlayerTurn}));
             var num = 0;
             A.CallTo(() => testAction.Do()).Invokes(() => num++);
             game.PerformAction(testAction);

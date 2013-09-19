@@ -37,6 +37,11 @@
 			//    how long it takes first.
 
             var result = new PlayItOutResults(this, state.Board, state);
+            var nextMove = result.NextMove();
+            int x, y;
+			state.Board.IndexToCoords(nextMove,out x,out y);
+            var act = new OccupyGameAction(state, this, x, y);
+            state.PerformAction(act);
         }
 
         public override string ToString()
@@ -46,14 +51,17 @@
 
         internal class PlayItOutResults
         {
+			public int StartIndex { get; internal set; }
 			public int Index { get; internal set; }
             public List<PlayItOutResults> Moves { get; internal set; }
 			public GameWinStatus Status { get; internal set; }
 			public IPlayer WinPlayer { get; internal set; }
+			public IPlayer Me { get; internal set; }
 			public Game Game { get; set; }
 
             public PlayItOutResults(IPlayer movePlayer, GameBoard board, Game game)
             {
+                Me = movePlayer;
                 Game = game;
                 Index = -1;
                 Moves = new List<PlayItOutResults>();
@@ -61,14 +69,16 @@
                 {
                     if (!board.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(i, movePlayer, board, game);
+                        var res = new PlayItOutResults(i,i, Me, movePlayer, board, game);
 						Moves.Add(res);
                     }
                 }
             }
 
-            public PlayItOutResults(int idx, IPlayer movePlayer, GameBoard board, Game game)
+            public PlayItOutResults(int startIdx, int idx, IPlayer me, IPlayer movePlayer, GameBoard board, Game game)
             {
+                StartIndex = startIdx;
+                Me = me;
                 Game = game;
                 Moves = new List<PlayItOutResults>();
                 Index = idx;
@@ -79,7 +89,7 @@
                 WinPlayer = bclone.Winner();
                 if (WinPlayer != null)
                 {
-                    Status = GameWinStatus.Win;
+                    if (WinPlayer == Me) Status = GameWinStatus.Win;
                     return;
                 }
 
@@ -97,7 +107,7 @@
                 {
                     if (!bclone.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(i, newMovePlayer, bclone, Game);
+                        var res = new PlayItOutResults(StartIndex,i, Me, newMovePlayer, bclone, Game);
                         Moves.Add(res);
                     }
                 }
@@ -114,6 +124,44 @@
                     }
                 }
                 return bclone;
+            }
+
+            internal int NextMove()
+            {
+                var results = GetEndResult();
+                var winResults = results
+					.OrderBy(x=>x.Status)
+                    .GroupBy(x => x.StartIndex)
+					.Select(x=>new
+					           {
+					               WinCount=x.Count(y=>y.Status == GameWinStatus.Win),
+                                   TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
+                                   Results=x
+					           })
+                    .OrderByDescending(x=>x.TieCount)
+					.ThenBy(x=>x.WinCount)
+					.Where(x=>x.TieCount > 0)
+                    .ToArray();
+                return winResults.First().Results.First().StartIndex;
+            }
+
+            internal List<PlayItOutResults> GetEndResult()
+            {
+                return GetEndResult(this.Moves);
+            }
+
+            internal List<PlayItOutResults> GetEndResult(List<PlayItOutResults> moves)
+            {
+                var ret = new List<PlayItOutResults>();
+                foreach (var m in moves)
+                {
+                    if (m.Status != GameWinStatus.None) ret.Add(m);
+                    else
+                    {
+                        ret.AddRange(GetEndResult(m.Moves));
+                    }
+                }
+                return ret;
             }
         }
     }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Threading.Tasks;
 
     using Common.Logging;
 
@@ -50,7 +51,11 @@
                 }
                 this.playerTurn = value;
                 this.OnPropertyChanged("PlayerTurn");
-                this.playerTurn.OnTurn(this);
+                if (this.playerTurn != null)
+                {
+                    
+                    this.playerTurn.OnTurn(this);
+                }
             }
         }
 
@@ -124,6 +129,32 @@
             Reset();
         }
 
+        public void Start(IPlayer startPlayer = null)
+        {
+            if (startPlayer != null)
+            {
+                Console.WriteLine("Player Turn: " + startPlayer.ToString());
+                PlayerTurn = startPlayer;
+                return;
+            }
+            if (PlayerTurn == null)
+            {
+                // Randomly picks who the starting player will be
+                // I think normally I would let the constructor of this class determine this
+                //    , but for the sake of this project I'll just decide here.
+                var rnum = RngRandom.Instance.Next(0, 2);
+                var tp = rnum == 0 ? Player1 : Player2;
+                Console.WriteLine("Player Turn[{0}]: {1}",rnum,tp);
+                PlayerTurn = tp;
+            }
+            else
+            {
+				var tp = PlayerTurn == Player1 ? Player2 : Player1;
+                Console.WriteLine("Player Turn: " + tp.ToString());
+                PlayerTurn = tp;
+            }
+        }
+
         public void PerformAction(GameAction action)
         {
             if (action == null)
@@ -171,17 +202,7 @@
             WinStatus = GameWinStatus.None;
             Winner = null;
             Board = new GameBoard();
-            if (PlayerTurn == null)
-            {
-                // Randomly picks who the starting player will be
-                // I think normally I would let the constructor of this class determine this
-                //    , but for the sake of this project I'll just decide here.
-                PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
-            }
-            else
-            {
-                PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
-            }
+
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");
             OnPropertyChanged("GameLog");
@@ -214,8 +235,8 @@
 
     public enum GameWinStatus
     {
-        None,
-        Win,
-        Tie
+        None = 0,
+        Win = 1,
+        Tie = 2
     }
 }
