@@ -133,7 +133,6 @@
         {
             if (startPlayer != null)
             {
-                Console.WriteLine("Player Turn: " + startPlayer.ToString());
                 PlayerTurn = startPlayer;
                 return;
             }
@@ -144,13 +143,11 @@
                 //    , but for the sake of this project I'll just decide here.
                 var rnum = RngRandom.Instance.Next(0, 2);
                 var tp = rnum == 0 ? Player1 : Player2;
-                Console.WriteLine("Player Turn[{0}]: {1}",rnum,tp);
                 PlayerTurn = tp;
             }
             else
             {
 				var tp = PlayerTurn == Player1 ? Player2 : Player1;
-                Console.WriteLine("Player Turn: " + tp.ToString());
                 PlayerTurn = tp;
             }
         }

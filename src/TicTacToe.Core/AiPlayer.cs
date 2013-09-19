@@ -36,7 +36,7 @@
 				//   for now
                 var xx = RngRandom.Instance.Next(0, 3);
                 var yy = RngRandom.Instance.Next(0, 3);
-                var a = new OccupyGameAction(state, this, xx, yy);
+                var a = new OccupyGameAction(state, this, 1, 1);
 				state.PerformAction(a);
                 return;
             }
