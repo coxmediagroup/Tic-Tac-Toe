@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\PassTurnGameAction.cs" />
     <Compile Include="GameAction.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Game.cs" />

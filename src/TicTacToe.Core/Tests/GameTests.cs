@@ -90,15 +90,10 @@
             var occupyGameAction = new OccupyGameAction(game.Player1, game, 1, 1);
             Assert.Throws<InvalidOperationException>(() => game.PerformAction(occupyGameAction));
 
-            var passTurnGameAction = new PassTurnGameAction(game, game.Player1);
-            Assert.Throws<InvalidOperationException>(() => game.PerformAction(passTurnGameAction));
-
             var resetGameAction = new ResetGameAction(game, game.Player1);
             Assert.DoesNotThrow(() => game.PerformAction(resetGameAction));
             occupyGameAction.Player = game.PlayerTurn;
             Assert.DoesNotThrow(() => game.PerformAction(occupyGameAction));
-            passTurnGameAction.Player = game.PlayerTurn;
-            Assert.DoesNotThrow(() => game.PerformAction(passTurnGameAction));
         }
 
         [Test]
