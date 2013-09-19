@@ -13,13 +13,17 @@
 
         internal static int[][] WinConditions;
 
+        public const int Width = 3;
+        public const int Height = 3;
+
         public GameBoard()
         {
             //Create three rows of three board positions
-            this.BoardPositions = new IPlayer[3][];
-            this.BoardPositions[0] = new IPlayer[3];
-            this.BoardPositions[1] = new IPlayer[3];
-            this.BoardPositions[2] = new IPlayer[3];
+            this.BoardPositions = new IPlayer[Height][];
+            for (var i = 0; i < Height; i++)
+            {
+                this.BoardPositions[i] = new IPlayer[Width];
+            }
 
             if (WinConditions == null)
             {

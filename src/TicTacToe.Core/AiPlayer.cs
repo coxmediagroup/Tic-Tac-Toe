@@ -121,9 +121,9 @@
             internal GameBoard CloneBoard(GameBoard board)
             {
                 var bclone = new GameBoard();
-                for (var row = 0; row < board.BoardPositions.Length; row++)
+                for (var row = 0; row < GameBoard.Height; row++)
                 {
-                    for (var p = 0; p < board.BoardPositions[row].Length; p++)
+                    for (var p = 0; p < GameBoard.Width; p++)
                     {
                         bclone.BoardPositions[row][p] = board.BoardPositions[row][p];
                     }
