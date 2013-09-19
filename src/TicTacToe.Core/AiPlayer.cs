@@ -8,16 +8,14 @@
     public class AiPlayer : IPlayer
     {
         public string Name { get; internal set; }
-		public Game Game { get; internal set; }
 
         /// <summary>
         /// Create a <see cref="AiPlayer"/>
         /// </summary>
         /// <param name="name">Name of the <see cref="AiPlayer"/></param>
-        public AiPlayer(string name, Game game)
+        public AiPlayer(string name)
         {
             this.Name = name;
-            this.Game = game;
         }
 
         /// <summary>
@@ -38,7 +36,7 @@
 			// I suppose we can brute force this sucker and see
 			//    how long it takes first.
 
-            var result = new PlayItOutResults(this, state.Board, Game);
+            var result = new PlayItOutResults(this, state.Board, state);
         }
 
         internal class PlayItOutResults
