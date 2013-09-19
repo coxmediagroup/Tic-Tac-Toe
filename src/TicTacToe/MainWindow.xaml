@@ -4,7 +4,18 @@
         xmlns:controls="clr-namespace:TicTacToe.Controls"
         Title="Tic Tac Toe" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
         x:Name="self" Icon="Resources/icon.ico">
+    <Window.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}" x:Key="Link">
+            <Setter Property="Foreground" Value="CadetBlue"/>
+            <Setter Property="TextDecorations" Value="Underline"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="Auto"/>
@@ -14,10 +25,13 @@
             <Image Source="/Resources/cross.png" Stretch="None"/>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
-        <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}"/>
-        <StackPanel Grid.Column="2">
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}"/>
+        <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
+                            Grid.RowSpan="2"/>
+        <StackPanel Grid.Row="0" Grid.Column="2">
             <Image Source="/Resources/circle.png" Stretch="None"/>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"/>
     </Grid>
 </Window>
