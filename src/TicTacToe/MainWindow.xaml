@@ -28,6 +28,54 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}"/>
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Background="#AA1199FF" Padding="30 0 30 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="47*"/>
+                    <RowDefinition Height="30*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Setup" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
+                    <Grid Height="4"/>
+                    <Rectangle Fill="#33FFFFFF" Height="2"/>
+                    <Grid Height="8"/>                    
+                </StackPanel>
+                <Grid Grid.Row="2" Background="#99FFFFFF">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Resources/cross.png" Stretch="None" Grid.Column="0"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <ComboBox>
+                            <ComboBoxItem Content="Human"/>
+                            <ComboBoxItem Content="AI"/>
+                        </ComboBox>
+                        <Grid Height="20"/>
+                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay}" Height="22"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="4" Background="#99FFFFFF">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Resources/circle.png" Stretch="None" Grid.Column="1"/>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <ComboBox>
+                            <ComboBoxItem Content="Human"/>
+                            <ComboBoxItem Content="AI"/>
+                        </ComboBox>
+                        <Grid Height="20"/>
+                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay}" Height="22"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
         <StackPanel Grid.Row="0" Grid.Column="2">
             <Image Source="/Resources/circle.png" Stretch="None"/>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>

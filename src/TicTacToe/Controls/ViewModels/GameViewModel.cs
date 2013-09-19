@@ -10,8 +10,24 @@ namespace TicTacToe.Controls.ViewModels
     {
         public Game Game { get; set; }
 
+        public string Player1Name
+        {
+            get
+            {
+                return this.player1Name;
+            }
+            set
+            {
+                if (value == this.player1Name) return;
+                this.player1Name = value;
+                OnPropertyChanged("Player1Name");
+            }
+        }
+
         public static readonly DependencyProperty GameBoardViewModelProperty =
             DependencyProperty.Register("GameBoardViewModel", typeof (GameBoardViewModel), typeof (GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
+
+        private string player1Name;
 
         public GameBoardViewModel GameBoardViewModel
         {
@@ -22,6 +38,7 @@ namespace TicTacToe.Controls.ViewModels
         public GameViewModel()
         {
             Game = new Game(new HumanPlayer("Player 1"), new HumanPlayer("Player 2"));
+            Player1Name = Game.Player1.Name;
             Game.PropertyChanged += GameOnPropertyChanged;
             GameBoardViewModel = new GameBoardViewModel(this);
             var t = new System.Timers.Timer(1000);
