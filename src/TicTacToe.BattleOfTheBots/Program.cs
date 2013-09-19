@@ -29,6 +29,8 @@
                 Console.WriteLine("[{0}ms]{1} - {2}",time.ElapsedMilliseconds, game.WinStatus, game.Winner);
 				resultList.Add(new RunResult(game.Winner,game.WinStatus,time.ElapsedMilliseconds));
             }
+            Console.WriteLine("Done");
+            Console.ReadKey();
             Log.Info("Stopping");
         }
 
