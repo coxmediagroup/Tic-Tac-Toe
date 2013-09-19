@@ -1,27 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TicTacToe.Controls.ViewModels;
+using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls
 {
     /// <summary>
     /// Interaction logic for Position.xaml
     /// </summary>
-    public partial class Position : UserControl
+    public partial class Position : INotifyPropertyChanged
     {
+        private PositionViewModel _vm;
+
+        public PositionViewModel Vm
+        {
+            get { return _vm; }
+            set
+            {
+                if (Equals(value, _vm)) return;
+                _vm = value;
+                OnPropertyChanged("Vm");
+            }
+        }
+
         public Position()
         {
             InitializeComponent();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
