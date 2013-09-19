@@ -1,6 +1,7 @@
 ﻿namespace TicTacToe.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class GameBoard
@@ -10,10 +11,22 @@
         /// </summary>
         public IPlayer[][] BoardPositions { get; internal set; }
 
+        internal static int[][] WinConditions;
+
         public GameBoard()
         {
             //Create three rows of three board positions
             this.BoardPositions = Enumerable.Repeat(Enumerable.Repeat<IPlayer>(null, 3).ToArray(), 3).ToArray();
+
+            WinConditions = new int[8][];
+            WinConditions[0] = new[] { 0, 1, 2 };
+            WinConditions[1] = new[] { 3, 4, 5 };
+            WinConditions[2] = new[] { 6, 7, 8 };
+            WinConditions[3] = new[] { 0, 3, 6 };
+            WinConditions[4] = new[] { 1, 4, 7 };
+            WinConditions[5] = new[] { 2, 5, 8 };
+            WinConditions[6] = new[] { 0, 4, 8 };
+            WinConditions[7] = new[] { 2, 4, 6 };
         }
 
         public bool IsPositionOccupied(int x, int y)
@@ -53,7 +66,31 @@
         /// <returns><cref see="IPlayer"/> if there is a winner, or null if there is a tie or no winner yet.</returns>
         public IPlayer Winner()
         {
-            return default(IPlayer);
+            foreach (var condition in WinConditions)
+            {
+                int x,y = 0;
+                IndexToCoords(condition[0],out x, out y);
+                var p1 = BoardPositions[y][x];
+                IndexToCoords(condition[1],out x, out y);
+                var p2 = BoardPositions[y][x];
+                IndexToCoords(condition[2],out x, out y);
+                var p3 = BoardPositions[y][x];
+
+                if (p1 == null) continue;
+
+                if (p1 == p2 && p2 == p3)
+                {
+                    return p1;
+                }
+            }
+
+            return null;
+        }
+
+        internal void IndexToCoords(int idx, out int x, out int y)
+        {
+            x = idx % 3;
+            y = idx / 3;
         }
     }
 }
