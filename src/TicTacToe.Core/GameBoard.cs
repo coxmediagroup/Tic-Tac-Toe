@@ -53,6 +53,15 @@
             return BoardPositions.Any(x => x.Any(y => y == null)) == false;
         }
 
+		/// <summary>
+		/// Determines if the game board is empty
+		/// </summary>
+		/// <returns>True if it's empty, otherwise False</returns>
+        public bool IsEmpty()
+		{
+		    return BoardPositions.All(x => x.All(y => y == null));
+		}
+
         /// <summary>
         /// Checks to see who the winner is for the current board state
         /// </summary>

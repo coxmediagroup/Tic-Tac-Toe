@@ -3,6 +3,9 @@
     using System;
 
     using NUnit.Framework;
+
+    using TicTacToe.Core.Utils;
+
     public class GameBoardTests
     {
         [Test]
@@ -78,6 +81,25 @@
             board.BoardPositions[2][2] = p1;
 
             Assert.True(board.IsFull());
+        }
+
+        [Test]
+        public void IsEmpty_Correct()
+        {
+            var p1 = new HumanPlayer("jim");
+
+            for (var i = 0; i < 9; i++)
+            {
+                var board = new GameBoard();
+                Assert.True(board.IsEmpty());
+
+                int x, y;
+				board.IndexToCoords(i,out x, out y);
+				board.Occupy(p1,x,y);
+                Assert.False(board.IsEmpty());
+            }
+
+
         }
 
         [Test]
