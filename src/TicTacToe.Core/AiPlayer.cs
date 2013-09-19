@@ -1,5 +1,9 @@
 ﻿namespace TicTacToe.Core
 {
+    using System.Linq;
+
+    using TicTacToe.Core.Actions;
+
     public class AiPlayer : IPlayer
     {
         public string Name { get; private set; }
@@ -20,6 +24,12 @@
         /// <returns>True to end the turn, False otherwise. Human players would return False, while AI would return True.</returns>
         public bool OnTurn(Game state)
         {
+            // If board is empty, then we're going first, so pick the middle one always
+            if (state.Board.IsEmpty())
+            {
+                var a = new OccupyGameAction(state, this, 1, 1);
+				state.PerformAction(a);
+            }
             return true;
         }
     }
