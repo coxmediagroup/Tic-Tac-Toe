@@ -9,8 +9,8 @@
              Cursor="Hand">
     <Grid>
         <Image Source="../Resources/cross.png" Stretch="None"
-               Visibility="{Binding ElementName=self,Path=Vm.ShowX}"/>
+               Visibility="{Binding ElementName=self,Path=Vm.ShowX, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Image Source="../Resources/circle.png" Stretch="None"
-               Visibility="{Binding ElementName=self,Path=Vm.ShowO}"/>
+               Visibility="{Binding ElementName=self,Path=Vm.ShowO, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
