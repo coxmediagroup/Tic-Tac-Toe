@@ -108,6 +108,8 @@
         /// <param name="gameBoard">Game board to use</param>
         public Game(IPlayer player1, IPlayer player2)
         {
+            if (player1 == null) throw new ArgumentException("player1 can't be null", "player1");
+            if (player2 == null) throw new ArgumentException("player2 can't be null", "player2");
             GameLog = new List<string>();
             GameActions = new List<GameAction>();
             Player1 = player1;
@@ -117,6 +119,8 @@
 
         public void PerformAction(GameAction action)
         {
+            if (action == null)
+                throw new ArgumentOutOfRangeException("action", "action can not be null");
             if (Status != GameStatus.Running && (action is ResetGameAction) == false)
                 throw new InvalidOperationException("Cannot do that action because the game is finished.");
             GameActions.Add(action);
@@ -154,10 +158,17 @@
             WinStatus = GameWinStatus.None;
             Winner = null;
             Board = new GameBoard();
-            // Randomly picks who the starting player will be
-            // I think normally I would let the constructor of this class determine this
-            //    , but for the sake of this project I'll just decide here.
-            PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
+            if (PlayerTurn == null)
+            {
+                // Randomly picks who the starting player will be
+                // I think normally I would let the constructor of this class determine this
+                //    , but for the sake of this project I'll just decide here.
+                PlayerTurn = RngRandom.Instance.Next(0, 1) == 0 ? Player1 : Player2;
+            }
+            else
+            {
+                PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+            }
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");
             OnPropertyChanged("GameLog");

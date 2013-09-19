@@ -16,7 +16,10 @@
         public GameBoard()
         {
             //Create three rows of three board positions
-            this.BoardPositions = Enumerable.Repeat(Enumerable.Repeat<IPlayer>(null, 3).ToArray(), 3).ToArray();
+            this.BoardPositions = new IPlayer[3][];
+            this.BoardPositions[0] = new IPlayer[3];
+            this.BoardPositions[1] = new IPlayer[3];
+            this.BoardPositions[2] = new IPlayer[3];
 
             WinConditions = new int[8][];
             WinConditions[0] = new[] { 0, 1, 2 };
@@ -76,7 +79,7 @@
                 IndexToCoords(condition[2],out x, out y);
                 var p3 = BoardPositions[y][x];
 
-                if (p1 == null) continue;
+                if (p1 == null || p2 == null || p3 == null) continue;
 
                 if (p1 == p2 && p2 == p3)
                 {

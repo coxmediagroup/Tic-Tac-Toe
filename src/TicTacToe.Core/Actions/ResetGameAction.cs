@@ -10,7 +10,7 @@
         public override void Do()
         {
             this.Game.Reset();
-            this.Log("{} Resets the game", this.Player);
+            this.Log("{0} Resets the game", this.Player);
         }
     }
 }
