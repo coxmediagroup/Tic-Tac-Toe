@@ -1,8 +1,13 @@
 ﻿namespace TicTacToe.Core.Tests
 {
+    using System;
+
     using FakeItEasy;
 
     using NUnit.Framework;
+
+    using TicTacToe.Core.Actions;
+
     public class GameActionTests
     {
         [Test]
@@ -16,6 +21,17 @@
 
             Assert.AreEqual(p1, action.Player);
             Assert.AreEqual(game, action.Game);
+        }
+
+        [Test]
+        public void Constructor_Constraints()
+        {
+            var p1 = new HumanPlayer("jim");
+            var p2 = new HumanPlayer("tim");
+            var game = new Game(p1, p2);
+
+            Assert.Throws<ArgumentException>(()=> new ResetGameAction(null, p1));
+            Assert.Throws<ArgumentException>(()=> new ResetGameAction(game, null));
         }
 
         [Test]

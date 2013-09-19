@@ -8,15 +8,12 @@
         internal int X { get; set; }
         internal int Y { get; set; }
 
-        public OccupyGameAction(IPlayer player, Game state, int x, int y):base(state, player)
+        public OccupyGameAction(Game state, IPlayer player, int x, int y):base(state, player)
         {
-            if (state == null) throw new ArgumentException("state cannot be null.", "state");
-            if (player == null) throw new ArgumentException("player cannot be null.", "player");
             if (x >= this.Game.Board.BoardPositions.First().Length)
                 throw new ArgumentException("x must be between 0 and " + this.Game.Board.BoardPositions.First().Length, "x");
             if (y >= this.Game.Board.BoardPositions.First().Length)
                 throw new ArgumentException("y must be between 0 and " + this.Game.Board.BoardPositions.Length, "y");
-            this.Player = player;
             this.X = x;
             this.Y = y;
         }

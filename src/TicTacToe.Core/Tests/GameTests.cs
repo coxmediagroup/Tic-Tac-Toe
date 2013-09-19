@@ -87,7 +87,7 @@
             var game = BasicGame();
             game.Status = GameStatus.Finished;
 
-            var occupyGameAction = new OccupyGameAction(game.Player1, game, 1, 1);
+            var occupyGameAction = new OccupyGameAction(game,game.Player1, 1, 1);
             Assert.Throws<InvalidOperationException>(() => game.PerformAction(occupyGameAction));
 
             var resetGameAction = new ResetGameAction(game, game.Player1);
