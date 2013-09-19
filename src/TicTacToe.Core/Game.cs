@@ -19,9 +19,31 @@
         private GameStatus status;
         private GameWinStatus winStatus;
         private IPlayer winner;
+        private IPlayer _player1;
+        private IPlayer _player2;
 
-        public IPlayer Player1 { get; internal set; }
-        public IPlayer Player2 { get; internal set; }
+        public IPlayer Player1
+        {
+            get { return _player1; }
+            set
+            {
+                if (Equals(value, _player1)) return;
+                _player1 = value;
+                OnPropertyChanged("Player1");
+            }
+        }
+
+        public IPlayer Player2
+        {
+            get { return _player2; }
+            set
+            {
+                if (Equals(value, _player2)) return;
+                _player2 = value;
+                OnPropertyChanged("Player2");
+            }
+        }
+
         public GameBoard Board { get; internal set; }
 
         /// <summary>
