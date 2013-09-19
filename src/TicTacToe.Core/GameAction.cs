@@ -17,7 +17,7 @@
 
         internal void Log(string message, params object[] args)
         {
-            this.Game.GameLog.Add(string.Format(message,args));
+            this.Game.ActionLog(string.Format(message, args));
         }
 
         public abstract void Do();

@@ -4,12 +4,16 @@
     using System.Collections.Generic;
     using System.ComponentModel;
 
+    using Common.Logging;
+
     using TicTacToe.Core.Actions;
     using TicTacToe.Core.Annotations;
     using TicTacToe.Core.Utils;
 
     public class Game : INotifyPropertyChanged
     {
+        internal static ILog GameLogger = LogManager.GetLogger("GameLog");
+
         private IPlayer playerTurn;
         private GameStatus status;
         private GameWinStatus winStatus;
@@ -180,6 +184,12 @@
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");
             OnPropertyChanged("GameLog");
+        }
+
+        internal void ActionLog(string message)
+        {
+			GameLogger.Info(message);
+            GameLog.Add(message);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
