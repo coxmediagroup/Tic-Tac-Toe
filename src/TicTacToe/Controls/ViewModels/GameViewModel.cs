@@ -31,6 +31,15 @@ namespace TicTacToe.Controls.ViewModels
             }
         }
 
+        public Game Game { get; set; }
+
+        public GameViewModel()
+        {
+            XPlayer = new HumanPlayer("Player 1");
+            OPlayer = new HumanPlayer("Player 2");
+            Game = new Game(XPlayer, OPlayer);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
