@@ -60,6 +60,7 @@
     <Compile Include="Actions\ResetGameAction.cs" />
     <Compile Include="Tests\Actions\OccupyGameActionTests.cs" />
     <Compile Include="Tests\Actions\ResetGameActionTests.cs" />
+    <Compile Include="Tests\AiPlayerTests.cs" />
     <Compile Include="Tests\GameActionTests.cs" />
     <Compile Include="Tests\GameBoardTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
