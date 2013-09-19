@@ -11,7 +11,7 @@
         /// </summary>
         public IPlayer[][] BoardPositions { get; internal set; }
 
-        internal static int[][] WinConditions;
+        internal int[][] WinConditions;
 
         public GameBoard()
         {
@@ -42,16 +42,6 @@
             if (this.IsPositionOccupied(x, y))
                 throw new InvalidOperationException("Position " + x + ":" + y + " is already occupied.");
             this.BoardPositions[y][x] = player;
-        }
-
-        /// <summary>
-        /// Unoccupy a position
-        /// </summary>
-        /// <param name="x">X Position</param>
-        /// <param name="y">Y Position</param>
-        public void UnOccupy(int x, int y)
-        {
-            this.BoardPositions[y][x] = null;
         }
 
         /// <summary>
