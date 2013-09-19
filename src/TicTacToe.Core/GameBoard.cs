@@ -37,6 +37,18 @@
             return this.BoardPositions[y][x] != null;
         }
 
+		/// <summary>
+		/// Is the flat array position occupied?
+		/// </summary>
+		/// <param name="idx">index</param>
+		/// <returns>True if Occupied, otherwise False</returns>
+        public bool IsPositionOccupied(int idx)
+		{
+		    int x, y;
+			this.IndexToCoords(idx,out x, out y);
+		    return IsPositionOccupied(x, y);
+		}
+
         public void Occupy(IPlayer player, int x, int y)
         {
             if (this.IsPositionOccupied(x, y))
