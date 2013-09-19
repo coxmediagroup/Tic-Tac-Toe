@@ -56,6 +56,18 @@
             this.BoardPositions[y][x] = player;
         }
 
+		/// <summary>
+		/// Occupy a position on a flat array version of the board
+		/// </summary>
+		/// <param name="player">Player occupying</param>
+		/// <param name="idx">Index</param>
+        public void Occupy(IPlayer player, int idx)
+        {
+		    int x, y;
+			this.IndexToCoords(idx,out x, out y);
+            Occupy(player,x, y);
+        }
+
         /// <summary>
         /// Determines if the game board positions are all taken
         /// </summary>
