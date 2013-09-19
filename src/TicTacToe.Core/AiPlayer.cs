@@ -39,6 +39,11 @@
             var result = new PlayItOutResults(this, state.Board, state);
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         internal class PlayItOutResults
         {
 			public int Index { get; internal set; }
