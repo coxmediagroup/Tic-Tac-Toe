@@ -28,7 +28,12 @@
             {
                 var a = new OccupyGameAction(state, this, 1, 1);
 				state.PerformAction(a);
+                return;
             }
+
+			// Otherwise, things get a bit sticky here.
+			// I suppose we can brute force this sucker and see
+			//    how long it takes first.
         }
     }
 }
