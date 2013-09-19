@@ -54,5 +54,30 @@
             board.Occupy(p1, 1, 1);
             Assert.Throws<InvalidOperationException>(() => board.Occupy(p1, 1, 1));
         }
+
+        [Test]
+        public void IsFull_IsCorrect()
+        {
+            var board = new GameBoard();
+            var p1 = new HumanPlayer("jim");
+
+            Assert.False(board.IsFull());
+
+            board.BoardPositions[0][0] = p1;
+            board.BoardPositions[1][0] = p1;
+            Assert.False(board.IsFull());
+            board.BoardPositions[2][0] = p1;
+            board.BoardPositions[0][1] = p1;
+            Assert.False(board.IsFull());
+            board.BoardPositions[1][1] = p1;
+            board.BoardPositions[2][1] = p1;
+            Assert.False(board.IsFull());
+            board.BoardPositions[0][2] = p1;
+            board.BoardPositions[1][2] = p1;
+            Assert.False(board.IsFull());
+            board.BoardPositions[2][2] = p1;
+
+            Assert.True(board.IsFull());
+        }
     }
 }
