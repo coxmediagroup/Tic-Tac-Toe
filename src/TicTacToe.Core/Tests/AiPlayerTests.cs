@@ -29,7 +29,7 @@
             var game = new Game(p1, p2);
 
             game.PlayerTurn = p2;
-			Assert.True(game.Board.IsPositionOccupied(4));
+			Assert.False(game.Board.IsEmpty());
         }
 
         [Test]
