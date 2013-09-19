@@ -11,7 +11,7 @@
 
     public class GameTests
     {
-        private Game Game()
+        private static Game BasicGame()
         {
             var h1 = new HumanPlayer("jim");
             var h2 = new HumanPlayer("tim");
@@ -48,7 +48,7 @@
         [Test]
         public void Reset_FillsClass()
         {
-            var game = Game();
+            var game = BasicGame();
             game.Status = GameStatus.Finished;
             game.WinStatus = GameWinStatus.Win;
             game.Winner = game.Player1;
@@ -64,7 +64,7 @@
         [Test]
         public void Reset_SetsTurnPlayerNext()
         {
-            var game = Game();
+            var game = BasicGame();
             var cp = game.PlayerTurn;
             for (var i = 0; i < 10; i++)
             {
@@ -77,14 +77,14 @@
         [Test]
         public void PerformAction_CantPassNullAction()
         {
-            var game = Game();
+            var game = BasicGame();
             Assert.Throws<ArgumentOutOfRangeException>(() => game.PerformAction(null));
         }
 
         [Test]
         public void PerformAction_CanOnlyDoResetOnFinishedGame()
         {
-            var game = Game();
+            var game = BasicGame();
             game.Status = GameStatus.Finished;
 
             var occupyGameAction = new OccupyGameAction(game.Player1, game, 1, 1);
@@ -99,7 +99,7 @@
         [Test]
         public void PerformAction_CantGoIfNotTurn()
         {
-            var game = Game();
+            var game = BasicGame();
             var testAction = A.Fake<GameAction>(x=>x.WithArgumentsForConstructor(new object[]{game,game.Player1}));
             game.PlayerTurn = game.Player2;
             Assert.Throws<InvalidOperationException>(() => game.PerformAction(testAction));
@@ -108,7 +108,7 @@
         [Test]
         public void PerformAction_SavesAction()
         {
-            var game = Game();
+            var game = BasicGame();
             var action = new ResetGameAction(game, game.Player1);
             Assert.AreEqual(0, game.GameActions.Count);
             game.PerformAction(action);
@@ -118,7 +118,7 @@
         [Test]
         public void PerformAction_CallsActionDo()
         {
-            var game = Game();
+            var game = BasicGame();
             var testAction = A.Fake<GameAction>(x=>x.WithArgumentsForConstructor(new object[]{game,game.Player1}));
             var num = 0;
             A.CallTo(() => testAction.Do()).Invokes(() => num++);
@@ -129,7 +129,7 @@
         [Test]
         public void PerformAction_CallsCheckGameState()
         {
-            var game = Game();
+            var game = BasicGame();
             var testAction = A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.Player1 }));
 
             game.PlayerTurn = game.Player1;
@@ -146,7 +146,7 @@
         [Test]
         public void CheckGameState_SetsWin()
         {
-            var game = Game();
+            var game = BasicGame();
 
             game.Board.BoardPositions[0][0] = game.Player1;
             game.Board.BoardPositions[1][0] = game.Player1;
@@ -166,7 +166,7 @@
         [Test]
         public void CheckGameState_SetsTie()
         {
-            var game = Game();
+            var game = BasicGame();
 
             Assert.Null(game.Winner);
             Assert.AreEqual(GameStatus.Running, game.Status);
