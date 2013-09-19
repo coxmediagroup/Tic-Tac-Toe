@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\ResetGameAction.cs" />
     <Compile Include="Tests\GameActionTests.cs" />
+    <Compile Include="Tests\GameBoardTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\HumanPlayerTests.cs" />
     <Compile Include="Utils\RngRandom.cs" />
