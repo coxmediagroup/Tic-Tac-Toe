@@ -129,6 +129,15 @@
                 <Image Source="/Resources/cross.png" Stretch="None" Margin="0,5,0,5"/>
             </Grid>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <Grid Height="5"/>
+            <TextBlock HorizontalAlignment="Left" >
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Wins: {0}&#x0a;Ties: {1}">
+                        <Binding ElementName="self" Path="Vm.Player1WinCount" />
+                        <Binding ElementName="self" Path="Vm.TieCount" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"
                    Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
@@ -203,6 +212,15 @@
                 <Image Source="/Resources/circle.png" Stretch="None" Margin="0,5,0,5"/>
             </Grid>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <Grid Height="5"/>
+            <TextBlock HorizontalAlignment="Left" >
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Wins: {0}&#x0a;Ties: {1}">
+                        <Binding ElementName="self" Path="Vm.Player2WinCount" />
+                        <Binding ElementName="self" Path="Vm.TieCount" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"
                    Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}" MouseLeftButtonDown="OnResetClick"/>

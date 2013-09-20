@@ -204,7 +204,6 @@
             var boardWinner = Board.Winner();
             if (boardWinner != null)
             {
-                Status = GameStatus.Finished;
                 WinStatus = GameWinStatus.Win;
                 Winner = boardWinner;
             }
@@ -212,11 +211,11 @@
             {
                 if (!this.Board.IsFull())
                     return;
-                this.Status = GameStatus.Finished;
                 this.WinStatus = GameWinStatus.Tie;
                 this.Winner = null;
             }
             this.ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
+                Status = GameStatus.Finished;
         }
 
         internal void Reset()

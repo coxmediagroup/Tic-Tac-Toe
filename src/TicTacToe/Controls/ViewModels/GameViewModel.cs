@@ -82,6 +82,39 @@ namespace TicTacToe.Controls.ViewModels
             }
         }
 
+        public int Player1WinCount
+        {
+            get { return _player1WinCount; }
+            set
+            {
+                if (value == _player1WinCount) return;
+                _player1WinCount = value;
+                OnPropertyChanged("Player1WinCount");
+            }
+        }
+
+        public int Player2WinCount
+        {
+            get { return _player2WinCount; }
+            set
+            {
+                if (value == _player2WinCount) return;
+                _player2WinCount = value;
+                OnPropertyChanged("Player2WinCount");
+            }
+        }
+
+        public int TieCount
+        {
+            get { return _tieCount; }
+            set
+            {
+                if (value == _tieCount) return;
+                _tieCount = value;
+                OnPropertyChanged("TieCount");
+            }
+        }
+
         public static readonly DependencyProperty GameBoardViewModelProperty =
             DependencyProperty.Register("GameBoardViewModel", typeof(GameBoardViewModel), typeof(GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
 
@@ -90,6 +123,9 @@ namespace TicTacToe.Controls.ViewModels
         private string player2Name;
 
         private Game game;
+        private int _player1WinCount;
+        private int _player2WinCount;
+        private int _tieCount;
 
         public GameBoardViewModel GameBoardViewModel
         {
@@ -121,6 +157,18 @@ namespace TicTacToe.Controls.ViewModels
             {
                 if (Game.Status == GameStatus.Finished)
                 {
+                    if (Game.Winner == Game.Player1)
+                    {
+                        Player1WinCount++;
+                    }
+                    else if (Game.Winner == Game.Player2)
+                    {
+                        Player2WinCount++;
+                    }
+                    else if (Game.WinStatus == GameWinStatus.Tie)
+                    {
+                        TieCount++;
+                    }
                     Task.Factory.StartNew(() =>
                     {
                         var rg = new ResetGameAction(Game, Game.PlayerTurn);
@@ -151,6 +199,9 @@ namespace TicTacToe.Controls.ViewModels
             Game = new Game(player1, player2);
             Game.PropertyChanged += GameOnPropertyChanged;
             GameBoardViewModel = new GameBoardViewModel(this);
+            this.Player1WinCount = 0;
+            this.Player2WinCount = 0;
+            this.TieCount = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
