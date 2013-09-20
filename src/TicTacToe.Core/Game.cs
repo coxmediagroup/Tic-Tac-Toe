@@ -1,4 +1,7 @@
-﻿namespace TicTacToe.Core
+﻿using System.Threading;
+using FakeItEasy;
+
+namespace TicTacToe.Core
 {
     using System;
     using System.Collections.Generic;
@@ -191,6 +194,10 @@
             {
                 Task.Factory.StartNew(() =>
                 {
+                    if (action is OccupyGameAction)
+                    {
+                        Thread.Sleep((action as OccupyGameAction).Delay);
+                    }
                     PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
                 });
             }

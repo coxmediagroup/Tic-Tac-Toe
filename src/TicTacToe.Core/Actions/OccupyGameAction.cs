@@ -28,7 +28,7 @@
 
             this.Game.Board.Occupy(this.Player, this.X, this.Y);
             this.Log("{0} Occupy's {1}:{2}",this.Player,this.X,this.Y);
-            Thread.Sleep(Delay);
+            //Thread.Sleep(Delay);
         }
     }
 }
