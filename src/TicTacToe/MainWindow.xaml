@@ -10,6 +10,44 @@
             <Setter Property="TextDecorations" Value="Underline"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}" x:Key="{x:Type Button}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="10 0 10 0"/>
+            <Setter Property="Background" Value="LawnGreen"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style TargetType="Border" x:Key="SetupArea">
+            <Setter Property="Background" Value="#AA1199FF"/>
+            <Setter Property="Padding" Value="30 0 30 0"/>
+            <Setter Property="Height" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=self,Path=SetupVisible}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetProperty="(Border.Height)">
+                                <DoubleAnimation From="0" To="290" Duration="0:0:0:0.500">
+                                    <!--<DoubleAnimation.EasingFunction >
+                                        <BackEase EasingMode="EaseIn"/>
+                                    </DoubleAnimation.EasingFunction>-->
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetProperty="(Border.Height)">
+                                <DoubleAnimation From="290" To="0" Duration="0:0:0:0.500">
+                                    <!--<DoubleAnimation.EasingFunction >
+                                        <BackEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>-->
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -25,24 +63,26 @@
             <Image Source="/Resources/cross.png" Stretch="None"/>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"/>
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
-        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Background="#AA1199FF" Padding="30 0 30 0">
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="SetupArea" Style="{StaticResource SetupArea}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="47*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="30*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="4"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
                     <TextBlock Text="Setup" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
                     <Grid Height="4"/>
                     <Rectangle Fill="#33FFFFFF" Height="2"/>
-                    <Grid Height="8"/>                    
+                    <Grid Height="8"/>
                 </StackPanel>
                 <Grid Grid.Row="2" Background="#99FFFFFF">
                     <Grid.ColumnDefinitions>
@@ -71,8 +111,12 @@
                             <ComboBoxItem Content="AI"/>
                         </ComboBox>
                         <Grid Height="20"/>
-                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay}" Height="22"/>
+                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player2Name,Mode=TwoWay}" Height="22"/>
                     </StackPanel>
+                </Grid>
+                <Grid Grid.Row="6">
+                    <TextBlock Text="Start Game" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Cancel" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Left"/>
                 </Grid>
             </Grid>
         </Border>
