@@ -7,5 +7,6 @@
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <ticTacToe:InvertedBooleanToVisibilityConverter x:Key="InvertetBooleanToVisibilityConverter"/>
+        <ticTacToe:WinStatusToColorConverter x:Key="WinStatusToColorConverter"/>
     </Application.Resources>
 </Application>

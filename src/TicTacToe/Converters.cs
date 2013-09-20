@@ -4,6 +4,9 @@
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
+    using System.Windows.Media;
+
+    using TicTacToe.Core;
 
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public class InvertedBooleanToVisibilityConverter : IValueConverter
@@ -18,5 +21,28 @@
         {
             throw new NotImplementedException();
         }
+    }
+
+	[ValueConversion(typeof(GameWinStatus),typeof(Brush))]
+    public class WinStatusToColorConverter : IValueConverter
+	{
+	    public static SolidColorBrush WinBrush = new SolidColorBrush(Colors.Green);
+	    public static SolidColorBrush TieBrush = new SolidColorBrush(Colors.Gray);
+	    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	    {
+	        var status = (GameWinStatus)value;
+	        switch (status)
+	        {
+	            case GameWinStatus.Win:
+	                return WinBrush;
+	            default:
+	                return TieBrush;
+	        }
+	    }
+
+	    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	    {
+	        throw new NotImplementedException();
+	    }
     }
 }
