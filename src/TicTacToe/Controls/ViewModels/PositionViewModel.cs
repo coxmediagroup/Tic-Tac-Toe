@@ -4,6 +4,8 @@ using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
+    using System;
+
     public class PositionViewModel : INotifyPropertyChanged
     {
         private IPlayer _player;
@@ -51,6 +53,13 @@ namespace TicTacToe.Controls.ViewModels
             X = x;
             Y = y;
             GameVm = gameVm;
+			GameVm.Game.Board.OnOccupy += BoardOnOnOccupy;
+        }
+
+        private void BoardOnOnOccupy(IPlayer player, int x, int y)
+        {
+            if (x != X && y != Y) return;
+            this.Player = player;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
