@@ -50,7 +50,7 @@
             </Style.Triggers>
         </Style>
         <Style TargetType="Border" x:Key="PlayerBackground">
-            <Setter Property="Background" Value="ForestGreen"/>
+            <Setter Property="Background" Value="#9955CC22"/>
             <Setter Property="Opacity" Value="0"/>
             <Setter Property="Width" Value="100"/>
         </Style>

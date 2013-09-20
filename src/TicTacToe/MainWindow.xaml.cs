@@ -85,6 +85,7 @@ namespace TicTacToe
         {
             IPlayer player1;
             IPlayer player2;
+            bool hasHuman = false;
 
             if (String.IsNullOrWhiteSpace(Vm.Player1Name))
             {
@@ -106,6 +107,7 @@ namespace TicTacToe
             {
                 Player1Type.Text = "Human";
                 player1 = new HumanPlayer(Vm.Player1Name);
+                hasHuman = true;
             }
             if (Player2Type.Text == "AI")
             {
@@ -115,8 +117,14 @@ namespace TicTacToe
             {
                 Player2Type.Text = "Human";
                 player2 = new HumanPlayer(Vm.Player2Name);
+                hasHuman = true;
             }
 			Vm.Reset(player1,player2);
+            if (!hasHuman)
+            {
+                (Vm.Game.Player1 as AiPlayer).TurnDelay = 600;
+                (Vm.Game.Player2 as AiPlayer).TurnDelay = 600;
+            }
             Vm.Player1Name = player1.Name;
             Vm.Player2Name = player2.Name;
             SetupVisible = false;
