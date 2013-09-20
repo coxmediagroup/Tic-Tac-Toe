@@ -48,6 +48,7 @@ namespace TicTacToe.Controls.ViewModels
         public int X { get; set; }
         public int Y { get; set; }
         public GameViewModel GameVm { get; set; }
+		internal bool WasSet { get; set; }
 
         public PositionViewModel(int x, int y, IPlayer player, GameViewModel gameVm)
         {
@@ -69,6 +70,8 @@ namespace TicTacToe.Controls.ViewModels
             if (GameVm.Game.Status == GameStatus.Finished) return;
             if (GameVm.Game.WinStatus != GameWinStatus.None) return;
             if (GameVm.Game.PlayerTurn is AiPlayer) return;
+            if (WasSet) return;
+            WasSet = true;
 			var action = new OccupyGameAction(GameVm.Game,GameVm.Game.PlayerTurn,X,Y);
 			GameVm.Game.PerformAction(action);
         }

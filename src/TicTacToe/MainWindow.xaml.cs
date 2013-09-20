@@ -101,7 +101,7 @@ namespace TicTacToe
 
             if (Player1Type.Text == "AI")
             {
-                player1 = new AiPlayer(Vm.Player1Name, GameWinStatus.Tie);
+                player1 = new AiPlayer(Vm.Player1Name, GameWinStatus.Win);
             }
 			else
             {
@@ -111,7 +111,7 @@ namespace TicTacToe
             }
             if (Player2Type.Text == "AI")
             {
-                player2 = new AiPlayer(Vm.Player2Name, GameWinStatus.Tie);
+                player2 = new AiPlayer(Vm.Player2Name, GameWinStatus.Win);
             }
 			else
             {

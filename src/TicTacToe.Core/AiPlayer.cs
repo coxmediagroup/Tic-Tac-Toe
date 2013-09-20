@@ -71,7 +71,9 @@
 			public IPlayer WinPlayer { get; internal set; }
 			public IPlayer Me { get; internal set; }
 			public Game Game { get; set; }
+			public bool IsLoss { get; set; }
 			public GameWinStatus Focus { get; set; }
+			public int MoveCount { get; set; }
 
             public PlayItOutResults(IPlayer movePlayer, GameBoard board, Game game, GameWinStatus focus)
             {
@@ -84,14 +86,15 @@
                 {
                     if (!board.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(i,i, Me, movePlayer, board, game, Focus);
+                        var res = new PlayItOutResults(i,i, Me, movePlayer, board, game, Focus, MoveCount);
 						Moves.Add(res);
                     }
                 }
             }
 
-            public PlayItOutResults(int startIdx, int idx, IPlayer me, IPlayer movePlayer, GameBoard board, Game game, GameWinStatus focus)
+            public PlayItOutResults(int startIdx, int idx, IPlayer me, IPlayer movePlayer, GameBoard board, Game game, GameWinStatus focus, int moveCount)
             {
+                this.MoveCount = moveCount;
                 Focus = focus;
                 StartIndex = startIdx;
                 Me = me;
@@ -101,11 +104,16 @@
                 var bclone = CloneBoard(board);
                 bclone.Occupy(movePlayer, idx);
 
+                this.MoveCount++;
+
 				//Check if it's a win
                 WinPlayer = bclone.Winner();
                 if (WinPlayer != null)
                 {
-                    if (WinPlayer == Me) Status = GameWinStatus.Win;
+                    if (WinPlayer == Me) 
+                        Status = GameWinStatus.Win;
+                    else 
+                        IsLoss = true;
                     return;
                 }
 
@@ -123,7 +131,7 @@
                 {
                     if (!bclone.IsPositionOccupied(i))
                     {
-                        var res = new PlayItOutResults(StartIndex,i, Me, newMovePlayer, bclone, Game, Focus);
+                        var res = new PlayItOutResults(StartIndex,i, Me, newMovePlayer, bclone, Game, Focus, MoveCount);
                         Moves.Add(res);
                     }
                 }
@@ -148,7 +156,9 @@
                 if (Focus == GameWinStatus.Tie)
                 {
                     var winResults =
-                        results.OrderBy(x => x.Status)
+                        results
+                            .OrderBy(x => x.MoveCount)
+							.ThenBy(x => x.Status)
                             .GroupBy(x => x.StartIndex)
                             .Select(
                                 x =>
@@ -156,18 +166,24 @@
                                     {
                                         WinCount = x.Count(y => y.Status == GameWinStatus.Win),
                                         TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
+										LossCount = x.Count(y=>y.IsLoss),
+										MoveCount = x.Count(),
                                         Results = x
+											.OrderBy(y=>y.MoveCount)
+                                            .ThenByDescending(y=>y.Status)//Descending because .Tie == 2 which is greater than .Win
+                                            .ToArray()
                                     })
-                            .OrderByDescending(x => x.TieCount)
+							.OrderBy(x=>x.MoveCount)
+                            .ThenBy(x => x.LossCount)
+							.ThenByDescending(x=>x.TieCount)
                             .ThenBy(x => x.WinCount)
-                            .Where(x => x.TieCount > 0)
                             .ToArray();
                     return winResults.First().Results.First().StartIndex;
                 }
                 if (this.Focus == GameWinStatus.Win)
                 {
                     var winResults =
-                        results.OrderBy(x => x.Status)
+                        results
                             .GroupBy(x => x.StartIndex)
                             .Select(
                                 x =>
@@ -175,11 +191,17 @@
                                     {
                                         WinCount = x.Count(y => y.Status == GameWinStatus.Win),
                                         TieCount = x.Count(y => y.Status == GameWinStatus.Tie),
+										LossCount = x.Count(y=>y.IsLoss),
+										MoveCount = x.Count(),
                                         Results = x
+											.OrderBy(y=>y.MoveCount)
+                                            .ThenBy(y=>y.Status)//Ascending because .Win == 1 which is less than than .Win
+                                            .ToArray()
                                     })
-                            .OrderByDescending(x => x.WinCount)
-                            .ThenBy(x => x.TieCount)
-                            .Where(x => x.TieCount > 0)
+							.OrderBy(x=>x.MoveCount)
+                            .ThenBy(x => x.LossCount)
+                            .ThenByDescending(x => x.WinCount)
+							.ThenBy(x=>x.TieCount)
                             .ToArray();
                     return winResults.First().Results.First().StartIndex;
                 }
@@ -196,10 +218,14 @@
                 var ret = new List<PlayItOutResults>();
                 foreach (var m in moves)
                 {
-                    if (m.Status != GameWinStatus.None) ret.Add(m);
+                    if (m.Status != GameWinStatus.None)
+                    {
+                        ret.Add(m);
+                    }
                     else
                     {
-                        ret.AddRange(GetEndResult(m.Moves));
+                        if (m.IsLoss) ret.Add(m);
+                        else ret.AddRange(GetEndResult(m.Moves));
                     }
                 }
                 return ret;
