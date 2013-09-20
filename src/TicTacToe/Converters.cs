@@ -45,4 +45,25 @@
 	        throw new NotImplementedException();
 	    }
     }
+
+    [ValueConversion(typeof(GameStatus), typeof(Visibility))]
+    public class GameStatusToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var status = (GameStatus)value;
+            switch (status)
+            {
+                case GameStatus.Finished:
+                    return Visibility.Visible;
+                default:
+                    return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
