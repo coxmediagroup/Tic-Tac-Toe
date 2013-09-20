@@ -122,5 +122,11 @@ namespace TicTacToe
             SetupVisible = false;
 			Vm.Start();
         }
+
+        private void OnResetClick(object sender, MouseButtonEventArgs e)
+        {
+            Vm.Reset(Vm.Game.Player1, Vm.Game.Player2);
+            Vm.Start();
+        }
     }
 }

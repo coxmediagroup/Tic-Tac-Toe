@@ -126,6 +126,6 @@
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"
-                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
+                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}" MouseLeftButtonDown="OnResetClick"/>
     </Grid>
 </Window>
