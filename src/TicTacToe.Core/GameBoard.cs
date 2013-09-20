@@ -63,6 +63,7 @@
             if (this.IsPositionOccupied(x, y))
                 throw new InvalidOperationException("Position " + x + ":" + y + " is already occupied.");
             this.BoardPositions[y][x] = player;
+		    FireOnOccupy(player, x, y);
         }
 
 		/// <summary>
@@ -75,7 +76,6 @@
 		    int x, y;
 			this.IndexToCoords(idx,out x, out y);
             Occupy(player,x, y);
-		    FireOnOccupy(player, x, y);
         }
 
         /// <summary>

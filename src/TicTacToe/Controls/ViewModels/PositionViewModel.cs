@@ -6,7 +6,7 @@ namespace TicTacToe.Controls.ViewModels
 {
     using System;
 
-    public class PositionViewModel : INotifyPropertyChanged
+    public class PositionViewModel : INotifyPropertyChanged, IDisposable
     {
         private IPlayer _player;
 
@@ -58,8 +58,8 @@ namespace TicTacToe.Controls.ViewModels
 
         private void BoardOnOnOccupy(IPlayer player, int x, int y)
         {
-            if (x != X && y != Y) return;
-            this.Player = player;
+            if (x == X && y == Y)
+				this.Player = player;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,6 +69,11 @@ namespace TicTacToe.Controls.ViewModels
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            GameVm.Game.Board.OnOccupy -= BoardOnOnOccupy;
         }
     }
 }

@@ -4,7 +4,9 @@ using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
-    public class GameBoardViewModel : INotifyPropertyChanged
+    using System;
+
+    public class GameBoardViewModel : INotifyPropertyChanged, IDisposable
     {
         public ObservableCollection<PositionViewModel> Positions { get; set; }
         public GameViewModel GameVm { get; set; }
@@ -30,6 +32,14 @@ namespace TicTacToe.Controls.ViewModels
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            foreach (var p in Positions)
+            {
+                p.Dispose();
+            }
         }
     }
 }

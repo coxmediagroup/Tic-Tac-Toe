@@ -6,6 +6,8 @@ using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
+    using System.Threading.Tasks;
+
     public class GameViewModel : DependencyObject, INotifyPropertyChanged
     {
         public Game Game
@@ -54,7 +56,7 @@ namespace TicTacToe.Controls.ViewModels
         }
 
         public static readonly DependencyProperty GameBoardViewModelProperty =
-            DependencyProperty.Register("GameBoardViewModel", typeof (GameBoardViewModel), typeof (GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
+            DependencyProperty.Register("GameBoardViewModel", typeof(GameBoardViewModel), typeof(GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
 
         private string player1Name;
 
@@ -64,7 +66,7 @@ namespace TicTacToe.Controls.ViewModels
 
         public GameBoardViewModel GameBoardViewModel
         {
-            get { return (GameBoardViewModel) GetValue(GameBoardViewModelProperty); }
+            get { return (GameBoardViewModel)GetValue(GameBoardViewModelProperty); }
             set { SetValue(GameBoardViewModelProperty, value); }
         }
 
@@ -89,7 +91,17 @@ namespace TicTacToe.Controls.ViewModels
 
         public void Start()
         {
-            Game.Start();
+            Task.Factory.StartNew(() =>
+            {
+                Game.Start();
+            });
+        }
+
+        public void Reset(IPlayer player1, IPlayer player2)
+        {
+            GameBoardViewModel.Dispose();
+            Game = new Game(player1, player2);
+            GameBoardViewModel = new GameBoardViewModel(this);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
