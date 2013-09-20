@@ -8,6 +8,8 @@ namespace TicTacToe
 {
     using System.Windows.Input;
 
+    using TicTacToe.Core;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -69,7 +71,56 @@ namespace TicTacToe
 
         private void OnSetupClick(object sender, MouseButtonEventArgs e)
         {
-            SetupVisible = SetupVisible == false;
+            SetupVisible = true;
+        }
+
+        private void OnCancelClick(object sender, MouseButtonEventArgs e)
+        {
+            Vm.Player1Name = Vm.Game.Player1.Name;
+            Vm.Player2Name = Vm.Game.Player2.Name;
+            SetupVisible = false;
+        }
+
+        private void OnStartGameClick(object sender, MouseButtonEventArgs e)
+        {
+            IPlayer player1;
+            IPlayer player2;
+
+            if (String.IsNullOrWhiteSpace(Vm.Player1Name))
+            {
+                MessageBox.Show("X Player must have a name", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            if (String.IsNullOrWhiteSpace(Vm.Player2Name))
+            {
+                MessageBox.Show("O Player must have a name", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            if (Player1Type.Text == "AI")
+            {
+                player1 = new AiPlayer(Vm.Player1Name, GameWinStatus.Win);
+            }
+			else
+            {
+                Player1Type.Text = "Human";
+                player1 = new HumanPlayer(Vm.Player1Name);
+            }
+            if (Player2Type.Text == "AI")
+            {
+                player2 = new AiPlayer(Vm.Player2Name, GameWinStatus.Win);
+            }
+			else
+            {
+                Player2Type.Text = "Human";
+                player2 = new HumanPlayer(Vm.Player2Name);
+            }
+            Vm.Game = new Game(player1, player2);
+            Vm.Player1Name = player1.Name;
+            Vm.Player2Name = player2.Name;
+            SetupVisible = false;
+			Vm.Start();
         }
     }
 }

@@ -61,9 +61,10 @@
         </Grid.ColumnDefinitions>
         <StackPanel>
             <Image Source="/Resources/cross.png" Stretch="None"/>
-            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"
+                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="SetupArea" Style="{StaticResource SetupArea}">
@@ -91,12 +92,12 @@
                     </Grid.ColumnDefinitions>
                     <Image Source="/Resources/cross.png" Stretch="None" Grid.Column="0"/>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <ComboBox>
-                            <ComboBoxItem Content="Human"/>
+                        <ComboBox x:Name="Player1Type">
+                            <ComboBoxItem Content="Human" IsSelected="True"/>
                             <ComboBoxItem Content="AI"/>
                         </ComboBox>
                         <Grid Height="20"/>
-                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay}" Height="22"/>
+                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="4" Background="#99FFFFFF">
@@ -106,24 +107,25 @@
                     </Grid.ColumnDefinitions>
                     <Image Source="/Resources/circle.png" Stretch="None" Grid.Column="1"/>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <ComboBox>
-                            <ComboBoxItem Content="Human"/>
+                        <ComboBox x:Name="Player2Type">
+                            <ComboBoxItem Content="Human" IsSelected="True"/>
                             <ComboBoxItem Content="AI"/>
                         </ComboBox>
                         <Grid Height="20"/>
-                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player2Name,Mode=TwoWay}" Height="22"/>
+                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player2Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="6">
-                    <TextBlock Text="Start Game" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Right"/>
-                    <TextBlock Text="Cancel" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Start Game" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Right" MouseLeftButtonUp="OnStartGameClick"/>
+                    <TextBlock Text="Cancel" Style="{StaticResource Link}" Foreground="White" HorizontalAlignment="Left" MouseLeftButtonUp="OnCancelClick"/>
                 </Grid>
             </Grid>
         </Border>
         <StackPanel Grid.Row="0" Grid.Column="2">
             <Image Source="/Resources/circle.png" Stretch="None"/>
-            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"
+                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
     </Grid>
 </Window>

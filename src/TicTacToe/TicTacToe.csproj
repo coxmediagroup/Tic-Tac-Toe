@@ -90,6 +90,7 @@
     <Compile Include="Controls\ViewModels\GameBoardViewModel.cs" />
     <Compile Include="Controls\ViewModels\GameViewModel.cs" />
     <Compile Include="Controls\ViewModels\PositionViewModel.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
