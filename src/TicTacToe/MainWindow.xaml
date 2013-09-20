@@ -5,6 +5,15 @@
         Title="Tic Tac Toe" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
         x:Name="self" Icon="Resources/icon.ico">
     <Window.Resources>
+        <Storyboard x:Key="FadeOut">
+            <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Width"/>
+        </Storyboard>
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Width"/>
+        </Storyboard>
+
         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}" x:Key="Link">
             <Setter Property="Foreground" Value="CadetBlue"/>
             <Setter Property="TextDecorations" Value="Underline"/>
@@ -26,24 +35,47 @@
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard Storyboard.TargetProperty="(Border.Height)">
-                                <DoubleAnimation From="0" To="290" Duration="0:0:0:0.500">
-                                    <!--<DoubleAnimation.EasingFunction >
-                                        <BackEase EasingMode="EaseIn"/>
-                                    </DoubleAnimation.EasingFunction>-->
-                                </DoubleAnimation>
+                                <DoubleAnimation From="0" To="290" Duration="0:0:0:0.500"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </DataTrigger.EnterActions>
                     <DataTrigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard Storyboard.TargetProperty="(Border.Height)">
-                                <DoubleAnimation From="290" To="0" Duration="0:0:0:0.500">
-                                    <!--<DoubleAnimation.EasingFunction >
-                                        <BackEase EasingMode="EaseOut"/>
-                                    </DoubleAnimation.EasingFunction>-->
-                                </DoubleAnimation>
+                                <DoubleAnimation From="290" To="0" Duration="0:0:0:0.500"/>
                             </Storyboard>
                         </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Border" x:Key="PlayerBackground">
+            <Setter Property="Background" Value="ForestGreen"/>
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+        <Style TargetType="Border" x:Key="Player1Background" BasedOn="{StaticResource PlayerBackground}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.IsPlayer1Turn}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOut}"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Border" x:Key="Player2Background" BasedOn="{StaticResource PlayerBackground}">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.IsPlayer2Turn}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOut}"/>
                     </DataTrigger.ExitActions>
                 </DataTrigger>
             </Style.Triggers>
@@ -60,7 +92,10 @@
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <StackPanel>
-            <Image Source="/Resources/cross.png" Stretch="None"/>
+            <Grid>
+                <Border Style="{StaticResource Player1Background}"/>
+                <Image Source="/Resources/cross.png" Stretch="None" Margin="0,5,0,5"/>
+            </Grid>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"
@@ -122,7 +157,10 @@
             </Grid>
         </Border>
         <StackPanel Grid.Row="0" Grid.Column="2">
-            <Image Source="/Resources/circle.png" Stretch="None"/>
+            <Grid>
+                <Border Style="{StaticResource Player2Background}"/>
+                <Image Source="/Resources/circle.png" Stretch="None" Margin="0,5,0,5"/>
+            </Grid>
             <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"

@@ -55,6 +55,22 @@ namespace TicTacToe.Controls.ViewModels
             }
         }
 
+        public bool IsPlayer1Turn
+        {
+            get
+            {
+                return Game.PlayerTurn == Game.Player1;
+            }
+        }
+
+        public bool IsPlayer2Turn
+        {
+            get
+            {
+                return Game.PlayerTurn == Game.Player2;
+            }
+        }
+
         public static readonly DependencyProperty GameBoardViewModelProperty =
             DependencyProperty.Register("GameBoardViewModel", typeof(GameBoardViewModel), typeof(GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
 
@@ -87,6 +103,9 @@ namespace TicTacToe.Controls.ViewModels
 
         private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
+            this.OnPropertyChanged("IsPlayer1Turn");
+            this.OnPropertyChanged("IsPlayer2Turn");
+			System.Diagnostics.Debug.WriteLine(propertyChangedEventArgs.PropertyName);
         }
 
         public void Start()
@@ -100,7 +119,9 @@ namespace TicTacToe.Controls.ViewModels
         public void Reset(IPlayer player1, IPlayer player2)
         {
             GameBoardViewModel.Dispose();
+            Game.PropertyChanged -= GameOnPropertyChanged;
             Game = new Game(player1, player2);
+            Game.PropertyChanged += GameOnPropertyChanged;
             GameBoardViewModel = new GameBoardViewModel(this);
         }
 
