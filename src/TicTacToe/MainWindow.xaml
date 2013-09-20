@@ -13,6 +13,14 @@
             <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
             <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Width"/>
         </Storyboard>
+        <Storyboard x:Key="FadeOutFinishArea">
+            <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <ThicknessAnimation From="0 95 0 0" To="0 -150 0 0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Margin"/>
+        </Storyboard>
+        <Storyboard x:Key="FadeInFinishArea">
+            <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <ThicknessAnimation From="0 -150 0 0" To="0 95 0 0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Margin"/>
+        </Storyboard>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}" x:Key="Link">
             <Setter Property="Foreground" Value="CadetBlue"/>
@@ -80,6 +88,29 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="GameFinishedArea" TargetType="{x:Type Border}" >
+            <Setter Property="Background" Value="{Binding ElementName=self,Path=Vm.Game.WinStatus, Converter={StaticResource WinStatusToColorConverter}}"/>
+            <!--<Setter Property="Background" Value="Green"/>-->
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Margin" Value="0 95 0 0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" Color="#FF333333" Opacity="1" BlurRadius="50"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.Game.Status}" Value="Finished">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeInFinishArea}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOutFinishArea}"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -102,6 +133,11 @@
                    Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="GameFinishedArea" Style="{StaticResource GameFinishedArea}">
+            <StackPanel>
+                <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="SetupArea" Style="{StaticResource SetupArea}">
             <Grid>
                 <Grid.RowDefinitions>
