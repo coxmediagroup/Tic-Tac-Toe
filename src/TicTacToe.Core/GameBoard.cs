@@ -1,7 +1,6 @@
 ﻿namespace TicTacToe.Core
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     public class GameBoard
@@ -10,6 +9,9 @@
         /// Positions and state of the board
         /// </summary>
         public IPlayer[][] BoardPositions { get; internal set; }
+
+        public delegate void OccupyDelegate(IPlayer player, int x, int y);
+		public event OccupyDelegate OnOccupy;
 
         internal static int[][] WinConditions;
 
@@ -73,6 +75,7 @@
 		    int x, y;
 			this.IndexToCoords(idx,out x, out y);
             Occupy(player,x, y);
+		    FireOnOccupy(player, x, y);
         }
 
         /// <summary>
@@ -124,6 +127,15 @@
         {
             x = idx % 3;
             y = idx / 3;
+        }
+
+        protected virtual void FireOnOccupy(IPlayer player, int x, int y)
+        {
+            var handler = this.OnOccupy;
+            if (handler != null)
+            {
+                handler(player, x, y);
+            }
         }
     }
 }
