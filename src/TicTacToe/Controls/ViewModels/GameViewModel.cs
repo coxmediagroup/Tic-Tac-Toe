@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows;
+using Common.Logging.Configuration;
 using TicTacToe.Core;
+using TicTacToe.Core.Actions;
 using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
@@ -109,11 +112,28 @@ namespace TicTacToe.Controls.ViewModels
             t.Start();
         }
 
-        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             this.OnPropertyChanged("IsPlayer1Turn");
             this.OnPropertyChanged("IsPlayer2Turn");
             this.OnPropertyChanged("ShowPlayerName");
+            if (args.PropertyName == "Status")
+            {
+                if (Game.Status == GameStatus.Finished)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        var rg = new ResetGameAction(Game, Game.PlayerTurn);
+                        Thread.Sleep(3000);
+                        Game.PerformAction(rg);
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            GameBoardViewModel.Dispose();
+                            GameBoardViewModel = new GameBoardViewModel(this);
+                        }));
+                    });
+                }
+            }
         }
 
         public void Start()

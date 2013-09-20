@@ -75,7 +75,7 @@
                 this.OnPropertyChanged("PlayerTurn");
                 if (this.playerTurn != null)
                 {
-                    
+
                     this.playerTurn.OnTurn(this);
                 }
             }
@@ -140,9 +140,9 @@
         /// <param name="gameBoard">Game board to use</param>
         public Game(IPlayer player1, IPlayer player2)
         {
-            if (player1 == null) 
+            if (player1 == null)
                 throw new ArgumentException("player1 can't be null", "player1");
-            if (player2 == null) 
+            if (player2 == null)
                 throw new ArgumentException("player2 can't be null", "player2");
             GameLog = new List<string>();
             GameActions = new List<GameAction>();
@@ -169,7 +169,7 @@
             }
             else
             {
-				var tp = PlayerTurn == Player1 ? Player2 : Player1;
+                var tp = PlayerTurn == Player1 ? Player2 : Player1;
                 PlayerTurn = tp;
             }
         }
@@ -180,7 +180,7 @@
                 throw new ArgumentOutOfRangeException("action", "action can not be null");
             if (Status != GameStatus.Running && (action is ResetGameAction) == false)
                 throw new InvalidOperationException("Cannot do that action because the game is finished.");
-            if ((action is ResetGameAction) == false && action.Player != PlayerTurn) 
+            if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
                 throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
             GameActions.Add(action);
             action.Do();
@@ -189,7 +189,10 @@
             CheckGameState();
             if (Status == GameStatus.Running)
             {
-                PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+                Task.Factory.StartNew(() =>
+                {
+                    PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+                });
             }
         }
 
@@ -230,7 +233,7 @@
 
         internal void ActionLog(string message)
         {
-			GameLogger.Info(message);
+            GameLogger.Info(message);
             GameLog.Add(message);
         }
 
