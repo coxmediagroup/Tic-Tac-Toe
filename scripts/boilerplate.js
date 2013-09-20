@@ -1,9 +1,8 @@
 $( document ).ready( function() 
 {
-	var settings = { width: 640, height: 480, fps: 30 };
-	var images = {};
-	var sounds = {};
-	
+	var settings = { width: 320, height: 400, fps: 30 };
+	var images = new Array();
+
 	$( "canvas" ).attr( "width", settings.width );
 	$( "canvas" ).attr( "height", settings.height );
 	
@@ -17,10 +16,10 @@ $( document ).ready( function()
 	
 	window.addEventListener( "mousedown", HandleMouseDown, false );
 	
-	Setup( settings );
+	Setup( settings, images );
 	
 	setInterval( function() {
 		Update( settings );
-		Draw( canvasWindow, settings );
+		Draw( canvasWindow, settings, images );
 	}, 1000 / settings.fps );
 } );
