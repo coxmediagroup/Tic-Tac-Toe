@@ -71,6 +71,14 @@ namespace TicTacToe.Controls.ViewModels
             }
         }
 
+        public bool ShowPlayerName
+        {
+            get
+            {
+                return Game.Winner != null;
+            }
+        }
+
         public static readonly DependencyProperty GameBoardViewModelProperty =
             DependencyProperty.Register("GameBoardViewModel", typeof(GameBoardViewModel), typeof(GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
 
@@ -105,7 +113,7 @@ namespace TicTacToe.Controls.ViewModels
         {
             this.OnPropertyChanged("IsPlayer1Turn");
             this.OnPropertyChanged("IsPlayer2Turn");
-			System.Diagnostics.Debug.WriteLine(propertyChangedEventArgs.PropertyName);
+            this.OnPropertyChanged("ShowPlayerName");
         }
 
         public void Start()
