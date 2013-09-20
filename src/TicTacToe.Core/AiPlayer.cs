@@ -1,4 +1,8 @@
-﻿namespace TicTacToe.Core
+﻿using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
+using System.Xaml;
+
+namespace TicTacToe.Core
 {
     using System;
     using System.Collections.Generic;
@@ -203,7 +207,28 @@
                             .ThenByDescending(x => x.WinCount)
 							.ThenBy(x=>x.TieCount)
                             .ToArray();
-                    return winResults.First().Results.First().StartIndex;
+
+                    var wr = results
+                        .OrderBy(x => x.MoveCount)
+                        .ThenBy(x => x.IsLoss)
+                        .ThenByDescending(x => x.Status)
+                        .ToArray();
+
+                    //var nextWin = wr.FirstOrDefault(x => x.Status == GameWinStatus.Win);
+                    //var nextTie = wr.FirstOrDefault(x => x.Status == GameWinStatus.Tie);
+                    //var nextLoss = wr.FirstOrDefault(x => x.IsLoss);
+                    
+                    //List of losses
+                    var lossList = wr.Where(x => x.IsLoss).ToArray();
+                    // Start Index's to ignore because they'll kill us. 
+                    var ignoreList = lossList.Where(x => x.MoveCount == 2).Select(x => x.StartIndex).Distinct().ToArray();
+                    // Items that don't have start index's on the ignoreList
+                    var passedThresholdList= wr.Where(x => ignoreList.Contains(x.StartIndex) == false).ToArray();
+
+                    var nonLosses = passedThresholdList.Where(x => x.IsLoss == false).ToArray();
+                    if(nonLosses.Length > 0)
+                        return nonLosses[0].StartIndex;
+                    return wr.First().StartIndex;
                 }
 				throw new InvalidOperationException("Can not set the focus to None");
             }
