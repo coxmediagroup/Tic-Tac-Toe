@@ -86,9 +86,10 @@ function triggerAIMove(e) {
         }
         return;
     }
-    // minimax algorithm
+    // run minimax algorithm
     var move = minimax(2, COMPUTER_SEED);
     var aicell = rows[move[1]][move[2]];
+    // set the value, mark as checked, and remove indeterminate
     aicell.value = COMPUTER_SEED;
     aicell.checked = false;
     aicell.disabled = true;
@@ -114,8 +115,10 @@ function minimax(depth, playerSeed) {
         // gameover or maximum recursion allowed reached
         bestScore = evaluate();
     } else {
+        // iterate each move for the best possible move
         nextMoves.forEach(function(move) {
             var x = move[0], y = move[1];
+            // simulate move
             rows[x][y].value = playerSeed;
             if (playerSeed == COMPUTER_SEED) {
                 currentScore = minimax(depth - 1, HUMAN_SEED)[0];
@@ -132,6 +135,7 @@ function minimax(depth, playerSeed) {
                     bestCol = y;
                 }
             }
+            // set cell to empty once more
             rows[x][y].value = -1;
         });
     }
@@ -140,6 +144,7 @@ function minimax(depth, playerSeed) {
 }
 
 function generateMoves() {
+    /* Generate a list of the remaining moves */
     var moves = [];
     if (hasWon(COMPUTER_SEED) || hasWon(HUMAN_SEED)) {
         return moves; // empty list at this point
@@ -156,6 +161,7 @@ function generateMoves() {
 }
 
 function hasWon(player) {
+    /* based on the board, generate a pattern similar to the ones found in `wins` */
     var pattern = '';
     rows.forEach(function(row) {
         row.forEach(function(cell) {
@@ -176,19 +182,23 @@ function hasWon(player) {
 }
 
 function evaluate() {
+    /* test for the availability of various win conditions */
     var score = 0;
-    score += evaluateLine(0, 0, 0, 1, 0, 2);
-    score += evaluateLine(1, 0, 1, 1, 1, 2);
-    score += evaluateLine(2, 0, 2, 1, 2, 2);
-    score += evaluateLine(0, 0, 1, 0, 2, 0);
-    score += evaluateLine(0, 1, 1, 1, 2, 1);
-    score += evaluateLine(0, 2, 1, 2, 2, 2);
-    score += evaluateLine(0, 0, 1, 1, 2, 2);
-    score += evaluateLine(0, 2, 1, 1, 2, 0);
+    score += evaluateLine(0, 0, 0, 1, 0, 2); // row 1
+    score += evaluateLine(1, 0, 1, 1, 1, 2); // row 2
+    score += evaluateLine(2, 0, 2, 1, 2, 2); // row 3
+    score += evaluateLine(0, 0, 1, 0, 2, 0); // col 1
+    score += evaluateLine(0, 1, 1, 1, 2, 1); // col 2
+    score += evaluateLine(0, 2, 1, 2, 2, 2); // col 3
+    score += evaluateLine(0, 0, 1, 1, 2, 2); // TL-BR diagonal
+    score += evaluateLine(0, 2, 1, 1, 2, 0); // TR-BL diagonal
     return score;
 }
 
 function evaluateLine(r1, c1, r2, c2, r3, c3) {
+    /* return the score for a given combination of cells */
+    /* 100, 10, 1 for each 3-, 2-, 1-in-a-row.
+        positive for computer, negative for human */
     var score = 0,
         cell1 = rows[r1][c1],
         cell2 = rows[r2][c2],
