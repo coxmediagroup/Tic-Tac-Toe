@@ -134,7 +134,7 @@
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="GameFinishedArea" Style="{StaticResource GameFinishedArea}">
-            <StackPanel>
+            <StackPanel Visibility="{Binding ElementName=self, Path=Vm.Game.Status, Converter={StaticResource GameStatusToVisibilityConverter}}">
                 <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
                 <Grid Height="5"/>
                 <TextBlock Foreground="White" FontSize="14" Text="{Binding ElementName=self,Path=Vm.Game.Winner}" HorizontalAlignment="Center"/>
