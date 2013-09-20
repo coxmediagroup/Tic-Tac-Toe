@@ -122,8 +122,8 @@ namespace TicTacToe
 			Vm.Reset(player1,player2);
             if (!hasHuman)
             {
-                (Vm.Game.Player1 as AiPlayer).TurnDelay = 600;
-                (Vm.Game.Player2 as AiPlayer).TurnDelay = 600;
+                (Vm.Game.Player1 as AiPlayer).TurnDelay = 800;
+                (Vm.Game.Player2 as AiPlayer).TurnDelay = 800;
             }
             Vm.Player1Name = player1.Name;
             Vm.Player2Name = player2.Name;

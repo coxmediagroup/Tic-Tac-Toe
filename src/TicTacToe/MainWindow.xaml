@@ -10,15 +10,15 @@
             <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Width"/>
         </Storyboard>
         <Storyboard x:Key="FadeIn">
-            <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From="0" To=".80" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
             <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Width"/>
         </Storyboard>
         <Storyboard x:Key="FadeOutFinishArea">
-            <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From=".80" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
             <ThicknessAnimation From="0 95 0 0" To="0 -150 0 0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Margin"/>
         </Storyboard>
         <Storyboard x:Key="FadeInFinishArea">
-            <DoubleAnimation From="0" To="100" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From="0" To=".80" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
             <ThicknessAnimation From="0 -150 0 0" To="0 95 0 0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Margin"/>
         </Storyboard>
 
@@ -91,13 +91,13 @@
         <Style x:Key="GameFinishedArea" TargetType="{x:Type Border}" >
             <Setter Property="Background" Value="{Binding ElementName=self,Path=Vm.Game.WinStatus, Converter={StaticResource WinStatusToColorConverter}}"/>
             <!--<Setter Property="Background" Value="Green"/>-->
-            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Opacity" Value=".80"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Height" Value="100"/>
-            <Setter Property="Margin" Value="0 95 0 0"/>
+            <Setter Property="Margin" Value="0 -150 0 0"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect ShadowDepth="0" Color="#FF333333" Opacity="1" BlurRadius="50"/>
+                    <DropShadowEffect ShadowDepth="0" Color="#FF333333" Opacity="1.00" BlurRadius="50"/>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
@@ -136,6 +136,8 @@
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="GameFinishedArea" Style="{StaticResource GameFinishedArea}">
             <StackPanel>
                 <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
+                <Grid Height="5"/>
+                <TextBlock Foreground="White" FontSize="14" Text="{Binding ElementName=self,Path=Vm.Game.Winner}" HorizontalAlignment="Center"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="SetupArea" Style="{StaticResource SetupArea}">
