@@ -6,6 +6,8 @@ namespace TicTacToe.Controls.ViewModels
 {
     using System;
 
+    using TicTacToe.Core.Actions;
+
     public class PositionViewModel : INotifyPropertyChanged, IDisposable
     {
         private IPlayer _player;
@@ -60,6 +62,15 @@ namespace TicTacToe.Controls.ViewModels
         {
             if (x == X && y == Y)
 				this.Player = player;
+        }
+
+        public void HandleClick()
+        {
+            if (GameVm.Game.Status == GameStatus.Finished) return;
+            if (GameVm.Game.WinStatus != GameWinStatus.None) return;
+            if (GameVm.Game.PlayerTurn is AiPlayer) return;
+			var action = new OccupyGameAction(GameVm.Game,GameVm.Game.PlayerTurn,X,Y);
+			GameVm.Game.PerformAction(action);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

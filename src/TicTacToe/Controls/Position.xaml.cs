@@ -6,6 +6,8 @@ using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls
 {
+    using System.Windows.Input;
+
     /// <summary>
     /// Interaction logic for Position.xaml
     /// </summary>
@@ -31,6 +33,11 @@ namespace TicTacToe.Controls
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnMouseClick(object sender, MouseButtonEventArgs e)
+        {
+            Vm.HandleClick();
         }
     }
 }
