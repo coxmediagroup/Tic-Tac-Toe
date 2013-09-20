@@ -6,9 +6,24 @@ using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
-    public class GameViewModel : DependencyObject
+    public class GameViewModel : DependencyObject, INotifyPropertyChanged
     {
-        public Game Game { get; set; }
+        public Game Game
+        {
+            get
+            {
+                return this.game;
+            }
+            set
+            {
+                if (Equals(value, this.game))
+                {
+                    return;
+                }
+                this.game = value;
+                this.OnPropertyChanged("Game");
+            }
+        }
 
         public string Player1Name
         {
@@ -44,6 +59,8 @@ namespace TicTacToe.Controls.ViewModels
         private string player1Name;
 
         private string player2Name;
+
+        private Game game;
 
         public GameBoardViewModel GameBoardViewModel
         {
