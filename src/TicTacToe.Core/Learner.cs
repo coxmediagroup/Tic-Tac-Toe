@@ -79,6 +79,10 @@
             else if (game.Winner != null) pbyte = 3;
             boardState = (boardState << 2) | (pbyte & 0x03);
 
+			// Append on the number of moves
+            var mnum = (byte)(moveList.Length & 0x0F);
+            boardState = (boardState << 4) | mnum;
+
             return boardState;
         }
 
