@@ -27,8 +27,8 @@ namespace TicTacToe.BattleOfTheBots
 
             ResultList = new List<RunResult>();
 
-			var p1 = new AiPlayer("TimWinBot",GameWinStatus.Win);
-            var p2 = new AiPlayer("JimTieBot",GameWinStatus.Tie);
+			var p1 = new AiPlayer("TimWinBot");
+            var p2 = new AiPlayer("JimTieBot");
             var maxCount = 1000000;
             Console.CursorTop = 3;
             for (var i = 0; i < maxCount; i++)
