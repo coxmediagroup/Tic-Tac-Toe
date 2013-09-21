@@ -101,9 +101,9 @@
             Winner = game.Winner;
         }
 
-        public bool Contains(GameState state)
+        public bool Contains(List<MoveItem> moveList)
         {
-            return !state.MoveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any();
+            return !moveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any();
         }
 
         /// <summary>
