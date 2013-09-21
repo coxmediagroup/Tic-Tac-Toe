@@ -5,7 +5,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
 
     using Common.Logging;
 
@@ -35,56 +34,14 @@
             if (game.WinStatus == GameWinStatus.None)
                 throw new InvalidOperationException("Game win status must be set before processing");
 
-            var state = this.GameToLong(game);
-            if (CacheList.Contains(state))
+            var state = new GameState(game);
+            if (CacheList.Contains(GameState.ToLong(state)))
             {
                 Log.Debug("State already exists");
                 return;
             }
-            File.AppendAllLines(LearnFile, new[] { state.ToString(CultureInfo.InvariantCulture) });
-            CacheList.Add(state);
-        }
-
-        internal long GameToLong(Game game)
-        {
-            long boardState = 0;
-            var moveList = game.GameActions.OfType<OccupyGameAction>().ToArray();
-            var startPlayer = moveList.First().Player;
-            var skip = 0;
-            byte pbyte = 1;
-            foreach (var m in moveList)
-            {
-                // Index + 1
-                var idx = (byte)((((m.Y * 3) + m.X) + 1) & 0x0F);
-                // Empty = 1, StartPlayer = 2, OtherPlayer = 3
-                if (m.Player == startPlayer) pbyte = 2;
-                else if (m.Player != null) pbyte = 3;
-
-                // 4 bits
-                boardState = (boardState << skip) | idx;
-
-                skip = 2;
-
-                // 2 bits
-                boardState = (boardState << skip) | (pbyte & 0x03);
-
-                skip = 4;
-
-            }
-            // Winning player
-            // 1 == No one(tie)
-            // 2 == Starting Player
-            // 3 == Other Player
-            pbyte = 1;
-            if (game.Winner == startPlayer) pbyte = 2;
-            else if (game.Winner != null) pbyte = 3;
-            boardState = (boardState << 2) | (pbyte & 0x03);
-
-            // Append on the number of moves
-            var mnum = (byte)(moveList.Length & 0x0F);
-            boardState = (boardState << 4) | mnum;
-
-            return boardState;
+            File.AppendAllLines(LearnFile, new[] { GameState.ToLong(state).ToString(CultureInfo.InvariantCulture) });
+            CacheList.Add(GameState.ToLong(state));
         }
 
         internal bool Contains(IPlayer player, Game game, long state)
