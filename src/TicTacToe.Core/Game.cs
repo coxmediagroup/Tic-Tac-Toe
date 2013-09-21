@@ -231,6 +231,8 @@ namespace TicTacToe.Core
             WinStatus = GameWinStatus.None;
             Winner = null;
             Board = new GameBoard();
+            GameActions = new List<GameAction>();
+            GameLog = new List<string>();
 
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");

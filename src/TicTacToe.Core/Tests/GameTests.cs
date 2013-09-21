@@ -103,16 +103,6 @@
         }
 
         [Test]
-        public void PerformAction_SavesAction()
-        {
-            var game = BasicGame();
-            var action = new ResetGameAction(game, game.Player1);
-            Assert.AreEqual(0, game.GameActions.Count);
-            game.PerformAction(action);
-            Assert.AreEqual(1, game.GameActions.Count);
-        }
-
-        [Test]
         public void PerformAction_CallsActionDo()
         {
             var game = BasicGame();
