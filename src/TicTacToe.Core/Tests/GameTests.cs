@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Threading;
 
     using FakeItEasy;
 
@@ -148,9 +149,11 @@
 
             game.PlayerTurn = game.Player1;
 			game.PerformAction(testAction);
+            Thread.Sleep(0);
             Assert.AreEqual(game.Player2, game.PlayerTurn);
             testAction.Player = game.Player2;
             game.PerformAction(testAction);
+            Thread.Sleep(0);
             Assert.AreEqual(game.Player1, game.PlayerTurn);
         }
 
