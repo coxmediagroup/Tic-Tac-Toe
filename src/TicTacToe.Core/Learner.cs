@@ -159,11 +159,13 @@
         {
             var state = gameState;
             var ret = new GameState();
+		    ret.Player1 = startPlayer;
+		    ret.Player2 = player2;
 
 			// Get the move count
             ret.MoveCount = (int)(state & 0x0F);
 
-			state <<= 4; //Remove movecount from state
+			state >>= 4; //Remove movecount from state
 
 			// Get the winning player
             switch ((byte)(state & 0x03))
@@ -176,7 +178,7 @@
                     break;
             }
 
-            state <<= 2; // Remove winning player from state
+            state >>= 2; // Remove winning player from state
 
 			// Get all the moves
             for (var i = 0; i < ret.MoveCount; i++)
@@ -184,11 +186,11 @@
 				// Player
                 var pbyte = ((byte)(state & 0x03));
 
-                state <<= 2; // Remove player from state
+                state >>= 2; // Remove player from state
 
                 var move = ((byte)(state & 0x0F));
 
-                state <<= 4; // Remove move nibble from state
+                state >>= 4; // Remove move nibble from state
 
                 IPlayer player = null;
                 switch (pbyte)
@@ -200,9 +202,10 @@
                         player = player2;
                         break;
                 }
-                ret.MoveList.Add(move, player);
+                ret.MoveList.Add(move - 1, player);
             }
-
+		    ret.MoveList = ret.MoveList.Reverse().ToDictionary(x=>x.Key,y=>y.Value);
+			
             return ret;
         }
     }

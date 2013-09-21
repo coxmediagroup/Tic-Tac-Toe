@@ -1,6 +1,8 @@
 ﻿namespace TicTacToe.Core.Tests
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using NUnit.Framework;
 
@@ -58,7 +60,37 @@
 
             Assert.AreEqual(p2, gs.MoveList[0]);
             Assert.AreEqual(p1, gs.MoveList[1]);
+        }
 
+        [Test]
+        public void ToLong_FromLong()
+        {
+            var p1 = new HumanPlayer("a");
+            var p2 = new HumanPlayer("b");
+            var game = new Game(p1, p2);
+            game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
+            game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
+            game.Status = GameStatus.Finished;
+            game.WinStatus = GameWinStatus.Tie;
+            game.Winner = p1;
+
+            var gs = new GameState(game);
+
+            var state = GameState.ToLong(gs);
+
+            Assert.AreNotEqual(0, state);
+
+            var newgs = GameState.FromLong(state,p2,p1);
+
+            Assert.AreEqual(gs.MoveCount, newgs.MoveCount);
+            Assert.AreEqual(gs.Player1, newgs.Player1);
+            Assert.AreEqual(gs.Player2, newgs.Player2);
+            Assert.AreEqual(gs.Winner, newgs.Winner);
+
+            foreach (var t in gs.MoveList)
+            {
+                Assert.AreEqual(t.Value, newgs.MoveList[t.Key]);
+            }
         }
     }
 }
