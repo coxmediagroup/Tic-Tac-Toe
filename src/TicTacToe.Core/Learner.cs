@@ -13,6 +13,7 @@
     public class LearnProcessor
     {
         internal static ILog Log = LogManager.GetCurrentClassLogger();
+        internal static int[] AllSpaces = new int[9] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
         internal string LearnFile { get; set; }
 
@@ -44,12 +45,6 @@
             CacheList.Add(GameState.ToLong(state));
         }
 
-        internal bool Contains(IPlayer player, Game game, long state)
-        {
-            var moveCount = state & 0x0F;
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Get the next move
         /// </summary>
@@ -59,14 +54,60 @@
         /// <returns></returns>
         public int GetNextMove(IPlayer player, Game game, bool learning)
         {
+            IPlayer firstPlayer = null;
+            var firstOccupy = game.GameActions.OfType<OccupyGameAction>().FirstOrDefault();
+            firstPlayer = firstOccupy != null ? firstOccupy.Player : game.PlayerTurn;
+			
+            var otherPlayer = game.Player1 == firstPlayer ? game.Player2 : game.Player1;
+            var gameStates = CacheList.Select(x => GameState.FromLong(x, firstPlayer, otherPlayer)).ToArray();
+
+            var moveList = MoveListFromGame(game);
+
             // If we're learning, then don't use any states that we have saved
             if (learning)
             {
-
-                return 0;
+				var availableMoves = AllSpaces
+					.Where(x => moveList.Any(y => y.Move == x) == false)
+					.Select(x => new MoveItem(x, player))
+					.ToList();
+				// Try and make a move that hasn't been stored yet.
+                foreach (var m in availableMoves)
+                {
+                    moveList.Add(m);
+                    if (gameStates.Any(x => x.Contains(moveList)) == false)
+                    {
+                        return m.Move;
+                    }
+                    moveList.Remove(m);
+                }
+				// Every variation of the next move has been stored, drop down to brain mode
             }
 
-            return 0;
+            var allMoves = gameStates
+                .Where(x => x.Contains(moveList)) //Only grab states that we can use
+                .OrderBy(x => x.Winner == null)
+                .ToArray();
+
+            var nonLosingMoves = allMoves
+                .Where(x => x.Winner == player || x.Winner == null)// Only grab ties or ones where we win
+                .ToArray();
+
+            var nextMove = nonLosingMoves.FirstOrDefault();
+            if (nextMove != null)
+            {
+                return nextMove.MoveList.Skip(moveList.Count).Take(1).First().Move;
+            }
+
+            nextMove = allMoves.First();
+            return nextMove.MoveList.Skip(moveList.Count).Take(1).First().Move;
+        }
+
+        internal List<MoveItem> MoveListFromGame(Game game)
+        {
+            return game.GameActions
+                .OfType<OccupyGameAction>()
+                .Select(x => new MoveItem((x.Y * 3) + x.X, x.Player))
+                .ToList();
         }
     }
 
@@ -80,7 +121,7 @@
 
         public GameState()
         {
-            MoveList = new List<MoveItem>();   
+            MoveList = new List<MoveItem>();
         }
 
         public GameState(Game game)
@@ -107,10 +148,10 @@
         }
 
         /// <summary>
-		/// Converts a GameState to a long
-		/// </summary>
-		/// <param name="gameState">The GameState to convert</param>
-		/// <returns>long value representing the GameState</returns>
+        /// Converts a GameState to a long
+        /// </summary>
+        /// <param name="gameState">The GameState to convert</param>
+        /// <returns>long value representing the GameState</returns>
         public static long ToLong(GameState gameState)
         {
             long boardState = 0;
@@ -141,7 +182,7 @@
             // 3 == Other Player
             pbyte = 1;
             if (gameState.Winner == gameState.Player1) pbyte = 2;
-            else if (gameState.Winner!= null) pbyte = 3;
+            else if (gameState.Winner != null) pbyte = 3;
             boardState = (boardState << 2) | (pbyte & 0x03);
 
             // Append on the number of moves
@@ -151,26 +192,26 @@
             return boardState;
         }
 
-		/// <summary>
-		/// Converts a long to a GameState
-		/// </summary>
-		/// <param name="gameState">long that contains state</param>
-		/// <param name="startPlayer">The player that started the current game</param>
-		/// <param name="player2">The other player</param>
-		/// <returns>GameState contained in long</returns>
+        /// <summary>
+        /// Converts a long to a GameState
+        /// </summary>
+        /// <param name="gameState">long that contains state</param>
+        /// <param name="startPlayer">The player that started the current game</param>
+        /// <param name="player2">The other player</param>
+        /// <returns>GameState contained in long</returns>
         public static GameState FromLong(long gameState, IPlayer startPlayer, IPlayer player2)
         {
             var state = gameState;
             var ret = new GameState();
-		    ret.Player1 = startPlayer;
-		    ret.Player2 = player2;
+            ret.Player1 = startPlayer;
+            ret.Player2 = player2;
 
-			// Get the move count
+            // Get the move count
             ret.MoveCount = (int)(state & 0x0F);
 
-			state >>= 4; //Remove movecount from state
+            state >>= 4; //Remove movecount from state
 
-			// Get the winning player
+            // Get the winning player
             switch ((byte)(state & 0x03))
             {
                 case 2:
@@ -183,10 +224,10 @@
 
             state >>= 2; // Remove winning player from state
 
-			// Get all the moves
+            // Get all the moves
             for (var i = 0; i < ret.MoveCount; i++)
             {
-				// Player
+                // Player
                 var pbyte = ((byte)(state & 0x03));
 
                 state >>= 2; // Remove player from state
@@ -207,8 +248,8 @@
                 }
                 ret.MoveList.Add(new MoveItem(move - 1, player));
             }
-		    ret.MoveList.Reverse();
-			
+            ret.MoveList.Reverse();
+
             return ret;
         }
     }
@@ -216,7 +257,7 @@
     public class MoveItem : IEquatable<MoveItem>
     {
         public int Move { get; set; }
-		public IPlayer Player { get; set; }
+        public IPlayer Player { get; set; }
 
         public MoveItem(int move, IPlayer player)
         {
