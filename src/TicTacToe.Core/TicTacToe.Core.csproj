@@ -65,6 +65,7 @@
     <Compile Include="Tests\AiPlayerTests.cs" />
     <Compile Include="Tests\GameActionTests.cs" />
     <Compile Include="Tests\GameBoardTests.cs" />
+    <Compile Include="Tests\GameStateTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\HumanPlayerTests.cs" />
     <Compile Include="Utils\RngRandom.cs" />

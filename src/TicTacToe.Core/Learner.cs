@@ -47,7 +47,7 @@
         internal bool Contains(IPlayer player, Game game, long state)
         {
             var moveCount = state & 0x0F;
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
