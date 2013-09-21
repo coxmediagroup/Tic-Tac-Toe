@@ -76,11 +76,11 @@
         public IPlayer Player1 { get; set; }
         public IPlayer Player2 { get; set; }
         public IPlayer Winner { get; set; }
-        public Dictionary<int, IPlayer> MoveList { get; set; }
+        public List<MoveItem> MoveList { get; set; }
 
         public GameState()
         {
-			MoveList = new Dictionary<int, IPlayer>();   
+            MoveList = new List<MoveItem>();   
         }
 
         public GameState(Game game)
@@ -91,19 +91,22 @@
             if (game.WinStatus == GameWinStatus.None)
                 throw new InvalidOperationException("Game win status must be set before processing");
 
-            MoveList = game.GameActions
-                .OfType<OccupyGameAction>()
-                .ToDictionary(x => (x.Y * 3) + x.X, x => x.Player);
+            MoveList = game.GameActions.OfType<OccupyGameAction>().Select(x => new MoveItem((x.Y * 3) + x.X, x.Player)).ToList();
 
             MoveCount = MoveList.Count;
 
-            Player1 = MoveList.First().Value;
-            Player2 = MoveList.First(x => x.Value != Player1).Value;
+            Player1 = MoveList.First().Player;
+            Player2 = MoveList.First(x => x.Player != Player1).Player;
 
             Winner = game.Winner;
         }
 
-		/// <summary>
+        public bool Contains(GameState state)
+        {
+            return !state.MoveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any();
+        }
+
+        /// <summary>
 		/// Converts a GameState to a long
 		/// </summary>
 		/// <param name="gameState">The GameState to convert</param>
@@ -116,10 +119,10 @@
             foreach (var m in gameState.MoveList)
             {
                 // Index + 1
-                var idx = (byte)(((m.Key) + 1) & 0x0F);
+                var idx = (byte)(((m.Move) + 1) & 0x0F);
                 // Empty = 1, StartPlayer = 2, OtherPlayer = 3
-                if (m.Value == gameState.Player1) pbyte = 2;
-                else if (m.Value != null) pbyte = 3;
+                if (m.Player == gameState.Player1) pbyte = 2;
+                else if (m.Player != null) pbyte = 3;
 
                 // 4 bits
                 boardState = (boardState << skip) | idx;
@@ -202,11 +205,28 @@
                         player = player2;
                         break;
                 }
-                ret.MoveList.Add(move - 1, player);
+                ret.MoveList.Add(new MoveItem(move - 1, player));
             }
-		    ret.MoveList = ret.MoveList.Reverse().ToDictionary(x=>x.Key,y=>y.Value);
+		    ret.MoveList.Reverse();
 			
             return ret;
+        }
+    }
+
+    public class MoveItem : IEquatable<MoveItem>
+    {
+        public int Move { get; set; }
+		public IPlayer Player { get; set; }
+
+        public MoveItem(int move, IPlayer player)
+        {
+            Move = move;
+            Player = player;
+        }
+
+        public bool Equals(MoveItem other)
+        {
+            return this.Move == other.Move && this.Player == other.Player;
         }
     }
 }

@@ -58,8 +58,8 @@
             Assert.AreEqual(p1, gs.Player2);
             Assert.AreEqual(p1, gs.Winner);
 
-            Assert.AreEqual(p2, gs.MoveList[0]);
-            Assert.AreEqual(p1, gs.MoveList[1]);
+            Assert.AreEqual(p2, gs.MoveList[0].Player);
+            Assert.AreEqual(p1, gs.MoveList[1].Player);
         }
 
         [Test]
@@ -87,9 +87,9 @@
             Assert.AreEqual(gs.Player2, newgs.Player2);
             Assert.AreEqual(gs.Winner, newgs.Winner);
 
-            foreach (var t in gs.MoveList)
+            for(var i = 0;i<gs.MoveList.Count;i++)
             {
-                Assert.AreEqual(t.Value, newgs.MoveList[t.Key]);
+                Assert.AreEqual(gs.MoveList[i], newgs.MoveList[i]);
             }
         }
     }
