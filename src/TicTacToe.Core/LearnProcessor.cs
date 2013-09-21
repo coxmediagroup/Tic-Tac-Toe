@@ -21,10 +21,10 @@
 
         public LearnProcessor(string learnFile)
         {
-            LearnFile = LearnFile;
-            if (!File.Exists(learnFile))
+            LearnFile = learnFile;
+            if (!File.Exists(LearnFile))
                 File.Create(LearnFile).Close();
-            CacheList = File.ReadAllLines(LearnFile).Select(long.Parse).ToList();
+			CacheList = File.ReadAllLines(LearnFile).Select(long.Parse).ToList();
         }
 
         public void ProcessEndGame(Game game)
