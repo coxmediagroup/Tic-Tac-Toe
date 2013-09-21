@@ -149,11 +149,11 @@
 
             game.PlayerTurn = game.Player1;
 			game.PerformAction(testAction);
-            Thread.Sleep(0);
+            Thread.Sleep(1);
             Assert.AreEqual(game.Player2, game.PlayerTurn);
             testAction.Player = game.Player2;
             game.PerformAction(testAction);
-            Thread.Sleep(0);
+            Thread.Sleep(1);
             Assert.AreEqual(game.Player1, game.PlayerTurn);
         }
 
