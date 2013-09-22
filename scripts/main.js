@@ -11,16 +11,17 @@ stateGame = {
 	
 	DebugMessage: function( message ) 
 	{
-		$( "#debug-out" ).append( stateGame.GetTime() + message + "\n" );
+		//$( "#debug-out" ).append( stateGame.GetTime() + message + "\n" );
 	},
 	
 	TrackMove: function( message )
 	{
-		$( "#move-tracker" ).append( message );
+		//$( "#move-tracker" ).append( message );
 	},
 	
 	TrackWin: function( player )
 	{
+		/*
 		if ( player == "player" )
 		{
 			$( "#move-tracker" ).append( "!!!!!!!!!!!!!" + player + " won round " + stateGame.turnInfo.timesPlayed + "\n" );
@@ -34,6 +35,7 @@ stateGame = {
 			$( "#move-tracker" ).append( "There was a tie for round " + stateGame.turnInfo.timesPlayed + "\n" );
 		}
 		$( "#move-tracker" ).append( "________________________________________\n\n" );
+		* */
 	},
 
 	Setup: function( settings, images )
@@ -134,7 +136,7 @@ stateGame = {
 		objGrid.Setup( settings );
 		stateGame.DebugMessage( "Reset Game" );	
 		
-		stateGame.turnInfo.turn 		= "player";	
+		//stateGame.turnInfo.turn 		= "player";	
 		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 	},
 	
