@@ -198,7 +198,6 @@ namespace TicTacToe.Core
                     throw new InvalidOperationException("Cannot do that action because the game is finished.");
                 if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
                     throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
-                GameActions.Add(action);
                 ActionQueue.Enqueue(action);
             }
         }
@@ -223,6 +222,7 @@ namespace TicTacToe.Core
                         Thread.Sleep(1);
                         continue;
                     }
+					GameActions.Add(action);
                     action.Do();
                     OnPropertyChanged("GameActions");
                     OnPropertyChanged("GameLog");
