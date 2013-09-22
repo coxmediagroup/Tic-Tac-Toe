@@ -48,7 +48,8 @@
                 throw new InvalidOperationException("Game win status must be set before processing");
 
             var state = new GameState(game);
-            if (CacheList.Contains(GameState.ToLong(state)))
+            var gameLongs = GameState.ToLongs(state);
+            if (CacheList.Any(gameLongs.Contains))
             {
                 //Log.Debug("State already exists");
                 return;
@@ -74,7 +75,11 @@
             firstPlayer = firstOccupy != null ? firstOccupy.Player : game.PlayerTurn;
 			
             var otherPlayer = game.Player1 == firstPlayer ? game.Player2 : game.Player1;
-            var gameStates = CacheList.Select(x => GameState.FromLong(x, firstPlayer, otherPlayer)).ToArray();
+            GameState[] gameStates = null;
+            lock (FileLock)
+            {
+				gameStates = CacheList.Select(x => GameState.FromLong(x, firstPlayer, otherPlayer)).ToArray();
+            }
 
             var moveList = MoveListFromGame(game);
 
@@ -112,11 +117,11 @@
             var nextMove = nonLosingMoves.FirstOrDefault();
             if (nextMove != null)
             {
-                return nextMove.MoveList.Skip(moveList.Count).Take(1).First().Move;
+                return nextMove.NextMove(moveList).Move;
             }
 
             nextMove = allMoves.First();
-            return nextMove.MoveList.Skip(moveList.Count).Take(1).First().Move;
+            return nextMove.NextMove(moveList).Move;
         }
 
         internal List<MoveItem> MoveListFromGame(Game game)

@@ -59,9 +59,9 @@ namespace TicTacToe.Core
         /// </summary>
         public List<string> GameLog { get; internal set; }
 
-		public LearnProcessor LearnProcessor { get; internal set; }
+        public LearnProcessor LearnProcessor { get; internal set; }
 
-		public IPlayer StartPlayer { get; internal set; }
+        public IPlayer StartPlayer { get; internal set; }
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
@@ -186,27 +186,31 @@ namespace TicTacToe.Core
 
         public void PerformAction(GameAction action)
         {
-            if (action == null)
-                throw new ArgumentOutOfRangeException("action", "action can not be null");
-            if (Status != GameStatus.Running && (action is ResetGameAction) == false)
-                throw new InvalidOperationException("Cannot do that action because the game is finished.");
-            if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
-                throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
-            GameActions.Add(action);
-            action.Do();
-            OnPropertyChanged("GameActions");
-            OnPropertyChanged("GameLog");
-            CheckGameState();
-            if (Status == GameStatus.Running)
+            lock (this)
             {
-                Task.Factory.StartNew(() =>
+                if (action == null)
+                    throw new ArgumentOutOfRangeException("action", "action can not be null");
+                if (Status != GameStatus.Running && (action is ResetGameAction) == false)
+                    throw new InvalidOperationException("Cannot do that action because the game is finished.");
+                if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
+                    throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
+                GameActions.Add(action);
+                action.Do();
+                OnPropertyChanged("GameActions");
+                OnPropertyChanged("GameLog");
+                CheckGameState();
+                if (Status == GameStatus.Running)
                 {
-                    if (action is OccupyGameAction)
-                    {
-                        Thread.Sleep((action as OccupyGameAction).Delay);
-                    }
-                    PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
-                });
+                    Task.Factory.StartNew(
+                        () =>
+                        {
+                            if (action is OccupyGameAction)
+                            {
+                                Thread.Sleep((action as OccupyGameAction).Delay);
+                            }
+                            PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+                        });
+                }
             }
         }
 
@@ -230,7 +234,7 @@ namespace TicTacToe.Core
             }
             this.ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
             Status = GameStatus.Finished;
-			LearnProcessor.ProcessEndGame(this);
+            LearnProcessor.ProcessEndGame(this);
         }
 
         public void Reset()

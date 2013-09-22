@@ -6,7 +6,7 @@ namespace TicTacToe.BattleOfTheBots
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
-	using System.Linq;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Common.Logging;
@@ -33,7 +33,7 @@ namespace TicTacToe.BattleOfTheBots
 
             ResultList = new List<RunResult>();
 
-			var p1 = new AiPlayer("TimWinBot", true);
+            var p1 = new AiPlayer("TimWinBot", true);
             var p2 = new AiPlayer("JimTieBot", true);
             var maxCount = 1000000;
             Console.CursorTop = 3;
@@ -46,18 +46,25 @@ namespace TicTacToe.BattleOfTheBots
                 if (game == null)
                 {
                     game = new Game(p1, p2);
-                    var g = game;
-                    Task.Factory.StartNew(() => g.Start());
+
                 }
                 else
                 {
                     game.Reset();
-                    var g = game;
-                    Task.Factory.StartNew(() => g.Start());
                 }
+                var g = game;
+                var mute = new AutoResetEvent(false);
+                var t = new Task(
+                    () =>
+                    {
+                        g.Start();
+                        mute.Set();
+                    });
+				t.Start();
+                mute.WaitOne();
                 AiCount = game.LearnProcessor.LearnCount;
-				while(game.Status ==GameStatus.Running)
-					Thread.Sleep(1);
+                while (game.Status == GameStatus.Running)
+                    Thread.Sleep(1);
                 time.Stop();
                 var oldColor = Console.ForegroundColor;
                 if (game.WinStatus == GameWinStatus.Win)
@@ -72,24 +79,24 @@ namespace TicTacToe.BattleOfTheBots
                     Console.WriteLine("[{0}ms] {1} -           ", time.ElapsedMilliseconds, game.WinStatus);
                     Console.ForegroundColor = oldColor;
                 }
-				ResultList.Add(new RunResult(game.Winner, game.WinStatus, time.ElapsedMilliseconds));
+                ResultList.Add(new RunResult(game.Winner, game.WinStatus, time.ElapsedMilliseconds));
                 TotalCount++;
             }
-			Console.SetCursorPosition((Console.WindowWidth / 2) - 2,Console.WindowHeight - 2);
+            Console.SetCursorPosition((Console.WindowWidth / 2) - 2, Console.WindowHeight - 2);
             Console.WriteLine("Done");
             Console.ReadKey();
             Log.Info("Stopping");
         }
 
-		/// <summary>
-		/// Draws a progress bar on the screen.
-		/// Took this from another open source project I have https://github.com/kellyelton/ShuffleValidator/blob/master/src/ShuffleValidator/Program.cs#L121
-		/// </summary>
-		/// <param name="complete"></param>
-		/// <param name="maxVal"></param>
-		/// <param name="progressCharacter"></param>
-		/// <param name="message"></param>
-		private static void DrawProgressBar(int complete, int maxVal, char progressCharacter, string message)
+        /// <summary>
+        /// Draws a progress bar on the screen.
+        /// Took this from another open source project I have https://github.com/kellyelton/ShuffleValidator/blob/master/src/ShuffleValidator/Program.cs#L121
+        /// </summary>
+        /// <param name="complete"></param>
+        /// <param name="maxVal"></param>
+        /// <param name="progressCharacter"></param>
+        /// <param name="message"></param>
+        private static void DrawProgressBar(int complete, int maxVal, char progressCharacter, string message)
         {
             Top = Console.CursorTop;
             Console.SetCursorPosition(0, 0);
@@ -107,17 +114,17 @@ namespace TicTacToe.BattleOfTheBots
             Console.Write(p1);
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write(p2);
-            
+
             Console.ResetColor();
             Console.Write(" {0}%", (perc * 100).ToString("N2"));
-		    Console.CursorLeft = 0;
-		    ShowStatsBar();
+            Console.CursorLeft = 0;
+            ShowStatsBar();
             Console.CursorLeft = Left;
             Console.CursorTop = Top;
             if (Top == Console.WindowHeight - 3)
             {
                 Left += 26;
-                if (Left >= Console.WindowWidth - 26) 
+                if (Left >= Console.WindowWidth - 26)
                     Left = 0;
                 Top = 3;
                 Console.CursorLeft = Left;
@@ -129,8 +136,8 @@ namespace TicTacToe.BattleOfTheBots
         private static void ShowStatsBar()
         {
             Console.CursorTop++;
-			for(var i = 0;i<Console.BufferWidth;i++)
-				Console.Write(" ");
+            for (var i = 0; i < Console.BufferWidth; i++)
+                Console.Write(" ");
             Console.CursorTop--;
             if (ResultList.Count == 0) return;
             var wins = ResultList.Count(x => x.Status == GameWinStatus.Win);
@@ -145,8 +152,8 @@ namespace TicTacToe.BattleOfTheBots
     public class RunResult
     {
         public IPlayer Winner { get; set; }
-		public GameWinStatus Status { get; set; }
-		public long Milliseconds { get; set; }
+        public GameWinStatus Status { get; set; }
+        public long Milliseconds { get; set; }
 
         public RunResult(IPlayer winner, GameWinStatus status, long milliseconds)
         {

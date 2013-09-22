@@ -49,33 +49,68 @@
             this.Winner = game.Winner;
         }
 
+        public List<MoveItem> GetTransform(List<MoveItem> moveList)
+        {
+            var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToList();
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // rotate -90
+            moveList.ForEach(x => x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // flip horizontally 
+            moveList.ForEach(x => x.FlipHorizontally());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // rotate -90
+            moveList.ForEach(x => x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // rotate -90
+            moveList.ForEach(x => x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // rotate -90
+            moveList.ForEach(x => x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // flip horizontally 
+            moveList.ForEach(x => x.FlipHorizontally());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            // rotate -90
+            moveList.ForEach(x => x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+
+            return null;
+        }
+
         public bool Contains(List<MoveItem> moveList)
         {
-            var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToArray();
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-            // rotate -90
-			moveList.ForEach(x=>x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-			// flip horizontally 
-			moveList.ForEach(x=>x.FlipHorizontally());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-            // rotate -90
-			moveList.ForEach(x=>x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-            // rotate -90
-			moveList.ForEach(x=>x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-            // rotate -90
-			moveList.ForEach(x=>x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-			// flip horizontally 
-			moveList.ForEach(x=>x.FlipHorizontally());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
-            // rotate -90
-			moveList.ForEach(x=>x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            var m2 = GetTransform(moveList);
+            if (m2 == null) return false;
+            return true;
+        }
 
-            return false;
+        public MoveItem NextMove(List<MoveItem> moves)
+        {
+            var m2 = GetTransform(moves);
+			return m2.Skip(moves.Count).Take(1).First();
+        }
+
+        public static long[] ToLongs(GameState gameState)
+        {
+            var gs = gameState.MemberwiseClone() as GameState;
+            var ret = new List<long>();
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.FlipHorizontally());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.FlipHorizontally());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            return ret.ToArray();
         }
 
         /// <summary>
