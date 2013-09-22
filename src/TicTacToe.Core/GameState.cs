@@ -54,25 +54,25 @@
             var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // rotate -90
-            moveList.ForEach(x => x.RotateLeft());
+            m2.ForEach(x => x.RotateLeft());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // flip horizontally 
-            moveList.ForEach(x => x.FlipHorizontally());
+            m2.ForEach(x => x.FlipHorizontally());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // rotate -90
-            moveList.ForEach(x => x.RotateLeft());
+            m2.ForEach(x => x.RotateLeft());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // rotate -90
-            moveList.ForEach(x => x.RotateLeft());
+            m2.ForEach(x => x.RotateLeft());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // rotate -90
-            moveList.ForEach(x => x.RotateLeft());
+            m2.ForEach(x => x.RotateLeft());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // flip horizontally 
-            moveList.ForEach(x => x.FlipHorizontally());
+            m2.ForEach(x => x.FlipHorizontally());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
             // rotate -90
-            moveList.ForEach(x => x.RotateLeft());
+            m2.ForEach(x => x.RotateLeft());
             if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
 
             return null;
