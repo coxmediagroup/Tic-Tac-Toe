@@ -71,6 +71,7 @@
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\HumanPlayerTests.cs" />
     <Compile Include="Tests\LearnProcessorTests.cs" />
+    <Compile Include="Tests\Utils\RngRandomTests.cs" />
     <Compile Include="Utils\RngRandom.cs" />
   </ItemGroup>
   <ItemGroup>
