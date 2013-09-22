@@ -168,6 +168,7 @@ namespace TicTacToe.Core
             {
                 PlayerTurn = startPlayer;
                 StartPlayer = startPlayer;
+				DoTurn(PlayerTurn);
                 return;
             }
             if (PlayerTurn == null)
@@ -222,8 +223,8 @@ namespace TicTacToe.Core
                         Thread.Sleep(1);
                         continue;
                     }
-					GameActions.Add(action);
                     action.Do();
+					GameActions.Add(action);
                     OnPropertyChanged("GameActions");
                     OnPropertyChanged("GameLog");
                     CheckGameState();
