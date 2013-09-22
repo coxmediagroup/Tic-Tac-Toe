@@ -61,6 +61,8 @@ objGrid = {
 		return this.gridData[index].state;
 	},
 	
+	// TODO: This should be renamed something like "TryMoveAtIndex",
+	// but I don't have any fancy JS refactoring tools so it'd be a bit tedious.
 	RandomGrid: function( index, player ) 
 	{
 		if ( index < 0 || index > 8 )

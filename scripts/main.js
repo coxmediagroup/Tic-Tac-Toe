@@ -280,12 +280,13 @@ stateGame = {
 			
 			
 			// Control corners
-			for ( var i = 0; i <= 8; i++ )
+			for ( var i = 0; i <= 8; i += 2 )
 			{
-					if ( i != 4 && objGrid.RandomGrid( 0, "computer" ) )
+				stateGame.DebugMessage( "CORNER: " + i );
+					if ( i != 4 && objGrid.RandomGrid( i, "computer" ) )
 					{
 						stateGame.turnInfo.lastMove = i;
-						stateGame.DebugMessage( "CORNER: " + i );
+						stateGame.DebugMessage( "MOVED TO CORNER: " + i );
 						this.ToggleTurns();
 						return;
 					}
