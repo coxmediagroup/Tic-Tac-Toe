@@ -9,9 +9,11 @@
     using Common.Logging;
 
     using TicTacToe.Core.Actions;
+    using TicTacToe.Core.Utils;
 
     public class LearnProcessor
     {
+        internal static object FileLock = new Object();
         internal static ILog Log = LogManager.GetCurrentClassLogger();
         internal static int[] AllSpaces = new int[9] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
@@ -19,12 +21,22 @@
 
         internal List<long> CacheList { get; set; }
 
+        public int LearnCount
+        {
+            get
+            {
+                lock (FileLock) return CacheList.Count;
+            }
+        }
+
         public LearnProcessor(string learnFile)
         {
-            LearnFile = learnFile;
-            if (!File.Exists(LearnFile))
-                File.Create(LearnFile).Close();
-			CacheList = File.ReadAllLines(LearnFile).Select(long.Parse).ToList();
+            lock (FileLock)
+            {
+                LearnFile = learnFile;
+                if (!File.Exists(LearnFile)) File.Create(LearnFile).Close();
+                CacheList = File.ReadAllLines(LearnFile).Select(long.Parse).ToList();
+            }
         }
 
         public void ProcessEndGame(Game game)
@@ -38,11 +50,14 @@
             var state = new GameState(game);
             if (CacheList.Contains(GameState.ToLong(state)))
             {
-                Log.Debug("State already exists");
+                //Log.Debug("State already exists");
                 return;
             }
-            File.AppendAllLines(LearnFile, new[] { GameState.ToLong(state).ToString(CultureInfo.InvariantCulture) });
-            CacheList.Add(GameState.ToLong(state));
+            lock (FileLock)
+            {
+                File.AppendAllLines(LearnFile, new[] { GameState.ToLong(state).ToString(CultureInfo.InvariantCulture) });
+                CacheList.Add(GameState.ToLong(state));
+            }
         }
 
         /// <summary>
@@ -81,11 +96,13 @@
                     moveList.Remove(m);
                 }
 				// Every variation of the next move has been stored, drop down to brain mode
+                var ret = RngRandom.Instance.Next(0, availableMoves.Count);
+                return availableMoves[ret].Move;
             }
 
             var allMoves = gameStates
                 .Where(x => x.Contains(moveList)) //Only grab states that we can use
-                .OrderBy(x => x.Winner == null)
+                .OrderByDescending(x => x.WinStatus)
                 .ToArray();
 
             var nonLosingMoves = allMoves
@@ -108,23 +125,6 @@
                 .OfType<OccupyGameAction>()
                 .Select(x => new MoveItem((x.Y * 3) + x.X, x.Player))
                 .ToList();
-        }
-    }
-
-    public class MoveItem : IEquatable<MoveItem>
-    {
-        public int Move { get; set; }
-        public IPlayer Player { get; set; }
-
-        public MoveItem(int move, IPlayer player)
-        {
-            Move = move;
-            Player = player;
-        }
-
-        public bool Equals(MoveItem other)
-        {
-            return this.Move == other.Move && this.Player == other.Player;
         }
     }
 }
