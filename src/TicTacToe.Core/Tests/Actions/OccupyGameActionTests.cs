@@ -13,13 +13,15 @@
         {
             var p1 = new HumanPlayer("jim");
             var p2 = new HumanPlayer("tim");
-            var game = new Game(p1, p2);
-            var action = new OccupyGameAction(game,p1,2,1);
+            using (var game = new Game(p1, p2))
+            {
+                var action = new OccupyGameAction(game, p1, 2, 1);
 
-            Assert.AreEqual(p1, action.Player);
-            Assert.AreEqual(game, action.Game);
-            Assert.AreEqual(2, action.X);
-            Assert.AreEqual(1, action.Y);
+                Assert.AreEqual(p1, action.Player);
+                Assert.AreEqual(game, action.Game);
+                Assert.AreEqual(2, action.X);
+                Assert.AreEqual(1, action.Y);
+            }
         }
 
         [Test]
@@ -27,10 +29,11 @@
         {
             var p1 = new HumanPlayer("jim");
             var p2 = new HumanPlayer("tim");
-            var game = new Game(p1, p2);
-
-            Assert.Throws<ArgumentException>(() => new OccupyGameAction(game,p1, 12, 0));
-            Assert.Throws<ArgumentException>(() => new OccupyGameAction(game,p1, 0, 12));
+            using (var game = new Game(p1, p2))
+            {
+                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 12, 0));
+                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 0, 12));
+            }
         }
 
         [Test]
@@ -38,11 +41,13 @@
         {
             var p1 = new HumanPlayer("jim");
             var p2 = new HumanPlayer("tim");
-            var game = new Game(p1, p2);
-            var action = new OccupyGameAction(game,p1, 2, 1);
+            using (var game = new Game(p1, p2))
+            {
+                var action = new OccupyGameAction(game, p1, 2, 1);
 
-            Assert.DoesNotThrow(action.Do);
-            Assert.Throws<InvalidOperationException>(action.Do);
+                Assert.DoesNotThrow(action.Do);
+                Assert.Throws<InvalidOperationException>(action.Do);
+            }
         }
 
         [Test]
@@ -50,12 +55,14 @@
         {
             var p1 = new HumanPlayer("jim");
             var p2 = new HumanPlayer("tim");
-            var game = new Game(p1, p2);
-            var action = new OccupyGameAction(game,p1, 2, 1);
+            using (var game = new Game(p1, p2))
+            {
+                var action = new OccupyGameAction(game, p1, 2, 1);
 
-            action.Do();
-            Assert.NotNull(game.Board.BoardPositions[1][2]);
-			Assert.AreEqual(p1,game.Board.BoardPositions[1][2]);
+                action.Do();
+                Assert.NotNull(game.Board.BoardPositions[1][2]);
+                Assert.AreEqual(p1, game.Board.BoardPositions[1][2]);
+            }
         }
 
         [Test]
@@ -63,12 +70,14 @@
         {
             var p1 = new HumanPlayer("jim");
             var p2 = new HumanPlayer("tim");
-            var game = new Game(p1, p2);
-            var action = new OccupyGameAction(game,p1, 2, 1);
+            using (var game = new Game(p1, p2))
+            {
+                var action = new OccupyGameAction(game, p1, 2, 1);
 
-            Assert.AreEqual(0, game.GameLog.Count);
-            action.Do();
-            Assert.AreEqual(1, game.GameLog.Count);
+                Assert.AreEqual(0, game.GameLog.Count);
+                action.Do();
+                Assert.AreEqual(1, game.GameLog.Count);
+            }
         }
     }
 }

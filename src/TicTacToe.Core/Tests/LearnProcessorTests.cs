@@ -46,17 +46,18 @@
             {
                 var p1 = new HumanPlayer("jim");
                 var p2 = new HumanPlayer("tim");
-                var game = new Game(p1, p2);
-                var lp = new LearnProcessor(fname);
+                using (var game = new Game(p1, p2))
+                {
+                    var lp = new LearnProcessor(fname);
 
-				//Blows up because game isn't over
-                Assert.Throws<InvalidOperationException>(() => lp.ProcessEndGame(game));
+                    //Blows up because game isn't over
+                    Assert.Throws<InvalidOperationException>(() => lp.ProcessEndGame(game));
 
-				game.Status = GameStatus.Finished;
+                    game.Status = GameStatus.Finished;
 
-				// Blows up because WinStatus of game isn't set right
-                Assert.Throws<InvalidOperationException>(() => lp.ProcessEndGame(game));
-				
+                    // Blows up because WinStatus of game isn't set right
+                    Assert.Throws<InvalidOperationException>(() => lp.ProcessEndGame(game));
+                }
             }
             finally
             {
@@ -72,28 +73,30 @@
             {
                 var p1 = new HumanPlayer("jim");
                 var p2 = new HumanPlayer("tim");
-                var game = new Game(p1, p2);
-				game.GameActions.Add(new OccupyGameAction(game,p1,0,1));
-                game.GameActions.Add(new OccupyGameAction(game, p2, 0, 2));
-				game.Status = GameStatus.Finished;
-				game.WinStatus = GameWinStatus.Win;
-                var lp = new LearnProcessor(fname);
+                using (var game = new Game(p1, p2))
+                {
+                    game.GameActions.Add(new OccupyGameAction(game, p1, 0, 1));
+                    game.GameActions.Add(new OccupyGameAction(game, p2, 0, 2));
+                    game.Status = GameStatus.Finished;
+                    game.WinStatus = GameWinStatus.Win;
+                    var lp = new LearnProcessor(fname);
 
-				lp.ProcessEndGame(game);
-                Assert.AreEqual(1, lp.CacheList.Count);
+                    lp.ProcessEndGame(game);
+                    Assert.AreEqual(1, lp.CacheList.Count);
 
-                var lp2 = new LearnProcessor(fname);
-                Assert.AreEqual(1, lp2.CacheList.Count);
+                    var lp2 = new LearnProcessor(fname);
+                    Assert.AreEqual(1, lp2.CacheList.Count);
 
-                Assert.AreEqual(lp.CacheList[0], lp2.CacheList[0]);
+                    Assert.AreEqual(lp.CacheList[0], lp2.CacheList[0]);
 
-                lp.ProcessEndGame(game);
-                Assert.AreEqual(1, lp.CacheList.Count);
+                    lp.ProcessEndGame(game);
+                    Assert.AreEqual(1, lp.CacheList.Count);
 
-                lp2 = new LearnProcessor(fname);
-                Assert.AreEqual(1, lp2.CacheList.Count);
+                    lp2 = new LearnProcessor(fname);
+                    Assert.AreEqual(1, lp2.CacheList.Count);
 
-                Assert.AreEqual(lp.CacheList[0], lp2.CacheList[0]);
+                    Assert.AreEqual(lp.CacheList[0], lp2.CacheList[0]);
+                }
             }
             finally
             {

@@ -196,6 +196,8 @@ namespace TicTacToe.Controls.ViewModels
         {
             GameBoardViewModel.Dispose();
             Game.PropertyChanged -= GameOnPropertyChanged;
+			if(Game != null)
+				Game.Dispose();
             Game = new Game(player1, player2);
             Game.PropertyChanged += GameOnPropertyChanged;
             GameBoardViewModel = new GameBoardViewModel(this);

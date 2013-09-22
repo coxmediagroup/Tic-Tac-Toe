@@ -15,7 +15,7 @@ namespace TicTacToe.Core
     using TicTacToe.Core.Annotations;
     using TicTacToe.Core.Utils;
 
-    public class Game : INotifyPropertyChanged
+    public class Game : INotifyPropertyChanged, IDisposable
     {
         internal static ILog GameLogger = LogManager.GetLogger("GameLog");
 
@@ -26,9 +26,9 @@ namespace TicTacToe.Core
         private IPlayer _player1;
         private IPlayer _player2;
 
-        internal AutoResetEvent ActionGate = new AutoResetEvent(true);
         internal Thread ActionThread;
         internal ConcurrentQueue<GameAction> ActionQueue;
+		internal bool IsRunning = true;
 
         public IPlayer Player1
         {
@@ -213,7 +213,7 @@ namespace TicTacToe.Core
 
         internal void ActionThreadRun()
         {
-            while (true)
+            while (IsRunning)
             {
                 if (Status == GameStatus.Running)
                 {
@@ -298,6 +298,11 @@ namespace TicTacToe.Core
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        public void Dispose()
+        {
+            IsRunning = false;
         }
     }
 

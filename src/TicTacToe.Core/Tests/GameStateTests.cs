@@ -26,16 +26,17 @@
         {
             var p1 = new HumanPlayer("a");
             var p2 = new HumanPlayer("b");
-            var game = new Game(p1, p2);
+            using (var game = new Game(p1, p2))
+            {
+                Assert.Throws<InvalidOperationException>(() => new GameState(game));
+                game.Status = GameStatus.Finished;
+                Assert.Throws<InvalidOperationException>(() => new GameState(game));
+                game.WinStatus = GameWinStatus.Tie;
 
-            Assert.Throws<InvalidOperationException>(() => new GameState(game));
-			game.Status = GameStatus.Finished;
-            Assert.Throws<InvalidOperationException>(() => new GameState(game));
-            game.WinStatus = GameWinStatus.Tie;
-
-			game.GameActions.Add(new OccupyGameAction(game,p1,0,0,0));
-			game.GameActions.Add(new OccupyGameAction(game,p2,1,0,0));
-            Assert.DoesNotThrow(() => new GameState(game));
+                game.GameActions.Add(new OccupyGameAction(game, p1, 0, 0, 0));
+                game.GameActions.Add(new OccupyGameAction(game, p2, 1, 0, 0));
+                Assert.DoesNotThrow(() => new GameState(game));
+            }
         }
 
         [Test]
@@ -43,24 +44,26 @@
         {
             var p1 = new HumanPlayer("a");
             var p2 = new HumanPlayer("b");
-            var game = new Game(p1, p2);
-			game.Start(p2);
-            game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
-            game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
-            game.Status = GameStatus.Finished;
-            game.WinStatus = GameWinStatus.Tie;
-            game.Winner = p1;
+            using (var game = new Game(p1, p2))
+            {
+                game.Start(p2);
+                game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
+                game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
+                game.Status = GameStatus.Finished;
+                game.WinStatus = GameWinStatus.Tie;
+                game.Winner = p1;
 
-            var gs = new GameState(game);
+                var gs = new GameState(game);
 
-            Assert.AreEqual(game.GameActions.Count, gs.MoveCount);
-            Assert.AreEqual(game.GameActions.Count, gs.MoveList.Count);
-            Assert.AreEqual(p2, gs.Player1);
-            Assert.AreEqual(p1, gs.Player2);
-            Assert.AreEqual(p1, gs.Winner);
+                Assert.AreEqual(game.GameActions.Count, gs.MoveCount);
+                Assert.AreEqual(game.GameActions.Count, gs.MoveList.Count);
+                Assert.AreEqual(p2, gs.Player1);
+                Assert.AreEqual(p1, gs.Player2);
+                Assert.AreEqual(p1, gs.Winner);
 
-            Assert.AreEqual(p2, gs.MoveList[0].Player);
-            Assert.AreEqual(p1, gs.MoveList[1].Player);
+                Assert.AreEqual(p2, gs.MoveList[0].Player);
+                Assert.AreEqual(p1, gs.MoveList[1].Player);
+            }
         }
 
         [Test]
@@ -68,30 +71,32 @@
         {
             var p1 = new HumanPlayer("a");
             var p2 = new HumanPlayer("b");
-            var game = new Game(p1, p2);
-            game.Start(p2);
-            game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
-            game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
-            game.Status = GameStatus.Finished;
-            game.WinStatus = GameWinStatus.Tie;
-            game.Winner = p1;
-
-            var gs = new GameState(game);
-
-            var state = GameState.ToLong(gs);
-
-            Assert.AreNotEqual(0, state);
-
-            var newgs = GameState.FromLong(state,p2,p1);
-
-            Assert.AreEqual(gs.MoveCount, newgs.MoveCount);
-            Assert.AreEqual(gs.Player1, newgs.Player1);
-            Assert.AreEqual(gs.Player2, newgs.Player2);
-            Assert.AreEqual(gs.Winner, newgs.Winner);
-
-            for(var i = 0;i<gs.MoveList.Count;i++)
+            using (var game = new Game(p1, p2))
             {
-                Assert.AreEqual(gs.MoveList[i], newgs.MoveList[i]);
+                game.Start(p2);
+                game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
+                game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
+                game.Status = GameStatus.Finished;
+                game.WinStatus = GameWinStatus.Tie;
+                game.Winner = p1;
+
+                var gs = new GameState(game);
+
+                var state = GameState.ToLong(gs);
+
+                Assert.AreNotEqual(0, state);
+
+                var newgs = GameState.FromLong(state, p2, p1);
+
+                Assert.AreEqual(gs.MoveCount, newgs.MoveCount);
+                Assert.AreEqual(gs.Player1, newgs.Player1);
+                Assert.AreEqual(gs.Player2, newgs.Player2);
+                Assert.AreEqual(gs.Winner, newgs.Winner);
+
+                for (var i = 0; i < gs.MoveList.Count; i++)
+                {
+                    Assert.AreEqual(gs.MoveList[i], newgs.MoveList[i]);
+                }
             }
         }
     }
