@@ -78,8 +78,6 @@ stateGame = {
 			var mouseX = ev.clientX - $( "#cnvWindow" ).position().left;
 			var mouseY = ev.clientY - $( "#cnvWindow" ).position().top;
 			
-			stateGame.DebugMessage( "Mouse click at (" + mouseX + ", " + mouseY + ")" );
-			
 			// Returns false if no item added
 			if ( mouseX >= 0 && mouseX <= settings.width && mouseY >= 0 && mouseY <= settings.height &&
 				objGrid.ClickedGrid( mouseX, mouseY, "player" ) )
@@ -132,9 +130,7 @@ stateGame = {
 	},
 	
 	ComputerStrategy: function()
-	{
-		stateGame.DebugMessage( "Computer strategy... turn #" + stateGame.turnInfo.turnCount );
-		
+	{		
 		// First Move logic
 		if ( stateGame.turnInfo.turnCount == 0 )
 		{
@@ -145,11 +141,10 @@ stateGame = {
 				this.ToggleTurns();
 				return;
 			}
-		}
-		
+		}		
 		
 		else if ( stateGame.turnInfo.turnCount == 1 )
-		{
+		{			
 			// Computer is responding to first movement
 			if ( stateGame.turnInfo.lastMove == 4 )
 			{
@@ -209,7 +204,7 @@ stateGame = {
 		
 		// Logic for other moves - At this point, the center is definitely taken.
 		else 
-		{
+		{		
 			// 1. Try to find a win position for computer
 			var winPos = objGrid.FindWinIndex( "computer" );
 			if ( winPos != -1 )
@@ -233,7 +228,7 @@ stateGame = {
 					return;
 				}
 			}
-			
+				
 			// 3. Try to make good move
 			stateGame.DebugMessage( "No winning positions, try to make good move" );
 			var lastMoveType = objGrid.EdgeOrCorner( stateGame.turnInfo.lastMove );

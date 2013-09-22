@@ -162,10 +162,10 @@ objGrid = {
 	
 	FindWinIndex: function( player )
 	{		
-		stateGame.DebugMessage( "Try to find win position" );
+		stateGame.DebugMessage( "Try to find win position for " + player );
 		
 		// Horizontal check
-		for ( var y = 0; y < 3; y++ )
+		for ( var y = 0; y <= 6; y += 3 )
 		{
 			var consecutiveMarks = 0;
 			
