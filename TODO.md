@@ -1,22 +1,87 @@
-I have some homework to work on, so I will have to work on this more over the weekend.
+Times the player has won:
 
-I was going to implement this with Python and PyGame, but apparently PyGame's website is down? D:
-Are they dead? Who knows!
 
-# To Do
+ROUND 30 turn 0:
+---
+---
+P--
 
-1. Add player / computer X / O placement and turn-taking
-1. Add end-condition and checking who has won the match
-1. Implement stategy for computer to never lose...
-    1. Computer goes first
-        1. Computer mark center
-            1. etc.
-        1. Computer mark corner
-		    1. etc.
-    1. Player goes first
-        1. If player marks center, computer mark a corner
-        1. If player marks a corner, computer marks the center
-        1. If player marks an edge, computer marks the center ?
-1. Add a reset button
+ROUND 30 turn 1:
+---
+-C-
+P--
 
-I'm trying to use the strategies mentioned on [This WikiHow page](http://www.wikihow.com/Win-at-Tic-Tac-Toe)
+ROUND 30 turn 2:
+---
+-CP
+P--
+
+ROUND 30 turn 3:
+C--
+-CP
+P--
+
+ROUND 30 turn 4:
+C--
+-CP
+P-P
+
+ROUND 30 turn 5:
+C--
+-CP
+PCP
+
+ROUND 30 turn 6:
+C-P
+-CP
+PCP
+
+ROUND 30 turn 7:
+C-P
+-CP
+PCP
+!!!!!!!!!!!!!player won round 30
+
+
+
+
+ROUND 55 turn 0:
+---
+-P-
+---
+
+ROUND 55 turn 1:
+C--
+-P-
+---
+
+ROUND 55 turn 2:
+C--
+-P-
+--P
+
+ROUND 55 turn 3:
+C--
+CP-
+--P
+
+ROUND 55 turn 4:
+C--
+CP-
+P-P
+
+ROUND 55 turn 5:
+C--
+CP-
+PCP
+
+ROUND 55 turn 6:
+C-P
+CP-
+PCP
+
+ROUND 55 turn 7:
+C-P
+CP-
+PCP
+!!!!!!!!!!!!!player won round 55

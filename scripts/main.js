@@ -21,7 +21,11 @@ stateGame = {
 	
 	TrackWin: function( player )
 	{
-		if ( player != "none" )
+		if ( player == "player" )
+		{
+			$( "#move-tracker" ).append( "!!!!!!!!!!!!!" + player + " won round " + stateGame.turnInfo.timesPlayed + "\n" );
+		}
+		else if ( player == "computer" )
 		{
 			$( "#move-tracker" ).append( player + " won round " + stateGame.turnInfo.timesPlayed + "\n" );
 		}
@@ -29,6 +33,7 @@ stateGame = {
 		{
 			$( "#move-tracker" ).append( "There was a tie for round " + stateGame.turnInfo.timesPlayed + "\n" );
 		}
+		$( "#move-tracker" ).append( "________________________________________\n\n" );
 	},
 
 	Setup: function( settings, images )
@@ -353,6 +358,20 @@ stateGame = {
 	
 	RandomStrategy: function( player )
 	{
+		if ( player == "player" ) 
+		{
+			var winPos = objGrid.FindWinIndex( "player" );
+			if ( winPos != -1 )
+			{
+				if ( objGrid.RandomGrid( winPos, "player" ) ) 
+				{
+					stateGame.turnInfo.lastMove = winPos;
+					this.ToggleTurns();
+					return;
+				}
+			}
+		}
+		
 		var randBlock = parseInt( Math.random() * 9 );
 		
 		if ( objGrid.RandomGrid( randBlock, player ) ) 
@@ -372,6 +391,8 @@ stateGame = {
 		{
 			stateGame.turnInfo.turn = "player";
 		}
+		
+		objGrid.LogBoard();
 		
 		stateGame.turnInfo.turnCount++;
 		stateGame.DebugMessage( "Turn " + stateGame.turnInfo.turnCount + ": " + stateGame.turnInfo.turn );

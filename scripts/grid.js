@@ -264,7 +264,7 @@ objGrid = {
 	
 	LogBoard: function() 
 	{
-		stateGame.TrackMove( "\n" );
+		stateGame.TrackMove( "\nROUND " + stateGame.turnInfo.timesPlayed + " turn " + stateGame.turnInfo.turnCount + ":\n" );
 		for ( var i = 0; i < 9; i++ )
 		{			
 			if ( this.gridData[i].state == "player" )
