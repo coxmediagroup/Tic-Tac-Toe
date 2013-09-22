@@ -1,6 +1,6 @@
 $( document ).ready( function() 
 {
-	var settings = { width: 320, height: 400, fps: 30 };
+	var settings = { width: 320, height: 320, fps: 30 };
 	var images = new Array();
 
 	$( "canvas" ).attr( "width", settings.width );

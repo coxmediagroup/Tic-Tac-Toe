@@ -11,9 +11,16 @@
 		<style type="text/css">
 			body { background: #222222; font-family: sans-serif; }
 			
-			.canvas-container { margin: 0 auto; width: 320px; height: 400px; }
+			.canvas-container { margin: 0 auto; width: 320px; }
 			
 			.description { background: #ffffff; padding: 10px; margin: 50px auto; width: 90%; border-radius: 15px; }
+			
+			.options-pane { width: 300px; padding: 10px; margin: 0 auto; background: #aaaaaa; clear: both; }
+			
+			#whose-turn { text-align: center; margin: 0; font-weight: bold; }
+			
+			.option p.header { margin: 0; font-size: 11px; text-align: center; }
+			.option { margin-top: 25px; }
 		</style>
 
 	</head>
@@ -23,6 +30,29 @@
 		<div class="canvas-container">
 			<canvas id="cnvWindow">
 			</canvas>
+			
+			<div class="options-pane">
+				<p id="whose-turn">Computer's Turn</p>
+				
+				<div class="option">
+					<p class="header">Computer Movement</p>
+					<input type="radio" name="computer-movement" id="computer-strategy" value="strategy" checked="checked" />
+					<label for="computer-strategy">Strategic (Never lose)</label>
+					
+					
+					<input type="radio" name="computer-movement" id="computer-random" value="random" />
+					<label for="computer-random">Random</label>	
+				</div>
+				
+				<div class="option">
+					<p class="header">Player Movement</p>
+					<input type="radio" name="player-movement" id="player-manual" value="manual" checked="checked" />
+					<label for="player-manual">Manual (Mouse move)</label>					
+					
+					<input type="radio" name="player-movement" id="player-random" value="random" />
+					<label for="player-random">Random</label>						
+				</div>
+			</div>
 		</div>
 		
 		

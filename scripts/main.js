@@ -29,11 +29,6 @@ function Draw( canvasWindow, settings, images )
 	// Draw board grid
 	objGrid.Draw( canvasWindow, settings );
 	
-	// Turn indicator
-	canvasWindow.fillStyle = "#ffffff";
-	canvasWindow.font = "20px Arial";
-	canvasWindow.fillText( "Computer's turn", 10, 350 );
-	
 	// Placeholder - Draw an X and O
 	canvasWindow.drawImage( images.x, 10, 10, 100, 100 );
 	canvasWindow.drawImage( images.o, 110, 10, 100, 100 );
