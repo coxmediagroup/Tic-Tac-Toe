@@ -1,13 +1,17 @@
 ﻿namespace TicTacToe.Core
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
 
     using TicTacToe.Core.Actions;
 
     public class GameState
     {
+		internal static ConcurrentDictionary<long,GameState> GameStateCache = new ConcurrentDictionary<long,GameState>(); 
+
         public int MoveCount { get; set; }
         public IPlayer Player1 { get; set; }
         public IPlayer Player2 { get; set; }
@@ -47,9 +51,30 @@
 
         public bool Contains(List<MoveItem> moveList)
         {
-            if (moveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) 
-                return true;
-			// rotate -90
+            var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToArray();
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            // rotate -90
+			moveList.ForEach(x=>x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+			// flip horizontally 
+			moveList.ForEach(x=>x.FlipHorizontally());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            // rotate -90
+			moveList.ForEach(x=>x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            // rotate -90
+			moveList.ForEach(x=>x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            // rotate -90
+			moveList.ForEach(x=>x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+			// flip horizontally 
+			moveList.ForEach(x=>x.FlipHorizontally());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+            // rotate -90
+			moveList.ForEach(x=>x.RotateLeft());
+            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return true;
+
             return false;
         }
 
@@ -107,8 +132,20 @@
         /// <returns>GameState contained in long</returns>
         public static GameState FromLong(long gameState, IPlayer startPlayer, IPlayer player2)
         {
+            GameState ret = null;
+            if (GameStateCache.ContainsKey(gameState))
+            {
+                while (!GameStateCache.TryGetValue(gameState, out ret))
+                {
+                    Thread.Sleep(1);
+                }
+                ret.Player1 = startPlayer;
+                ret.Player2 = player2;
+                return ret;
+            }
+
             var state = gameState;
-            var ret = new GameState();
+            ret = new GameState();
             ret.Player1 = startPlayer;
             ret.Player2 = player2;
 
@@ -155,6 +192,11 @@
                 ret.MoveList.Add(new MoveItem(move - 1, player));
             }
             ret.MoveList.Reverse();
+
+            while (!GameStateCache.TryAdd(gameState, ret))
+            {
+                Thread.Sleep(1);
+            }
 
             return ret;
         }

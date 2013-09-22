@@ -17,6 +17,24 @@
             this.Y = move / 3;
         }
 
+        public void RotateLeft()
+        {
+            var x = Y;
+            var y = 3 - X - 1;
+            X = x;
+            Y = y;
+            Move = (Y * 3) + X;
+        }
+
+        public void FlipHorizontally()
+        {
+            var x = 3 - X - 1;
+            var y = Y;
+            X = x;
+            Y = y;
+            Move = (Y * 3) + X;
+        }
+
         public bool Equals(MoveItem other)
         {
             return this.Move == other.Move && this.Player == other.Player;

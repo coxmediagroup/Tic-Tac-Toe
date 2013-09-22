@@ -233,7 +233,7 @@ namespace TicTacToe.Core
 			LearnProcessor.ProcessEndGame(this);
         }
 
-        internal void Reset()
+        public void Reset()
         {
             Status = GameStatus.Running;
             WinStatus = GameWinStatus.None;
