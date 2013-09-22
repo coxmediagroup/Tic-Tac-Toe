@@ -59,6 +59,10 @@ namespace TicTacToe.Core
         /// </summary>
         public List<string> GameLog { get; internal set; }
 
+		public LearnProcessor LearnProcessor { get; internal set; }
+
+		public IPlayer StartPlayer { get; internal set; }
+
         /// <summary>
         /// Gets the <see cref="IPlayer"/> who's turn it is.
         /// </summary>
@@ -147,6 +151,7 @@ namespace TicTacToe.Core
                 throw new ArgumentException("player1 can't be null", "player1");
             if (player2 == null)
                 throw new ArgumentException("player2 can't be null", "player2");
+            LearnProcessor = new LearnProcessor("aidata.dat");
             GameLog = new List<string>();
             GameActions = new List<GameAction>();
             Player1 = player1;
@@ -159,6 +164,7 @@ namespace TicTacToe.Core
             if (startPlayer != null)
             {
                 PlayerTurn = startPlayer;
+                StartPlayer = startPlayer;
                 return;
             }
             if (PlayerTurn == null)
@@ -175,6 +181,7 @@ namespace TicTacToe.Core
                 var tp = PlayerTurn == Player1 ? Player2 : Player1;
                 PlayerTurn = tp;
             }
+            StartPlayer = PlayerTurn;
         }
 
         public void PerformAction(GameAction action)
@@ -222,7 +229,8 @@ namespace TicTacToe.Core
                 this.Winner = null;
             }
             this.ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
-                Status = GameStatus.Finished;
+            Status = GameStatus.Finished;
+			LearnProcessor.ProcessEndGame(this);
         }
 
         internal void Reset()

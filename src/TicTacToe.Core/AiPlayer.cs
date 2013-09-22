@@ -16,6 +16,7 @@ namespace TicTacToe.Core
     {
         public string Name { get; internal set; }
 		public int TurnDelay { get; set; }
+		public bool IsLearning { get; set; }
 
         /// <summary>
         /// Create a <see cref="AiPlayer"/>
@@ -23,10 +24,11 @@ namespace TicTacToe.Core
         /// <param name="name">Name of the <see cref="AiPlayer"/></param>
         /// <param name="focus">Choose what the Ai is more focused on achieving</param>
         /// <param name="turnDelay">Time to wait before switching the turn in ms(Default: 0)</param>
-        public AiPlayer(string name, int turnDelay = 0)
+        public AiPlayer(string name, bool isLearning, int turnDelay = 0)
         {
             this.Name = name;
             this.TurnDelay = turnDelay;
+            this.IsLearning = isLearning;
         }
 
         /// <summary>
@@ -51,8 +53,11 @@ namespace TicTacToe.Core
 			// I suppose we can brute force this sucker and see
 			//    how long it takes first.
 
-            //var act = new OccupyGameAction(state, this, x, y, TurnDelay);
-            //state.PerformAction(act);
+            var move = state.LearnProcessor.GetNextMove(this, state, IsLearning);
+			var x = move % 3;
+            var y = move / 3;
+            var action = new OccupyGameAction(state, this, x, y,TurnDelay);
+			state.PerformAction(action);
         }
 
         public override string ToString()

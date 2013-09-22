@@ -14,6 +14,14 @@
         public IPlayer Winner { get; set; }
         public List<MoveItem> MoveList { get; set; }
 
+        public GameWinStatus WinStatus
+        {
+            get
+            {
+                return Winner == null ? GameWinStatus.Tie : GameWinStatus.Win;
+            }
+        }
+
         public GameState()
         {
             this.MoveList = new List<MoveItem>();
@@ -31,15 +39,18 @@
 
             this.MoveCount = this.MoveList.Count;
 
-            this.Player1 = this.MoveList.First().Player;
-            this.Player2 = this.MoveList.First(x => x.Player != this.Player1).Player;
+            this.Player1 = game.StartPlayer;
+            this.Player2 = game.Player1 == this.Player1 ? game.Player2 : game.Player1;
 
             this.Winner = game.Winner;
         }
 
         public bool Contains(List<MoveItem> moveList)
         {
-            return !moveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any();
+            if (moveList.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) 
+                return true;
+			// rotate -90
+            return false;
         }
 
         /// <summary>

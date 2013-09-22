@@ -7,6 +7,7 @@ namespace TicTacToe.BattleOfTheBots
     using System.Diagnostics;
     using System.Threading;
 	using System.Linq;
+    using System.Threading.Tasks;
 
     using Common.Logging;
 
@@ -19,6 +20,8 @@ namespace TicTacToe.BattleOfTheBots
         public static int Left;
         public static int Top;
 
+        public static int AiCount = 0;
+
         public static List<RunResult> ResultList = new List<RunResult>();
 
         static void Main(string[] args)
@@ -27,8 +30,8 @@ namespace TicTacToe.BattleOfTheBots
 
             ResultList = new List<RunResult>();
 
-			var p1 = new AiPlayer("TimWinBot");
-            var p2 = new AiPlayer("JimTieBot");
+			var p1 = new AiPlayer("TimWinBot", true);
+            var p2 = new AiPlayer("JimTieBot", true);
             var maxCount = 1000000;
             Console.CursorTop = 3;
             for (var i = 0; i < maxCount; i++)
@@ -37,14 +40,22 @@ namespace TicTacToe.BattleOfTheBots
                 var time = new Stopwatch();
                 time.Start();
                 var game = new Game(p1, p2);
-                game.Start();
-                Thread.Sleep(10);
+                AiCount = game.LearnProcessor.LearnCount;
+                Task.Factory.StartNew(()=>game.Start());
+				while(game.Status ==GameStatus.Running)
+					Thread.Sleep(1);
                 time.Stop();
                 var oldColor = Console.ForegroundColor;
                 if (game.WinStatus == GameWinStatus.Win)
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("[{0}ms] {1} - {2}", time.ElapsedMilliseconds, game.WinStatus, game.Winner);
+                    Console.ForegroundColor = oldColor;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("[{0}ms] {1} -           ", time.ElapsedMilliseconds, game.WinStatus);
                     Console.ForegroundColor = oldColor;
                 }
 				ResultList.Add(new RunResult(game.Winner, game.WinStatus, time.ElapsedMilliseconds));
@@ -111,7 +122,7 @@ namespace TicTacToe.BattleOfTheBots
             var ties = ResultList.Count(x => x.Status == GameWinStatus.Tie);
             var avgtime = ResultList.Average(x => x.Milliseconds);
             var mostwins = ResultList.GroupBy(x => x.Winner).Select(x => new { Wins = x.Count(), Player = x.First().Winner }).OrderByDescending(x=>x.Wins).ToArray();
-            var str = string.Format("Wins: {0}     Ties: {1}    AvgTime: {2}    MostWins: {3}", wins, ties, (int)avgtime, mostwins.First().Player);
+            var str = string.Format("Wins: {0}     Ties: {1}    AvgTime: {2}    MostWins: {3}    Aicount: {4}", wins, ties, (int)avgtime, mostwins.First().Player, AiCount);
             Console.CursorLeft = (Console.WindowWidth / 2) - (str.Length / 2);
             Console.Write(str);
         }

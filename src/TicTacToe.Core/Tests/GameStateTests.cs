@@ -44,6 +44,7 @@
             var p1 = new HumanPlayer("a");
             var p2 = new HumanPlayer("b");
             var game = new Game(p1, p2);
+			game.Start(p2);
             game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
             game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
             game.Status = GameStatus.Finished;
@@ -68,6 +69,7 @@
             var p1 = new HumanPlayer("a");
             var p2 = new HumanPlayer("b");
             var game = new Game(p1, p2);
+            game.Start(p2);
             game.GameActions.Add(new OccupyGameAction(game, p2, 0, 0, 0));
             game.GameActions.Add(new OccupyGameAction(game, p1, 1, 0, 0));
             game.Status = GameStatus.Finished;

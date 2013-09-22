@@ -58,6 +58,7 @@
     <Compile Include="IPlayer.cs" />
     <Compile Include="Actions\OccupyGameAction.cs" />
     <Compile Include="LearnProcessor.cs" />
+    <Compile Include="MoveItem.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\ResetGameAction.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Tests\GameStateTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\HumanPlayerTests.cs" />
+    <Compile Include="Tests\LearnProcessorTests.cs" />
     <Compile Include="Utils\RngRandom.cs" />
   </ItemGroup>
   <ItemGroup>
