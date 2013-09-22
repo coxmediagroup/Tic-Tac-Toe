@@ -303,6 +303,7 @@ stateGame = {
 	
 	RandomStrategy: function( player )
 	{
+		/*
 		if ( player == "player" ) 
 		{
 			var winPos = objGrid.FindWinIndex( "player" );
@@ -334,6 +335,7 @@ stateGame = {
 				return;
 			}
 		}
+		*/
 		
 		var randBlock = parseInt( Math.random() * 9 );
 		
