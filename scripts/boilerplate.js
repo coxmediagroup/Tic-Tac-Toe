@@ -14,12 +14,12 @@ $( document ).ready( function()
 	canvasWindow.fillStyle = "#ffffff";
 	canvasWindow.fillText( "Loading...", 10, 10 );
 	
-	window.addEventListener( "mousedown", HandleMouseDown, false );
+	window.addEventListener( "mousedown", stateGame.HandleMouseDown, false );
 	
-	Setup( settings, images );
+	stateGame.Setup( settings, images );
 	
 	setInterval( function() {
-		Update( settings );
-		Draw( canvasWindow, settings, images );
+		stateGame.Update( settings );
+		stateGame.Draw( canvasWindow, settings, images );
 	}, 1000 / settings.fps );
 } );
