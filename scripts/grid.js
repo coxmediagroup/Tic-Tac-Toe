@@ -76,5 +76,61 @@ objGrid = {
 		}
 		
 		return emptyCount;
+	},
+	
+	WhoWon: function() 
+	{
+		/*
+		 * Win Conditions:
+		 * i, i+1, i+2 for i % 3 == 0 (Horizontal)
+		 * i, i+3, i+6 for i / 3 == 0 (Vertical)
+		 * i, i+4, i+8 for i == 0 (Diagonal Top-Left to Bottom-Right)
+		 * i, i+2, i+4 for i == 2 (Diagonal Top-Right to Bottom-Left)
+		 * */
+		
+		// Horizontal check
+		for ( var y = 0; y < 3; y++ )
+		{
+			if ( 	this.gridData[y].state == this.gridData[y+1].state &&
+					this.gridData[y].state == this.gridData[y+2].state &&
+					this.gridData[y].state != "empty" )
+			{
+				stateGame.DebugMessage( "** Horizontal win " + this.gridData[y].state );
+				return this.gridData[y].state;
+			}
+		}
+		
+		// Vertical check
+		for ( var x = 0; x < 3; x++ )
+		{
+			if ( 	this.gridData[x].state == this.gridData[x+3].state &&
+					this.gridData[x].state == this.gridData[x+6].state &&
+					this.gridData[x].state != "empty" )
+			{
+				stateGame.DebugMessage( "** Vertical win " + this.gridData[x].state );
+				return this.gridData[x].state;
+			}
+		}
+		
+		// Diagonal 1
+		if ( 	this.gridData[0].state == this.gridData[4].state &&
+				this.gridData[0].state == this.gridData[8].state &&
+				this.gridData[0].state != "empty" )
+		{
+			stateGame.DebugMessage( "** Diagonal 1 win " + this.gridData[0].state );
+			return this.gridData[0].state;
+		}
+		
+		
+		// Diagonal 2
+		if ( 	this.gridData[2].state == this.gridData[4].state && 
+				this.gridData[2].state == this.gridData[6].state &&
+				this.gridData[2].state != "empty" )
+		{
+			stateGame.DebugMessage( "** Diagonal 2 win " + this.gridData[2].state );
+			return this.gridData[2].state;
+		}
+		
+		return "none";
 	}	
 }

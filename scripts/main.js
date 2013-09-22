@@ -30,6 +30,7 @@ stateGame = {
 		stateGame.turnInfo.turn 		= "player";		
 		stateGame.turnInfo.computer 	= $( "input:radio[name='computer-movement']" ).val();
 		stateGame.turnInfo.player 		= $( "input:radio[name='player-movement']" ).val();
+		stateGame.turnInfo.gameOver = "false";
 		
 		stateGame.DebugMessage( "Computer Movement: " 	+ stateGame.turnInfo.computer );
 		stateGame.DebugMessage( "Player Movement: " 	+ stateGame.turnInfo.player );
@@ -98,8 +99,28 @@ stateGame = {
 			}
 		}
 		
-		if ( objGrid.EmptyBlocksLeft() == 0 ) 
-		{
+		// Check to see if anyone won this round, or if there are no blocks left.
+		var whoWon = objGrid.WhoWon();
+		if ( objGrid.EmptyBlocksLeft() == 0 || whoWon != "none" ) 
+		{						
+			// Update score data
+			if ( whoWon == "player" ) 			
+			{ 
+				$( "#wins-player" ).html( parseInt( $( "#wins-player" ).html() ) + 1 ); 
+			}
+			else if ( whoWon == "computer" ) 	
+			{ 
+				$( "#wins-computer" ).html( parseInt( $( "#wins-computer" ).html() ) + 1 ); 
+			}
+			else 								
+			{ 
+				$( "#wins-ties" ).html( parseInt( $( "#wins-ties" ).html() ) + 1 );
+				stateGame.DebugMessage( "Tie" );
+			 }
+			
+			
+			// TODO: Make reset prettier / have user click before resetting game
+			stateGame.ResetGame( settings );
 		}
 	},
 
@@ -111,5 +132,11 @@ stateGame = {
 		
 		// Draw board grid & X's & O's
 		objGrid.Draw( canvasWindow, settings, images );
+	},
+	
+	ResetGame: function( settings )
+	{
+		objGrid.Setup( settings );
+		stateGame.DebugMessage( "Reset Game" );	
 	}
 }
