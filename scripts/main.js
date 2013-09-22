@@ -313,6 +313,17 @@ stateGame = {
 				}
 			}
 			
+			var winPos = objGrid.FindWinIndex( "computer" );
+			if ( winPos != -1 )
+			{
+				if ( objGrid.RandomGrid( winPos, "player" ) ) 
+				{
+					stateGame.turnInfo.lastMove = winPos;
+					this.ToggleTurns();
+					return;
+				}
+			}
+			
 			if ( objGrid.WhoControls( 4 ) == "empty" && objGrid.RandomGrid( 4, "player" ) )
 			{
 				stateGame.turnInfo.lastMove = 4;
