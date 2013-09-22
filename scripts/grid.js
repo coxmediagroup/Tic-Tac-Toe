@@ -56,8 +56,18 @@ objGrid = {
 		return this.RandomGrid( index, player );
 	},
 	
+	WhoControls: function( index ) 
+	{
+		return this.gridData[index].state;
+	},
+	
 	RandomGrid: function( index, player ) 
 	{
+		if ( index < 0 || index > 8 )
+		{
+			return false;
+		}
+		
 		stateGame.DebugMessage( player + " trying to move to " + index );
 		if ( this.gridData[index].state == "empty" )
 		{
@@ -161,9 +171,7 @@ objGrid = {
 	},
 	
 	FindWinIndex: function( player )
-	{		
-		stateGame.DebugMessage( "Try to find win position for " + player );
-		
+	{				
 		// Horizontal check
 		for ( var y = 0; y <= 6; y += 3 )
 		{
@@ -258,7 +266,7 @@ objGrid = {
 			}
 		}	
 		
-		stateGame.DebugMessage( "Could not find win position" );
+		stateGame.DebugMessage( "Could not find win position for " + player );
 		return -1;
 	},
 	

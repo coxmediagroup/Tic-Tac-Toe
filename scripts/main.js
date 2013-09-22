@@ -51,6 +51,7 @@ stateGame = {
 		
 		stateGame.turnInfo.timesPlayed 	= 1;
 		stateGame.turnInfo.turn 		= "player";		
+		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 		stateGame.turnInfo.turnCount 	= 0;
 		stateGame.turnInfo.lastMove 	= -1;
 		stateGame.turnInfo.computer 	= $( "input:radio[name='computer-movement']" ).val();
@@ -132,6 +133,9 @@ stateGame = {
 		stateGame.turnInfo.turnCount = 0;
 		objGrid.Setup( settings );
 		stateGame.DebugMessage( "Reset Game" );	
+		
+		stateGame.turnInfo.turn 		= "player";	
+		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 	},
 	
 	ComputerStrategy: function()
@@ -148,67 +152,28 @@ stateGame = {
 			}
 		}		
 		
-		else if ( stateGame.turnInfo.turnCount == 1 )
+		else if ( stateGame.turnInfo.turnCount == 1 && stateGame.turnInfo.lastMove != 4 )
 		{			
 			// Computer is responding to first movement
-			if ( stateGame.turnInfo.lastMove == 4 )
+			// Player didn't mark center, mark the center for self.
+			if ( objGrid.RandomGrid( 4, "computer" ) ) 
 			{
-				// Player marked center, mark a corner
-				var rand = parseInt( Math.random() * 4 );
-				if ( rand == 0 ) 
-				{
-					if ( objGrid.RandomGrid( 0, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 0;
-						this.ToggleTurns();
-						return;
-					}
-				}
-				else if ( rand == 1 )
-				{
-					if ( objGrid.RandomGrid( 2, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 2;
-						this.ToggleTurns();
-						return;
-					}
-
-				}
-				else if ( rand == 2 )
-				{
-					if ( objGrid.RandomGrid( 6, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 6;
-						this.ToggleTurns();
-						return;
-					}
-
-				}
-				else if ( rand == 3 )
-				{
-					if ( objGrid.RandomGrid( 8, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 8;
-						this.ToggleTurns();
-						return;
-					}
-
-				}
-			}
-			else 
-			{
-				// Player didn't mark center, mark the center for self.
-				if ( objGrid.RandomGrid( 4, "computer" ) ) 
-				{
-					stateGame.turnInfo.lastMove = 4;
-					this.ToggleTurns();
-					return;
-				}
+				stateGame.turnInfo.lastMove = 4;
+				this.ToggleTurns();
+				return;
 			}
 		}
 		
+		// stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
+		
 		// Logic for other moves - At this point, the center is definitely taken.
-		else 
+		// Trying logic from http://www.youtube.com/watch?v=C07jkOu9Tsc video:
+		// Take position to the RIGHT of player if possible
+		// Take position to the LEFT of player if possible
+		// Take position to the ABOVE of player if possible
+		// Take position to the BOTTOM of player if possible
+		else if ( 	stateGame.turnInfo.firstMove == "computer" || 
+					( stateGame.turnInfo.firstMove == "player" && objGrid.WhoControls( 4 ) == "computer" ) )
 		{		
 			// 1. Try to find a win position for computer
 			var winPos = objGrid.FindWinIndex( "computer" );
@@ -233,126 +198,103 @@ stateGame = {
 					return;
 				}
 			}
+			
+			// These are only used if the check is passed. No grid wrap-around.
+			var toRight 	= stateGame.turnInfo.lastMove+1;
+			var toLeft 		= stateGame.turnInfo.lastMove-1;
+			var toTop 		= stateGame.turnInfo.lastMove-3;
+			var toBottom 	= stateGame.turnInfo.lastMove+3;
 				
-			// 3. Try to make good move
-			stateGame.DebugMessage( "No winning positions, try to make good move" );
-			var lastMoveType = objGrid.EdgeOrCorner( stateGame.turnInfo.lastMove );
-			if ( lastMoveType == "edge" )
+			// Try to take position to the right
+			if ( 	stateGame.turnInfo.lastMove % 3 < 2 && 
+					objGrid.RandomGrid( toRight, "computer" ) ) 
 			{
-				// Mark a corner that isn't in the same row/column
-				var moved = false;
-				var rand = parseInt( Math.random() * 2 );
-				
-				if ( stateGame.turnInfo.lastMove == 3 )
+				stateGame.turnInfo.lastMove = toRight;
+				stateGame.DebugMessage( "RIGHT: " + toRight );
+				this.ToggleTurns();
+				return;
+			}
+			// Try to take position to the left
+			else if ( 	stateGame.turnInfo.lastMove % 3 > 0 &&
+						objGrid.RandomGrid( toLeft, "computer" ) ) 
+			{
+				stateGame.turnInfo.lastMove = toLeft;
+				stateGame.DebugMessage( "LEFT: " + toLeft );
+				this.ToggleTurns();
+				return;
+			}
+			// Try to take position above
+			else if ( 	parseInt( stateGame.turnInfo.lastMove / 3 ) > 0 &&
+						objGrid.RandomGrid( toTop, "computer" ) ) 
+			{
+				stateGame.turnInfo.lastMove = toTop;
+				stateGame.DebugMessage( "TOP: " + toTop );
+				this.ToggleTurns();
+				return;
+			}
+			
+			// Try to take position below
+			else if ( 	parseInt( stateGame.turnInfo.lastMove / 3 ) < 2 &&
+						objGrid.RandomGrid( toBottom, "computer" ) ) 
+			{
+				stateGame.turnInfo.lastMove = toBottom;
+				stateGame.DebugMessage( "BOTTOM: " + toBottom );
+				this.ToggleTurns();
+				return;
+			}
+			
+			else
+			{
+				// TODO: Handle this better
+				this.RandomStrategy( "computer" );
+			}
+		}
+		else
+		{
+			// This is the logic for when the player controls the center tile because they went first
+			// and chose the center tile on their first turn (otherwise the computer would have grabbed it)
+			
+			// 1. Try to find a win position for computer
+			var winPos = objGrid.FindWinIndex( "computer" );
+			if ( winPos != -1 )
+			{
+				if ( objGrid.RandomGrid( winPos, "computer" ) ) 
 				{
-					if ( rand == 0 && objGrid.RandomGrid( 2, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 2;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-					else if ( rand == 1 && objGrid.RandomGrid( 8, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 8;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-				}
-				else if ( stateGame.turnInfo.lastMove == 5 )
-				{
-					if ( rand == 0 && objGrid.RandomGrid( 0, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 0;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-					else if ( rand == 1 && objGrid.RandomGrid( 6, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 6;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-				}
-				else if ( stateGame.turnInfo.lastMove == 1 )
-				{
-					if ( rand == 0 && objGrid.RandomGrid( 6, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 6;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-					else if ( rand == 1 && objGrid.RandomGrid( 8, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 8;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-				}
-				else if ( stateGame.turnInfo.lastMove == 7 )
-				{
-					if ( rand == 0 && objGrid.RandomGrid( 0, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 0;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-					else if ( rand == 1 && objGrid.RandomGrid( 2, "computer" ) ) 
-					{
-						stateGame.turnInfo.lastMove = 2;
-						this.ToggleTurns();
-						moved = true;
-						return;
-					}
-				}
-				
-				if ( moved == false )
-				{
-					// Couldn't move to an ideal position - random?
-					this.RandomStrategy( "computer" );
+					stateGame.turnInfo.lastMove = winPos;
+					this.ToggleTurns();
 					return;
 				}
 			}
-			else if ( lastMoveType == "corner" )
+			
+			// 2. Try to block a win position from player
+			var winPos = objGrid.FindWinIndex( "player" );
+			if ( winPos != -1 )
 			{
-				// Try to mark opposite corner
-				if ( stateGame.turnInfo.lastMove == 0 && objGrid.RandomGrid( 8, "computer" ) )
+				if ( objGrid.RandomGrid( winPos, "computer" ) ) 
 				{
-					stateGame.turnInfo.lastMove = 8;
+					stateGame.turnInfo.lastMove = winPos;
 					this.ToggleTurns();
-					return;
-				}
-				else if ( stateGame.turnInfo.lastMove == 2 && objGrid.RandomGrid( 6, "computer" ) )
-				{
-					stateGame.turnInfo.lastMove = 6;
-					this.ToggleTurns();
-					return;
-				}
-				else if ( stateGame.turnInfo.lastMove == 6 && objGrid.RandomGrid( 2, "computer" ) )
-				{
-					stateGame.turnInfo.lastMove = 2;
-					this.ToggleTurns();
-					return;
-				}
-				else if ( stateGame.turnInfo.lastMove == 8 && objGrid.RandomGrid( 0, "computer" ) )
-				{
-					stateGame.turnInfo.lastMove = 0;
-					this.ToggleTurns();
-					return;
-				}
-				else
-				{
-					// Unable to mark opposite corner
-					this.RandomStrategy( "computer" );
 					return;
 				}
 			}
+			
+			
+			// Control corners
+			for ( var i = 0; i <= 8; i++ )
+			{
+					if ( i != 4 && objGrid.RandomGrid( 0, "computer" ) )
+					{
+						stateGame.turnInfo.lastMove = i;
+						stateGame.DebugMessage( "CORNER: " + i );
+						this.ToggleTurns();
+						return;
+					}
+			}
+			
+			
+			// TODO: Handle this better
+			this.RandomStrategy( "computer" );
+			return;
 		}
 	},
 	
@@ -369,6 +311,13 @@ stateGame = {
 					this.ToggleTurns();
 					return;
 				}
+			}
+			
+			if ( objGrid.WhoControls( 4 ) == "empty" && objGrid.RandomGrid( 4, "player" ) )
+			{
+				stateGame.turnInfo.lastMove = 4;
+				this.ToggleTurns();
+				return;
 			}
 		}
 		
