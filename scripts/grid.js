@@ -29,6 +29,8 @@ objGrid = {
 			canvasWindow.strokeRect( this.gridData[i].x, this.gridData[i].y, this.gridWidth, this.gridHeight );
 		}
 		
-	}
-		
+	},
+	
+	ClickedGrid: function( settings, mouseX, mouseY ) {
+	}		
 }

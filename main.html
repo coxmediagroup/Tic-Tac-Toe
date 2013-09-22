@@ -21,6 +21,12 @@
 			
 			.option p.header { margin: 0; font-size: 11px; text-align: center; }
 			.option { margin-top: 25px; }
+			
+			.stats { margin-top: 25px; }
+			.stats .item { float: left; width: 33%; font-size: 11px; text-align: center; }
+			.clear { clear: both; }
+			
+			#debug-out { margin-top: 25px; background: #ffffff; font-size: 10px; min-height: 20px; }
 		</style>
 
 	</head>
@@ -52,6 +58,26 @@
 					<input type="radio" name="player-movement" id="player-random" value="random" />
 					<label for="player-random">Random</label>						
 				</div>
+				
+				<div class="stats">
+					<div class="item">
+						<label>Computer Wins</label>
+						<p class="win-count" id="wins-computer">0</p>
+					</div>
+					
+					<div class="item">
+						<label>Player Wins</label>
+						<p class="win-count" id="wins-player">0</p>
+					</div>
+					
+					<div class="item">
+						<label>Ties</label>
+						<p class="win-count" id="wins-ties">0</p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<p id="debug-out"></p>
 			</div>
 		</div>
 		

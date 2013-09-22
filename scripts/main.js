@@ -10,14 +10,47 @@ function Setup( settings, images )
 	
 	images.o = new Image();
 	images.o.src = images.pathbase + "o.png";
+	
+	turn = "player";
+	
+	settings.computer = "strategy";
+	settings.player = "manual";
+	
+	// Add movement option change tracker
+	$( "input:radio[name='computer-movement']" ).change( function() 
+	{
+		settings.computer = $(this).val();
+		
+		$( "#debug-out" ).html( settings.computer );
+	} );
+	
+	$( "input:radio[name='player-movement']" ).change( function() 
+	{
+		settings.player = $(this).val();
+
+		$( "#debug-out" ).html( settings.player );
+	} );
 }
 
 function HandleMouseDown( ev )
 {
+
 }
 
 function Update( settings )
 {
+	if ( turn == "computer" )
+	{
+		if ( settings.computer == "strategy" )
+		{
+		}
+		else if ( settings.computer == "manual" )
+		{
+		}
+	}
+	else if ( turn == "player" && settings.player == "random" )
+	{
+	}
 }
 
 function Draw( canvasWindow, settings, images )
