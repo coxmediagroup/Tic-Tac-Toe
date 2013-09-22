@@ -53,6 +53,19 @@ stateGame = {
 	{
 		if ( stateGame.turnInfo.turn == "player" )
 		{
+			// Need to find coordinates based on canvas window position
+			var mouseX = ev.clientX - $( "#cnvWindow" ).position().left;
+			var mouseY = ev.clientY - $( "#cnvWindow" ).position().top;
+			
+			stateGame.DebugMessage( "Mouse click at (" + mouseX + ", " + mouseY + ")" );
+			
+			// Returns false if no item added
+			if ( mouseX >= 0 && mouseX <= settings.width && mouseY >= 0 && mouseY <= settings.height &&
+				objGrid.ClickedGrid( mouseX, mouseY, "player" ) )
+			{
+				stateGame.turnInfo.turn = "computer";
+				stateGame.DebugMessage( "Turn: " + stateGame.turnInfo.turn );
+			}
 		}
 	},
 
@@ -65,9 +78,27 @@ stateGame = {
 			}
 			else if ( stateGame.turnInfo.computer == "random" )
 			{
+				var randBlock = parseInt( Math.random() * 9 );
+				
+				if ( objGrid.RandomGrid( randBlock, "computer" ) ) 
+				{
+					stateGame.turnInfo.turn = "player";
+					stateGame.DebugMessage( "Turn: " + stateGame.turnInfo.turn );
+				}
 			}
 		}
 		else if ( stateGame.turnInfo.turn == "player" && stateGame.turnInfo.player == "random" )
+		{
+			var randBlock = parseInt( Math.random() * 9 );
+			
+			if ( objGrid.RandomGrid( randBlock, "player" ) ) 
+			{
+				stateGame.turnInfo.turn = "computer";
+				stateGame.DebugMessage( "Turn: " + stateGame.turnInfo.turn );
+			}
+		}
+		
+		if ( objGrid.EmptyBlocksLeft() == 0 ) 
 		{
 		}
 	},
@@ -78,11 +109,7 @@ stateGame = {
 		canvasWindow.fillStyle = "#654f1b";
 		canvasWindow.fillRect( 0, 0, settings.width, settings.height );
 		
-		// Draw board grid
-		objGrid.Draw( canvasWindow, settings );
-		
-		// Placeholder - Draw an X and O
-		canvasWindow.drawImage( images.x, 10, 10, 100, 100 );
-		canvasWindow.drawImage( images.o, 110, 10, 100, 100 );
+		// Draw board grid & X's & O's
+		objGrid.Draw( canvasWindow, settings, images );
 	}
 }
