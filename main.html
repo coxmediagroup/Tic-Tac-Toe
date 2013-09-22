@@ -26,12 +26,21 @@
 			.stats .item { float: left; width: 33%; font-size: 11px; text-align: center; }
 			.clear { clear: both; }
 			
-			#debug-out { margin-top: 25px; background: #ffffff; font-size: 10px; min-height: 20px; width: 100%; }
+			#move-tracker, #debug-out {
+				position: absolute; background: #ffffff; font-size: 12px;
+				width: 300px; height: 400px; top: 0;
+			}
+			
+			#debug-out { right: 0; }
+			#move-tracker { left: 0; }
 		</style>
 
 	</head>
 	
 	<body>
+		
+		<textarea id="debug-out"></textarea>
+		<textarea id="move-tracker"></textarea>
 		
 		<div class="canvas-container">
 			<canvas id="cnvWindow">
@@ -77,7 +86,6 @@
 					<div class="clear"></div>
 				</div>
 				
-				<textarea id="debug-out"></textarea>
 			</div>
 		</div>
 		
