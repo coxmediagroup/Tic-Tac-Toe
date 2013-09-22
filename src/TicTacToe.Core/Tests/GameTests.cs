@@ -89,6 +89,7 @@
 
             var resetGameAction = new ResetGameAction(game, game.Player1);
             Assert.DoesNotThrow(() => game.PerformAction(resetGameAction));
+            game.Status = GameStatus.Running;
             occupyGameAction.Player = game.PlayerTurn;
             Assert.DoesNotThrow(() => game.PerformAction(occupyGameAction));
         }
@@ -103,48 +104,14 @@
         }
 
         [Test]
-        public void PerformAction_CallsActionDo()
+        public void PerformAction_EnqueusAction()
         {
             var game = BasicGame();
             game.Start();
             var testAction = A.Fake<GameAction>(x=>x.WithArgumentsForConstructor(new object[]{game,game.PlayerTurn}));
             var num = 0;
-            A.CallTo(() => testAction.Do()).Invokes(() => num++);
             game.PerformAction(testAction);
-            Assert.AreEqual(1, num);
-        }
-
-        [Test]
-        public void PerformAction_CallsCheckGameState()
-        {
-            var game = BasicGame();
-            var testAction = A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.Player1 }));
-
-            game.PlayerTurn = game.Player1;
-
-            game.Board.BoardPositions[0][0] = game.Player1;
-            game.Board.BoardPositions[1][0] = game.Player1;
-            game.Board.BoardPositions[2][0] = game.Player1;
-
-            game.PerformAction(testAction);
-
-            Assert.AreEqual(GameStatus.Finished, game.Status);
-        }
-
-        [Test]
-        public void PerformAction_PassesTurn()
-        {
-            var game = BasicGame();
-            var testAction = A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.Player1 }));
-
-            game.PlayerTurn = game.Player1;
-			game.PerformAction(testAction);
-            Thread.Sleep(1);
-            Assert.AreEqual(game.Player2, game.PlayerTurn);
-            testAction.Player = game.Player2;
-            game.PerformAction(testAction);
-            Thread.Sleep(1);
-            Assert.AreEqual(game.Player1, game.PlayerTurn);
+            Assert.AreEqual(1, game.ActionQueue.Count);
         }
 
         [Test]

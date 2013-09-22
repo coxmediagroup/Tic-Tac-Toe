@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
 
     using NUnit.Framework;
 
@@ -19,17 +20,6 @@
         {
             var p = new AiPlayer("jim", false);
             Assert.AreEqual("jim", p.ToString());
-        }
-
-        [Test]
-        public void OnTurn_WithEmptyBoard()
-        {
-            var p1 = new HumanPlayer("jim");
-            var p2 = new AiPlayer("tim", false);
-            var game = new Game(p1, p2);
-
-            game.PlayerTurn = p2;
-			Assert.False(game.Board.IsEmpty());
         }
 
         [Test]

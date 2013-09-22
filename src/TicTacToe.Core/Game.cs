@@ -4,6 +4,7 @@ using FakeItEasy;
 namespace TicTacToe.Core
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace TicTacToe.Core
         private IPlayer winner;
         private IPlayer _player1;
         private IPlayer _player2;
+
+        internal AutoResetEvent ActionGate = new AutoResetEvent(true);
+        internal Thread ActionThread;
+        internal ConcurrentQueue<GameAction> ActionQueue;
 
         public IPlayer Player1
         {
@@ -78,13 +83,9 @@ namespace TicTacToe.Core
                 {
                     return;
                 }
+                //ActionGate.WaitOne();
                 this.playerTurn = value;
                 this.OnPropertyChanged("PlayerTurn");
-                if (this.playerTurn != null)
-                {
-
-                    this.playerTurn.OnTurn(this);
-                }
             }
         }
 
@@ -157,6 +158,8 @@ namespace TicTacToe.Core
             Player1 = player1;
             Player2 = player2;
             Reset();
+            ActionThread = new Thread(ActionThreadRun);
+            ActionThread.Start();
         }
 
         public void Start(IPlayer startPlayer = null)
@@ -182,6 +185,7 @@ namespace TicTacToe.Core
                 PlayerTurn = tp;
             }
             StartPlayer = PlayerTurn;
+            DoTurn(PlayerTurn);
         }
 
         public void PerformAction(GameAction action)
@@ -195,22 +199,48 @@ namespace TicTacToe.Core
                 if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
                     throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
                 GameActions.Add(action);
-                action.Do();
-                OnPropertyChanged("GameActions");
-                OnPropertyChanged("GameLog");
-                CheckGameState();
+                ActionQueue.Enqueue(action);
+            }
+        }
+
+        public void DoTurn(IPlayer player, int delay = 0)
+        {
+            if (this.playerTurn != null)
+            {
+                this.playerTurn.OnTurn(this);
+            }
+        }
+
+        internal void ActionThreadRun()
+        {
+            while (true)
+            {
                 if (Status == GameStatus.Running)
                 {
-                    Task.Factory.StartNew(
-                        () =>
-                        {
-                            if (action is OccupyGameAction)
-                            {
-                                Thread.Sleep((action as OccupyGameAction).Delay);
-                            }
-                            PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
-                        });
+                    GameAction action = null;
+                    if (!ActionQueue.TryDequeue(out action))
+                    {
+                        Thread.Sleep(1);
+                        continue;
+                    }
+                    action.Do();
+                    OnPropertyChanged("GameActions");
+                    OnPropertyChanged("GameLog");
+                    CheckGameState();
+                    if (Status == GameStatus.Finished)
+                    {
+                        Thread.Sleep(10);
+                        continue;
+                    }
+                    var delay = 0;
+                    if (action is OccupyGameAction)
+                    {
+                        delay = (action as OccupyGameAction).Delay;
+                    }
+                    PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+                    DoTurn(PlayerTurn, delay);
                 }
+                else Thread.Sleep(10);
             }
         }
 
@@ -245,6 +275,7 @@ namespace TicTacToe.Core
             Board = new GameBoard();
             GameActions = new List<GameAction>();
             GameLog = new List<string>();
+            ActionQueue = new ConcurrentQueue<GameAction>();
 
             OnPropertyChanged("Board");
             OnPropertyChanged("GameActions");

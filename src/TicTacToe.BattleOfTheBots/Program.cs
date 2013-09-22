@@ -53,15 +53,18 @@ namespace TicTacToe.BattleOfTheBots
                     game.Reset();
                 }
                 var g = game;
-                var mute = new AutoResetEvent(false);
-                var t = new Task(
-                    () =>
-                    {
-                        g.Start();
-                        mute.Set();
-                    });
-				t.Start();
-                mute.WaitOne();
+                //var mute = new AutoResetEvent(false);
+                //var t = new Task(
+                //    () =>
+                //    {
+                //        mute.WaitOne();
+                //        g.Start();
+                //        mute.Set();
+                //    });
+                //t.Start();
+                //mute.Set();
+                //mute.WaitOne();
+				g.Start();
                 AiCount = game.LearnProcessor.LearnCount;
                 while (game.Status == GameStatus.Running)
                     Thread.Sleep(1);
