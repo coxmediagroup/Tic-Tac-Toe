@@ -184,7 +184,8 @@ stateGame = {
 				return;
 			}
 		}		
-				
+		
+		/*		
 		else if ( stateGame.turnInfo.turnCount == 1 && stateGame.turnInfo.lastMove != 4 )
 		{		
 			stateGame.DebugMessage( "Second move but center is clear", 1 );	
@@ -197,6 +198,7 @@ stateGame = {
 				return;
 			}
 		}
+		*/
 		
 		// stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 		
@@ -422,9 +424,21 @@ stateGame = {
 				this.ToggleTurns();
 				return;
 			}
-			
-			stateGame.DebugMessage( "Capture other corner", 1 );				
 				
+			stateGame.DebugMessage( "Capture center if available", 1 );
+			
+			if ( objGrid.WhoControls( 4 ) == "empty" )
+			{		
+				if ( objGrid.RandomGrid( 4, "computer" ) ) 
+				{
+					stateGame.turnInfo.lastMove = 4;
+					this.ToggleTurns();
+					return;
+				}
+			}			
+				
+			stateGame.DebugMessage( "Capture other corner", 1 );
+			
 			// Otherwise, try to capture another corner
 			for ( var tileToMove = 0; tileToMove < 9; tileToMove += 2 )
 			{
