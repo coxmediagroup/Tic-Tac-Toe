@@ -19,19 +19,15 @@
 
         public void RotateLeft()
         {
-            var x = Y;
-            var y = 3 - X - 1;
-            X = x;
-            Y = y;
+            var oy = Y;
+            Y = 3 - X - 1;
+            X = oy;
             Move = (Y * 3) + X;
         }
 
         public void FlipHorizontally()
         {
-            var x = 3 - X - 1;
-            var y = Y;
-            X = x;
-            Y = y;
+            X = 3 - X - 1;
             Move = (Y * 3) + X;
         }
 

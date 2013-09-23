@@ -49,28 +49,56 @@
             this.Winner = game.Winner;
         }
 
-        public List<MoveItem> GetTransform(List<MoveItem> moveList)
-        {
-            foreach (var t in GetTransforms(moveList))
-            {
-                if((t.Where((x, i) => !x.Equals(this.MoveList[i])).Any())) return t;
-            }
-
-            return null;
-        }
-
         public bool Contains(List<MoveItem> moveList)
         {
-            var m2 = GetTransform(moveList);
-            if (m2 == null) 
-                return false;
-            return true;
+            foreach (var tran in GetTransforms(MoveList))
+            {
+                var match = false;
+                for (var i = 0; i < moveList.Count; i++)
+                {
+                    if (tran[i].Equals(moveList[i]))
+                    {
+                        match = true;
+                    }
+                    else
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public MoveItem NextMove(List<MoveItem> moves)
         {
-            var m2 = GetTransform(moves);
-			return m2.Skip(moves.Count).Take(1).First();
+            foreach (var tran in GetTransforms(MoveList))
+            {
+                var match = false;
+                for (var i = 0; i < moves.Count; i++)
+                {
+                    if (tran[i].Equals(moves[i]))
+                    {
+                        match = true;
+                    }
+                    else
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                {
+                    // Got our local transformation.
+                    var ret = tran.Skip(moves.Count).Take(1).First();
+                    return ret;
+                }
+            }
+            return null;
         }
 
         public static long[] ToLongs(GameState gameState)
@@ -162,8 +190,8 @@
             m2.ForEach(x => x.RotateLeft());
 
             // Now invert the players
-            var p1 = moveList.First().Player;
-            var p2 = moveList.Skip(1).Take(1).First().Player;
+            var p1 = moveList[0].Player;
+            var p2 = moveList[1].Player;
 
             m2.ForEach(x => x.Player = x.Player == p1 ? p2 : p1);
 
