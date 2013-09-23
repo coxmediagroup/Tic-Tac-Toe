@@ -49,10 +49,10 @@
 
             var state = new GameState(game);
             var gameLongs = GameState.ToLongs(state);
-            if (CacheList.Any(gameLongs.Contains))
+            foreach (var l in gameLongs)
             {
-                //Log.Debug("State already exists");
-                return;
+                if (CacheList.Contains(l)) 
+                    return;
             }
             lock (FileLock)
             {
@@ -96,12 +96,18 @@
                     moveList.Add(m);
                     if (gameStates.Any(x => x.Contains(moveList)) == false)
                     {
+                        LogManager.GetCurrentClassLogger().Debug("Non Random Pick");
                         return m.Move;
                     }
                     moveList.Remove(m);
                 }
 				// Every variation of the next move has been stored, drop down to brain mode
                 var ret = RngRandom.Instance.Next(0, availableMoves.Count);
+				Common.Logging.LogManager.GetCurrentClassLogger().DebugFormat("Doing Random Pick[{0}][{1},{2}]",player,availableMoves[ret].X,availableMoves[ret].Y);
+                if (game.Board.IsPositionOccupied(availableMoves[ret].Move))
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
                 return availableMoves[ret].Move;
             }
 
@@ -117,7 +123,7 @@
             var nextMove = nonLosingMoves.FirstOrDefault();
             if (nextMove != null)
             {
-                return nextMove.NextMove(moveList).Move;
+				return nextMove.NextMove(moveList).Move;
             }
 
             nextMove = allMoves.First();

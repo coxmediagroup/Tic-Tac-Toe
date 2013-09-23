@@ -8,9 +8,10 @@
     {
         internal int X { get; set; }
         internal int Y { get; set; }
-		internal int Delay { get; set; }
+        internal int Delay { get; set; }
 
-        public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay = 0):base(state, player)
+        public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay = 0)
+            : base(state, player)
         {
             if (x >= this.Game.Board.BoardPositions.First().Length)
                 throw new ArgumentException("x must be between 0 and " + this.Game.Board.BoardPositions.First().Length, "x");
@@ -23,11 +24,10 @@
 
         public override void Do()
         {
-            if (this.Game.Board.IsPositionOccupied(this.X, this.Y)) 
-                throw new InvalidOperationException("Position " + this.X + ":" + this.Y + " is already occupied.");
+            if (this.Game.Board.IsPositionOccupied(this.X, this.Y)) throw new InvalidOperationException("Position " + this.X + ":" + this.Y + " is already occupied.");
 
             this.Game.Board.Occupy(this.Player, this.X, this.Y);
-            this.Log("{0} Occupy's {1}:{2}",this.Player,this.X,this.Y);
+            this.Log("{0} Occupy's {1}:{2}", this.Player, this.X, this.Y);
             //Thread.Sleep(Delay);
         }
     }

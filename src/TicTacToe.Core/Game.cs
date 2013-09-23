@@ -28,7 +28,9 @@ namespace TicTacToe.Core
 
         internal Thread ActionThread;
         internal ConcurrentQueue<GameAction> ActionQueue;
-		internal bool IsRunning = true;
+        internal bool IsRunning = true;
+
+        public bool ReadyForReset { get; set; }
 
         public IPlayer Player1
         {
@@ -168,7 +170,8 @@ namespace TicTacToe.Core
             {
                 PlayerTurn = startPlayer;
                 StartPlayer = startPlayer;
-				DoTurn(PlayerTurn);
+                LogManager.GetCurrentClassLogger().Debug("DoTurn 1");
+                DoTurn(PlayerTurn);
                 return;
             }
             if (PlayerTurn == null)
@@ -186,6 +189,7 @@ namespace TicTacToe.Core
                 PlayerTurn = tp;
             }
             StartPlayer = PlayerTurn;
+            LogManager.GetCurrentClassLogger().Debug("DoTurn 2");
             DoTurn(PlayerTurn);
         }
 
@@ -199,6 +203,7 @@ namespace TicTacToe.Core
                     throw new InvalidOperationException("Cannot do that action because the game is finished.");
                 if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
                     throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
+                LogManager.GetCurrentClassLogger().Debug("EnqueueAction");
                 ActionQueue.Enqueue(action);
             }
         }
@@ -215,22 +220,28 @@ namespace TicTacToe.Core
         {
             while (IsRunning)
             {
+                GameAction action = null;
+                if (!ActionQueue.TryDequeue(out action))
+                {
+                    Thread.Sleep(1);
+                    continue;
+                }
                 if (Status == GameStatus.Running)
                 {
-                    GameAction action = null;
-                    if (!ActionQueue.TryDequeue(out action))
-                    {
-                        Thread.Sleep(1);
-                        continue;
-                    }
+                    ReadyForReset = false;
+                    if (action is OccupyGameAction)
+                        LogManager.GetCurrentClassLogger()
+                            .DebugFormat("DoAction[{0}] {1}:{2}", action.GetType().Name, (action as OccupyGameAction).X, (action as OccupyGameAction).Y);
                     action.Do();
-					GameActions.Add(action);
+                    GameActions.Add(action);
                     OnPropertyChanged("GameActions");
                     OnPropertyChanged("GameLog");
                     CheckGameState();
                     if (Status == GameStatus.Finished)
                     {
+                        LogManager.GetCurrentClassLogger().DebugFormat("Finished with {0} in queue", ActionQueue.Count);
                         Thread.Sleep(10);
+                        ReadyForReset = true;
                         continue;
                     }
                     var delay = 0;
@@ -239,6 +250,7 @@ namespace TicTacToe.Core
                         delay = (action as OccupyGameAction).Delay;
                     }
                     PlayerTurn = PlayerTurn == Player1 ? Player2 : Player1;
+                    LogManager.GetCurrentClassLogger().Debug("DoTurn 3");
                     DoTurn(PlayerTurn, delay);
                 }
                 else Thread.Sleep(10);

@@ -57,6 +57,7 @@ namespace TicTacToe.BattleOfTheBots
                 AiCount = game.LearnProcessor.LearnCount;
                 while (game.Status == GameStatus.Running)
                     Thread.Sleep(1);
+                while (game.ReadyForReset == false) Thread.Sleep(1);
                 time.Stop();
                 var oldColor = Console.ForegroundColor;
                 if (game.WinStatus == GameWinStatus.Win)

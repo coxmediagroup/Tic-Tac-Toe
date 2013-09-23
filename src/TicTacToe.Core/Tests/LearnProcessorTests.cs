@@ -79,6 +79,7 @@
                     game.GameActions.Add(new OccupyGameAction(game, p2, 0, 2));
                     game.Status = GameStatus.Finished;
                     game.WinStatus = GameWinStatus.Win;
+                    game.StartPlayer = p1;
                     var lp = new LearnProcessor(fname);
 
                     lp.ProcessEndGame(game);

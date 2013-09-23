@@ -99,5 +99,50 @@
                 }
             }
         }
+
+        [Test]
+        public void ToLongs()
+        {
+            var p1 = new HumanPlayer("a");
+            var p2 = new HumanPlayer("b");
+            using (var game = new Game(p1, p2))
+            {
+                game.Start(p2);
+                var action1 = new OccupyGameAction(game, p2, 0, 0, 0);
+                var action2 = new OccupyGameAction(game, p1, 1, 0, 0);
+
+                game.GameActions.Add(action1);
+                game.GameActions.Add(action2);
+                game.Status = GameStatus.Finished;
+                game.WinStatus = GameWinStatus.Tie;
+                game.Winner = p1;
+
+                var gs = new GameState(game);
+
+                var longs = GameState.ToLongs(gs);
+
+				// Hflip
+                action1.X = 2;
+
+                gs = new GameState(game);
+
+                var gl = GameState.ToLong(gs);
+
+                Assert.Contains(gl, longs);
+
+				// Flip players
+                game.StartPlayer = p1;
+                action1.Player = p1;
+                action2.Player = p2;
+                game.Winner = p2;
+
+                gs = new GameState(game);
+
+                gl = GameState.ToLong(gs);
+
+                Assert.Contains(gl, longs);
+
+            }
+        }
     }
 }

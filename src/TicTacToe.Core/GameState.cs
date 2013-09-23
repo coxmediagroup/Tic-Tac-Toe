@@ -51,29 +51,10 @@
 
         public List<MoveItem> GetTransform(List<MoveItem> moveList)
         {
-            var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToList();
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // rotate -90
-            m2.ForEach(x => x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // flip horizontally 
-            m2.ForEach(x => x.FlipHorizontally());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // rotate -90
-            m2.ForEach(x => x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // rotate -90
-            m2.ForEach(x => x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // rotate -90
-            m2.ForEach(x => x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // flip horizontally 
-            m2.ForEach(x => x.FlipHorizontally());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
-            // rotate -90
-            m2.ForEach(x => x.RotateLeft());
-            if (m2.Where((t, i) => !t.Equals(this.MoveList[i])).Any()) return m2;
+            foreach (var t in GetTransforms(moveList))
+            {
+                if((t.Where((x, i) => !x.Equals(this.MoveList[i])).Any())) return t;
+            }
 
             return null;
         }
@@ -81,7 +62,8 @@
         public bool Contains(List<MoveItem> moveList)
         {
             var m2 = GetTransform(moveList);
-            if (m2 == null) return false;
+            if (m2 == null) 
+                return false;
             return true;
         }
 
@@ -110,7 +92,97 @@
             ret.Add(ToLong(gs));
             gs.MoveList.ForEach(x => x.RotateLeft());
             ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+
+			// Now invert the players
+            var p1 = gs.Player2;
+            var p2 = gs.Player1;
+            gs.Player1 = p1;
+            gs.Player2 = p2;
+
+            if (gs.Winner != null)
+            {
+                gs.Winner = gs.Winner == gs.Player1 ? gs.Player2 : gs.Player1;
+            }
+
+			gs.MoveList.ForEach(x=>x.Player = x.Player == gs.Player1 ? gs.Player2 : gs.Player1);
+
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.FlipHorizontally());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.FlipHorizontally());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+            ret.Add(ToLong(gs));
+            gs.MoveList.ForEach(x => x.RotateLeft());
+			
+			// Now put the players back the way they were
+
+            p1 = gs.Player2;
+            p2 = gs.Player1;
+            gs.Player1 = p1;
+            gs.Player2 = p2;
+
+            if (gs.Winner != null)
+            {
+                gs.Winner = gs.Winner == gs.Player1 ? gs.Player2 : gs.Player1;
+            }
+
+            gs.MoveList.ForEach(x => x.Player = x.Player == gs.Player1 ? gs.Player2 : gs.Player1);
+
             return ret.ToArray();
+        }
+
+        public IEnumerable<List<MoveItem>> GetTransforms(List<MoveItem> moveList)
+        {
+            var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToList();
+            yield return m2;
+			m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.FlipHorizontally());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.FlipHorizontally());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+
+            // Now invert the players
+            var p1 = moveList.First().Player;
+            var p2 = moveList.Skip(1).Take(1).First().Player;
+
+            m2.ForEach(x => x.Player = x.Player == p1 ? p2 : p1);
+
+            yield return m2;
+
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.FlipHorizontally());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
+            m2.ForEach(x => x.FlipHorizontally());
+            yield return m2;
+            m2.ForEach(x => x.RotateLeft());
+            yield return m2;
         }
 
         /// <summary>

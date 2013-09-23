@@ -44,6 +44,7 @@ namespace TicTacToe.Core
 				//   for now
                 var xx = RngRandom.Instance.Next(0, 3);
                 var yy = RngRandom.Instance.Next(0, 3);
+				Common.Logging.LogManager.GetCurrentClassLogger().DebugFormat("CreatingAction[Occupy] {0}:{1}",xx,yy);
                 var a = new OccupyGameAction(state, this, xx, yy,TurnDelay);
 				state.PerformAction(a);
                 return;
@@ -56,6 +57,7 @@ namespace TicTacToe.Core
             var move = state.LearnProcessor.GetNextMove(this, state, IsLearning);
 			var x = move % 3;
             var y = move / 3;
+			Common.Logging.LogManager.GetCurrentClassLogger().DebugFormat("CreatingAction[Occupy] {0}:{1}",x,y);
             var action = new OccupyGameAction(state, this, x, y,TurnDelay);
 			state.PerformAction(action);
         }
