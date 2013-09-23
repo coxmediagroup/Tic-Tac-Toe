@@ -171,9 +171,9 @@ namespace TicTacToe.Controls.ViewModels
                     }
                     Task.Factory.StartNew(() =>
                     {
-                        var rg = new ResetGameAction(Game, Game.PlayerTurn);
-                        Thread.Sleep(3000);
-                        Game.PerformAction(rg);
+                        Thread.Sleep(1000);
+                        this.Game.Reset();
+                        this.Game.Start();
                         Dispatcher.Invoke(new Action(() =>
                         {
                             GameBoardViewModel.Dispose();
