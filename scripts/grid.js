@@ -70,18 +70,18 @@ objGrid = {
 			return false;
 		}
 		
-		stateGame.DebugMessage( player + " trying to move to " + index );
+		stateGame.DebugMessage( player + " trying to move to " + index, 3 );
 		if ( this.gridData[index].state == "empty" )
 		{
-			stateGame.DebugMessage( "Set block " + index + " to " + player );
+			stateGame.DebugMessage( "Set block " + index + " to " + player, 3 );
 			this.gridData[index].state = player;
 			
-			stateGame.DebugMessage( "Move success" );
+			stateGame.DebugMessage( "Move success", 3 );
 			
 			return true;
 		}
 		
-		stateGame.DebugMessage( "Move failure" );
+		stateGame.DebugMessage( "Move failure", 3 );
 		
 		return false;
 	},
@@ -133,7 +133,7 @@ objGrid = {
 					this.gridData[y].state == this.gridData[y+2].state &&
 					this.gridData[y].state != "empty" )
 			{
-				stateGame.DebugMessage( "** Horizontal win " + this.gridData[y].state );
+				stateGame.DebugMessage( "** Horizontal win " + this.gridData[y].state, 4 );
 				return this.gridData[y].state;
 			}
 		}
@@ -145,7 +145,7 @@ objGrid = {
 					this.gridData[x].state == this.gridData[x+6].state &&
 					this.gridData[x].state != "empty" )
 			{
-				stateGame.DebugMessage( "** Vertical win " + this.gridData[x].state );
+				stateGame.DebugMessage( "** Vertical win " + this.gridData[x].state, 4 );
 				return this.gridData[x].state;
 			}
 		}
@@ -155,7 +155,7 @@ objGrid = {
 				this.gridData[0].state == this.gridData[8].state &&
 				this.gridData[0].state != "empty" )
 		{
-			stateGame.DebugMessage( "** Diagonal 1 win " + this.gridData[0].state );
+			stateGame.DebugMessage( "** Diagonal 1 win " + this.gridData[0].state, 4 );
 			return this.gridData[0].state;
 		}
 
@@ -165,7 +165,7 @@ objGrid = {
 				this.gridData[2].state == this.gridData[6].state &&
 				this.gridData[2].state != "empty" )
 		{
-			stateGame.DebugMessage( "** Diagonal 2 win " + this.gridData[2].state );
+			stateGame.DebugMessage( "** Diagonal 2 win " + this.gridData[2].state, 4 );
 			return this.gridData[2].state;
 		}
 		
@@ -268,7 +268,7 @@ objGrid = {
 			}
 		}	
 		
-		stateGame.DebugMessage( "Could not find win position for " + player );
+		stateGame.DebugMessage( "Could not find win position for " + player, 3 );
 		return -1;
 	},
 	

@@ -26,13 +26,14 @@
 			.stats .item { float: left; width: 33%; font-size: 11px; text-align: center; }
 			.clear { clear: both; }
 			
-			#move-tracker, #debug-out {
+			#move-tracker, #debug-out, #debug-player-win {
 				position: absolute; background: #ffffff; font-size: 12px;
-				width: 300px; height: 400px; top: 0;
+				width: 300px; height: 200px; top: 0;
 			}
 			
 			#debug-out { right: 0; }
 			#move-tracker { left: 0; }
+			#debug-player-win { left: 0; top: 250px; }
 		</style>
 
 	</head>
@@ -41,6 +42,7 @@
 		
 		<textarea id="debug-out"></textarea>
 		<textarea id="move-tracker"></textarea>
+		<textarea id="debug-player-win"></textarea>
 		
 		<div class="canvas-container">
 			<canvas id="cnvWindow">
