@@ -44,10 +44,16 @@ stateGame = {
 		if ( player == "player" )
 		{
 			// Copy contents of this tracker to the debug log before clearing the log.
+			$( "#debug-player-win" ).append( "\n-------------------------------------------\n" );
+			$( "#debug-player-win" ).append( "\n\nROUND DEBUG" );
+			$( "#debug-player-win" ).append( $( "#debug-out" ).html() );
+			
+			$( "#debug-player-win" ).append( "\nROUND MOVES" );
 			$( "#debug-player-win" ).append( $( "#move-tracker" ).html() );
 		}
 		
 		$( "#move-tracker" ).empty();
+		$( "#debug-out" ).empty();
 		
 	},
 
@@ -114,24 +120,27 @@ stateGame = {
 
 	Update: function( settings )
 	{
-		if ( stateGame.turnInfo.turn == "computer" )
+		if ( stateGame.turnInfo.checkedWinner == false )	// Don't continue if we're waiting on reset timeout.
 		{
-			if ( stateGame.turnInfo.computer == "strategy" )
+			if ( stateGame.turnInfo.turn == "computer" )
 			{
-				this.ComputerStrategy();
+				if ( stateGame.turnInfo.computer == "strategy" )
+				{
+					this.ComputerStrategy();
+				}
+				else if ( stateGame.turnInfo.computer == "random" )
+				{
+					this.RandomStrategy( "computer" );
+				}
 			}
-			else if ( stateGame.turnInfo.computer == "random" )
+			else if ( stateGame.turnInfo.turn == "player" && stateGame.turnInfo.player == "random" )
 			{
-				this.RandomStrategy( "computer" );
+				this.RandomStrategy( "player" );
 			}
+			
+			// Check to see if anyone won this round, or if there are no blocks left.
+			this.CheckForWinner();
 		}
-		else if ( stateGame.turnInfo.turn == "player" && stateGame.turnInfo.player == "random" )
-		{
-			this.RandomStrategy( "player" );
-		}
-		
-		// Check to see if anyone won this round, or if there are no blocks left.
-		this.CheckForWinner();
 	},
 
 	Draw: function( canvasWindow, settings, images )
@@ -150,8 +159,9 @@ stateGame = {
 		objGrid.Setup( settings );
 		stateGame.DebugMessage( "Reset Game", 4 );	
 		
-		//stateGame.turnInfo.turn 		= "player";	
 		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
+		stateGame.turnInfo.timesPlayed += 1;
+		
 		stateGame.turnInfo.checkedWinner = false;
 	},
 	
@@ -159,6 +169,7 @@ stateGame = {
 	{		
 			
 		stateGame.DebugMessage( "--- Computer ---", 1 );	
+		stateGame.DebugMessage( "--- Turn " + stateGame.turnInfo.turnCount + " ---", 1 );	
 			
 		// First Move logic
 		if ( stateGame.turnInfo.turnCount == 0 )
@@ -173,7 +184,7 @@ stateGame = {
 				return;
 			}
 		}		
-		
+				
 		else if ( stateGame.turnInfo.turnCount == 1 && stateGame.turnInfo.lastMove != 4 )
 		{		
 			stateGame.DebugMessage( "Second move but center is clear", 1 );	
@@ -195,7 +206,7 @@ stateGame = {
 		// Take position to the LEFT of player if possible
 		// Take position to the ABOVE of player if possible
 		// Take position to the BOTTOM of player if possible
-		else if ( objGrid.WhoControls( 4 ) == "computer" )
+		else if ( stateGame.turnInfo.firstMove == "computer" )
 		{		
 			stateGame.DebugMessage( "Computer controls the center", 1 );		
 			stateGame.DebugMessage( "Check for Computer win position", 1 );
@@ -308,6 +319,7 @@ stateGame = {
 			
 			
 			stateGame.DebugMessage( "Take corner opposite to one controlled by the player", 1 );
+			
 			// Control corners. Mark a corner close to the player's last move if possible.
 			// Prevent player from having two opposite corners
 			if ( objGrid.WhoControls( 0 ) == "player" )
@@ -360,6 +372,55 @@ stateGame = {
 					this.ToggleTurns();
 					return;
 				}
+			}
+			
+			stateGame.DebugMessage( "Find intersecting corner", 1 );
+			
+			// Check any corners that the player already has a mark in that row/column
+			var neighbors = {};
+			var indexMax = 0;
+			for ( var tileToMove = 0; tileToMove < 9; tileToMove += 2 )
+			{
+				if ( tileToMove != 4 )
+				{
+					var row = tileToMove % 3;
+					var col = parseInt( tileToMove / 3 );
+					var neighborCount = 0;
+					
+					for ( var r = col; r < 9; r += 3 )
+					{
+						if ( objGrid.WhoControls( r ) == "player" )
+						{
+							neighborCount++;
+						}
+					}
+					
+					for ( var c = row * 3; c < row * 3 + 3; c++ )
+					{
+						if ( objGrid.WhoControls( c ) == "player" )
+						{
+							neighborCount++;
+						}
+					}
+					
+					stateGame.DebugMessage( neighborCount + " neighbors for corner " + tileToMove, 1 );
+					
+					neighbors.tileToMove = neighborCount;
+					if ( neighbors[tileToMove] > neighbors[indexMax] )
+					{
+						indexMax = tileTomove;
+						stateGame.DebugMessage( "Max is " + indexMax, 1 );
+					}
+				}
+			}
+			
+			stateGame.DebugMessage( "Max is " + indexMax, 1 );
+			
+			if ( objGrid.RandomGrid( indexMax, "computer" ) )
+			{
+				stateGame.turnInfo.lastMove = indexMax;
+				this.ToggleTurns();
+				return;
 			}
 			
 			stateGame.DebugMessage( "Capture other corner", 1 );				
@@ -474,15 +535,13 @@ stateGame = {
 				stateGame.DebugMessage( "Tie", 4 );
 			}
 			
-			stateGame.TrackWin( whoWon );
-			stateGame.turnInfo.timesPlayed++;
-			
+			stateGame.TrackWin( whoWon );			
 			stateGame.turnInfo.checkedWinner = true;
 			
 			// TODO: Make reset prettier / have user click before resetting game			
 			setTimeout( function() { 			
 				stateGame.ResetGame( settings );
-			}, 0500 );
+			}, 500 );
 		}
 	}
 }
