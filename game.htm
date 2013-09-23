@@ -268,6 +268,8 @@
 		function isEndGame() {
 			/* determine if player has won or if it is a draw */
 			/* first, determine if there is a win*/
+			console.log(GAME_STATE);
+
 			if( 
 				GAME_STATE[0] == GAME_STATE[1]
 				&& GAME_STATE[1] == GAME_STATE[2]
@@ -366,13 +368,18 @@
 
 			displayBoard( GAME_STATE );
 			var aiWon = isEndGame();
+			var response = false;
 			if( aiWon ) {
-				var response = confirm("I won. Too bad. I was enjoying that. Again?");
-				if( response == true ){
-					location.reload();
-				}
-
+				response = confirm("I won. Too bad. I was enjoying that. Again?");
 			}
+			else if( isDraw() ) {
+				response = confirm('Aw, shucks. Looks like a draw. Play again?');
+			}
+
+			if( response == true ){
+				location.reload();
+			}
+
 		}
 
 
@@ -382,6 +389,18 @@
 			GAME_STATE[index] = player;
 		}
 
+		function setTurns() {
+			var result = confirm("Would you like to go first?");
+			if(!result) {
+				/* user has opted not to go first; switch designation and move */
+				AVATAR_PLAYER = 'O';
+				AVATAR_COMPUTER = 'X';
+				/* have the computer move */
+				nextMove();
+			}
+		}
+
+
 		jQ(document).ready( function() {
 			console.log("ready!");
 			/* render the playing board; on initial state there isn't much to show */
@@ -389,6 +408,9 @@
 
 			/* attach action elements to empty board slots */
 			applyEvents('board');
+
+			/* ask user if they'd prefer to go first or second */
+			setTurns();
 		});
 
 	</script>	
