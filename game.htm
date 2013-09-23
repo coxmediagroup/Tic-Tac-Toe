@@ -238,26 +238,28 @@
 
 			/* apply what the cell should do when clicked on  */
 			jQ('td').click( function() {
-				/* set the cell contents to taken */
-				jQ(this).addClass("played");
-				/* regardless of if they are 'X' or 'O', denote move made by player */
-				updateGameState( jQ(this).attr('id'), 'P' );
-				var endFlag = isEndGame();
-				if( !endFlag ) {
-					if( !isDraw() ) {
-						nextMove();
+				if( ! jQ(this).hasClass('played')) {
+					/* set the cell contents to taken, only if not previously used */
+					jQ(this).addClass("played");
+					/* regardless of if they are 'X' or 'O', denote move made by player */
+					updateGameState( jQ(this).attr('id'), 'P' );
+					var endFlag = isEndGame();
+					if( !endFlag ) {
+						if( !isDraw() ) {
+							nextMove();
+						}
+						else {
+							var response = confirm('Aw, shucks. Looks like a draw. Play again?');
+							if( response == true ){
+								location.reload();
+							}
+						}
 					}
 					else {
-						var response = confirm('Aw, shucks. Looks like a draw. Play again?');
+						var response = confirm("You... won? How embarassing. This isn't supposed to happend. Try again?");
 						if( response == true ){
 							location.reload();
 						}
-					}
-				}
-				else {
-					var response = confirm("You... won? How embarassing. This isn't supposed to happend. Try again?");
-					if( response == true ){
-						location.reload();
 					}
 				}
 			});
