@@ -53,7 +53,7 @@ objGrid = {
 		// Figure out which grid this is
 		var index = this.GetIndexAtPosition( mouseX, mouseY );
 		
-		return this.RandomGrid( index, player );
+		return this.TryMoveAtIndex( index, player );
 	},
 	
 	WhoControls: function( index ) 
@@ -63,25 +63,25 @@ objGrid = {
 	
 	// TODO: This should be renamed something like "TryMoveAtIndex",
 	// but I don't have any fancy JS refactoring tools so it'd be a bit tedious.
-	RandomGrid: function( index, player ) 
+	TryMoveAtIndex: function( index, player ) 
 	{
 		if ( index < 0 || index > 8 )
 		{
 			return false;
 		}
 		
-		stateGame.DebugMessage( player + " trying to move to " + index, 3 );
+		objLogger.DebugMessage( player + " trying to move to " + index, 3 );
 		if ( this.gridData[index].state == "empty" )
 		{
-			stateGame.DebugMessage( "Set block " + index + " to " + player, 3 );
+			objLogger.DebugMessage( "Set block " + index + " to " + player, 3 );
 			this.gridData[index].state = player;
 			
-			stateGame.DebugMessage( "Move success", 3 );
+			objLogger.DebugMessage( "Move success", 3 );
 			
 			return true;
 		}
 		
-		stateGame.DebugMessage( "Move failure", 3 );
+		objLogger.DebugMessage( "Move failure", 3 );
 		
 		return false;
 	},
@@ -133,7 +133,7 @@ objGrid = {
 					this.gridData[y].state == this.gridData[y+2].state &&
 					this.gridData[y].state != "empty" )
 			{
-				stateGame.DebugMessage( "** Horizontal win " + this.gridData[y].state, 4 );
+				objLogger.DebugMessage( "** Horizontal win " + this.gridData[y].state, 4 );
 				return this.gridData[y].state;
 			}
 		}
@@ -145,7 +145,7 @@ objGrid = {
 					this.gridData[x].state == this.gridData[x+6].state &&
 					this.gridData[x].state != "empty" )
 			{
-				stateGame.DebugMessage( "** Vertical win " + this.gridData[x].state, 4 );
+				objLogger.DebugMessage( "** Vertical win " + this.gridData[x].state, 4 );
 				return this.gridData[x].state;
 			}
 		}
@@ -155,7 +155,7 @@ objGrid = {
 				this.gridData[0].state == this.gridData[8].state &&
 				this.gridData[0].state != "empty" )
 		{
-			stateGame.DebugMessage( "** Diagonal 1 win " + this.gridData[0].state, 4 );
+			objLogger.DebugMessage( "** Diagonal 1 win " + this.gridData[0].state, 4 );
 			return this.gridData[0].state;
 		}
 
@@ -165,7 +165,7 @@ objGrid = {
 				this.gridData[2].state == this.gridData[6].state &&
 				this.gridData[2].state != "empty" )
 		{
-			stateGame.DebugMessage( "** Diagonal 2 win " + this.gridData[2].state, 4 );
+			objLogger.DebugMessage( "** Diagonal 2 win " + this.gridData[2].state, 4 );
 			return this.gridData[2].state;
 		}
 		
@@ -268,31 +268,31 @@ objGrid = {
 			}
 		}	
 		
-		stateGame.DebugMessage( "Could not find win position for " + player, 3 );
+		objLogger.DebugMessage( "Could not find win position for " + player, 3 );
 		return -1;
 	},
 	
 	LogBoard: function() 
 	{
-		stateGame.TrackMove( "\nROUND " + stateGame.turnInfo.timesPlayed + " turn " + stateGame.turnInfo.turnCount + ":\n" );
+		objLogger.TrackMove( "\nROUND " + stateGame.turnInfo.timesPlayed + " turn " + stateGame.turnInfo.turnCount + ":\n" );
 		for ( var i = 0; i < 9; i++ )
 		{			
 			if ( this.gridData[i].state == "player" )
 			{
-				stateGame.TrackMove( "P" );
+				objLogger.TrackMove( "P" );
 			}
 			else if ( this.gridData[i].state == "computer" )
 			{
-				stateGame.TrackMove( "C" );
+				objLogger.TrackMove( "C" );
 			}
 			else
 			{
-				stateGame.TrackMove( "-" );
+				objLogger.TrackMove( "-" );
 			}
 			
 			if ( i == 2 || i == 5 || i == 8 ) 
 			{
-				stateGame.TrackMove( "\n" );
+				objLogger.TrackMove( "\n" );
 			}
 		}
 	}
