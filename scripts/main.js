@@ -34,7 +34,7 @@ stateGame = {
 		images.o.src = images.pathbase + "o.png";
 		
 		stateGame.turnInfo.timesPlayed 	= 1;
-		stateGame.turnInfo.turn 		= "player";		
+		stateGame.turnInfo.turn 		= "computer";		
 		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 		stateGame.turnInfo.turnCount 	= 0;
 		stateGame.turnInfo.lastMove 	= -1;
@@ -124,6 +124,7 @@ stateGame = {
 		
 		stateGame.turnInfo.firstMove	= stateGame.turnInfo.turn;
 		stateGame.turnInfo.timesPlayed += 1;
+		stateGame.turnInfo.turn 		= "computer";	
 		
 		stateGame.turnInfo.checkedWinner = false;
 	},

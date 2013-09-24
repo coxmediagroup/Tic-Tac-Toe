@@ -20,3 +20,4 @@ Tools:
 
 
 ![Tic Tac Toe](sample.png)
+![Tic Tac Toe - Computer First](computerfirst.png)
