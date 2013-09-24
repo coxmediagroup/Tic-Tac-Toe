@@ -1,3 +1,5 @@
+debugLevel = 2;
+
 /* Logs game events to the textareas on the webpage */
 objLogger = {
 	GetTime: function()
