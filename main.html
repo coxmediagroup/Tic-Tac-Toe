@@ -32,8 +32,8 @@
 				background: #ffffff; font-size: 12px; height: 200px; 
 			}
 			
-			#debug-window { width: 100%; display: none; }
-			#debug-window textarea { width: 33%; float: left; }
+			#debug-window { width: 100%; display: none; margin-left: 1%; }
+			#debug-window textarea { width: 32%; float: left; }
 			
 			#debug-header { background: #f85f03; height: 25px; text-align: center; 
 				display: block; width: 100%; clear: both; margin-top: 20px;
@@ -47,9 +47,11 @@
 					
 					if ( $( "#debug-window" ).is( ":visible" ) ) {
 						$( "#debug-window" ).slideUp();
+						$( "#debug-header" ).html( "Debug (open)" );
 					}
 					else {
 						$( "#debug-window" ).slideDown();
+						$( "#debug-header" ).html( "Debug (close)" );
 					}
 					
 				} );
