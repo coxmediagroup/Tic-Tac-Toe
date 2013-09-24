@@ -27,22 +27,37 @@
 			.clear { clear: both; }
 			
 			#move-tracker, #debug-out, #debug-player-win {
-				position: absolute; background: #ffffff; font-size: 12px;
-				width: 300px; height: 200px; top: 0;
+				background: #ffffff; font-size: 12px; height: 200px; 
 			}
 			
-			#debug-out { right: 0; }
-			#move-tracker { left: 0; }
-			#debug-player-win { left: 0; top: 250px; }
+			#debug-window { width: 100%; display: none; }
+			#debug-window textarea { width: 33%; float: left; }
+			
+			#debug-header { background: #f85f03; height: 25px; text-align: center; 
+				display: block; width: 100%; clear: both; margin-top: 20px;
+				cursor: pointer; font-weight: bold; border: solid 1px #b21500; }
 		</style>
+		
+		<script>
+			$( document ).ready( function() {
+				
+				$( "#debug-header" ).click( function() {
+					
+					if ( $( "#debug-window" ).is( ":visible" ) ) {
+						$( "#debug-window" ).slideUp();
+					}
+					else {
+						$( "#debug-window" ).slideDown();
+					}
+					
+				} );
+				
+			} );
+		</script>
 
 	</head>
 	
 	<body>
-		
-		<textarea id="debug-out"></textarea>
-		<textarea id="move-tracker"></textarea>
-		<textarea id="debug-player-win"></textarea>
 		
 		<div class="canvas-container">
 			<canvas id="cnvWindow">
@@ -91,6 +106,13 @@
 			</div>
 		</div>
 		
+		<span id="debug-header">Debug (open)</span>
+		<div id="debug-window">
+			<textarea id="debug-out"></textarea>
+			<textarea id="move-tracker"></textarea>
+			<textarea id="debug-player-win"></textarea>
+			<div class="clear"></div>
+		</div>	
 		
 		<div class="description">
 			<h1>CoxMedia Tic-Tac-Toe</h1>
