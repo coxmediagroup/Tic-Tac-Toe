@@ -1,6 +1,26 @@
+// Rachel J. Morris - From https://github.com/coxmediagroup/Tic-Tac-Toe
+
+/*
+ * objGrid class for handling board / possible movements.
+ * Functions:
+ * Setup
+ * Update
+ * Draw
+ * GetIndexAtPosition
+ * ClickedGrid
+ * TryMoveAtIndex
+ * EdgeOrCorner
+ * EmptyBlocksLeft
+ * WhoWon
+ * FindWinIndex
+ * LogBoard
+ * */
+
 objGrid = {
 	
-	// 3x3 grid
+	/*
+	 * Initializes the game board, clears out all states
+	 * */
 	Setup: function( settings ) 
 	{
 		this.gridData = new Array();
@@ -21,6 +41,9 @@ objGrid = {
 	{
 	},
 	
+	/*
+	 * Draws the board to the HTML5 canvas
+	 * */
 	Draw: function( canvasWindow, settings, images ) 
 	{
 		
@@ -43,11 +66,18 @@ objGrid = {
 		
 	},
 	
+	/*
+	 * Translates (x,y) coordinates into an index in the 1-D array of tiles
+	 * */
 	GetIndexAtPosition: function( x, y )
 	{
 		return parseInt( x / 100 ) + parseInt( y / 100 ) * 3;
 	},
 	
+	/*
+	 * Receives (x,y) coordinates and tries to see if that tile is available
+	 * Returns true if move was success; fail if tile is already taken.
+	 * */
 	ClickedGrid: function( mouseX, mouseY, player ) 
 	{
 		// Figure out which grid this is
@@ -56,13 +86,18 @@ objGrid = {
 		return this.TryMoveAtIndex( index, player );
 	},
 	
+	/*
+	 * Returns whether "player" or "computer" or "empty" controls this tile
+	 * */
 	WhoControls: function( index ) 
 	{
 		return this.gridData[index].state;
 	},
 	
-	// TODO: This should be renamed something like "TryMoveAtIndex",
-	// but I don't have any fancy JS refactoring tools so it'd be a bit tedious.
+	/*
+	 * Checks to see whether tile is available, and if it is will claim it
+	 * for the current player moving.
+	 * */
 	TryMoveAtIndex: function( index, player ) 
 	{
 		if ( index < 0 || index > 8 )
@@ -86,6 +121,10 @@ objGrid = {
 		return false;
 	},
 	
+	/*
+	 * Checks to see whether the tile at the given index is an edge,
+	 * corner, or center tile.
+	 * */
 	EdgeOrCorner: function( index ) 
 	{
 		if ( index % 2 != 0 )
@@ -102,6 +141,9 @@ objGrid = {
 		}
 	},
 	
+	/*
+	 * Returns the amount of tiles still in the "empty" state.
+	 * */
 	EmptyBlocksLeft: function()
 	{
 		var emptyCount = 0;
@@ -116,6 +158,11 @@ objGrid = {
 		return emptyCount;
 	},
 	
+	/*
+	 * Checks to see if there are any winners. Will return "none" if
+	 * nobody wins. The main state will know whether there are any empty
+	 * spaces left, and will call it a tie. Otherwise, the game will continue.
+	 * */
 	WhoWon: function() 
 	{
 		/*
@@ -172,6 +219,10 @@ objGrid = {
 		return "none";
 	},
 	
+	/*
+	 * Tries to find any tiles that will give the player (passed in via argument)
+	 * an immediate win
+	 * */
 	FindWinIndex: function( player )
 	{				
 		// Horizontal check
@@ -272,6 +323,10 @@ objGrid = {
 		return -1;
 	},
 	
+	/*
+	 * Logs the 3x3 grid via the logger so can keep track of each move
+	 * in case the player wins.
+	 * */
 	LogBoard: function() 
 	{
 		objLogger.TrackMove( "\nROUND " + stateGame.turnInfo.timesPlayed + " turn " + stateGame.turnInfo.turnCount + ":\n" );

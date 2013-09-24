@@ -1,5 +1,18 @@
+// Rachel J. Morris - From https://github.com/coxmediagroup/Tic-Tac-Toe
+
+/*
+ * Handler class for player and computer
+ * Functions:
+ * ManualPlayerMove
+ * RandomStrategy
+ * ComputerStrategy
+ * */
+
 objPlayers = {
 
+	/* When player clicks board, this is called to handle move position
+	 * and trying to claim that tile.
+	 * */
 	ManualPlayerMove: function( ev, settings ) 
 	{
 		// Need to find coordinates based on canvas window position
@@ -17,6 +30,11 @@ objPlayers = {
 		stateGame.CheckForWinner();
 	},
 
+	/*
+	 * If the random checkbox is selected for a player, this function
+	 * is called to choose a random tile, with NO strategy.
+	 * Useful for testing.
+	 * */
 	RandomStrategy: function( player )
 	{		
 		var randBlock = parseInt( Math.random() * 9 );
@@ -28,7 +46,10 @@ objPlayers = {
 		}
 	},
 	
-
+	/* Imperfect computer strategy.  If the computer always goes first,
+	 * the computer will always win.
+	 * Otherwise, there is some chance the player will win.
+	 * */
 	ComputerStrategy: function()
 	{		
 		objLogger.DebugMessage( "--- Computer ---", 1 );	

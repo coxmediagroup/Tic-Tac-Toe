@@ -1,8 +1,25 @@
 // Rachel J. Morris - From https://github.com/coxmediagroup/Tic-Tac-Toe
 
+/*
+ * Main game state 
+ * Functions:
+ * Setup
+ * HandleMouseDown
+ * Update
+ * Draw
+ * ResetGame
+ * ToggleTurns
+ * CheckForWinner 
+ * */
+
 stateGame = {	
 	turnInfo : {},
-
+	
+	/*
+	 * Setup assets, variables, and call other class' setup.
+	 * Make sure the radio buttons have a callback in case the player/computer
+	 * movement method is changed mid-game.
+	 * */
 	Setup: function( settings, images )
 	{
 		objLogger.DebugMessage( "Main setup", 4 );
@@ -44,6 +61,9 @@ stateGame = {
 		} );
 	},
 
+	/*
+	 * Handle mouse-down event 
+	 * */
 	HandleMouseDown: function( ev )
 	{
 		if ( stateGame.turnInfo.turn == "player" )
@@ -52,6 +72,9 @@ stateGame = {
 		}
 	},
 
+	/*
+	 * Update game, specifically if not waiting on human player
+	 * */
 	Update: function( settings )
 	{
 		if ( stateGame.turnInfo.checkedWinner == false )	// Don't continue if we're waiting on reset timeout.
@@ -77,6 +100,9 @@ stateGame = {
 		}
 	},
 
+	/*
+	 * Draw X's, O's, and grid!
+	 * */
 	Draw: function( canvasWindow, settings, images )
 	{
 		// Draw background
@@ -87,6 +113,9 @@ stateGame = {
 		objGrid.Draw( canvasWindow, settings, images );
 	},
 	
+	/*
+	 * Reset the game board and update stats
+	 * */
 	ResetGame: function( settings )
 	{
 		stateGame.turnInfo.turnCount = 0;
@@ -99,6 +128,9 @@ stateGame = {
 		stateGame.turnInfo.checkedWinner = false;
 	},
 	
+	/*
+	 * Switch turns and do state logging
+	 * */
 	ToggleTurns: function() 
 	{		
 		if ( stateGame.turnInfo.turn == "player" ) 
@@ -116,6 +148,8 @@ stateGame = {
 		objLogger.DebugMessage( "Turn " + stateGame.turnInfo.turnCount + ": " + stateGame.turnInfo.turn, 4 );
 	},
 	
+	/* Checks to see if there is a winner yet.
+	 * */
 	CheckForWinner: function() 
 	{
 		if ( stateGame.turnInfo.checkedWinner == true )
@@ -144,7 +178,9 @@ stateGame = {
 			
 			objLogger.TrackWin( whoWon );			
 			stateGame.turnInfo.checkedWinner = true;
-					
+			
+			// We don't want the game board to reset immediately,
+			// let the player see the board before it resets.		
 			setTimeout( function() { 			
 				stateGame.ResetGame( settings );
 			}, 500 );
