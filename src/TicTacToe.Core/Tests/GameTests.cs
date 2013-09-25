@@ -137,6 +137,9 @@
                 game.Board.BoardPositions[1][0] = game.Player1;
                 game.Board.BoardPositions[2][0] = game.Player1;
 
+                game.GameActions.Add(new OccupyGameAction(game, game.Player1, 0, 0));
+                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1));
+
                 Assert.Null(game.Winner);
                 Assert.AreEqual(GameStatus.Running, game.Status);
                 Assert.AreEqual(GameWinStatus.None, game.WinStatus);
@@ -157,6 +160,9 @@
                 Assert.Null(game.Winner);
                 Assert.AreEqual(GameStatus.Running, game.Status);
                 Assert.AreEqual(GameWinStatus.None, game.WinStatus);
+
+				game.GameActions.Add(new OccupyGameAction(game,game.Player1,0,0));
+                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1));
 
                 game.Board.BoardPositions[0][0] = game.Player1;
                 game.Board.BoardPositions[1][0] = game.Player2;

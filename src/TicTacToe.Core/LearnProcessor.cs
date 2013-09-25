@@ -56,7 +56,20 @@
             }
             lock (FileLock)
             {
-                File.AppendAllLines(LearnFile, new[] { GameState.ToLong(state).ToString(CultureInfo.InvariantCulture) });
+                while (true)
+                {
+                    try
+                    {
+                        File.AppendAllLines(
+                            LearnFile,
+                            new[] { GameState.ToLong(state).ToString(CultureInfo.InvariantCulture) });
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
                 CacheList.Add(GameState.ToLong(state));
             }
         }
@@ -104,10 +117,6 @@
 				// Every variation of the next move has been stored, drop down to brain mode
                 var ret = RngRandom.Instance.Next(0, availableMoves.Count);
 				Common.Logging.LogManager.GetCurrentClassLogger().DebugFormat("Doing Random Pick[{0}][{1},{2}]",player,availableMoves[ret].X,availableMoves[ret].Y);
-                if (game.Board.IsPositionOccupied(availableMoves[ret].Move))
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
                 return availableMoves[ret].Move;
             }
 

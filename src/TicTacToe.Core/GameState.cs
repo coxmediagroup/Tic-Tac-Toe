@@ -10,13 +10,15 @@
 
     public class GameState
     {
-		internal static ConcurrentDictionary<long,GameState> GameStateCache = new ConcurrentDictionary<long,GameState>(); 
+        internal static Dictionary<long, GameState> GameStateCache = new Dictionary<long, GameState>();
 
         public int MoveCount { get; set; }
         public IPlayer Player1 { get; set; }
         public IPlayer Player2 { get; set; }
         public IPlayer Winner { get; set; }
         public List<MoveItem> MoveList { get; set; }
+
+        public List<List<MoveItem>> AllTransforms { get; set; }
 
         public GameWinStatus WinStatus
         {
@@ -47,10 +49,38 @@
             this.Player2 = game.Player1 == this.Player1 ? game.Player2 : game.Player1;
 
             this.Winner = game.Winner;
+
+            AllTransforms = GetTransforms(MoveList).ToList();
         }
 
         public bool Contains(List<MoveItem> moveList)
         {
+            foreach (var tran in AllTransforms)
+            {
+                var match = false;
+                if (tran[0].Move != moveList[0].Move)
+                {
+                    match = false;
+                    continue;
+                }
+                for (var i = 0; i < moveList.Count; i++)
+                {
+                    if (tran[i].Equals(moveList[i]))
+                    {
+                        match = true;
+                    }
+                    else
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                {
+                    return true;
+                }
+            }
+            return false;
             foreach (var tran in GetTransforms(MoveList))
             {
                 var match = false;
@@ -122,7 +152,7 @@
             ret.Add(ToLong(gs));
             gs.MoveList.ForEach(x => x.RotateLeft());
 
-			// Now invert the players
+            // Now invert the players
             var p1 = gs.Player2;
             var p2 = gs.Player1;
             gs.Player1 = p1;
@@ -133,7 +163,7 @@
                 gs.Winner = gs.Winner == gs.Player1 ? gs.Player2 : gs.Player1;
             }
 
-			gs.MoveList.ForEach(x=>x.Player = x.Player == gs.Player1 ? gs.Player2 : gs.Player1);
+            gs.MoveList.ForEach(x => x.Player = x.Player == gs.Player1 ? gs.Player2 : gs.Player1);
 
             ret.Add(ToLong(gs));
             gs.MoveList.ForEach(x => x.RotateLeft());
@@ -151,8 +181,8 @@
             gs.MoveList.ForEach(x => x.RotateLeft());
             ret.Add(ToLong(gs));
             gs.MoveList.ForEach(x => x.RotateLeft());
-			
-			// Now put the players back the way they were
+
+            // Now put the players back the way they were
 
             p1 = gs.Player2;
             p2 = gs.Player1;
@@ -173,42 +203,56 @@
         {
             var m2 = moveList.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             yield return m2;
-			m2.ForEach(x => x.RotateLeft());
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
+            m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.FlipHorizontally());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.FlipHorizontally());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
 
             // Now invert the players
             var p1 = moveList[0].Player;
             var p2 = moveList[1].Player;
-
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.Player = x.Player == p1 ? p2 : p1);
 
             yield return m2;
-
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.FlipHorizontally());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.FlipHorizontally());
             yield return m2;
+            m2 = m2.Select(x => new MoveItem(x.Move, x.Player)).ToList();
             m2.ForEach(x => x.RotateLeft());
             yield return m2;
         }
@@ -270,10 +314,7 @@
             GameState ret = null;
             if (GameStateCache.ContainsKey(gameState))
             {
-                while (!GameStateCache.TryGetValue(gameState, out ret))
-                {
-                    Thread.Sleep(1);
-                }
+                ret = GameStateCache[gameState];
                 ret.Player1 = startPlayer;
                 ret.Player2 = player2;
                 return ret;
@@ -327,11 +368,8 @@
                 ret.MoveList.Add(new MoveItem(move - 1, player));
             }
             ret.MoveList.Reverse();
-
-            while (!GameStateCache.TryAdd(gameState, ret))
-            {
-                Thread.Sleep(1);
-            }
+            ret.AllTransforms = ret.GetTransforms(ret.MoveList).ToList();
+            GameStateCache.Add(gameState, ret);
 
             return ret;
         }
