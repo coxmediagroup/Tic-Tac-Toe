@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AiPlayer.cs" />
+    <Compile Include="AiStateMachine.cs" />
     <Compile Include="GameAction.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Game.cs" />

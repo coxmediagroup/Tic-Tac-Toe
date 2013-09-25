@@ -8,6 +8,7 @@
     {
         internal int X { get; set; }
         internal int Y { get; set; }
+		internal int Move { get; set; }
         internal int Delay { get; set; }
 
         public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay = 0)
@@ -19,6 +20,7 @@
                 throw new ArgumentException("y must be between 0 and " + this.Game.Board.BoardPositions.Length, "y");
             this.X = x;
             this.Y = y;
+            this.Move = (Y * 3) + X;
             this.Delay = delay;
         }
 
