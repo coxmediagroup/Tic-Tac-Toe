@@ -1,16 +1,14 @@
-﻿namespace TicTacToe.Core
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Common.Logging;
+using TicTacToe.Core.Actions;
+using TicTacToe.Core.Utils;
+
+namespace TicTacToe.Core.Players.AI
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-
-    using Common.Logging;
-
-    using TicTacToe.Core.Actions;
-    using TicTacToe.Core.Utils;
-
     public class LearnProcessor
     {
         internal static object FileLock = new Object();

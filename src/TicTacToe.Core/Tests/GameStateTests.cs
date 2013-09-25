@@ -1,9 +1,8 @@
-﻿namespace TicTacToe.Core.Tests
+﻿using TicTacToe.Core.Players.AI;
+
+namespace TicTacToe.Core.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using NUnit.Framework;
 
     using TicTacToe.Core.Actions;

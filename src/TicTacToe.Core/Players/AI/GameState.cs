@@ -1,13 +1,10 @@
-﻿namespace TicTacToe.Core
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TicTacToe.Core.Actions;
+
+namespace TicTacToe.Core.Players.AI
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-
-    using TicTacToe.Core.Actions;
-
     public class GameState
     {
         internal static Dictionary<long, GameState> GameStateCache = new Dictionary<long, GameState>();

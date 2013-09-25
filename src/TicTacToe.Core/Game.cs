@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using FakeItEasy;
+using TicTacToe.Core.Players.AI;
 
 namespace TicTacToe.Core
 {

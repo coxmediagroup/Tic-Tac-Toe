@@ -1,7 +1,7 @@
-﻿namespace TicTacToe.Core
-{
-    using System;
+﻿using System;
 
+namespace TicTacToe.Core.Players.AI
+{
     public class MoveItem : IEquatable<MoveItem>
     {
         public int Move { get; set; }
