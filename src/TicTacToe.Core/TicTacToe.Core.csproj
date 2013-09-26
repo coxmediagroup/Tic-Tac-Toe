@@ -49,17 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AiPlayer.cs" />
-    <Compile Include="AiStateMachine.cs" />
+    <Compile Include="Players\AiPlayer.cs" />
+    <Compile Include="Players\AI\MoveList.cs" />
+    <Compile Include="Players\AI\StateMachine\AiStateMachine.cs" />
     <Compile Include="GameAction.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="HumanPlayer.cs" />
-    <Compile Include="IPlayer.cs" />
+    <Compile Include="Players\AI\GameState.cs" />
+    <Compile Include="Players\HumanPlayer.cs" />
+    <Compile Include="Players\AI\StateMachine\IMoveStateMachine.cs" />
+    <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Actions\OccupyGameAction.cs" />
-    <Compile Include="LearnProcessor.cs" />
-    <Compile Include="MoveItem.cs" />
+    <Compile Include="Players\AI\LearnProcessor.cs" />
+    <Compile Include="Players\AI\MoveItem.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\ResetGameAction.cs" />
@@ -78,7 +80,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
