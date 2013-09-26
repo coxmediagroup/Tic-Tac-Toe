@@ -2,12 +2,36 @@
 
 namespace TicTacToe.Core.Players.AI
 {
-    public class MoveItem : IEquatable<MoveItem>
+    public class MoveItem : IEquatable<MoveItem>, ICloneable
     {
         public int Move { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
         public IPlayer Player { get; set; }
+
+        public bool IsCorner
+        {
+            get
+            {
+                return Move == 0 || Move == 2 || Move == 6 || Move == 8;
+            }
+        }
+
+        public bool IsSide
+        {
+            get
+            {
+                return Move == 1 || Move == 3 || Move == 5 || Move == 7;
+            }
+        }
+
+        public bool IsCenter
+        {
+            get
+            {
+                return Move == 4;
+            }
+        }
 
         public MoveItem(int move, IPlayer player)
         {
@@ -35,5 +59,20 @@ namespace TicTacToe.Core.Players.AI
         {
             return this.Move == other.Move && this.Player == other.Player;
         }
+
+        #region Implementation of ICloneable
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone()
+        {
+            return new MoveItem(Move, Player);
+        }
+
+        #endregion
     }
 }

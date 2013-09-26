@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using TicTacToe.Core.Actions;
 using TicTacToe.Core.Utils;
 
@@ -44,7 +45,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
                 return new MoveItem(next, me);
             }
 
-            var startGameMove = game.GameActions.OfType<OccupyGameAction>().FirstOrDefault();
+            var startGameMove = game.GameActions.OfType<OccupyGameAction>().First();
             switch (startGameMove.Move)
             {
                 case 0:
@@ -73,7 +74,51 @@ namespace TicTacToe.Core.Players.AI.StateMachine
     {
         public MoveItem GetNextMove(Game game, IPlayer me)
         {
-
+            var mcount = game.GameActions.OfType<OccupyGameAction>().Count();
+            var lastMove = game.GameActions.OfType<OccupyGameAction>().Last();
+            if (mcount == 1)
+            {
+                return new MoveItem(4, me);
+            }
+            if (mcount == 2)
+            {
+                switch (lastMove.Move)
+                {
+                    case 1:
+                    {
+                        break;
+                    }
+                    case 2:
+                    {
+                        break;
+                    }
+                    case 3:
+                    {
+                        break;
+                    }
+                    case 4:
+                    {
+                        break;
+                    }
+                    case 5:
+                    {
+                        break;
+                    }
+                    case 6:
+                    {
+                        break;
+                    }
+                    case 7:
+                    {
+                        break;
+                    }
+                    case 8:
+                    {
+                        break;
+                    }
+                }
+            }
+            return null;
         }
     }
 
@@ -81,7 +126,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
     {
         public MoveItem GetNextMove(Game game, IPlayer me)
         {
-
+            var mcount = game.GameActions.OfType<OccupyGameAction>().Count();
         }
     }
 
@@ -89,7 +134,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
     {
         public MoveItem GetNextMove(Game game, IPlayer me)
         {
-
+            var mcount = game.GameActions.OfType<OccupyGameAction>().Count();
         }
     }
 }
