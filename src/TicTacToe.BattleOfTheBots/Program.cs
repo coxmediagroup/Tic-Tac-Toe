@@ -1,4 +1,4 @@
-﻿using TicTacToe.Core;
+﻿using TicTacToe.Core.Players;
 
 namespace TicTacToe.BattleOfTheBots
 {
@@ -7,12 +7,9 @@ namespace TicTacToe.BattleOfTheBots
     using System.Diagnostics;
     using System.Threading;
     using System.Linq;
-    using System.Threading.Tasks;
-
     using Common.Logging;
 
     using TicTacToe.Core;
-    using TicTacToe.Core.Actions;
 
     public class Program
     {

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using TicTacToe.Controls.ViewModels;
 using TicTacToe.Core.Annotations;
+using TicTacToe.Core.Players;
 
 namespace TicTacToe
 {

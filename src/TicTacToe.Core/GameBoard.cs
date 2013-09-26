@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Core
+﻿using TicTacToe.Core.Players.AI;
+
+namespace TicTacToe.Core
 {
     using System;
     using System.Linq;
@@ -117,6 +119,29 @@
                 if (p1 == p2 && p2 == p3)
                 {
                     return p1;
+                }
+            }
+
+            return null;
+        }
+
+        public int? WinLocation(IPlayer player)
+        {
+            var moveItems = new MoveItem[3];
+            foreach (var condition in WinConditions)
+            {
+                int x, y = 0;
+                IndexToCoords(condition[0], out x, out y);
+                moveItems[0] = new MoveItem(condition[0],BoardPositions[y][x]);
+                IndexToCoords(condition[1], out x, out y);
+                moveItems[1] = new MoveItem(condition[1],BoardPositions[y][x]);
+                IndexToCoords(condition[2], out x, out y);
+                moveItems[2] = new MoveItem(condition[2],BoardPositions[y][x]);
+
+                if (moveItems.Count(m => m.Player == player) == 2 && moveItems.Count(m=>m.Player == null) == 1)
+                {
+                    var move = moveItems.First(m => m.Player == null);
+                    return move.Move;
                 }
             }
 

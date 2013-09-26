@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Core.Tests
+﻿using TicTacToe.Core.Players;
+
+namespace TicTacToe.Core.Tests
 {
     using System;
     using System.Diagnostics;

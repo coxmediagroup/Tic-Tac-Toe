@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using TicTacToe.Core;
 using TicTacToe.Core.Annotations;
+using TicTacToe.Core.Players;
 
 namespace TicTacToe.Controls.ViewModels
 {

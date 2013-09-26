@@ -67,6 +67,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
                         return new CenterStartStateMachine().GetNextMove(game, me);
                     }
             }
+            return null;
         }
     }
 
@@ -127,6 +128,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
         public MoveItem GetNextMove(Game game, IPlayer me)
         {
             var mcount = game.GameActions.OfType<OccupyGameAction>().Count();
+            return null;
         }
     }
 
@@ -135,6 +137,7 @@ namespace TicTacToe.Core.Players.AI.StateMachine
         public MoveItem GetNextMove(Game game, IPlayer me)
         {
             var mcount = game.GameActions.OfType<OccupyGameAction>().Count();
+            return null;
         }
     }
 }

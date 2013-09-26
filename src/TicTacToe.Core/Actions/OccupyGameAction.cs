@@ -11,6 +11,11 @@
 		internal int Move { get; set; }
         internal int Delay { get; set; }
 
+        public OccupyGameAction(Game state, IPlayer player, int move, int delay = 0)
+            : this(state, player,move % 3,move/3,delay)
+        {
+        }
+
         public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay = 0)
             : base(state, player)
         {
