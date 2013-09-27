@@ -71,9 +71,9 @@ namespace TicTacToe.Controls.ViewModels
             if (GameVm.Game.Status == GameStatus.Finished) return;
             if (GameVm.Game.WinStatus != GameWinStatus.None) return;
             if (GameVm.Game.PlayerTurn is AiPlayer) return;
-            if (WasSet) return;
-            WasSet = true;
-			var action = new OccupyGameAction(GameVm.Game,GameVm.Game.PlayerTurn,X,Y);
+            if (GameVm.Game.Board.IsPositionOccupied(X, Y))
+                return;
+			var action = new OccupyGameAction(GameVm.Game,GameVm.Game.PlayerTurn,X,Y,0);
 			GameVm.Game.PerformAction(action);
         }
 

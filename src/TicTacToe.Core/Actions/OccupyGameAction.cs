@@ -16,7 +16,7 @@
         {
         }
 
-        public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay = 0)
+        public OccupyGameAction(Game state, IPlayer player, int x, int y, int delay)
             : base(state, player)
         {
             if (x >= this.Game.Board.BoardPositions.First().Length)

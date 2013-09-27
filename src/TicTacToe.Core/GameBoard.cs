@@ -60,6 +60,13 @@ namespace TicTacToe.Core
 		    return IsPositionOccupied(x, y);
 		}
 
+        public IPlayer GetPosition(int idx)
+        {
+            int x, y;
+            this.IndexToCoords(idx,out x, out y);
+            return BoardPositions[y][x];
+        }
+
         public void Occupy(IPlayer player, int x, int y)
         {
             if (this.IsPositionOccupied(x, y))

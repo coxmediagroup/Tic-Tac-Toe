@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Management.Instrumentation;
 using System.Reflection;
 using Common.Logging;
@@ -63,11 +64,11 @@ namespace TicTacToe.Core.Players
                     return;
                 }
                 
-                // Try and pick a side
-                var posavail = new[] {1, 3, 5, 7};
+                // Try and pick a corner
+                var posavail = new[] {0, 2, 6, 8};
                 var pos = posavail.FirstOrDefault(x => state.Board.IsPositionOccupied(x) == false);
 
-                Log.DebugFormat("[OnTurn] Second Move take side {0}",pos);
+                Log.DebugFormat("[OnTurn] Second Move take corner {0}",pos);
                 a = new OccupyGameAction(state, this, pos, TurnDelay);
                 state.PerformAction(a);
                 return;
@@ -93,23 +94,113 @@ namespace TicTacToe.Core.Players
                 return;
             }
 
+            int? move = null;
+
             if (state.StartPlayer == this)
             {
-                // make horizontal line
-
+                // make diagonal line
+                move = TryMakeLine(state, this, true, DiagonalLines);
 
                 // make vertical line
+                if (move == null)
+                    move = TryMakeLine(state, this, true, VerticalLines);
 
-                // make diagonal line
+                // make horizontal line
+                if (move == null)
+                    move = TryMakeLine(state, this, true, HorizontalLines);
+
+                if (move != null)
+                {
+                    Log.DebugFormat("[OnTurn] SP Line Move {0}", move);
+                    a = new OccupyGameAction(state, this, move.Value, TurnDelay);
+                    state.PerformAction(a);
+                    return;
+                }
             }
             else
             {
                 // make diagonal line
+                move = TryMakeLine(state, this, true, DiagonalLines);
 
-                // make horizontal line
+                // make horizontal line - Don't skip center if on side
+                if (move == null)
+                    move = TryMakeLine(state, this, false, HorizontalLines);
 
-                // make vertical line
+                // make vertical line - Don't skip center if on side
+                if (move == null)
+                    move = TryMakeLine(state, this, false, VerticalLines);
+
+                if (move != null)
+                {
+                    Log.DebugFormat("[OnTurn] SecP Line Move {0}", move);
+                    a = new OccupyGameAction(state, this, move.Value, TurnDelay);
+                    state.PerformAction(a);
+                    return;
+                }
             }
+
+            // Ok, so can't take start moves, win, block, or make any lines, at this point we just pick the first possible location on the board
+
+            for (var i = 0; i < 9; i++)
+            {
+                if (state.Board.IsPositionOccupied(i) == false)
+                {
+                    Log.DebugFormat("[OnTurn] Blind Move {0}", i);
+                    a = new OccupyGameAction(state, this, i, TurnDelay);
+                    state.PerformAction(a);
+                    return;
+                }
+            }
+            throw new InvalidOperationException("[OnTurn] No Possible Moves?");
+        }
+
+        internal static readonly int[][] HorizontalLines = { new[] { 0, 1, 2 }, new[] { 3, 4, 5 }, new[] { 6, 7, 8 } };
+        internal static readonly int[][] VerticalLines = { new[] { 0, 3, 6 }, new[] { 1, 4, 7 }, new[] { 2, 5, 8 } };
+        internal static readonly int[][] DiagonalLines = { new[] { 0, 4, 8 }, new[] { 2, 4, 6 } };
+
+        internal int? TryMakeLine(Game state, IPlayer player, bool skipCenter, int[][] possibleLines)
+        {
+            int? ret = null;
+            var ourMoves = state.GameActions.OfType<OccupyGameAction>().Where(x => x.Player == player).ToList();
+            var centers = possibleLines.Select(x => x.Skip(1).Take(1).First()).ToArray();
+
+            foreach (var move in ourMoves)
+            {
+                // find a line we're a part of
+                var mv = move;
+                var ourLines = possibleLines.Where(x => x.Contains(mv.Move));
+                foreach (var ourLine in ourLines)
+                {
+                    if (ourLine == null)
+                        continue;
+                    bool gotIt = true;
+                    foreach (var p in ourLine)
+                    {
+                        var pos = state.Board.GetPosition(p);
+                        if (pos == null) continue;
+                        if (pos != player)
+                        {
+                            gotIt = false;
+                            break;
+                        }
+                    }
+                    if (gotIt)
+                    {
+                        if ((centers.Contains(move.Move)) || skipCenter)
+                        {
+                            ret = ourLine.First(x => state.Board.IsPositionOccupied(x) == false);
+                            return ret;
+                        }
+
+                        if (move.Move == ourLine.First())
+                            ret = ourLine.Last();
+                        else ret = ourLine.First();
+                        return ret;
+                    }
+                }
+                // If we get here that means that there wasn't a line that was completely free for us to use with this move.
+            }
+            return ret;
         }
 
         public override string ToString()
