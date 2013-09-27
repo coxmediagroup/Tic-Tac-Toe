@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using Common.Logging;
 using TicTacToe.Core.Actions;
@@ -103,11 +104,11 @@ namespace TicTacToe.Core.Players
 
                 // make vertical line
                 if (move == null)
-                    move = TryMakeLine(state, this, true, VerticalLines);
+                    move = TryMakeLine(state, this, false, VerticalLines);
 
                 // make horizontal line
                 if (move == null)
-                    move = TryMakeLine(state, this, true, HorizontalLines);
+                    move = TryMakeLine(state, this, false, HorizontalLines);
 
                 if (move != null)
                 {
@@ -186,8 +187,12 @@ namespace TicTacToe.Core.Players
                     }
                     if (gotIt)
                     {
-                        if ((centers.Contains(move.Move)) || skipCenter)
+                        if ((centers.Contains(move.Move)) || skipCenter || new MoveItem(move.Move,this).IsSide)
                         {
+                            if (ourLine[1] != move.Move)
+                            {
+                                return ourLine[1];
+                            }
                             ret = ourLine.First(x => state.Board.IsPositionOccupied(x) == false);
                             return ret;
                         }
