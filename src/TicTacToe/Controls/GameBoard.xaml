@@ -6,12 +6,12 @@
              xmlns:controls="clr-namespace:TicTacToe.Controls"
              mc:Ignorable="d" 
              Width="315"
-             Height="290" x:Name="self"
+             Height="290" x:Name="Self"
              d:DesignHeight="300" d:DesignWidth="300" Background="#FF4E4C51">
     <Grid>
         <Image Source="../Resources/board.png" Stretch="None"></Image>
         <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Top"
-            ItemsSource="{Binding ElementName=self,Path=Vm.Positions}">
+            ItemsSource="{Binding ElementName=Self,Path=Vm.Positions}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" >

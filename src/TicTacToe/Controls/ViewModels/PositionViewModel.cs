@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel;
 using TicTacToe.Core;
-using TicTacToe.Core.Annotations;
 using TicTacToe.Core.Players;
+using TicTacToe.Core.Annotations;
 
 namespace TicTacToe.Controls.ViewModels
 {
     using System;
 
-    using TicTacToe.Core.Actions;
+    using Core.Actions;
 
     public class PositionViewModel : INotifyPropertyChanged, IDisposable
     {
@@ -63,7 +63,7 @@ namespace TicTacToe.Controls.ViewModels
         private void BoardOnOnOccupy(IPlayer player, int x, int y)
         {
             if (x == X && y == Y)
-				this.Player = player;
+				Player = player;
         }
 
         public void HandleClick()

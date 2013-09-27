@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Players
 {
     public interface IPlayer
     {

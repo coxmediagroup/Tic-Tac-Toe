@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:TicTacToe.Controls"
         Title="Tic Tac Toe" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-        x:Name="self" Icon="Resources/icon.ico">
+        x:Name="Self" Icon="Resources/icon.ico">
     <Window.Resources>
         <Storyboard x:Key="FadeOut">
             <DoubleAnimation From="100" To="0" Duration="0:0:0:0.300" Storyboard.TargetProperty="Opacity"/>
@@ -39,7 +39,7 @@
             <Setter Property="Height" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=self,Path=SetupVisible}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=Self,Path=SetupVisible}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard Storyboard.TargetProperty="(Border.Height)">
@@ -65,7 +65,7 @@
         <Style TargetType="Border" x:Key="Player1Background" BasedOn="{StaticResource PlayerBackground}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.IsPlayer1Turn}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=Self,Path=Vm.IsPlayer1Turn}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
                     </DataTrigger.EnterActions>
@@ -78,7 +78,7 @@
         <Style TargetType="Border" x:Key="Player2Background" BasedOn="{StaticResource PlayerBackground}">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.IsPlayer2Turn}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=Self,Path=Vm.IsPlayer2Turn}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
                     </DataTrigger.EnterActions>
@@ -89,7 +89,7 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="GameFinishedArea" TargetType="{x:Type Border}" >
-            <Setter Property="Background" Value="{Binding ElementName=self,Path=Vm.Game.WinStatus, Converter={StaticResource WinStatusToColorConverter}}"/>
+            <Setter Property="Background" Value="{Binding ElementName=Self,Path=Vm.Game.WinStatus, Converter={StaticResource WinStatusToColorConverter}}"/>
             <!--<Setter Property="Background" Value="Green"/>-->
             <Setter Property="Opacity" Value=".80"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
@@ -102,7 +102,7 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=self,Path=Vm.Game.Status}" Value="Finished">
+                <DataTrigger Binding="{Binding ElementName=Self,Path=Vm.Game.Status}" Value="Finished">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard Storyboard="{StaticResource FadeInFinishArea}"/>
                     </DataTrigger.EnterActions>
@@ -128,27 +128,27 @@
                 <Border Style="{StaticResource Player1Background}"/>
                 <Image Source="/Resources/cross.png" Stretch="None" Margin="0,5,0,5"/>
             </Grid>
-            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player1.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ElementName=Self,Path=Vm.Game.Player1.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Grid Height="5"/>
             <TextBlock HorizontalAlignment="Left" >
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}Wins: {0}&#x0a;Ties: {1}">
-                        <Binding ElementName="self" Path="Vm.Player1WinCount" />
-                        <Binding ElementName="self" Path="Vm.TieCount" />
+                        <Binding ElementName="Self" Path="Vm.Player1WinCount" />
+                        <Binding ElementName="Self" Path="Vm.TieCount" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Setup" HorizontalAlignment="Center" Style="{StaticResource Link}" MouseLeftButtonUp="OnSetupClick"
-                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
-        <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
+                   Visibility="{Binding ElementName=Self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}"/>
+        <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=Self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="GameFinishedArea" Style="{StaticResource GameFinishedArea}">
-            <StackPanel Visibility="{Binding ElementName=self, Path=Vm.Game.Status, Converter={StaticResource GameStatusToVisibilityConverter}}" Margin="5 3 5 3">
-                <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
+            <StackPanel Visibility="{Binding ElementName=Self, Path=Vm.Game.Status, Converter={StaticResource GameStatusToVisibilityConverter}}" Margin="5 3 5 3">
+                <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=Self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
                 <Grid Height="5"/>
-                <TextBlock Foreground="White" FontSize="28" Text="{Binding ElementName=self,Path=Vm.Game.Winner}" 
-                           Visibility="{Binding ElementName=self,Path=Vm.ShowPlayerName, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center"/>
+                <TextBlock Foreground="White" FontSize="28" Text="{Binding ElementName=Self,Path=Vm.Game.Winner}" 
+                           Visibility="{Binding ElementName=Self,Path=Vm.ShowPlayerName, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center"/>
                 <TextBlock Foreground="White" FontSize="14" Text="Better luck next time? I mean you can keep on trying if you want." TextWrapping="Wrap" HorizontalAlignment="Left" Height="40"/>
             </StackPanel>
         </Border>
@@ -182,7 +182,7 @@
                             <ComboBoxItem Content="AI"/>
                         </ComboBox>
                         <Grid Height="20"/>
-                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player1Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
+                        <TextBox Text="{Binding ElementName=Self,Path=Vm.Player1Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="4" Background="#99FFFFFF">
@@ -197,7 +197,7 @@
                             <ComboBoxItem Content="AI"/>
                         </ComboBox>
                         <Grid Height="20"/>
-                        <TextBox Text="{Binding ElementName=self,Path=Vm.Player2Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
+                        <TextBox Text="{Binding ElementName=Self,Path=Vm.Player2Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="22"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="6">
@@ -211,18 +211,18 @@
                 <Border Style="{StaticResource Player2Background}"/>
                 <Image Source="/Resources/circle.png" Stretch="None" Margin="0,5,0,5"/>
             </Grid>
-            <TextBlock Text="{Binding ElementName=self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ElementName=Self,Path=Vm.Game.Player2.Name, Mode=OneWay}" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Grid Height="5"/>
             <TextBlock HorizontalAlignment="Left" >
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}Wins: {0}&#x0a;Ties: {1}">
-                        <Binding ElementName="self" Path="Vm.Player2WinCount" />
-                        <Binding ElementName="self" Path="Vm.TieCount" />
+                        <Binding ElementName="Self" Path="Vm.Player2WinCount" />
+                        <Binding ElementName="Self" Path="Vm.TieCount" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
         </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Reset Game" HorizontalAlignment="Center" Style="{StaticResource Link}"
-                   Visibility="{Binding ElementName=self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}" MouseLeftButtonDown="OnResetClick"/>
+                   Visibility="{Binding ElementName=Self,Path=SetupVisible, Converter={StaticResource InvertetBooleanToVisibilityConverter}}" MouseLeftButtonDown="OnResetClick"/>
     </Grid>
 </Window>

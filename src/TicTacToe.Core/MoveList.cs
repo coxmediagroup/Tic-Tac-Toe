@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TicTacToe.Core.Actions;
+using TicTacToe.Core.Players;
 
-namespace TicTacToe.Core.Players.AI
+namespace TicTacToe.Core
 {
     public class MoveList : ICloneable
     {
@@ -53,7 +54,7 @@ namespace TicTacToe.Core.Players.AI
                 }
                 if (match)
                 {
-                    this.Moves = t.Moves;
+                    Moves = t.Moves;
                     return;
                 }
             }
@@ -137,7 +138,8 @@ namespace TicTacToe.Core.Players.AI
 
         public IEnumerable<MoveList> GetTransforms()
         {
-            var m2 = this.Clone() as MoveList;
+// ReSharper disable PossibleNullReferenceException
+            var m2 = Clone() as MoveList;
             yield return m2;
             m2 = m2.Clone() as MoveList; 
             m2.RotateLeft();
@@ -164,6 +166,7 @@ namespace TicTacToe.Core.Players.AI
             //m2 = m2.Clone() as MoveList; 
             //m2.RotateLeft();
             //yield return m2;
+// ReSharper restore PossibleNullReferenceException
         }
 
         #region Implementation of ICloneable
@@ -176,10 +179,11 @@ namespace TicTacToe.Core.Players.AI
         /// </returns>
         public object Clone()
         {
+// ReSharper disable once UseObjectOrCollectionInitializer
             var ml = new MoveList();
-            ml.StartPlayer = this.StartPlayer;
-            ml.MoveCount = this.MoveCount;
-            ml.Moves = this.Moves.Select(x => x.Clone() as MoveItem).ToList();
+            ml.StartPlayer = StartPlayer;
+            ml.MoveCount = MoveCount;
+            ml.Moves = Moves.Select(x => x.Clone() as MoveItem).ToList();
             return ml;
         }
 

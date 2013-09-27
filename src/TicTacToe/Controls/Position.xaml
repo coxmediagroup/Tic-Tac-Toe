@@ -4,13 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             Width="58" Height="64" x:Name="self"
+             Width="58" Height="64" x:Name="Self"
              HorizontalAlignment="Left" VerticalAlignment="Top"
              Cursor="Hand"  Background="#01FFFFFF" IsHitTestVisible="True" MouseLeftButtonUp="OnMouseClick">
     <Grid>
         <Image Source="../Resources/cross.png" Stretch="None"
-               Visibility="{Binding ElementName=self,Path=Vm.ShowX, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+               Visibility="{Binding ElementName=Self,Path=Vm.ShowX, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Image Source="../Resources/circle.png" Stretch="None"
-               Visibility="{Binding ElementName=self,Path=Vm.ShowO, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+               Visibility="{Binding ElementName=Self,Path=Vm.ShowO, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

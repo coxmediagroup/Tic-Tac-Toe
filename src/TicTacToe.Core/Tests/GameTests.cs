@@ -1,14 +1,13 @@
-﻿namespace TicTacToe.Core.Tests
+﻿using TicTacToe.Core.Players;
+
+namespace TicTacToe.Core.Tests
 {
     using System;
-    using System.Linq;
-    using System.Threading;
-
     using FakeItEasy;
 
     using NUnit.Framework;
 
-    using TicTacToe.Core.Actions;
+    using Core.Actions;
 
     public class GameTests
     {
@@ -73,7 +72,6 @@
             {
                 Assert.Null(game.PlayerTurn);
                 game.Start();
-                var cp = game.PlayerTurn;
             }
         }
 
@@ -85,30 +83,13 @@
         }
 
         [Test]
-        public void PerformAction_CanOnlyDoResetOnFinishedGame()
-        {
-            using (var game = BasicGame())
-            {
-                game.Status = GameStatus.Finished;
-
-                var occupyGameAction = new OccupyGameAction(game, game.Player1, 1, 1);
-                Assert.Throws<InvalidOperationException>(() => game.PerformAction(occupyGameAction));
-
-                var resetGameAction = new ResetGameAction(game, game.Player1);
-                Assert.DoesNotThrow(() => game.PerformAction(resetGameAction));
-                game.Status = GameStatus.Running;
-                occupyGameAction.Player = game.PlayerTurn;
-                Assert.DoesNotThrow(() => game.PerformAction(occupyGameAction));
-            }
-        }
-
-        [Test]
         public void PerformAction_CantGoIfNotTurn()
         {
             using (var game = BasicGame())
             {
+                var g = game;
                 var testAction =
-                    A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.Player1 }));
+                    A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { g, g.Player1 }));
                 game.PlayerTurn = game.Player2;
                 Assert.Throws<InvalidOperationException>(() => game.PerformAction(testAction));
             }
@@ -119,10 +100,10 @@
         {
             using (var game = BasicGame())
             {
+                var g = game;
                 game.Start();
                 var testAction =
-                    A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { game, game.PlayerTurn }));
-                var num = 0;
+                    A.Fake<GameAction>(x => x.WithArgumentsForConstructor(new object[] { g, g.PlayerTurn }));
                 game.PerformAction(testAction);
                 Assert.AreEqual(1, game.ActionQueue.Count);
             }
@@ -137,8 +118,8 @@
                 game.Board.BoardPositions[1][0] = game.Player1;
                 game.Board.BoardPositions[2][0] = game.Player1;
 
-                game.GameActions.Add(new OccupyGameAction(game, game.Player1, 0, 0));
-                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1));
+                game.GameActions.Add(new OccupyGameAction(game, game.Player1, 0));
+                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1,0));
 
                 Assert.Null(game.Winner);
                 Assert.AreEqual(GameStatus.Running, game.Status);
@@ -161,8 +142,8 @@
                 Assert.AreEqual(GameStatus.Running, game.Status);
                 Assert.AreEqual(GameWinStatus.None, game.WinStatus);
 
-				game.GameActions.Add(new OccupyGameAction(game,game.Player1,0,0));
-                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1));
+				game.GameActions.Add(new OccupyGameAction(game,game.Player1,0));
+                game.GameActions.Add(new OccupyGameAction(game, game.Player2, 0, 1,0));
 
                 game.Board.BoardPositions[0][0] = game.Player1;
                 game.Board.BoardPositions[1][0] = game.Player2;

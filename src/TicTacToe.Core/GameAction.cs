@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Core
+﻿using TicTacToe.Core.Players;
+
+namespace TicTacToe.Core
 {
     using System;
 
@@ -11,13 +13,13 @@
         {
             if (state == null) throw new ArgumentException("state cannot be null.", "state");
             if (player == null) throw new ArgumentException("player cannot be null.", "player");
-            this.Game = state;
-            this.Player = player;
+            Game = state;
+            Player = player;
         }
 
         internal void Log(string message, params object[] args)
         {
-            this.Game.ActionLog(string.Format(message, args));
+            Game.ActionLog(string.Format(message, args));
         }
 
         public abstract void Do();

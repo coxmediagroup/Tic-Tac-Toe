@@ -1,10 +1,12 @@
-﻿namespace TicTacToe.Core.Tests.Actions
+﻿using TicTacToe.Core.Players;
+
+namespace TicTacToe.Core.Tests.Actions
 {
     using System;
 
     using NUnit.Framework;
 
-    using TicTacToe.Core.Actions;
+    using Core.Actions;
 
     public class OccupyGameActionTests
     {
@@ -15,7 +17,7 @@
             var p2 = new HumanPlayer("tim");
             using (var game = new Game(p1, p2))
             {
-                var action = new OccupyGameAction(game, p1, 2, 1);
+                var action = new OccupyGameAction(game, p1, 2, 1, 0);
 
                 Assert.AreEqual(p1, action.Player);
                 Assert.AreEqual(game, action.Game);
@@ -31,8 +33,8 @@
             var p2 = new HumanPlayer("tim");
             using (var game = new Game(p1, p2))
             {
-                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 12, 0));
-                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 0, 12));
+                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 12));
+                Assert.Throws<ArgumentException>(() => new OccupyGameAction(game, p1, 0, 12,0));
             }
         }
 
@@ -57,7 +59,7 @@
             var p2 = new HumanPlayer("tim");
             using (var game = new Game(p1, p2))
             {
-                var action = new OccupyGameAction(game, p1, 2, 1);
+                var action = new OccupyGameAction(game, p1, 2, 1,0);
 
                 action.Do();
                 Assert.NotNull(game.Board.BoardPositions[1][2]);

@@ -1,4 +1,4 @@
-﻿using TicTacToe.Core.Players.AI;
+﻿using TicTacToe.Core.Players;
 
 namespace TicTacToe.Core
 {
@@ -23,10 +23,10 @@ namespace TicTacToe.Core
         public GameBoard()
         {
             //Create three rows of three board positions
-            this.BoardPositions = new IPlayer[Height][];
+            BoardPositions = new IPlayer[Height][];
             for (var i = 0; i < Height; i++)
             {
-                this.BoardPositions[i] = new IPlayer[Width];
+                BoardPositions[i] = new IPlayer[Width];
             }
 
             if (WinConditions == null)
@@ -45,7 +45,7 @@ namespace TicTacToe.Core
 
         public bool IsPositionOccupied(int x, int y)
         {
-            return this.BoardPositions[y][x] != null;
+            return BoardPositions[y][x] != null;
         }
 
 		/// <summary>
@@ -56,22 +56,22 @@ namespace TicTacToe.Core
         public bool IsPositionOccupied(int idx)
 		{
 		    int x, y;
-			this.IndexToCoords(idx,out x, out y);
+			IndexToCoords(idx,out x, out y);
 		    return IsPositionOccupied(x, y);
 		}
 
         public IPlayer GetPosition(int idx)
         {
             int x, y;
-            this.IndexToCoords(idx,out x, out y);
+            IndexToCoords(idx,out x, out y);
             return BoardPositions[y][x];
         }
 
         public void Occupy(IPlayer player, int x, int y)
         {
-            if (this.IsPositionOccupied(x, y))
+            if (IsPositionOccupied(x, y))
                 throw new InvalidOperationException("Position " + x + ":" + y + " is already occupied.");
-            this.BoardPositions[y][x] = player;
+            BoardPositions[y][x] = player;
 		    FireOnOccupy(player, x, y);
         }
 
@@ -83,7 +83,7 @@ namespace TicTacToe.Core
         public void Occupy(IPlayer player, int idx)
         {
 		    int x, y;
-			this.IndexToCoords(idx,out x, out y);
+			IndexToCoords(idx,out x, out y);
             Occupy(player,x, y);
         }
 
@@ -113,7 +113,7 @@ namespace TicTacToe.Core
         {
             foreach (var condition in WinConditions)
             {
-                int x,y = 0;
+                int x,y;
                 IndexToCoords(condition[0],out x, out y);
                 var p1 = BoardPositions[y][x];
                 IndexToCoords(condition[1],out x, out y);
@@ -137,7 +137,7 @@ namespace TicTacToe.Core
             var moveItems = new MoveItem[3];
             foreach (var condition in WinConditions)
             {
-                int x, y = 0;
+                int x, y;
                 IndexToCoords(condition[0], out x, out y);
                 moveItems[0] = new MoveItem(condition[0],BoardPositions[y][x]);
                 IndexToCoords(condition[1], out x, out y);
@@ -163,7 +163,7 @@ namespace TicTacToe.Core
 
         protected virtual void FireOnOccupy(IPlayer player, int x, int y)
         {
-            var handler = this.OnOccupy;
+            var handler = OnOccupy;
             if (handler != null)
             {
                 handler(player, x, y);

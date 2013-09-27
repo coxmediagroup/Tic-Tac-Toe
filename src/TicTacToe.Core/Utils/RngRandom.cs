@@ -29,7 +29,7 @@
 
         #endregion Singleton
 
-        private readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+        private readonly RNGCryptoServiceProvider _rng = new RNGCryptoServiceProvider();
 
         /// <summary>
         /// Gets next random integer between 0 and Int32.MaxValue
@@ -38,7 +38,7 @@
         public Int32 Next()
         {
             var uint32Buffer = new byte[4];
-            this.rng.GetBytes(uint32Buffer);
+            _rng.GetBytes(uint32Buffer);
             return BitConverter.ToInt32(uint32Buffer, 0) & 0x7FFFFFFF;
         }
         /// <summary>
@@ -49,7 +49,7 @@
         public Int32 Next(Int32 maxValue)
         {
             if (maxValue < 0) throw new ArgumentOutOfRangeException("maxValue");
-            return this.Next(0, maxValue);
+            return Next(0, maxValue);
         }
 
         /// <summary>
@@ -66,11 +66,11 @@
             var uint32Buffer = new byte[4];
             while (true)
             {
-                this.rng.GetBytes(uint32Buffer);
+                _rng.GetBytes(uint32Buffer);
                 var rand = BitConverter.ToUInt32(uint32Buffer, 0);
-                const long Max = (1 + (Int64)UInt32.MaxValue);
-                var remainder = Max % diff;
-                if (rand < Max - remainder)
+                const long max = (1 + (Int64)UInt32.MaxValue);
+                var remainder = max % diff;
+                if (rand < max - remainder)
                 {
                     return (Int32)(minValue + (rand % diff));
                 }

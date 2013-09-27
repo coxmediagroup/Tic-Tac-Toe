@@ -2,7 +2,7 @@
 {
 	using NUnit.Framework;
 
-	using TicTacToe.Core.Utils;
+	using Core.Utils;
 
     public class RngRandomTests
     {

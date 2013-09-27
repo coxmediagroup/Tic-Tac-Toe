@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.Core
+﻿namespace TicTacToe.Core.Players
 {
     public class HumanPlayer : IPlayer
     {
@@ -10,7 +10,7 @@
         /// <param name="name">Name of the <see cref="HumanPlayer"/></param>
         public HumanPlayer(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@
 
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
     }
 }

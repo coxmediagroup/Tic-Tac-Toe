@@ -1,6 +1,7 @@
 ﻿using System;
+using TicTacToe.Core.Players;
 
-namespace TicTacToe.Core.Players.AI
+namespace TicTacToe.Core
 {
     public class MoveItem : IEquatable<MoveItem>, ICloneable
     {
@@ -35,10 +36,10 @@ namespace TicTacToe.Core.Players.AI
 
         public MoveItem(int move, IPlayer player)
         {
-            this.Move = move;
-            this.Player = player;
-            this.X = move % 3;
-            this.Y = move / 3;
+            Move = move;
+            Player = player;
+            X = move % 3;
+            Y = move / 3;
         }
 
         public void RotateLeft()
@@ -57,7 +58,7 @@ namespace TicTacToe.Core.Players.AI
 
         public bool Equals(MoveItem other)
         {
-            return this.Move == other.Move && this.Player == other.Player;
+            return Move == other.Move && Player == other.Player;
         }
 
         #region Implementation of ICloneable

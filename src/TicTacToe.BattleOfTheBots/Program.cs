@@ -9,7 +9,7 @@ namespace TicTacToe.BattleOfTheBots
     using System.Linq;
     using Common.Logging;
 
-    using TicTacToe.Core;
+    using Core;
 
     public class Program
     {
@@ -18,21 +18,19 @@ namespace TicTacToe.BattleOfTheBots
         public static int Left;
         public static int Top;
 
-        public static int AiCount = 0;
-
         public static int TotalCount = 0;
 
         public static List<RunResult> ResultList = new List<RunResult>();
 
-        static void Main(string[] args)
+        static void Main()
         {
             Log.Info("Starting");
 
             ResultList = new List<RunResult>();
 
-            var p1 = new AiPlayer("TimWinBot", true);
-            var p2 = new AiPlayer("JimTieBot", true);
-            var maxCount = 1000000;
+            var p1 = new AiPlayer("TimWinBot");
+            var p2 = new AiPlayer("JimTieBot");
+            const int maxCount = 1000000;
             Console.CursorTop = 3;
             Game game = null;
             for (var i = 0; i < maxCount; i++)
@@ -51,7 +49,6 @@ namespace TicTacToe.BattleOfTheBots
                 }
                 var g = game;
 				g.Start();
-                AiCount = game.LearnProcessor.LearnCount;
                 while (game.Status == GameStatus.Running)
                     Thread.Sleep(1);
                 while (game.ReadyForReset == false) Thread.Sleep(1);
@@ -72,7 +69,8 @@ namespace TicTacToe.BattleOfTheBots
                 ResultList.Add(new RunResult(game.Winner, game.WinStatus, time.ElapsedMilliseconds));
                 TotalCount++;
             }
-			game.Dispose();
+            if(game!= null)
+			    game.Dispose();
             Console.SetCursorPosition((Console.WindowWidth / 2) - 2, Console.WindowHeight - 2);
             Console.WriteLine("Done");
             Console.ReadKey();
@@ -94,8 +92,8 @@ namespace TicTacToe.BattleOfTheBots
             int barSize = Console.BufferWidth - 14;
             Console.CursorVisible = false;
             Console.WriteLine(message);
-            decimal perc = (decimal)complete / (decimal)maxVal;
-            int chars = (int)Math.Floor(perc / ((decimal)1 / (decimal)barSize));
+            decimal perc = complete / (decimal)maxVal;
+            var chars = (int)Math.Floor(perc / (1 / (decimal)barSize));
             string p1 = String.Empty, p2 = String.Empty;
 
             for (int i = 0; i < chars; i++) p1 += progressCharacter;
@@ -134,7 +132,7 @@ namespace TicTacToe.BattleOfTheBots
             var wins = ResultList.Count(x => x.Status == GameWinStatus.Win);
             var ties = ResultList.Count(x => x.Status == GameWinStatus.Tie);
             var avgtime = ResultList.Average(x => x.Milliseconds);
-            var str = string.Format("Wins: {0}     Ties: {1}    Total: {2}    AvgTime: {3}    Aicount: {4}", wins, ties, TotalCount, (int)avgtime, AiCount);
+            var str = string.Format("Wins: {0}     Ties: {1}    Total: {2}    AvgTime: {3}", wins, ties, TotalCount, (int)avgtime);
             Console.CursorLeft = (Console.WindowWidth / 2) - (str.Length / 2);
             Console.Write(str);
         }

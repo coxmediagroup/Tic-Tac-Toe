@@ -2,10 +2,9 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
-using Common.Logging.Configuration;
 using TicTacToe.Core;
-using TicTacToe.Core.Actions;
 using TicTacToe.Core.Annotations;
+using TicTacToe.Core.Players;
 
 namespace TicTacToe.Controls.ViewModels
 {
@@ -17,16 +16,16 @@ namespace TicTacToe.Controls.ViewModels
         {
             get
             {
-                return this.game;
+                return _game;
             }
             set
             {
-                if (Equals(value, this.game))
+                if (Equals(value,_game))
                 {
                     return;
                 }
-                this.game = value;
-                this.OnPropertyChanged("Game");
+                _game = value;
+                OnPropertyChanged("Game");
             }
         }
 
@@ -34,12 +33,12 @@ namespace TicTacToe.Controls.ViewModels
         {
             get
             {
-                return this.player1Name;
+                return _player1Name;
             }
             set
             {
-                if (value == this.player1Name) return;
-                this.player1Name = value;
+                if (value == _player1Name) return;
+                _player1Name = value;
                 OnPropertyChanged("Player1Name");
             }
         }
@@ -48,12 +47,12 @@ namespace TicTacToe.Controls.ViewModels
         {
             get
             {
-                return this.player2Name;
+                return _player2Name;
             }
             set
             {
-                if (value == this.player2Name) return;
-                this.player2Name = value;
+                if (value == _player2Name) return;
+                _player2Name = value;
                 OnPropertyChanged("Player2Name");
             }
         }
@@ -118,11 +117,11 @@ namespace TicTacToe.Controls.ViewModels
         public static readonly DependencyProperty GameBoardViewModelProperty =
             DependencyProperty.Register("GameBoardViewModel", typeof(GameBoardViewModel), typeof(GameViewModel), new PropertyMetadata(default(GameBoardViewModel)));
 
-        private string player1Name;
+        private string _player1Name;
 
-        private string player2Name;
+        private string _player2Name;
 
-        private Game game;
+        private Game _game;
         private int _player1WinCount;
         private int _player2WinCount;
         private int _tieCount;
@@ -150,9 +149,9 @@ namespace TicTacToe.Controls.ViewModels
 
         private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            this.OnPropertyChanged("IsPlayer1Turn");
-            this.OnPropertyChanged("IsPlayer2Turn");
-            this.OnPropertyChanged("ShowPlayerName");
+            OnPropertyChanged("IsPlayer1Turn");
+            OnPropertyChanged("IsPlayer2Turn");
+            OnPropertyChanged("ShowPlayerName");
             if (args.PropertyName == "Status")
             {
                 if (Game.Status == GameStatus.Finished)
@@ -172,8 +171,8 @@ namespace TicTacToe.Controls.ViewModels
                     Task.Factory.StartNew(() =>
                     {
                         Thread.Sleep(1000);
-                        this.Game.Reset();
-                        this.Game.Start();
+                        Game.Reset();
+                        Game.Start();
                         Dispatcher.Invoke(new Action(() =>
                         {
                             GameBoardViewModel.Dispose();
@@ -186,10 +185,7 @@ namespace TicTacToe.Controls.ViewModels
 
         public void Start()
         {
-            Task.Factory.StartNew(() =>
-            {
-                Game.Start();
-            });
+            Task.Factory.StartNew(() => Game.Start());
         }
 
         public void Reset(IPlayer player1, IPlayer player2)
@@ -201,9 +197,9 @@ namespace TicTacToe.Controls.ViewModels
             Game = new Game(player1, player2);
             Game.PropertyChanged += GameOnPropertyChanged;
             GameBoardViewModel = new GameBoardViewModel(this);
-            this.Player1WinCount = 0;
-            this.Player2WinCount = 0;
-            this.TieCount = 0;
+            Player1WinCount = 0;
+            Player2WinCount = 0;
+            TieCount = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

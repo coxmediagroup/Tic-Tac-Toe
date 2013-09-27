@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using TicTacToe.Controls.ViewModels;
 using TicTacToe.Core.Annotations;
 

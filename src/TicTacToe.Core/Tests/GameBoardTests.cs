@@ -1,10 +1,10 @@
-﻿namespace TicTacToe.Core.Tests
+﻿using TicTacToe.Core.Players;
+
+namespace TicTacToe.Core.Tests
 {
     using System;
 
     using NUnit.Framework;
-
-    using TicTacToe.Core.Utils;
 
     public class GameBoardTests
     {
@@ -106,8 +106,8 @@
         public void IndexToCoords_IsCorrect()
         {
             var board = new GameBoard();
-            var x = 0;
-            var y = 0;
+            int x;
+            int y;
 			board.IndexToCoords(0,out x,out y);
             Assert.AreEqual(0, x);
             Assert.AreEqual(0, y);
@@ -140,7 +140,8 @@
         [Test]
         public void Winner_IsCorrect()
         {
-            GameBoard board = null;
+// ReSharper disable once JoinDeclarationAndInitializer
+            GameBoard board;
             var p1 = new HumanPlayer("jim");
             
             board = new GameBoard();

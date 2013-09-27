@@ -1,6 +1,5 @@
 ﻿using System.Threading;
-using FakeItEasy;
-using TicTacToe.Core.Players.AI;
+using TicTacToe.Core.Players;
 
 namespace TicTacToe.Core
 {
@@ -8,22 +7,20 @@ namespace TicTacToe.Core
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading.Tasks;
-
     using Common.Logging;
 
-    using TicTacToe.Core.Actions;
-    using TicTacToe.Core.Annotations;
-    using TicTacToe.Core.Utils;
+    using Actions;
+    using Annotations;
+    using Utils;
 
     public class Game : INotifyPropertyChanged, IDisposable
     {
         internal static ILog GameLogger = LogManager.GetLogger("GameLog");
 
-        private IPlayer playerTurn;
-        private GameStatus status;
-        private GameWinStatus winStatus;
-        private IPlayer winner;
+        private IPlayer _playerTurn;
+        private GameStatus _status;
+        private GameWinStatus _winStatus;
+        private IPlayer _winner;
         private IPlayer _player1;
         private IPlayer _player2;
 
@@ -67,8 +64,6 @@ namespace TicTacToe.Core
         /// </summary>
         public List<string> GameLog { get; internal set; }
 
-        public LearnProcessor LearnProcessor { get; internal set; }
-
         public IPlayer StartPlayer { get; internal set; }
 
         /// <summary>
@@ -78,17 +73,17 @@ namespace TicTacToe.Core
         {
             get
             {
-                return this.playerTurn;
+                return _playerTurn;
             }
             internal set
             {
-                if (Equals(value, this.playerTurn))
+                if (Equals(value, _playerTurn))
                 {
                     return;
                 }
                 //ActionGate.WaitOne();
-                this.playerTurn = value;
-                this.OnPropertyChanged("PlayerTurn");
+                _playerTurn = value;
+                OnPropertyChanged("PlayerTurn");
             }
         }
 
@@ -96,16 +91,16 @@ namespace TicTacToe.Core
         {
             get
             {
-                return this.status;
+                return _status;
             }
             internal set
             {
-                if (value == this.status)
+                if (value == _status)
                 {
                     return;
                 }
-                this.status = value;
-                this.OnPropertyChanged("Status");
+                _status = value;
+                OnPropertyChanged("Status");
             }
         }
 
@@ -113,16 +108,16 @@ namespace TicTacToe.Core
         {
             get
             {
-                return this.winStatus;
+                return _winStatus;
             }
             internal set
             {
-                if (value == this.winStatus)
+                if (value == _winStatus)
                 {
                     return;
                 }
-                this.winStatus = value;
-                this.OnPropertyChanged("WinStatus");
+                _winStatus = value;
+                OnPropertyChanged("WinStatus");
             }
         }
 
@@ -130,16 +125,16 @@ namespace TicTacToe.Core
         {
             get
             {
-                return this.winner;
+                return _winner;
             }
             internal set
             {
-                if (Equals(value, this.winner))
+                if (Equals(value, _winner))
                 {
                     return;
                 }
-                this.winner = value;
-                this.OnPropertyChanged("Winner");
+                _winner = value;
+                OnPropertyChanged("Winner");
             }
         }
 
@@ -148,14 +143,12 @@ namespace TicTacToe.Core
         /// </summary>
         /// <param name="player1">Player 1</param>
         /// <param name="player2">Player 2</param>
-        /// <param name="gameBoard">Game board to use</param>
         public Game(IPlayer player1, IPlayer player2)
         {
             if (player1 == null)
                 throw new ArgumentException("player1 can't be null", "player1");
             if (player2 == null)
                 throw new ArgumentException("player2 can't be null", "player2");
-            LearnProcessor = new LearnProcessor("aidata.dat");
             GameLog = new List<string>();
             GameActions = new List<GameAction>();
             Player1 = player1;
@@ -200,9 +193,9 @@ namespace TicTacToe.Core
             {
                 if (action == null)
                     throw new ArgumentOutOfRangeException("action", "action can not be null");
-                if (Status != GameStatus.Running && (action is ResetGameAction) == false)
+                if (Status != GameStatus.Running)
                     throw new InvalidOperationException("Cannot do that action because the game is finished.");
-                if ((action is ResetGameAction) == false && action.Player != PlayerTurn)
+                if (action.Player != PlayerTurn)
                     throw new InvalidOperationException("It's not " + action.Player.Name + "'s turn");
                 LogManager.GetCurrentClassLogger().Debug("EnqueueAction");
                 ActionQueue.Enqueue(action);
@@ -211,9 +204,9 @@ namespace TicTacToe.Core
 
         public void DoTurn(IPlayer player, int delay = 0)
         {
-            if (this.playerTurn != null)
+            if (_playerTurn != null)
             {
-                this.playerTurn.OnTurn(this);
+                _playerTurn.OnTurn(this);
             }
         }
 
@@ -221,7 +214,7 @@ namespace TicTacToe.Core
         {
             while (IsRunning)
             {
-                GameAction action = null;
+                GameAction action;
                 if (!ActionQueue.TryDequeue(out action))
                 {
                     Thread.Sleep(1);
@@ -271,14 +264,13 @@ namespace TicTacToe.Core
             }
             else
             {
-                if (!this.Board.IsFull())
+                if (!Board.IsFull())
                     return;
-                this.WinStatus = GameWinStatus.Tie;
-                this.Winner = null;
+                WinStatus = GameWinStatus.Tie;
+                Winner = null;
             }
-            this.ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
+            ActionLog(string.Format("Game Finished[{0}]: {1}", WinStatus, Winner));
             Status = GameStatus.Finished;
-            LearnProcessor.ProcessEndGame(this);
         }
 
         public void Reset()

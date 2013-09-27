@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using Common.Logging;
 using TicTacToe.Core.Actions;
-using TicTacToe.Core.Players.AI;
 using TicTacToe.Core.Utils;
 
 namespace TicTacToe.Core.Players
@@ -21,13 +18,11 @@ namespace TicTacToe.Core.Players
         /// Create a <see cref="AiPlayer"/>
         /// </summary>
         /// <param name="name">Name of the <see cref="AiPlayer"/></param>
-        /// <param name="focus">Choose what the Ai is more focused on achieving</param>
         /// <param name="turnDelay">Time to wait before switching the turn in ms(Default: 0)</param>
-        public AiPlayer(string name, bool isLearning, int turnDelay = 0)
+        public AiPlayer(string name, int turnDelay = 0)
         {
-            this.Name = name;
-            this.TurnDelay = turnDelay;
-            this.IsLearning = isLearning;
+            Name = name;
+            TurnDelay = turnDelay;
         }
 
         /// <summary>
@@ -36,9 +31,9 @@ namespace TicTacToe.Core.Players
         /// <param name="state">State of the game</param>
         public void OnTurn(Game state)
         {
-            OccupyGameAction a = null;
+            OccupyGameAction a;
 
-            Log.DebugFormat("[OnTurn] Player={0}",this.Name);
+            Log.DebugFormat("[OnTurn] Player={0}",Name);
 
             // If board is empty, then we're going first
             if (state.Board.IsEmpty())
@@ -95,8 +90,9 @@ namespace TicTacToe.Core.Players
                 return;
             }
 
-            int? move = null;
+            int? move;
 
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
             if (state.StartPlayer == this)
             {
                 // make diagonal line
@@ -139,7 +135,7 @@ namespace TicTacToe.Core.Players
                     return;
                 }
             }
-
+// ReSharper restore ConvertIfStatementToNullCoalescingExpression
             // Ok, so can't take start moves, win, block, or make any lines, at this point we just pick the first possible location on the board
 
             for (var i = 0; i < 9; i++)
@@ -161,7 +157,6 @@ namespace TicTacToe.Core.Players
 
         internal int? TryMakeLine(Game state, IPlayer player, bool skipCenter, int[][] possibleLines)
         {
-            int? ret = null;
             var ourMoves = state.GameActions.OfType<OccupyGameAction>().Where(x => x.Player == player).ToList();
             var centers = possibleLines.Select(x => x.Skip(1).Take(1).First()).ToArray();
 
@@ -175,6 +170,7 @@ namespace TicTacToe.Core.Players
                     if (ourLine == null)
                         continue;
                     bool gotIt = true;
+// ReSharper disable once LoopCanBeConvertedToQuery
                     foreach (var p in ourLine)
                     {
                         var pos = state.Board.GetPosition(p);
@@ -187,6 +183,7 @@ namespace TicTacToe.Core.Players
                     }
                     if (gotIt)
                     {
+                        int? ret;
                         if ((centers.Contains(move.Move)) || skipCenter || new MoveItem(move.Move,this).IsSide)
                         {
                             if (ourLine[1] != move.Move)
@@ -197,15 +194,13 @@ namespace TicTacToe.Core.Players
                             return ret;
                         }
 
-                        if (move.Move == ourLine.First())
-                            ret = ourLine.Last();
-                        else ret = ourLine.First();
+                        ret = move.Move == ourLine.First() ? ourLine.Last() : ourLine.First();
                         return ret;
                     }
                 }
                 // If we get here that means that there wasn't a line that was completely free for us to use with this move.
             }
-            return ret;
+            return null;
         }
 
         public override string ToString()

@@ -9,8 +9,6 @@ namespace TicTacToe
 {
     using System.Windows.Input;
 
-    using TicTacToe.Core;
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -18,7 +16,7 @@ namespace TicTacToe
     {
         private GameViewModel _vm;
 
-        private bool setupVisible;
+        private bool _setupVisible;
 
         public GameViewModel Vm
         {
@@ -35,28 +33,28 @@ namespace TicTacToe
         {
             get
             {
-                return this.setupVisible;
+                return _setupVisible;
             }
             set
             {
-                if (value.Equals(this.setupVisible))
+                if (value.Equals(_setupVisible))
                 {
                     return;
                 }
-                this.setupVisible = value;
-                this.OnPropertyChanged("SetupVisible");
+                _setupVisible = value;
+                OnPropertyChanged("SetupVisible");
             }
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += OnLoaded;
+            Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            this.Loaded -= OnLoaded;
+            Loaded -= OnLoaded;
             Vm = new GameViewModel();
             Vm.Start();
         }
@@ -102,7 +100,7 @@ namespace TicTacToe
 
             if (Player1Type.Text == "AI")
             {
-                player1 = new AiPlayer(Vm.Player1Name,false, 400);
+                player1 = new AiPlayer(Vm.Player1Name, 400);
             }
 			else
             {
@@ -112,7 +110,7 @@ namespace TicTacToe
             }
             if (Player2Type.Text == "AI")
             {
-                player2 = new AiPlayer(Vm.Player2Name, false, 400);
+                player2 = new AiPlayer(Vm.Player2Name, 400);
             }
 			else
             {
@@ -123,8 +121,10 @@ namespace TicTacToe
 			Vm.Reset(player1,player2);
             if (!hasHuman)
             {
+// ReSharper disable PossibleNullReferenceException
                 (Vm.Game.Player1 as AiPlayer).TurnDelay = 800;
                 (Vm.Game.Player2 as AiPlayer).TurnDelay = 800;
+// ReSharper restore PossibleNullReferenceException
             }
             Vm.Player1Name = player1.Name;
             Vm.Player2Name = player2.Name;

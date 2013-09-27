@@ -6,7 +6,7 @@
     using System.Windows.Data;
     using System.Windows.Media;
 
-    using TicTacToe.Core;
+    using Core;
 
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public class InvertedBooleanToVisibilityConverter : IValueConverter
