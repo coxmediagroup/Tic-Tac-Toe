@@ -48,8 +48,9 @@ namespace TicTacToe.Core.Players
                 return;
             }
 
+            var moveCount = state.GameActions.OfType<OccupyGameAction>().Count();
             // If we're doing the second move
-            if (state.GameActions.OfType<OccupyGameAction>().Count() == 1)
+            if (moveCount == 1)
             {
                 // Try and pick the center
                 if (!state.Board.IsPositionOccupied(4))
@@ -90,7 +91,7 @@ namespace TicTacToe.Core.Players
                 return;
             }
 
-            int? move;
+            int? move = null;
 
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
             if (state.StartPlayer == this)
@@ -117,7 +118,18 @@ namespace TicTacToe.Core.Players
             else
             {
                 // make diagonal line
-                move = TryMakeLine(state, this, true, DiagonalLines);
+                if (moveCount == 3)
+                {
+                    if (state.Board.GetPosition(0) != this && state.Board.GetPosition(4) == this
+                        && state.Board.GetPosition(7) != this)
+                    {
+                        var dlines = DiagonalLines.Select(x => x.Reverse().ToArray()).ToArray();
+                        move = TryMakeLine(state, this, true, dlines);
+                    }
+                }
+				
+				if(move == null)
+					move = TryMakeLine(state, this, true, DiagonalLines);
 
                 // make horizontal line - Don't skip center if on side
                 if (move == null)
