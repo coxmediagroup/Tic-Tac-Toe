@@ -93,7 +93,7 @@
             <!--<Setter Property="Background" Value="Green"/>-->
             <Setter Property="Opacity" Value=".80"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Height" Value="100"/>
+            <Setter Property="Height" Value="130"/>
             <Setter Property="Margin" Value="0 -150 0 0"/>
             <Setter Property="Width" Value="305"/>
             <Setter Property="Effect">
@@ -144,13 +144,19 @@
         <controls:GameBoard Grid.Column="1" Vm="{Binding ElementName=Self,Path=Vm.GameBoardViewModel}" Grid.Row="0"
                             Grid.RowSpan="2"/>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="GameFinishedArea" Style="{StaticResource GameFinishedArea}">
-            <StackPanel Visibility="{Binding ElementName=Self, Path=Vm.Game.Status, Converter={StaticResource GameStatusToVisibilityConverter}}" Margin="5 3 5 3">
-                <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=Self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
-                <Grid Height="5"/>
-                <TextBlock Foreground="White" FontSize="28" Text="{Binding ElementName=Self,Path=Vm.Game.Winner}" 
+            <Grid Margin="5 3 5 3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="100*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Visibility="{Binding ElementName=Self, Path=Vm.Game.Status, Converter={StaticResource GameStatusToVisibilityConverter}}">
+                    <TextBlock Foreground="White" FontSize="20" Text="{Binding ElementName=Self,Path=Vm.Game.WinStatus}" HorizontalAlignment="Center"/>
+                    <Grid Height="5"/>
+                    <TextBlock Foreground="White" FontSize="28" Text="{Binding ElementName=Self,Path=Vm.Game.Winner.Name}" 
                            Visibility="{Binding ElementName=Self,Path=Vm.ShowPlayerName, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center"/>
-                <TextBlock Foreground="White" FontSize="14" Text="Better luck next time? I mean you can keep on trying if you want." TextWrapping="Wrap" HorizontalAlignment="Left" Height="40"/>
-            </StackPanel>
+                </StackPanel>
+                <TextBlock Grid.Row="1"  Foreground="White" FontSize="14" Text="Better luck next time? I mean you can keep on trying if you want." TextWrapping="Wrap" HorizontalAlignment="Left" Height="40"/>
+            </Grid>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="SetupArea" Style="{StaticResource SetupArea}">
             <Grid>

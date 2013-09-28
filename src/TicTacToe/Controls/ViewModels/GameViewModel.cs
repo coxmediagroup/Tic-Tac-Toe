@@ -170,7 +170,7 @@ namespace TicTacToe.Controls.ViewModels
                     }
                     Task.Factory.StartNew(() =>
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(5000);
                         Game.Reset();
                         Game.Start();
                         Dispatcher.Invoke(new Action(() =>
