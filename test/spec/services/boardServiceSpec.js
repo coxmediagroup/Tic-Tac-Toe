@@ -30,5 +30,16 @@ describe('Service: boardService', function () {
       board.setMove(1, 1, 'X');
       expect(board.isTileEmpty(1, 1)).toEqual(false);
     })
+
+    it('should be able to determine if every tile is taken', function() {
+      var board = service.newBoard();
+      expect(board.isBoardFull()).toEqual(false);
+
+      for(var i = 0; i < board.tiles.length; i++) {
+        board.tiles[i] = 'X';
+      }
+
+      expect(board.isBoardFull()).toEqual(true);
+    })
   });
 });

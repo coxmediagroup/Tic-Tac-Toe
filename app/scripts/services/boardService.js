@@ -23,6 +23,16 @@ angular.module('TicTacToeApp')
         return this.getMove(row, col) === '';
       };
 
+      Board.prototype.isBoardFull = function isBoardFull() {
+        var foundEmptyTile = false;
+        for(var i = 0; i < this.tiles.length; i++) {
+          if (this.tiles[i] === '') {
+            foundEmptyTile = true;
+          }
+        }
+        return !foundEmptyTile;
+      };
+
       return Board;
     })();
 
