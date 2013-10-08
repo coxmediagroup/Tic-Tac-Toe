@@ -8,13 +8,29 @@ angular.module('TicTacToeApp')
       X: '×'
     };
 
-    $scope.currentPlayer = 'X';
+    $scope.board = boardService.newBoard();
+    $scope.currentPlayer = '';
+    $scope.status = 'Waiting to start game';
     $scope.players = {};
-    $scope.players.X = playerService.newInteractivePlayer();
-    $scope.players.O = playerService.newEasyAiPlayer();
+    $scope.gameInProgress = false;
+
+    $scope.startGame = function() {
+      $scope.board = boardService.newBoard();
+      $scope.players.X = playerService.newInteractivePlayer();
+      $scope.players.O = playerService.newEasyAiPlayer();
+      $scope.currentPlayer = 'X';
+      $scope.gameInProgress = true;
+      $scope.checkGameStatus();
+    };
+
+    $scope.endGame = function() {
+      $scope.gameInProgress = false;
+      $scope.currentPlayer = '';
+    };
 
     $scope.nextPlayer = function () {
       $scope.currentPlayer = $scope.currentPlayer === 'X' ? 'O' : 'X';
+      $scope.checkGameStatus();
     };
 
     $scope.processMove = function(move) {
@@ -27,6 +43,10 @@ angular.module('TicTacToeApp')
     };
 
     $scope.clickBoard = function (idx) {
+      if(!$scope.gameInProgress) {
+        return;
+      }
+
       if($scope.waitForClick) {
         var row = Math.floor(idx / 3);
         var col = idx % 3;
@@ -38,7 +58,22 @@ angular.module('TicTacToeApp')
       }
     };
 
+    $scope.checkGameStatus = function() {
+      //check for game winner
+      //if not, a full board is a tie
+      if($scope.board.isBoardFull()) {
+        $scope.endGame();
+        $scope.status = 'Board is full, tie?';
+      } else {
+        $scope.status = $scope.displaySymbols[$scope.currentPlayer] + '\' turn';
+      }
+    };
+
     $scope.$watch('currentPlayer', function() {
+      if(!$scope.gameInProgress) {
+        return;
+      }
+
       var move = $scope.players[$scope.currentPlayer].move($scope.board);
       console.log('Player move');
       console.log(move);
@@ -53,5 +88,5 @@ angular.module('TicTacToeApp')
       }
     });
 
-    $scope.board = boardService.newBoard();
+    $scope.endGame();
   }]);

@@ -22,6 +22,11 @@ body {
     cursor: default;
 }
 
+.ttt-status {
+    font-size: 24px;
+    margin: 25px;
+}
+
 .ttt-rtop {
     border-top: 0 !important;
     top: 0;

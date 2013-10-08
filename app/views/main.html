@@ -8,3 +8,8 @@
     'ttt-cright': ($index % 3) == 2
     }" ng-click="clickBoard($index)">{{displaySymbols[tile]}}</div>
 </div>
+
+<div style="text-align: center">
+    <div class="ttt-status">{{status}}</div>
+    <button class="btn" ng-click="startGame()">Start New Game</button>
+</div>
