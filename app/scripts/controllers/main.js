@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('TicTacToeApp')
-  .controller('MainCtrl', ['$scope', 'boardService', function ($scope, boardService) {
+  .controller('MainCtrl', ['$scope', 'boardService', 'playerService', function ($scope, boardService, playerService) {
     $scope.Math = Math;
     $scope.displaySymbols = {
       O: '○',
@@ -9,6 +9,9 @@ angular.module('TicTacToeApp')
     };
 
     $scope.currentPlayer = 'X';
+    $scope.players = {};
+    $scope.players.X = playerService.newInteractivePlayer();
+    $scope.players.O = playerService.newEasyAiPlayer();
 
     $scope.nextPlayer = function () {
       $scope.currentPlayer = $scope.currentPlayer === 'X' ? 'O' : 'X';
@@ -24,14 +27,31 @@ angular.module('TicTacToeApp')
     };
 
     $scope.clickBoard = function (idx) {
-      var row = Math.floor(idx / 3);
-      var col = idx % 3;
+      if($scope.waitForClick) {
+        var row = Math.floor(idx / 3);
+        var col = idx % 3;
 
-      //don't accept clicks if tile isn't empty
-      if ($scope.board.isTileEmpty(row, col)) {
-        $scope.processMove({row: row, col: col});
+        //don't accept clicks if tile isn't empty
+        if ($scope.board.isTileEmpty(row, col)) {
+          $scope.processMove({row: row, col: col});
+        }
       }
     };
+
+    $scope.$watch('currentPlayer', function() {
+      var move = $scope.players[$scope.currentPlayer].move($scope.board);
+      console.log('Player move');
+      console.log(move);
+
+      if(!move) {
+        //no move was returned, wait for clicks on the board
+        $scope.waitForClick = true;
+      } else {
+        //set the move
+        $scope.waitForClick = false;
+        $scope.processMove(move);
+      }
+    });
 
     $scope.board = boardService.newBoard();
   }]);
