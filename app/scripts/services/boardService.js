@@ -11,6 +11,14 @@ angular.module('TicTacToeApp')
         }
       }
 
+      Board.prototype.getMove = function getMoveAt(row, col) {
+        return this.tiles[row * 3 + col];
+      };
+
+      Board.prototype.setMove = function getMoveAt(row, col, player) {
+        this.tiles[row * 3 + col] = player;
+      };
+
       return Board;
     })();
 
