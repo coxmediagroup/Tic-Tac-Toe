@@ -27,6 +27,10 @@ body {
     margin: 25px;
 }
 
+.ttt-inactive {
+    background-color: #f8f8f8;
+}
+
 .ttt-rtop {
     border-top: 0 !important;
     top: 0;

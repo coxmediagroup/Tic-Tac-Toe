@@ -1,4 +1,4 @@
-<div class="ttt">
+<div class="ttt" ng-class="{'ttt-inactive': !gameInProgress}">
     <div ng-repeat="tile in board.tiles" ng-class="{
     'ttt-rtop': Math.floor($index/3) == 0,
     'ttt-rmid': Math.floor($index/3) == 1,
