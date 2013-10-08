@@ -12,8 +12,8 @@ describe('Service: playerService - ', function () {
   });
 
   it('Interactive player should always return undefined.', function () {
-    var board = brdService.newBoard();
-    var player = service.newInteractivePlayer();
+    var board = new brdService.Board();
+    var player = new service.InteractivePlayer();
     expect(player.move(board)).toBeUndefined();
   });
 
@@ -25,8 +25,8 @@ describe('Service: playerService - ', function () {
       }
     };
 
-    var board = brdService.newBoard();
-    var player = service.newEasyAiPlayer();
+    var board = new brdService.Board();
+    var player = new service.EasyAiPlayer();
     expect(player.move(board)).toEqual(idxToRowCol(0));
 
     board.setMove(0, 0, 'X');

@@ -4,6 +4,10 @@ angular.module('TicTacToeApp')
 
     var Board = (function () {
       function Board() {
+        if(!(this instanceof Board)) {
+          return new Board();
+        }
+
         this.tiles = new Array(9);
 
         for (var i = 0; i < this.tiles.length; i++) {
@@ -37,8 +41,6 @@ angular.module('TicTacToeApp')
     })();
 
     return {
-      newBoard: function () {
-        return new Board();
-      }
+      Board: Board
     };
   });

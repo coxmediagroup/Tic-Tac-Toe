@@ -13,6 +13,9 @@ angular.module('TicTacToeApp').service('playerService', [function () {
   //This player will always wait for clicks.
   var InteractivePlayer = (function () {
     function InteractivePlayer() {
+      if(!(this instanceof InteractivePlayer)) {
+        return new InteractivePlayer();
+      }
     }
 
     InteractivePlayer.prototype.move = function move() {
@@ -25,6 +28,9 @@ angular.module('TicTacToeApp').service('playerService', [function () {
   //A dumb computer player.
   var EasyAiPlayer = (function () {
     function EasyAiPlayer() {
+      if(!(this instanceof EasyAiPlayer)) {
+        return new EasyAiPlayer();
+      }
     }
 
     EasyAiPlayer.prototype.move = function move(board) {
@@ -46,11 +52,7 @@ angular.module('TicTacToeApp').service('playerService', [function () {
   })();
 
   return {
-    newInteractivePlayer: function () {
-      return new InteractivePlayer();
-    },
-    newEasyAiPlayer: function () {
-      return new EasyAiPlayer();
-    }
+    InteractivePlayer: InteractivePlayer,
+    EasyAiPlayer: EasyAiPlayer
   };
 }]);

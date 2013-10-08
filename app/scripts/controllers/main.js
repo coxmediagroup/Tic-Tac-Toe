@@ -8,16 +8,16 @@ angular.module('TicTacToeApp')
       X: '×'
     };
 
-    $scope.board = boardService.newBoard();
+    $scope.board = new boardService.Board();
     $scope.currentPlayer = '';
     $scope.status = 'Waiting to start game';
     $scope.players = {};
     $scope.gameInProgress = false;
 
     $scope.startGame = function() {
-      $scope.board = boardService.newBoard();
-      $scope.players.X = playerService.newInteractivePlayer();
-      $scope.players.O = playerService.newEasyAiPlayer();
+      $scope.board = new boardService.Board();
+      $scope.players.X = new playerService.InteractivePlayer();
+      $scope.players.O = new playerService.EasyAiPlayer();
       $scope.currentPlayer = 'X';
       $scope.gameInProgress = true;
       $scope.checkGameStatus();
