@@ -4,7 +4,7 @@ angular.module('TicTacToeApp')
 
     var Board = (function () {
       function Board() {
-        if(!(this instanceof Board)) {
+        if (!(this instanceof Board)) {
           return new Board();
         }
 
@@ -29,7 +29,7 @@ angular.module('TicTacToeApp')
 
       Board.prototype.isBoardFull = function isBoardFull() {
         var foundEmptyTile = false;
-        for(var i = 0; i < this.tiles.length; i++) {
+        for (var i = 0; i < this.tiles.length; i++) {
           if (this.tiles[i] === '') {
             foundEmptyTile = true;
           }

@@ -14,7 +14,7 @@ angular.module('TicTacToeApp')
     $scope.players = {};
     $scope.gameInProgress = false;
 
-    $scope.startGame = function() {
+    $scope.startGame = function () {
       $scope.board = new boardService.Board();
       $scope.players.X = new playerService.InteractivePlayer();
       $scope.players.O = new playerService.EasyAiPlayer();
@@ -23,7 +23,7 @@ angular.module('TicTacToeApp')
       $scope.checkGameStatus();
     };
 
-    $scope.endGame = function() {
+    $scope.endGame = function () {
       $scope.gameInProgress = false;
       $scope.currentPlayer = '';
     };
@@ -33,7 +33,7 @@ angular.module('TicTacToeApp')
       $scope.checkGameStatus();
     };
 
-    $scope.processMove = function(move) {
+    $scope.processMove = function (move) {
       //make sure the tile is empty, otherwise turn is lost
       if ($scope.board.isTileEmpty(move.row, move.col)) {
         $scope.board.setMove(move.row, move.col, $scope.currentPlayer);
@@ -43,11 +43,11 @@ angular.module('TicTacToeApp')
     };
 
     $scope.clickBoard = function (idx) {
-      if(!$scope.gameInProgress) {
+      if (!$scope.gameInProgress) {
         return;
       }
 
-      if($scope.waitForClick) {
+      if ($scope.waitForClick) {
         var row = Math.floor(idx / 3);
         var col = idx % 3;
 
@@ -58,10 +58,10 @@ angular.module('TicTacToeApp')
       }
     };
 
-    $scope.checkGameStatus = function() {
+    $scope.checkGameStatus = function () {
       //check for game winner
       //if not, a full board is a tie
-      if($scope.board.isBoardFull()) {
+      if ($scope.board.isBoardFull()) {
         $scope.endGame();
         $scope.status = 'Board is full, tie?';
       } else {
@@ -69,8 +69,8 @@ angular.module('TicTacToeApp')
       }
     };
 
-    $scope.$watch('currentPlayer', function() {
-      if(!$scope.gameInProgress) {
+    $scope.$watch('currentPlayer', function () {
+      if (!$scope.gameInProgress) {
         return;
       }
 
@@ -78,7 +78,7 @@ angular.module('TicTacToeApp')
       console.log('Player move');
       console.log(move);
 
-      if(!move) {
+      if (!move) {
         //no move was returned, wait for clicks on the board
         $scope.waitForClick = true;
       } else {

@@ -3,9 +3,9 @@
 describe('Service: playerService - ', function () {
   var service, brdService;
 
-  beforeEach(function() {
+  beforeEach(function () {
     module('TicTacToeApp');
-    inject(function(playerService, boardService) {
+    inject(function (playerService, boardService) {
       service = playerService;
       brdService = boardService;
     });
@@ -18,7 +18,7 @@ describe('Service: playerService - ', function () {
   });
 
   it('Easy AI should always pick the next open tile.', function () {
-    var idxToRowCol = function(idx) {
+    var idxToRowCol = function (idx) {
       return {
         row: Math.floor(idx / 3),
         col: idx % 3
