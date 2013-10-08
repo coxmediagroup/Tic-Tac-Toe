@@ -23,5 +23,12 @@ describe('Service: boardService', function () {
       board.setMove(1, 1, 'X');
       expect(board.getMove(1, 1)).toEqual('X');
     });
+
+    it('should be able to determine if a tile is empty', function() {
+      var board = service.newBoard();
+      expect(board.isTileEmpty(1, 1)).toEqual(true);
+      board.setMove(1, 1, 'X');
+      expect(board.isTileEmpty(1, 1)).toEqual(false);
+    })
   });
 });

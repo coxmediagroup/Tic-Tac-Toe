@@ -19,6 +19,10 @@ angular.module('TicTacToeApp')
         this.tiles[row * 3 + col] = player;
       };
 
+      Board.prototype.isTileEmpty = function isTileEmpty(row, col) {
+        return this.getMove(row, col) === '';
+      };
+
       return Board;
     })();
 
