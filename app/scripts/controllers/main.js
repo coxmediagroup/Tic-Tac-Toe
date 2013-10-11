@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('TicTacToeApp')
-  .controller('MainCtrl', ['$scope', 'boardService', 'playerService', function ($scope, boardService, playerService) {
+  .controller('MainCtrl', ['$scope', 'boardService', 'playerService', '$timeout', function ($scope, boardService, playerService, $timeout) {
     $scope.Math = Math;
     $scope.displaySymbols = {
       O: '○',
@@ -17,7 +17,7 @@ angular.module('TicTacToeApp')
     $scope.startGame = function () {
       $scope.board = new boardService.Board();
       $scope.players.X = new playerService.InteractivePlayer();
-      $scope.players.O = new playerService.EasyAiPlayer();
+      $scope.players.O = new playerService.MinimaxAiPlayer();
       $scope.currentPlayer = 'X';
       $scope.gameInProgress = true;
       $scope.checkGameStatus();
@@ -39,7 +39,8 @@ angular.module('TicTacToeApp')
         $scope.board.setMove(move.row, move.col, $scope.currentPlayer);
       }
 
-      $scope.nextPlayer();
+      $scope.checkGameStatus();
+      $timeout($scope.nextPlayer, 100);
     };
 
     $scope.clickBoard = function (idx) {
@@ -78,7 +79,7 @@ angular.module('TicTacToeApp')
         return;
       }
 
-      var move = $scope.players[$scope.currentPlayer].move($scope.board);
+      var move = $scope.players[$scope.currentPlayer].move($scope.board, $scope.currentPlayer);
       console.log('Player move');
       console.log(move);
 
