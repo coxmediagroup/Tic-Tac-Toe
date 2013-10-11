@@ -61,9 +61,13 @@ angular.module('TicTacToeApp')
     $scope.checkGameStatus = function () {
       //check for game winner
       //if not, a full board is a tie
-      if ($scope.board.isBoardFull()) {
+      var winner = $scope.board.checkForWin();
+      if (winner) {
         $scope.endGame();
-        $scope.status = 'Board is full, tie?';
+        $scope.status = 'Game Over: ' + $scope.displaySymbols[winner] + ' wins!';
+      } else if ($scope.board.isBoardFull()) {
+        $scope.endGame();
+        $scope.status = 'Game Over: Tie';
       } else {
         $scope.status = $scope.displaySymbols[$scope.currentPlayer] + '\' turn';
       }
