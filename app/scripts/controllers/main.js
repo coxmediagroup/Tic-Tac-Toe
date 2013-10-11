@@ -97,8 +97,6 @@ angular.module('TicTacToeApp')
       }
 
       var move = $scope.players[$scope.currentPlayer].move($scope.board, $scope.currentPlayer);
-      console.log('Player move');
-      console.log(move);
 
       if (!move) {
         //no move was returned, wait for clicks on the board
