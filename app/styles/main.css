@@ -31,6 +31,10 @@ body {
     background-color: #f8f8f8;
 }
 
+.ttt-playerSelect {
+    margin: 25px;
+}
+
 .ttt-rtop {
     border-top: 0 !important;
     top: 0;
