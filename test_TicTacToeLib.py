@@ -1,5 +1,5 @@
 import unittest
-import TicTacToeLib as TTTL
+import TicTacToeLib.TicTacToeLib as TTTL
 from random import shuffle,choice
 
 NUMBER_LIST = ['EmptyBoard', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight']

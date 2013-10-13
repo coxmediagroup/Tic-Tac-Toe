@@ -1,5 +1,5 @@
 import pygame, sys
-import TicTacToeLib as TTTL
+import TicTacToeLib.TicTacToeLib as TTTL
 from random import choice
 BG = "res/paper.png"
 CD = "res/choosedialog.png"
