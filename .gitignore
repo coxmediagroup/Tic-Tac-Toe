@@ -29,3 +29,7 @@ nosetests.xml
 
 # Translations
 *.mo
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
