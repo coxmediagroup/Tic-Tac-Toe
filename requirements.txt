@@ -1,2 +1,7 @@
 # Django Beta
 git+https://github.com/django/django.git@1.6c1
+
+# Python TimeZone Library (Recomended by Django Documentation)
+pytz
+
+
