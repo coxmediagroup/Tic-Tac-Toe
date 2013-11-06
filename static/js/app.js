@@ -35,4 +35,7 @@ $(document).ready(function() {
 			: insertPiece(this);
 	});
 
+	// Notify the User it is their turn to Select a Box
+	setStatusMessage("Please select a box...", "warning");
+
 });
