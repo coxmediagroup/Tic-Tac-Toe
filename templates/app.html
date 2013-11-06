@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+
+    <title>Tic-Tac-Toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="{% static "css/tictactoe.css" %}" rel="stylesheet" media="screen">
+
+  </head>
+
+  <body>
+
+  <div class="container">
+
+    <div class="page-header">
+      <h1>
+        Tic-Tac-Toe 
+        <small>Three in a Row</small>
+      </h1>
+    </div>
+
+    <div class="row">
+
+      <table id="game-table" class="table table-bordered text-center">
+        <tbody>
+          <tr>
+            <td>
+              <i class="fa fa-linux fa-5x"></i>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+    <!-- JavaScript Includes -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+
+  </body>
+</html>
