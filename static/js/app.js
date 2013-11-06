@@ -13,7 +13,17 @@ var insertPiece = function(element) {
 		.append(gamePiece)
 		.addClass('disabled');
 
+	// Update the Status Message
+	setStatusMessage("Set piece successfully.", "success");
+
 };
+
+
+/* Sets the Text and Class of the Status Message. */
+var setStatusMessage = function(message, messageClass) {
+	$("#status-message").attr("value", message)
+	$("#status-message").parent().addClass("has-" + messageClass);
+}
 
 
 $(document).ready(function() {
