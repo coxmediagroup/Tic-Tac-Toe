@@ -33,3 +33,7 @@
 	background-color: #f2dede !important;
 
 }
+
+input[type=text]:disabled {
+	background-color: #ffffff;
+}
