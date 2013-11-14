@@ -5,9 +5,10 @@ class Board(models.Model):
 	This represents a standard game board. It consists of 9 boxes. Each box is
 	represented by one of three states:
 
-	0     No Game Piece
-	1     Player Piece
-	-1    Computer Piece
+		0     No Game Piece
+		1     Player Piece
+		-1    Computer Piece
+
 	"""
 	# Top Row
 	top_left = models.SmallIntegerField(default=0)
@@ -29,9 +30,10 @@ class Board(models.Model):
 		This method determines the current victory status of the board. It will
 		return one of the three states:
 
-		0     Still in Progress
-		1     Human has Won
-		-1    Computer has Won
+			0     Still in Progress
+			1     Human has Won
+			-1    Computer has Won
+
 		"""
 		# Rows
 		if self.top_left == self.top_center == self.top_right \
