@@ -14,7 +14,7 @@ var insertPiece = function(element) {
 		.addClass('disabled');
 
 	// Update the Status Message
-	setStatusMessage("Set piece successfully.", "success");
+	setStatusMessage("Box Marked Successfully", "success");
 
 };
 
@@ -36,6 +36,6 @@ $(document).ready(function() {
 	});
 
 	// Notify the User it is their turn to Select a Box
-	setStatusMessage("Please select a box...", "warning");
+	setStatusMessage("Player's Turn", "warning");
 
 });
