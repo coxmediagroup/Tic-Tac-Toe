@@ -20,7 +20,7 @@ Here are steps to quickly get it up and running on your system.
 2. Create a Virtual Environment for this project.
 3. Enter the Virtual Environment.
 4. Install the dependencies: `pip install -r requirements.txt`
-5. Create the database: `python tictactoe/manage.py syncdb`
-6. Start Django's built-in HTTP Server: `python tictactoe/manage.py runserver`
+5. Create the database: `python manage.py syncdb`
+6. Start Django's built-in HTTP Server: `python manage.py runserver`
 7. Open the game on your web browser by browsing to 
     [localhost:8000](http://localhost:8000)
