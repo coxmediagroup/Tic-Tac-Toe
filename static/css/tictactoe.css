@@ -9,10 +9,6 @@
 
 
 #game-table tbody tr td {
-
-	/* Remove all padding. */
-	padding: 0;
-	margin: 0;
 	
 	/* Set a fixed size for each box. */
 	width: 9em;
@@ -35,6 +31,9 @@
 .disabled:hover {
 
 	background-color: #f2dede !important;
-	
 
+}
+
+input[type=text]:disabled {
+	background-color: #ffffff;
 }
