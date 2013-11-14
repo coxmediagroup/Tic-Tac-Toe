@@ -55,7 +55,7 @@ class Board(models.Model):
 			and self.top_right != 0:
 			return self.top_right
 
-		# Diaganols
+		# Diagonals
 		if self.top_left == self.center == self.bottom_right \
 			and self.top_left != 0:
 			return self.top_left
