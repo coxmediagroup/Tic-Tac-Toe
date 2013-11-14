@@ -84,12 +84,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, os.pardir, 'static/'),
+    os.path.join(BASE_DIR, 'static/'),
 )
 
 
 # Template Directories
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, os.pardir, 'templates/'),
+    os.path.join(BASE_DIR, 'templates/'),
 )
