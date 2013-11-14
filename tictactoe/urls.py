@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     # Sample 'Home' Page
-    url(r'^$', TemplateView.as_view(template_name='app.html'), name='home'),
+    url(r'^$', 'tictactoe.views.game_view', name='home'),
 
     # Django Admin
     url(r'^admin/', include(admin.site.urls)),
