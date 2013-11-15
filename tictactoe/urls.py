@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'tictactoe.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    # Sample 'Home' Page
+    # 'Home' Page
     url(r'^$', 'tictactoe.views.game_view', name='home'),
 
     # Django Admin
