@@ -28,6 +28,11 @@ var setStatusMessage = function(message, messageClass) {
 
 $(document).ready(function() {
 
+	// Display all Game Pieces upon initial page load.
+	$('.piece-box').each(function(i, obj) {
+		console.log("Piece: " + $(obj).attr('data-piece'));
+	});
+
 	// Insert a Game Piece when a User selects a position on the Game Board. 
 	$('.piece-box').click(function() {
 		$(this).has('i').length 
