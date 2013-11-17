@@ -1,6 +1,8 @@
 from itertools import repeat
 import json
 from django.http.response import HttpResponseBadRequest
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from third_party.tictactoe import whoGoesFirst, getComputerMove, makeMove, isWinner, isBoardFull
 
@@ -16,23 +18,25 @@ class GameView(TemplateView):
     def start_game(self):
         board = self.board
         start = whoGoesFirst()
-        #start = "computer"
-        print start
         if start == "computer":
             computer_letter = "X"
+            self.player_letter = "O"
             move = getComputerMove(board, computer_letter)
             makeMove(board, computer_letter, move)
+
 
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
         context["board"] = self.board[1:]
         context["board_json"] = json.dumps(self.board[1:])
         context["message"] = "Please click on an empty square."
+        context["player_letter"] = self.player_letter
         return context
 
     def __init__(self, **kwargs):
         super(GameView, self).__init__(**kwargs)
         self.board = []
+        self.player_letter = "X"
 
 
 class PlayerMove(TemplateView):
@@ -52,6 +56,10 @@ class PlayerMove(TemplateView):
             result = 2
         return result
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PlayerMove, self).dispatch(request, *args, **kwargs)
+
     def computer_move(self, board):
         pass
 
@@ -64,7 +72,7 @@ class PlayerMove(TemplateView):
         return context
 
     def post(self, request):
-        board_json = request.POST.get("board", "[]")
+        board_json = request.POST.get("board_json", "[]")
         board = json.loads(board_json)
         if not isinstance(board, list) or not len(board) == 9:
             return HttpResponseBadRequest("You gave me a bad board or none at all.")
@@ -80,7 +88,7 @@ class PlayerMove(TemplateView):
 
         # put an empty value at the start so the board is compatible with the external lib
         board.insert(0, "")
-
+        self.board = board
         board_result = self.evaluate_board(player_letter)
         winner = None
         if not board_result:
@@ -89,7 +97,7 @@ class PlayerMove(TemplateView):
             board_result = self.evaluate_board(computer_letter)
             if board_result == 1:
                 winner = "Computer"
-        else:
+        elif board_result == 1:
             winner = "Player"
 
         if board_result or winner:
@@ -100,6 +108,7 @@ class PlayerMove(TemplateView):
             else:
                 return HttpResponseBadRequest("How did the board evaluate to that?")
 
+        self.player_letter = player_letter
         self.board = board[1:]
         context = self.get_context_data()
         return self.render_to_response(context)
@@ -108,3 +117,5 @@ class PlayerMove(TemplateView):
         super(PlayerMove, self).__init__(**kwargs)
         self.board = []
         self.message = "Please click on an empty square."
+        self.player_letter = "X"
+

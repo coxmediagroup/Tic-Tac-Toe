@@ -1,10 +1,13 @@
  <ul class="small-block-grid-3 large-block-grid-3">
 {% for val in board %}
-    <li class="board"><img class="{% if not val %}empty{% endif %}" id="cell{{ forloop.counter }}" src="{{ STATIC_URL }}img/{% if val %}{{ val }}{% else %}box{% endif %}.png"></li>
+    <li class="board"><img class="{% if not val %}empty{% endif %}" id="cell{{ forloop.counter0 }}" src="{{ STATIC_URL }}img/{% if val %}{{ val }}{% else %}box{% endif %}.png"></li>
 {% endfor %}
  </ul>
-<div class="large-4 small-4 columns">&nbsp;</div>
-<div class="large-4 small-4 columns">
-    <span>{{ message }}</span>
+<div class="large-2 small-2 columns">&nbsp;</div>
+<div class="large-8 small-8 columns">
+    <h4 class="text-center">{{ message }}</h4>
 </div>
-<div class="large-4 small-4 columns">&nbsp;</div>
+<div class="large-2 small-2 columns">&nbsp;</div>
+ <script>
+     board = {{ board_json|safe }};
+ </script>

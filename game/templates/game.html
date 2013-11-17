@@ -7,7 +7,7 @@
 
 {% block content %}
     <div class="small-12 large-12 columns">
-    <div class="small-8 small-centered large-4 large-centered columns">
+    <div class="small-8 small-centered large-4 large-centered columns" id="board-space">
         {% include "board_snippet.html" %}
     </div>
     </div>
@@ -19,6 +19,5 @@
 {% endblock javascript_includes %}
 
 {% block document_ready %}
-    var board = {{ board_json|safe }};
-    setUpGame(board, "{% url "player_move" %}");
+    setUpGame("{% url "player_move" %}", "{{ player_letter }}");
 {% endblock document_ready %}
