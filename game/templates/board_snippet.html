@@ -1,6 +1,6 @@
  <ul class="small-block-grid-3 large-block-grid-3">
 {% for val in board %}
-    <li class="board"><img class="{% if not val %}empty{% endif %}" id="cell{{ forloop.counter0 }}" src="{{ STATIC_URL }}img/{% if val %}{{ val }}{% else %}box{% endif %}.png"></li>
+    <li class="board"><img class="{% if not val and "won" not in message %}empty{% endif %}" id="cell{{ forloop.counter0 }}" src="{{ STATIC_URL }}img/{% if val %}{{ val }}{% else %}box{% endif %}.png"></li>
 {% endfor %}
  </ul>
 <div class="large-2 small-2 columns">&nbsp;</div>
