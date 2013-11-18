@@ -1,18 +1,10 @@
 var userFontClass = "fa-linux";
+var computerFontClass = "fa-windows";
 
 /* Inserts the User's Selected piece into the box specified. */
 var insertPiece = function(element) {
 
-	// Create the Game Piece Element
-	var gamePiece = $(document.createElement("i"))
-						.addClass("fa fa-5x")
-						.addClass(userFontClass);
-
-	// Insert and Disable the box.
-	$(element)
-		.append(gamePiece)
-		.addClass('disabled');
-
+	// Submit the Piece Selection to the Server
 
 };
 
@@ -21,7 +13,25 @@ $(document).ready(function() {
 
 	// Display all Game Pieces upon initial page load.
 	$('.piece-box').each(function(i, obj) {
-		console.log("Piece: " + $(obj).attr('data-piece'));
+
+		// Determine the Piece that belongs to this Box.
+		var player = $(obj).attr('data-piece');
+		// Insert Player's Piece
+			var gamePiece = $(document.createElement("i"))
+						.addClass("fa fa-5x")
+						.addClass(userFontClass);
+		}
+
+		// Insert Computer's Piece
+		else if ( player == -1 ) {
+			var gamePiece = $(document.createElement("i"))
+						.addClass("fa fa-5x")
+						.addClass(computerFontClass);
+		}
+
+		// Disable User Selection of this Box
+		$(obj).append(gamePiece).addClass('disabled');
+
 	});
 
 	// Insert a Game Piece when a User selects a position on the Game Board. 
