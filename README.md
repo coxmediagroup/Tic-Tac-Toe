@@ -11,8 +11,8 @@ try to defeat the Computer player. It is implemented using Django and HTML5.
 
 ## Usage
 
-Currently, this project has barely been started. The Django back-end has only
-been "initialized" and there is no front-end HTML. 
+Currently, this project is in extremely early development. The Django back-end 
+has very limited functionality. The HTML5 front-end is extremely limited.
 
 Here are steps to quickly get it up and running on your system.
 
