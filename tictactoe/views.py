@@ -22,6 +22,8 @@ def game_view(request):
 		messages.warning(request, 'The Computer has won the Game')
 	elif board.victory_status() == 1:
 		messages.success(request, 'You have miraculously won the Game!')
+	elif board.victory_status() == 0:
+		messages.warning(request, 'The Game has ended in a Draw')
 
 	return render(request, 'app.html', { 'board': board })
 

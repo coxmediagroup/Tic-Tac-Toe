@@ -30,11 +30,24 @@ class Board(models.Model):
 		This method determines the current victory status of the board. It will
 		return one of the three states:
 
-			0     Still in Progress
+			0     Draw
 			1     Human has Won
 			-1    Computer has Won
+			None  Still in Play
 
 		"""
+		# Simple Draw (No more Moves available)
+		if self.top_left != 0  				\
+			and self.top_center != 0  		\
+			and self.top_right != 0 		\
+			and self.left != 0 				\
+			and self.center != 0 			\
+			and self.right != 0 			\
+			and self.bottom_left != 0 		\
+			and self.bottom_center != 0		\
+			and self.bottom_right != 0:
+				return 0
+
 		# Rows
 		if self.top_left == self.top_center == self.top_right \
 			and self.top_left != 0:
@@ -66,7 +79,7 @@ class Board(models.Model):
 			return self.top_right
 
 		# Still in Progress
-		return 0
+		return None
 
 	def __unicode__(self):
 		"""
