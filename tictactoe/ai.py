@@ -326,7 +326,7 @@ def get_best_move(board, player):
 	if board.center == 0:
 		return 'center'
 
-	""" Select a Corner (Forking Opportunity) """
+	""" Select an Empty Corner """
 	
 	if board.top_left == 0:
 		return 'top_left'
@@ -339,3 +339,17 @@ def get_best_move(board, player):
 
 	if board.bottom_right == 0:
 		return 'bottom_right'
+
+	""" Select an Empty Side """
+
+	if board.top_center == 0:
+		return 'top_center'
+
+	if board.left == 0:
+		return 'left'
+
+	if board.right == 0:
+		return 'right'
+
+	if board.bottom_center == 0:
+		return 'bottom_center'
