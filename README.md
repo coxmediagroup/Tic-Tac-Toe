@@ -11,7 +11,7 @@ try to defeat the Computer player. It is implemented using Django and HTML5.
 
 ## Usage
 
-Here are steps to quickly get it up and running on your system.
+Here are the steps to quickly get this game up and running on your system:
 
 1. Clone this repository
 2. Create a Virtual Environment for this project.
