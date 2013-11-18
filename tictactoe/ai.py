@@ -17,7 +17,6 @@ def get_best_move(board, player):
 	Strategy based on this Wikipedia article: 
 	http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 	"""
-
 	# Collect Move-Combinations a Data-Structure for Programmatic iterations.
 	triples = [
 
@@ -81,51 +80,28 @@ def get_best_move(board, player):
 		if block:
 			return block
 
-	
+	# Select the Center
+	if board.center == 0: return 'center'
 
-	""" Center """
-
-	if board.center == 0:
-		return 'center'
-
-	""" Opposite Corners """
-
-	if board.top_left == -player and board.bottom_right == 0:
+	# Opposite Corners
+	if board.top_left == -player and board.bottom_right == 0: 
 		return 'bottom_right'
-
-	if board.top_right == -player and board.bottom_left == 0:
+	if board.top_right == -player and board.bottom_left == 0: 
 		return 'bottom_left'
-
-	if board.top_left == 0 and board.bottom_right == -player:
+	if board.top_left == 0 and board.bottom_right == -player: 
 		return 'top_left'
-
-	if board.top_right == 0 and board.bottom_left == -player:
+	if board.top_right == 0 and board.bottom_left == -player: 
 		return 'top_right'
 
-	""" Select an Empty Corner """
-	
-	if board.top_left == 0:
-		return 'top_left'
+	# Select an Empty Corner
+	if board.top_left == 0: return 'top_left'
+	if board.top_right == 0: return 'top_right'
+	if board.bottom_left == 0: return 'bottom_left'
+	if board.bottom_right == 0: return 'bottom_right'
 
-	if board.top_right == 0:
-		return 'top_right'
+	# Select an Empty Side
+	if board.top_center == 0: return 'top_center'
+	if board.left == 0: return 'left'
+	if board.right == 0: return 'right'
+	if board.bottom_center == 0: return 'bottom_center'
 
-	if board.bottom_left == 0:
-		return 'bottom_left'
-
-	if board.bottom_right == 0:
-		return 'bottom_right'
-
-	""" Select an Empty Side """
-
-	if board.top_center == 0:
-		return 'top_center'
-
-	if board.left == 0:
-		return 'left'
-
-	if board.right == 0:
-		return 'right'
-
-	if board.bottom_center == 0:
-		return 'bottom_center'
