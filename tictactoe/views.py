@@ -16,6 +16,12 @@ def game_view(request):
 		request.session['board_id'] = board.id
 		messages.success(request, 'Started a New Game')
 
+	# Check for Victory
+	if board.victory_status() == -1:
+		messages.warning(request, 'The Computer has won the Game')
+	elif board.victory_status() == 1:
+		messages.success(request, 'You have miraculously won the Game!')
+
 	return render(request, 'app.html', { 'board': board })
 
 def select_piece(request):
@@ -32,6 +38,14 @@ def select_piece(request):
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
 		messages.success(request, 'Started a New Game')
+
+	# Check for Victory
+	if board.victory_status() == -1:
+		messages.warning(request, 'The Computer has won the Game')
+		return redirect('home')
+	elif board.victory_status() == 1:
+		messages.success(request, 'You have miraculously won the Game!')
+		return redirect('home')
 
 	# Set the User's Selection
 	if request.method == 'POST':
