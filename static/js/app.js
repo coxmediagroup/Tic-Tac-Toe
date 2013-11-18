@@ -13,17 +13,8 @@ var insertPiece = function(element) {
 		.append(gamePiece)
 		.addClass('disabled');
 
-	// Update the Status Message
-	setStatusMessage("Box Marked Successfully", "success");
 
 };
-
-
-/* Sets the Text and Class of the Status Message. */
-var setStatusMessage = function(message, messageClass) {
-	$("#status-message").attr("value", message)
-	$("#status-message").parent().addClass("has-" + messageClass);
-}
 
 
 $(document).ready(function() {
@@ -40,7 +31,5 @@ $(document).ready(function() {
 			: insertPiece(this);
 	});
 
-	// Notify the User it is their turn to Select a Box
-	setStatusMessage("Player's Turn", "warning");
 
 });
