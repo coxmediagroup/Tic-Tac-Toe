@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import render
 
+from tictactoe.ai import get_best_move
 from tictactoe.models import Board
 
 def game_view(request):
@@ -46,12 +47,15 @@ def select_piece(request):
 	elif board.victory_status() == 1:
 		return redirect('home')
 
-	# Set the User's Selection
+	# Set the User's and Computer's Selection
 	if request.method == 'POST':
 		if 'selection' in request.POST:
 			selection = request.POST['selection']
 			if getattr(board, selection) == 0:
 				piece = setattr(board, selection, 1)
+				computer_selection = get_best_move(board, -1)
+				if computer_selection:
+					setattr(board, computer_selection, -1)
 				board.save()
 			else:
 				messages.warning(request, "Cannot place a Game Piece here")
