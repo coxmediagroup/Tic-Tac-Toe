@@ -323,8 +323,23 @@ def get_best_move(board, player):
 			return 'top_right'
 
 	""" Select Center """
+
 	if board.center == 0:
 		return 'center'
+
+	""" Opposite Corners """
+
+	if board.top_left == -player and board.bottom_right == 0:
+		return 'bottom_right'
+
+	if board.top_right == -player and board.bottom_left == 0:
+		return 'bottom_left'
+
+	if board.top_left == 0 and board.bottom_right == -player:
+		return 'top_left'
+
+	if board.top_right == 0 and board.bottom_left == -player:
+		return 'top_right'
 
 	""" Select an Empty Corner """
 	
