@@ -20,15 +20,15 @@ $(document).ready(function() {
 		// Insert Player's Piece
 		if ( player == 1 ) {
 			var gamePiece = $(document.createElement("i"))
-						.addClass("fa fa-5x")
-						.addClass(userFontClass);
+								.addClass("fa fa-5x")
+								.addClass(userFontClass);
 		}
 
 		// Insert Computer's Piece
 		else if ( player == -1 ) {
 			var gamePiece = $(document.createElement("i"))
-						.addClass("fa fa-5x")
-						.addClass(computerFontClass);
+								.addClass("fa fa-5x")
+								.addClass(computerFontClass);
 		}
 
 		// Disable User Selection of this Box
