@@ -50,8 +50,11 @@ def select_piece(request):
 	if request.method == 'POST':
 		if 'selection' in request.POST:
 			selection = request.POST['selection']
-			piece = setattr(board, selection, 1)
-			board.save()
+			if getattr(board, selection) == 0:
+				piece = setattr(board, selection, 1)
+				board.save()
+			else:
+				messages.warning(request, "Cannot place a Game Piece here")
 
 	return redirect('home')
 
