@@ -10,6 +10,7 @@ var insertPiece = function(element) {
 
 	// Create a Form Input Attribute with the User's selection
 	var selection = $(document.createElement("input"))
+						.attr("type", "hidden")
 						.attr("name", "selection")
 						.attr("value", box);
 	$('#selection-form').append(selection);
