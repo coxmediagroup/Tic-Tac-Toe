@@ -9,7 +9,7 @@ def game_view(request):
 	"""
 
 	# Get or Create a new Game Board
-	board_id = request.session.get('board_id')
+	board_id = request.session.get('board_id', None)
 	if board_id:
 		print "Getting current board"
 		board = Board.objects.get(id=board_id)
