@@ -80,6 +80,10 @@ def get_best_move(board, player):
 		if block:
 			return block
 
+	# @TODO To Enhance the Computer's Ability to win against Human Opponents,
+	# the processes of 'Fork' and 'Blocking an Opponent's Fork' should be
+	# implemented here.
+
 	# Select the Center
 	if board.center == 0: return 'center'
 
