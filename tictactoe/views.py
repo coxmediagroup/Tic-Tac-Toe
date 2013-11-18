@@ -10,10 +10,8 @@ def game_view(request):
 	# Get or Create a new Game Board
 	board_id = request.session.get('board_id', None)
 	if board_id:
-		print "Getting current board"
 		board = Board.objects.get(id=board_id)
 	else:
-		print "Creating a new Board"
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
 		messages.success(request, 'Started a New Game')
@@ -26,21 +24,33 @@ def select_piece(request):
 	move, and redirects the User back to the `game_view`.
 	"""
 
-	# Get and Print the User's Piece Selection
-	if 'selection' in request.POST:
-		selection = request.POST['selection']
-		print selection
+	# Get or Create a new Game Board
+	board_id = request.session.get('board_id', None)
+	if board_id:
+		board = Board.objects.get(id=board_id)
+	else:
+		board = Board.objects.create()
+		request.session['board_id'] = board.id
 		messages.success(request, 'Started a New Game')
+
+	# Set the User's Selection
+	if request.method == 'POST':
+		if 'selection' in request.POST:
+			selection = request.POST['selection']
+			piece = setattr(board, selection, 1)
+			board.save()
+
+	return redirect('home')
 
 def end_game(request):
 	""" Ends the current game and redirects the User to play a new Game. """
 
+	# Get and delete the current Game Board if it exists.
 	board_id = request.session.get('board_id', None)
 	if board_id:
 		request.session.pop('board_id')
 		board = Board.objects.get(id=board_id)
 		board.delete()
-		messages.success(request, 'Game ended successfully.')
 
 	# Redirect the User to play the Game.
 	return redirect('home')
