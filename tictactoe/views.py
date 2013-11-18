@@ -3,11 +3,8 @@ from django.shortcuts import render_to_response
 from tictactoe.models import Board
 
 def game_view(request):
-	"""
-	This View is responsible for providing the HTML5 code along with
-	instantiating or loading a Game Board for the current browser session.
-	"""
-
+	""" Renders the Game Board """
+	
 	# Get or Create a new Game Board
 	board_id = request.session.get('board_id', None)
 	if board_id:
