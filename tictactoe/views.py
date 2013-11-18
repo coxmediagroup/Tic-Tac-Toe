@@ -29,4 +29,15 @@ def select_piece(request):
 		selection = request.POST['selection']
 		print selection
 
+def end_game(request):
+	""" Ends the current game and redirects the User to play a new Game. """
+
+	board_id = request.session.get('board_id', None)
+	if board_id:
+		request.session.pop('board_id')
+		board = Board.objects.get(id=board_id)
+		board.delete()
+		messages.success(request, 'Game ended successfully.')
+
+	# Redirect the User to play the Game.
 	return redirect('home')
