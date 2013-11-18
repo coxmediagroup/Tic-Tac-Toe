@@ -16,14 +16,14 @@
 
   <body>
 
-  <div class="container">
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <a class="navbar-brand" href="{% url 'home' %}">Tic-Tac-Toe</a>
+    <p class="navbar-text navbar-right">
+      <a href="{% url 'end-game' %}" class="navbar-link">End Game</a>
+    </p>
+  </nav>
 
-    <div class="page-header">
-      <h1>
-        Tic-Tac-Toe 
-        <small>Three in a Row</small>
-      </h1>
-    </div>
+  <div class="container">
 
     {% if messages %}{% for message in messages %}
     <div class="row">
