@@ -4,7 +4,18 @@ var computerFontClass = "fa-windows";
 /* Inserts the User's Selected piece into the box specified. */
 var insertPiece = function(element) {
 
-	// Submit the Piece Selection to the Server
+	// Determine the Box which was selected.
+	var box = $(element).attr('id');
+	console.log("ID: " + box);
+
+	// Create a Form Input Attribute with the User's selection
+	var selection = $(document.createElement("input"))
+						.attr("name", "selection")
+						.attr("value", box);
+	$('#selection-form').append(selection);
+
+	// Submit the Form
+	$('#selection-form').submit();
 
 };
 
