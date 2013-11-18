@@ -14,7 +14,7 @@ def game_view(request):
 	else:
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
-		messages.success(request, 'Started a New Game')
+		messages.success(request, 'Started a New Game. Your turn!')
 
 	# Check for Victory
 	if board.victory_status() == -1:
@@ -37,7 +37,7 @@ def select_piece(request):
 	else:
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
-		messages.success(request, 'Started a New Game')
+		messages.success(request, 'Started a New Game. Your Turn!')
 
 	# Check for Victory
 	if board.victory_status() == -1:
