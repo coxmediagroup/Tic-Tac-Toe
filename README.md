@@ -11,8 +11,10 @@ try to defeat the Computer player. It is implemented using Django and HTML5.
 
 ## Usage
 
-Currently, this project is in extremely early development. The Django back-end 
-has very limited functionality. The HTML5 front-end is extremely limited.
+While the project is currently playable, it is still in an early Alpha stage.
+The *draw* victory state is not available. The A.I. player is fairly
+untested and, while it should never lose, it may not win in all possible
+circumstances.
 
 Here are steps to quickly get it up and running on your system.
 
