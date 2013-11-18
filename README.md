@@ -21,3 +21,9 @@ Here are the steps to quickly get this game up and running on your system:
 6. Start Django's built-in HTTP Server: `python manage.py runserver`
 7. Open the game on your web browser by browsing to 
     [localhost:8000](http://localhost:8000)
+
+## Dependencies
+
+* [Django](https://www.djangoproject.com/)
+* [jQuery](http://jquery.com/)
+* [Bootstrap](http://getbootstrap.com/)
