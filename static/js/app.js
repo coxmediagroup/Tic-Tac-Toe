@@ -16,7 +16,9 @@ $(document).ready(function() {
 
 		// Determine the Piece that belongs to this Box.
 		var player = $(obj).attr('data-piece');
+
 		// Insert Player's Piece
+		if ( player == 1 ) {
 			var gamePiece = $(document.createElement("i"))
 						.addClass("fa fa-5x")
 						.addClass(userFontClass);
