@@ -44,7 +44,6 @@ def select_piece(request):
 		messages.warning(request, 'The Computer has won the Game')
 		return redirect('home')
 	elif board.victory_status() == 1:
-		messages.success(request, 'You have miraculously won the Game!')
 		return redirect('home')
 
 	# Set the User's Selection
