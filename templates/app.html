@@ -28,6 +28,7 @@
     {% include "board.html" %}
 
     <form action="{% url "select-piece" %}" method="POST" id="selection-form">
+      {% csrf_token %}
     </form>
 
   </div>
@@ -35,7 +36,6 @@
   <!-- JavaScript Includes -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
   <script src="{% static "js/app.js" %}"></script>
 
   </body>

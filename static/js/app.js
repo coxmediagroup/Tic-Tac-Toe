@@ -43,7 +43,4 @@ $(document).ready(function() {
 			: insertPiece(this);
 	});
 
-	var csrftoken = $.cookie('csrftoken');
-	console.log("CSRF Token: " + csrftoken);
-
 });

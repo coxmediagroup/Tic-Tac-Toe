@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 from tictactoe.models import Board
 
@@ -16,7 +16,7 @@ def game_view(request):
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
 
-	return render_to_response('app.html', { 'board': board })
+	return render(request, 'app.html', { 'board': board })
 
 def select_piece(request):
 	"""
