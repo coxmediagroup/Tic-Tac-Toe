@@ -40,11 +40,9 @@ def select_piece(request):
 	else:
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
-		messages.success(request, 'Started a New Game. Your Turn!')
 
 	# Check for Victory
 	if board.victory_status() == -1:
-		messages.warning(request, 'The Computer has won the Game')
 		return redirect('home')
 	elif board.victory_status() == 1:
 		return redirect('home')
