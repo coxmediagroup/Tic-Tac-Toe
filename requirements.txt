@@ -1,9 +1,6 @@
 # Django Beta
 git+https://github.com/django/django.git@1.6c1
 
-# Django Rest Framework
-djangorestframework
-
 # Python TimeZone Library (Recomended by Django Documentation)
 pytz
 

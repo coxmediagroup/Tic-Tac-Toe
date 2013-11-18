@@ -14,11 +14,4 @@ urlpatterns = patterns('',
 
     # Django Admin
     url(r'^admin/', include(admin.site.urls)),
-
-    # Django Rest Framework Authentication
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
-    # GameBoard API
-    url(r'^api/boards/$', BoardList.as_view()),
-    url(r'^api/boards/(?P<pk>[0-9]+)/$', BoardDetail.as_view()),
 )
