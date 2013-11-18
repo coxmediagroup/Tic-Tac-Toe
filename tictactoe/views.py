@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -15,6 +16,7 @@ def game_view(request):
 		print "Creating a new Board"
 		board = Board.objects.create()
 		request.session['board_id'] = board.id
+		messages.success(request, 'Started a New Game')
 
 	return render(request, 'app.html', { 'board': board })
 
@@ -28,6 +30,7 @@ def select_piece(request):
 	if 'selection' in request.POST:
 		selection = request.POST['selection']
 		print selection
+		messages.success(request, 'Started a New Game')
 
 def end_game(request):
 	""" Ends the current game and redirects the User to play a new Game. """
