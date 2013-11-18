@@ -1,58 +1,37 @@
-var userFontClass = "fa-linux";
-var computerFontClass = "fa-windows";
+// Defines Game Pieces (Icons) used in the Game
+var userFontClass = "fa-linux",
+  computerFontClass = "fa-windows";
 
-/* Inserts the User's Selected piece into the box specified. */
-var insertPiece = function(element) {
-
-	// Determine the Box which was selected.
-	var box = $(element).attr('id');
-	console.log("ID: " + box);
-
-	// Create a Form Input Attribute with the User's selection
-	var selection = $(document.createElement("input"))
-						.attr("type", "hidden")
-						.attr("name", "selection")
-						.attr("value", box);
-	$('#selection-form').append(selection);
-
-	// Submit the Form
-	$('#selection-form').submit();
-
+// Submits the User's selection
+function insertPiece(event) {
+  if (!$(this).has('i').length) {
+    var box = $(this).attr('id'),
+      selection = $(document.createElement("input"))
+                      .attr("type", "hidden")
+                      .attr("name", "selection")
+                      .attr("value", box);
+    $('#selection-form').append(selection);
+    $('#selection-form').submit();
+  };
 };
 
+// Render the Game Piece
+function renderGamePiece(i, obj) {
+  var player = parseInt($(obj).attr('data-piece'));
+  if ( player === 1 ) {
+    var gamePiece = $(document.createElement("i"))
+                      .addClass("fa fa-5x")
+                      .addClass(userFontClass);
+    $(obj).append(gamePiece).addClass('disabled');
+  } else if ( player === -1 ) {
+    var gamePiece = $(document.createElement("i"))
+                      .addClass("fa fa-5x")
+                      .addClass(computerFontClass);
+    $(obj).append(gamePiece).addClass('disabled');
+  }
+};
 
 $(document).ready(function() {
-
-	// Display all Game Pieces upon initial page load.
-	$('.piece-box').each(function(i, obj) {
-
-		// Determine the Piece that belongs to this Box.
-		var player = $(obj).attr('data-piece');
-
-		// Insert Player's Piece
-		if ( player == 1 ) {
-			var gamePiece = $(document.createElement("i"))
-								.addClass("fa fa-5x")
-								.addClass(userFontClass);
-		}
-
-		// Insert Computer's Piece
-		else if ( player == -1 ) {
-			var gamePiece = $(document.createElement("i"))
-								.addClass("fa fa-5x")
-								.addClass(computerFontClass);
-		}
-
-		// Disable User Selection of this Box
-		$(obj).append(gamePiece).addClass('disabled');
-
-	});
-
-	// Insert a Game Piece when a User selects a position on the Game Board. 
-	$('.piece-box').click(function() {
-		$(this).has('i').length 
-			? console.log("This cell already contains a game piece.")
-			: insertPiece(this);
-	});
-
+  $('.piece-box').each(renderGamePiece);
+  $('.piece-box').click(insertPiece);
 });
