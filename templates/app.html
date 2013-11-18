@@ -16,12 +16,22 @@
 
   <body>
 
-  <nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <a class="navbar-brand" href="{% url 'home' %}">Tic-Tac-Toe</a>
-    <p class="navbar-text navbar-right">
-      <a href="{% url 'end-game' %}" class="navbar-link btn btn-default">End Game</a>
-    </p>
-  </nav>
+  <nav class="navbar navbar-default" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#"><strong>Tic-Tac-Toe</strong></a>
+  </div>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'end-game' %}">New Game</a></li>
+    </ul>
+  </div>
+</nav>
 
   <div class="container">
 
