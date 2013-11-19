@@ -37,8 +37,7 @@
 
     {% if messages %}{% for message in messages %}
     <div class="row">
-      <div class="alert alert-{{ message.tags }} alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <div class="alert alert-{{ message.tags }} alert-dismissable text-center">
         <strong>{{ message }}</strong>
       </div>
     </div>
