@@ -84,6 +84,26 @@ def get_best_move(board, player):
     # the processes of 'Fork' and 'Blocking an Opponent's Fork' should be
     # implemented here.
 
+    # Block Opposite-Corner Forks
+    if board.top_left == -player and board.bottom_right == -player:
+        if board.top_center == 0:
+            return 'top_center'
+        if board.left == 0:
+            return 'left'
+        if board.right == 0:
+            return 'right'
+        if board.bottom_center == 0:
+            return 'bottom_center'
+    if board.top_right == -player and board.bottom_left == -player:
+        if board.top_center == 0:
+            return 'top_center'
+        if board.left == 0:
+            return 'left'
+        if board.right == 0:
+            return 'right'
+        if board.bottom_center == 0:
+            return 'bottom_center'
+
     # Select the Center
     if board.center == 0:
         return 'center'
