@@ -28,3 +28,12 @@ Here are the steps to quickly get this game up and running on your system:
 * [jQuery](http://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
 * [Font Awesome](http://fontawesome.io/)
+
+## Artificial Intelligence
+
+The Artificial Intelligence is based upon the **Perfect Strategy** laid out in
+the Wikipedia [article](http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy). It 
+currently implements most of the strategy with the exception of the *Fork* and 
+*Block Forks* steps. While there is room for improvement to increase the 
+opportunity for the Computer player to win, my manual testing has shown that the
+game will always win in either a *Draw* or a *Computer Victory*.
