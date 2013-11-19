@@ -46,12 +46,13 @@ def select_piece(request):
         form = SelectionForm(request.POST)
         if form.is_valid():
             selection = form.cleaned_data['selection']
+            print 'Selection: %s' % selection
             if getattr(board, selection) == 0:
                 setattr(board, selection, 1)
                 computer_selection = get_best_move(board, -1)
                 if computer_selection:
                     setattr(board, computer_selection, -1)
-                    board.save()
+                board.save()
             else:
                 messages.warning(request, "Cannot place a Game Piece here")
 
