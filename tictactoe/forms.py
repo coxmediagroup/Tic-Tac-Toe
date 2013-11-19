@@ -17,4 +17,4 @@ class SelectionForm(forms.Form):
         ('bottom_center', 'Bottom Center'),
         ('bottom_right', 'Bottom Right')
     )
-    selection = models.ChoiceField(choices=SELECTION_CHOICES)
+    selection = forms.ChoiceField(choices=SELECTION_CHOICES)
