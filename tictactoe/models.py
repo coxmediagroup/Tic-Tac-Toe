@@ -46,7 +46,7 @@ class Board(models.Model):
             and self.bottom_left != 0       \
             and self.bottom_center != 0     \
             and self.bottom_right != 0:
-                return 0
+            return 0
 
         # Rows
         if self.top_left == self.top_center == self.top_right \
