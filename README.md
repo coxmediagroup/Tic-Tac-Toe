@@ -27,3 +27,4 @@ Here are the steps to quickly get this game up and running on your system:
 * [Django](https://www.djangoproject.com/)
 * [jQuery](http://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
+* [Font Awesome](http://fontawesome.io/)
