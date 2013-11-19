@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from tictactoe.ai import get_best_move
+from tictactoe.forms import SelectionForm
 from tictactoe.models import Board
 
 def game_view(request):
@@ -32,7 +33,6 @@ def select_piece(request):
     Accepts a Piece Selection from a User, executes the Computer Player's next
     move, and redirects the User back to the `game_view`.
     """
-
     # Get or Create a new Game Board
     board_id = request.session.get('board_id', None)
     if board_id:
@@ -41,22 +41,17 @@ def select_piece(request):
         board = Board.objects.create()
         request.session['board_id'] = board.id
 
-    # Check for Victory
-    if board.victory_status() == -1:
-        return redirect('home')
-    elif board.victory_status() == 1:
-        return redirect('home')
-
-    # Set the User's and Computer's Selection
+    # Insert the Player's and Computer's Selections
     if request.method == 'POST':
-        if 'selection' in request.POST:
-            selection = request.POST['selection']
+        form = SelectionForm(request.POST)
+        if form.is_valid():
+            selection = form.cleaned_data['selection']
             if getattr(board, selection) == 0:
                 setattr(board, selection, 1)
                 computer_selection = get_best_move(board, -1)
                 if computer_selection:
                     setattr(board, computer_selection, -1)
-                board.save()
+                    board.save()
             else:
                 messages.warning(request, "Cannot place a Game Piece here")
 
