@@ -41,8 +41,6 @@ def select_piece(request):
         board = Board.objects.create()
         request.session['board_id'] = board.id
 
-    print "Victory Status: %s" % board.victory_status()
-
     # Insert the Player's and Computer's Selections
     if request.method == 'POST' and board.victory_status() == None:
         form = SelectionForm(request.POST)
