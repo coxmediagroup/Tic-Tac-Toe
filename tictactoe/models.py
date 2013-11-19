@@ -86,12 +86,12 @@ class Board(models.Model):
         Returns a Character-Representation of the Game Board.
         """
         text = u"\n"
-        text += " %i  |  %i  |  %i\n" % (self.top_left, self.top_center, 
+        text += " %i  |  %i  |  %i\n" % (self.top_left, self.top_center,
                                             self.top_right)
         text += "----------------\n"
-        text += " %i  |  %i  |  %i\n" % (self.left, self.center, 
+        text += " %i  |  %i  |  %i\n" % (self.left, self.center,
                                             self.right)
         text += "----------------\n"
-        text += " %i  |  %i  |  %i\n" % (self.bottom_left, self.bottom_center, 
+        text += " %i  |  %i  |  %i\n" % (self.bottom_left, self.bottom_center,
                                             self.bottom_right)
         return text
