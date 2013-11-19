@@ -81,8 +81,8 @@ def get_best_move(board, player):
             return block
 
     # @TODO To Enhance the Computer's Ability to win against Human Opponents,
-    # the processes of 'Fork' and 'Blocking an Opponent's Fork' should be
-    # implemented here.
+    # the processes of 'Creating a Fork' and 'Blocking an Opponent's Fork' 
+    # should be implemented and/or enhanced here.
 
     # Block Opposite-Corner Forks
     if board.top_left == -player and board.bottom_right == -player:
