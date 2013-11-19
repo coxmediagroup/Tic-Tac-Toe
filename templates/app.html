@@ -27,9 +27,9 @@
     <a class="navbar-brand" href="#"><strong>Tic-Tac-Toe</strong></a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="{% url 'end-game' %}">New Game</a></li>
-    </ul>
+    <form class="navbar-form navbar-right" method="GET" action="{% url 'end-game' %}">
+      <button class="btn btn-primary">New Game</button>
+    </form>
   </div>
 </nav>
 
