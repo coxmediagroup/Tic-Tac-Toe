@@ -6,17 +6,16 @@ from tictactoe.ai import get_best_move
 from tictactoe.forms import SelectionForm
 from tictactoe.models import Board
 
-def game_view(request):
-    """ Renders the Game Board """
-
-    # Get or Create a new Game Board
+def show_board(request):
+    """
+    Renders the Game Board
+    """
+    # Ensure a Game is in Progress
     board_id = request.session.get('board_id', None)
     if board_id:
         board = Board.objects.get(id=board_id)
     else:
-        board = Board.objects.create()
-        request.session['board_id'] = board.id
-        messages.success(request, 'Started a New Game. Your turn!')
+        return redirect('new-game')
 
     # Check for Victory
     if board.victory_status() == -1:
@@ -28,18 +27,18 @@ def game_view(request):
 
     return render(request, 'app.html', { 'board': board })
 
+
 def select_piece(request):
     """
     Accepts a Piece Selection from a User, executes the Computer Player's next
     move, and redirects the User back to the `game_view`.
     """
-    # Get or Create a new Game Board
+    # Ensure a Game is in Progress
     board_id = request.session.get('board_id', None)
     if board_id:
         board = Board.objects.get(id=board_id)
     else:
-        board = Board.objects.create()
-        request.session['board_id'] = board.id
+        return redirect('new-game')
 
     # Insert the Player's and Computer's Selections
     if request.method == 'POST' and board.victory_status() == None:
@@ -58,15 +57,27 @@ def select_piece(request):
 
     return redirect('home')
 
-def end_game(request):
-    """ Ends the current game and redirects the User to play a new Game. """
 
-    # Get and delete the current Game Board if it exists.
+def end_game(request):
+    """ 
+    Ends the current game and redirects the User to play a new Game.
+    """
+    # Delete the current Game from both the Browser Session and Database.
     board_id = request.session.get('board_id', None)
     if board_id:
         request.session.pop('board_id')
         board = Board.objects.get(id=board_id)
         board.delete()
 
-    # Redirect the User to play the Game.
+    # Redirect to create a New Game
+    return redirect('new-game')
+
+
+def new_game(request):
+    """
+    Starts a New Game
+    """
+    board = Board.objects.create()
+    request.session['board_id'] = board.id
+    messages.success(request, "New Game Started. It's your turn. Good luck!")
     return redirect('home')
