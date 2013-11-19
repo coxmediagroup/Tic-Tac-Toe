@@ -2,8 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from tictactoe.api import BoardList, BoardDetail
-
 urlpatterns = patterns('',
 
     # Render Game Board
