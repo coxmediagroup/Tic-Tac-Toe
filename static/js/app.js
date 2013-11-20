@@ -25,9 +25,11 @@ function renderGamePiece() {
   if (player === 1) {
     gamePiece.addClass(userFontClass);
     $(this).append(gamePiece).addClass('disabled');
+    $(this).addClass('human-player');
   } else if (player === -1) {
     gamePiece.addClass(computerFontClass);
     $(this).append(gamePiece).addClass('disabled');
+    $(this).addClass('computer-player');
   }
 }
 

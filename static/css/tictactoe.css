@@ -27,3 +27,11 @@
 input[type=text]:disabled {
 	background-color: #ffffff;
 }
+
+.human-player {
+	background-color: #4BD12A !important;
+}
+
+.computer-player {
+	background-color: #D12A2A !important;
+}
