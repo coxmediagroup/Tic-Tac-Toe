@@ -1,9 +1,12 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send us a pull request.
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+Hello, this is my submission for a non-losing Tic Tac Toe
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+pls run it from a terminal via 
+
+python main.py
+
+If any problems, pls let me know.
+
+Tests are in tests.py. There is a test that can run an arbitrary number of fake games against the computer by randomly making moves.
+
+-Moshe Adesnik
