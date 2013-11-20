@@ -5,7 +5,7 @@
 	margin-right: auto;
 }
 
-#game-table tbody tr td {
+.piece-box {
 	/* Set a fixed size for each box. */
 	width: 9em;
 	height: 9em;
@@ -14,7 +14,7 @@
 	vertical-align: middle;
 }
 
-#game-table tbody tr td:hover {
+.piece-box:hover {
 	/* Highlight the Table Cell when the cursor is over it. */
 	background-color: #dff0d8;
 	cursor: pointer;
