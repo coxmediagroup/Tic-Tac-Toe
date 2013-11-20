@@ -10,8 +10,8 @@
 	width: 9em;
 	height: 9em;
 
-	/* Center the player's icon in the Center. */
-	vertical-align: middle;
+	/* Center the icon. */
+	vertical-align: middle !important;
 }
 
 .piece-box:hover {
