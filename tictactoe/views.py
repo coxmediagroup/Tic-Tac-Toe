@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -13,7 +14,12 @@ def show_board(request):
     # Ensure a Game is in Progress
     board_id = request.session.get('board_id', None)
     if board_id:
-        board = Board.objects.get(id=board_id)
+        try:
+            board = Board.objects.get(id=board_id)
+            print "Board ID: %s" % board_id
+        except ObjectDoesNotExist:
+            messages.warning(request, "The game you were playing is gone.")
+            return redirect('new-game')
     else:
         return redirect('new-game')
 
@@ -36,7 +42,11 @@ def select_piece(request):
     # Ensure a Game is in Progress
     board_id = request.session.get('board_id', None)
     if board_id:
-        board = Board.objects.get(id=board_id)
+        try:
+            board = Board.objects.get(id=board_id)
+        except ObjectDoesNotExist:
+            messages.warning(request, "The game you were playing is gone.")
+            return redirect('new-game')
     else:
         return redirect('new-game')
 
@@ -66,8 +76,11 @@ def end_game(request):
     board_id = request.session.get('board_id', None)
     if board_id:
         request.session.pop('board_id')
-        board = Board.objects.get(id=board_id)
-        board.delete()
+        try:
+            board = Board.objects.get(id=board_id)
+            board.delete()
+        except ObjectDoesNotExist:
+            return redirect('new-game')
 
     # Redirect to create a New Game
     return redirect('new-game')
