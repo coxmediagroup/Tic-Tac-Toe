@@ -1,37 +1,27 @@
 #game-table {
-
 	/* Reduce the table's width and center it. */
 	width: auto;
 	margin-left: auto;
 	margin-right: auto;
-
 }
 
-
 #game-table tbody tr td {
-	
 	/* Set a fixed size for each box. */
 	width: 9em;
 	height: 9em;
 
 	/* Center the player's icon in the Center. */
 	vertical-align: middle;
-
 }
 
-
 #game-table tbody tr td:hover {
-
 	/* Highlight the Table Cell when the cursor is over it. */
 	background-color: #dff0d8;
 	cursor: pointer;
-
 }
 
 .disabled:hover {
-
 	background-color: #f2dede !important;
-
 }
 
 input[type=text]:disabled {
