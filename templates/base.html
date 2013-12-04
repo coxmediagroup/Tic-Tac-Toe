@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <title>Tic Tac Toe</title>
+
+    {% block style_includes %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}third_party/foundation/css/normalize.css"/>
+        <link rel="stylesheet" href="{{ STATIC_URL }}third_party/foundation/css/foundation.css"/>
+    {% endblock style_includes %}
+    <script src="{{ STATIC_URL }}third_party/foundation/js/vendor/custom.modernizr.js"></script>
+</head>
+<body>
+<nav class="top-bar">
+  <ul class="title-area">
+    <!-- Title Area -->
+    <li class="name">
+      <h1>Tic Tac Toe</h1>
+    </li>
+      </ul>
+</nav>
+{% block content %}
+{% endblock content %}
+{% block javascript_includes %}
+  <script src="{{ STATIC_URL }}third_party/foundation/js/vendor/jquery.js"></script>
+  <script src="{{ STATIC_URL }}third_party/foundation/js/foundation/foundation.js"></script>
+{% endblock javascript_includes %}
+
+<script type="text/javascript">
+  $(document).foundation();
+  $(document).ready(function(){
+  {% block document_ready %}
+  {% endblock document_ready %}
+  });
+  {% block extra_script %}
+  {% endblock extra_script %}
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block style_includes %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/game.css"/>
+{% endblock style_includes %}
+
+{% block content %}
+    <div class="small-12 large-12 columns">
+    <div class="small-8 small-centered large-4 large-centered columns" id="board-space">
+        {% include "board_snippet.html" %}
+    </div>
+    <div class="small-8 small-centered large-4 large-centered columns" id="board-space">
+        <a class="button expand" href="{% url "home" %}">Start Over</a>
+    </div>
+    </div>
+{%  endblock content %}
+
+{% block javascript_includes %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}js/game.js"></script>
+{% endblock javascript_includes %}
+
+{% block document_ready %}
+    setUpGame("{% url "player_move" %}", "{{ player_letter }}");
+{% endblock document_ready %}
