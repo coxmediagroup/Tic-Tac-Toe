@@ -1,0 +1,47 @@
+{% load compress %}
+
+<!doctype html>
+<html>
+
+    <head>
+
+        <title>{% block title%}Naughts and Crosses{% endblock title %}</title>
+
+        {% block favicon %}
+        <link rel="icon" href="{{ STATIC_URL }}img/symbol.ico" />
+        {% endblock favicon %}
+
+        {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <meta name="author" content="Bryce Eggleton">
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        {% endblock meta %}
+
+        {% block header_css %}
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css">
+        {% endblock header_css %}
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        {% compress js %}
+        {% block header_scripts %}
+        {% endblock header_scripts %}
+        {% endcompress %}
+
+    </head>
+
+    <body id="body">
+        {% block body %}
+        {% block content %}
+        {% endblock content %}
+        {% endblock body %}
+
+        {% compress js %}
+        {% block page_scripts %}
+        {% endblock page_scripts %}
+        {% endcompress %}
+    </body>
+
+</html>
