@@ -30,6 +30,7 @@
 		$('#m8').html(data["m8"]);
 		$('#m9').data('state', data["m9"]);
 		$('#m9').html(data["m9"]);
+		$('#game-message').html(data["status"]);
 		waiting = false;
 	};
 
@@ -54,6 +55,8 @@
 		}
 		// gather game data
 		var gamedata = get_board_state();
+		gamedata["move"] = $(this).attr("id");
+		gamedata["token"] = $("#gametoken").data("token");
 
 		// send it off to be processed
 		$.ajax({
@@ -77,7 +80,7 @@
 	};
 
 	$(function() {
-		$(".gamegrid").create_game();
+		$(".movespot").create_game();
 	});
 
 }(jQuery));

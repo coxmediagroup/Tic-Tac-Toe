@@ -5,9 +5,9 @@
 {% endblock page_scripts %}
 
 {% block page_content %}
-<span class="game-message"></span>
-
-<div class="gamegrid">
+<span id="game-message"></span>
+<br>
+<div id="gametoken" class="gamegrid" data-token="{{token}}">
     <div class="movespot" id="m1" data-state=""></div>
     <div class="movespot" id="m2" data-state=""></div>
     <div class="movespot" id="m3" data-state=""></div>
