@@ -2,6 +2,36 @@ from core.utils import CBVBaseView
 from django.views.decorators.csrf import csrf_exempt
 
 
+def generate_movelist(board):
+    movelist = []
+    for move, spot in board.iteritems():
+        if spot != 'X' and spot != 'O' and len(move) < 3:
+            movelist.append(move)
+    return movelist
+
+
+def get_winning_moves(board, moves, token):
+    winning = []
+    for move in moves:
+        board[move] = token
+        if victory(board, move):
+            winning.append(move)
+        board[move] = ''
+    return winning
+
+
+def check_branching(board, moves, token):
+    winning = []
+    for move in moves:
+        board[move] = token
+        ml = generate_movelist(board)
+        wm = get_winning_moves(board, ml, token)
+        if len(wm) > 1:
+            winning.append(move)
+        board[move] = ''
+    return winning
+
+
 def get_possible_moves(board, token):
     human = 'X' if token == 'O' else 'O'
     moves = {
@@ -13,30 +43,39 @@ def get_possible_moves(board, token):
         "p6": None,
         "p7": None
     }
-    movelist = []
-    for move, spot in board.iteritems():
-        if spot != 'X' and spot != 'O' and len(move) < 3:
-            movelist.append(move)
+    movelist = generate_movelist(board)
 
     # p1: win if possible, can't lose if the game is over
-    for move in movelist:
-        board[move] = token
-        if victory(board, move):
-            moves['p1'] = move
-            return moves
-        board[move] = ''
+    wm = get_winning_moves(board, movelist, token)
+    if len(wm):
+        moves['p1'] = wm[0]
+        return moves
 
     # p2: keep opponent from winning
     for move in movelist:
         board[move] = human
         if victory(board, move):
-            moves['p1'] = move
+            moves['p2'] = move
             return moves
         board[move] = ''
 
-    # p3: create multiple opportunities for yourself
+    # p3: create multiple opportunities for yourself;
+    # this one is a lot more complex because you have to 
+    # look ahead to see what will give you branching
+    branch = check_branching(board, movelist, token)
+    if len(branch):
+        moves['p3'] = branch[0]
+        return moves
 
-    # p4: block opponent from setting up multiple win scenarios
+    # p4: block opponent from setting up multiple win scenarios;
+    # again this one is a little more complex since now we look 
+    # ahead for branching scenarios for the opponent
+    for move in movelist:
+        ml = generate_movelist(board)
+        branch = check_branching(board, ml, human)
+        if len(branch):
+            moves['p4'] = move
+            return moves
 
     # p5: take the center if its available
     if 'm5' in movelist:
@@ -134,6 +173,21 @@ def draw(board):
     return True
 
 
+def get_initial_board(first=False):
+    board = {
+        'm1': '', 'm2': '', 'm3': '',
+        'm4': '', 'm5': '', 'm6': '',
+        'm7': '', 'm8': '', 'm9': '',
+        'status': '', 'latest': '', 'gamestate': ''
+    }
+    if first == True:
+        # between perfect players, either a corner or the center have the 
+        # same outcome, however, playing a corner results in more outcomes 
+        # where X wins, so we play to a corner for better chances
+        board['m7'] = 'X'
+
+    return board
+
 
 class TicTacToeView(CBVBaseView):
     def get(self, request):
@@ -141,11 +195,13 @@ class TicTacToeView(CBVBaseView):
         order = request.GET.get('order')
         if order == 'first':
             token = "X"
+            board = get_initial_board()
         elif order == 'second':
             token = "O"
+            board = get_initial_board(first=True)
         else:
             raise ValueError(order)
-        return self.to_template(data={"token":token})
+        return self.to_template(data={"token":token, "board":board})
 
 
     def post(self, request):
@@ -169,7 +225,7 @@ class TicTacToeView(CBVBaseView):
             board[move] = token
 
         if victory(board, move):
-            board["status"] = "ERROR: You have won! That was not supposed to happen!"
+            board["status"] = "ERROR: YOU HAVE WON! THAT WAS NOT INTEDED TO HAPPEN THERE IS A FLAW IN THE MACHINE!"
             board["gamestate"] = "victory"
             return self.to_json(board)
         if draw(board):
@@ -196,7 +252,7 @@ class TicTacToeView(CBVBaseView):
             board = make_move(board, pctoken)
 
         if victory(board, board['latest']):
-            board["status"] = "The computer has won. Long live AI!"
+            board["status"] = "The computer has won. Long live the machines!"
             board["gamestate"] = "victory"
         elif draw(board):
             board["status"] = "The game has ended in a draw!"

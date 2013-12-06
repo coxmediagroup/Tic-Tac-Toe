@@ -33,6 +33,12 @@
 		$('#game-message').html(data["status"]);
 		$('#gametoken').data('gamestate', data["gamestate"])
 		waiting = false;
+		if(data["gamestate"] == "draw" || data["gamestate"] == "victory") {
+            $(".play-again").click(function(event){
+                window.location.assign("/");
+            });
+			$(".play-again").removeClass('hidden');
+		}
 	};
 
 	var get_board_state = function get_board_state() {
