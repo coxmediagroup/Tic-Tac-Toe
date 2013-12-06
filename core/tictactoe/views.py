@@ -2,6 +2,24 @@ from core.utils import CBVBaseView
 from django.views.decorators.csrf import csrf_exempt
 
 
+def generate_movelist(board):
+    movelist = []
+    for move, spot in board.iteritems():
+        if spot != 'X' and spot != 'O' and len(move) < 3:
+            movelist.append(move)
+    return movelist
+
+
+def get_winning_moves(board, moves, token):
+    winning = []
+    for move in moves:
+        board[move] = token
+        if victory(board, move):
+            winning.append(move)
+        board[move] = ''
+    return winning
+
+
 def get_possible_moves(board, token):
     human = 'X' if token == 'O' else 'O'
     moves = {
@@ -13,30 +31,47 @@ def get_possible_moves(board, token):
         "p6": None,
         "p7": None
     }
-    movelist = []
-    for move, spot in board.iteritems():
-        if spot != 'X' and spot != 'O' and len(move) < 3:
-            movelist.append(move)
+    movelist = generate_movelist(board)
 
     # p1: win if possible, can't lose if the game is over
-    for move in movelist:
-        board[move] = token
-        if victory(board, move):
-            moves['p1'] = move
-            return moves
-        board[move] = ''
+    wm = get_winning_moves(board, movelist, token)
+    if len(wm):
+        moves['p1'] = wm[0]
+        return moves
 
     # p2: keep opponent from winning
     for move in movelist:
         board[move] = human
         if victory(board, move):
-            moves['p1'] = move
+            moves['p2'] = move
             return moves
         board[move] = ''
 
-    # p3: create multiple opportunities for yourself
+    # p3: create multiple opportunities for yourself;
+    # this one is a lot more complex because you have to 
+    # look ahead to see what will give you branching
+    for move in movelist:
+        board[move] = token
+        ml = generate_movelist(board)
+        wm = get_winning_moves(board, ml, token)
+        if len(wm) > 1:
+            moves['p3'] = move
+            return moves
+        board[move] = ''
 
-    # p4: block opponent from setting up multiple win scenarios
+    # p4: block opponent from setting up multiple win scenarios;
+    # again this one is a little more complex since now we look 
+    # ahead for branching scenarios for the opponent
+    for move in movelist:
+        board[move] = token
+        '''
+        ml = generate_movelist(board)
+        wm = get_winning_moves(board, ml, human)
+        if len(wm) > 1:
+            moves['p4'] = move
+            return moves
+        '''
+        board[move] = ''
 
     # p5: take the center if its available
     if 'm5' in movelist:
