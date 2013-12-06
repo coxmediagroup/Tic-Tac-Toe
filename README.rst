@@ -6,7 +6,7 @@ Foreward
 
 Firstly, let me thank you for taking the time to consider me as a candidate for 
 employment. While not strictly necessary to achieve the goal of the project, I chose
-to use Django since you are a Django shop and I have experience working with it.
+to use Django since I am familiar with and have experience working with it.
 
 There are further instructions below on how to quickly launch this project within an 
 instance of the Django dev server. If you are running Windows, there are also batch 
@@ -24,6 +24,16 @@ the circumstances I imagine you already have those taken care of.
 For Windows, your /Python27 as well as /Python27/Scripts directories
 **must** be included in the system path environment variable, otherwise the 
 setup batch file will fail.
+
+
+Resume
+------
+
+You are welcome to contact me through LinkedIn, GitHub, or other avenues. 
+I try to keep my LinkedIn account the most current, however, so that would be 
+the best place to find up to date information.
+
+`My LinkedIn Profile <//www.linkedin.com/pub/bryce-eggleton/84/850/713>`_
 
 
 Quickstart
