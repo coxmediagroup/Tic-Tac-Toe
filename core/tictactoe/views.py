@@ -169,7 +169,7 @@ class TicTacToeView(CBVBaseView):
             board[move] = token
 
         if victory(board, move):
-            board["status"] = "ERROR: You have won! That was not supposed to happen!"
+            board["status"] = "ERROR: YOU HAVE WON! THAT WAS NOT INTEDED TO HAPPEN THERE IS A FLAW IN THE MACHINE!"
             board["gamestate"] = "victory"
             return self.to_json(board)
         if draw(board):
@@ -196,7 +196,7 @@ class TicTacToeView(CBVBaseView):
             board = make_move(board, pctoken)
 
         if victory(board, board['latest']):
-            board["status"] = "The computer has won. Long live AI!"
+            board["status"] = "The computer has won. Long live the machines!"
             board["gamestate"] = "victory"
         elif draw(board):
             board["status"] = "The game has ended in a draw!"
