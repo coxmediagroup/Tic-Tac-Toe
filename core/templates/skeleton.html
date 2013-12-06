@@ -20,13 +20,22 @@
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
         {% endblock meta %}
 
+        {# EXTERNAL MEDIA #}
+        {# The ever present jQuery library #}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        {# Good old bootstrap here to lend a hand #}
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+        {# Local CSS that can be compressed and cached #}
         {% compress css %}
         {% block header_css %}
         <link rel="stylesheet" type="text/less" media="all" href="{{ STATIC_URL }}less/site.less"/>
         {% endblock header_css %}
         {% endcompress %}
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        {# Local JS that can be compressed and cached #}
         {% compress js %}
         {% block header_scripts %}
         {% endblock header_scripts %}

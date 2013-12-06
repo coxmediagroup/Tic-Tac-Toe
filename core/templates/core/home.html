@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
 
-{% block header_scripts %}
+{% block page_scripts %}
 <script src="{{ STATIC_URL }}js/home.js" type="text/javascript"></script>
-{% endblock header_scripts %}
+{% endblock page_scripts %}
 
 
 {% block page_content %}
-<a class="playbutton" href="/tictactoe">play button</a>
-
-Explain reasoning and such here
+<div>
+<button type="button" class="play-first btn btn-default">PLAY: I'd like to go first</button>
+<button type="button" class="play-second btn btn-default">PLAY: I'll go second</button>
+</div>
+<p class="about-info">
+The algorithm used for this project is just simple heuristics, but it gets the job done. While it would have been fun to implement a MinMax algorithm with alpha-beta pruning, it would have taken far more time than I had available to be able to finish in time. Furthermore, this allows for a much more RESTful mechanism instead of having to generate and manage a game tree and state space.
+</p>
 {% endblock page_content %}
 
 
