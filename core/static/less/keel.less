@@ -17,17 +17,16 @@
         font-family: "courier new", serif;
     }
 
-    /*
-    CORRECT ORDER TO SPECIFY LINKS IN:
-    a:link
-    a:visited
-    a:hover
-    a:active
-    */
-    a:link, a:visited {
+    a:link {
         color: @text-medium;
     }
-    a:hover, a:active {
+    a:visited {
+        color: @text-medium;
+    }
+    a:hover {
+        color: @text-superlight;
+    }
+    a:active {
         color: @text-superlight;
     }
 }
