@@ -5,15 +5,26 @@
 {% endblock page_scripts %}
 
 {% block body %}
-<div class="topmast">
-    <span class="title">Tic-Tac-Toe</span>
-</div>
 <div class="hull">
-{% block content %}
-{% endblock content %}
-</div>
-<div class="keel">
-    this is some keel text
+    
+    <div class="hold">
+    {% block content %}
+    {% endblock content %}
+    </div>
+
+    <div class="topmast">
+        <span class="title">&#123;&#35; Naughts and Crosses &#35;&#125;</span>
+    </div>
+
+    <div class="keel">
+        <span class="footnote">
+            <a class="author" href="//www.facebook.com/eggleton.bryce" target="_blank">
+                &#123;&#123; author|bryce_eggleton &#125;&#125;</a>
+            &nbsp;&nbsp;&nbsp;
+            <a class="linkedin" href="//www.linkedin.com/pub/bryce-eggleton/84/850/713" target="_blank">
+                &#123;&#37; profile author.LinkedIn &#37;&#125;</a>
+        </span>
+    </div>
 </div>
 {% endblock body %}
 

@@ -1,13 +1,35 @@
 @import 'constants';
 
 .keel {
+    position: fixed;
+    bottom: 0px;
     width: 100%;
     height: @keel-height;
     position: fixed;
     bottom: 0px;
-    color: @text-light;
-
     background-color: @base-color-dark;
+    
+    .footnote {
+        font-size: 125%;
+        line-height: @keel-height;
+        font-weight: bold;
+        color: @text-medium;
+        font-family: "courier new", serif;
+    }
+
+    /*
+    CORRECT ORDER TO SPECIFY LINKS IN:
+    a:link
+    a:visited
+    a:hover
+    a:active
+    */
+    a:link, a:visited {
+        color: @text-medium;
+    }
+    a:hover, a:active {
+        color: @text-superlight;
+    }
 }
 
 

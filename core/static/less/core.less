@@ -1,15 +1,45 @@
 @import 'constants';
 @import 'topmast';
 @import 'keel';
+@import 'apps/tictactoe';
+
+::selection {
+    background-color: @text-light;
+    color: @base-color-dark;
+}
+::-moz-selection {
+    background-color: @text-light;
+    color: @base-color-dark;
+}
+
 
 .hull {
-	width: 100%;
-	height: 100%;
-	padding-top: @topmast-height;
-	padding-bottom: @keel-height;
+	position: relative;
+	overflow: hidden;
 	color: @text-light;
-
+	text-align: center;
+	min-height: 100%;
 	background-color: @base-color-medium;
+
+    /* clipping fixes for various browsers */
+    background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+}
+
+.hold {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	min-width: 650px;
+	min-height: 500px;
+	margin: 0px auto;
+	margin-top: @topmast-height;
+	margin-bottom: @keel-height;
+	padding-top: 30px;
+	padding-bottom: 15px;
+	border-left: dashed 2px @text-light;
+	border-right: dashed 2px @text-light;
 }
 
 
