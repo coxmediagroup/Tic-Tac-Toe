@@ -1,9 +1,29 @@
 {% extends "base.html" %}
 
+{% block page_scripts %}
+<script src="{{ STATIC_URL }}js/tictactoe.js" type="text/javascript"></script>
+{% endblock page_scripts %}
 
 {% block page_content %}
 <span class="game-message"></span>
-<div class="ttt-board"></div>
+
+<table class="gamegrid">
+    <tr>
+        <td class="movespot m1" data-state=""></td>
+        <td class="movespot m2" data-state=""></td>
+        <td class="movespot m3" data-state=""></td>
+    </tr>
+    <tr>
+        <td class="movespot m4" data-state=""></td>
+        <td class="movespot m5" data-state=""></td>
+        <td class="movespot m6" data-state=""></td>
+    </tr>
+    <tr>
+        <td class="movespot m7" data-state=""></td>
+        <td class="movespot m8" data-state=""></td>
+        <td class="movespot m9" data-state=""></td>
+    </tr>
+</table>
 {% endblock page_content %}
 
 

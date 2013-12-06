@@ -1,12 +1,12 @@
 from core.utils import CBVBaseView
+from django.views.decorators.csrf import csrf_exempt
 
 class TicTacToeView(CBVBaseView):
-	def get(self, request):
-		return self.to_template()
+    def get(self, request):
+        return self.to_template()
 
 
-class MoveView(CBVBaseView):
-	def get(self, request):
-		return self.to_json()
+    def post(self, request):
+        return self.to_json()
 
 

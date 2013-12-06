@@ -1,0 +1,20 @@
+@import 'constants';
+
+
+.gamegrid {
+    margin: 10px auto;
+    width: 300px;
+    height: 300px;
+    background-color: @text-medium;
+    border-collapse: collapse;
+
+    .movespot {
+        width: 100px;
+        height: 100px;
+        border: solid 1px @base-color-dark;
+    }
+
+    .movespot:hover {
+        background-color: @text-light;
+    }
+}
