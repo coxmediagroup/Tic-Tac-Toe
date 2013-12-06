@@ -3,15 +3,27 @@
 
 .gamegrid {
     margin: 10px auto;
-    width: 300px;
-    height: 300px;
+    display:inline-block;
     background-color: @text-medium;
-    border-collapse: collapse;
+    max-width: @grid-cell-size * 3;
+    max-height: @grid-cell-size * 3;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+    overflow: hidden;
 
     .movespot {
-        width: 100px;
-        height: 100px;
         border: solid 1px @base-color-dark;
+        float: left;
+        overflow: hidden;
+        min-width: @grid-cell-size;
+        max-width: @grid-cell-size;
+        min-height: @grid-cell-size;
+        max-height: @grid-cell-size;
+        color: @base-color-dark;
+        font-family: "courier new", serif;
+        font-size: @grid-cell-size * 2 / 3;
+        line-height: @grid-cell-size;
     }
 
     .movespot:hover {

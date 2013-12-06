@@ -7,6 +7,17 @@ class TicTacToeView(CBVBaseView):
 
 
     def post(self, request):
-        return self.to_json()
+        board = {
+            'm1': '',
+            'm2': 'O',
+            'm3': 'X',
+            'm4': '',
+            'm5': 'X',
+            'm6': '',
+            'm7': '',
+            'm8': 'O',
+            'm9': '',
+        }
+        return self.to_json(board)
 
 
