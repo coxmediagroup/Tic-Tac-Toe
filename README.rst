@@ -1,4 +1,4 @@
-Naughts and Crosses
+Noughts and Crosses
 ===================
 
 Foreward
@@ -35,7 +35,7 @@ Windows
 1) run setup.cmd (django setup can take a couple minutes just give it a litte time)
 2) run launchdev.cmd
 3) navigate to 127.0.0.1:8000 in a browser
-4) play naughts and crosses
+4) play noughts and crosses
 5) close dev server
 6) run uninstall.cmd
 
@@ -80,7 +80,7 @@ runserver.cmd
 -------------
 
 This will launch an instance of the Django dev server with the project 
-settings and at that point, the interactive game of Naughts and Crosses 
+settings and at that point, the interactive game of Noughts and Crosses 
 will be available from your browser at 127.0.0.1:8000
 
 

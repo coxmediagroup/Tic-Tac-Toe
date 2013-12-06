@@ -13,9 +13,8 @@ SECRET_KEY = '!!ck=of93i3bo4mva2br*on!bj_6+^yrj@ami==46#o2hfmmkc'
 DEBUG = True
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
-LESS_CSS_PATHS = {
-    'static/less/site.less': 'static/css/site.css'
-}
+COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
+INTERNAL_IPS = ('127.0.0.1',)
 
 
 TEMPLATE_DEBUG = True

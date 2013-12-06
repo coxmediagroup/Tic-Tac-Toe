@@ -1,6 +1,12 @@
-from django.views.generic import View
+from core.utils import CBVBaseView
 
-class TicTacToeView(View):
-	template_name = "tictactoe.html"
+class TicTacToeView(CBVBaseView):
+	def get(self, request):
+		return self.to_template()
+
+
+class MoveView(CBVBaseView):
+	def get(self, request):
+		return self.to_json()
 
 
