@@ -20,6 +20,18 @@ def get_winning_moves(board, moves, token):
     return winning
 
 
+def check_branching(board, moves, token):
+    winning = []
+    for move in moves:
+        board[move] = token
+        ml = generate_movelist(board)
+        wm = get_winning_moves(board, ml, token)
+        if len(wm) > 1:
+            winning.append(move)
+        board[move] = ''
+    return winning
+
+
 def get_possible_moves(board, token):
     human = 'X' if token == 'O' else 'O'
     moves = {
@@ -50,28 +62,20 @@ def get_possible_moves(board, token):
     # p3: create multiple opportunities for yourself;
     # this one is a lot more complex because you have to 
     # look ahead to see what will give you branching
-    for move in movelist:
-        board[move] = token
-        ml = generate_movelist(board)
-        wm = get_winning_moves(board, ml, token)
-        if len(wm) > 1:
-            moves['p3'] = move
-            return moves
-        board[move] = ''
+    branch = check_branching(board, movelist, token)
+    if len(branch):
+        moves['p3'] = branch[0]
+        return moves
 
     # p4: block opponent from setting up multiple win scenarios;
     # again this one is a little more complex since now we look 
     # ahead for branching scenarios for the opponent
     for move in movelist:
-        board[move] = token
-        '''
         ml = generate_movelist(board)
-        wm = get_winning_moves(board, ml, human)
-        if len(wm) > 1:
+        branch = check_branching(board, ml, human)
+        if len(branch):
             moves['p4'] = move
             return moves
-        '''
-        board[move] = ''
 
     # p5: take the center if its available
     if 'm5' in movelist:
@@ -191,10 +195,10 @@ class TicTacToeView(CBVBaseView):
         order = request.GET.get('order')
         if order == 'first':
             token = "X"
-            board = get_initial_board(first=True)
+            board = get_initial_board()
         elif order == 'second':
             token = "O"
-            board = get_initial_board()
+            board = get_initial_board(first=True)
         else:
             raise ValueError(order)
         return self.to_template(data={"token":token, "board":board})
