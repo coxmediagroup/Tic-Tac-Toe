@@ -4,8 +4,17 @@
 <script src="{{ STATIC_URL }}js/home.js" type="text/javascript"></script>
 {% endblock page_scripts %}
 
+{% block body %}
+<div class="topmast">
+    <span class="title">Tic-Tac-Toe</span>
+</div>
+<div class="hull">
 {% block content %}
-
 {% endblock content %}
+</div>
+<div class="keel">
+    this is some keel text
+</div>
+{% endblock body %}
 
 

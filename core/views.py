@@ -1,7 +1,7 @@
-from core.utils import CBVBase
+from core.utils import CBVBaseView
 
-class HomeView(CBVBase):
+class HomeView(CBVBaseView):
 	def get(self, request):
-		return self.to_template('home.html')
+		return self.to_template()
 
 

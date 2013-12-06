@@ -22,7 +22,7 @@
 
         {% compress css %}
         {% block header_css %}
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}less/site.less">
+        <link rel="stylesheet" type="text/less" media="all" href="{{ STATIC_URL }}less/site.less"/>
         {% endblock header_css %}
         {% endcompress %}
 
