@@ -6,18 +6,18 @@
 
 {% block page_content %}
 <button type="button" class="hidden play-again btn btn-default">I'd like to play again!</button>
-<div id="gametoken" class="gamegrid" data-token="{{token}}" data-gamestate="">
-    <div class="movespot" id="m1" data-state=""></div>
-    <div class="movespot" id="m2" data-state=""></div>
-    <div class="movespot" id="m3" data-state=""></div>
-    <div class="movespot" id="m4" data-state=""></div>
-    <div class="movespot" id="m5" data-state=""></div>
-    <div class="movespot" id="m6" data-state=""></div>
-    <div class="movespot" id="m7" data-state=""></div>
-    <div class="movespot" id="m8" data-state=""></div>
-    <div class="movespot" id="m9" data-state=""></div>
+<div id="gametoken" class="gamegrid" data-token="{{token}}" data-gamestate="{{board.gamestate}}">
+    <div class="movespot" id="m1" data-state="{{board.m1}}">{{board.m1}}</div>
+    <div class="movespot" id="m2" data-state="{{board.m2}}">{{board.m2}}</div>
+    <div class="movespot" id="m3" data-state="{{board.m3}}">{{board.m3}}</div>
+    <div class="movespot" id="m4" data-state="{{board.m4}}">{{board.m4}}</div>
+    <div class="movespot" id="m5" data-state="{{board.m5}}">{{board.m5}}</div>
+    <div class="movespot" id="m6" data-state="{{board.m6}}">{{board.m6}}</div>
+    <div class="movespot" id="m7" data-state="{{board.m7}}">{{board.m7}}</div>
+    <div class="movespot" id="m8" data-state="{{board.m8}}">{{board.m8}}</div>
+    <div class="movespot" id="m9" data-state="{{board.m9}}">{{board.m9}}</div>
 </div>
-<span id="game-message"></span>
+<span id="game-message">{{board.status}}</span>
 {% endblock page_content %}
 
 

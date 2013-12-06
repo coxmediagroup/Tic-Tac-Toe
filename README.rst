@@ -90,3 +90,11 @@ uninstall.cmd
 This file simply removes the virtual environment created from the setup.cmd 
 script to leave almost no trace of the project.
 
+
+TODO
+====
+
+#) darken out board a bit once the game is over
+#) make the game status text more prominent
+#) highlight what each player's last move was
+

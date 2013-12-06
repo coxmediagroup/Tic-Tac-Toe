@@ -169,6 +169,21 @@ def draw(board):
     return True
 
 
+def get_initial_board(first=False):
+    board = {
+        'm1': '', 'm2': '', 'm3': '',
+        'm4': '', 'm5': '', 'm6': '',
+        'm7': '', 'm8': '', 'm9': '',
+        'status': '', 'latest': '', 'gamestate': ''
+    }
+    if first == True:
+        # between perfect players, either a corner or the center have the 
+        # same outcome, however, playing a corner results in more outcomes 
+        # where X wins, so we play to a corner for better chances
+        board['m7'] = 'X'
+
+    return board
+
 
 class TicTacToeView(CBVBaseView):
     def get(self, request):
@@ -176,11 +191,13 @@ class TicTacToeView(CBVBaseView):
         order = request.GET.get('order')
         if order == 'first':
             token = "X"
+            board = get_initial_board(first=True)
         elif order == 'second':
             token = "O"
+            board = get_initial_board()
         else:
             raise ValueError(order)
-        return self.to_template(data={"token":token})
+        return self.to_template(data={"token":token, "board":board})
 
 
     def post(self, request):
