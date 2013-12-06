@@ -15,7 +15,7 @@ def get_possible_moves(board, token):
     }
     movelist = []
     for move, spot in board.iteritems():
-        if spot != 'X' and spot != 'O':
+        if spot != 'X' and spot != 'O' and len(move) < 3:
             movelist.append(move)
 
     # p1: win if possible, can't lose if the game is over
@@ -54,16 +54,16 @@ def get_possible_moves(board, token):
         pass
 
     # p7: just take any corner while you're at it. you might as well
-    if 'm1' in uselists:
+    if 'm1' in movelist:
         moves['p7'] = 'm1'
         return moves
-    if 'm3' in uselists:
+    if 'm3' in movelist:
         moves['p7'] = 'm3'
         return moves
-    if 'm7' in uselists:
+    if 'm7' in movelist:
         moves['p7'] = 'm7'
         return moves
-    if 'm9' in uselists:
+    if 'm9' in movelist:
         moves['p7'] = 'm9'
         return moves
 
@@ -129,9 +129,8 @@ def victory(board, last):
 
 def draw(board):
     for key, value in board.iteritems():
-        if value != 'X' and value != 'O':
-            if key != 'status' and key != 'latest':
-                return False
+        if value != 'X' and value != 'O' and len(key) < 3:
+            return False
     return True
 
 
@@ -156,16 +155,26 @@ class TicTacToeView(CBVBaseView):
             'm1': request.POST["m1"], 'm2': request.POST["m2"], 'm3': request.POST["m3"],
             'm4': request.POST["m4"], 'm5': request.POST["m5"], 'm6': request.POST["m6"],
             'm7': request.POST["m7"], 'm8': request.POST["m8"], 'm9': request.POST["m9"],
-            'status': '', 'latest': ''
+            'status': '', 'latest': '', 'gamestate': request.POST["gamestate"]
         }
+        if board['gamestate'] in ['victory', 'draw']:
+            board['status'] = "The game is already over!"
+            return self.to_json(board)
+
         move = request.POST["move"]
         if move in board and board[move] != "":
             board["status"] = "That is an invalid move"
             return self.to_json(board)
         else:
             board[move] = token
+
         if victory(board, move):
             board["status"] = "ERROR: You have won! That was not supposed to happen!"
+            board["gamestate"] = "victory"
+            return self.to_json(board)
+        if draw(board):
+            board["status"] = "The game has ended in a draw!"
+            board["gamestate"] = "draw"
             return self.to_json(board)
         
         moves = get_possible_moves(board, pctoken)
@@ -188,11 +197,11 @@ class TicTacToeView(CBVBaseView):
 
         if victory(board, board['latest']):
             board["status"] = "The computer has won. Long live AI!"
-
-        if draw(board):
+            board["gamestate"] = "victory"
+        elif draw(board):
             board["status"] = "The game has ended in a draw!"
+            board["gamestate"] = "draw"
 
-        print board
         return self.to_json(board)
 
 

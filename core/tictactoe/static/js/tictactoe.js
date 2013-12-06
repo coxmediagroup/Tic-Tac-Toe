@@ -31,6 +31,7 @@
 		$('#m9').data('state', data["m9"]);
 		$('#m9').html(data["m9"]);
 		$('#game-message').html(data["status"]);
+		$('#gametoken').data('gamestate', data["gamestate"])
 		waiting = false;
 	};
 
@@ -57,6 +58,7 @@
 		var gamedata = get_board_state();
 		gamedata["move"] = $(this).attr("id");
 		gamedata["token"] = $("#gametoken").data("token");
+		gamedata["gamestate"] = $("#gametoken").data("gamestate")
 
 		// send it off to be processed
 		$.ajax({
