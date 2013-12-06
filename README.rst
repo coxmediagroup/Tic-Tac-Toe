@@ -21,9 +21,9 @@ Python 2.7.5 and pip >= 1.4.1 are the only things that must be installed
 in advance for this project to run on a Django dev server locally. Given 
 the circumstances I imagine you already have those taken care of.
 
-For Windows, your \Python27 as well as \Python27\Scripts directories
+For Windows, your /Python27 as well as /Python27/Scripts directories
 **must** be included in the system path environment variable, otherwise the 
-setup batch files will fail.
+setup batch file will fail.
 
 
 Quickstart
@@ -49,18 +49,18 @@ fairly painless setup and launch. It is assumed that you are in the main project
 directory for these commands.
 
 Create a virtual environment:
-``pip install virtualenvwrapper
-pip install --upgrade virtualenv
-mkvirtualenv test-bryce-eggleton
-workon test-bryce-eggleton``
+	``pip install virtualenvwrapper``
+	``pip install --upgrade virtualenv``
+	``mkvirtualenv test-bryce-eggleton``
+	``workon test-bryce-eggleton``
 
 Launch the dev server:
-``workon test-bryce-eggleton
-python manage.py runserver --settings=core.config``
+	``workon test-bryce-eggleton``
+	``python manage.py runserver --settings=core.config``
 
 Remove Virtual Environment:
-``deactivate
-rmvirtualenv test-bryce-eggleton``
+	``deactivate``
+	``rmvirtualenv test-bryce-eggleton``
 
 
 Shell Script Files
@@ -70,7 +70,7 @@ setup.cmd
 ---------
 
 This file will create a virtual environment for the Python packages this 
-project requires so as not to pollute the main Python installation. 
+project requires so as not to pollute your main Python installation. 
 Then it will install any required Python packages for the project, including 
 Django into the virtual environment. At that point, the project should be 
 completely configured and ready to run, via the next script.
@@ -80,7 +80,7 @@ runserver.cmd
 -------------
 
 This will launch an instance of the Django dev server with the project 
-settings and at that point, the interactive game of Noughts and Crosses 
+settings and at that point, an interactive game of Noughts and Crosses 
 will be available from your browser at 127.0.0.1:8000
 
 

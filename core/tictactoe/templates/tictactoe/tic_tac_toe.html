@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 
+{% block page_scripts %}
+<script src="{{ STATIC_URL }}js/tictactoe.js" type="text/javascript"></script>
+{% endblock page_scripts %}
 
 {% block page_content %}
-<span class="game-message"></span>
-<div class="ttt-board"></div>
+<span id="game-message"></span>
+<br>
+<div id="gametoken" class="gamegrid" data-token="{{token}}" data-gamestate="">
+    <div class="movespot" id="m1" data-state=""></div>
+    <div class="movespot" id="m2" data-state=""></div>
+    <div class="movespot" id="m3" data-state=""></div>
+    <div class="movespot" id="m4" data-state=""></div>
+    <div class="movespot" id="m5" data-state=""></div>
+    <div class="movespot" id="m6" data-state=""></div>
+    <div class="movespot" id="m7" data-state=""></div>
+    <div class="movespot" id="m8" data-state=""></div>
+    <div class="movespot" id="m9" data-state=""></div>
+</div>
 {% endblock page_content %}
 
 
