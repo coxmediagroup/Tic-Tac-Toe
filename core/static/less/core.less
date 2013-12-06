@@ -1,0 +1,73 @@
+@import 'constants';
+@import 'topmast';
+@import 'keel';
+@import 'apps/tictactoe';
+
+::selection {
+    background-color: @text-light;
+    color: @base-color-dark;
+}
+::-moz-selection {
+    background-color: @text-light;
+    color: @base-color-dark;
+}
+
+
+.hull {
+	position: relative;
+	overflow: hidden;
+	color: @text-light;
+	text-align: center;
+	min-height: 100%;
+	background-color: @base-color-medium;
+
+    /* clipping fixes for various browsers */
+    background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+}
+
+.hold {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	min-width: 650px;
+    max-width: 740px;
+	min-height: 500px;
+	margin: 0px auto;
+	margin-top: @topmast-height;
+	margin-bottom: @keel-height;
+	padding-top: 30px;
+	padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: "courier new", serif;
+
+    .about-info {
+        border-top: dashed 2px @text-light;
+        border-bottom: dashed 2px @text-light;
+    }
+
+    p {
+        display: inline-block;
+        margin: 5px 20px;
+        margin-top: 30px;
+        padding: 15px 0px;
+        line-height: 115%;
+    }
+
+    a:link {
+        color: @text-light;
+    }
+    a:visited {
+        color: @text-light;
+    }
+    a:hover {
+        color: @text-superlight;
+    }
+    a:active {
+        color: @text-superlight;
+    }
+}
+
+
