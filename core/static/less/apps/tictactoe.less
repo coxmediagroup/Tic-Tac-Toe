@@ -1,0 +1,39 @@
+@import 'constants';
+
+#game-message {
+    display: inline-block;
+    margin: 20px;
+    font-size: 115%;
+    line-height: 115%;
+}
+
+.gamegrid {
+    margin: 10px auto;
+    margin-top: 30px;
+    background-color: @text-medium;
+    width: @grid-cell-size * 3;
+    max-width: @grid-cell-size * 3;
+    max-height: @grid-cell-size * 3;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+    overflow: hidden;
+
+    .movespot {
+        border: solid 1px @base-color-dark;
+        float: left;
+        overflow: hidden;
+        min-width: @grid-cell-size;
+        max-width: @grid-cell-size;
+        min-height: @grid-cell-size;
+        max-height: @grid-cell-size;
+        color: @base-color-dark;
+        font-family: "courier new", serif;
+        font-size: @grid-cell-size * 2 / 3;
+        line-height: @grid-cell-size;
+    }
+
+    .movespot:hover {
+        background-color: @text-light;
+    }
+}

@@ -1,0 +1,38 @@
+@import 'constants';
+
+.topmast {
+    width: 100%;
+    height: @topmast-height;
+    position: fixed;
+    top: 0px;
+    color: @text-light;
+    background-color: @base-color-dark;
+
+    .title {
+        font-family: "courier new", serif;
+        display: inline-block;
+        margin-left: 30px;
+        font-size: 230%;
+        line-height: 200%;
+        color: @text-superlight;
+        font-weight: bold;
+        text-shadow: 0 0 1px @text-light;
+    }
+
+    a:link {
+        color: @text-superlight;
+    }
+    a:visited {
+        color: @text-superlight;
+    }
+    a:hover {
+        color: @text-superlight;
+        text-shadow: 0 0 3px @text-light;
+    }
+    a:active {
+        color: @text-superlight;
+        text-shadow: 0 0 3px @text-light;
+    }
+}
+
+
