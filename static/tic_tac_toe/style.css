@@ -13,6 +13,8 @@ h1 {
     width: 125px;
     height: 125px;
     float: left;
+    font-size: 130px;
+    text-align: center;
 }
 
 .clear {
