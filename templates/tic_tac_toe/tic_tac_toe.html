@@ -1,17 +1,30 @@
 {% load staticfiles %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'tic_tac_toe/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'tic_tac_toe/css/style.css' %}" />
+<script type="text/javascript" src="{% static 'tic_tac_toe/js/main.js' %}"></script>
 
 <h1>Let's play Tic-Tac-Toe!</h1>
 
 <div class="game_board">
 {% for cell in upper_row %}
-    <div class="cell upper {{ cell.position }}" id="{{ cell.index }}">{{ cell.value }}</div>
+    <div class="cell upper {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
 {% endfor %}
 {% for cell in middle_row %}
-    <div class="cell middle {{ cell.position }}" id="{{ cell.index }}">{{ cell.value }}</div>
+    <div class="cell middle {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
 {% endfor %}
 {% for cell in bottom_row %}
-    <div class="cell lower {{ cell.position }}" id="{{ cell.index }}">{{ cell.value }}</div>
+    <div class="cell lower {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
 {% endfor %}
 </div>
