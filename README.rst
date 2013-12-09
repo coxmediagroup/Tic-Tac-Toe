@@ -5,6 +5,9 @@ Noughts and Crosses
 Bryce Eggleton: Django & Python sample code
 -------------------------------------------
 
+Foreward
+========
+
 This repo is meant to serve as sample code for a very simple Django/Python application.
 So firstly, if you are an employer then let me thank you for taking the time to consider
 me as a candidate for a position within your company.
