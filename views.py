@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from random import randrange
 
@@ -31,4 +32,11 @@ def index(request):
         'upper_row': upper_row,
         'middle_row': middle_row,
         'bottom_row': bottom_row
-    });
+    }, RequestContext(request));
+
+def user_move(request):
+    return render_to_response('tic_tac_toe/tic_tac_toe.html', {
+        'upper_row': None,
+        'middle_row': None,
+        'bottom_row': None
+    }, RequestContext(request));
