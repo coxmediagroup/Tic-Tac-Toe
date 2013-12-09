@@ -1,0 +1,36 @@
+h1 {
+    text-align: center;
+}
+
+.game_board {
+    width: 379px;
+    height: 375px;
+    display: block;
+    margin: auto;
+}
+
+.cell {
+    width: 125px;
+    height: 125px;
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+.cell.upper {
+    border-bottom: solid 2px;
+}
+
+.cell.lower {
+    border-top: solid 2px;
+}
+
+.cell.left {
+    border-right: solid 2px;
+}
+
+.cell.right {
+    border-left: solid 2px;
+}
