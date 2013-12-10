@@ -5,6 +5,10 @@
 
 <h1>Let's play Tic-Tac-Toe!</h1>
 
+{% if winner %}
+    <p>We have a winner!</p>
+{% endif %}
+
 <form action="{% url 'user_move' %}" method="post" id="board">
 {% csrf_token %}
 
@@ -35,5 +39,6 @@
 {% endfor %}
 </div>
 
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Reset" name="reset" />
+    <input type="submit" value="Submit" name="submit" />
 </form>
