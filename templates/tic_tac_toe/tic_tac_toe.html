@@ -10,6 +10,10 @@
     <p>Click 'Reset' to play again.</p>
 </div>
 {% endif %}
+{% if draw %}
+    <p>It's a draw.</p>
+    <p>Click 'Reset' to play again.</p>
+{% endif %}
 
 <form action="{% url 'user_move' %}" method="post" id="board">
 {% csrf_token %}
@@ -40,9 +44,14 @@
     <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
 {% endfor %}
 </div>
-
+<div class="clear"></div>
+<div class="buttons">
+    <input type="hidden" value="" name="last_move" />
     <input type="submit" value="Reset" name="reset" />
 {% if not winner %}
-    <input type="submit" value="Submit" name="submit" />
+    {% if not draw %}
+        <input type="submit" value="Submit" name="submit" />
+    {% endif %}
 {% endif %}
+</div>
 </form>

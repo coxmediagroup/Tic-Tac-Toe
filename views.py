@@ -7,17 +7,11 @@ from random import randrange
 def index(request):
 
     # Computer plays first
-    first_plays = [ 'B3', 'A2', 'B1', 'C2' ]
-
-    first_play = randrange(0, 4)
-
     cells = {
         'A1': '', 'A2': '', 'A3': '',
-        'B1': '', 'B2': '', 'B3': '',
+        'B1': '', 'B2': 'X', 'B3': '',
         'C1': '', 'C2': '', 'C3': ''
     }
-
-    cells[first_plays[first_play]] = 'X'
 
     upper_row = [ { 'index': 'A1', 'value': cells['A1'], 'position': 'left' }, 
         { 'index': 'A2', 'value': cells['A2'], 'position': 'center' }, 
@@ -37,8 +31,6 @@ def index(request):
 
 def user_move(request):
 
-    upper_row = None
-
     if request.method == "POST":
 
         if request.POST.get('reset'):
@@ -53,6 +45,7 @@ def user_move(request):
         c1 = request.POST.get('C1', '')
         c2 = request.POST.get('C2', '')
         c3 = request.POST.get('C3', '')
+        last_move = request.POST.get('last_move', '')
     
         cells = {
             'A1': a1, 'A2': a2, 'A3': a3,
@@ -60,9 +53,21 @@ def user_move(request):
             'C1': c1, 'C2': c2, 'C3': c3 
         }
         winner = check_for_winner(cells)
-        next_move = find_next_move(cells)
-
-        cells[next_move] = 'X'
+        draw = False
+        if not(winner):
+            empty_cells = check_for_empty_cells(cells)
+            if empty_cells:
+                next_move = find_next_move(cells, last_move)
+                if next_move:
+                    cells[next_move] = 'X'
+                    winner = check_for_winner(cells)
+                    empty_cells = check_for_empty_cells(cells)
+                    if not empty_cells:
+                        draw = True
+                else:
+                    draw = True
+            else:
+                draw = True
 
         upper_row = [ { 'index': 'A1', 'value': cells['A1'], 'position': 'left' }, 
             { 'index': 'A2', 'value': cells['A2'], 'position': 'center' }, 
@@ -79,6 +84,7 @@ def user_move(request):
         'middle_row': middle_row,
         'bottom_row': bottom_row,
         'winner': winner,
+        'draw': draw
     }, RequestContext(request));
 
 def check_for_winner(cells):
@@ -107,7 +113,13 @@ def check_for_winner(cells):
 
     return False
 
-def find_next_move(cells):
+def check_for_empty_cells(cells):
+
+    for key in cells.iterkeys():
+        if ( cells[key] == '' ):
+            return key
+
+def find_next_move(cells, last_move):
 
     # Check for win
     next_move = potential_win(cells, 'row', 'A', 'X')
@@ -173,6 +185,10 @@ def find_next_move(cells):
     if next_move:
         return next_move
 
+    next_move = strategic_move(cells, last_move)
+    if next_move:
+        return next_move
+
     return None
 
 def potential_win(cells, orientation, id, value):
@@ -206,3 +222,41 @@ def potential_win(cells, orientation, id, value):
             return 'B2'
         elif ( cells['A3'] == '' and cells['B2'] == value and cells['C1'] == value ):
             return 'A3'
+
+def strategic_move(cells, last_move):
+    right = False
+    left = False
+    top = False
+    bottom = False
+
+    char_list = list(last_move)
+    right_index = int(char_list[1]) + 1
+    left_index = int(char_list[1]) - 1
+
+    if right_index <= 3:
+        right = True
+    if left_index > 0:
+        left = True
+    if (char_list[0] != 'A'):
+        top = True
+    if (char_list[0] != 'C'):
+        bottom = True
+ 
+    if right == True:
+        if (cells[char_list[0] + str(right_index)] == ''):
+            return char_list[0] + str(right_index)
+    if left == True:
+        if (cells[char_list[0] + str(left_index)] == ''):
+            return char_list[0] + str(left_index)
+    if top == True:
+        if char_list[0] == 'B' and cells['A' + str(char_list[1])] == '':
+            return 'A' + str(char_list[1])
+        if char_list[0] == 'C' and cells['C' + str(char_list[1])] == '':
+            return 'B' + str(char_list[1])
+    if bottom == True:
+        if char_list[0] == 'A' and cells['B' + str(char_list[1])] == '':
+            return 'B' + str(char_list[1])
+        if char_list[0] == 'B' and cells['C' + str(char_list[1])] == '':
+            return 'C' + str(char_list[1])
+
+    return check_for_empty_cells(cells)

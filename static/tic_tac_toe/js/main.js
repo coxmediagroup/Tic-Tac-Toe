@@ -13,4 +13,7 @@ function addToken(cell) {
 
     var move_input = document.getElementsByName(current_move)[0];
     move_input.value = "O";
+
+    var last_move = document.getElementsByName('last_move')[0];
+    last_move.value = current_move;
 }

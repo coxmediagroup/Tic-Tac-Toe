@@ -36,3 +36,17 @@ h1 {
 .cell.right {
     border-left: solid 2px;
 }
+
+ .buttons {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}
+
+p {
+    margin: auto;
+    display: block;
+    text-align: center;
+}
