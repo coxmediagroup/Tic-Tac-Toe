@@ -21,12 +21,6 @@ h1 {
     clear: both;
 }
 
-input[type=button] {
-    width: 125px;
-    height: 125px;
-    font-size: 100px;
-}
-
 .cell.upper {
     border-bottom: solid 2px;
 }

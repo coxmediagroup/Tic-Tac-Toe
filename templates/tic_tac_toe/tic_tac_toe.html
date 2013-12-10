@@ -5,30 +5,33 @@
 
 <h1>Let's play Tic-Tac-Toe!</h1>
 
-<form action="{% url 'user_move' %}" method="post">
+<form action="{% url 'user_move' %}" method="post" id="board">
 {% csrf_token %}
 
 <div class="game_board">
 {% for cell in upper_row %}
-    <div class="cell upper {{ cell.position }}"><input type="button" name="cell" id="{{ cell.index }}"
+    <div class="cell upper {{ cell.position }}" id="{{ cell.index }}"
     {% if cell.value|length = 0 %}
         onclick="addToken(this)"
     {% endif %}
-    value="{{ cell.value }}"/></div>
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
 {% endfor %}
 {% for cell in middle_row %}
-    <div class="cell middle {{ cell.position }}"><input type="button" name="cell" id="{{ cell.index }}"
+    <div class="cell middle {{ cell.position }}" id="{{ cell.index }}"
     {% if cell.value|length = 0 %}
         onclick="addToken(this)"
     {% endif %}
-    value="{{ cell.value }}"/></div>
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
 {% endfor %}
 {% for cell in bottom_row %}
-    <div class="cell lower {{ cell.position }}"><input type="button" name="cell" id="{{ cell.index }}"
+    <div class="cell lower {{ cell.position }}" id="{{ cell.index }}"
     {% if cell.value|length = 0 %}
         onclick="addToken(this)"
     {% endif %}
-    value="{{ cell.value }}"/></div>
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
 {% endfor %}
 </div>
 
