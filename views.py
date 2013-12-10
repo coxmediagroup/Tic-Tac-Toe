@@ -109,42 +109,100 @@ def check_for_winner(cells):
 
 def find_next_move(cells):
 
+    # Check for win
+    next_move = potential_win(cells, 'row', 'A', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'row', 'B', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'row', 'C', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'col', '1', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'col', '2', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'col', '3', 'X')
+    if next_move:
+        return next_move
+
+    next_move = potential_win(cells, 'diagonal', '', 'X')
+    if next_move:
+        return next_move
+
     # Look for block in first row
-    if ( cells['A1'] == 'O' and cells['A2'] == 'O' and cells['A3'] == '' ):
-        return 'A3'
-    elif ( cells['A1'] == '' and cells['A2'] == 'O' and cells['A3'] == 'O' ):
-        return 'A1'
-    elif ( cells['A1'] == 'O' and cells['A2'] == '' and cells['A3'] == 'O' ):
-        return 'A2'
+    next_move = potential_win(cells, 'row', 'A', 'O')
+    if next_move:
+        return next_move
 
     # Look for block in second row
-    if ( cells['B1'] == 'O' and cells['B2'] == 'O' and cells['B3'] == '' ):
-        return 'B3'
-    elif ( cells['B1'] == '' and cells['B2'] == 'O' and cells['B3'] == 'O' ):
-        return 'B1'
-    elif ( cells['B1'] == 'O' and cells['B2'] == '' and cells['B3'] == 'O' ):
-        return 'B2'
+    next_move = potential_win(cells, 'row', 'B', 'O')
+    if next_move:
+        return next_move
 
     # Look for block in third row
-    if ( cells['C1'] == 'O' and cells['C2'] == 'O' and cells['C3'] == '' ):
-        return 'C3'
-    elif ( cells['C1'] == '' and cells['C2'] == 'O' and cells['C3'] == 'O' ):
-        return 'C1'
-    elif ( cells['C1'] == 'O' and cells['C2'] == '' and cells['C3'] == 'O' ):
-        return 'C2'
+    next_move = potential_win(cells, 'row', 'C', 'O')
+    if next_move:
+        return next_move
+
+    # Look for block in first column
+    next_move = potential_win(cells, 'col', '1', 'O')
+    if next_move:
+        return next_move
+
+    # Look for block in second column
+    next_move = potential_win(cells, 'col', '2', 'O')
+    if next_move:
+        return next_move
+
+    # Look for block in third column
+    next_move = potential_win(cells, 'col', '3', 'O')
+    if next_move:
+        return next_move
 
     # Look for diagonal block
-    if ( cells['A1'] == 'O' and cells['B2'] == 'O' and cells['C3'] == '' ):
-        return 'C3'
-    elif ( cells['A1'] == 'O' and cells['B2'] == '' and cells['C3'] == 'O' ):
-        return 'B2'
-    elif ( cells['A1'] == '' and cells['B2'] == 'O' and cells['C3'] == 'O' ):
-        return 'A1'
-    if ( cells['A3'] == 'O' and cells['B2'] == 'O' and cells['C1'] == '' ):
-        return 'C1'
-    elif ( cells['A3'] == 'O' and cells['B2'] == '' and cells['C1'] == 'O' ):
-        return 'B2'
-    elif ( cells['A3'] == '' and cells['B2'] == 'O' and cells['C1'] == 'O' ):
-        return 'A3'
+    next_move = potential_win(cells, 'diagonal', '', 'O')
+    if next_move:
+        return next_move
 
     return None
+
+def potential_win(cells, orientation, id, value):
+    
+    if ( orientation == 'row' ):
+        if ( cells[id + '1'] == value and cells[id + '2'] == value and cells[id + '3'] == '' ):
+            return id + '3'
+        elif ( cells[id + '1'] == '' and cells[id + '2'] == value and cells[id + '3'] == value ):
+            return id + '1'
+        elif ( cells[id + '1'] == value and cells[id + '2'] == '' and cells[id + '3'] == value ):
+            return id + '2'
+
+    if ( orientation == 'col' ):
+        if ( cells['A' + str(id)] == value and cells['B' + str(id)] == value and cells['C' + str(id)] =='' ):
+            return 'C' + str(id)
+        if ( cells['A' + str(id)] == '' and cells['B' + str(id)] == value and cells['C' + str(id)] == value ):
+            return 'A' + str(id)
+        if ( cells['A' + str(id)] == value and cells['B' + str(id)] == '' and cells['C' + str(id)] == value ):
+            return 'B' + str(id)
+
+    if ( orientation == 'diagonal' ):
+        if ( cells['A1'] == value and cells['B2'] == value and cells['C3'] == '' ):
+            return 'C3'
+        elif ( cells['A1'] == value and cells['B2'] == '' and cells['C3'] == value ):
+            return 'B2'
+        elif ( cells['A1'] == '' and cells['B2'] == value and cells['C3'] == value ):
+            return 'A1'
+        if ( cells['A3'] == value and cells['B2'] == value and cells['C1'] == '' ):
+            return 'C1'
+        elif ( cells['A3'] == value and cells['B2'] == '' and cells['C1'] == value ):
+            return 'B2'
+        elif ( cells['A3'] == '' and cells['B2'] == value and cells['C1'] == value ):
+            return 'A3'
