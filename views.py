@@ -26,7 +26,8 @@ def index(request):
     return render_to_response('tic_tac_toe/tic_tac_toe.html', {
         'upper_row': upper_row,
         'middle_row': middle_row,
-        'bottom_row': bottom_row
+        'bottom_row': bottom_row,
+        'first': True
     }, RequestContext(request));
 
 def user_move(request):

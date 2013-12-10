@@ -5,6 +5,10 @@
 
 <h1>Let's play Tic-Tac-Toe!</h1>
 
+{% if first %}
+<p>Click a square to mark it and click 'Submit' to make your decision final.</p>
+{% endif %}
+
 {% if winner %}
     <p>We have a winner!</p>
     <p>Click 'Reset' to play again.</p>
@@ -18,6 +22,16 @@
 <form action="{% url 'user_move' %}" method="post" id="board">
 {% csrf_token %}
 
+<div class="clear"></div>
+<div class="buttons">
+    <input type="hidden" value="" name="last_move" />
+    <input type="submit" value="Reset" name="reset" />
+{% if not winner %}
+    {% if not draw %}
+        <input type="submit" value="Submit" name="submit" />
+    {% endif %}
+{% endif %}
+</div>
 <div class="game_board">
 {% for cell in upper_row %}
     <div class="cell upper {{ cell.position }}" id="{{ cell.index }}"
@@ -43,15 +57,5 @@
     >{{ cell.value }}</div>
     <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
 {% endfor %}
-</div>
-<div class="clear"></div>
-<div class="buttons">
-    <input type="hidden" value="" name="last_move" />
-    <input type="submit" value="Reset" name="reset" />
-{% if not winner %}
-    {% if not draw %}
-        <input type="submit" value="Submit" name="submit" />
-    {% endif %}
-{% endif %}
 </div>
 </form>
