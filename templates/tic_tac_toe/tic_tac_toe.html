@@ -7,6 +7,8 @@
 
 {% if winner %}
     <p>We have a winner!</p>
+    <p>Click 'Reset' to play again.</p>
+</div>
 {% endif %}
 
 <form action="{% url 'user_move' %}" method="post" id="board">
@@ -40,5 +42,7 @@
 </div>
 
     <input type="submit" value="Reset" name="reset" />
+{% if not winner %}
     <input type="submit" value="Submit" name="submit" />
+{% endif %}
 </form>

@@ -81,18 +81,24 @@ def check_for_winner(cells):
 
     if cells['A1']:
         if ( cells['A1'] == cells['A2'] ) and ( cells['A1'] == cells['A3'] ):
-            return True;
-        elif ( cells['B1'] == cells['B2'] ) and ( cells['B1'] == cells['B3'] ):
-            return True;
-        elif ( cells['C1'] == cells['C2'] ) and ( cells['C1'] == cells['C3'] ):
-            return True;
+            return True
         elif ( cells['A1'] == cells['B1'] ) and ( cells['A1'] == cells['C1'] ):
-            return True;
-        elif ( cells['A2'] == cells['B2'] ) and ( cells['A2'] == cells['C2'] ):
-            return True;
-        elif ( cells['A3'] == cells['B3'] ) and ( cells['A3'] == cells['C3'] ):
-            return True;
+            return True
         elif ( cells['A1'] == cells['B2'] ) and ( cells['A1'] == cells['C3'] ):
-            return True;
+            return True
+    if cells['B1']:
+        if ( cells['B1'] == cells['B2'] ) and ( cells['B1'] == cells['B3'] ):
+            return True
+    if cells['C1']:
+        if ( cells['C1'] == cells['C2'] ) and ( cells['C1'] == cells['C3'] ):
+            return True
+    if cells['A2']:
+        if ( cells['A2'] == cells['B2'] ) and ( cells['A2'] == cells['C2'] ):
+            return True
+    if cells['A3']:
+        if ( cells['A3'] == cells['B3'] ) and ( cells['A3'] == cells['C3'] ):
+            return True
         elif ( cells['A3'] == cells['B2'] ) and ( cells['A3'] == cells['C1'] ):
-            return True;
+            return True
+
+    return False
