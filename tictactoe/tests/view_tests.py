@@ -24,6 +24,8 @@ class GameCreateViewTestCase(TestCase):
 
         self.assertEqual(models.Game.objects.count(), 1)
         game = models.Game.objects.get()
+        self.assertRedirects(response,
+                             reverse('game_detail', kwargs={'pk': game.pk}))
         self.assertEqual(game.user, self.user)
 
     def test_anonymous(self):
@@ -40,3 +42,23 @@ class GameCreateViewTestCase(TestCase):
                                                    self.create_url))
 
         self.assertEqual(models.Game.objects.count(), 0)
+
+
+class GameDetailViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='default',
+                                        password='password')
+        self.game = models.Game(user=self.user)
+        self.game.save()
+
+        self.detail_url = reverse('game_detail', kwargs={'pk': self.game.pk})
+
+    def test_exists(self):
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "default vs. the Computer")
+
+    def test_does_not_exist(self):
+        response = self.client.get(
+            reverse('game_detail', kwargs={'pk': self.game.pk+1}))
+        self.assertEqual(response.status_code, 404)
