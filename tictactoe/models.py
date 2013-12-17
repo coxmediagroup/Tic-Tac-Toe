@@ -8,3 +8,9 @@ class Game(models.Model):
 
     def get_absolute_url(self):
         return reverse('game_detail', kwargs={'pk': self.pk})
+
+
+class Position(models.Model):
+    game = models.ForeignKey(Game, related_name='positions')
+    state = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)

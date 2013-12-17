@@ -14,6 +14,7 @@ class GameCreateViewTestCase(TestCase):
 
     def test_authenticated(self):
         self.assertEqual(models.Game.objects.count(), 0)
+        self.assertEqual(models.Position.objects.count(), 0)
         self.client.login(username='default', password='password')
 
         response = self.client.get(self.create_url)
@@ -27,9 +28,11 @@ class GameCreateViewTestCase(TestCase):
         self.assertRedirects(response,
                              reverse('game_detail', kwargs={'pk': game.pk}))
         self.assertEqual(game.user, self.user)
+        self.assertEqual(game.positions.count(), 1)
 
     def test_anonymous(self):
         self.assertEqual(models.Game.objects.count(), 0)
+        self.assertEqual(models.Position.objects.count(), 0)
 
         response = self.client.get(self.create_url)
         self.assertRedirects(response,
@@ -42,6 +45,7 @@ class GameCreateViewTestCase(TestCase):
                                                    self.create_url))
 
         self.assertEqual(models.Game.objects.count(), 0)
+        self.assertEqual(models.Position.objects.count(), 0)
 
 
 class GameDetailViewTestCase(TestCase):

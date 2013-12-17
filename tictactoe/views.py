@@ -15,7 +15,9 @@ class CreateGameView(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super(CreateGameView, self).form_valid(form)
+        response = super(CreateGameView, self).form_valid(form)
+        self.object.positions.create()
+        return response
 
 
 class GameDetailView(DetailView):
