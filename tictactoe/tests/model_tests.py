@@ -48,3 +48,30 @@ class PositionTestCase(TestCase):
             position.make_move('b4')
 
         self.assertEqual(models.Position.objects.count(), 1)
+
+    def test_empty_array(self):
+        position = self.game.positions.create()
+
+        self.assertEqual(position.array,
+                         [[' ', ' ', ' '],
+                          [' ', ' ', ' '],
+                          [' ', ' ', ' ']])
+
+    def test_upper_right_corner_array(self):
+        position = self.game.positions.create()
+        position = position.make_move('a3')
+
+        self.assertEqual(position.array,
+                         [[' ', ' ', 'X'],
+                          [' ', ' ', ' '],
+                          [' ', ' ', ' ']])
+
+    def test_array_second_move(self):
+        position = self.game.positions.create()
+        position = position.make_move('a3')
+        position = position.make_move('b2')
+
+        self.assertEqual(position.array,
+                         [[' ', ' ', 'X'],
+                          [' ', 'O', ' '],
+                          [' ', ' ', ' ']])

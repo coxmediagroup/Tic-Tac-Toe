@@ -49,3 +49,23 @@ class Position(models.Model):
         placement = self.parse(play) << (9 * self.parity)
         return Position.objects.create(game=self.game,
                                        state=placement | self.state)
+
+    @property
+    def array(self):
+        x = self.state & 0b111111111
+        o = self.state >> 9
+
+        array = []
+        for r in reversed(xrange(3)):
+            row = []
+            for c in reversed(xrange(3)):
+                spot = 1 << (3*r + c)
+                if spot & x:
+                    row.append('X')
+                elif spot & o:
+                    row.append('O')
+                else:
+                    row.append(' ')
+            array.append(row)
+
+        return array
