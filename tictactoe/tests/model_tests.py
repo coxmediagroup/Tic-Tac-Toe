@@ -49,6 +49,50 @@ class PositionTestCase(TestCase):
 
         self.assertEqual(models.Position.objects.count(), 1)
 
+    def test_empty_is_not_won(self):
+        position = self.game.positions.create()
+
+        self.assertFalse(position.is_won())
+
+    def test_column_is_won(self):
+        position = self.game.positions.create()
+        position = position.make_move('a3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('a2')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b2')
+        self.assertFalse(position.is_won())
+        position = position.make_move('c3')
+        self.assertTrue(position.is_won())
+
+    def test_row_is_won(self):
+        position = self.game.positions.create()
+        position = position.make_move('a3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('a2')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b2')
+        self.assertFalse(position.is_won())
+        position = position.make_move('a1')
+        self.assertTrue(position.is_won())
+
+    def test_diagonal_is_won(self):
+        position = self.game.positions.create()
+        position = position.make_move('a3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('b2')
+        self.assertFalse(position.is_won())
+        position = position.make_move('c3')
+        self.assertFalse(position.is_won())
+        position = position.make_move('c1')
+        self.assertTrue(position.is_won())
+
     def test_empty_array(self):
         position = self.game.positions.create()
 

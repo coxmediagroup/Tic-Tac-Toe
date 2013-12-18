@@ -1,6 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from itertools import chain
+
 
 class Game(models.Model):
     user = models.ForeignKey('auth.User')
@@ -28,6 +30,11 @@ class Position(models.Model):
         '3': 0b001001001,
     }
 
+    DIAGONALS = {
+        'up': 0b001010100,
+        'down': 0b100010001,
+    }
+
     @property
     def parity(self):
         return bin(self.state).count('1') % 2
@@ -49,6 +56,13 @@ class Position(models.Model):
         placement = self.parse(play) << (9 * self.parity)
         return Position.objects.create(game=self.game,
                                        state=placement | self.state)
+
+    def is_won(self):
+        return any(
+            (self.state & mask == mask) or ((self.state >> 9) & mask == mask)
+            for mask in chain(self.BITS.itervalues(),
+                              self.DIAGONALS.itervalues())
+        )
 
     @property
     def array(self):
