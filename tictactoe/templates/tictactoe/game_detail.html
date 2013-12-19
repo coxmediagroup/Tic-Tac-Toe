@@ -7,15 +7,23 @@
 {% block content %}
 <div class="center-block">
   <canvas id="board" width="600" height="600"></canvas>
+  <form id="placement_form" action="" method="post">
+    <input id="row_placement" type="hidden" name="row" />
+    <input id="col_placement" type="hidden" name="column" />
+    <input class="btn btn-primary" type="submit" value="Update" />
+  </form>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
 var state = '{{ game.positions.latest.state }}';
+var url = $('#placement_form').attr('action');
 
 $('#board').click(function (e) {
   var canvas_position = $('#board').position();
+  var $row_input = $('#row_placement');
+  var $col_input = $('#col_placement');
 
   var x = e.pageX - canvas_position.left;
   var y = e.pageY - canvas_position.top;
@@ -24,14 +32,42 @@ $('#board').click(function (e) {
   var c = Math.floor(x / 200);
 
   draw_state(new_state(state, r, c));
+  $row_input.val(r);
+  $col_input.val(c);
+});
+
+$('#placement_form').on("submit", function (e) {
+  e.preventDefault();
+  var data = $(this).serialize()
+
+  $.ajax({
+    url: url,
+    type: 'post',
+    data: data,
+    success: function(data) {
+      if (data.success) {
+        state = data.state;
+        draw_state(state);
+      } else {
+
+      }
+    }
+  });
 });
 
 function new_state(state, r, c) {
   var index = 3 * r + c;
+  if (state[index] !== ' ') {
+    return false
+  }
   return state.substring(0, index) + 'o' + state.substring(index);
 }
 
 function draw_state(state) {
+  if (!state) {
+    return
+  }
+
   var canvas = $('#board')[0];
   var context = canvas.getContext("2d");
 
