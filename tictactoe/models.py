@@ -30,6 +30,17 @@ class Position(models.Model):
         return ''.join((position[6::-3], position[7::-3], position[8::-3]))
 
     @classmethod
+    def expand_symmetry(cls, position):
+        results = set()
+        for pos in (position, cls._flip(position)):
+            results.add(pos)
+            new_pos = cls._rotate(pos)
+            while new_pos != pos:
+                results.add(new_pos)
+                new_pos = cls._rotate(new_pos)
+        return results
+
+    @classmethod
     def _play(cls, position, move):
         return ''.join(move[2] if i == 3 * move[0] + move[1] else c
                        for i, c in enumerate(position))
@@ -60,3 +71,17 @@ class Position(models.Model):
 
     def is_won(self):
         return self._is_won(self.state)
+
+
+class NextMoveManager(models.Manager):
+    def lookup(self, state):
+        return self.get_query_set().filter(
+            state__in=Position.expand_symmetry(state)).get()
+
+
+class NextMove(models.Model):
+    state = models.CharField(max_length=9)
+    row = models.SmallIntegerField()
+    column = models.SmallIntegerField()
+
+    objects = NextMoveManager()

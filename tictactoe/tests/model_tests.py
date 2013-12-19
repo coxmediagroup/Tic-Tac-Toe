@@ -93,3 +93,22 @@ class PositionTestCase(TestCase):
         self.assertFalse(position.is_won())
         position = position.new((2, 0))
         self.assertTrue(position.is_won())
+
+
+class NextMoveTestCase(TestCase):
+    def test_lookup_empty(self):
+        self.assertEqual(models.NextMove.objects.count(), 0)
+        move = models.NextMove(state=' '*9, row=0, column=0)
+        move.save()
+
+        self.assertEqual(models.NextMove.objects.count(), 1)
+        self.assertEqual(models.NextMove.objects.lookup(' '*9), move)
+
+    def test_lookup_rotated(self):
+        self.assertEqual(models.NextMove.objects.count(), 0)
+        move = models.NextMove(state='x        ', row=0, column=0)
+        move.save()
+
+        self.assertEqual(models.NextMove.objects.count(), 1)
+        self.assertEqual(models.NextMove.objects.lookup('      x  '),
+                         move)
