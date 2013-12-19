@@ -10,6 +10,8 @@ class GameCreateViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='default',
                                              password='password')
+        models.NextMove.objects.create(state=' '*9, row=0, column=0)
+
         self.create_url = reverse('create_game')
 
     def test_authenticated(self):
@@ -28,7 +30,8 @@ class GameCreateViewTestCase(TestCase):
         self.assertRedirects(response,
                              reverse('game_detail', kwargs={'pk': game.pk}))
         self.assertEqual(game.user, self.user)
-        self.assertEqual(game.positions.count(), 1)
+        # the blank start position, and the AI's first move.
+        self.assertEqual(game.positions.count(), 2)
 
     def test_anonymous(self):
         self.assertEqual(models.Game.objects.count(), 0)
