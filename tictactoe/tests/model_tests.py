@@ -102,13 +102,30 @@ class NextMoveTestCase(TestCase):
         move.save()
 
         self.assertEqual(models.NextMove.objects.count(), 1)
-        self.assertEqual(models.NextMove.objects.lookup(' '*9), move)
+        self.assertEqual(models.NextMove.objects.lookup(' '*9), (0, 0))
+
+    def test_lookup_flipped(self):
+        self.assertEqual(models.NextMove.objects.count(), 0)
+        move = models.NextMove(state=' xo      ', row=0, column=0)
+        move.save()
+
+        symmetry = models.Position.expand_symmetry('       xo')
+        self.assertIn(' xo      ', symmetry)
+        self.assertEqual(symmetry[' xo      '], 'f')
+
+        self.assertEqual(models.NextMove.objects.count(), 1)
+        self.assertEqual(models.NextMove.objects.lookup('       xo'),
+                         (2, 0))
 
     def test_lookup_rotated(self):
         self.assertEqual(models.NextMove.objects.count(), 0)
-        move = models.NextMove(state='x        ', row=0, column=0)
+        move = models.NextMove(state='x   o    ', row=0, column=1)
         move.save()
 
+        symmetry = models.Position.expand_symmetry('    o   x')
+        self.assertIn('x   o    ', symmetry)
+        self.assertEqual(symmetry['x   o    '], 'rr')
+
         self.assertEqual(models.NextMove.objects.count(), 1)
-        self.assertEqual(models.NextMove.objects.lookup('      x  '),
-                         move)
+        self.assertEqual(models.NextMove.objects.lookup('    o   x'),
+                         (2, 1))

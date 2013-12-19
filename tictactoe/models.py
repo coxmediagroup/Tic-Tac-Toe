@@ -21,6 +21,8 @@ class Position(models.Model):
         ordering = ('timestamp',)
         get_latest_by = 'timestamp'
 
+    SYMMETRY = ('', 'r', 'rr', 'rrr', 'f', 'fr', 'frr', 'frrr')
+
     @classmethod
     def _flip(cls, position):
         return ''.join((position[6:9], position[3:6], position[0:3]))
@@ -31,13 +33,16 @@ class Position(models.Model):
 
     @classmethod
     def expand_symmetry(cls, position):
-        results = set()
-        for pos in (position, cls._flip(position)):
-            results.add(pos)
-            new_pos = cls._rotate(pos)
-            while new_pos != pos:
-                results.add(new_pos)
-                new_pos = cls._rotate(new_pos)
+        op_methods = {'f': cls._flip,
+                      'r': cls._rotate}
+
+        results = {}
+        for operations in cls.SYMMETRY:
+            pos = position
+            for op in operations:
+                pos = op_methods[op](pos)
+            results.setdefault(pos, operations)
+
         return results
 
     @classmethod
@@ -74,9 +79,28 @@ class Position(models.Model):
 
 
 class NextMoveManager(models.Manager):
+    @classmethod
+    def _flip(self, move):
+        return (2 - move[0], move[1])
+
+    @classmethod
+    def _rotate(self, move):
+        return (move[1], 2 - move[0])
+
     def lookup(self, state):
-        return self.get_query_set().filter(
-            state__in=Position.expand_symmetry(state)).get()
+        symmetric_states = Position.expand_symmetry(state)
+        stored = self.get_query_set().filter(
+            state__in=symmetric_states.keys()
+        ).get()
+
+        operations = symmetric_states[stored.state]
+        move = (stored.row, stored.column)
+        for x in xrange(operations.count('f') % 2):
+            move = self._flip(move)
+        for x in xrange((4 - operations.count('r')) % 4):
+            move = self._rotate(move)
+
+        return move
 
 
 class NextMove(models.Model):
