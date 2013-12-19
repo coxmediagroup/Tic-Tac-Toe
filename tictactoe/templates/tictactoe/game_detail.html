@@ -60,7 +60,7 @@ function new_state(state, r, c) {
   if (state[index] !== ' ') {
     return false
   }
-  return state.substring(0, index) + 'o' + state.substring(index);
+  return state.substring(0, index) + 'o' + state.substring(index + 1);
 }
 
 function draw_state(state) {
