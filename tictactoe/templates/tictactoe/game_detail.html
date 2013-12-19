@@ -3,3 +3,63 @@
 {% block title %}Game | {{ block.super }}{% endblock %}
 
 {% block header %}<h1>Game <small>{{ game.user }} vs. the Computer</small></h1>{% endblock %}
+
+{% block content %}
+<div class="center-block">
+  <canvas id="board" width="600" height="600"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+var state = '{{ game.positions.latest.state }}';
+
+function draw_state(state) {
+  var canvas = document.getElementById("board");
+  var context = canvas.getContext("2d");
+
+  canvas.width = canvas.width;
+
+  context.moveTo(200.5, 0);
+  context.lineTo(200.5, 600);
+
+  context.moveTo(400.5, 0);
+  context.lineTo(400.5, 600);
+
+  context.moveTo(0, 200.5);
+  context.lineTo(600, 200.5);
+
+  context.moveTo(0, 400.5);
+  context.lineTo(600, 400.5);
+
+  context.strokeStyle = "#000";
+  context.lineWidth = 3;
+  context.stroke();
+
+  for (var row = 0; row < 3; row++) {
+    for (var col = 0; col < 3; col++) {
+      if (state[3 * row + col] === 'x') {
+        context.beginPath();
+        context.moveTo(25 + 200 * col, 25 + 200 * row);
+        context.lineTo(175 + 200 * col, 175 + 200 * row);
+        context.moveTo(175 + 200 * col, 25 + 200 * row);
+        context.lineTo(25 + 200 * col, 175 + 200 * row);
+        context.strokeStyle = "#f00";
+        context.lineWidth = 5;
+        context.stroke();
+      } else if (state[3 * row + col] === 'o') {
+        context.beginPath();
+        context.arc(100 + 200 * col, 100 + 200 * row, 75, 0, Math.PI * 2, false);
+        context.closePath();
+        context.strokeStyle = "#0f0";
+        context.lineWidth = 5;
+        context.stroke();
+      }
+    }
+  }
+
+}
+
+draw_state(state);
+</script>
+{% endblock %}
