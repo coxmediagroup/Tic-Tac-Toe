@@ -14,72 +14,49 @@ class Game(models.Model):
 
 class Position(models.Model):
     game = models.ForeignKey(Game, related_name='positions')
-    state = models.IntegerField(default=0)
+    state = models.CharField(max_length=9, default='         ')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('timestamp',)
         get_latest_by = 'timestamp'
 
-    BITS = {
-        'a': 0b111000000,
-        'b': 0b000111000,
-        'c': 0b000000111,
-        '1': 0b100100100,
-        '2': 0b010010010,
-        '3': 0b001001001,
-    }
+    @classmethod
+    def _flip(cls, position):
+        return ''.join((position[6:9], position[3:6], position[0:3]))
 
-    DIAGONALS = {
-        'up': 0b001010100,
-        'down': 0b100010001,
-    }
+    @classmethod
+    def _rotate(cls, position):
+        return ''.join((position[6::-3], position[7::-3], position[8::-3]))
 
-    @property
-    def parity(self):
-        return bin(self.state).count('1') % 2
+    @classmethod
+    def _play(cls, position, move):
+        return ''.join(move[2] if i == 3 * move[0] + move[1] else c
+                       for i, c in enumerate(position))
 
-    def parse(self, play):
-        return self.BITS[play[0]] & self.BITS[play[1]]
+    @classmethod
+    def _is_won(cls, position):
+        for S in (position[0:3], position[3:6], position[6:9],
+                  position[0::3], position[1::3], position[2::3],
+                  position[0::4], position[2:8:2]):
+            pieces = set(S)
+            if len(pieces) == 1 and pieces != set(' '):
+                return True
+        return False
 
-    def is_legal(self, play):
-        try:
-            placement = self.parse(play)
-        except (KeyError, IndexError) as e:
-            return False
+    def player(self):
+        return 'ox'[self.state.count(' ') % 2]
 
-        return not (self.state & (placement | placement << 9))
-
-    def make_move(self, play):
-        if not self.is_legal(play):
+    def new(self, move):
+        if not self.is_legal(move):
             raise Exception("Illegal move.")
-        placement = self.parse(play) << (9 * self.parity)
-        return Position.objects.create(game=self.game,
-                                       state=placement | self.state)
-
-    def is_won(self):
-        return any(
-            (self.state & mask == mask) or ((self.state >> 9) & mask == mask)
-            for mask in chain(self.BITS.itervalues(),
-                              self.DIAGONALS.itervalues())
+        return Position.objects.create(
+            game=self.game,
+            state=self._play(self.state, (move[0], move[1], self.player()))
         )
 
-    @property
-    def array(self):
-        x = self.state & 0b111111111
-        o = self.state >> 9
+    def is_legal(self, move):
+        return self.state[3 * move[0] + move[1]] == ' '
 
-        array = []
-        for r in reversed(xrange(3)):
-            row = []
-            for c in reversed(xrange(3)):
-                spot = 1 << (3*r + c)
-                if spot & x:
-                    row.append('X')
-                elif spot & o:
-                    row.append('O')
-                else:
-                    row.append(' ')
-            array.append(row)
-
-        return array
+    def is_won(self):
+        return self._is_won(self.state)

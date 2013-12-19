@@ -17,27 +17,28 @@ class PositionTestCase(TestCase):
 
         self.assertEqual(self.game.positions.count(), 1)
         position = self.game.positions.get()
-        self.assertEqual(position.state, 0)
+        self.assertEqual(position.state, ' '*9)
+        self.assertEqual(position.player(), 'x')
 
-    def test_make_play(self):
+    def test_new_position(self):
         self.game.positions.create()
         self.assertEqual(self.game.positions.count(), 1)
         position = self.game.positions.get()
 
-        new_position = position.make_move('a3')
+        new_position = position.new((0, 2))
         self.game = models.Game.objects.get()
         self.assertEqual(self.game.positions.count(), 2)
         self.assertEqual(self.game.positions.latest(), new_position)
-        self.assertEqual(new_position.state, 0b001000000)
+        self.assertEqual(new_position.state, '  x      ')
 
     def test_repeated_plays_are_not_legal(self):
         position = self.game.positions.create()
-        new_position = position.make_move('a3')
+        new_position = position.new((0, 2))
         self.assertEqual(self.game.positions.count(), 2)
 
-        self.assertFalse(new_position.is_legal('a3'))
+        self.assertFalse(new_position.is_legal((0, 2)))
         with self.assertRaises(Exception):
-            new_position.make_move('a3')
+            new_position.new((0, 2))
 
         self.assertEqual(self.game.positions.count(), 2)
 
@@ -45,7 +46,7 @@ class PositionTestCase(TestCase):
         position = self.game.positions.create()
 
         with self.assertRaises(Exception):
-            position.make_move('b4')
+            position.new('b4')
 
         self.assertEqual(models.Position.objects.count(), 1)
 
@@ -56,66 +57,39 @@ class PositionTestCase(TestCase):
 
     def test_column_is_won(self):
         position = self.game.positions.create()
-        position = position.make_move('a3')
+        position = position.new((0, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('a2')
+        position = position.new((0, 1))
         self.assertFalse(position.is_won())
-        position = position.make_move('b3')
+        position = position.new((1, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('b2')
+        position = position.new((1, 1))
         self.assertFalse(position.is_won())
-        position = position.make_move('c3')
+        position = position.new((2, 2))
         self.assertTrue(position.is_won())
 
     def test_row_is_won(self):
         position = self.game.positions.create()
-        position = position.make_move('a3')
+        position = position.new((0, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('b3')
+        position = position.new((1, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('a2')
+        position = position.new((0, 1))
         self.assertFalse(position.is_won())
-        position = position.make_move('b2')
+        position = position.new((1, 1))
         self.assertFalse(position.is_won())
-        position = position.make_move('a1')
+        position = position.new((0, 0))
         self.assertTrue(position.is_won())
 
     def test_diagonal_is_won(self):
         position = self.game.positions.create()
-        position = position.make_move('a3')
+        position = position.new((0, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('b3')
+        position = position.new((1, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('b2')
+        position = position.new((1, 1))
         self.assertFalse(position.is_won())
-        position = position.make_move('c3')
+        position = position.new((2, 2))
         self.assertFalse(position.is_won())
-        position = position.make_move('c1')
+        position = position.new((2, 0))
         self.assertTrue(position.is_won())
-
-    def test_empty_array(self):
-        position = self.game.positions.create()
-
-        self.assertEqual(position.array,
-                         [[' ', ' ', ' '],
-                          [' ', ' ', ' '],
-                          [' ', ' ', ' ']])
-
-    def test_upper_right_corner_array(self):
-        position = self.game.positions.create()
-        position = position.make_move('a3')
-
-        self.assertEqual(position.array,
-                         [[' ', ' ', 'X'],
-                          [' ', ' ', ' '],
-                          [' ', ' ', ' ']])
-
-    def test_array_second_move(self):
-        position = self.game.positions.create()
-        position = position.make_move('a3')
-        position = position.make_move('b2')
-
-        self.assertEqual(position.array,
-                         [[' ', ' ', 'X'],
-                          [' ', 'O', ' '],
-                          [' ', ' ', ' ']])
