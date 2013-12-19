@@ -14,8 +14,25 @@
 <script>
 var state = '{{ game.positions.latest.state }}';
 
+$('#board').click(function (e) {
+  var canvas_position = $('#board').position();
+
+  var x = e.pageX - canvas_position.left;
+  var y = e.pageY - canvas_position.top;
+
+  var r = Math.floor(y / 200);
+  var c = Math.floor(x / 200);
+
+  draw_state(new_state(state, r, c));
+});
+
+function new_state(state, r, c) {
+  var index = 3 * r + c;
+  return state.substring(0, index) + 'o' + state.substring(index);
+}
+
 function draw_state(state) {
-  var canvas = document.getElementById("board");
+  var canvas = $('#board')[0];
   var context = canvas.getContext("2d");
 
   canvas.width = canvas.width;
