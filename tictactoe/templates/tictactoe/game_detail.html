@@ -2,18 +2,25 @@
 
 {% block title %}Game | {{ block.super }}{% endblock %}
 
-{% block header %}<h1>Game <small>{{ game.user }} vs. the Computer</small></h1>{% endblock %}
+{% block header %}
+<h1>Game <small>{{ game.user }} vs. the Computer</small></h1>
+{% endblock %}
 
 {% block content %}
-<div class="center-block">
+<div id="board_area" class="center-block">
   <canvas id="board" width="600" height="600"></canvas>
   {% if not position.is_finished %}
   <form id="placement_form" action="{% url 'submit_move' pk=game.pk %}" method="post">
+    {% csrf_token %}
     <input id="row_placement" type="hidden" name="row" />
     <input id="col_placement" type="hidden" name="column" />
     <input class="btn btn-primary" type="submit" value="Update" />
   </form>
   {% endif %}
+  <form id="new_game_form" action="{% url 'create_game' %}" method="post">
+    {% csrf_token %}
+    <input id="new_game_button" type="submit" class="hidden btn btn-primary" value="New Game" />
+  </form>
 </div>
 {% endblock %}
 
@@ -73,10 +80,11 @@ function update_state(data) {
   draw_state(board.state);
   if (data.done) {
     $('#placement_form').remove();
+    $('#new_game_button').removeClass('hidden');
     if (data.done === true) {
       msg = "Game is a draw."
     } else if (data.done === 'x') {
-      msg = "The AI wins!";
+      msg = "The computer wins!";
     } else if (data.done === 'o') {
       msg = "You win!"
     }
