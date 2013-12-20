@@ -7,7 +7,7 @@
 {% block content %}
 <div class="center-block">
   <canvas id="board" width="600" height="600"></canvas>
-  <form id="placement_form" action="" method="post">
+  <form id="placement_form" action="{% url 'submit_move' pk=game.pk %}" method="post">
     <input id="row_placement" type="hidden" name="row" />
     <input id="col_placement" type="hidden" name="column" />
     <input class="btn btn-primary" type="submit" value="Update" />
@@ -17,8 +17,38 @@
 
 {% block extra_scripts %}
 <script>
-var state = '{{ game.positions.latest.state }}';
+var board = {'state': '{{ game.positions.latest.state }}'};
 var url = $('#placement_form').attr('action');
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = $.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+  crossDomain: false, // obviates need for sameOrigin test
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type)) {
+      xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+  }
+});
 
 $('#board').click(function (e) {
   var canvas_position = $('#board').position();
@@ -31,7 +61,7 @@ $('#board').click(function (e) {
   var r = Math.floor(y / 200);
   var c = Math.floor(x / 200);
 
-  draw_state(new_state(state, r, c));
+  draw_state(new_state(board.state, r, c));
   $row_input.val(r);
   $col_input.val(c);
 });
@@ -45,12 +75,8 @@ $('#placement_form').on("submit", function (e) {
     type: 'post',
     data: data,
     success: function(data) {
-      if (data.success) {
-        state = data.state;
-        draw_state(state);
-      } else {
-
-      }
+      board.state = data.state;
+      draw_state(board.state);
     }
   });
 });
@@ -113,6 +139,6 @@ function draw_state(state) {
 
 }
 
-draw_state(state);
+draw_state(board.state);
 </script>
 {% endblock %}
