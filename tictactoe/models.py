@@ -93,11 +93,13 @@ class NextMoveManager(models.Manager):
             state__in=symmetric_states.keys()
         ).get()
 
-        operations = symmetric_states[stored.state]
+        symmetric_states = Position.expand_symmetry(stored.state)
+        operations = symmetric_states[state]
         move = (stored.row, stored.column)
-        for x in xrange(operations.count('f') % 2):
+
+        for x in xrange(operations.count('f')):
             move = self._flip(move)
-        for x in xrange((4 - operations.count('r')) % 4):
+        for x in xrange(operations.count('r')):
             move = self._rotate(move)
 
         return move

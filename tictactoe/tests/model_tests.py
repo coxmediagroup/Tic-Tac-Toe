@@ -129,3 +129,19 @@ class NextMoveTestCase(TestCase):
         self.assertEqual(models.NextMove.objects.count(), 1)
         self.assertEqual(models.NextMove.objects.lookup('    o   x'),
                          (2, 1))
+
+    def test_lookup_invert_correctly(self):
+        # D8's rotation and reflection operations do not commute, so
+        # it matters what order they are in.
+
+        self.assertEqual(models.NextMove.objects.count(), 0)
+        move = models.NextMove(state='xxo o    ', row=2, column=0)
+        move.save()
+
+        symmetry = models.Position.expand_symmetry('  o ox  x')
+        self.assertIn('xxo o    ', symmetry)
+        self.assertEqual(symmetry['xxo o    '], 'frrr')
+
+        self.assertEqual(models.NextMove.objects.count(), 1)
+        self.assertEqual(models.NextMove.objects.lookup('  o ox  x'),
+                         (2, 0))
