@@ -7,17 +7,19 @@
 {% block content %}
 <div class="center-block">
   <canvas id="board" width="600" height="600"></canvas>
+  {% if not position.is_finished %}
   <form id="placement_form" action="{% url 'submit_move' pk=game.pk %}" method="post">
     <input id="row_placement" type="hidden" name="row" />
     <input id="col_placement" type="hidden" name="column" />
     <input class="btn btn-primary" type="submit" value="Update" />
   </form>
+  {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-var board = {'state': '{{ game.positions.latest.state }}'};
+var board = {'state': '{{ position.state }}'};
 var url = $('#placement_form').attr('action');
 
 function getCookie(name) {
@@ -66,6 +68,14 @@ $('#board').click(function (e) {
   $col_input.val(c);
 });
 
+function update_state(data) {
+  board.state = data.state;
+  draw_state(board.state);
+  if (data.done) {
+    $('#placement_form').remove();
+  }
+}
+
 $('#placement_form').on("submit", function (e) {
   e.preventDefault();
   var data = $(this).serialize()
@@ -74,10 +84,8 @@ $('#placement_form').on("submit", function (e) {
     url: url,
     type: 'post',
     data: data,
-    success: function(data) {
-      board.state = data.state;
-      draw_state(board.state);
-    }
+    success: update_state,
+    error: update_state,
   });
 });
 

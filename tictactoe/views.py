@@ -33,6 +33,11 @@ class GameDetailView(DetailView):
     model = models.Game
     context_object_name = 'game'
 
+    def get_context_data(self, **kwargs):
+        context = {'position': self.object.positions.latest()}
+        context.update(kwargs)
+        return super(GameDetailView, self).get_context_data(**context)
+
 
 class SubmitMoveView(SingleObjectMixin, BaseFormView):
     model = models.Game
@@ -46,10 +51,12 @@ class SubmitMoveView(SingleObjectMixin, BaseFormView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.user != self.request.user:
+            position = self.object.positions.latest()
             return self.render_to_json_response(
                 {'error': "You are not authorized to submit"
                  " turns for this game.",
-                 'state': self.object.positions.latest().state},
+                 'state': position.state,
+                 'done': position.is_finished()},
                 status=400
             )
         return super(SubmitMoveView, self).get(request, *args, **kwargs)
@@ -57,10 +64,12 @@ class SubmitMoveView(SingleObjectMixin, BaseFormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.user != self.request.user:
+            position = self.object.positions.latest()
             return self.render_to_json_response(
                 {'error': "You are not authorized to submit"
                  " turns for this game.",
-                 'state': self.object.positions.latest().state},
+                 'state': position.state,
+                 'done': position.is_finished()},
                 status=400
             )
         return super(SubmitMoveView, self).post(request, *args, **kwargs)
@@ -75,14 +84,17 @@ class SubmitMoveView(SingleObjectMixin, BaseFormView):
         column = form.cleaned_data.get('column')
         new_position = self.object.positions.latest().new((row, column))
 
-        if ' ' in new_position.state and not new_position.is_won():
+        if not new_position.is_finished():
             next_move = models.NextMove.objects.lookup(new_position.state)
             new_position = new_position.new(next_move)
 
-        data = {'state': new_position.state, 'done': True}
+        data = {'state': new_position.state,
+                'done': new_position.is_finished()}
         return self.render_to_json_response(data)
 
     def form_invalid(self, form):
-        data = {'state': self.object.positions.latest().state}
+        position = self.object.positions.latest()
+        data = {'state': position.state,
+                'done': position.is_finished()}
         data.update(**form.errors)
         return self.render_to_json_response(data, status=400)

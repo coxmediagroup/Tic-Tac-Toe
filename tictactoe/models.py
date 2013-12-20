@@ -77,6 +77,9 @@ class Position(models.Model):
     def is_won(self):
         return self._is_won(self.state)
 
+    def is_finished(self):
+        return ' ' not in self.state or self.is_won()
+
 
 class NextMoveManager(models.Manager):
     @classmethod
