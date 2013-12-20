@@ -73,6 +73,14 @@ function update_state(data) {
   draw_state(board.state);
   if (data.done) {
     $('#placement_form').remove();
+    if (data.done === true) {
+      msg = "Game is a draw."
+    } else if (data.done === 'x') {
+      msg = "The AI wins!";
+    } else if (data.done === 'o') {
+      msg = "You win!"
+    }
+    $('#messages').append('<div class="alert alert-dismissable alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + msg + "</div>");
   }
 }
 

@@ -57,7 +57,7 @@ class Position(models.Model):
                   position[0::4], position[2:8:2]):
             pieces = set(S)
             if len(pieces) == 1 and pieces != set(' '):
-                return True
+                return pieces.pop()
         return False
 
     def player(self):

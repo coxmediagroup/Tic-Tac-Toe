@@ -57,6 +57,7 @@ class GameDetailViewTestCase(TestCase):
                                         password='password')
         self.game = models.Game(user=self.user)
         self.game.save()
+        self.game.positions.create()
 
         self.detail_url = reverse('game_detail', kwargs={'pk': self.game.pk})
 
