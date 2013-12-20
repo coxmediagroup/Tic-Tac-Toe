@@ -82,10 +82,17 @@ class Command(BaseCommand):
             if self.table[result]['result'] == other:
                 losses += 1
 
-        # We want to choose the move that maximizes the number of losing
-        # moves available to the other player.
-        L, move, pos = max((self.table[child_mapping[p]]['losses'], m, p)
-                           for p, m in play_mapping.iteritems())
+        # prefer wins over draws, and draws over losses
+        weights = {player: 1, 'draw': 0, other: -1}
+
+        # We want to choose the move that gives the best type of
+        # outcome, then that maximizes the losing moves available to
+        # the other player.
+        w, L, move, pos = max(
+            (weights[self.table[child_mapping[p]]['result']],
+             self.table[child_mapping[p]]['losses'], m, p)
+            for p, m in play_mapping.iteritems()
+        )
 
         self.table[position].update(
             result=self.table[child_mapping[pos]]['result'],
