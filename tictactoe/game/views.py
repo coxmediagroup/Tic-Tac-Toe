@@ -27,7 +27,9 @@ class PlayGame(View):
             return HttpResponse()
         else:
             data = game.move_added(action)
-            data = {'move':data[0], 'is_won':data[1], 'winning_moves':data[2]}
+            data = {'move':data[0],
+                    'is_won':data[1],
+                    'winning_moves':data[2]}
             print data
             return HttpResponse(json.dumps(data), content_type = "application/json")
 

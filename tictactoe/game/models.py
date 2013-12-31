@@ -19,7 +19,10 @@ class SingleGame(models.Model):
         if self.state.find(str(spot)) > -1:
             return -1, -1, ''
         self.make_move(spot, 'P')
-        computer_move = self.make_computer_move(self.state)
+        if len(self.state) == 2:
+            computer_move = self.make_first_move(spot)
+        else:
+            computer_move = self.make_computer_move(self.state)
         self.make_move(computer_move[1], 'C')
 
         is_won = ''
@@ -37,6 +40,18 @@ class SingleGame(models.Model):
             self.state = str(spot) + piece
         self.save()
         return
+
+    def make_first_move(self, spot):
+        # makes first move faster and more random
+        #
+        spot = int(spot)
+        if spot == 4:
+            return 0, choice([0,2,6,8])
+        elif spot in [0,2,6,8]:
+            return 0, 4
+        else:
+            return 0, choice ([8-spot, spot-1, spot+1])
+        
 
     def make_computer_move(self, state, player = 'C'):
         next_player = self.player_toggle(player)

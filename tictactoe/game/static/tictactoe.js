@@ -12,6 +12,9 @@ window.onload = function() {
     })
 
     function makemove(id) {
+        if (id == 'gameboard') {
+            return
+        }
         var move = new XMLHttpRequest()
         move.open('POST', '/playgame/')
         move.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
@@ -52,10 +55,10 @@ window.onload = function() {
         var newgame = new XMLHttpRequest()
         newgame.open('POST', '/playgame/')
         newgame.send('makenewgame')
-        newgame.onreadystatechange = makeNewGame
+        newgame.onreadystatechange = newGame
         is_won.innerHTML = ''
 
-        function makeNewGame() {
+        function newGame() {
             if (newgame.readyState == 4) {
                 for (var i=0; i<=8; i++) {
                     var element = document.getElementById(i);
