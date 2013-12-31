@@ -30,9 +30,10 @@ class SingleGame(models.Model):
 
         is_won = ''
         winning_moves = ''
-        if self.is_won(self.state, 'C'):
-            is_won = 'won'
-            winning_moves = self.get_winning_moves()
+        if len(self.state) > 16: #might make it faster to not check winners if not 6 pieces out
+            if self.is_won(self.state, 'C'):
+                is_won = 'won'
+                winning_moves = self.get_winning_moves()
 
         return computer_move[1], is_won, winning_moves
 
