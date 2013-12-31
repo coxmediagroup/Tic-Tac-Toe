@@ -1,4 +1,5 @@
 from django.db import models
+from random import choice
 
 
 class AllGames(models.Model):
@@ -11,7 +12,8 @@ class SingleGame(models.Model):
     
     def move_added(self, spot):
         self.make_move(spot, 'P')
-        computer_move = self.make_computer_move(1, 'C')
+        computer_move = self.make_computer_move()
+        self.make_move(computer_move, 'C')
         return computer_move
 
     def make_move(self, spot, piece):
@@ -22,8 +24,16 @@ class SingleGame(models.Model):
         self.save()
         return
 
-    def make_computer_move(self, spot, player):
-        return spot
+    def make_computer_move(self):
+        return choice(self.get_unused_squares(self.state))
+    
+    def get_unused_squares(self, state):
+        unused_squares = []
+        for num in range(0,9):
+            if state.find(str(num)) == -1:
+                unused_squares.append(num)
+        return unused_squares
+
 
         
 
