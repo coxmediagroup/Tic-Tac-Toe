@@ -37,3 +37,14 @@ class SimpleTest(TestCase):
         state = '1P,2C'
         self.assertFalse(self.new_game.is_won(state, 'P'))
         self.assertFalse(self.new_game.is_won(state, 'C'))
+
+    def test_get_winning_moves(self):
+        self.new_game.state = "8C,1P,0C,2P,7C,5P,4C"
+        self.new_game.save()
+        self.assertEqual(self.new_game.get_winning_moves(), (0,4,8))
+        self.new_game.state = "0C,3C,6C"
+        self.new_game.save()
+        self.assertEqual(self.new_game.get_winning_moves(), (0,3,6))
+        self.new_game.state = "4P,0C,2P,3C,8P,6C"
+        self.new_game.save()
+        self.assertEqual(self.new_game.get_winning_moves(), (0,3,6))

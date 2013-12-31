@@ -36,6 +36,11 @@ window.onload = function() {
                 }
                 if (json_data.is_won == 'won') {
                     is_won.innerHTML = 'you lost'
+                    for (id in json_data.winning_moves){
+                        console.log(id)
+                        var element = document.getElementById(json_data.winning_moves[id])
+                        element.className = 'winners'
+                    }
                 }
                 
             }
@@ -55,6 +60,7 @@ window.onload = function() {
                 for (var i=0; i<=8; i++) {
                     var element = document.getElementById(i);
                     element.innerHTML = '';
+                    element.className = ''
                 }
             }
         }

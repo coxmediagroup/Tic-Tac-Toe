@@ -17,16 +17,18 @@ class SingleGame(models.Model):
 
     def move_added(self, spot):
         if self.state.find(str(spot)) > -1:
-            return -1, -1
+            return -1, -1, ''
         self.make_move(spot, 'P')
         computer_move = self.make_computer_move(self.state)
         self.make_move(computer_move[1], 'C')
 
         is_won = ''
+        winning_moves = ''
         if self.is_won(self.state, 'C'):
             is_won = 'won'
+            winning_moves = self.get_winning_moves()
 
-        return computer_move[1], is_won
+        return computer_move[1], is_won, winning_moves
 
     def make_move(self, spot, piece):
         if len(self.state) > 0:
@@ -42,7 +44,7 @@ class SingleGame(models.Model):
         #
         # end points for recursion
         #
-        if self.is_won(state, next_player): 
+        if self.is_won(state, next_player): #win
             if player == 'P':
                 return (1, -1)
             else:
@@ -85,6 +87,16 @@ class SingleGame(models.Model):
                 return True
         return False
 
+    def get_winning_moves(self):
+        for combo in self.WINNING_COMBINATIONS:
+            is_winning_combo = True
+            
+            for i in combo:
+                if self.state.find(str(i) + 'C') == -1:
+                    is_winning_combo = False
+            if is_winning_combo:
+                return combo
+        return
 
     
     def get_unused_squares(self, state):
