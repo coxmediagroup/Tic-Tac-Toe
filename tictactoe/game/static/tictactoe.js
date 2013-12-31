@@ -1,14 +1,29 @@
 window.onload = function() {
 
-    var gameboard = document.getElementById('gameboard')
+    function clickable(val){
+        var is_clickable = val
+        
+        this.getValue = function() {
+            return is_clickable
+        }
 
+        this.setValue = function(val){
+            is_clickable = val
+            }
+        }
+    var clickable = new clickable(true)
+
+    var gameboard = document.getElementById('gameboard')
     var newGame = document.getElementById('newgame')
     newgame.addEventListener("click", function() {
         makeNewGame()
     })
 
     gameboard.addEventListener("click", function(element) {
-        makemove(element.target.id)
+        if (clickable.getValue()) {
+            makemove(element.target.id)
+            clickable.setValue(false)
+        }
     })
 
     function makemove(id) {
@@ -28,6 +43,7 @@ window.onload = function() {
         }
 
         function updateBoard() {
+            clickable.setValue(true)
             console.log(move.readyState)
             if (move.readyState == 4) {
                 json_data = move.responseText
@@ -52,6 +68,7 @@ window.onload = function() {
     }// function makemove
 
     function makeNewGame() {
+        clickable.setValue(true)
         var newgame = new XMLHttpRequest()
         newgame.open('POST', '/playgame/')
         newgame.send('makenewgame')

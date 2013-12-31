@@ -9,10 +9,13 @@ class AllGames(models.Model):
 class SingleGame(models.Model):
     state = models.CharField(max_length = 50)
     player_piece = models.CharField(max_length = 1)
+
+    def __unicode__(self):
+        return self.state
     
     WINNING_COMBINATIONS = [(0,1,2), (3,4,5), (6,7,8), #horizontal
-                           (0,3,6), (1,4,7), (2,5,8), #vert
-                           (2,4,6), (0,4,8)]          #diag
+                           (0,3,6), (1,4,7), (2,5,8), #vertical
+                           (2,4,6), (0,4,8)]          #diagonal
 
 
     def move_added(self, spot):
@@ -123,12 +126,6 @@ class SingleGame(models.Model):
 
     def player_toggle(self, player):
         return 'P' if player == 'C' else 'C'
-
-
-
-
-
-        
 
 
 
