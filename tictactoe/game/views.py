@@ -20,11 +20,16 @@ class PlayGame(View):
     def post(self, request, pk = 1, *args, **kwargs):
         game = SingleGame.objects.get(pk = pk)
         action = request.body
-        data = game.move_added(action)
-        data = {'move':data}
-        print data
-        
-        return HttpResponse(json.dumps(data), content_type = "application/json")
+
+        if action == 'makenewgame':
+            game.state = ''
+            game.save()
+            return HttpResponse()
+        else:
+            data = game.move_added(action)
+            data = {'move':data}
+            print data
+            return HttpResponse(json.dumps(data), content_type = "application/json")
 
         
 

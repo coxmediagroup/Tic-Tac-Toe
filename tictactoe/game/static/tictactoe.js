@@ -2,6 +2,11 @@ window.onload = function() {
 
     var gameboard = document.getElementById('gameboard')
 
+    var newGame = document.getElementById('newgame')
+    newgame.addEventListener("click", function() {
+        makeNewGame()
+    })
+
     gameboard.addEventListener("click", function(element) {
         makemove(element.target.id)
     })
@@ -30,6 +35,23 @@ window.onload = function() {
 
         } //function updateBoard
     }// function makemove
+
+    function makeNewGame() {
+        var newgame = new XMLHttpRequest()
+        newgame.open('POST', '/playgame/')
+        newgame.send('makenewgame')
+        newgame.onreadystatechange = makeNewGame
+
+        function makeNewGame() {
+            if (newgame.readyState == 4) {
+                for (var i=0; i<=8; i++) {
+                    var element = document.getElementById(i);
+                    element.innerHTML = '';
+                }
+            }
+        }
+    }// function makeNewGame
+
 }//window.onload
 
 
