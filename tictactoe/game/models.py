@@ -17,11 +17,16 @@ class SingleGame(models.Model):
 
     def move_added(self, spot):
         if self.state.find(str(spot)) > -1:
-            return -1
+            return -1, -1
         self.make_move(spot, 'P')
-        computer_move = self.make_computer_move(self.state, 'C')
+        computer_move = self.make_computer_move(self.state)
         self.make_move(computer_move[1], 'C')
-        return computer_move[1]
+
+        is_won = ''
+        if self.is_won(self.state, 'C'):
+            is_won = 'won'
+
+        return computer_move[1], is_won
 
     def make_move(self, spot, piece):
         if len(self.state) > 0:
