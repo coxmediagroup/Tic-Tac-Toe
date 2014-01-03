@@ -1,9 +1,16 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send us a pull request.
+A program that can interactively play the game of Tic-Tac-Toe against a human 
+player and never lose.
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+Let us implement the solution in a client-server configuration. The client will
+be comprised of a single web page that interacts with a simple web api. The web
+api implementation will make use of Twisted Web, giving us easy implementation 
+with minimal overhead. We could certainly use Twisted to serve the static files
+as well, but let us keep somewhat to the 'best practices' and serve the static 
+content with nginx. For traffic that is intended for the web API, we will have 
+nginx proxy such requests to port 8080 where Twisted is listening.
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+We will allow our web api to grow organically as we implement our solution, but 
+even as we begin, it seems reasonable that we will need one resource for 
+creating new games and another one for communicating the plays that the human 
+player makes.
+
