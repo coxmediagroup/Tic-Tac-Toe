@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+    <div id='testPanel' style='display:none;'>
+        <button id='btnCreateGame'>Create Game</button>
+        <button id='btnPlayTurn'>Play Turn</button>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+        function getTestHandler(endpoint) {
+            var handler = function() {
+                $.ajax({
+                    type: "POST",
+                    url: "http://199.223.234.139/TTT_API/"+endpoint,
+                    data: JSON.stringify({key1: 'val1', key2: 'val2'}),
+                    contentType: 'application/json',
+                    processData: false,
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(xhr, status) {
+                        console.log(xhr);
+                    }
+                });
+            };
+            return handler;
+        }
+
+        $(function() { // document ready...
+            $('#btnCreateGame').click(getTestHandler('create-game'));
+            $('#btnPlayTurn').click(getTestHandler('play-turn'));
+            $('#testPanel').show();
+        });
+    </script>
+</body>
+</html>
