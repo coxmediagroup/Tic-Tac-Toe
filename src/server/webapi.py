@@ -1,20 +1,40 @@
 from twisted.web import server, resource
 from twisted.internet import reactor
+from src.tic_tac_toe import game_server
+import json
 
 class ApiRoot(resource.Resource):
     def render_GET(self, request):
-        return "prepath is %s and postpath is %s" % (request.prepath, request.postpath)
+        return "There are %d active games. prepath is %s and postpath is %s" % (len(game_server.games), request.prepath, request.postpath)
+
 
 class CreateGameResource(resource.Resource):
     isLeaf = True
     def render_POST(self, request):
-        return "<html>CreateGameResource</html>"
+        """Create new game and communicate game_id to client for subsequent 
+        requests."""
+        game = game_server.createGame()
+        data = {'gameId': str(game.id), 'board': game.board,}
+        return json.dumps(data)
 
 
 class PlayTurnResource(resource.Resource):
     isLeaf = True
     def render_POST(self, request):
-        return "<html>PlayTurnResource</html>"
+        content = request.content.getvalue()
+        turn_info = json.loads(content)
+        #return "<html> %s %s '%s' </html>" % (request.__dict__, msg, foo)
+
+        gameId = turn_info['gameId']
+        turnNum = turn_info['turn']
+        squareNum = int(turn_info['square'])
+
+        game = game_server.getGame(gameId)
+        game.do_turn(turnNum, squareNum)
+
+        data = {'gameId': str(game.id), 'board': game.board,}
+        return json.dumps(data)
+
 
 root = resource.Resource()
 
