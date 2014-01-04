@@ -1,39 +1,144 @@
 <!doctype html>
 <html>
 <head>
+
 </head>
 <body>
-    <div id='testPanel' style='display:none;'>
-        <button id='btnCreateGame'>Create Game</button>
-        <button id='btnPlayTurn'>Play Turn</button>
+    <style>
+        #tblBoard {
+            background: lavender;
+        }
+
+        .boardRow {
+            height: 100px;
+        }
+
+        .cell {
+            width: 100px;
+            cursor: pointer;
+            font-size: 80px;
+        }
+
+        table, td {
+            border: 1px solid black;
+        }
+
+        span {
+            margin-left: 29px;
+        }
+
+    </style>
+    <div>
+        <button id='btnStart'>Start Game</button>
+        <p id='error'></p>
+        <p id='board'></p>
+        <div id='divBoard'>
+        <table id='tblBoard'>
+            <tr class='boardRow' id='r1'>
+                <td id='c1' class='cell'></td>
+                <td id='c2' class='cell'></td>
+                <td id='c3' class='cell'></td>
+            </tr>
+            <tr class='boardRow' id='r2'>
+                <td id='c4' class='cell'></td>
+                <td id='c5' class='cell'></td>
+                <td id='c6' class='cell'></td>
+            </tr>
+            <tr class='boardRow' id='r3'>
+                <td id='c7' class='cell'></td>
+                <td id='c8' class='cell'></td>
+                <td id='c9' class='cell'></td>
+            </tr>
+        </table>
+        </div>
+        <div id='inputPanel' style='display:none;'>
+            <label for='move'>Your move:</label>
+            <input id='move' />
+            <button id='btnMove'>Ok</button>
+        </div>
     </div>
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script>
-        function getTestHandler(endpoint) {
-            var handler = function() {
-                $.ajax({
-                    type: "POST",
-                    url: "http://199.223.234.139/TTT_API/"+endpoint,
-                    data: JSON.stringify({key1: 'val1', key2: 'val2'}),
-                    contentType: 'application/json',
-                    processData: false,
-                    success: function(data) {
-                        console.log(data);
-                    },
-                    error: function(xhr, status) {
-                        console.log(xhr);
-                    }
-                });
-            };
-            return handler;
+        var url = "http://199.223.234.139/TTT_API/";
+        var createGameUrl = url + 'create-game';
+        var playTurnUrl = url + 'play-turn';
+
+        var gameId = null;
+        var turnNumber = 0;
+
+        function displayBoard(board) {
+            $('#board').text(JSON.stringify(board));
+            // iterate thru and set each cell
+            for (var c in board) {
+                var sp = "<span>" + board[c] + "</span>";
+                $("#c"+c).html(sp);
+                console.log(c);
+            }
         }
 
+        function displayError(errMsg) {
+            $('#error').text(errMsg);
+        }
+
+        function setupInput() {
+            $('#inputPanel').show();
+            turnNumber = 1;
+        }
+
+        var btnStart_click = function() {
+            $('#btnStart').hide();
+            $.ajax({
+                type: 'POST',
+                url: createGameUrl,
+                success: function(data) {
+                    game = JSON.parse(data);
+                    gameId = game.gameId;
+                    displayBoard(game.board);
+                    setupInput();
+                },
+                error: function(xhr, status) {
+                }
+            });
+        };
+
+        var btnMove_click = function() {
+            var square = $('#move').val();
+            playTurn(square);
+        };
+
+        function playTurn(squareNumber) {
+            var data = {gameId: gameId, turn: turnNumber, square: squareNumber};
+            $.ajax({
+                type: 'POST',
+                url: playTurnUrl,
+                data: JSON.stringify(data),
+                processData: false,
+                success: function(data) {
+                    console.log('success ' + data);
+                    boardInfo = JSON.parse(data);
+                    displayBoard(boardInfo.board);
+                    turnNumber += 1;
+                },
+                error: function(xhr, status) {
+                    console.log(xhr);
+                    displayError('The move you are trying to make is illegal.');
+                }
+            });
+        }
+
+        var cell_click = function() {
+            // user is requesting X at this space
+            // squareNum is id of clicked cell minus leading 'c'
+            var squareNum = this.id.substring(1);
+            playTurn(squareNum);
+        };
+
         $(function() { // document ready...
-            $('#btnCreateGame').click(getTestHandler('create-game'));
-            $('#btnPlayTurn').click(getTestHandler('play-turn'));
-            $('#testPanel').show();
+            $('#btnStart').click(btnStart_click);
+            $('#btnMove').click(btnMove_click);
+            $('.cell').click(cell_click);
         });
     </script>
 </body>
