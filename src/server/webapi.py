@@ -30,9 +30,14 @@ class PlayTurnResource(resource.Resource):
         squareNum = int(turn_info['square'])
 
         game = game_server.getGame(gameId)
-        game.do_turn(turnNum, squareNum)
+        status = game.do_turn(turnNum, squareNum)
 
-        data = {'gameId': str(game.id), 'board': game.board,}
+        data = {
+            'gameId': str(game.id), 
+            'gameState': status,
+            'board': game.board,
+            'winningSquares': game.winning_squares,
+        }
         return json.dumps(data)
 
 
