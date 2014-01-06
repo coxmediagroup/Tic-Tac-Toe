@@ -7,10 +7,11 @@ api implementation will make use of Twisted Web, giving us easy implementation
 with minimal overhead. We could certainly use Twisted to serve the static files
 as well, but let us keep somewhat to the 'best practices' and serve the static 
 content with nginx. For traffic that is intended for the web API, we will have 
-nginx proxy such requests to port 8080 where Twisted is listening.
+nginx proxy such requests to port 8080 where Twisted is listening (see nginx 
+config in deploy/ directory). Everything as simple as possbile and no simpler.
 
-We will allow our web api to grow organically as we implement our solution, but 
-even as we begin, it seems reasonable that we will need one resource for 
-creating new games and another one for communicating the plays that the human 
-player makes.
+This code is running (as of the time of this writing) out on Google Compute
+Engine on a Debian GNU/Linux server (like God intended). You may visit it at 
+http://199.223.234.139/
+
 
