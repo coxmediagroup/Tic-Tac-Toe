@@ -38,26 +38,54 @@ def find_path_move(game, player_symbol):
             if open_space:
                 return open_space
 
+def opposite_corner(corner):
+    if corner == 1: return 9
+    if corner == 3: return 7
+    if corner == 7: return 3
+    if corner == 9: return 1
 
 def find_corner_move(game):
     open_corners = [c for c in game.corners if not game.board[c]]
     if open_corners: return choice(open_corners)
 
-
 def get_optimal_move(game):
-    if game.turn == 1:
+    if game.turn == 1: # our first move
+        # take center if open, otherwise take a corner
         if game.board[5] == 'x':
             return choice(game.corners)
         else:
             return 5
 
+    # the second turn is the killer
+    # handle some special cases; after that it's simple
     if game.turn == 2:
+        # if X needs to be blocked, do it
+        block_move = find_path_move(game, 'x')
+        if block_move: return block_move
+
+        # if opponent has opposite corners, go on offensive
         if game.board[1] == game.board[9] == 'x' or \
            game.board[3] == game.board[7] == 'x':
-            return choice(game.edges)            
+            return choice(game.edges)
+
+        # if opponent is in two edges, play an adjacent corner
+        edges_with_x = [e for e in game.edges if game.board[e] == 'x']
+        if len(edges_with_x) == 2:
+            # return 3 unless X is in (4,8) in which case return any other corner
+            if edges_with_x != [4,8]:
+                return 3
+            else:
+                return choice([c for c in game.corners if c != 3])
+
+        # if we played center and they are in one corner, take opposite corner
+        if game.board[5] == 'o':
+            corners_with_x = [c for c in game.corners if game.board[c] == 'x']
+            if corners_with_x:
+                occupied_corner = corners_with_x[0]
+                return opposite_corner(occupied_corner)
+                
 
     # if there is an opportunity for a win, take it
-    # iterate thru each winning path
     win_move = find_path_move(game, 'o')
     if win_move: return win_move
 
@@ -69,7 +97,7 @@ def get_optimal_move(game):
     corner_move = find_corner_move(game)
     if corner_move: return corner_move
 
-    # take whatever
+    # if we get this far, take any empty space
     empty_spaces = [ s for s in game.board.keys() if not game.board[s] ]
     if empty_spaces: return choice(empty_spaces)
 

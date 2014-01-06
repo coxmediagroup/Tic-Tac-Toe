@@ -29,7 +29,6 @@
 
     </style>
     <div>
-        <button id='btnStart'>New Game</button>
         <p id='board'></p>
         <div id='divBoard'>
         <table id='tblBoard'>
@@ -51,6 +50,7 @@
         </table>
         </div>
         <p id='error'></p>
+        <button id='btnStart'>New Game</button>
         <div id='inputPanel' style='display:none;'>
             <label for='move'>Your move:</label>
             <input id='move' />
@@ -69,7 +69,7 @@
         var turnNumber = 0;
 
         function displayBoard(gameInfo) {
-            $('#board').text(JSON.stringify(gameInfo));
+            //$('#board').text(JSON.stringify(gameInfo));
             var board = gameInfo.board;
             for (var c in board) {
                 var sp = "<span>" + board[c] + "</span>";
@@ -82,8 +82,7 @@
                         $('#c'+val).css('background', 'green');
                     });
                 case "tie":
-                    $('.cell').unbind();
-                    $('#btnStart').click(btnStart_click);
+                    $('.cell').off('click');
                     $('#btnStart').show();
                     break;
                 default: // in_progress etc.
@@ -99,9 +98,13 @@
             $('#error').text("");
         }
 
+        /* Initialize the UI by initializing turn number and gameId,
+        setting background color to default, and hooking up click events.*/ 
         function setupInput(gameId) {
             this.turnNumber = 1;
             this.gameId = gameId;
+            $('.cell').css('background', 'lavender');
+            $('.cell').on('click', cell_click);
         }
 
         var btnStart_click = function() {
@@ -120,11 +123,6 @@
                 }
             });
         };
-
-        //var btnMove_click = function() {
-        //    var square = $('#move').val();
-        //    playTurn(square);
-        //};
 
         function playTurn(squareNumber) {
             var data = {gameId: gameId, turn: turnNumber, square: squareNumber};
@@ -155,10 +153,8 @@
         };
 
         $(function() { // document ready...
-            //$('#btnStart').click(btnStart_click);
-            //$('#btnMove').click(btnMove_click);
+            $('#btnStart').click(btnStart_click);
             btnStart_click();
-            $('.cell').click(cell_click);
         });
     </script>
 </body>
