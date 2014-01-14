@@ -1,0 +1,16 @@
+{% extends "tictactoe/base.html" %}
+
+{% block title %}Tic-Tac-Toe{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>Welcome to Tic-Tac-Toe!</h1>
+  <p>Play the game against a superior AI.</p>
+  <p>
+    <form method="post" action="{% url 'create_game' %}">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-primary btn-lg" value="Get Started" />
+    </form>
+  </p>
+</div>
+{% endblock %}

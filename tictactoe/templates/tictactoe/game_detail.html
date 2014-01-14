@@ -1,0 +1,168 @@
+{% extends "tictactoe/base.html" %}
+
+{% block title %}Game | {{ block.super }}{% endblock %}
+
+{% block header %}
+<h1>Game <small>{{ game.user }} vs. the Computer</small></h1>
+{% endblock %}
+
+{% block content %}
+<div id="board_area" class="center-block">
+  <canvas id="board" width="600" height="600"></canvas>
+  {% if not position.is_finished %}
+  <form id="placement_form" action="{% url 'submit_move' pk=game.pk %}" method="post">
+    {% csrf_token %}
+    <input id="row_placement" type="hidden" name="row" />
+    <input id="col_placement" type="hidden" name="column" />
+    <input class="btn btn-primary" type="submit" value="Update" />
+  </form>
+  {% endif %}
+  <form id="new_game_form" action="{% url 'create_game' %}" method="post">
+    {% csrf_token %}
+    <input id="new_game_button" type="submit" class="hidden btn btn-primary" value="New Game" />
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+var board = {'state': '{{ position.state }}'};
+var url = $('#placement_form').attr('action');
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = $.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+  crossDomain: false, // obviates need for sameOrigin test
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type)) {
+      xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+  }
+});
+
+$('#board').click(function (e) {
+  var canvas_position = $('#board').position();
+  var $row_input = $('#row_placement');
+  var $col_input = $('#col_placement');
+
+  var x = e.pageX - canvas_position.left;
+  var y = e.pageY - canvas_position.top;
+
+  var r = Math.floor(y / 200);
+  var c = Math.floor(x / 200);
+
+  draw_state(new_state(board.state, r, c));
+  $row_input.val(r);
+  $col_input.val(c);
+});
+
+function update_state(data) {
+  board.state = data.state;
+  draw_state(board.state);
+  if (data.done) {
+    $('#placement_form').remove();
+    $('#new_game_button').removeClass('hidden');
+    if (data.done === true) {
+      msg = "Game is a draw."
+    } else if (data.done === 'x') {
+      msg = "The computer wins!";
+    } else if (data.done === 'o') {
+      msg = "You win!"
+    }
+    $('#messages').append('<div class="alert alert-dismissable alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + msg + "</div>");
+  }
+}
+
+$('#placement_form').on("submit", function (e) {
+  e.preventDefault();
+  var data = $(this).serialize()
+
+  $.ajax({
+    url: url,
+    type: 'post',
+    data: data,
+    success: update_state,
+    error: update_state,
+  });
+});
+
+function new_state(state, r, c) {
+  var index = 3 * r + c;
+  if (state[index] !== ' ') {
+    return false
+  }
+  return state.substring(0, index) + 'o' + state.substring(index + 1);
+}
+
+function draw_state(state) {
+  if (!state) {
+    return
+  }
+
+  var canvas = $('#board')[0];
+  var context = canvas.getContext("2d");
+
+  canvas.width = canvas.width;
+
+  context.moveTo(200.5, 0);
+  context.lineTo(200.5, 600);
+
+  context.moveTo(400.5, 0);
+  context.lineTo(400.5, 600);
+
+  context.moveTo(0, 200.5);
+  context.lineTo(600, 200.5);
+
+  context.moveTo(0, 400.5);
+  context.lineTo(600, 400.5);
+
+  context.strokeStyle = "#000";
+  context.lineWidth = 3;
+  context.stroke();
+
+  for (var row = 0; row < 3; row++) {
+    for (var col = 0; col < 3; col++) {
+      if (state[3 * row + col] === 'x') {
+        context.beginPath();
+        context.moveTo(25 + 200 * col, 25 + 200 * row);
+        context.lineTo(175 + 200 * col, 175 + 200 * row);
+        context.moveTo(175 + 200 * col, 25 + 200 * row);
+        context.lineTo(25 + 200 * col, 175 + 200 * row);
+        context.strokeStyle = "#f00";
+        context.lineWidth = 5;
+        context.stroke();
+      } else if (state[3 * row + col] === 'o') {
+        context.beginPath();
+        context.arc(100 + 200 * col, 100 + 200 * row, 75, 0, Math.PI * 2, false);
+        context.closePath();
+        context.strokeStyle = "#0f0";
+        context.lineWidth = 5;
+        context.stroke();
+      }
+    }
+  }
+
+}
+
+draw_state(board.state);
+</script>
+{% endblock %}
