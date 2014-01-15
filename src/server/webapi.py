@@ -5,7 +5,7 @@ import json
 
 class ApiRoot(resource.Resource):
     def render_GET(self, request):
-        return "There are %d active games. prepath is %s and postpath is %s" % (len(game_server.games), request.prepath, request.postpath)
+        return "There are %d active games." % len(game_server.games)
 
 
 class CreateGameResource(resource.Resource):
@@ -23,7 +23,6 @@ class PlayTurnResource(resource.Resource):
     def render_POST(self, request):
         content = request.content.getvalue()
         turn_info = json.loads(content)
-        #return "<html> %s %s '%s' </html>" % (request.__dict__, msg, foo)
 
         gameId = turn_info['gameId']
         turnNum = turn_info['turn']
