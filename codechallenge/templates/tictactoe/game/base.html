@@ -28,6 +28,7 @@
     <div class="col-xs-12 grid_content">
         <div class="panel panel-default">
             <div class="panel-heading">Tic-Tac-Toe</div>
+
             <div class="panel-body">
                 {% for y in "123" %}
                 <div class="row">
@@ -38,6 +39,12 @@
                     {% endfor %}
                 </div>
                 {% endfor %}
+                <hr />
+                <div class="row">
+                    <div class="col-xs-4 col-xs-offset-7">
+                        <button class="btn btn-danger" name="clear">Clear</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
