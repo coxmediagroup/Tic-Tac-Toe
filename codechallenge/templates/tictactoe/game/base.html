@@ -1,0 +1,46 @@
+{% extends 'tictactoe/index.html' %}
+{% block title %}Code Chanllenge - TicTacToe{% endblock %}
+
+{% block css %}
+{{ block.super }}
+.grid_content {
+    float: none;
+    margin: 0 auto;
+    max-width: 300px;
+    min-width: 220px;
+}
+.grid {
+    max-width: 100px;
+    min-width: 73;
+    max-height: 100px;
+    min-height: 73px;
+}
+.grid-c1, .grid-c2 {
+    border-right: 2px solid black;
+}
+.grid-r1, .grid-r2 {
+    border-bottom: 2px solid black;
+}
+{% endblock css %}
+
+{% block container %}
+<div class="row grid_container">
+    <div class="col-xs-12 grid_content">
+        <div class="panel panel-default">
+            <div class="panel-heading">Tic-Tac-Toe</div>
+            <div class="panel-body">
+                {% for y in "123" %}
+                <div class="row">
+                    {% for x in "123" %}
+                    <div class="col-xs-4 grid grid-c{{x}} grid-r{{y}}" id="grid-{{x}}.{{y}}">
+                        <i class="fa fa-5x"></i>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
