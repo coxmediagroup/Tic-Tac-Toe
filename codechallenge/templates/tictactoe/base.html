@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load activelink %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,11 +45,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="">Game 1</a>
+                    <li class="{% ifactive "normal_game" %}active{% endifactive %}"><a href="{% url 'normal_game' %}">Normal Game</a>
                     </li>
-                    <li><a href="#services">Game 2</a>
+                    <li class="{% ifactive "ajax_game" %}active{% endifactive %}"><a href="{% url 'ajax_game' %}">Ajax Game</a>
                     </li>
-                    <li><a href="#contact">Game 3</a>
+                    <li class="{% ifactive "angular_game" %}active{% endifactive %}"><a href="{% url 'angular_game' %}">Angular Game</a>
                     </li>
                 </ul>
             </div>
@@ -58,14 +59,7 @@
     </nav>
 
     <div class="container">
-        {% block container %}
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>A better Bootstrap starter template.</h1>
-                <p>Complete with pre-defined file paths that you won't have to change!</p>
-            </div>
-        </div>
-        {% endblock container %}
+        {% block container %}{% endblock container %}
     </div>
     <!-- /.container -->
 </body>
