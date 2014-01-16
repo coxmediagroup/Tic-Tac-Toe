@@ -1,0 +1,3 @@
+
+# ignore the codechallenge db
+codechallenge.db.sqlite3

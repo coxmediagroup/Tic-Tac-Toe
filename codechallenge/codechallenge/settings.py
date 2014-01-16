@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__) + "/..")
 
 # Application definition
 
@@ -36,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangular',
+    'tictactoe',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,7 +61,7 @@ WSGI_APPLICATION = 'codechallenge.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'codechallenge.db.sqlite3'),
     }
 }
 
@@ -80,3 +83,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    PROJECT_PATH + '/static/',
+)
+
+TEMPLATE_DIRS = (
+    PROJECT_PATH + '/templates/',
+)
+
