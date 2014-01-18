@@ -18,6 +18,13 @@ $(function() {
 
     // mark this cell as done
     $(".grid-cell").click(function(event) {
+        // check for already selected and skip
+        if($(this).find("i").hasClass("fa-times") ||
+            $(this).find("i").hasClass("fa-circle-o")) {
+            // skip
+            return null;
+        }
+
         // parse id
         var m = $(this).attr("id").match(/grid-(\d).(\d)/);
 
