@@ -14,15 +14,24 @@ $(function() {
     var game_form = $("#game_form");
     var game_form_cell_row = $("#game_form input[name='cell_row']");
     var game_form_cell_col = $("#game_form input[name='cell_col']");
+    var game_form_action = $("#game_form input[name='action']");
 
     // mark this cell as done
-    $(".grid-cell").click(function(elem) {
+    $(".grid-cell").click(function(event) {
         // parse id
         var m = $(this).attr("id").match(/grid-(\d).(\d)/);
 
         // set game form values and submit
+        game_form_action.val("mark");
         game_form_cell_row.val(m[1]);
         game_form_cell_col.val(m[2]);
+        game_form.submit();
+    });
+
+    // clear the form
+    $("#clear_button").click(function(event) {
+        // set game form values and submit
+        game_form_action.val("clear");
         game_form.submit();
     });
 });
@@ -35,6 +44,7 @@ $(function() {
 <!-- game form hidden for submission -->
 <form id="game_form" method="POST" action="{% url 'normal_game' %}">
     {% csrf_token %}
+    <input type="hidden" name="action" value="" />
     <input type="hidden" name="cell_row" value="" />
     <input type="hidden" name="cell_col" value="" />
 </form>
