@@ -27,24 +27,32 @@ def normal_game(request):
 
         # handle game engine updates
         if action == 'mark':
-            try:
-                col = int(request.POST['cell_col'])
-                row = int(request.POST['cell_row'])
+            if not game.gameover:
+                try:
+                    col = int(request.POST['cell_col'])
+                    row = int(request.POST['cell_row'])
 
-                if game.is_free(col=col, row=row):
-                    if not game.mark_player(col=col, row=row):
-                        context['error'] = 'Unable to set mark, invalid cordiates(col=%s, row=%s)?' % ( col, row )
-                else:
-                    # unable to mark, already taken
-                    context['error'] = 'Unable to set mark, cell already taken'
+                    if game.is_free(col=col, row=row):
+                        if not game.mark_player(col=col, row=row):
+                            context['error'] = 'Unable to set mark, invalid cordiates(col=%s, row=%s)?' % ( col, row )
+                        else:
+                            # check if gameover and if not set a mark for the game engine
+                            if not game.gameover:
+                                if not game.move_next():
+                                    context['error'] = 'GameEngine failure: unable to set a valid mark'
+                    else:
+                        # unable to mark, already taken
+                        context['error'] = 'Unable to set mark, cell already taken'
 
-            except ValueError:
-                # str to int conversion most likely
-                context['error'] = 'Unable to convert cell values to integers'
-            except Exception as e:
-                # broad error
-                print >> sys.stderr, "Unable to set mark, internal error: %s" % str(e)
-                context['error'] = 'Unable to set mark, internal error'
+                except ValueError:
+                    # str to int conversion most likely
+                    context['error'] = 'Unable to convert cell values to integers'
+                except Exception as e:
+                    # broad error
+                    print >> sys.stderr, "Unable to set mark, internal error: %s" % str(e)
+                    context['error'] = 'Unable to set mark, internal error'
+            else:
+                context['error'] = 'Unable to set mark, GameOver'
 
         elif action == 'clear':
             # create a new game board to clear it
@@ -54,6 +62,7 @@ def normal_game(request):
             context['error'] = 'Invalid form action'
 
     context['board'] = game.board
+    context['gameover'] = game.gameover
     
     # save game state
     request.session['game'] = game.to_dict()

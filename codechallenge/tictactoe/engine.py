@@ -19,9 +19,9 @@ class Board:
         # NOTE: cells are in cells[ROW][COL] format!
         if self.cells is None:
             self.cells = [ ]
-            for y in range(BOARD_ROWS):
+            for r in range(BOARD_ROWS):
                 row = [ ]
-                for x in range(BOARD_COLS):
+                for c in range(BOARD_COLS):
                     row.append(MARK_EMPTY)
                 self.cells.append(row)
 
@@ -58,6 +58,18 @@ class Board:
             return 'fa-circle-o'
         return ''
 
+    @property
+    def possible_moves(self):
+        """ generate a list of dictionaries w/ all possible moves left
+        :return: a list of dict w/ keys (row, col) of possible moves
+        """
+        moves = [ ]
+        for row in range(BOARD_ROWS):
+            for col in range(BOARD_COLS):
+                if self.is_free(row=row, col=col):
+                    moves.append(dict(row=row, col=col))
+        return moves
+
     def to_dict(self):
         """ Save the session to a dictionary """
         return { 'cells': deepcopy(self.cells) }
@@ -78,7 +90,7 @@ class GameEngine:
     @property
     def engine_mark(self):
         """ returns the mark used by the engine """
-        return self.MARK_CIRCLE if self.user_mark == MARK_CROSS else MARK_CROSS
+        return MARK_CIRCLE if self.user_mark == MARK_CROSS else MARK_CROSS
 
     def is_free(self, col, row):
         """ Check if a cell is free
@@ -97,6 +109,29 @@ class GameEngine:
         :return: True if the mark was successfully set
         """
         return self.mark(col=col, row=row, mark=self.user_mark)
+
+    def mark_engine(self, col, row):
+        """ mark a cell as taken by the game engine
+        :return: True if the mark was successfully set
+        """
+        return self.mark(col=col, row=row, mark=self.engine_mark)
+
+    def move_next(self):
+        """ calculates the next best move to be made and sets a mark there
+        :return: True if the mark was successfully set
+        """
+        # TODO: actual logic
+        # mark the first possible move
+        if self.gameover:
+            return False
+        return self.mark_engine(**self.board.possible_moves[0])
+
+    @property
+    def gameover(self):
+        """ Checks if the game is over
+        :return: True if the game is over / all marks are set
+        """
+        return not self.board.possible_moves
 
     def to_dict(self):
         """ Save the game engine state to dictionary """
