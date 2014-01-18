@@ -1,2 +1,42 @@
 {% extends 'tictactoe/game/base.html' %}
 
+{% block css %}
+{{ block.super }}
+#game_form {
+    display: none;
+}
+{% endblock css %}
+
+{% block extra_header %}
+<script type="text/javascript">
+$(function() {
+    // save reference to game form and inputs
+    var game_form = $("#game_form");
+    var game_form_cell_row = $("#game_form input[name='cell_row']");
+    var game_form_cell_col = $("#game_form input[name='cell_col']");
+
+    // mark this cell as done
+    $(".grid-cell").click(function(elem) {
+        // parse id
+        var m = $(this).attr("id").match(/grid-(\d).(\d)/);
+
+        // set game form values and submit
+        game_form_cell_row.val(m[1]);
+        game_form_cell_col.val(m[2]);
+        game_form.submit();
+    });
+});
+</script>
+{% endblock %}
+
+{% block container %}
+{{ block.super }}
+
+<!-- game form hidden for submission -->
+<form id="game_form" method="POST" action="{% url 'normal_game' %}">
+    {% csrf_token %}
+    <input type="hidden" name="cell_row" value="" />
+    <input type="hidden" name="cell_col" value="" />
+</form>
+{% endblock %}
+

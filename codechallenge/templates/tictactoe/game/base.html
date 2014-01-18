@@ -1,4 +1,6 @@
 {% extends 'tictactoe/index.html' %}
+{% load tictactoe_extras %}
+
 {% block title %}Code Chanllenge - TicTacToe{% endblock %}
 
 {% block css %}
@@ -9,32 +11,42 @@
     max-width: 300px;
     min-width: 220px;
 }
-.grid {
+.grid-cell {
     max-width: 100px;
     min-width: 73;
     max-height: 100px;
     min-height: 73px;
 }
-.grid-c1, .grid-c2 {
+.grid-c0, .grid-c1 {
     border-right: 2px solid black;
 }
-.grid-r1, .grid-r2 {
+.grid-r0, .grid-r1 {
     border-bottom: 2px solid black;
 }
 {% endblock css %}
 
 {% block container %}
+{% if error %}
+<div class="row">
+    <div class="col-xs-offset-4 col-xs-4 alert alert-danger">{{ error }}</div>
+</div>
+{% endif %}
+
 <div class="row grid_container">
     <div class="col-xs-12 grid_content">
         <div class="panel panel-default">
             <div class="panel-heading">Tic-Tac-Toe</div>
 
             <div class="panel-body">
-                {% for y in "123" %}
+                {% for row in "012" %}
                 <div class="row">
-                    {% for x in "123" %}
-                    <div class="col-xs-4 grid grid-c{{x}} grid-r{{y}}" id="grid-{{x}}.{{y}}">
+                    {% for col in "012" %}
+                    <div class="col-xs-4 grid-cell grid-c{{col}} grid-r{{row}}" id="grid-{{row}}.{{col}}">
+                        {% if board  %}
+                        <i class="fa fa-5x {% board_cell board forloop.parentloop.counter0 forloop.counter0 %}"></i>
+                        {% else %}
                         <i class="fa fa-5x"></i>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
