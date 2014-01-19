@@ -161,11 +161,11 @@ class GameEngine:
         if self.board.cell(**cell3) == self.engine_mark: # mine
             if score < 0: # they own cell1 and / or cell2
                 return 0
-            score = 100 if score > 0 else 1 # I own two else I own one, rest empty
+            score = (score * 10) if score > 0 else 1 # I own two else I own one, rest empty
         elif self.board.cell(**cell3) == self.user_mark: # opp
             if score > 0: # I own cell1 and / or cell2
                 return 0
-            score = -100 if score < 0 else -1 # They own two else I own one, rest empty
+            score = (score * 10) if score < 0 else -1 # They own two else I own one, rest empty
 
         return score
 
@@ -207,7 +207,7 @@ class GameEngine:
         possible_moves = self.board.possible_moves
         best_score = (-sys.maxint - 1) if mark == self.engine_mark else sys.maxint 
 
-        if not possible_moves or depth <= 0:
+        if self.gameover or depth <= 0:
             return { 'best_score': self.best_score }
 
         # bruteforce through all possible moves and see which one is the best
