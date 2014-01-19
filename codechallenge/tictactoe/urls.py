@@ -6,7 +6,7 @@ from . import views
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^game/normal$', views.normal_game, name='normal_game'),
-    url(r'^game/ajax$', TemplateView.as_view(template_name='tictactoe/game/ajax.html'), name='ajax_game'),
-    url(r'^game/angular$', TemplateView.as_view(template_name='tictactoe/game/angular.html'), name='angular_game'),
+    #TODO: url(r'^game/ajax$', TemplateView.as_view(template_name='tictactoe/game/ajax.html'), name='ajax_game'),
+    #TODO: url(r'^game/angular$', TemplateView.as_view(template_name='tictactoe/game/angular.html'), name='angular_game'),
 )
 

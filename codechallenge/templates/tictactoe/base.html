@@ -52,9 +52,12 @@
                 <ul class="nav navbar-nav">
                     <li class="{% ifactive "normal_game" %}active{% endifactive %}"><a href="{% url 'normal_game' %}">Normal Game</a>
                     </li>
+                    {% comment %}
+                    <!-- TODO: implement game in Ajax and in angularjs -->
                     <li class="{% ifactive "ajax_game" %}active{% endifactive %}"><a href="{% url 'ajax_game' %}">Ajax Game</a>
                     </li>
                     <li class="{% ifactive "angular_game" %}active{% endifactive %}"><a href="{% url 'angular_game' %}">Angular Game</a>
+                    {% endcomment %}
                     </li>
                 </ul>
             </div>
