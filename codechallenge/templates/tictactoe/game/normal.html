@@ -10,6 +10,9 @@
 {% block extra_header %}
 <script type="text/javascript">
 $(function() {
+    // gameover value
+    var gameover = {% if gameover %}true{% else %}false{% endif %};
+
     // save reference to game form and inputs
     var game_form = $("#game_form");
     var game_form_cell_row = $("#game_form input[name='cell_row']");
@@ -17,23 +20,25 @@ $(function() {
     var game_form_action = $("#game_form input[name='action']");
 
     // mark this cell as done
-    $(".grid-cell").click(function(event) {
-        // check for already selected and skip
-        if($(this).find("i").hasClass("fa-times") ||
-            $(this).find("i").hasClass("fa-circle-o")) {
-            // skip
-            return null;
-        }
+    if(!gameover) {
+        $(".grid-cell").click(function(event) {
+            // check for already selected and skip
+            if($(this).find("i").hasClass("fa-times") ||
+                $(this).find("i").hasClass("fa-circle-o")) {
+                // skip
+                return null;
+            }
 
-        // parse id
-        var m = $(this).attr("id").match(/grid-(\d).(\d)/);
+            // parse id
+            var m = $(this).attr("id").match(/grid-(\d).(\d)/);
 
-        // set game form values and submit
-        game_form_action.val("mark");
-        game_form_cell_row.val(m[1]);
-        game_form_cell_col.val(m[2]);
-        game_form.submit();
-    });
+            // set game form values and submit
+            game_form_action.val("mark");
+            game_form_cell_row.val(m[1]);
+            game_form_cell_col.val(m[2]);
+            game_form.submit();
+        });
+    }
 
     // clear the form
     $("#clear_button").click(function(event) {
