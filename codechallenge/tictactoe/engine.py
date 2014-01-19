@@ -252,12 +252,51 @@ class GameEngine:
 
         return False
 
+    def check_line(self, cell1, cell2, cell3):
+        """ checks if the current line is complete and won by engine
+        :return: True if the engine won, False if not won, None if line incomplete
+        """
+        if self.board.cell(**cell1) == self.engine_mark \
+            and self.board.cell(**cell2) == self.engine_mark \
+            and self.board.cell(**cell3) == self.engine_mark:
+                return True
+        elif self.board.cell(**cell1) == self.user_mark \
+            and self.board.cell(**cell2) == self.user_mark \
+            and self.board.cell(**cell3) == self.user_mark:
+                return False
+
+        return None
+
+    @property
+    def engine_won(self):
+        """ checks if the engine won
+        :return: True if the engine won, False if not won, None if draw or gameover
+        """
+        win_combos = [ ]
+
+        # diagonals
+        win_combos.append([{ 'row': 0, 'col': 0 }, { 'row': 1, 'col': 1 }, { 'row': 2, 'col': 2 }]) # \ <-- direction
+        win_combos.append([{ 'row': 2, 'col': 0 }, { 'row': 1, 'col': 1 }, { 'row': 0, 'col': 2 }]) # / <-- direction
+
+        # horizontals and verticals
+        for i in range(BOARD_COLS):
+            win_combos.append([{ 'row': i, 'col': 0 }, { 'row': i, 'col': 1 }, { 'row': i, 'col': 2 }]) # horizontal
+            win_combos.append([{ 'row': 0, 'col': i }, { 'row': 1, 'col': i }, { 'row': 2, 'col': i }]) # vertical
+
+        # check combos
+        for combo in win_combos:
+            won = self.check_line(*combo)
+            if not won is None: # we either lost or won
+                return won
+
+        return None
+
     @property
     def gameover(self):
         """ Checks if the game is over
         :return: True if the game is over / all marks are set
         """
-        return not self.board.possible_moves
+        return not self.board.possible_moves or not self.engine_won is None
 
     def to_dict(self):
         """ Save the game engine state to dictionary """

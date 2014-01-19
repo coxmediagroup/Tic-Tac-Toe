@@ -45,6 +45,25 @@ $(function() {
 </script>
 {% endblock %}
 
+{% block error %}{% if error %}
+<div class="row" id="error">
+    <div class="col-xs-offset-4 col-xs-4 alert alert-danger">{{ error }}</div>
+</div>
+{% endif %}{% endblock %}
+
+{% block panel_tag %}
+{% if gameover %}
+    {% if engine_won == False %}
+    <span class="label label-success">You won! Amazing... you beat logic somehow... record this somewhere.</span>
+    {% elif engine_won  %}
+    <span class="label label-warning">You lost!</span>
+    {% else %}
+    <span class="label label-default">Its a Draw!</span>
+    {% endif %}
+{% endif %}
+{% endblock %}
+
+
 {% block container %}
 {{ block.super }}
 

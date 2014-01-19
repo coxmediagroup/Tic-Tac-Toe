@@ -26,16 +26,10 @@
 {% endblock css %}
 
 {% block container %}
-{% if error %}
-<div class="row">
-    <div class="col-xs-offset-4 col-xs-4 alert alert-danger">{{ error }}</div>
-</div>
-{% endif %}
-
 <div class="row grid_container">
     <div class="col-xs-12 grid_content">
         <div class="panel panel-default">
-            <div class="panel-heading">Tic-Tac-Toe</div>
+            <div class="panel-heading">Tic-Tac-Toe{% block panel_tag %}{% endblock %}</div>
 
             <div class="panel-body">
                 {% for row in "012" %}

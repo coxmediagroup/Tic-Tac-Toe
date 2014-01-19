@@ -63,6 +63,7 @@ def normal_game(request):
 
     context['board'] = game.board
     context['gameover'] = game.gameover
+    context['engine_won'] = game.engine_won
     
     # save game state
     request.session['game'] = game.to_dict()
