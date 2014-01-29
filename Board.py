@@ -22,19 +22,26 @@ class BoardSpace(object):
 class Board(object):
     """The tic-tac-toe game board"""
     
-    # Board settings
-    ROWS = 3
-    COLS = 3
+
     
     # Game rules
     IN_A_ROW = 3
     
-    # Players
-    P0 = u'-' # player null (blank spaces)
-    P1 = u'X' # player one
-    P2 = u'O' # player two
+    P0_score = 0 # Draw
+    P1_score = 0 # Player 1
+    P2_score = 0 # Player 2
     
-    def __init__(self):
+    def __init__(self, **kwargs):
+        
+        # Board settings
+        self.ROWS = kwargs.get('rows', 3)
+        self.COLS = kwargs.get('cols', 3)
+        
+        # Players
+        self.P0 = kwargs.get('P0', '-') # player null (blank spaces)
+        self.P1 = kwargs.get('P1', 'X') # player one
+        self.P2 = kwargs.get('P2', 'O') # player two
+        
         self.sanity_check()
         self.board = self.new_board()
         
