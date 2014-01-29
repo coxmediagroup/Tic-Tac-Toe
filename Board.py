@@ -1,3 +1,6 @@
+class BoardException(Exception):
+    pass
+
 class BoardSpace(object):
     """
     Attributes for a space in a game board
@@ -56,20 +59,29 @@ class Board(object):
         
         """
         # Test the rows and cols are positive integers
-        assert int(self.ROWS) > 0, "ROWS must be an integer greater than 0"
-        assert int(self.COLS) > 0, "COLS must be an integer greater than 0"
+        if not int(self.ROWS) > 0:
+            raise BoardException("ROWS must be an integer greater than 0")
+        if not int(self.COLS) > 0:
+            raise BoardException("COLS must be an integer greater than 0")
         
         # Test that the game will have a minimal board size
-        assert self.ROWS * self.COLS >= 9, "Too few spaces for a game"
+        if not self.ROWS * self.COLS >= 9:
+            raise BoardException("Too few spaces for a game")
         
         # Test that the width of the character for blanks and player is 1 wide
-        assert len(self.P0) == 1, "Blank spaces must be one character wide"
-        assert len(self.P1) == 1, "Player 1 must be one character wide"
-        assert len(self.P2) == 1, "Player 1 must be one character wide"
+        if not len(self.P0) == 1:
+            raise BoardException("Blank spaces must be one character wide")
+        if not len(self.P1) == 1:
+            raise BoardException("Player 1 must be one character wide")
+        if not len(self.P2) == 1:
+            raise BoardException("Player 1 must be one character wide")
         
         # Test that there arent any duplicated players or blank characters
-        assert self.P0 not in (self.P1, self.P2), "Blank spaces must be unique"
-        assert self.P1 not in (self.P0, self.P2), "Player 1 must be unique"
-        assert self.P2 not in (self.P0, self.P1), "Player 2 must be unique"
+        if self.P0 in (self.P1, self.P2):
+            raise BoardException("Blank spaces must be unique")
+        if self.P1 in (self.P0, self.P2):
+            raise BoardException("Player 1 must be unique")
+        if self.P2 in (self.P0, self.P1):
+            raise BoardException("Player 2 must be unique")
         
         return True
