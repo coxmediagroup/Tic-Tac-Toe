@@ -10,11 +10,11 @@ class BoardSpace(object):
     
     def __init__(self, **kwargs):
         self.player = kwargs['player'] # required
-        self.board_index = kwargs['board_index'] # required
+        self.board_index = int(kwargs['board_index']) # required
         self.winner = kwargs.get('winner', False) # optional
         
     def __str__(self):
-        return self.occupant
+        return self.player
 
 class Board(object):
     """The tic-tac-toe game board"""

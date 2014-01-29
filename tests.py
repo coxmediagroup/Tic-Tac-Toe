@@ -1,5 +1,9 @@
 #! /usr/bin/env
-from Board import Board
+from Board import Board, BoardSpace
+
+def new_space():
+    s = BoardSpace(player=u"X", board_index=1)
+    assert s.__str__() == "X"
 
 def new_board():
     b = Board()
@@ -10,6 +14,7 @@ def new_board():
 def tests():
     """Tests for the Board class"""
     # test that a new board is rational
+    new_space()
     new_board()
 
     print "All Board tests have passed!"
