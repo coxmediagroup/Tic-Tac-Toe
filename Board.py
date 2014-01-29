@@ -85,3 +85,10 @@ class Board(object):
             raise BoardException("Player 2 must be unique")
         
         return True
+    
+    def __str__(self):
+        string = u''
+        for rows in self.board:
+            for col in rows:
+                string += col.player
+        return string

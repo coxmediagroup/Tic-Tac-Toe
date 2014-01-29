@@ -7,6 +7,7 @@ def new_space():
 
 def new_board():
     b = Board()
+    assert b.__str__() == b.P0 * b.ROWS * b.COLS
     assert len(b.board) == b.ROWS
     assert all(len(x) == b.COLS for x in b.board)
     return 'new board: "{0}"'.format(b.board)
