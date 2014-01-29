@@ -3,9 +3,10 @@ from Board import Board
 
 def new_board():
     b = Board()
-    assert b.board == (b.P0 * b.ROWS * b.COLS)
+    assert len(b.board) == b.ROWS
+    assert all(len(x) == b.COLS for x in b.board)
     return 'new board: "{0}"'.format(b.board)
- 
+
 def tests():
     """Tests for the Board class"""
     # test that a new board is rational

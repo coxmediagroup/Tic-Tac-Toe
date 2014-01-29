@@ -1,3 +1,21 @@
+class BoardSpace(object):
+    """
+    Attributes for a space in a game board
+    
+    1) player
+    2) index value within game board
+    3) if this space is part of a winning move
+    
+    """
+    
+    def __init__(self, **kwargs):
+        self.player = kwargs['player'] # required
+        self.board_index = kwargs['board_index'] # required
+        self.winner = kwargs.get('winner', False) # optional
+        
+    def __str__(self):
+        return self.occupant
+
 class Board(object):
     """The tic-tac-toe game board"""
     
@@ -11,7 +29,7 @@ class Board(object):
     # Players
     P0 = u'-' # player null (blank spaces)
     P1 = u'X' # player one
-    P2 = u'0' # player two
+    P2 = u'O' # player two
     
     def __init__(self):
         self.sanity_check()
@@ -19,12 +37,18 @@ class Board(object):
         
     def new_board(self):
         """
-        Game board is represented as a string of chars
-        
-        Empty spots are represented by the value of P0
+        Game board is represented as a 2 dimensional list of BoardSpaces
         
         """
-        return self.P0 * self.ROWS * self.COLS
+        board = []
+        counter = 0
+        for x in range(self.ROWS):
+            board.append([])
+            for y in range(self.COLS):
+                s = BoardSpace(player=self.P0, board_index=counter)
+                board[-1].append(s)
+                counter += 1
+        return board
     
     def sanity_check(self):
         """
