@@ -10,7 +10,6 @@ class BoardSpace(object):
     3) if this space is part of a winning move
     
     """
-    
     def __init__(self, **kwargs):
         self.player = kwargs['player'] # required
         self.board_index = int(kwargs['board_index']) # required
@@ -22,24 +21,26 @@ class BoardSpace(object):
 class Board(object):
     """The tic-tac-toe game board"""
     
-    # Game rules
-    IN_A_ROW = 3
-    
-    P0_score = 0 # Draw
-    P1_score = 0 # Player 1
-    P2_score = 0 # Player 2
-    
     def __init__(self, **kwargs):
         
         # Board settings
         self.ROWS = kwargs.get('rows', 3)
         self.COLS = kwargs.get('cols', 3)
         
+        # Game rules
+        self.IN_A_ROW = kwargs.get('IN_A_ROW', 3)
+        
         # Players
         self.P0 = kwargs.get('P0', '-') # player null (blank spaces)
         self.P1 = kwargs.get('P1', 'X') # player one
         self.P2 = kwargs.get('P2', 'O') # player two
         
+        # Scores
+        self.P0_score = kwargs.get('P0_score', 0) # Draw
+        self.P1_score = kwargs.get('P1_score', 0) # Player 1
+        self.P2_score = kwargs.get('P2_score', 0) # Player 2
+        
+        # Put a game board together
         self.sanity_check()
         self.board = self.new_board()
         
