@@ -8,8 +8,14 @@
 import curses
 from Board import Board
 
-def display(screen, line_number, msg, x_pos=2):
-    screen.addstr(line_number, x_pos, msg)
+def display(screen, line_number, msg, x_pos=2, **kwargs):
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
+    is_error = kwargs.get('error', False)
+    if is_error:
+        screen.addstr(line_number, x_pos, msg, curses.color_pair(1))
+    else:
+        screen.addstr(line_number, x_pos, msg)
+    screen.refresh()
     line_number += 1
     return line_number
 
@@ -41,9 +47,7 @@ def main(screen):
     # screen.keypad(1)
     # curses.noecho()
     
-    curses.noecho()
-    curses.cbreak()
-    curses.curs_set(0)
+
     
     # game states
     number_view = False
@@ -53,7 +57,13 @@ def main(screen):
     game_width = 60
     line_separator = '-' * (game_width - 4)
     
+    errors = []
+    
     while True:
+        
+        curses.noecho()
+        curses.cbreak()
+        curses.curs_set(0)
         
         screen.clear()
         line_number = 2
@@ -102,30 +112,46 @@ def main(screen):
         line_number += 2
         
         # Error Messages
-        # curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
-        # screen.addstr(16, 2, ' Error Message Here! '.format(0), curses.color_pair(1))
+        if errors:
+            while errors:
+                msg = errors.pop()
+                line_number = display(screen, line_number, msg, error=True)
+            line_number += 1
         
         # Player input or notice
         if not this_player:
-            player_query = "Who goes first? (1) Human, (2) Computer:"
+            player_query = "Who goes first? (1) You, (2) Computer:"
             line_number = display(screen, line_number, player_query)
         else:
             msg = 'Turn: Player "{}"!'.format(this_player)
             line_number = display(screen, line_number, msg)
             
             if toggle_move_text:
-                toggle_move_text = False
-                number_view = False
                 curses.echo()
                 curses.nocbreak()
                 curses.curs_set(2)
-                msg = 'Enter an integer (0-9): '
+                msg = 'Enter an integer (0-{}): '.format(b.last_space_index())
                 line_number = display(screen, line_number, msg)
-                move_index = screen.getstr(line_number-1, len(msg)+2, 3)
-                line_number = display(screen, line_number, move_index)
-                curses.noecho()
-                curses.cbreak()
-                curses.curs_set(0)
+                board_index = screen.getstr(line_number-1, 2+len(msg), 3)
+                board_index = board_index.strip()
+                try:
+                    board_index = int(board_index)
+                    if b.player_to_spot(this_player, board_index):
+                        next_player, this_player = this_player, next_player
+                    else:
+                        errors.append('"{}" not a valid move!'.format(
+                            board_index))
+                except:
+                    errors.append('"{}" not valid, please try again!'.format(
+                        board_index))
+                finally:
+                    curses.noecho()
+                    curses.cbreak()
+                    curses.curs_set(0)
+                    toggle_move_text = False
+                    number_view = False
+
+                
             else:
                 msg = '(press "m" to enter a move)'
                 line_number = display(screen, line_number, msg)
@@ -154,7 +180,6 @@ def main(screen):
         else:
             if not toggle_move_text and key_event == ord("m"):
                 toggle_move_text = True
-
 
 if __name__ == "__main__":
     curses.wrapper(main)
