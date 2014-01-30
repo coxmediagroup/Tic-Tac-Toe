@@ -14,6 +14,7 @@ class BoardSpace(object):
         self.player = kwargs['player'] # required
         self.board_index = int(kwargs['board_index']) # required
         self.winner = kwargs.get('winner', False) # optional
+        self.last_move = kwargs.get('last_move', False) # optional
 
     def __str__(self):
         return self.player
@@ -65,7 +66,13 @@ class Board(object):
     def move_player_to_space(self, this_player, board_index):
         x, y = board_index / self.ROWS, board_index % self.COLS
         if self.board[x][y].player == self.P0:
+            # unflag any previous last moves
+            for row in self.board:
+                for space in row:
+                    space.last_move = False
+            # set space to player and flag as a last move
             self.board[x][y].player = this_player
+            self.board[x][y].last_move = True
             return True
         else:
             return False
