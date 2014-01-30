@@ -22,8 +22,6 @@ class BoardSpace(object):
 class Board(object):
     """The tic-tac-toe game board"""
     
-
-    
     # Game rules
     IN_A_ROW = 3
     
@@ -60,6 +58,17 @@ class Board(object):
                 counter += 1
         return board
     
+    def last_space_index(self):
+        return self.board[-1][-1].board_index
+    
+    def player_to_spot(self, this_player, board_index):
+        x, y = board_index / self.ROWS, board_index % self.COLS
+        if self.board[x][y].player == self.P0:
+            self.board[x][y].player = this_player
+            return True
+        else:
+            return False
+            
     def sanity_check(self):
         """
         Basic sanity tests to make the game settings makes sense
