@@ -20,9 +20,9 @@ def display(screen, line_number, msg, x_pos=2, **kwargs):
     return line_number
 
 def show_board(screen, board, line_number, number_view):
-    
+
     row_separator = (u'--- ' * board.COLS).strip()
-    
+
     i = 0
     for row in board.board:
         msg =  ''
@@ -37,18 +37,14 @@ def show_board(screen, board, line_number, number_view):
         if i < (board.ROWS -1):
             line_number = display(screen, line_number, row_separator)
         i += 1
-    
+
     return line_number
 
 def main(screen):
-    
-    b = Board(P0=' ')
-        
-    # screen.keypad(1)
-    # curses.noecho()
-    
 
-    
+    # Make a new game board
+    b = Board(P0=' ')
+
     # game states
     number_view = False
     toggle_move_text = False
@@ -56,38 +52,37 @@ def main(screen):
     next_player = None
     game_width = 60
     line_separator = '-' * (game_width - 4)
-    
+
+    # Collect input errors
     errors = []
-    
+
     while True:
-        
+
         curses.noecho()
         curses.cbreak()
         curses.curs_set(0)
-        
+
         screen.clear()
         line_number = 2
-        
-        
+
         # Title
         msg =  'Code Challenge'
         line_number = display(screen, line_number, msg)
         line_number += 1
-        
+
         # Divider
         line_number = display(screen, line_number, line_separator)
-        
+
         # Help section
         line_number = display(screen, line_number, 'n = number view')
         line_number = display(screen, line_number, 'q = quit')
-        
+
         # Divider
         line_number = display(screen, line_number, line_separator)
-        
-        
+
         # spacer
         line_number += 1
-        
+
         # Score Board
         msg = '"{}" (You)       = {}'.format(b.P1, b.P1_score)
         line_number = display(screen, line_number, msg)
@@ -95,29 +90,29 @@ def main(screen):
         line_number = display(screen, line_number, msg)
         msg = 'Draw            = {}'.format(b.P2_score)
         line_number = display(screen, line_number, msg)
-        
-        # spacer
+
+        # Spacer
         line_number += 1
-        
+
         # Divider
         line_number = display(screen, line_number, line_separator)
-        
+
         # Spacer
         line_number += 2
-        
+
         # Show game Board
         line_number = show_board(screen, b, line_number, number_view)
-        
-        # spacing (if errors?)
+
+        # Spacer
         line_number += 2
-        
+
         # Error Messages
         if errors:
             while errors:
                 msg = errors.pop()
                 line_number = display(screen, line_number, msg, error=True)
             line_number += 1
-        
+
         # Player input or notice
         if not this_player:
             player_query = "Who goes first? (1) You, (2) Computer:"
@@ -125,7 +120,7 @@ def main(screen):
         else:
             msg = 'Turn: Player "{}"!'.format(this_player)
             line_number = display(screen, line_number, msg)
-            
+
             if toggle_move_text:
                 curses.echo()
                 curses.nocbreak()
@@ -151,25 +146,24 @@ def main(screen):
                     toggle_move_text = False
                     number_view = False
 
-                
             else:
                 msg = '(press "m" to enter a move)'
                 line_number = display(screen, line_number, msg)
-            
+
         # key events
         key_event = screen.getch()
-        
+
         # quit game
         if key_event == ord("q"):
             break
-            
+
         # toggle view numbers
         elif key_event == ord("n"):
             if number_view:
                 number_view = False
             else:
                 number_view = True
-        
+
         if not this_player:
             if key_event == ord("1"):
                 this_player = b.P1
