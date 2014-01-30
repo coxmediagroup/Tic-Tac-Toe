@@ -131,7 +131,7 @@ def main(screen):
                 board_index = board_index.strip()
                 try:
                     board_index = int(board_index)
-                    if b.player_to_spot(this_player, board_index):
+                    if b.player_to_space(this_player, board_index):
                         next_player, this_player = this_player, next_player
                     else:
                         errors.append('"{}" not a valid move!'.format(

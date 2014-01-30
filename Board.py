@@ -62,7 +62,7 @@ class Board(object):
     def last_space_index(self):
         return self.board[-1][-1].board_index
 
-    def player_to_spot(self, this_player, board_index):
+    def move_player_to_space(self, this_player, board_index):
         x, y = board_index / self.ROWS, board_index % self.COLS
         if self.board[x][y].player == self.P0:
             self.board[x][y].player = this_player
