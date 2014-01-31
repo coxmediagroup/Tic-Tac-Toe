@@ -20,8 +20,10 @@ class BoardSpace(object):
         return self.player
 
 class Board(object):
-    """The tic-tac-toe game board"""
-
+    """
+    The game board
+    
+    """
     def __init__(self, **kwargs):
 
         # Board settings
@@ -51,10 +53,11 @@ class Board(object):
 
         """
         board = []
-        counter = 0
+        counter = 1
         for x in range(self.ROWS):
             board.append([])
             for y in range(self.COLS):
+                msg = 'row: {}, col: {}, counter: {}, board_index: {}'
                 s = BoardSpace(player=self.P0, board_index=counter)
                 board[-1].append(s)
                 counter += 1
@@ -63,15 +66,64 @@ class Board(object):
     def last_space_index(self):
         return self.board[-1][-1].board_index
 
+    def board_position_by_index(self, board_index):
+        """
+        Given a 1-based index, return the x, y coordinates on the game board
+
+           1-Base Index
+
+        4x3
+           1 | 2 | 3 | 4
+          --- --- --- ---
+           5 | 6 | 7 | 8
+          --- --- --- ---
+           9 | 10| 11| 12
+
+        3x4
+           1 | 2 | 3
+          --- --- ---
+           4 | 5 | 6
+          --- --- ---
+           7 | 8 | 9
+          --- --- ---
+           10| 11| 12
+
+        3x3
+           1 | 2 | 3
+          --- --- ---
+           4 | 5 | 6
+          --- --- ---
+           7 | 8 | 9
+
+        """
+        
+        # Raise exception if not possible
+        if board_index < 1 or board_index > (self.ROWS * self.COLS):
+            msg = '"{}" is out of range for this board.'.format(board_index)
+            raise BoardException(msg)
+        
+        for x, row in enumerate(self.board):
+            for y, space in enumerate(row):
+                if space.board_index == board_index:
+                    return [x,y]
+
+        msg = '"{}" was not found on this board.'.format(board_index)
+        raise BoardException(msg)
+
+    def reset_last_move_flag(self):
+        """reset last_move flag for every space on board"""
+        for row in self.board:
+            for space in row:
+                space.last_move = False
+
     def move_player_to_space(self, this_player, board_index):
-        x, y = board_index / self.ROWS, board_index % self.COLS
+        x, y = self.board_position_by_index(board_index)
+        # Check to see if the space is already occupied
         if self.board[x][y].player == self.P0:
-            # unflag any previous last moves
-            for row in self.board:
-                for space in row:
-                    space.last_move = False
-            # set space to player and flag as a last move
+            # set space to player
             self.board[x][y].player = this_player
+            # flag the set space as a last move
+            self.reset_last_move_flag()
             self.board[x][y].last_move = True
             return True
         else:
@@ -90,7 +142,11 @@ class Board(object):
 
         # Test that the game will have a minimal board size
         if not self.ROWS * self.COLS >= 9:
-            raise BoardException("Too few spaces for a game")
+            raise BoardException("Too few spaces for this game")
+
+        # Test that the game does not exceed a reasonable board size [256]
+        # if self.ROWS * self.COLS > 256:
+        #     raise BoardException("Too many spaces for this game")
 
         # Test that the width of the character for blanks and player is 1 wide
         if not len(self.P0) == 1:
