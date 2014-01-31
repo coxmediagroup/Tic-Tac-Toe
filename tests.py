@@ -1,4 +1,3 @@
-#! /usr/bin/env
 from Board import Board, BoardSpace
 
 def new_space():
@@ -86,7 +85,7 @@ def tests():
     board_positions()
     game_winners()
 
-    print "All Board tests have passed!"
+    print "All tests have passed!"
 
 if __name__ == '__main__':
     tests()
