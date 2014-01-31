@@ -20,8 +20,6 @@ def main(screen):
     # Make a new game board
     b = Board(P0=' ')
 
-    _rig_the_game()
-
     # game states
     number_view = False
     toggle_move_text = False
