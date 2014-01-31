@@ -178,9 +178,6 @@ def main(screen):
                 except:
                     errors.append(msg.format(board_index))
                 finally:
-                    curses.noecho()
-                    # curses.cbreak()
-                    curses.curs_set(0)
                     toggle_move_text = False
                     number_view = False
 
