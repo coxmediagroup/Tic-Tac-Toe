@@ -88,12 +88,5 @@ def tests():
 
     print "All Board tests have passed!"
 
-def cli_tests():
-    """Tests CLI game"""
-    assert 1 == 1
-
-    print "All CLI tests have passed!"
-
 if __name__ == '__main__':
     tests()
-    cli_tests()
