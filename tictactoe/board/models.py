@@ -23,6 +23,9 @@ class Game(models.Model):
   is_over = models.BooleanField(default=False)
   winner = models.ForeignKey(Player, related_name='winner', null=True, blank=True)
 
+  def __unicode__(self):
+    return '%s - %s vs %s' % (self.start_time, self.player_1.name, self.player_2.name)
+
   def get_absolute_url(self):
     return "/game/%i/" % self.id
 
@@ -44,6 +47,7 @@ class Move(models.Model):
   position_y = models.IntegerField(null=False, blank=False)
 
   def save(self, *args, **kwargs):
+    # default ordering is by time descending, see above
     existing_moves = Move.objects.filter(game=self.game)
     if len(existing_moves) > 0 and existing_moves[0].player == self.player:
       raise IntegrityError('Same player cannot make consecutive moves in the same game')
@@ -54,6 +58,9 @@ class Move(models.Model):
     else:
       super(Move, self).save(*args, **kwargs)
       game = Game.objects.get(id=self.game.id)
+
+  def __unicode__(self):
+    return '%s - %s vs %s | player: %s marked position %s,%s' % (self.time, self.game.player_1.name, self.game.player_2.name, self.player.name, self.position_x, self.position_y)
 
   def get_absolute_url(self):
     return "/move/%i/" % self.id
