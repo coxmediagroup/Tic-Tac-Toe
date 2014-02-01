@@ -62,6 +62,28 @@ def game_winners():
     b.board[2][0].player = b.P1
     assert b.player_won(b.P1) == True
 
+    # Draw
+    b = Board()
+    assert len(b.remaining_spaces()) == 9
+    b.board[0][0].player = b.P1
+    assert len(b.remaining_spaces()) == 8
+    b.board[0][1].player = b.P1
+    assert len(b.remaining_spaces()) == 7
+    b.board[0][2].player = b.P1
+    assert len(b.remaining_spaces()) == 6
+    b.board[1][0].player = b.P1
+    assert len(b.remaining_spaces()) == 5
+    b.board[1][1].player = b.P1
+    assert len(b.remaining_spaces()) == 4
+    b.board[1][2].player = b.P1
+    assert len(b.remaining_spaces()) == 3
+    b.board[2][0].player = b.P1
+    assert len(b.remaining_spaces()) == 2
+    b.board[2][1].player = b.P1
+    assert len(b.remaining_spaces()) == 1
+    b.board[2][2].player = b.P1
+    assert len(b.remaining_spaces()) == 0
+
     # Player 0 (Draw) Score board
     assert b.score_board[b.P0] == 0
     b.score_board[b.P0] += 1
@@ -77,6 +99,14 @@ def game_winners():
     b.score_board[b.P2] += 1
     assert b.score_board[b.P2] == 1
 
+def ai():
+    
+    # AI should place player on board
+    b = Board()
+    assert len(b.remaining_spaces()) == 9
+    b.ai(b.P1)
+    assert len(b.remaining_spaces()) == 8
+
 def tests():
     """Tests for the Board class"""
     # test that a new board is rational
@@ -84,6 +114,7 @@ def tests():
     new_board()
     board_positions()
     game_winners()
+    ai()
 
     print "All tests have passed!"
 

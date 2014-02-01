@@ -68,6 +68,11 @@ class Board(object):
                 counter += 1
         return board
 
+    def ai(self, this_player):
+        remaining_spaces = self.remaining_spaces()
+        this_space = remaining_spaces[0]
+        return self.move_player(this_player, this_space.board_index)
+
     def remaining_spaces(self):
         """
         How many spaces are left on the board
@@ -217,7 +222,7 @@ class Board(object):
             for space in row:
                 space.last_move = False
 
-    def move_player_to_space(self, this_player, board_index):
+    def move_player(self, this_player, board_index):
         x, y = self.board_position_by_index(board_index)
         # Check to see if the space is already occupied
         if self.board[x][y].player == self.P0:
