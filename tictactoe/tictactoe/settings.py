@@ -27,6 +27,10 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+TASTYPIE_SWAGGER_API_MODULE = 'tictactoe.urls.api'
+TASTYPIE_FULL_DEBUG = True
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -37,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'tastypie',
+    'tastypie_swagger',
     'board',
 )
 
