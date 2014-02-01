@@ -1,5 +1,5 @@
 """
-Django settings for board project.
+Django settings for tictactoe project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_tp^hg(f%v^m*ly7g(o!f&5g$%+*gqox4z-f$u!v9o_rz)-$r0'
+SECRET_KEY = 'xb8m^2m^xje8s287_gdxuvbfa3@4_eoh61_=9uyf^hy-xdiv*u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'board',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,9 +48,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'board.urls'
+ROOT_URLCONF = 'tictactoe.urls'
 
-WSGI_APPLICATION = 'board.wsgi.application'
+WSGI_APPLICATION = 'tictactoe.wsgi.application'
 
 
 # Database
