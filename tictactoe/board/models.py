@@ -7,6 +7,9 @@ class Player(models.Model):
   name = models.CharField(max_length=60, null=True, blank=True)
   is_human = models.BooleanField(default=False)
 
+  def __unicode__(self):
+    return self.name
+
   def get_absolute_url(self):
     return "/player/%i/" % self.id
 
@@ -18,7 +21,7 @@ class Game(models.Model):
   player_2 = models.ForeignKey(Player, related_name='player_2', null=False, blank=False)
   start_time = models.DateTimeField(default=datetime.datetime.now)
   is_over = models.BooleanField(default=False)
-  winner = models.ForeignKey(Player, related_name='winner', null=True, blank=False)
+  winner = models.ForeignKey(Player, related_name='winner', null=True, blank=True)
 
   def get_absolute_url(self):
     return "/game/%i/" % self.id
