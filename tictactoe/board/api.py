@@ -84,11 +84,6 @@ class MoveResource(ModelResource):
     bundle = super(MoveResource, self).obj_create(bundle, **kwargs)
     game = Game.objects.get(id=bundle.data['game']['id'])
     existing_moves = Move.objects.filter(game=game.id)
-    # TODO: remove this print statement (left commented in case for debugging)
-    '''
-    for move in existing_moves:
-      print('HEY HEY HEY,,, move: %s - %s vs %s | player: %s marked position %s,%s' % (move.time, move.game.player_1.name, move.game.player_2.name, move.player.name, move.position_x, move.position_y))
-    '''
     winner = determine_winner(game)
     if winner:
       game.winner = winner
