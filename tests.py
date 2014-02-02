@@ -39,28 +39,28 @@ def game_winners():
     b.board[0][0].player = b.P1
     b.board[0][1].player = b.P1
     b.board[0][2].player = b.P1
-    assert b.player_won(b.P1) == True
+    assert b.player_win_round(b.P1) == True
 
     # win by column
     b = Board()
     b.board[0][0].player = b.P1
     b.board[1][0].player = b.P1
     b.board[2][0].player = b.P1
-    assert b.player_won(b.P1) == True
+    assert b.player_win_round(b.P1) == True
 
     # win by diagonal left-to-right
     b = Board()
     b.board[0][0].player = b.P1
     b.board[1][1].player = b.P1
     b.board[2][2].player = b.P1
-    assert b.player_won(b.P1) == True
+    assert b.player_win_round(b.P1) == True
 
     # win by diagonal right-to-left
     b = Board()
     b.board[0][2].player = b.P1
     b.board[1][1].player = b.P1
     b.board[2][0].player = b.P1
-    assert b.player_won(b.P1) == True
+    assert b.player_win_round(b.P1) == True
 
     # Draw
     b = Board()
