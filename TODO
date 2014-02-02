@@ -1,0 +1,18 @@
+TODO
+[ - ] high score splash screen
+[ - ] ai minimax logic (with AB pruning?)
+[ - ] Resizing terminal will crash game
+[ - ] Comments!
+[ - ] Make Players into objects with attributes?
+[ - ] Game play preferences out of curses-game?
+[ - ] Refactor game play logic out of curses-game?
+      (curses-game should be about display)
+      
+Changes: 2014-02-01
+[ X ] Major refactor of game script
+[ X ] View numbers game option: show numbers for empty spaces only instead of
+      replacing the placed "X" or "O"
+[ X ] Quit screen confirmation logic
+
+Changes: 2014-01-31
+[ X ] Rudimentary game play
