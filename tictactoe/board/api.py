@@ -7,22 +7,12 @@ from django.http import Http404
 from board.models import Player, Move, Game
 import numpy as np
 
-class PlayerResource(ModelResource):
-  class Meta:
-    queryset = Player.objects.all()
-    resource_name = 'player'
-    authorization = Authorization()
-
-class GameResource(ModelResource):
-  player_1 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_1', full=True, null=True)
-  player_2 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_2', full=True, null=True)
-  winner = fields.ForeignKey(__name__ + '.PlayerResource', 'winner', full=True, null=True)
-  class Meta:
-    queryset = Game.objects.all()
-    resource_name = 'game'
-    authorization = Authorization()
-
 def determine_winner(game):
+  '''
+     Determines the winner of the game passed as argument.
+     Returns a Player model object or None.
+     Different values per player are used in turn positions and summed.  If the expected sum for victory is found, the winner is the corresponding player.
+  '''
   winner = None
   p1_token = 1
   p2_token = 9
@@ -52,7 +42,33 @@ def determine_winner(game):
     return None
 
 
+class PlayerResource(ModelResource):
+  '''
+     Standard Resource for Player model
+  '''
+
+  class Meta:
+    queryset = Player.objects.all()
+    resource_name = 'player'
+    authorization = Authorization()
+
+class GameResource(ModelResource):
+  '''
+     Standard Resource for Game model with players/winner added via Foreign Key
+  '''
+  player_1 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_1', full=True, null=True)
+  player_2 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_2', full=True, null=True)
+  winner = fields.ForeignKey(__name__ + '.PlayerResource', 'winner', full=True, null=True)
+  class Meta:
+    queryset = Game.objects.all()
+    resource_name = 'game'
+    authorization = Authorization()
+
 class MoveResource(ModelResource):
+  '''
+     Resource for Move with player and game added via Foreign Key
+     Customized functionality post-save located in overridden obj_create()
+  '''
   player = fields.ForeignKey(__name__ + '.PlayerResource', 'player', full=True, null=True)
   game = fields.ForeignKey(__name__ + '.GameResource', 'game', full=True, null=True)
   class Meta:
@@ -61,6 +77,10 @@ class MoveResource(ModelResource):
     authorization = Authorization()
 
   def obj_create(self, bundle, **kwargs):
+    '''
+       Occurs after saved to persistence.
+       If a game has exhausted all positions, or if there is a winner, that is set on the game object here.
+    '''
     bundle = super(MoveResource, self).obj_create(bundle, **kwargs)
     game = Game.objects.get(id=bundle.data['game']['id'])
     existing_moves = Move.objects.filter(game=game.id)
