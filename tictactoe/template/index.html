@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Tic Tac Toe
+		</title>
+		<link rel = "stylesheet" type = "text/css" href = "/media/css/apps/tictactoe/base.css"/>
+	  	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+	  	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+	  	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		
+<!--		<script src = "/media/js/jquery-1.9.1.js">
+		</script>-->
+		<script src = "/media/js/apps/tictactoe/base.js">
+		</script>
+	</head>
+	<body>
+		<div id="dialog">
+		</div>
+		<div id = "wrapper">
+			<div id = "content">
+				<h1>
+					Tic Tac Toe Game Board
+				</h1>
+				<div id = "board">
+					<table>
+						<tr>
+							<td class = "title above aside">
+								Y\X
+							</td>
+							<td class = "title above">
+								0
+							</td>
+							<td class = "title above">
+								1
+							</td>
+							<td class = "title above">
+								2
+							</td>
+						</tr>
+						<tr>
+							<td class = "title side">
+								0
+							</td>
+							<td class = "left top">
+								<button data-x = "0" data-y = "0">
+								</button>
+							</td>
+							<td class = "top">
+								<button data-x = "0" data-y = "1">
+								</button>
+							</td>
+							<td class = "right top">
+								<button data-x = "0" data-y = "2">
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class = "title side">
+								1
+							</td>
+							<td class = "left">
+								<button data-x = "1" data-y = "0">
+								</button>
+							</td>
+							<td>
+								<button data-x = "1" data-y = "1">
+								</button>
+							</td>
+							<td class = "right">
+								<button data-x = "1" data-y = "2">
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class = "title side">
+								2
+							</td>
+							<td class = "left bottom">
+								<button data-x = "2" data-y = "0">
+								</button>
+							</td>
+							<td class = "bottom">
+								<button data-x = "2" data-y = "1">
+								</button>
+							</td>
+							<td class = "right bottom">
+								<button data-x = "2" data-y = "2">
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id = "log">
+					<div id = "title">
+						Game Log
+					</div>
+					<div id = "data">
+						<ul>
+							<li id = "begin">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">Begin Game</span>
+									<span id = "log">c</span>
+								</span>
+							</li>
+							<li id = "1">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">1</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "2">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">2</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "3">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">3</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "4">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">4</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "5">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">5</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "6">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">6</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "7">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">7</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "8">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">8</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "9">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">9</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+							<li id = "end">
+								<span class = "hide">
+									<span id = "time"></span>
+									<span id = "move">End Game</span>
+									<span id = "log"></span>
+								</span>
+							</li>
+						</ul>
+					</div>
+					<div id = "footer">
+						<button id = "begin">
+							Begin
+						</button>
+						<button id = "reset">
+							End
+						</button>
+					</div>
+				</div>
+				<div id = "info">
+					<p id = "status">
+						You are : 
+						<button id = "status">
+						</button>
+						&nbsp&nbsp&nbsp&nbsp
+						Turn:
+						<button id = "turn">
+						</button>
+					</p>
+					<p id = "instruction">
+						<dl>
+							<dt>
+								Instructions:
+							</dt>
+							<dd>
+								a) Click Begin to start the game, the board will decide how starts and what figure will be using
+							</dd>
+							<dd>
+								b) Click End to end the game and clear the board
+							</dd>
+							<dd>
+								c) Click Any Position in the Board to select the position
+							</dd>
+							<dd>
+								d) If the CPU starts, it will select their choice, then you have the board open to made your
+							</dd>
+						</dl>
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+<html>
