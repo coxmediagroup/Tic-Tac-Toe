@@ -1,7 +1,10 @@
 from django.test import TestCase
+from tastypie.test import ResourceTestCase, TestApiClient
 from models import Player, Game, Move
 from django.db import IntegrityError
 import unittest
+
+#TODO- split to different py files...
 
 class SavingMoveModelTestCase(TestCase):
   '''
@@ -72,4 +75,90 @@ class SavingMoveModelTestCase(TestCase):
     with self.assertRaises(IntegrityError) as context:
       move.save()
     self.assertEqual(context.exception.message, 'position_y, %s is outside of valid range,0-2' % invalid_position)
+
+
+
+
+class ApiTestCase(ResourceTestCase):
+  '''
+     Testing custom integrity checks for the Move model.
+  '''
+
+  def setUp(self):
+    self.api_client = TestApiClient()
+    player_1 = Player.objects.create(name="Person1", is_human=True)
+    player_2 = Player.objects.create(name="Person2", is_human=False)
+    Game.objects.create(player_1=player_1, player_2=player_2)
+
+  def move_dict(self, game_id, player_id, x, y):
+    return {"game": { "id": game_id }, "player": { "id": player_id }, "position_x": x, "position_y": y}
+
+  def test_winner_found(self):
+    '''
+       Tests winner and is_over are updated on game when three coordinates in a row are one player's.
+       Tests winner and is_over are not updated before that.
+    '''
+
+    self.api_client.get('/api/v1/move/', format='json')
+
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+    Move(game=game, player=player1, position_x=1, position_y=1).save()
+    Move(game=game, player=player2, position_x=0, position_y=0).save()
+    Move(game=game, player=player1, position_x=1, position_y=0).save()
+    move_post = self.move_dict(game.id, player2.id, 0, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+    
+    game = Game.objects.get(id=1)
+
+    self.assertFalse(game.is_over or game.winner)
+    move_post = self.move_dict(game.id, player1.id, 1, 2)
+
+    self.api_client.post('/api/v1/move/', data=move_post)
+
+
+    self.api_client.get('/api/v1/move/', format='json')
+
+    game = Game.objects.get(id=1)
+    self.assertTrue(game.is_over)
+    self.assertEqual(game.winner, player1)
+    
+  def test_tie(self):
+    '''
+       Tests is_over is updated on game when all coordinates have been taken.
+       Tests is_over is not updated before that.
+       Tests that winner is never set for this scenario.
+    '''
+
+    self.api_client.get('/api/v1/move/', format='json')
+
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+    Move(game=game, player=player1, position_x=1, position_y=1).save()
+    Move(game=game, player=player2, position_x=1, position_y=0).save()
+    Move(game=game, player=player1, position_x=2, position_y=0).save()
+    Move(game=game, player=player2, position_x=2, position_y=2).save()
+    Move(game=game, player=player1, position_x=0, position_y=0).save()
+    Move(game=game, player=player2, position_x=0, position_y=1).save()
+    Move(game=game, player=player1, position_x=1, position_y=2).save()
+    move_post = self.move_dict(game.id, player2.id, 0, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+    
+    game = Game.objects.get(id=1)
+
+    self.assertFalse(game.is_over or game.winner)
+    move_post = self.move_dict(game.id, player1.id, 2, 1)
+    
+    self.api_client.post('/api/v1/move/', data=move_post)
+
+
+    self.api_client.get('/api/v1/move/', format='json')
+
+    game = Game.objects.get(id=1)
+    self.assertTrue(game.is_over)
+    #self.assertEqual(game.winner, player1)
+    self.assertFalse(game.winner)
+
 
