@@ -57,7 +57,6 @@ class Move(models.Model):
       raise IntegrityError('position_y, %s is outside of valid range,0-2' % self.position_y)
     else:
       super(Move, self).save(*args, **kwargs)
-      game = Game.objects.get(id=self.game.id)
 
   def __unicode__(self):
     return '%s - %s vs %s | player: %s marked position %s,%s' % (self.time, self.game.player_1.name, self.game.player_2.name, self.player.name, self.position_x, self.position_y)
