@@ -29,14 +29,18 @@ class Board(object):
         # Board settings
         self.ROWS = kwargs.get('rows', 3)
         self.COLS = kwargs.get('cols', 3)
-
+        
         # Game rules
-        self.IN_A_ROW = kwargs.get('IN_A_ROW', 3)
+        self.IN_A_ROW = kwargs.get('in_a_row', 3)
 
         # Players
-        self.P0 = kwargs.get('P0', '-') # player null (blank spaces)
-        self.P1 = kwargs.get('P1', 'X') # player one
-        self.P2 = kwargs.get('P2', 'O') # player two
+        self.P0 = kwargs.get('p0', '-') # player null (blank spaces)
+        self.P1 = kwargs.get('p1', 'X') # player one
+        self.P2 = kwargs.get('p2', 'O') # player two
+        self.P1_AI = kwargs.get('p1_ai', False) # player one AI or human
+        self.P2_AI = kwargs.get('p2_ai', False) # player one AI or human
+        self.current_player = kwargs.get('current_player', None)
+        self.next_player = kwargs.get('next_player', None)
 
         # Score Board
         self.score_board = {
@@ -50,6 +54,9 @@ class Board(object):
         self.board = self.new_board()
 
     def clear_board(self):
+        """
+        
+        """
         self.board = self.new_board()
 
     def new_board(self):
@@ -69,6 +76,9 @@ class Board(object):
         return board
 
     def ai(self, this_player):
+        """
+        
+        """
         remaining_spaces = self.remaining_spaces()
         this_space = remaining_spaces[0]
         return self.move_player(this_player, this_space.board_index)
@@ -85,9 +95,9 @@ class Board(object):
                     these_spaces.append(space)
         return these_spaces
 
-    def player_won(self, player):
+    def player_win_round(self, player):
         """
-        Game is won if player has N-in-a-row spots filled
+        Game is won if player has N-in-a-row spots filled 1 time
 
         player = self.P1 or self.P2
 
@@ -169,7 +179,10 @@ class Board(object):
         else:
             return False
 
-    def last_space_index(self):
+    def last_space_number(self):
+        """
+        
+        """
         return self.board[-1][-1].board_index
 
     def board_position_by_index(self, board_index):
@@ -217,12 +230,18 @@ class Board(object):
         raise BoardException(msg)
 
     def reset_last_move_flag(self):
-        """reset last_move flag for every space on board"""
+        """
+        reset last_move flag for every space on board
+        
+        """
         for row in self.board:
             for space in row:
                 space.last_move = False
 
     def move_player(self, this_player, board_index):
+        """
+        
+        """
         x, y = self.board_position_by_index(board_index)
         # Check to see if the space is already occupied
         if self.board[x][y].player == self.P0:
@@ -234,6 +253,14 @@ class Board(object):
             return True
         else:
             return False
+
+    def swap_players(self):
+        """
+        
+        """
+        swap = self.next_player
+        self.next_player = self.current_player
+        self.current_player = swap
 
     def sanity_check(self):
         """
@@ -273,6 +300,9 @@ class Board(object):
         return True
 
     def __str__(self):
+        """
+        
+        """
         string = u''
         for rows in self.board:
             for col in rows:
