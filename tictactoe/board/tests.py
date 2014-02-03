@@ -2,6 +2,7 @@ from django.test import TestCase
 from tastypie.test import ResourceTestCase, TestApiClient
 from models import Player, Game, Move
 from django.db import IntegrityError
+import json
 import unittest
 
 #TODO- split to different py files...
@@ -119,10 +120,14 @@ class ApiTestCase(ResourceTestCase):
 
 
     self.api_client.get('/api/v1/move/', format='json')
+    resp = json.loads(self.api_client.get('/api/v1/game/1/', format='json').content)
 
     game = Game.objects.get(id=1)
     self.assertTrue(game.is_over)
+    self.assertTrue(resp['is_over'])
     self.assertEqual(game.winner, player1)
+    self.assertEqual(resp['winner']['name'], player1.name)
+
     
   def test_tie(self):
     '''
@@ -150,15 +155,14 @@ class ApiTestCase(ResourceTestCase):
 
     self.assertFalse(game.is_over or game.winner)
     move_post = self.move_dict(game.id, player1.id, 2, 1)
-    
     self.api_client.post('/api/v1/move/', data=move_post)
 
-
-    self.api_client.get('/api/v1/move/', format='json')
+    resp = json.loads(self.api_client.get('/api/v1/game/1/', format='json').content)
 
     game = Game.objects.get(id=1)
     self.assertTrue(game.is_over)
-    #self.assertEqual(game.winner, player1)
+    self.assertTrue(resp['is_over'])
     self.assertFalse(game.winner)
+    self.assertFalse(resp['winner'])
 
 
