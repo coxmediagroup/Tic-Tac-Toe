@@ -165,4 +165,19 @@ class ApiTestCase(ResourceTestCase):
     self.assertFalse(game.winner)
     self.assertFalse(resp['winner'])
 
+  def test_computer_turn(self):
+    '''
+       Tests that a computer turn is taken automatically when computer's turn is next and POST is made wtih Move object.
+       Tests that the computer turn is chosen as the first 0 found left to right top to bottom.
+    '''
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+    
+    move_post = self.move_dict(game.id, player1.id, 0,0)
+    self.api_client.post('/api/v1/move/', data=move_post)
 
+    computer_move = json.loads(self.api_client.get('/api/v1/move/2/', format='json').content)
+    self.assertTrue(computer_move)
+    self.assertEqual(computer_move['player']['name'], player2.name)
+    self.assertEqual((computer_move['position_x'], computer_move['position_y']), (1,0))
