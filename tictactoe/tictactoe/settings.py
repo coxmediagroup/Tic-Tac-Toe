@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 TASTYPIE_SWAGGER_API_MODULE = 'tictactoe.urls.api'
 TASTYPIE_FULL_DEBUG = True
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
     'tastypie_swagger',
+    'django_nose',
     'board',
 )
 
