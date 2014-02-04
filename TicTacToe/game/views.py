@@ -3,6 +3,8 @@ from django.http import HttpResponse
 import simplejson
 from django.core.cache import cache
 
+import gameboard
+game_board = gameboard.GameBoard()
 
 
 #handles the "start game" view
@@ -12,8 +14,9 @@ def start_game(request):
 
 #handles when player presses "Start Game" button
 def launch(request):
-    context = {}
-    return render(request, 'game/game.html', context)
+    game_board.reset()
+
+    return render(request, 'game/game.html')
 
 #loads the current game based on settings in memory
 def game_page(request):
@@ -24,16 +27,16 @@ def game_page(request):
 def ajax_make_move(request):
     if request.is_ajax():
         req = {}
-        req['box1'] = cache.get('tictactoe_box1')
-        req['box2'] = cache.get('tictactoe_box2')
-        req['box3'] = cache.get('tictactoe_box3')
-        req['box4'] = cache.get('tictactoe_box4')
-        req['box5'] = cache.get('tictactoe_box5')
-        req['box6'] = cache.get('tictactoe_box6')
-        req['box7'] = cache.get('tictactoe_box7')
-        req['box8'] = cache.get('tictactoe_box8')
-        req['box9'] = cache.get('tictactoe_box9')
-        req['game_state'] = cache.get('tictactoe_game_state')
+        req['box1'] = game_board.get_box_state(1)
+        req['box2'] = game_board.get_box_state(1)
+        req['box3'] = game_board.get_box_state(1)
+        req['box4'] = game_board.get_box_state(1)
+        req['box5'] = game_board.get_box_state(1)
+        req['box6'] = game_board.get_box_state(1)
+        req['box7'] = game_board.get_box_state(1)
+        req['box8'] = game_board.get_box_state(1)
+        req['box9'] = game_board.get_box_state(1)
+        req['game_state'] = game_board.state
 
         response = simplejson.dumps(req)
     else:
