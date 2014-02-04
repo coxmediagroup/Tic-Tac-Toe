@@ -168,16 +168,126 @@ class ApiTestCase(ResourceTestCase):
   def test_computer_turn(self):
     '''
        Tests that a computer turn is taken automatically when computer's turn is next and POST is made wtih Move object.
-       Tests that the computer turn is chosen as the first 0 found left to right top to bottom.
     '''
     game = Game.objects.get(id=1)
     player1 = Player.objects.get(id=1)
     player2 = Player.objects.get(id=2)
     
-    move_post = self.move_dict(game.id, player1.id, 0,0)
+    move_post = self.move_dict(game.id, player1.id, 0, 0)
     self.api_client.post('/api/v1/move/', data=move_post)
 
     computer_move = json.loads(self.api_client.get('/api/v1/move/2/', format='json').content)
     self.assertTrue(computer_move)
     self.assertEqual(computer_move['player']['name'], player2.name)
-    self.assertEqual((computer_move['position_x'], computer_move['position_y']), (1,0))
+
+  def test_computer_turn_not_after_win(self):
+    '''
+       Tests that after a human player wins a turn, the automatic play of the computer does not occur.
+    '''
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+
+    Move(game=game, player=player1, position_x=0, position_y=0).save()
+    Move(game=game, player=player2, position_x=1, position_y=0).save()
+    Move(game=game, player=player1, position_x=1, position_y=1).save()
+    Move(game=game, player=player2, position_x=2, position_y=0).save()
+
+    move_post = self.move_dict(game.id, player1.id, 2, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+
+    moves = json.loads(self.api_client.get('/api/v1/move/', format='json').content)
+    self.assertEquals(len(moves['objects']), 5)
+    self.assertEquals(moves['objects'][0]['player']['name'], player1.name)
+    
+  def test_computer_selects_middle(self):
+    '''
+       Tests that if available, computer selects middle coordinate.
+    '''
+    
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+    
+    move_post = self.move_dict(game.id, player1.id, 2, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+    
+    moves = json.loads(self.api_client.get('/api/v1/move/', format='json').content)
+    self.assertEquals(len(moves['objects']), 2)
+    x = moves['objects'][0]['position_x']
+    y = moves['objects'][0]['position_y']
+
+    self.assertEquals((x,y), (1,1))
+
+  def test_computer_wins_if_possible(self):
+    '''
+       Tests that computer will make winning move if possible.
+    '''
+    
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+
+    Move(game=game, player=player1, position_x=0, position_y=0).save()
+    Move(game=game, player=player2, position_x=1, position_y=1).save()
+    Move(game=game, player=player1, position_x=2, position_y=1).save()
+    Move(game=game, player=player2, position_x=1, position_y=2).save()
+    
+    move_post = self.move_dict(game.id, player1.id, 0, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+
+    moves = json.loads(self.api_client.get('/api/v1/move/', format='json').content)
+    self.assertEquals(len(moves['objects']), 6)
+    self.assertEquals(moves['objects'][0]['player']['name'], player2.name)
+
+    x = moves['objects'][0]['position_x']
+    y = moves['objects'][0]['position_y']
+    self.assertEquals((x,y), (1,0))
+
+    game = Game.objects.get(id=1)
+    self.assertTrue(game.is_over)
+    self.assertEquals(game.winner.name, player2.name)
+    
+  def test_computer_prevents_user_win(self):
+    '''
+       Tests that computer will prevent a user's win.
+    '''
+
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+
+    Move(game=game, player=player1, position_x=0, position_y=0).save()
+    Move(game=game, player=player2, position_x=1, position_y=1).save()
+    
+    move_post = self.move_dict(game.id, player1.id, 0, 2)
+    self.api_client.post('/api/v1/move/', data=move_post)
+    
+    moves = json.loads(self.api_client.get('/api/v1/move/', format='json').content)
+    self.assertEquals(len(moves['objects']), 4)
+    x = moves['objects'][0]['position_x']
+    y = moves['objects'][0]['position_y']
+    
+    self.assertEquals((x,y), (0,1))
+    
+  def test_computer_finishes_tie(self):
+    '''
+       Tests that computer makes selections until the game is over.
+    '''
+
+    game = Game.objects.get(id=1)
+    player1 = Player.objects.get(id=1)
+    player2 = Player.objects.get(id=2)
+
+    Move(game=game, player=player1, position_x=0, position_y=0).save()
+    Move(game=game, player=player2, position_x=1, position_y=1).save()
+    Move(game=game, player=player1, position_x=2, position_y=2).save()
+    Move(game=game, player=player2, position_x=1, position_y=0).save()
+    Move(game=game, player=player1, position_x=1, position_y=2).save()
+    Move(game=game, player=player2, position_x=0, position_y=2).save()
+    
+    move_post = self.move_dict(game.id, player1.id, 2, 0)
+    self.api_client.post('/api/v1/move/', data=move_post)
+    
+    moves = json.loads(self.api_client.get('/api/v1/move/', format='json').content)
+    self.assertEquals(len(moves['objects']), 8)
