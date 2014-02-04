@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/game/gameboard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/game.html" afterPath="$PROJECT_DIR$/game/templates/game/game.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/gameboard.py" afterPath="$PROJECT_DIR$/game/gameboard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TicTacToe/settings.py" afterPath="$PROJECT_DIR$/TicTacToe/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/urls.py" afterPath="$PROJECT_DIR$/game/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/views.py" afterPath="$PROJECT_DIR$/game/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -30,36 +33,25 @@
       <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="8" selection-start="1869" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="1235" max-vertical-offset="1513">
+            <state line="88" column="1" selection-start="2164" selection-end="2164" vertical-scroll-proportion="0.0" vertical-offset="1115" max-vertical-offset="1683">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gameboard.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game/gameboard.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="172" column="0" selection-start="6130" selection-end="6130" vertical-scroll-proportion="0.0" vertical-offset="2630" max-vertical-offset="3060">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TicTacToe/urls.py">
+        <entry file="file://$PROJECT_DIR$/game/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="238">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/game/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="30" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="901">
-              <folding>
-                <element signature="e#0#35#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gameboard.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/game/gameboard.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="17" selection-start="1771" selection-end="1771" vertical-scroll-proportion="0.49595687" vertical-offset="887" max-vertical-offset="1360">
+            <state line="7" column="40" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="238">
               <folding />
             </state>
           </provider>
@@ -68,27 +60,44 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="0" selection-start="4537" selection-end="4537" vertical-scroll-proportion="0.0" vertical-offset="1921" max-vertical-offset="5032">
+            <state line="206" column="0" selection-start="9145" selection-end="9145" vertical-scroll-proportion="0.0" vertical-offset="3121" max-vertical-offset="4777">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="startgame.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
+      <file leaf-file-name="wsgi.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/wsgi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="731">
-              <folding>
-                <marker date="1391482913963" expanded="true" signature="40:933" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="47:353" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="360:925" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="385:426" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="455:724" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="530:713" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="577:650" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="757:915" placeholder="..." />
-                <marker date="1391482913963" expanded="true" signature="793:903" placeholder="{...}" />
-              </folding>
+            <state line="214" column="0" selection-start="7646" selection-end="7646" vertical-scroll-proportion="0.0" vertical-offset="3127" max-vertical-offset="3519">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="handlers.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/contrib/staticfiles/handlers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="66" column="0" selection-start="2298" selection-end="2298" vertical-scroll-proportion="0.0" vertical-offset="768" max-vertical-offset="1139">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="handlers.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://C:/Python27/Lib/wsgiref/handlers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="84" column="0" selection-start="2886" selection-end="2886" vertical-scroll-proportion="0.0" vertical-offset="1237" max-vertical-offset="7616">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/game/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="0" selection-start="933" selection-end="933" vertical-scroll-proportion="0.33153638" vertical-offset="319" max-vertical-offset="1037">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -96,34 +105,7 @@
       <file leaf-file-name="game.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="-9.807693" vertical-offset="357" max-vertical-offset="1054">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/game/static/game/style.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="1" selection-start="111" selection-end="111" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1462">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="importlib.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/utils/importlib.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="799">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/conf/urls/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="0" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="1173">
+            <state line="55" column="0" selection-start="1223" selection-end="1223" vertical-scroll-proportion="-5.1538463" vertical-offset="801" max-vertical-offset="1445">
               <folding />
             </state>
           </provider>
@@ -148,13 +130,13 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/TicTacToe/urls.py" />
-        <option value="$PROJECT_DIR$/TicTacToe/settings.py" />
-        <option value="$PROJECT_DIR$/game/urls.py" />
         <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
         <option value="$PROJECT_DIR$/game/static/game/style.css" />
-        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
-        <option value="$PROJECT_DIR$/game/views.py" />
+        <option value="$PROJECT_DIR$/game/urls.py" />
         <option value="$PROJECT_DIR$/game/gameboard.py" />
+        <option value="$PROJECT_DIR$/TicTacToe/settings.py" />
+        <option value="$PROJECT_DIR$/game/views.py" />
+        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
       </list>
     </option>
   </component>
@@ -190,7 +172,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -233,23 +214,94 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="TicTacToe" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -341,7 +393,27 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="TicTacToe" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -367,27 +439,7 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="TicTacToe" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -500,14 +552,21 @@
       <created>1391484959607</created>
       <updated>1391484959607</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="1)Added unfinished GameBoard class that handles state and logic">
+      <created>1391489505136</created>
+      <updated>1391489505136</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added more game logic for GameBoard class to handle game by turns and functions to check for next winning move">
+      <created>1391494376564</created>
+      <updated>1391494376564</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="1" width="1022" height="726" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32828283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -523,6 +582,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -539,118 +599,41 @@
     <MESSAGE value="added code for handling ajax requests of the game state" />
     <MESSAGE value="1)Added Start Page code&#10;2)Added Ajax functionality code for Game page" />
     <MESSAGE value="1)Added css for game board" />
-    <option name="LAST_COMMIT_MESSAGE" value="1)Added css for game board" />
+    <MESSAGE value="1)Added unfinished GameBoard class that handles state and logic" />
+    <MESSAGE value="Added more game logic for GameBoard class to handle game by turns and functions to check for next winning move" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added more game logic for GameBoard class to handle game by turns and functions to check for next winning move" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/game/views.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/game/views.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="django-line">
+          <url>file://$PROJECT_DIR$/game/templates/game/game.html</url>
+          <line>56</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="django-line">
+          <url>file://$PROJECT_DIR$/game/templates/game/game.html</url>
+          <line>55</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="13" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1496">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TicTacToe/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="300" selection-end="300" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="306">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="51" selection-start="253" selection-end="253" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="306">
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <folding>
-            <marker date="1391482913963" expanded="true" signature="40:933" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="47:353" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="360:925" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="385:426" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="455:724" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="530:713" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="577:650" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="757:915" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="793:903" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TicTacToe/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="204">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="200" selection-end="200" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/utils/importlib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="462" max-vertical-offset="765">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/conf/urls/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0" vertical-offset="278" max-vertical-offset="1105">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="0" selection-start="4537" selection-end="4537" vertical-scroll-proportion="0.0" vertical-offset="1570" max-vertical-offset="4777">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="8" selection-start="1869" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="1235" max-vertical-offset="1513">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="731">
-          <folding>
-            <marker date="1391482913963" expanded="true" signature="40:933" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="47:353" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="360:925" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="385:426" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="455:724" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="530:713" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="577:650" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="757:915" placeholder="..." />
-            <marker date="1391482913963" expanded="true" signature="793:903" placeholder="{...}" />
-          </folding>
-        </state>
+        <state line="40" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.6792453" vertical-offset="394" max-vertical-offset="765" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/static/game/style.css">
@@ -660,25 +643,92 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="731">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="40" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="204">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/servers/basehttp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="0" selection-start="4483" selection-end="4483" vertical-scroll-proportion="0.0" vertical-offset="1764" max-vertical-offset="2737" />
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="482" column="0" selection-start="14914" selection-end="14914" vertical-scroll-proportion="0.33153638" vertical-offset="8071" max-vertical-offset="16473" />
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/SocketServer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="582" column="0" selection-start="18876" selection-end="18876" vertical-scroll-proportion="0.33153638" vertical-offset="9720" max-vertical-offset="12223" />
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/wsgiref/simple_server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="123" column="0" selection-start="3789" selection-end="3789" vertical-scroll-proportion="0.33153638" vertical-offset="1934" max-vertical-offset="2703" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="172" column="0" selection-start="6130" selection-end="6130" vertical-scroll-proportion="0.0" vertical-offset="2702" max-vertical-offset="3060">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="1" selection-start="2164" selection-end="2164" vertical-scroll-proportion="0.0" vertical-offset="1115" max-vertical-offset="1683">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="206" column="0" selection-start="9145" selection-end="9145" vertical-scroll-proportion="0.0" vertical-offset="3121" max-vertical-offset="4777">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="214" column="0" selection-start="7646" selection-end="7646" vertical-scroll-proportion="0.0" vertical-offset="3127" max-vertical-offset="3519">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/contrib/staticfiles/handlers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="0" selection-start="2298" selection-end="2298" vertical-scroll-proportion="0.0" vertical-offset="768" max-vertical-offset="1139">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/wsgiref/handlers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="0" selection-start="2886" selection-end="2886" vertical-scroll-proportion="0.0" vertical-offset="1237" max-vertical-offset="7616">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="-9.807693" vertical-offset="357" max-vertical-offset="1054">
+        <state line="55" column="0" selection-start="1223" selection-end="1223" vertical-scroll-proportion="-5.1538463" vertical-offset="801" max-vertical-offset="1445">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="30" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="901">
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="17" selection-start="1771" selection-end="1771" vertical-scroll-proportion="0.49595687" vertical-offset="887" max-vertical-offset="1360">
+        <state line="32" column="0" selection-start="933" selection-end="933" vertical-scroll-proportion="0.33153638" vertical-offset="319" max-vertical-offset="1037">
           <folding />
         </state>
       </provider>

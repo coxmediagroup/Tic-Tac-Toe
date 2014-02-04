@@ -30,20 +30,43 @@ game
 
 <script type="text/javascript">
 
-function updateBoard(data) {
-    $.each( data, function( key, val ) {
-        alert(key + " +_" + val);
-    });
+var canClick = true;
 
-    $('#box1').prepend('<img src="{% static 'game/images/x.jpg' %}" />')
+function updateBoard(data) {
+    for (var key in data) {
+
+        alert(key + "+" +  data[key]);
+        var val = data[key];
+
+        if(key.substr(0, 3) == "box")
+        {
+            $("#" + key).empty();
+            if(val == 'X')
+                $("#" + key).prepend('<img src="{% static 'game/images/X.jpg' %}" />');
+            else if(val == 'O')
+                $("#" + key).prepend('<img src="{% static 'game/images/O.jpg' %}" />');
+        }
+
+
+    }
 }
 
 $(document).ready(function() {
 
-    $("#test-ajax").click(function() {
-        $.getJSON( "{% url 'ajax_make_move' %}", function( data ) {
-          updateBoard(data);
-        });
+
+    updateBoard({{ context|safe }});
+
+    $("#board div").click(function() {
+        var box = this;
+
+        if(canClick) {
+            canClick = false;
+            var url = "{% url 'ajax_make_move' box_choice=12345 %}".replace(/12345/,  $(box).attr('id').substring(3,4));
+            $.getJSON(url, function( data ) {
+                updateBoard(data);
+                canClick = true;
+            });
+        }
     });
 
 

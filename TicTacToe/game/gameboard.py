@@ -16,12 +16,12 @@ PLAYER_X = 'X'
 PLAYER_O = 'O'
 
 def get_box_state(box):
-        return cache.get('tictactoe_box' + box)
+        return cache.get('tictactoe_box' + str(box))
 
 def try_set_box_state(box, value):
-       if cache.get('tictactoe_box' + box) != '':
+       if cache.get('tictactoe_box' + str(box)) != '':
            return False
-       cache.set('tictactoe_box' + box, value)
+       cache.set('tictactoe_box' + str(box), value)
        return True
 
 def opposing_player(player):
@@ -90,16 +90,18 @@ def get_next_winnable_move(side):
 
     return None
 
+
+
 class GameBoard:
     def __init__(self, computer_side):
-        side = computer_side
+        self.side = computer_side
         self.reset()
 
     def reset(self):
-        turn_count = 1
-        last_move = 0
-        human_last_move = 0
-        state = STATE_PLAYER_X_TURN
+        self.turn_count = 0
+        self.last_move = 0
+        self.human_last_move = 0
+        self.state = STATE_PLAYER_X_TURN
 
         cache.set('tictactoe_box1', '')
         cache.set('tictactoe_box2', '')
@@ -110,6 +112,7 @@ class GameBoard:
         cache.set('tictactoe_box7', '')
         cache.set('tictactoe_box8', '')
         cache.set('tictactoe_box9', '')
+
 
     def computer_move(self):
 
@@ -139,7 +142,7 @@ class GameBoard:
                 opposing_box = get_opposing_box(self.last_move)
                 #try to get the opposing corner
                 val = try_set_box_state(opposing_box)
-                if val == True:
+                if val is True:
                     ret = opposing_box
                 #human player went there, so lets go to adjacent corner
                 else:
@@ -165,6 +168,7 @@ class GameBoard:
        # else:
 
         self.state = opposing_player(self.side)
-        last_move = ret
+        self.last_move = ret
+
         return ret
 
