@@ -3,5 +3,7 @@ from django.conf.urls import patterns, url
 from game import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.start_game, name='start_game')
+    url(r'^$', views.start_game, name='start_game'),
+    url(r'^launch/$', views.launch, name='launch'),
+    url(r'^ajax_make_move/$', views.ajax_make_move, name='ajax_make_move'),
 )

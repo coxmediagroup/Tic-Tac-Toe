@@ -1,9 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+    <title>Tic Tac Toe!</title>
 </head>
 <body>
+game
+<button id="test-ajax">Text Ajax</button>
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    $("#test-ajax").click(function() {
+        $.getJSON( "{% url 'ajax_make_move' %}", function( data ) {
+
+          alert(data);  //for testing
+
+          $.each( data, function( key, val ) {
+
+          });
+        });
+    });
+
+
+
+});
+
+
+</script>
 
 </body>
 </html>
