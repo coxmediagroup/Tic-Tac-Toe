@@ -36,20 +36,27 @@ def launch(request):
 
     context = get_game_variables()
     context = {'context': context}
-    return render(request, 'game/game.html', Context(context))
+    return render(request, 'game/game.html', context)
 
 #loads the current game based on settings in memory
 def game_page(request):
-    context = {}
+    context = get_game_variables()
+    context = {'context': context}
     return render(request, 'game/game.html', context)
 
 #handles user making a move
 def ajax_make_move(request, box_choice):
     if request.is_ajax():
         game_board = cache.get('ttt_game_board')
-        game_board.last_move = box_choice
+        #turn count increases from player choosing move
+        game_board.turn_count += 1
+        #change game state to the computer
+        game_board.state = game_board.side
+        game_board.human_last_move = box_choice
         gameboard.try_set_box_state(box_choice, gameboard.opposing_player(game_board.side))
         move = game_board.computer_move()
+        #save game_board
+        cache.set('ttt_game_board', game_board)
 
         ret = get_game_variables()
         response = simplejson.dumps(ret)

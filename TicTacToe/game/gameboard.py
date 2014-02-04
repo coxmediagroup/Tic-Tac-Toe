@@ -141,7 +141,7 @@ class GameBoard:
             if is_corner(self.last_move):
                 opposing_box = get_opposing_box(self.last_move)
                 #try to get the opposing corner
-                val = try_set_box_state(opposing_box)
+                val = try_set_box_state(opposing_box, self.side)
                 if val is True:
                     ret = opposing_box
                 #human player went there, so lets go to adjacent corner
