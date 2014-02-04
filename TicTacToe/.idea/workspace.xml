@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/game/static/game/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/game.html" afterPath="$PROJECT_DIR$/game/templates/game/game.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/startgame.html" afterPath="$PROJECT_DIR$/game/templates/game/startgame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/urls.py" afterPath="$PROJECT_DIR$/game/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/views.py" afterPath="$PROJECT_DIR$/game/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TicTacToe.iws" />
@@ -32,7 +31,7 @@
       <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="11" selection-start="1022" selection-end="1022" vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="1513">
+            <state line="79" column="8" selection-start="1869" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="1235" max-vertical-offset="1513">
               <folding />
             </state>
           </provider>
@@ -41,7 +40,7 @@
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TicTacToe/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="204">
+            <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="238">
               <folding />
             </state>
           </provider>
@@ -50,7 +49,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="40" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="799">
+            <state line="15" column="0" selection-start="350" selection-end="350" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="799">
               <folding />
             </state>
           </provider>
@@ -59,7 +58,7 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="0" selection-start="4537" selection-end="4537" vertical-scroll-proportion="0.0" vertical-offset="1570" max-vertical-offset="4777">
+            <state line="113" column="0" selection-start="4537" selection-end="4537" vertical-scroll-proportion="0.0" vertical-offset="1921" max-vertical-offset="5032">
               <folding />
             </state>
           </provider>
@@ -68,7 +67,7 @@
       <file leaf-file-name="startgame.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="44" selection-start="455" selection-end="473" vertical-scroll-proportion="-4.576923" vertical-offset="153" max-vertical-offset="663">
+            <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="731">
               <folding />
             </state>
           </provider>
@@ -77,7 +76,16 @@
       <file leaf-file-name="game.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="0" selection-start="481" selection-end="518" vertical-scroll-proportion="0.67509025" vertical-offset="153" max-vertical-offset="714">
+            <state line="36" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="0.36823106" vertical-offset="510" max-vertical-offset="1054">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game/static/game/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="1" selection-start="111" selection-end="111" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1462">
               <folding />
             </state>
           </provider>
@@ -86,10 +94,8 @@
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="0" selection-start="200" selection-end="200" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-              <folding>
-                <element signature="e#0#42#0" expanded="true" />
-              </folding>
+            <state line="7" column="0" selection-start="200" selection-end="200" vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="238">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -97,7 +103,7 @@
       <file leaf-file-name="importlib.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/utils/importlib.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="462" max-vertical-offset="765">
+            <state line="40" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="799">
               <folding />
             </state>
           </provider>
@@ -106,7 +112,7 @@
       <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/conf/urls/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="0" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0" vertical-offset="278" max-vertical-offset="1105">
+            <state line="26" column="0" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="1173">
               <folding />
             </state>
           </provider>
@@ -132,9 +138,10 @@
       <list>
         <option value="$PROJECT_DIR$/TicTacToe/urls.py" />
         <option value="$PROJECT_DIR$/TicTacToe/settings.py" />
-        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
         <option value="$PROJECT_DIR$/game/urls.py" />
         <option value="$PROJECT_DIR$/game/views.py" />
+        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
+        <option value="$PROJECT_DIR$/game/static/game/style.css" />
         <option value="$PROJECT_DIR$/game/templates/game/game.html" />
       </list>
     </option>
@@ -247,6 +254,28 @@
               <option name="myItemId" value="game" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TicTacToe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
@@ -273,12 +302,12 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -370,27 +399,7 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="TicTacToe" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -416,7 +425,27 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="TicTacToe" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -521,7 +550,11 @@
       <created>1391477331389</created>
       <updated>1391477331389</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="1)Added Start Page code&#10;2)Added Ajax functionality code for Game page">
+      <created>1391481938590</created>
+      <updated>1391481938590</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -558,27 +591,19 @@
     </option>
     <MESSAGE value="added necessary views, templates, images" />
     <MESSAGE value="added code for handling ajax requests of the game state" />
-    <option name="LAST_COMMIT_MESSAGE" value="added code for handling ajax requests of the game state" />
+    <MESSAGE value="1)Added Start Page code&#10;2)Added Ajax functionality code for Game page" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)Added Start Page code&#10;2)Added Ajax functionality code for Game page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="51" selection-start="146" selection-end="146" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="204">
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -617,13 +642,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="11" selection-start="1022" selection-end="1022" vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="1513">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TicTacToe/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="204">
@@ -631,19 +649,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="44" selection-start="455" selection-end="473" vertical-scroll-proportion="-4.576923" vertical-offset="153" max-vertical-offset="663">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="7" column="0" selection-start="200" selection-end="200" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -668,16 +677,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TicTacToe/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="8" selection-start="1869" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="1235" max-vertical-offset="1513">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="731">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/game/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="40" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="799">
+        <state line="15" column="0" selection-start="350" selection-end="350" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="799">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/static/game/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="1" selection-start="111" selection-end="111" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1462">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="481" selection-end="518" vertical-scroll-proportion="0.67509025" vertical-offset="153" max-vertical-offset="714">
+        <state line="36" column="0" selection-start="816" selection-end="816" vertical-scroll-proportion="0.36823106" vertical-offset="510" max-vertical-offset="1054">
           <folding />
         </state>
       </provider>

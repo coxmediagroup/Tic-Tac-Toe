@@ -1,28 +1,48 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}" />
+
     <title>Tic Tac Toe!</title>
 </head>
 <body>
+
+<div id="board">
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <div id="box3"></div>
+    <div id="box4"></div>
+    <div id="box5"></div>
+    <div id="box6"></div>
+    <div id="box7"></div>
+    <div id="box8"></div>
+    <div id="box9"></div>
+</div>
+
 game
 <button id="test-ajax">Text Ajax</button>
 
 
 <script type="text/javascript">
 
+function updateBoard(data) {
+    $.each( data, function( key, val ) {
+        alert(key + " +_" + val);
+    });
+
+    $('#box1').prepend('<img src="{% static 'game/images/x.jpg' %}" />')
+}
+
 $(document).ready(function() {
 
     $("#test-ajax").click(function() {
         $.getJSON( "{% url 'ajax_make_move' %}", function( data ) {
-
-          alert(data);  //for testing
-
-          $.each( data, function( key, val ) {
-
-          });
+          updateBoard(data);
         });
     });
 
