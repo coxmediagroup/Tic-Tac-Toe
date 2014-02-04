@@ -4,8 +4,8 @@ STATE_PLAYER_X_TURN = 'X'
 STATE_PLAYER_O_TURN = 'O'
 STATE_GAME_OVER = 'OVER'
 
-PLAYER1_WON = 0
-PLAYER2_WON = 1
+HUMAN_WON = 0
+COMPUTER_WON = 1
 DRAW = 2
 
 BOX_CLEAR = ''
@@ -91,6 +91,12 @@ def get_next_winnable_move(side):
     return None
 
 
+def get_available_box():
+    for i in range(1,9):
+        if get_box_state(i) == BOX_CLEAR:
+            return i
+    return None
+
 
 class GameBoard:
     def __init__(self, computer_side):
@@ -102,6 +108,7 @@ class GameBoard:
         self.last_move = 0
         self.human_last_move = 0
         self.state = STATE_PLAYER_X_TURN
+        self.winner = DRAW
 
         cache.set('tictactoe_box1', '')
         cache.set('tictactoe_box2', '')
@@ -161,11 +168,45 @@ class GameBoard:
                 elif try_set_box_state(7, self.side):
                     ret = 7
 
-       # elif self.turn_count == 5:
-       # elif self.turn_count == 6:
-       # elif self.turn_count == 7:
-       # elif self.turn_count == 8:
-       # else:
+        elif self.turn_count == 5:
+            #see if we can win next move
+            winning_box = get_next_winnable_move(self.side)
+            if winning_box is not None:
+                ret = winning_box
+                try_set_box_state(winning_box, self.side)
+                self.state = STATE_GAME_OVER
+                self.winner = COMPUTER_WON
+                return ret
+            #look if we have diagonal
+            if get_box_state(1) == self.side and get_box_state(9) == self.side:
+                #since we do have 1 and 9 and couldn't win, human has box 2; go for box 3
+                val = try_set_box_state(3, self.side)
+                ret = 3
+                if val is False: #human took middle, so...
+                    try_set_box_state(7, self.side)
+                    ret = 7
+             #go for another corner
+            else:
+                try_set_box_state(7, self.side)
+                ret = 7
+        elif self.turn_count >= 6:
+            #see if we can win next move
+            winning_box = get_next_winnable_move(self.side)
+            if winning_box is not None:
+                ret = winning_box
+                try_set_box_state(winning_box, self.side)
+                self.state = STATE_GAME_OVER
+                self.winner = COMPUTER_WON
+                return ret
+            else:
+                #block a winnable by opponent
+                winning_box = get_next_winnable_move(opposing_player(self.side))
+                if winning_box is not None:
+                    try_set_box_state(winning_box, self.side)
+                    ret = winning_box
+                else:
+                    ret = get_available_box()
+                    try_set_box_state(ret, self.side)
 
         self.state = opposing_player(self.side)
         self.last_move = ret
