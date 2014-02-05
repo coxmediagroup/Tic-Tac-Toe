@@ -1,0 +1,103 @@
+Participant: James Robey, jrobey.services@gmail.com
+
+The goal is to create an 3D interactive game of Tic Tac Toe with one human and 
+a computer based player. There are no other guidelines enforced by the challenge 
+so the following structure will be created to create the game.
+
+Please note while it is perfect when playing on any given board, 3D tic tac toe 
+is winnable by the first player if they go in the center square!
+
+######################################################################
+
+1) All operation is meant to take place on localhost, that is, 
+    all on the same computer.
+
+    a) The entire game is a client/server pattern with a python script as the 
+        server and a SWF derived from openlaszlo
+
+    b) The python script is started
+    
+    c) the openlaszlo-based html page is opened in a web-browser on the same 
+        machine the script is started on.
+    
+######################################################################
+
+2) Python script (server running on port 2020 using a simple XML protocol on 
+    top of ajax requests)
+
+    a) The backend is python script that will respond to http requests on 
+        localhost until terminated (on port 2020)
+         
+    b) it will use a simple and insecure python-based http server to respond to 
+        the client update of game state
+        
+    c) It is stateless. It will only return the next move when it receives a given 
+        board's state (as discussed in point 4)
+    
+######################################################################
+        
+3) Open-Laszlo client (SWF compiled from openlaszlo source)
+
+    a) A SWF that displays a tic-tac-toe board graphically.  
+    
+    b) The human will always go first. Although it's pretty easy to do both 
+        since one infers the other, we'll just code one path for this challenge.
+    
+    c) on each move the state of the board is sent to the server
+    
+    d) the client recieves the next state from the server, displaying it.
+    
+######################################################################
+    
+4) JSON Protocol used between the client and server
+
+    a) the board is represented by JSON sent to and from the client 
+        to the server to the client, etc. until the game is won.
+    
+    b) it is composed of a structure like the one shown here:
+    
+        game = [
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+            [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ],
+        ]
+            
+    c) if the game is won, the json array is merely replaced with a string that is displayed
+        to indicate the game is over. The client identifies a string (as opposed to an array)
+        as the game over state.
+    
+######################################################################
+
+5) Tic Tac Toe strategy
+
+    The realization is:
+        -that if you represent a 3D plane as a three dimensional array
+            and fill it with zeros, so that when the computer goes
+            it's a 1 if the human goes it's a -1
+        -that each possible winning vector through the 3d space of the "field"
+            is evaluated by summing the values in the vector to some value
+        -that the computer must go anywhere in a vector where equal 2 to obtain a win
+        -that the computer must go anywhere in a vector where equal -2 to prevent a win 
+        
+        -that the computer will try to go anywhere it can make the vector 2 
+        -that the computer will try to go anywhere it can prevent the vector becoming -2
+        
+    Then (hopefully, proven TBD) a perfect tic-tac-toe game will be played. That's the conjecture.
+    In truth, 3D tic tac toe is winnable by the first player if they play the center square first.
+    There goes a fun childhood game :)
+
+######################################################################
+
+This is the envisioned structure. This document will be updated as necessary to reflect changes.
