@@ -196,10 +196,20 @@ def get_forking_box(side):
     for corner in [1, 3, 7, 9]:
         if get_box_state(corner) == side:
             one, two = get_adjacent_corners(corner)
+            if get_box_state(5) == side and get_box_state(one) == BOX_CLEAR:
+                return one
+            if get_box_state(5) == side and get_box_state(two) == BOX_CLEAR:
+                return two
+            if get_box_state(one) == side and get_box_state(5) == BOX_CLEAR:
+                return 5
+            if get_box_state(two) == side and get_box_state(5) == BOX_CLEAR:
+                return 5
             if get_box_state(one) == side and get_box_state(two) == BOX_CLEAR:
                 return two
             if get_box_state(two) == side and get_box_state(one) == BOX_CLEAR:
                 return one
+
+
 
     return None
 
@@ -240,15 +250,19 @@ class GameBoard:
         cache.set('ttt_game_board', self)
 
     def check_game_over(self):
+
+        if self.state == STATE_GAME_OVER:
+            return True
+
         ret = False
         human = opposing_player(self.side)
 
         if get_available_box() is None:
             self.state = STATE_GAME_OVER
             if get_side_won(self.side):
-                self.winner = self.side
+                self.winner = COMPUTER_WON
             elif get_side_won(human):
-                self.winner = human
+                self.winner = HUMAN_WON
             else:
                 self.winner = DRAW
             ret = True
@@ -294,7 +308,7 @@ class GameBoard:
 
         if get_side_won(human):
             self.state = STATE_GAME_OVER
-            self.winner = human
+            self.winner = HUMAN_WON
 
 
     def computer_move(self):
@@ -342,9 +356,15 @@ class GameBoard:
             if winning_box is not None:
                 ret = winning_box
                 try_set_box_state(winning_box, self.side)
-            #there is no winning move, so let's take a side to force player to counter (block fork)
+            #there is no winning move, so let's to block a fork or cause them to counter a win
             else:
-                if try_set_box_state(2, self.side):
+                fork = get_forking_box(opposing_player(self.side))
+                if fork is not None:
+                    try_set_box_state(fork, self.side)
+                    ret = fork
+                elif self.human_last_move == 5:
+                    try_set_box_state(7, self.side)
+                elif try_set_box_state(2, self.side):
                     ret = 2
                 elif try_set_box_state(4, self.side):
                     ret = 4

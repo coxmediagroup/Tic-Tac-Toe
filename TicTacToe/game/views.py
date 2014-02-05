@@ -50,6 +50,7 @@ def ajax_make_move(request, box_choice):
                 #check if game is over
                 game_board.check_game_over()
 
+            game_board.save()
             ret = game_board.get_game_variables()
             response = simplejson.dumps(ret)
     else:

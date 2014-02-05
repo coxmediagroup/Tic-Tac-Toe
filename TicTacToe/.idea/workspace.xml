@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/game/static/game/script.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/game.html" afterPath="$PROJECT_DIR$/game/templates/game/game.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/gameboard.py" afterPath="$PROJECT_DIR$/game/gameboard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/startgame.html" afterPath="$PROJECT_DIR$/game/templates/game/startgame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/views.py" afterPath="$PROJECT_DIR$/game/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TicTacToe.iws" />
@@ -26,10 +30,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="gameboard.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="gameboard.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/gameboard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="353" column="0" selection-start="11300" selection-end="11300" vertical-scroll-proportion="17.702065" vertical-offset="0" max-vertical-offset="6630">
+            <state line="360" column="0" selection-start="11524" selection-end="11524" vertical-scroll-proportion="-4.28" vertical-offset="6013" max-vertical-offset="6970">
               <folding />
             </state>
           </provider>
@@ -38,7 +42,7 @@
       <file leaf-file-name="startgame.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="27" selection-start="366" selection-end="456" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="765">
+            <state line="14" column="20" selection-start="407" selection-end="407" vertical-scroll-proportion="-3.2692308" vertical-offset="153" max-vertical-offset="765">
               <folding />
             </state>
           </provider>
@@ -74,7 +78,7 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="2006" max-vertical-offset="5032">
+            <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4777">
               <folding />
             </state>
           </provider>
@@ -92,7 +96,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1020">
+            <state line="48" column="0" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1037">
               <folding />
             </state>
           </provider>
@@ -101,7 +105,16 @@
       <file leaf-file-name="game.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="14" selection-start="854" selection-end="854" vertical-scroll-proportion="-10.461538" vertical-offset="238" max-vertical-offset="1836">
+            <state line="39" column="9" selection-start="1158" selection-end="1158" vertical-scroll-proportion="-8.923077" vertical-offset="431" max-vertical-offset="816">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="script.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/game/static/game/script.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="58" column="16" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.75766015" vertical-offset="714" max-vertical-offset="1275">
               <folding />
             </state>
           </provider>
@@ -128,11 +141,12 @@
         <option value="$PROJECT_DIR$/TicTacToe/urls.py" />
         <option value="$PROJECT_DIR$/TicTacToe/settings.py" />
         <option value="$PROJECT_DIR$/game/urls.py" />
-        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
-        <option value="$PROJECT_DIR$/game/views.py" />
-        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
         <option value="$PROJECT_DIR$/game/static/game/style.css" />
+        <option value="$PROJECT_DIR$/game/views.py" />
         <option value="$PROJECT_DIR$/game/gameboard.py" />
+        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
+        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
+        <option value="$PROJECT_DIR$/game/static/game/script.js" />
       </list>
     </option>
   </component>
@@ -563,7 +577,11 @@
       <created>1391604446545</created>
       <updated>1391604446545</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="*Removed unused/commented code">
+      <created>1391604551856</created>
+      <updated>1391604551856</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -572,12 +590,12 @@
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32828283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32828283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26242545" sideWeight="0.67171717" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3164983" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26242545" sideWeight="0.68350166" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3164983" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4107744" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32828283" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -612,11 +630,12 @@
     <MESSAGE value="*Fixed bugs connected to code changes&#10;*Fixed bug with fork finding algorithm" />
     <MESSAGE value="*Fixed some CSS and UI" />
     <MESSAGE value="*Adjusted CSS for prettiness" />
-    <option name="LAST_COMMIT_MESSAGE" value="*Adjusted CSS for prettiness" />
+    <MESSAGE value="*Removed unused/commented code" />
+    <option name="LAST_COMMIT_MESSAGE" value="*Removed unused/commented code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="38" />
+      <option name="time" value="44" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -644,7 +663,9 @@
     </entry>
     <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/wsgi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="214" column="0" selection-start="7646" selection-end="7646" vertical-scroll-proportion="0.0" vertical-offset="3127" max-vertical-offset="3519" />
+        <state line="214" column="0" selection-start="7646" selection-end="7646" vertical-scroll-proportion="0.0" vertical-offset="3127" max-vertical-offset="3519">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/contrib/staticfiles/handlers.py">
@@ -675,27 +696,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4777">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="27" selection-start="366" selection-end="456" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="765">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="14" selection-start="854" selection-end="854" vertical-scroll-proportion="-10.461538" vertical-offset="238" max-vertical-offset="1836">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/static/game/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="33" column="20" selection-start="400" selection-end="400" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1921">
@@ -703,16 +703,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4777">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/game/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1020">
+        <state line="48" column="0" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1037">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="20" selection-start="407" selection-end="407" vertical-scroll-proportion="-3.2692308" vertical-offset="153" max-vertical-offset="765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="9" selection-start="1158" selection-end="1158" vertical-scroll-proportion="-8.923077" vertical-offset="431" max-vertical-offset="816">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/gameboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="353" column="0" selection-start="11300" selection-end="11300" vertical-scroll-proportion="17.702065" vertical-offset="0" max-vertical-offset="6630">
+        <state line="360" column="0" selection-start="11524" selection-end="11524" vertical-scroll-proportion="-4.28" vertical-offset="6013" max-vertical-offset="6970">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/static/game/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="16" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.75766015" vertical-offset="714" max-vertical-offset="1275">
           <folding />
         </state>
       </provider>
