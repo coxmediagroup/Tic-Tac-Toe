@@ -15,6 +15,63 @@ BOX_O = 'O'
 PLAYER_X = 'X'
 PLAYER_O = 'O'
 
+def get_board():
+    return cache.get('ttt_game_board')
+
+def save_board(board):
+    cache.set('ttt_game_board', board)
+
+def get_side_won(side):
+    #check column 1
+    if get_box_state(1) == side and get_box_state(4) == side and get_box_state(7) == side:
+        return True
+    #...col2
+    if get_box_state(2) == side and get_box_state(5) == side and get_box_state(8) == side:
+        return True
+    if get_box_state(3) == side and get_box_state(6) == side and get_box_state(9) == side:
+        return True
+
+    #check rows
+    #for i in range(1,7,3):
+    if get_box_state(1) == side and get_box_state(2) == side and get_box_state(3) == side:
+        return True
+    if get_box_state(4) == side and get_box_state(5) == side and get_box_state(6) == side:
+        return True
+    if get_box_state(7) == side and get_box_state(8) == side and get_box_state(9) == side:
+        return True
+
+    #diagonals
+    if get_box_state(1) == side and get_box_state(5) == side and get_box_state(9) == side:
+        return True
+    if get_box_state(3) == side and get_box_state(5) == side and get_box_state(7) == side:
+        return True
+
+    return False
+
+
+def get_game_variables(board):
+    ret = {}
+    ret['box1'] = get_box_state(1)
+    ret['box2'] = get_box_state(2)
+    ret['box3'] = get_box_state(3)
+    ret['box4'] = get_box_state(4)
+    ret['box5'] = get_box_state(5)
+    ret['box6'] = get_box_state(6)
+    ret['box7'] = get_box_state(7)
+    ret['box8'] = get_box_state(8)
+    ret['box9'] = get_box_state(9)
+    ret['game_state'] = board.state
+    ret['winner'] = board.winner
+    ret['message'] = get_player_message()
+    return ret
+
+def get_player_message():
+    board = get_board()
+    if opposing_player(board.side) == board.state:
+        return 'Your turn!'
+    else:
+        return "Computer's turn..."
+
 def get_box_state(box):
         return cache.get('tictactoe_box' + str(box))
 
@@ -35,7 +92,11 @@ def is_corner(box):
         return True
     return False
 
-def get_opposing_box(box):
+def box_empty(box):
+    return get_box_state(box) == BOX_CLEAR
+
+
+def get_opposing_corner(box):
     if box == 1:
         return 9
     if box == 3:
@@ -45,6 +106,57 @@ def get_opposing_box(box):
     if box == 9:
         return 1
     return None
+
+def get_adjacent_corners(box):
+    if get_box_state(box) == 1:
+        return 3, 7
+    if get_box_state(box) == 3:
+        return 1, 9
+    if get_box_state(box) == 7:
+        return 1, 9
+    if get_box_state(box) == 9:
+        return 3, 7
+
+
+
+def get_empty_adjacent_box(box):
+    if box == 1:
+        if get_box_state(3) == '':
+            return 3
+        elif get_box_state(7) == '':
+            return 7
+        else:
+            return None
+
+    if box == 3:
+        if get_box_state(1) == '':
+            return 1
+        elif get_box_state(9) == '':
+            return 9
+        else:
+            return None
+
+    if box == 7:
+        if get_box_state(1) == '':
+            return 1
+        elif get_box_state(9) == '':
+            return 9
+        else:
+            return None
+
+    if box == 9:
+        if get_box_state(3) == '':
+            return 3
+        elif get_box_state(7) == '':
+            return 7
+        else:
+            return None
+
+    return None
+
+
+
+
 
 def get_next_winnable_move(side):
     if get_box_state(1) == side and get_box_state(2) == side and get_box_state(3) != opposing_player(side):
@@ -87,9 +199,36 @@ def get_next_winnable_move(side):
         return 5
     if get_box_state(5) == side and get_box_state(6) == side and get_box_state(4) != opposing_player(side):
         return 4
+    #diagonals
+    if get_box_state(1) == side and get_box_state(5) == side and get_box_state(9) != opposing_player(side):
+        return 9
+    if get_box_state(1) == side and get_box_state(9) == side and get_box_state(5) != opposing_player(side):
+        return 5
+    if get_box_state(5) == side and get_box_state(9) == side and get_box_state(1) != opposing_player(side):
+        return 1
+    if get_box_state(7) == side and get_box_state(5) == side and get_box_state(3) != opposing_player(side):
+        return 3
+    if get_box_state(7) == side and get_box_state(3) == side and get_box_state(5) != opposing_player(side):
+        return 5
+    if get_box_state(3) == side and get_box_state(5) == side and get_box_state(7) != opposing_player(side):
+        return 7
+
 
     return None
 
+
+
+def get_forking_box(side):
+    #get a corner
+    for corner in [1, 3, 7, 9]:
+        if get_box_state(corner) == side:
+            one, two = get_adjacent_corners(1)
+            if get_box_state(one) == side and get_box_state(two) == BOX_CLEAR:
+                return two
+            if get_box_state(two) == side and get_box_state(one) == BOX_CLEAR:
+                return one
+
+    return None
 
 def get_available_box():
     for i in range(1,9):
@@ -137,7 +276,10 @@ class GameBoard:
         elif self.turn_count == 2:
             #see if they went in a corner, if so, counter it
             if is_corner(self.human_last_move):
-                ret = get_opposing_box(self.human_last_move)
+                #ret = get_empty_adjacent_box(self.human_last_move)
+                #try_set_box_state(ret, self.side)
+                #ret = get_opposing_corner(self.human_last_move)
+                ret = 5
                 try_set_box_state(ret, self.side)
             #since no corner was taken, take top-left
             else:
@@ -146,7 +288,7 @@ class GameBoard:
         elif self.turn_count == 3:
             #if our last move was in a corner
             if is_corner(self.last_move):
-                opposing_box = get_opposing_box(self.last_move)
+                opposing_box = get_opposing_corner(self.last_move)
                 #try to get the opposing corner
                 val = try_set_box_state(opposing_box, self.side)
                 if val is True:
@@ -161,12 +303,17 @@ class GameBoard:
             if winning_box is not None:
                 ret = winning_box
                 try_set_box_state(winning_box, self.side)
-            #there is no winning move, so let's set one up for ourselves
+            #there is no winning move, so let's see if they have one
             else:
-                if try_set_box_state(3,self.side):
+                if try_set_box_state(3, self.side):
                     ret = 3
                 elif try_set_box_state(7, self.side):
                     ret = 7
+                elif try_set_box_state(1, self.side):
+                    ret = 1
+                else:
+                    try_set_box_state(9, self.side)
+                    ret = 9
 
         elif self.turn_count == 5:
             #see if we can win next move
@@ -205,8 +352,14 @@ class GameBoard:
                     try_set_box_state(winning_box, self.side)
                     ret = winning_box
                 else:
-                    ret = get_available_box()
-                    try_set_box_state(ret, self.side)
+                    #try and get the fork
+                    val = get_forking_box(self.side)
+                    if val is not None:
+                        ret = val
+                        try_set_box_state(ret, self.side)
+                    else:
+                        ret = get_available_box()
+                        try_set_box_state(ret, self.side)
 
         self.state = opposing_player(self.side)
         self.last_move = ret

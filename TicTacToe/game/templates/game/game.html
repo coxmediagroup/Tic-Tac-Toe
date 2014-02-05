@@ -24,8 +24,7 @@
     <div id="box9"></div>
 </div>
 
-game
-<button id="test-ajax">Text Ajax</button>
+<div id="message">Your turn!</div>
 
 
 <script type="text/javascript">
@@ -33,12 +32,16 @@ game
 var canClick = true;
 
 function updateBoard(data) {
+
+    var game_state = '';
+    var winner = '';
+    var message = '';
+
     for (var key in data) {
 
         var val = data[key];
 
-        if(key.substr(0, 3) == "box")
-        {
+        if(key.substr(0, 3) == "box") {
             $("#" + key).empty();
             if(val == 'X')
                 $("#" + key).prepend('<img src="{% static 'game/images/X.jpg' %}" />');
@@ -46,12 +49,29 @@ function updateBoard(data) {
                 $("#" + key).prepend('<img src="{% static 'game/images/O.jpg' %}" />');
         }
 
-
+        if(key == 'game_state')
+            game_state = val;
+        if(key == 'winner')
+            winner = val;
+        if(key == 'message')
+            message = val;
     }
+
+    if(game_state == 'OVER') {
+        if(winner == 0)
+            winner = 'You have won!';
+        else if(winner == 1)
+            winner = 'The Computer has beat you!';
+        else
+            winner = 'The game is a draw!';
+
+        $("#message").html(winner);
+    }
+    else
+        $("#message").html(message);
 }
 
 $(document).ready(function() {
-
 
     updateBoard({{ context|safe }});
 
