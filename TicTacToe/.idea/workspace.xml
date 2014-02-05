@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/gameboard.py" afterPath="$PROJECT_DIR$/game/gameboard.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/startgame.html" afterPath="$PROJECT_DIR$/game/templates/game/startgame.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/views.py" afterPath="$PROJECT_DIR$/game/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -28,10 +27,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="gameboard.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="gameboard.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game/gameboard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="275" column="16" selection-start="8604" selection-end="8612" vertical-scroll-proportion="-24.4" vertical-offset="4065" max-vertical-offset="6970">
+            <state line="393" column="0" selection-start="13002" selection-end="13002" vertical-scroll-proportion="0.33333334" vertical-offset="6574" max-vertical-offset="7004">
               <folding />
             </state>
           </provider>
@@ -100,10 +99,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="190" selection-end="190" vertical-scroll-proportion="0.09470752" vertical-offset="0" max-vertical-offset="1020">
+            <state line="50" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1020">
               <folding />
             </state>
           </provider>
@@ -142,8 +141,8 @@
         <option value="$PROJECT_DIR$/game/urls.py" />
         <option value="$PROJECT_DIR$/game/templates/game/game.html" />
         <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
-        <option value="$PROJECT_DIR$/game/gameboard.py" />
         <option value="$PROJECT_DIR$/game/views.py" />
+        <option value="$PROJECT_DIR$/game/gameboard.py" />
       </list>
     </option>
   </component>
@@ -513,13 +512,18 @@
       <created>1391566016364</created>
       <updated>1391566016364</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="*Cleaned up code and game logic&#10;*Fixed some bugs concerning strategy logic">
+      <created>1391600804072</created>
+      <updated>1391600804072</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="1" width="1022" height="726" extended-state="0" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32828283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -535,7 +539,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -558,11 +561,12 @@
     <MESSAGE value="* Fixed game logic bug to keep game_board persistent&#10;* Fixed bug in game logic&#10;*Removed test alerts" />
     <MESSAGE value="*Finished Game Logic&#10;*Fixed bugs associated with game logic while testing for computer as X" />
     <MESSAGE value="*Fixed bug concering computer playing O not playing properly&#10;*Added functions to clean up code" />
-    <option name="LAST_COMMIT_MESSAGE" value="*Fixed bug concering computer playing O not playing properly&#10;*Added functions to clean up code" />
+    <MESSAGE value="*Cleaned up code and game logic&#10;*Fixed some bugs concerning strategy logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="*Cleaned up code and game logic&#10;*Fixed some bugs concerning strategy logic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="32" />
+      <option name="time" value="38" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -633,13 +637,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4777">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="33" selection-start="626" selection-end="626" vertical-scroll-proportion="-7.076923" vertical-offset="173" max-vertical-offset="765">
@@ -654,16 +651,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
+    <entry file="file://C:/Python27/Lib/site-packages/django-1.6.1-py2.7.egg/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="275" column="16" selection-start="8604" selection-end="8612" vertical-scroll-proportion="-24.4" vertical-offset="4065" max-vertical-offset="6970">
+        <state line="118" column="0" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4777">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="190" selection-end="190" vertical-scroll-proportion="0.09470752" vertical-offset="0" max-vertical-offset="1020">
+        <state line="50" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="393" column="0" selection-start="13002" selection-end="13002" vertical-scroll-proportion="0.33333334" vertical-offset="6574" max-vertical-offset="7004">
           <folding />
         </state>
       </provider>

@@ -16,17 +16,17 @@ def start_game(request):
 def launch(request):
     if request.POST.get('play-as-o', False) is not False:
         game_board = gb.GameBoard(gb.PLAYER_X)
-        move = game_board.computer_move()
+        game_board.computer_move()
     else:
         game_board = gb.GameBoard(gb.PLAYER_O)
 
-    gb.save_board(game_board)
+    game_board.save()
 
     return redirect('game')
 
 #loads the current game based on settings in memory
 def game_page(request):
-    context = gb.get_game_variables(gb.get_board())
+    context = gb.GameBoard.get().get_game_variables()
     context = {'context': context}
     return render(request, 'game/game.html', context)
 

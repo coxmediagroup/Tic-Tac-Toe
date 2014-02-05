@@ -81,13 +81,13 @@ def get_opposing_corner(box):
     return None
 
 def get_adjacent_corners(box):
-    if get_box_state(box) == 1:
+    if box == 1:
         return 3, 7
-    if get_box_state(box) == 3:
+    if box == 3:
         return 1, 9
-    if get_box_state(box) == 7:
+    if box == 7:
         return 1, 9
-    if get_box_state(box) == 9:
+    if box == 9:
         return 3, 7
 
 
@@ -195,7 +195,7 @@ def get_forking_box(side):
     #get a corner
     for corner in [1, 3, 7, 9]:
         if get_box_state(corner) == side:
-            one, two = get_adjacent_corners(1)
+            one, two = get_adjacent_corners(corner)
             if get_box_state(one) == side and get_box_state(two) == BOX_CLEAR:
                 return two
             if get_box_state(two) == side and get_box_state(one) == BOX_CLEAR:
@@ -204,7 +204,7 @@ def get_forking_box(side):
     return None
 
 def get_available_box():
-    for i in range(1,9):
+    for i in range(1, 10):
         if get_box_state(i) == BOX_CLEAR:
             return i
     return None
@@ -247,7 +247,7 @@ class GameBoard:
             self.state = STATE_GAME_OVER
             if get_side_won(self.side):
                 self.winner = self.side
-            elif get_side_won():
+            elif get_side_won(human):
                 self.winner = human
             else:
                 self.winner = DRAW
@@ -255,6 +255,7 @@ class GameBoard:
 
         #save it
         self.save()
+        return ret
 
 
     def get_game_variables(self):
@@ -294,6 +295,7 @@ class GameBoard:
         if get_side_won(human):
             self.state = STATE_GAME_OVER
             self.winner = human
+
 
     def computer_move(self):
 
@@ -340,7 +342,7 @@ class GameBoard:
             if winning_box is not None:
                 ret = winning_box
                 try_set_box_state(winning_box, self.side)
-            #there is no winning move, so let's take a side to force player to counter
+            #there is no winning move, so let's take a side to force player to counter (block fork)
             else:
                 if try_set_box_state(2, self.side):
                     ret = 2
