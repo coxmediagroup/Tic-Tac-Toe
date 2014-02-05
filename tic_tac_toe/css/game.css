@@ -1,0 +1,233 @@
+#Gameapp h1 {
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        padding: 0 0 10px 0;
+}
+
+#Gameapp input[type="text"] {
+        font-size: 23px;
+        font-family: inherit;
+        line-height: 1.4em;
+        border: 0;
+        outline: none;
+        padding: 6px;
+        border: 1px solid #999999;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+        -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+        -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+        -o-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+}
+
+
+.highlight {
+        width: 90%;
+        padding: 7px 0 8px 0;
+        background-color:   #052243;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+        border-radius: 8px;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -o-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+
+}
+
+#Gameapp input::-webkit-input-placeholder {
+        font-style: italic;
+}
+
+#main {
+        display: none;
+}
+
+#Game-list {
+        margin: 10px 0;
+        padding: 0;
+        list-style: none;
+}
+
+#Game-list li {
+        position: relative;
+        font-size: 32px;
+        margin: 15px 0 15px 0;
+}
+
+#Game-list li:last-child {
+        border-bottom: none;
+}
+
+
+#Game-list li.editing {
+        border-bottom: none;
+        margin-top: -1px;
+        padding: 0;
+}
+
+#Game-list li.editing:last-child {
+        margin-bottom: -1px;
+}
+
+#Game-list li.editing .edit {
+        display: block;
+        background-color: #c4c4c4;
+        width: 80%;
+        margin: 15px 0 15px 0;
+}
+
+#Game-list li.editing .view {
+        display: none;
+}
+
+#Game-list li .view label {
+        word-break: break-word;
+}
+
+#Game-list li .edit {
+        display: none;
+}
+
+
+#edit-list {
+        margin: 10px 0;
+        padding: 0;
+        list-style: none;
+}
+
+#edit-list li:last-child {
+        border-bottom: none;
+}
+
+
+#edit-list li.editing {
+        border-bottom: none;
+}
+
+#edit-list li.editing:last-child {
+}
+
+#edit-list li.editing .edit {
+        background-color: #f3f3f3;
+}
+
+#edit-list li.editing .view {
+}
+
+#edit-list li .view label {
+        word-break: break-word;
+}
+
+
+.important {
+        float: left;
+        margin-right: 15px;
+        font-size: 80%;
+        cursor: pointer;
+}
+
+
+.toggle {
+        cursor: pointer;
+}
+
+
+.field_name {
+        position: relative;
+        font-size: 32px;
+
+}
+
+
+#Gameapp footer {
+        display: none;
+        overflow: hidden;
+        color: #555555;
+        padding: 0 20px;
+        line-height: 37px;
+        -webkit-border-radius: 0 0 5px 5px;
+        -moz-border-radius: 0 0 5px 5px;
+        -ms-border-radius: 0 0 5px 5px;
+        -o-border-radius: 0 0 5px 5px;
+        border-radius: 0 0 5px 5px;
+}
+
+#clear-selected {
+        float: right;
+        line-height: 20px;
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.6);
+        color: #abb1b3;
+        font-size: 16px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        padding: 0 10px 1px;
+        cursor: pointer;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        -ms-border-radius: 12px;
+        -o-border-radius: 12px;
+        border-radius: 12px;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        -o-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
+}
+
+#clear-selected:hover {
+        background: rgba(0, 0, 0, 0.35);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+        -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+        -ms-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+        -o-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+        box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+}
+
+#clear-selected:active {
+        position: relative;
+        top: 1px;
+}
+
+
+
+.square {
+	border: 2px solid black;
+	width: 130px;
+	height: 130px;
+
+}
+
+.playerSymbol {
+
+	background: url('../images/x_lay_down.png') no-repeat;
+}
+
+.aiSymbol {
+
+	background: url('../images/o_lay_down.png') no-repeat;
+
+}
+
+
+#game_nav_tabs {
+
+	font-size: 160%;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
