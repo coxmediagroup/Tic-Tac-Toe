@@ -1,4 +1,5 @@
 # Console tic-tac-toe
+# Adding a comment to see if I can use git properly.
 
 BLANK = '_'
 X = 'X'
