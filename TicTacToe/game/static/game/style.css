@@ -1,14 +1,33 @@
+h1, h2 {
+    text-align: center;
+    background-color:yellow;
+}
 
 #board {
+    width: 33.5%;
+    margin: 0 auto;
+}
 
+#message {
+   width: 50%;
+   margin: 0 auto;
+   text-align: center;
+   margin-bottom:20px;
 }
 
 #board div {
-
     border-color: black;
     border-width:5px;
     width:100px;
     height:100px;
+}
+
+#header {
+    width:100%;
+}
+
+#main-section {
+    width:100%
 }
 
 #board div img {
