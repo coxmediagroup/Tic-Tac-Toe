@@ -1,0 +1,28 @@
+/* app css stylesheet */
+
+div {
+  font-size: 30px;
+}
+
+.message {
+    /*margin-left: 35%;*/
+}
+
+.tictac {
+    width:80px;height:80px;
+}
+
+body{
+    text-align: center;
+}
+
+.center {
+    margin-left: 35%;
+    /*color: buttontext;*/
+    /*border: 2px outset buttonface;*/
+    /*border-image: initial;*/
+    /*padding: 1px 6px;*/
+    /*background-color: buttonface;*/
+    /*box-sizing: border-box;*/
+}
+
