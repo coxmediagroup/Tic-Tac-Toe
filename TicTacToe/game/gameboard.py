@@ -352,28 +352,6 @@ class GameBoard:
                     try_set_box_state(6, self.side)
                     ret = 6
 
-        #elif self.turn_count == 5:
-        #
-        #    #see if we can win next move
-        #    winning_box = get_next_winnable_move(self.side)
-        #    if winning_box is not None:
-        #        ret = winning_box
-        #        try_set_box_state(winning_box, self.side)
-        #        self.state = STATE_GAME_OVER
-        #        self.winner = COMPUTER_WON
-        #        return ret
-        #    #look if we have diagonal
-        #    if get_box_state(1) == self.side and get_box_state(9) == self.side:
-        #        #since we do have 1 and 9 and couldn't win, human has box 2; go for box 3
-        #        val = try_set_box_state(3, self.side)
-        #        ret = 3
-        #        if val is False: #human took middle, so...
-        #            try_set_box_state(7, self.side)
-        #            ret = 7
-        #     #go for another corner
-        #    else:
-        #        try_set_box_state(7, self.side)
-        #        ret = 7
         elif self.turn_count >= 5:
             #see if we can win next move
             winning_box = get_next_winnable_move(self.side)
