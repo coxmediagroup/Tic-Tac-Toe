@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+{% load board_tags%}
+{% block head %}
+{% endblock %}
+{% block content %}
+    <div class="grid_15" >
+        {% render_board board  %}
+    </div>
+    <div class="clear" ></div>
+    <div class="grid_15">
+        {% if board.winner == None %}
+        <form action="#" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+        {% else %}
+        <a href={% url again %} ><h3> Play again</h3> </a>
+        {% endif %}
+    </div>
+{% endblock %}

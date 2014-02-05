@@ -1,0 +1,15 @@
+{% extends "base.html"%}
+{% block head %}
+{% endblock %}
+{% block content %}
+    <div class="grid_15">
+        <h1>Welcome to Tic-Tac-Toe</h1>
+    </div>
+    <div class="clear" ></div>
+    <div class="grid_15">
+        <form action="#" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+{% endblock %}
