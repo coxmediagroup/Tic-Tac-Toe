@@ -3,7 +3,7 @@
  */
 var canClick = true;
 var xImagePath = "";
-var oImagepath = "";
+var oImagePath = "";
 var context;
 var ajaxUrl = "";
 
@@ -22,7 +22,7 @@ function updateBoard(data) {
             if(val == 'X')
                 $("#" + key).prepend('<img src="' + xImagePath + '" />');
             else if(val == 'O')
-                $("#" + key).prepend('<img src="' + oImagepath + '" />');
+                $("#" + key).prepend('<img src="' + oImagePath + '" />');
         }
 
         if(key == 'game_state')

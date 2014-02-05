@@ -14,7 +14,7 @@
 <body>
 
     <div class="header">
-            <h1>Tic Tac Toe!</h1>
+            <h1>Lehel's Tic Tac Toe!</h1>
         </div>
 
     <div id="main-section">
@@ -34,7 +34,7 @@
 
 <script type="text/javascript">
 xImagePath = "{% static 'game/images/X.jpg' %}";
-oImagepath = "{% static 'game/images/O.jpg' %}";
+oImagePath = "{% static 'game/images/O.jpg' %}";
 context = {{ context|safe }};
 ajaxUrl = "{% url 'ajax_make_move' box_choice=12345 %}"
 </script>

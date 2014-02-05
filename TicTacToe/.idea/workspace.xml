@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/game/static/game/script.js" />
+    <list default="true" id="e37b8845-926e-4aa9-9246-8eadeb234c96" name="Default" comment="*Moved Javascript to static script file and added dynamically generated variables in template">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/game.html" afterPath="$PROJECT_DIR$/game/templates/game/game.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/gameboard.py" afterPath="$PROJECT_DIR$/game/gameboard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/static/game/script.js" afterPath="$PROJECT_DIR$/game/static/game/script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/templates/game/startgame.html" afterPath="$PROJECT_DIR$/game/templates/game/startgame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game/views.py" afterPath="$PROJECT_DIR$/game/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TicTacToe.iws" />
@@ -30,10 +28,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="gameboard.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="gameboard.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game/gameboard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="360" column="0" selection-start="11524" selection-end="11524" vertical-scroll-proportion="-4.28" vertical-offset="6013" max-vertical-offset="6970">
+            <state line="402" column="18" selection-start="13233" selection-end="13233" vertical-scroll-proportion="20.018692" vertical-offset="408" max-vertical-offset="6970">
               <folding />
             </state>
           </provider>
@@ -42,7 +40,7 @@
       <file leaf-file-name="startgame.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="20" selection-start="407" selection-end="407" vertical-scroll-proportion="-3.2692308" vertical-offset="153" max-vertical-offset="765">
+            <state line="10" column="19" selection-start="334" selection-end="334" vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="765">
               <folding />
             </state>
           </provider>
@@ -96,7 +94,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="0" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1037">
+            <state line="58" column="50" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.0" vertical-offset="678" max-vertical-offset="1037">
               <folding />
             </state>
           </provider>
@@ -105,16 +103,16 @@
       <file leaf-file-name="game.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="9" selection-start="1158" selection-end="1158" vertical-scroll-proportion="-8.923077" vertical-offset="431" max-vertical-offset="816">
+            <state line="16" column="24" selection-start="478" selection-end="478" vertical-scroll-proportion="8.115385" vertical-offset="483" max-vertical-offset="816">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="script.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="script.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/static/game/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="16" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.75766015" vertical-offset="714" max-vertical-offset="1275">
+            <state line="69" column="0" selection-start="1512" selection-end="1512" vertical-scroll-proportion="0.0" vertical-offset="916" max-vertical-offset="1275">
               <folding />
             </state>
           </provider>
@@ -144,9 +142,9 @@
         <option value="$PROJECT_DIR$/game/static/game/style.css" />
         <option value="$PROJECT_DIR$/game/views.py" />
         <option value="$PROJECT_DIR$/game/gameboard.py" />
-        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
-        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
         <option value="$PROJECT_DIR$/game/static/game/script.js" />
+        <option value="$PROJECT_DIR$/game/templates/game/game.html" />
+        <option value="$PROJECT_DIR$/game/templates/game/startgame.html" />
       </list>
     </option>
   </component>
@@ -581,7 +579,11 @@
       <created>1391604551856</created>
       <updated>1391604551856</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="*Moved Javascript to static script file and added dynamically generated variables in template">
+      <created>1391610755755</created>
+      <updated>1391610755755</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -631,7 +633,8 @@
     <MESSAGE value="*Fixed some CSS and UI" />
     <MESSAGE value="*Adjusted CSS for prettiness" />
     <MESSAGE value="*Removed unused/commented code" />
-    <option name="LAST_COMMIT_MESSAGE" value="*Removed unused/commented code" />
+    <MESSAGE value="*Moved Javascript to static script file and added dynamically generated variables in template" />
+    <option name="LAST_COMMIT_MESSAGE" value="*Moved Javascript to static script file and added dynamically generated variables in template" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -710,37 +713,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="0" selection-start="1376" selection-end="1376" vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1037">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/templates/game/startgame.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="20" selection-start="407" selection-end="407" vertical-scroll-proportion="-3.2692308" vertical-offset="153" max-vertical-offset="765">
+        <state line="10" column="19" selection-start="334" selection-end="334" vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="765">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/templates/game/game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="9" selection-start="1158" selection-end="1158" vertical-scroll-proportion="-8.923077" vertical-offset="431" max-vertical-offset="816">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="360" column="0" selection-start="11524" selection-end="11524" vertical-scroll-proportion="-4.28" vertical-offset="6013" max-vertical-offset="6970">
+        <state line="16" column="24" selection-start="478" selection-end="478" vertical-scroll-proportion="8.115385" vertical-offset="483" max-vertical-offset="816">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game/static/game/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="16" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.75766015" vertical-offset="714" max-vertical-offset="1275">
+        <state line="69" column="0" selection-start="1512" selection-end="1512" vertical-scroll-proportion="0.0" vertical-offset="916" max-vertical-offset="1275">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="50" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.0" vertical-offset="678" max-vertical-offset="1037">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/gameboard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="402" column="18" selection-start="13233" selection-end="13233" vertical-scroll-proportion="20.018692" vertical-offset="408" max-vertical-offset="6970">
           <folding />
         </state>
       </provider>
