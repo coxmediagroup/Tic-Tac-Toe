@@ -18,7 +18,9 @@
     <div id="main-section">
         <h2>Play a new game of Tic Tac Toe?</h2>
         <div id="yes-no">
-            <form action="{% url 'launch' %}">
+            <form action="{% url 'launch' %}" method="POST">
+                 {% csrf_token %}
+                <input type="checkbox" name="play-as-o" id="play-as-o" value="X">Play as O (start second)</input>
                 <input type="submit" value="Yes!" />
             </form>
             <button id="no-button">No!</button>

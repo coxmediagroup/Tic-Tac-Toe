@@ -7,8 +7,6 @@ from django.shortcuts import redirect
 import gameboard as gb
 
 
-
-
 #handles the "start game" view
 def start_game(request):
     context = {}
@@ -16,12 +14,14 @@ def start_game(request):
 
 #handles when player presses "Start Game" button
 def launch(request):
-    game_board = gb.GameBoard(gb.PLAYER_O)
-    #game_board.computer_move()
-    cache.set('ttt_game_board', game_board)
+    if request.POST.get('play-as-o', False) is not False:
+        game_board = gb.GameBoard(gb.PLAYER_X)
+        move = game_board.computer_move()
+    else:
+        game_board = gb.GameBoard(gb.PLAYER_O)
 
-    context = gb.get_game_variables(game_board)
-    context = {'context': context}
+    gb.save_board(game_board)
+
     return redirect('game')
 
 #loads the current game based on settings in memory
@@ -34,39 +34,23 @@ def game_page(request):
 def ajax_make_move(request, box_choice):
 
     if request.is_ajax():
-        game_board = gb.get_board()
+        game_board = gb.GameBoard.get()
 
-        if game_board.state == gb.STATE_GAME_OVER:
-            ret = gb.get_game_variables(game_board)
-            response = simplejson.dumps(ret)
-        else:
-            #turn count increases from player choosing move
-            game_board.turn_count += 1
-
-            opposing_player = gb.opposing_player(game_board.side)
+        if game_board.check_game_over() is False:
 
             #update board
-            box_choice = int(box_choice)
-            game_board.human_last_move = box_choice
-            gb.try_set_box_state(box_choice,opposing_player)
-
-            if gb.get_side_won(opposing_player):
-                game_board.state = gb.STATE_GAME_OVER
-                game_board.winner = opposing_player
+            game_board.human_move(box_choice)
 
             #check if last move filled the board (draw)
-            elif gb.get_available_box() is None:
-                game_board.state = gb.STATE_GAME_OVER
-                game_board.winner = gb.DRAW
-            else:
+            if game_board.check_game_over() is False:
                 #change game state to the computer
-                game_board.state = game_board.side
+                game_board.set_turn(game_board.side)
                 #get computer's move
-                move = game_board.computer_move()
-                #save game_board
-                gb.save_board(game_board)
+                game_board.computer_move()
+                #check if game is over
+                game_board.check_game_over()
 
-            ret = gb.get_game_variables(game_board)
+            ret = game_board.get_game_variables()
             response = simplejson.dumps(ret)
     else:
         response = 'fail'

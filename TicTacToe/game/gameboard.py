@@ -15,11 +15,7 @@ BOX_O = 'O'
 PLAYER_X = 'X'
 PLAYER_O = 'O'
 
-def get_board():
-    return cache.get('ttt_game_board')
 
-def save_board(board):
-    cache.set('ttt_game_board', board)
 
 def get_side_won(side):
     #check column 1
@@ -48,29 +44,6 @@ def get_side_won(side):
 
     return False
 
-
-def get_game_variables(board):
-    ret = {}
-    ret['box1'] = get_box_state(1)
-    ret['box2'] = get_box_state(2)
-    ret['box3'] = get_box_state(3)
-    ret['box4'] = get_box_state(4)
-    ret['box5'] = get_box_state(5)
-    ret['box6'] = get_box_state(6)
-    ret['box7'] = get_box_state(7)
-    ret['box8'] = get_box_state(8)
-    ret['box9'] = get_box_state(9)
-    ret['game_state'] = board.state
-    ret['winner'] = board.winner
-    ret['message'] = get_player_message()
-    return ret
-
-def get_player_message():
-    board = get_board()
-    if opposing_player(board.side) == board.state:
-        return 'Your turn!'
-    else:
-        return "Computer's turn..."
 
 def get_box_state(box):
         return cache.get('tictactoe_box' + str(box))
@@ -259,6 +232,68 @@ class GameBoard:
         cache.set('tictactoe_box8', '')
         cache.set('tictactoe_box9', '')
 
+    @staticmethod
+    def get():
+        return cache.get('ttt_game_board')
+
+    def save(self):
+        cache.set('ttt_game_board', self)
+
+    def check_game_over(self):
+        ret = False
+        human = opposing_player(self.side)
+
+        if get_available_box() is None:
+            self.state = STATE_GAME_OVER
+            if get_side_won(self.side):
+                self.winner = self.side
+            elif get_side_won():
+                self.winner = human
+            else:
+                self.winner = DRAW
+            ret = True
+
+        #save it
+        self.save()
+
+
+    def get_game_variables(self):
+        ret = {}
+        ret['box1'] = get_box_state(1)
+        ret['box2'] = get_box_state(2)
+        ret['box3'] = get_box_state(3)
+        ret['box4'] = get_box_state(4)
+        ret['box5'] = get_box_state(5)
+        ret['box6'] = get_box_state(6)
+        ret['box7'] = get_box_state(7)
+        ret['box8'] = get_box_state(8)
+        ret['box9'] = get_box_state(9)
+        ret['game_state'] = self.state
+        ret['winner'] = self.winner
+        ret['message'] = self.get_player_message()
+        return ret
+
+    def set_turn(self, player):
+        self.state = player
+        self.save()
+
+    def get_player_message(self):
+        if opposing_player(self.side) == self.state:
+            return 'Your turn!'
+        else:
+            return "Computer's turn..."
+
+    def human_move(self, box_choice):
+        self.turn_count += 1
+
+        human = opposing_player(self.side)
+        box_choice = int(box_choice)
+        self.human_last_move = box_choice
+        try_set_box_state(box_choice, human)
+
+        if get_side_won(human):
+            self.state = STATE_GAME_OVER
+            self.winner = human
 
     def computer_move(self):
 
@@ -279,6 +314,8 @@ class GameBoard:
                 #ret = get_empty_adjacent_box(self.human_last_move)
                 #try_set_box_state(ret, self.side)
                 #ret = get_opposing_corner(self.human_last_move)
+
+                #take middle
                 ret = 5
                 try_set_box_state(ret, self.side)
             #since no corner was taken, take top-left
@@ -303,40 +340,39 @@ class GameBoard:
             if winning_box is not None:
                 ret = winning_box
                 try_set_box_state(winning_box, self.side)
-            #there is no winning move, so let's see if they have one
+            #there is no winning move, so let's take a side to force player to counter
             else:
-                if try_set_box_state(3, self.side):
-                    ret = 3
-                elif try_set_box_state(7, self.side):
-                    ret = 7
-                elif try_set_box_state(1, self.side):
-                    ret = 1
+                if try_set_box_state(2, self.side):
+                    ret = 2
+                elif try_set_box_state(4, self.side):
+                    ret = 4
                 else:
-                    try_set_box_state(9, self.side)
-                    ret = 9
+                    try_set_box_state(6, self.side)
+                    ret = 6
 
-        elif self.turn_count == 5:
-            #see if we can win next move
-            winning_box = get_next_winnable_move(self.side)
-            if winning_box is not None:
-                ret = winning_box
-                try_set_box_state(winning_box, self.side)
-                self.state = STATE_GAME_OVER
-                self.winner = COMPUTER_WON
-                return ret
-            #look if we have diagonal
-            if get_box_state(1) == self.side and get_box_state(9) == self.side:
-                #since we do have 1 and 9 and couldn't win, human has box 2; go for box 3
-                val = try_set_box_state(3, self.side)
-                ret = 3
-                if val is False: #human took middle, so...
-                    try_set_box_state(7, self.side)
-                    ret = 7
-             #go for another corner
-            else:
-                try_set_box_state(7, self.side)
-                ret = 7
-        elif self.turn_count >= 6:
+        #elif self.turn_count == 5:
+        #
+        #    #see if we can win next move
+        #    winning_box = get_next_winnable_move(self.side)
+        #    if winning_box is not None:
+        #        ret = winning_box
+        #        try_set_box_state(winning_box, self.side)
+        #        self.state = STATE_GAME_OVER
+        #        self.winner = COMPUTER_WON
+        #        return ret
+        #    #look if we have diagonal
+        #    if get_box_state(1) == self.side and get_box_state(9) == self.side:
+        #        #since we do have 1 and 9 and couldn't win, human has box 2; go for box 3
+        #        val = try_set_box_state(3, self.side)
+        #        ret = 3
+        #        if val is False: #human took middle, so...
+        #            try_set_box_state(7, self.side)
+        #            ret = 7
+        #     #go for another corner
+        #    else:
+        #        try_set_box_state(7, self.side)
+        #        ret = 7
+        elif self.turn_count >= 5:
             #see if we can win next move
             winning_box = get_next_winnable_move(self.side)
             if winning_box is not None:
