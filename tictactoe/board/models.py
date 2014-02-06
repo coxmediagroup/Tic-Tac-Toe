@@ -49,7 +49,7 @@ class Move(models.Model):
   def save(self, *args, **kwargs):
     # default ordering is by time descending, see above
     existing_moves = Move.objects.filter(game=self.game)
-    if len(existing_moves) > 0 and existing_moves[0].player == self.player:
+    if len(existing_moves) > 0 and existing_moves[0].player == self.player and existing_moves[0].id != self.id:
       raise IntegrityError('Same player cannot make consecutive moves in the same game')
     elif self.position_x not in range(0,3):
       raise IntegrityError('position_x, %s is outside of valid range,0-2' % self.position_x)
