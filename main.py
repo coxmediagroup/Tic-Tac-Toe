@@ -20,7 +20,7 @@ GRID = ['*'] + [BLANK] * 9
 LINES = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7))
 
 
-# Check whether the indicated player (X or O) has won the game. Returns True or False
+# Check whether the indicated player (X or O) has won the game. Returns True or False.
 def check_for_win(player):
     for a, b, c in LINES:
         if player == GRID[a] == GRID[b] == GRID[c]:
@@ -170,7 +170,7 @@ def print_instructions():
 
 # Play a game of Tic-Tac-Toe. The required arguments 'player1' and 'player2' are functions that are called
 # by 'play' to select moves for X and O respectively. If the optional argument 'verbose' is set to False
-# then the output of the functions 'player1' and 'player2' is suppressed. This is useful for testing, but
+# then the output of the functions 'player1' and 'player2' is not displayed. This is useful for testing, but
 # we prefer the default verbose=True for interactive play.
 #
 # The function returns X if X wins, O if O wins, and BLANK if the game is tied.
