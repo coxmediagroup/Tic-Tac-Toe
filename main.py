@@ -14,6 +14,14 @@ X = 'X'
 O = 'O'
 GRID = ['*'] + [BLANK] * 9
 
+VERBOSE = True  # Setting this variable to False will suppress mose output.
+
+
+# Suppresses output for purposes of automated testing.
+def silence():
+    global VERBOSE
+    VERBOSE = False
+
 # LINES describes all possible ways to get three in a row in Tic-Tac-Toe: horizontal, vertical, and diagonal lines.
 # This could be changed if you wanted to experiment with variants of Tic-Tac-Toe.
 
@@ -54,7 +62,7 @@ def get_human_move(x, y):
                 print 'That square is occupied.'
         else:
             print 'Illegal move.'
-    return move, None
+    return move
 
 
 # Returns a winning move for the player (X or O) if possible.
@@ -149,8 +157,9 @@ def get_computer_move(computer_plays, move_count):
         else:
             move = (find_winning_move(O) or find_winning_move(X) or find_double_attack(O) or
                     find_double_attack(X) or any_square())
-    msg = 'The computer picks square %d.' % move
-    return move, msg
+    if VERBOSE:
+        print 'The computer picks square %d.' % move
+    return move
 
 
 # Display the instructions and ask the human if he would like to play X or O.
@@ -174,23 +183,20 @@ def print_instructions():
 # we prefer the default verbose=True for interactive play.
 #
 # The function returns X if X wins, O if O wins, and BLANK if the game is tied.
-def play(player1, player2, verbose=True):
+def play(player1, player2):
     move_count = 0
     GRID[1:10] = [BLANK] * 9
     while move_count < 9:
         if move_count % 2 == 0:
-            move, msg = player1(X, move_count)
+            move = player1(X, move_count)
             player = X
         else:
-            move, msg = player2(O, move_count)
+            move = player2(O, move_count)
             player = O
         GRID[move] = player
         move_count += 1
-        if verbose:
-            if msg:
-                print msg
+        if VERBOSE:
             print_board()
-
         if check_for_win(player):
             return player
     else:
@@ -201,9 +207,9 @@ def play(player1, player2, verbose=True):
 def main():
     human_plays = print_instructions()
     if human_plays == X:
-        winner = play(get_human_move, get_computer_move, verbose=True)
+        winner = play(get_human_move, get_computer_move)
     else:
-        winner = play(get_computer_move, get_human_move, verbose=True)
+        winner = play(get_computer_move, get_human_move)
     if winner == human_plays:
         print 'You win!'
     elif winner == BLANK:
