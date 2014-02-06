@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from tastypie import fields
 from tastypie.api import Api
 from tastypie.authorization import Authorization, DjangoAuthorization
