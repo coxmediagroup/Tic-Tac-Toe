@@ -4,9 +4,8 @@
 BLANK = '_'
 X = 'X'
 O = 'O'
-GRID = [BLANK] * 10
-LINES = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (2, 5, 8))
-MOVE_COUNT = 0
+GRID = ['*'] + [BLANK] * 9
+LINES = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7))
 
 
 def check_for_win(player):
@@ -23,33 +22,23 @@ def print_board():
     print
 
 
-def get_human_move(human_plays, first=False):
+def get_human_move(human_plays, move_count):
     move = None
     while move is None:
-        response = raw_input('Enter your move (1-9): ').lower()
-        if response == 'quit':
-            move = 'quit'
-        elif response == 'pass':
-            if first:
-                print 'OK, I will go first.'
-                move = 'pass'
+        response = raw_input('Enter your move (1-9): ')
+        if len(response) == 1 and '1' <= response <= '9':
+            square = int(response)
+            if GRID[square] == BLANK:
+                move = square
             else:
-                print 'You may only pass on your first move.'
+                print 'That square is occupied.'
         else:
-            if len(response) == 1 and '1' <= response <= '9':
-                square = int(response)
-                if GRID[square] == BLANK:
-                    move = square
-                else:
-                    print 'That square is occupied.'
-            else:
-                print 'Illegal move.'
-    assert move is not None
-    return move
+            print 'Illegal move.'
+    return move, None
 
 
 def find_winning_move(player):
-    for square in range(1,10):
+    for square in range(1, 10):
         if GRID[square] == BLANK:
             GRID[square] = player
             win = check_for_win(player)
@@ -61,17 +50,17 @@ def find_winning_move(player):
 
 def find_double_attack(player):
     move = None
-    for square in range(1,10):
+    for square in range(1, 10):
         if GRID[square] == BLANK:
             GRID[square] = player
-            attacks = 0
+            attacks = False
             for a, b, c in LINES:
                 if (GRID[a], GRID[b], GRID[c]) in [(player, player, BLANK), (player, BLANK, player),
                                                    (BLANK, player, player)]:
-                    attacks += 1
-                    if attacks == 2:
+                    if attacks:
                         move = square
                         break
+                    attacks = True
             GRID[square] = BLANK
             if move is not None:
                 break
@@ -86,23 +75,23 @@ def get_computer_move(computer_plays, move_count):
     if computer_plays == X:
         if move_count == 0:
             move = 1
-        elif move_count == 1:
-            if GRID[5] == O: # Only safe move for human player
+        elif move_count == 2:
+            if GRID[5] == O:     # Only safe move for human player
                 move = 9
             elif GRID[4] == O or GRID[7] == O or GRID[8] == O:
                 move = 3
             else:
                 move = 7
         else:
-            move = find_winning_move(X) or find_winning_move(O) or find_double_attack(X)
-            move = move or find_double_attack(O) or any_square()
+            move = (find_winning_move(X) or find_winning_move(O) or find_double_attack(X)
+                    or find_double_attack(O) or any_square())
     else:
-        if move_count == 0:
+        if move_count == 1:
             if GRID[5] == X:
                 move = 1
             else:
                 move = 5
-        elif move_count == 1:
+        elif move_count == 3:
             move = find_winning_move(X)
             if move is None:
                 if GRID[5] == X:
@@ -112,51 +101,61 @@ def get_computer_move(computer_plays, move_count):
                 else:
                     move = find_double_attack(O) or find_double_attack(X) or any_square()
         else:
-            move = find_winning_move(O) or find_winning_move(X) or find_double_attack(O)
-            move = move or find_double_attack(X) or any_square()
-
-    print 'The computer picks square %d.' % move
-    return move
+            move = (find_winning_move(O) or find_winning_move(X) or find_double_attack(O) or
+                    find_double_attack(X) or any_square())
+    msg = 'The computer picks square %d.' % move
+    return move, msg
 
 
 def print_instructions():
     print 'Play tic-tac-toe against the computer. You know the rules.'
     print 'The squares are numbered 1-9. To move, type the number of your square.'
-    print 'If you would like to play second, type "pass" (without quotes).'
-    print 'If you would like to quit, type "quit" (without quotes).'
+    print '   1 2 3'
+    print '   4 5 6'
+    print '   7 8 9'
     print
+    while True:
+        response = raw_input('Do you wish to play X or O? ').upper()
+        if response == 'X' or response == 'O':
+            return response
+        print 'Please type X or O.'
+
+
+def play(player1, player2, verbose=True):
+    move_count = 0
+    GRID[1:10] = [BLANK] * 9
+    while move_count < 9:
+        if move_count % 2 == 0:
+            move, msg = player1(X, move_count)
+            player = X
+        else:
+            move, msg = player2(O, move_count)
+            player = O
+        GRID[move] = player
+        move_count += 1
+        if verbose:
+            if msg:
+                print msg
+            print_board()
+
+        if check_for_win(player):
+            return player
+    else:
+        return BLANK
 
 
 def main():
-    human_plays = X
-    computer_plays = O
-    print_instructions()
-    human_move = get_human_move(human_plays, first=True)
-    if human_move == 'quit':
-        return None
-    if human_move == 'pass':
-        human_plays = O
-        computer_plays = X
+    human_plays = print_instructions()
+    if human_plays == X:
+        winner = play(get_human_move, get_computer_move, verbose=True)
     else:
-        GRID[human_move] = human_plays
-        print_board()
-    for move_count in range(4):
-        computer_move = get_computer_move(computer_plays, move_count)
-        GRID[computer_move] = computer_plays
-        print_board()
-        if check_for_win(computer_plays):
-            print 'The computer won! All hail the computer!'
-            break
-        human_move = get_human_move(human_plays)
-        if human_move == 'quit':
-            break
-        GRID[human_move] = human_plays
-        print_board()
-        if check_for_win(human_plays):
-            print 'You won!'
-            break
+        winner = play(get_computer_move, get_human_move, verbose=True)
+    if winner == human_plays:
+        print 'You win!'
+    elif winner == BLANK:
+        print 'Tie game!'
     else:
-        print 'The game is a draw!'
+        print 'Computer wins!'
 
 if __name__ == '__main__':
     main()
