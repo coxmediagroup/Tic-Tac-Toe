@@ -55,9 +55,9 @@ class Move(models.Model):
       acceptable_change = updated_move.player == self.player
       print('updating player: '+updated_move.player.name+' to player: '+self.player.name)
       print(acceptable_change)
-    else:
+    elif len(existing_moves) > 0:
       acceptable_change = existing_moves[0].player != self.player
-    if len(existing_moves) > 0 and not acceptable_change:
+    if not acceptable_change:
       raise IntegrityError('Same player cannot make consecutive moves in the same game')
     elif self.position_x not in range(0,3):
       raise IntegrityError('position_x, %s is outside of valid range,0-2' % self.position_x)
