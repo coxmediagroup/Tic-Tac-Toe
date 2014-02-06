@@ -1,9 +1,44 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send us a pull request.
+To see the game in action, please go to Tic-Tac-Toe/tictactoe and run ./manage.py runserver
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+In another terminal, go to Tic-Tac-Toe directory and run python client.py
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+Requirements.txt holds all the requirements
+I used virtualenv and pip freeze
+
+
+Description of solution...
+
+My solution is written in Python using the Django framework.  I have implemented REST apis which I use via python script to run the game from the terminal.  I used the default sqlite3 configuration for this because I didn't feel it worth the time to fiddle with configuring another database, regardless of how easy it was.  Just no point for this exercize.
+
+I started out planning to deploy this and have a nice UI available online.  I will still do that some time, but I just can't find the time to get to it lately and I don't want to keep you all waiting.  So, I stopped short of the web UI, but continued using the REST apis in a quick little client python script.
+
+I'm attaching my whiteboard in my email notification of completion for what I was thinking for the web UI component in case you are interested there.
+
+I included some validation checks on the save method on the Move class in models.py to raise exceptions for the following reasons:
+
+- Same player cannot make consecutive moves in the same game
+- position_x is outside of valid range,0-2
+- position_y, %s is outside of valid range,0-2
+
+I included unicode for all model objects so they would look nice in the admin page.
+http://localhost:8000/admin/
+
+I utilized tastypie as well as swagger as well.
+http://localhost:8000/swagger/
+
+I created two test classes with multiple cases each.  One class for the model level save validations that I introduced and then another for the inter-model update of game status upon saving a game ending move.  The latter logic being tested living in api.py.  That set of tests also tests the move selections of the computer player.
+
+At one point I had a choice to prioritize getting the computer player to play more realistically (instead of choosing the first empty slot as I put in as a temporary thing) vs. getting the UI out and on the web.  I chose to get the computer player's selections on par with a human player above the UI because that was a requirement specified and the web based UI was not.
+
+To check for winning conditions, I utilized numpy, which has nice matrix functions which include rotation, sums of diagonal (only in one direction, so I paired it with the rotation to get the other diagonal), sums of rows and sums of columns.  I used these features to detect a winning condition by setting different values in the positions for each player's moves.  For example, player1 could have 1 and player2 could have 9.  The selection of the numbers is fairly arbitrary, but you cannot choose p' < n*p'' where p' and p'' are different players' values and n is one of the two dimension lengths of the tictactoe board.  This solution relies on a square area.  So, finding the winner is as simple as looking at all the sums for a value equal to p'*n or p''*n.  Example:  p' is 1 and p'' is 3 - one cannot assume a winning condition if the sum of a row is 3 because that could either be three in the row belonging to player' or one position in the row belonging to player''.
+
+In order to select a position for the computer player to choose, I implemented a similar idea, where p''*(n-1) means that they are one move away from winning (and they must be stopped!).  But the question was still, how to keep track of what row/column/diagonal it was and select the empty slot?  I acheived this in the function select_move_for_computer by hard coding the coordinates as tuples in a dict of lists with keys being integers (sum for that row of tuple coordinates for example).  So, when going through the priorities for the computer player (value p'), first was to win in one move if possible, I simply looked for p'*(n-1) in the dict and if it was there, loop through the tuples of the first list there and select the first one found where the value was 0.  The same thing was done for stopping the other player from winning.  Beyond that, I have it selecting the first available slot untaken going left to right top to bottom.
+
+I had planned on using the player model more, with a stretch goal of adding logging in capability, so I left it in there although it isn't technically necessary for the functionality you see at work.  I added search (filtering in class Meta) for PlayerResource to help avoid creating a computer player every game and also reusing players with the same name as entered.  Again, this would be more apt for a login scenario with abilities to view past games and continue existing ones.
+
+One option I thought of was storing the matrix in the game model as a pickle but I decided against that in favor of keeping the moves separate and building the matrix each time.  This would allow easier capability to undo/redo moves later down the road and I like to have the timeline available as well.
+
+I used South, but it turned out to be uneccessary for this iteration.
+I also used django-nose, which is useful for running individual tests and the output is nicer as it groups the stdout for each test together after the results of the test (pass, fail, skip).
+
+
