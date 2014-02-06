@@ -173,8 +173,8 @@ class GameScreen(object):
             msg = '* winning_player      = {}'
             self.display(msg.format(self.winning_player))
             
-            msg = '* current_player      = {}'
-            self.display(msg.format(self.board.current_player))
+            msg = '* this_player      = {}'
+            self.display(msg.format(self.board.this_player))
             
             self._write_divider()
         
@@ -246,8 +246,8 @@ class GameScreen(object):
         self._write_spacer(lines=2)
         
         # Show player turn
-        if self.board.current_player:
-            msg = self.MSG_PLAYER_TURN.format(self.board.current_player)
+        if self.board.this_player:
+            msg = self.MSG_PLAYER_TURN.format(self.board.this_player)
             self.display(msg)
             self._write_spacer()
         
@@ -342,12 +342,12 @@ class GameScreen(object):
         if self.screen_mode == self.GAME_SCREEN_MODE:
             
             # Which player goes first
-            if not self.board.current_player:
+            if not self.board.this_player:
                 if key_event == ord("1"):
-                    self.board.current_player = self.board.P1
+                    self.board.this_player = self.board.P1
                     self.board.next_player = self.board.P2
                 elif key_event == ord ("2"):
-                    self.board.current_player = self.board.P2
+                    self.board.this_player = self.board.P2
                     self.board.next_player = self.board.P1
             
             # Interact with player
@@ -387,7 +387,7 @@ class GameScreen(object):
         Game is ready when there is a defined starting player
         
         """
-        if not self.board.current_player:
+        if not self.board.this_player:
             self.display(self.MSG_PLAYER_START)
             return False
         else:
@@ -430,9 +430,9 @@ class GameScreen(object):
         """
         
         """
-        if self.board.current_player == self.board.P1:
+        if self.board.this_player == self.board.P1:
             return self.board.P1_AI
-        elif self.board.current_player == self.board.P2:
+        elif self.board.this_player == self.board.P2:
             return self.board.P2_AI
 
     def valid_player_move(self, this_space):
@@ -442,8 +442,8 @@ class GameScreen(object):
             # make this an integer
             this_space = int(this_space)
             # try to place move
-            current_player = self.board.current_player
-            if not self.board.move_player(current_player, this_space):
+            this_player = self.board.this_player
+            if not self.board.move_player(this_player, this_space):
                 raise GameScreenException
         except:
             self.errors.append(self.MSG_NOT_VALID.format(this_space))
@@ -488,7 +488,7 @@ class GameScreen(object):
         # current player turn: human or computer?
         if self.player_ai(): # computer
             # Computer: always makes a valid move - right? :)
-            valid_move = self.board.ai(self.board.current_player)
+            valid_move = self.board.ai()
             self.display(self.MSG_PRESS_ANY_KEY)
         else:
             # Human: choose a valid move
@@ -498,12 +498,12 @@ class GameScreen(object):
         if valid_move:
             
             # current player move make a winning move?
-            player_wins = self.board.player_win_round(self.board.current_player)
+            player_wins = self.board.player_win_round(self.board.this_player)
             if player_wins:
                 #   Note which player was winner
-                self.winning_player = self.board.current_player
+                self.winning_player = self.board.this_player
                 #   add point for current player
-                self.board.score_board[self.board.current_player] += 1
+                self.board.score_board[self.board.this_player] += 1
         
             # swap player turns
             self.board.swap_players()
@@ -519,7 +519,7 @@ class GameScreen(object):
                 # add point for draw
                 self.board.score_board[self.board.P0] += 1
                 # [Round over] (Draw)
-                self.round_over_status == True
+                self.round_over_status = self.MSG_GAME_DRAW
                 
             
             self.screen.refresh()

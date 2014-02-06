@@ -103,9 +103,84 @@ def ai():
     
     # AI should place player on board
     b = Board()
+    b.this_player = b.P1
+    b.next_player = b.P2
+    
+    # empty board has 9 spaces
     assert len(b.remaining_spaces()) == 9
-    b.ai(b.P1)
+    
+    # first move should have 8 spaces
+    b.ai()
     assert len(b.remaining_spaces()) == 8
+    
+    # AI should place winning move
+    b = Board()
+    # OO-
+    # XX-
+    # O-X
+    b.board[0][0].player = b.P2 #1
+    b.board[0][1].player = b.P2 #2
+    b.board[0][2].player = b.P0 #3
+    b.board[1][0].player = b.P1 #4
+    b.board[1][1].player = b.P1 #5
+    b.board[1][2].player = b.P0 #6
+    b.board[2][0].player = b.P2 #7
+    b.board[2][1].player = b.P0 #8
+    b.board[2][2].player = b.P1 #9
+    
+    b.this_player = b.P1
+    b.next_player = b.P2
+    b.ai()
+    
+    board_spots = 'OO-XXXO-X'
+    msg = 'Winning Move for "{}" is "{}", not "{}"'
+    assert b.__str__() == board_spots, msg.format(b.P1, board_spots, b)
+    
+    # AI should block winning move
+    b = Board()
+    # XX-
+    # --O
+    # --O
+    b.board[0][0].player = b.P1 #1
+    b.board[0][1].player = b.P1 #2
+    b.board[0][2].player = b.P0 #3
+    b.board[1][0].player = b.P0 #4
+    b.board[1][1].player = b.P0 #5
+    b.board[1][2].player = b.P2 #6
+    b.board[2][0].player = b.P0 #7
+    b.board[2][1].player = b.P0 #8
+    b.board[2][2].player = b.P0 #9
+    
+    b.this_player = b.P2
+    b.next_player = b.P1
+    b.ai()
+    
+    board_spots = 'XXO--O---'
+    msg = 'Blocking move for P2 is "{}", not "{}"'
+    assert str(b) == board_spots, msg.format(board_spots, b)
+
+def tmp():
+    # NOT a win by diagonal right-to-left
+    b = Board()
+    # XOX
+    # -X-
+    # OXO
+    b.board[0][0].player = b.P1 #1
+    b.board[0][1].player = b.P2 #2
+    b.board[0][2].player = b.P1 #3
+    b.board[1][0].player = b.P0 #4
+    b.board[1][1].player = b.P1 #5
+    b.board[1][2].player = b.P0 #6
+    b.board[2][0].player = b.P2 #7
+    b.board[2][1].player = b.P1 #8
+    b.board[2][2].player = b.P2 #9
+
+    b.this_player = b.P2
+    b.next_player = b.P1
+    b.ai()
+    # assert b.player_win_round(b.P2) == True
+    msg = 'Board should be not be winnable: "{}"'
+    assert b.winning_space() == False, msg.format(b)
 
 def tests():
     """Tests for the Board class"""
@@ -115,6 +190,7 @@ def tests():
     board_positions()
     game_winners()
     ai()
+    tmp()
 
     print "All tests have passed!"
 

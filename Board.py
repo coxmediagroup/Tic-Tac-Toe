@@ -1,3 +1,9 @@
+import random
+import copy
+import logging
+
+logging.basicConfig(filename='/tmp/tic-tac-toe.log',level=logging.DEBUG)
+
 class BoardException(Exception):
     pass
 
@@ -24,8 +30,12 @@ class Board(object):
     The game board
 
     """
+    INFINITY = 999
+    
     def __init__(self, **kwargs):
-
+        
+        self.node_counter = 0
+        
         # Board settings
         self.ROWS = kwargs.get('rows', 3)
         self.COLS = kwargs.get('cols', 3)
@@ -39,7 +49,7 @@ class Board(object):
         self.P2 = kwargs.get('p2', 'O') # player two
         self.P1_AI = kwargs.get('p1_ai', False) # player one AI or human
         self.P2_AI = kwargs.get('p2_ai', False) # player one AI or human
-        self.current_player = kwargs.get('current_player', None)
+        self.this_player = kwargs.get('this_player', None)
         self.next_player = kwargs.get('next_player', None)
 
         # Score Board
@@ -57,6 +67,7 @@ class Board(object):
         """
         
         """
+        self.node_counter = 0
         self.board = self.new_board()
 
     def new_board(self):
@@ -74,14 +85,96 @@ class Board(object):
                 board[-1].append(s)
                 counter += 1
         return board
-
-    def ai(self, this_player):
+    
+    def ai(self):
         """
         
         """
+        this_space = None
+        
+        # Choose random if starting on empty board
         remaining_spaces = self.remaining_spaces()
-        this_space = remaining_spaces[0]
-        return self.move_player(this_player, this_space.board_index)
+        if len(remaining_spaces) == (self.COLS * self.ROWS):
+            this_space = random.choice(remaining_spaces)
+
+        # Or use minimax
+        elif remaining_spaces:
+            # logging.debug('board: {}'.format(str(self)))
+            # logging.debug('max_player: "{}"'.format(self.this_player))
+            # logging.debug('min_player: "{}"'.format(self.next_player))
+            # logging.debug('='*30)
+            this_space = self.minimax()[1]
+            # logging.debug('~'*30)
+            # logging.debug('best move is: {}'.format(this_space.board_index))
+        
+        if this_space:
+            return self.move_player(self.this_player, this_space.board_index)
+        else:
+            logging.debug('space: {}'.format(this_space))
+            # raise BoardException("No available spaces for ai to place!")
+
+    counter = 0
+    def minimax(self, max_turn=True):
+        """
+        
+        """
+        # establish who is max and who is min
+        if max_turn:
+            this_player = self.this_player
+        else:
+            this_player = self.next_player
+
+        # Available spaces on board
+        remaining_spaces = self.remaining_spaces()
+        
+        # board has a winner?
+        if self.winning_space():
+            if max_turn:
+                point = -1
+            else:
+                point = 1
+            # logging.debug('Pt:{}'.format(point))
+            # logging.debug('*' * 30)
+            return (point, None)
+        
+        # Draw        
+        if len(remaining_spaces) == 0:
+            point = 0
+            # logging.debug('Pt:{}'.format(point))
+            # logging.debug('*' * 30)
+            return (point, None)
+        
+        # player moves
+        if max_turn:
+            best_move = (-self.INFINITY, None)
+            for space in remaining_spaces:
+                self.node_counter += 1
+                # logging.debug('counter: {}'.format(self.counter))
+                # logging.debug('board_index: {}'.format(space.board_index))
+                # logging.debug('player: {}'.format(this_player))
+                self.place_player(this_player, space.board_index)
+                # logging.debug('board: {}'.format(str(self)))
+                value = self.minimax(max_turn=False)[0]
+                self.unplace_player(space.board_index)
+                if value > best_move[0]:
+                    best_move = (value, space)
+
+        else:
+            best_move = (self.INFINITY, None)
+            for space in remaining_spaces:
+                self.node_counter += 1
+                # logging.debug('counter: {}'.format(self.counter))
+                # logging.debug('board_index: {}'.format(space.board_index))
+                # logging.debug('player: {}'.format(this_player))
+                self.place_player(this_player, space.board_index)
+                # logging.debug('board: {}'.format(str(self)))
+                value = self.minimax(max_turn=True)[0]
+                self.unplace_player(space.board_index)
+                if value < best_move[0]:
+                    best_move = (value, space)
+        
+        # return the best move
+        return best_move
 
     def remaining_spaces(self):
         """
@@ -95,7 +188,18 @@ class Board(object):
                     these_spaces.append(space)
         return these_spaces
 
-    def player_win_round(self, player):
+    def winning_space(self):
+        """
+        
+        """
+        if self.player_win_round(self.P1, flag_winner=False):
+            return True
+        elif self.player_win_round(self.P2, flag_winner=False):
+            return True
+        else:
+            return False
+
+    def player_win_round(self, this_player, flag_winner=True):
         """
         Game is won if player has N-in-a-row spots filled 1 time
 
@@ -108,12 +212,12 @@ class Board(object):
         for row in self.board:
             spaces_in_a_row = []
             for space in row:
-                if space.player == player:
+                if space.player == this_player:
                     spaces_in_a_row.append(space)
                 else:
                     spaces_in_a_row = []
             if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = set(winning_spaces + spaces_in_a_row)
+                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
 
         # Check columns
         column_counter = 0
@@ -121,12 +225,12 @@ class Board(object):
             spaces_in_a_row = []
             for row in self.board:
                 space = row[column_counter]
-                if space.player == player:
+                if space.player == this_player:
                     spaces_in_a_row.append(space)
                 else:
                     spaces_in_a_row = []
             if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = set(winning_spaces + spaces_in_a_row)
+                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
             column_counter += 1
 
         # Check Diagonals "left-to-right"
@@ -137,7 +241,7 @@ class Board(object):
             for row in self.board:
                 try:
                     space = row[column_counter]
-                    if space.player == player:
+                    if space.player == this_player:
                         spaces_in_a_row.append(space)
                     else:
                         spaces_in_a_row = []
@@ -147,7 +251,7 @@ class Board(object):
             diagonal_counter += 1
             column_counter = diagonal_counter
             if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = set(winning_spaces + spaces_in_a_row)
+                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
 
         # Check Diagonals "right-to-left"
         column_counter = self.COLS
@@ -157,7 +261,7 @@ class Board(object):
             for row in self.board:
                 try:
                     space = row[column_counter]
-                    if space.player == player:
+                    if space.player == this_player:
                         spaces_in_a_row.append(space)
                     else:
                         spaces_in_a_row = []
@@ -167,11 +271,12 @@ class Board(object):
             diagonal_counter += 1
             column_counter = diagonal_counter
             if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = set(winning_spaces + spaces_in_a_row)
+                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
 
         # Flag winning spaces
-        for space in winning_spaces:
-            space.winner = True
+        if flag_winner:
+            for space in winning_spaces:
+                space.winner = True
 
         # player is winner if there are winning spaces for player
         if winning_spaces:
@@ -254,13 +359,21 @@ class Board(object):
         else:
             return False
 
+    def place_player(self, this_player, board_index):
+        x, y = self.board_position_by_index(board_index)
+        self.board[x][y].player = this_player
+
+    def unplace_player(self, board_index):
+        x, y = self.board_position_by_index(board_index)
+        self.board[x][y].player = self.P0
+
     def swap_players(self):
         """
         
         """
         swap = self.next_player
-        self.next_player = self.current_player
-        self.current_player = swap
+        self.next_player = self.this_player
+        self.this_player = swap
 
     def sanity_check(self):
         """
@@ -305,6 +418,6 @@ class Board(object):
         """
         string = u''
         for rows in self.board:
-            for col in rows:
-                string += col.player
+            for space in rows:
+                string += space.player
         return string
