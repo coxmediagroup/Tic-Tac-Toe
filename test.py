@@ -7,10 +7,14 @@ counter1 = Counter()
 counter2 = Counter()
 
 
-def random_move(dummy1, dummy2):
-    return choice([k for k in range(1,10) if GRID[k] == BLANK]), None
+# Choose a random move. The arguments are not used, but are required for syntactical reasons.
+# The second return value None tells the calling function not to display any messages.
+def random_move(x, y):
+    return choice([k for k in range(1, 10) if GRID[k] == BLANK]), None
 
 
+# Play lots of games between the expert system 'get_computer_move' and the random mover,
+# and tabulate the results.
 for _ in xrange(number_of_trials):
     winner1 = play(random_move, get_computer_move, verbose=False)
     winner2 = play(get_computer_move, random_move, verbose=False)
