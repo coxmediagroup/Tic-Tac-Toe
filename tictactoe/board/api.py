@@ -1,7 +1,8 @@
+from django.conf.urls.defaults import *
 from tastypie import fields
 from tastypie.api import Api
 from tastypie.authorization import Authorization, DjangoAuthorization
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.utils import trailing_slash
 from django.http import Http404
 from board.models import Player, Move, Game
@@ -142,8 +143,6 @@ def make_computer_move(game):
 
 
     Move(game=game, player=current_player, position_x=x, position_y=y).save()
-   
-    
 
 class PlayerResource(ModelResource):
   '''
@@ -154,6 +153,11 @@ class PlayerResource(ModelResource):
     queryset = Player.objects.all()
     resource_name = 'player'
     authorization = Authorization()
+    # bug in django-tastypie-swagger necessitates lists for comparison options
+    filtering = { 'name': ['exact', 'icontains',],
+                  'is_human': ['exact',],
+    }
+    always_return_data = True
 
 class GameResource(ModelResource):
   '''
@@ -162,10 +166,12 @@ class GameResource(ModelResource):
   player_1 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_1', full=True, null=True)
   player_2 = fields.ForeignKey(__name__ + '.PlayerResource', 'player_2', full=True, null=True)
   winner = fields.ForeignKey(__name__ + '.PlayerResource', 'winner', full=True, null=True)
+  move_set = fields.ToManyField(__name__ + '.MoveResource', 'move_set', full=True, null=True)
   class Meta:
     queryset = Game.objects.all()
     resource_name = 'game'
     authorization = Authorization()
+    always_return_data = True
 
 class MoveResource(ModelResource):
   '''
@@ -173,7 +179,7 @@ class MoveResource(ModelResource):
      Customized functionality post-save located in overridden obj_create()
   '''
   player = fields.ForeignKey(__name__ + '.PlayerResource', 'player', full=True, null=True)
-  game = fields.ForeignKey(__name__ + '.GameResource', 'game', full=True, null=True)
+  game = fields.ForeignKey(__name__ + '.GameResource', 'game', full=False, null=True)
   class Meta:
     queryset = Move.objects.all()
     resource_name = 'move'
