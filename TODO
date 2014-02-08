@@ -8,6 +8,9 @@ TODO
 [ - ] Refactor game play logic out of curses-game?
       (curses-game should be about display)
 
+Changes: 2014-02-08
+[ X ] Fix diagonal win bug
+
 Changes: 2014-02-06
 [ X ] AI minimax logic
 
