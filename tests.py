@@ -159,7 +159,6 @@ def ai():
     msg = 'Blocking move for P2 is "{}", not "{}"'
     assert str(b) == board_spots, msg.format(board_spots, b)
 
-def tmp():
     # NOT a win by diagonal right-to-left
     b = Board()
     # XOX
@@ -190,7 +189,6 @@ def tests():
     board_positions()
     game_winners()
     ai()
-    tmp()
 
     print "All tests have passed!"
 

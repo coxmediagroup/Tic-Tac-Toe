@@ -1,6 +1,6 @@
-import random
 import copy
 import logging
+import random
 
 logging.basicConfig(filename='/tmp/tic-tac-toe.log',level=logging.DEBUG)
 
@@ -199,17 +199,12 @@ class Board(object):
         else:
             return False
 
-    def player_win_round(self, this_player, flag_winner=True):
+    def __check_rows(self, this_player, this_board):
         """
-        Game is won if player has N-in-a-row spots filled 1 time
-
-        player = self.P1 or self.P2
-
+        
         """
         winning_spaces = []
-
-        # Check all rows
-        for row in self.board:
+        for row in this_board:
             spaces_in_a_row = []
             for space in row:
                 if space.player == this_player:
@@ -217,61 +212,102 @@ class Board(object):
                 else:
                     spaces_in_a_row = []
             if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
+                winning_spaces += spaces_in_a_row
+        return winning_spaces
+        
+    def __rotate_board(self):
+        """
+        board:
+        [[1, 2, 3],
+         [4, 5, 6],
+         [7, 8, 9]]
+
+        rotated:
+        [(7, 4, 1),
+         (8, 5, 2),
+         (9, 6, 3)]
+         
+        """
+        # rotate the board, then check rows
+        rotated_board = zip(*self.board)
+        return rotated_board
+    
+    def __diagonal_board(self, reverse=False):
+        """
+        board:
+        [[1, 2, 3],
+         [4, 5, 6],
+         [7, 8, 9]]
+         
+        diagonal:
+        [[1],
+         [2, 4],
+         [3, 5, 7],
+         [6, 8],
+         [9]]
+         
+        diagonal reversed:
+        [[3],
+         [2, 6],
+         [1, 5, 9],
+         [4, 8],
+         [7]]
+        
+        """
+        if reverse:
+            pop_index = -1
+        else:
+            pop_index = 0
+    
+        # copy of board
+        board_copy = [x[:] for x in self.board[:]]
+    
+        # build the board on diagonals to rows
+        diagonal_board = []
+    
+        # iterate over the copied board collecting diagonal spaces
+        counter = 1
+        while counter < (len(board_copy) + len(board_copy[0])):
+            new_row = []
+            for row in range(counter):
+                try:
+                    if board_copy[row]:
+                        new_row.append(board_copy[row].pop(pop_index))
+                except IndexError:
+                    pass
+            counter += 1
+            diagonal_board.append(new_row)
+    
+        # Done
+        return diagonal_board
+
+    def player_win_round(self, this_player, flag_winner=True):
+        """
+        Game is won if player has N-in-a-row spots filled X times
+
+        player = self.P1 or self.P2
+
+        """
+        winning_spaces = []
+        
+        # Check all rows
+        these_spaces = self.__check_rows(this_player, self.board)
+        winning_spaces = list(set(winning_spaces + these_spaces))
 
         # Check columns
-        column_counter = 0
-        while column_counter < self.COLS:
-            spaces_in_a_row = []
-            for row in self.board:
-                space = row[column_counter]
-                if space.player == this_player:
-                    spaces_in_a_row.append(space)
-                else:
-                    spaces_in_a_row = []
-            if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
-            column_counter += 1
-
+        this_board = self.__rotate_board()
+        these_spaces = self.__check_rows(this_player, this_board)
+        winning_spaces = list(set(winning_spaces + these_spaces))
+        
+        # Check Diagonals "right-to-left"""
+        this_board = self.__diagonal_board()
+        these_spaces = self.__check_rows(this_player, this_board)
+        winning_spaces = list(set(winning_spaces + these_spaces))
+        
         # Check Diagonals "left-to-right"
-        column_counter = 0
-        diagonal_counter = 0
-        while diagonal_counter < self.COLS:
-            spaces_in_a_row = []
-            for row in self.board:
-                try:
-                    space = row[column_counter]
-                    if space.player == this_player:
-                        spaces_in_a_row.append(space)
-                    else:
-                        spaces_in_a_row = []
-                    column_counter += 1
-                except IndexError:
-                    pass
-            diagonal_counter += 1
-            column_counter = diagonal_counter
-            if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
-
-        # Check Diagonals "right-to-left"
-        column_counter = self.COLS
-        diagonal_counter = 0
-        while diagonal_counter < self.COLS:
-            spaces_in_a_row = []
-            for row in self.board:
-                try:
-                    space = row[column_counter]
-                    if space.player == this_player:
-                        spaces_in_a_row.append(space)
-                    else:
-                        spaces_in_a_row = []
-                    column_counter -= 1
-                except IndexError:
-                    pass
-            diagonal_counter += 1
-            column_counter = diagonal_counter
-            if len(spaces_in_a_row) >= self.IN_A_ROW:
-                winning_spaces = list(set(winning_spaces + spaces_in_a_row))
+        this_board = self.__diagonal_board(reverse=True)
+        these_spaces = self.__check_rows(this_player, this_board)
+        winning_spaces = list(set(winning_spaces + these_spaces))
 
         # Flag winning spaces
         if flag_winner:

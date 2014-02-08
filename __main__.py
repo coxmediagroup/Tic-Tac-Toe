@@ -7,16 +7,6 @@ def main(screen):
     # Make new Game
     s = GameScreen(screen)
     
-    # s.board.board[0][0].player = s.board.P1 #1
-    # s.board.board[0][1].player = s.board.P1 #2
-    # s.board.board[0][2].player = s.board.P0 #3
-    # s.board.board[1][0].player = s.board.P0 #4
-    # s.board.board[1][1].player = s.board.P2 #5
-    # s.board.board[1][2].player = s.board.P2 #6
-    # s.board.board[2][0].player = s.board.P0 #7
-    # s.board.board[2][1].player = s.board.P0 #8
-    # s.board.board[2][2].player = s.board.P0 #9
-    
     # Game Loop
     while s.game_is_running:
         
