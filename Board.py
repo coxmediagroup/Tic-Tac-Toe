@@ -31,6 +31,8 @@ class Board(object):
 
     """
     INFINITY = 999
+    MIN_DIM = 3
+    MAX_DIM = 16
     
     def __init__(self, **kwargs):
         
@@ -60,8 +62,41 @@ class Board(object):
         }
 
         # Put a game board together
-        self.sanity_check()
+        self.__sanity_check()
         self.board = self.new_board()
+
+    def __sanity_check(self):
+        """
+        Basic sanity tests to make sure the game settings makes sense
+
+        """
+        # Test the rows and cols are the minimal size
+        msg = '"{}" must be an integer larger than {} and smaller than {}.'
+        if not int(self.ROWS) >= self.MIN_DIM <= self.MAX_DIM:
+            row_msg = msg.format('rows', self.MIN_DIM, self.MAX_DIM)
+            raise BoardException(row_msg)
+        if not int(self.COLS) >= self.MIN_DIM <= self.MAX_DIM:
+            row_msg = msg.format('cols', self.MIN_DIM, self.MAX_DIM)
+            raise BoardException(row_msg)
+
+        # Test that the width of the character for blanks and player is 1 wide
+        if not len(self.P0) == 1:
+            raise BoardException("Blank spaces must be one character wide")
+        if not len(self.P1) == 1:
+            raise BoardException("Player 1 must be one character wide")
+        if not len(self.P2) == 1:
+            raise BoardException("Player 1 must be one character wide")
+
+        # Test that there arent any duplicated players or blank characters
+        msg = '"{}" must be unique'
+        if self.P0 in (self.P1, self.P2):
+            raise BoardException(msg.format("Blank spaces"))
+        if self.P1 in (self.P0, self.P2):
+            raise BoardException(msg.format("Player 1"))
+        if self.P2 in (self.P0, self.P1):
+            raise BoardException(msg.format("Player 2"))
+
+        return True
 
     def clear_board(self):
         """
@@ -410,43 +445,6 @@ class Board(object):
         swap = self.next_player
         self.next_player = self.this_player
         self.this_player = swap
-
-    def sanity_check(self):
-        """
-        Basic sanity tests to make the game settings makes sense
-
-        """
-        # Test the rows and cols are positive integers
-        if not int(self.ROWS) > 0:
-            raise BoardException("ROWS must be an integer greater than 0")
-        if not int(self.COLS) > 0:
-            raise BoardException("COLS must be an integer greater than 0")
-
-        # Test that the game will have a minimal board size
-        if not self.ROWS * self.COLS >= 9:
-            raise BoardException("Too few spaces for this game")
-
-        # Test that the game does not exceed a reasonable board size [256]
-        # if self.ROWS * self.COLS > 256:
-        #     raise BoardException("Too many spaces for this game")
-
-        # Test that the width of the character for blanks and player is 1 wide
-        if not len(self.P0) == 1:
-            raise BoardException("Blank spaces must be one character wide")
-        if not len(self.P1) == 1:
-            raise BoardException("Player 1 must be one character wide")
-        if not len(self.P2) == 1:
-            raise BoardException("Player 1 must be one character wide")
-
-        # Test that there arent any duplicated players or blank characters
-        if self.P0 in (self.P1, self.P2):
-            raise BoardException("Blank spaces must be unique")
-        if self.P1 in (self.P0, self.P2):
-            raise BoardException("Player 1 must be unique")
-        if self.P2 in (self.P0, self.P1):
-            raise BoardException("Player 2 must be unique")
-
-        return True
 
     def __str__(self):
         """
