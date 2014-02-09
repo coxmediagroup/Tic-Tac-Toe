@@ -138,7 +138,7 @@ class Board(object):
             # logging.debug('max_player: "{}"'.format(self.this_player))
             # logging.debug('min_player: "{}"'.format(self.next_player))
             # logging.debug('='*30)
-            this_space = self.minimax()[1]
+            this_space = self.minimax()[-1]
             # logging.debug('~'*30)
             # logging.debug('best move is: {}'.format(this_space.board_index))
         
@@ -164,48 +164,61 @@ class Board(object):
         # board has a winner?
         if self.winning_space():
             if max_turn:
-                point = -1
+                v = -1
+                a = -1
+                b = self.INFINITY
             else:
-                point = 1
-            # logging.debug('Pt:{}'.format(point))
+                v = 1
+                a = -self.INFINITY
+                b = 1
+            # logging.debug('Pt:{}'.format(v))
             # logging.debug('*' * 30)
-            return (point, None)
+            return (v, a, b, None)
         
         # Draw        
         if len(remaining_spaces) == 0:
-            point = 0
-            # logging.debug('Pt:{}'.format(point))
+            if max_turn:
+                v = 0
+                a = 0
+                b = -self.INFINITY
+            else:
+                v = 0
+                a = self.INFINITY
+                b = 0
+            # logging.debug('Pt:{}'.format(v))
             # logging.debug('*' * 30)
-            return (point, None)
+            return (v, a, b, None)
         
         # player moves
         if max_turn:
-            best_move = (-self.INFINITY, None)
+            v = -self.INFINITY
+            a = -self.INFINITY
+            b = self.INFINITY
+            best_move = (v, a, b, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # logging.debug('node_counter: {}'.format(self.node_counter))
-                # logging.debug('board_index: {}'.format(space.board_index))
-                # logging.debug('player: {}'.format(this_player))
-                self.place_player(this_player, space.board_index)
-                # logging.debug('board: {}'.format(str(self)))
-                value = self.minimax(max_turn=False)[0]
-                self.unplace_player(space.board_index)
-                if value > best_move[0]:
-                    best_move = (value, space)
+                # max: if v > alpha; alpha-cut
+                if best_move[0] <= best_move[1]:
+                    self.place_player(this_player, space.board_index)
+                    value, alpha, beta = self.minimax(max_turn=False)[0:3]
+                    self.unplace_player(space.board_index)
+                    if value > best_move[0]:
+                        best_move = (value, alpha, beta, space)
 
         else:
-            best_move = (self.INFINITY, None)
+            v = self.INFINITY
+            a = self.INFINITY
+            b = -self.INFINITY
+            best_move = (v, a, b, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # logging.debug('node_counter: {}'.format(self.node_counter))
-                # logging.debug('board_index: {}'.format(space.board_index))
-                # logging.debug('player: {}'.format(this_player))
-                self.place_player(this_player, space.board_index)
-                # logging.debug('board: {}'.format(str(self)))
-                value = self.minimax(max_turn=True)[0]
-                self.unplace_player(space.board_index)
-                if value < best_move[0]:
-                    best_move = (value, space)
+                # min: if v < beta; beta-cut
+                if best_move[0] >= best_move[2]:
+                    self.place_player(this_player, space.board_index)
+                    value, alpha, beta = self.minimax(max_turn=True)[0:3]
+                    self.unplace_player(space.board_index)
+                    if value < best_move[0]:
+                        best_move = (value, alpha, beta, space)
         
         # return the best move
         return best_move
