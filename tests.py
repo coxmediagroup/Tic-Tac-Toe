@@ -223,6 +223,48 @@ def ai():
     msg = 'Board should be not be winnable: "{}"'
     assert b.winning_space() == False, msg.format(b)
 
+def bad_logical_move():
+    """
+    
+    """
+    # AI should place winning move
+    b = Board()
+
+    b.board[0][0].player = b.P1 #1
+    b.board[0][1].player = b.P1 #2
+    b.board[0][2].player = b.P2 #3
+    b.board[1][0].player = b.P0 #4
+    b.board[1][1].player = b.P0 #5
+    b.board[1][2].player = b.P0 #6
+    b.board[2][0].player = b.P0 #7
+    b.board[2][1].player = b.P0 #8
+    b.board[2][2].player = b.P2 #9
+    
+    b.this_player = b.P2
+    b.next_player = b.P1
+    b.ai()
+    
+    # with this board
+    # XXO
+    # ---
+    # --O
+    
+    # ai: "O" should win
+    # XXO
+    # --O
+    # --O
+    
+    # but it does not
+    # XXO
+    # -O-
+    # --O
+    
+    board_spots = 'XXO--O--O'
+    msg = 'Winning Move for "{}" is "{}", not "{}"'
+    assert str(b) == board_spots, msg.format(b.P2, board_spots, b)
+    print str(b)
+    
+
 def tests():
     """Tests for the Board class"""
     # test that a new board is rational
@@ -231,6 +273,7 @@ def tests():
     board_positions()
     game_winners()
     ai()
+    # bad_logical_move() 
 
     print "All tests have passed!"
 
