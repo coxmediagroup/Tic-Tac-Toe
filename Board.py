@@ -148,7 +148,6 @@ class Board(object):
             logging.debug('space: {}'.format(this_space))
             # raise BoardException("No available spaces for ai to place!")
 
-    counter = 0
     def minimax(self, max_turn=True):
         """
         
@@ -184,7 +183,7 @@ class Board(object):
             best_move = (-self.INFINITY, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # logging.debug('counter: {}'.format(self.counter))
+                # logging.debug('node_counter: {}'.format(self.node_counter))
                 # logging.debug('board_index: {}'.format(space.board_index))
                 # logging.debug('player: {}'.format(this_player))
                 self.place_player(this_player, space.board_index)
@@ -198,7 +197,7 @@ class Board(object):
             best_move = (self.INFINITY, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # logging.debug('counter: {}'.format(self.counter))
+                # logging.debug('node_counter: {}'.format(self.node_counter))
                 # logging.debug('board_index: {}'.format(space.board_index))
                 # logging.debug('player: {}'.format(this_player))
                 self.place_player(this_player, space.board_index)
