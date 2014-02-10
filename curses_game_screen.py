@@ -160,7 +160,7 @@ class GameScreen(object):
 
     def _display_debug(self):
         """
-        So some variables during game play
+        Show some variables during game play
 
         """
         if self.DEBUG:
@@ -445,7 +445,7 @@ class GameScreen(object):
         if no then the game will reset, the scores will reset and the player 
         will be presented with the splash screen again.
 
-        """        
+        """
         # show winner
         self._display_winner()
 
@@ -485,7 +485,7 @@ class GameScreen(object):
     def _player_move_query(self):
         """
         Only to allow multi-character cursor input if the player is ready
-        to enter a position. Especially for larger game boards with multiple
+        to enter a position. Especially for larger game boards where multiple
         digits for spaces are necessary.
 
         """
@@ -522,7 +522,9 @@ class GameScreen(object):
 
         Display an error if the move is not valid
 
-        Assign point if there is winning move or a draw; or swap players turns
+        Assign point if there is winning move or a draw
+        
+        Swap player turns
 
         """
         # current player turn: human or computer?

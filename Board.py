@@ -27,11 +27,18 @@ class BoardSpace(object):
 
 class Board(object):
     """
-    The game board
+    Game board is represented as a 2 dimensional list of BoardSpaces
+    
+    Players are described by a single character
 
     """
+    # minimax infinity replacement
     INFINITY = 999
+    
+    # the minimum board side
     MIN_DIM = 3
+    
+    # the maximum board side
     MAX_DIM = 16
 
     def __init__(self, **kwargs):
@@ -68,7 +75,7 @@ class Board(object):
 
     def _sanity_check(self):
         """
-        Basic sanity tests to make sure the game settings makes sense
+        Basic sanity tests to make sure that all game settings make sense
 
         """
         # Test the rows and cols are the minimal size
@@ -101,7 +108,7 @@ class Board(object):
 
     def new_board(self):
         """
-        Game board is represented as a 2 dimensional list of BoardSpaces
+        Creates a new game board from scratch
 
         """
         board = []
@@ -274,7 +281,7 @@ class Board(object):
 
     def _vertical_rows(self):
         """
-        convert vertical "columns" spaces into "rows" before checking for
+        Convert vertical "column" spaces into "rows" before checking for
         a winning move.
 
         board:
@@ -294,22 +301,22 @@ class Board(object):
 
     def _diagonal_rows(self, reverse=False):
         """
-        convert a "diagonal" spaces into "rows" before checking for a winning
+        Convert a "diagonal" spaces into "rows" before checking for a winning
         move.
 
-        normal board:
+        Normal board:
         [[1, 2, 3],
          [4, 5, 6],
          [7, 8, 9]]
 
-        converted to diagonal rows:
+        Converted to diagonal rows:
         [[1],
          [2, 4],
          [3, 5, 7],
          [6, 8],
          [9]]
 
-        converted to diagonal (reversed):
+        Converted to diagonal (reversed):
         [[3],
          [2, 6],
          [1, 5, 9],
@@ -348,7 +355,7 @@ class Board(object):
         """
         Game is won if player has N-in-a-row spots filled X times
 
-        player = self.P1 or self.P2
+        Player = self.P1 or self.P2
 
         """
         winning_spaces = []
@@ -439,7 +446,7 @@ class Board(object):
 
     def _reset_last_move_flag(self):
         """
-        reset last_move flag for every space on board
+        Reset last_move flag for every space on board
 
         """
         for row in self.board:
