@@ -33,15 +33,16 @@ class Board(object):
     INFINITY = 999
     MIN_DIM = 3
     MAX_DIM = 16
-    
+
     def __init__(self, **kwargs):
-        
+
         self.node_counter = 0
-        
+        self.node_depth = 0
+
         # Board settings
         self.ROWS = kwargs.get('rows', 3)
         self.COLS = kwargs.get('cols', 3)
-        
+
         # Game rules
         self.IN_A_ROW = kwargs.get('in_a_row', 3)
 
@@ -62,10 +63,10 @@ class Board(object):
         }
 
         # Put a game board together
-        self.__sanity_check()
+        self._sanity_check()
         self.board = self.new_board()
 
-    def __sanity_check(self):
+    def _sanity_check(self):
         """
         Basic sanity tests to make sure the game settings makes sense
 
@@ -98,13 +99,6 @@ class Board(object):
 
         return True
 
-    def clear_board(self):
-        """
-        
-        """
-        self.node_counter = 0
-        self.board = self.new_board()
-
     def new_board(self):
         """
         Game board is represented as a 2 dimensional list of BoardSpaces
@@ -115,42 +109,49 @@ class Board(object):
         for x in range(self.ROWS):
             board.append([])
             for y in range(self.COLS):
-                msg = 'row: {}, col: {}, counter: {}, board_index: {}'
                 s = BoardSpace(player=self.P0, board_index=counter)
                 board[-1].append(s)
                 counter += 1
         return board
-    
+
+    def clear_board(self):
+        """
+        Clear the spaces of player moves, while keeping the player scores
+
+        """
+        self.node_counter = 0
+        self.node_depth = 0
+        self.board = self.new_board()
+
     def ai(self):
         """
-        
+        For whichever player is the "current" player, auto-play their move.
+
         """
         this_space = None
-        
-        # Choose random if starting on empty board
+
+        # Choose random, if starting on empty board
         remaining_spaces = self.remaining_spaces()
         if len(remaining_spaces) == (self.COLS * self.ROWS):
             this_space = random.choice(remaining_spaces)
 
         # Or use minimax
         elif remaining_spaces:
-            # logging.debug('board: {}'.format(str(self)))
-            # logging.debug('max_player: "{}"'.format(self.this_player))
-            # logging.debug('min_player: "{}"'.format(self.next_player))
-            # logging.debug('='*30)
-            this_space = self.minimax()[-1]
-            # logging.debug('~'*30)
+            this_space = self._minimax()[-1]
             # logging.debug('best move is: {}'.format(this_space.board_index))
-        
+
+        # if this_space is None then there is no valid move and
+        # an Error should be raised
         if this_space:
             return self.move_player(self.this_player, this_space.board_index)
         else:
-            logging.debug('space: {}'.format(this_space))
-            # raise BoardException("No available spaces for ai to place!")
+            # AI can't place a move if no spaces are left!
+            raise BoardException("No available spaces for ai to place!")
 
-    def minimax(self, max_turn=True):
+    def _minimax(self, max_turn=True):
         """
-        
+        Minimax algorithm with alpha-beta pruning
+
         """
         # establish who is max and who is min
         if max_turn:
@@ -160,21 +161,22 @@ class Board(object):
 
         # Available spaces on board
         remaining_spaces = self.remaining_spaces()
-        
+
         # board has a winner?
         if self.winning_space():
+            point = 1
             if max_turn:
-                v = -1
-                a = -1
+                v = -point
+                a = v
                 b = self.INFINITY
             else:
-                v = 1
+                v = point
                 a = -self.INFINITY
-                b = 1
+                b = v
             # logging.debug('Pt:{}'.format(v))
             # logging.debug('*' * 30)
             return (v, a, b, None)
-        
+
         # Draw        
         if len(remaining_spaces) == 0:
             if max_turn:
@@ -188,8 +190,8 @@ class Board(object):
             # logging.debug('Pt:{}'.format(v))
             # logging.debug('*' * 30)
             return (v, a, b, None)
-        
-        # player moves
+
+        # player max moves
         if max_turn:
             v = -self.INFINITY
             a = -self.INFINITY
@@ -199,12 +201,15 @@ class Board(object):
                 self.node_counter += 1
                 # max: if v > alpha; alpha-cut
                 if best_move[0] <= best_move[1]:
-                    self.place_player(this_player, space.board_index)
-                    value, alpha, beta = self.minimax(max_turn=False)[0:3]
-                    self.unplace_player(space.board_index)
+                    self.node_depth += 1
+                    self._place_player(this_player, space.board_index)
+                    value, alpha, beta = self._minimax(max_turn=False)[0:3]
+                    self.node_depth -= 1
+                    self._un_place_player(space.board_index)
                     if value > best_move[0]:
                         best_move = (value, alpha, beta, space)
 
+        # player min moves
         else:
             v = self.INFINITY
             a = self.INFINITY
@@ -214,18 +219,20 @@ class Board(object):
                 self.node_counter += 1
                 # min: if v < beta; beta-cut
                 if best_move[0] >= best_move[2]:
-                    self.place_player(this_player, space.board_index)
-                    value, alpha, beta = self.minimax(max_turn=True)[0:3]
-                    self.unplace_player(space.board_index)
+                    self.node_depth += 1
+                    self._place_player(this_player, space.board_index)
+                    value, alpha, beta = self._minimax(max_turn=True)[0:3]
+                    self.node_depth -= 1
+                    self._un_place_player(space.board_index)
                     if value < best_move[0]:
                         best_move = (value, alpha, beta, space)
-        
+
         # return the best move
         return best_move
 
     def remaining_spaces(self):
         """
-        How many spaces are left on the board
+        How many valid spaces are left on the board
 
         """
         these_spaces = []
@@ -237,7 +244,8 @@ class Board(object):
 
     def winning_space(self):
         """
-        
+        Check if the last placed move was a winning move, regardless of player
+
         """
         if self.player_win_round(self.P1, flag_winner=False):
             return True
@@ -246,9 +254,11 @@ class Board(object):
         else:
             return False
 
-    def __check_rows(self, this_player, this_board):
+    def _check_rows(self, this_player, this_board):
         """
-        
+        All wins are check by rows, if vertical or diagonal then rotate the
+        board first before checking rows.
+
         """
         winning_spaces = []
         for row in this_board:
@@ -261,9 +271,12 @@ class Board(object):
             if len(spaces_in_a_row) >= self.IN_A_ROW:
                 winning_spaces += spaces_in_a_row
         return winning_spaces
-        
-    def __rotate_board(self):
+
+    def _vertical_rows(self):
         """
+        convert vertical "columns" spaces into "rows" before checking for
+        a winning move.
+
         board:
         [[1, 2, 3],
          [4, 5, 6],
@@ -273,45 +286,48 @@ class Board(object):
         [(7, 4, 1),
          (8, 5, 2),
          (9, 6, 3)]
-         
+
         """
         # rotate the board, then check rows
         rotated_board = zip(*self.board)
         return rotated_board
-    
-    def __diagonal_board(self, reverse=False):
+
+    def _diagonal_rows(self, reverse=False):
         """
-        board:
+        convert a "diagonal" spaces into "rows" before checking for a winning
+        move.
+
+        normal board:
         [[1, 2, 3],
          [4, 5, 6],
          [7, 8, 9]]
-         
-        diagonal:
+
+        converted to diagonal rows:
         [[1],
          [2, 4],
          [3, 5, 7],
          [6, 8],
          [9]]
-         
-        diagonal reversed:
+
+        converted to diagonal (reversed):
         [[3],
          [2, 6],
          [1, 5, 9],
          [4, 8],
          [7]]
-        
+
         """
         if reverse:
             pop_index = -1
         else:
             pop_index = 0
-    
+
         # copy of board
         board_copy = [x[:] for x in self.board[:]]
-    
+
         # build the board on diagonals to rows
         diagonal_board = []
-    
+
         # iterate over the copied board collecting diagonal spaces
         counter = 1
         while counter < (len(board_copy) + len(board_copy[0])):
@@ -324,7 +340,7 @@ class Board(object):
                     pass
             counter += 1
             diagonal_board.append(new_row)
-    
+
         # Done
         return diagonal_board
 
@@ -336,24 +352,24 @@ class Board(object):
 
         """
         winning_spaces = []
-        
+
         # Check all rows
-        these_spaces = self.__check_rows(this_player, self.board)
+        these_spaces = self._check_rows(this_player, self.board)
         winning_spaces = list(set(winning_spaces + these_spaces))
 
         # Check columns
-        this_board = self.__rotate_board()
-        these_spaces = self.__check_rows(this_player, this_board)
+        this_board = self._vertical_rows()
+        these_spaces = self._check_rows(this_player, this_board)
         winning_spaces = list(set(winning_spaces + these_spaces))
-        
+
         # Check Diagonals "right-to-left"""
-        this_board = self.__diagonal_board()
-        these_spaces = self.__check_rows(this_player, this_board)
+        this_board = self._diagonal_rows()
+        these_spaces = self._check_rows(this_player, this_board)
         winning_spaces = list(set(winning_spaces + these_spaces))
-        
+
         # Check Diagonals "left-to-right"
-        this_board = self.__diagonal_board(reverse=True)
-        these_spaces = self.__check_rows(this_player, this_board)
+        this_board = self._diagonal_rows(reverse=True)
+        these_spaces = self._check_rows(this_player, this_board)
         winning_spaces = list(set(winning_spaces + these_spaces))
 
         # Flag winning spaces
@@ -369,7 +385,8 @@ class Board(object):
 
     def last_space_number(self):
         """
-        
+        Returns the board index of the last space of the board
+
         """
         return self.board[-1][-1].board_index
 
@@ -379,14 +396,16 @@ class Board(object):
 
            1-Base Index
 
-        4x3
+        4x3 Board: "6" == (1,1)
+
            1 | 2 | 3 | 4
           --- --- --- ---
            5 | 6 | 7 | 8
           --- --- --- ---
            9 | 10| 11| 12
 
-        3x4
+        3x4 Board: "12" == (2,3)
+
            1 | 2 | 3
           --- --- ---
            4 | 5 | 6
@@ -395,7 +414,8 @@ class Board(object):
           --- --- ---
            10| 11| 12
 
-        3x3
+        3x3 Board: "9" == (2,2)
+
            1 | 2 | 3
           --- --- ---
            4 | 5 | 6
@@ -417,10 +437,10 @@ class Board(object):
         msg = '"{}" was not found on this board.'.format(board_index)
         raise BoardException(msg)
 
-    def reset_last_move_flag(self):
+    def _reset_last_move_flag(self):
         """
         reset last_move flag for every space on board
-        
+
         """
         for row in self.board:
             for space in row:
@@ -428,7 +448,11 @@ class Board(object):
 
     def move_player(self, this_player, board_index):
         """
-        
+        Update the space to the value of the player and flag it so the space
+        can be highlighted for the next players turn.
+
+        If the targeted space is not a "blank" space then return False
+
         """
         x, y = self.board_position_by_index(board_index)
         # Check to see if the space is already occupied
@@ -436,23 +460,33 @@ class Board(object):
             # set space to player
             self.board[x][y].player = this_player
             # flag the set space as a last move
-            self.reset_last_move_flag()
+            self._reset_last_move_flag()
             self.board[x][y].last_move = True
             return True
         else:
             return False
 
-    def place_player(self, this_player, board_index):
+    def _place_player(self, this_player, board_index):
+        """
+        Same as move_player() except it is used by minimax to place players
+        but not to change the last move flag
+
+        """
         x, y = self.board_position_by_index(board_index)
         self.board[x][y].player = this_player
 
-    def unplace_player(self, board_index):
+    def _un_place_player(self, board_index):
+        """
+        unplay a placed player set by minimax
+
+        """
         x, y = self.board_position_by_index(board_index)
         self.board[x][y].player = self.P0
 
     def swap_players(self):
         """
-        
+        Swap the players as tracked by the board, not used by minimax
+
         """
         swap = self.next_player
         self.next_player = self.this_player
@@ -460,7 +494,8 @@ class Board(object):
 
     def __str__(self):
         """
-        
+        Simple string representing which space the players are occupying
+
         """
         string = u''
         for rows in self.board:

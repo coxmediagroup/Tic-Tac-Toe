@@ -14,15 +14,15 @@ def new_board():
 def board_positions():
     """
     smallest board:
-    
+
      1 | 2 | 3 
     --- --- ---
      4 | 5 | 6 
     --- --- ---
      7 | 8 | 9
-    
+
     biggest board:
-     
+
      1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16
     --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
      17| 18| 19| 20| 21| 22| 23| 24| 25| 26| 27| 28| 29| 30| 31| 32
@@ -55,11 +55,10 @@ def board_positions():
     --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
     241|242|243|244|245|246|247|248|249|250|251|252|253|254|255|256
 
-
     """
     min_dim = Board.MIN_DIM
     max_dim = Board.MIN_DIM
-    
+
     for x in range(min_dim, max_dim+1):
         for y in range(min_dim, max_dim+1):
             b = Board(rows=x, cols=y)
@@ -142,19 +141,19 @@ def game_winners():
     assert b.score_board[b.P2] == 1
 
 def ai():
-    
+
     # AI should place player on board
     b = Board()
     b.this_player = b.P1
     b.next_player = b.P2
-    
+
     # empty board has 9 spaces
     assert len(b.remaining_spaces()) == 9
-    
+
     # first move should have 8 spaces
     b.ai()
     assert len(b.remaining_spaces()) == 8
-    
+
     # AI should place winning move
     b = Board()
     # OO-
@@ -169,15 +168,15 @@ def ai():
     b.board[2][0].player = b.P2 #7
     b.board[2][1].player = b.P0 #8
     b.board[2][2].player = b.P1 #9
-    
+
     b.this_player = b.P1
     b.next_player = b.P2
     b.ai()
-    
+
     board_spots = 'OO-XXXO-X'
     msg = 'Winning Move for "{}" is "{}", not "{}"'
     assert b.__str__() == board_spots, msg.format(b.P1, board_spots, b)
-    
+
     # AI should block winning move
     b = Board()
     # XX-
@@ -192,11 +191,11 @@ def ai():
     b.board[2][0].player = b.P0 #7
     b.board[2][1].player = b.P0 #8
     b.board[2][2].player = b.P0 #9
-    
+
     b.this_player = b.P2
     b.next_player = b.P1
     b.ai()
-    
+
     board_spots = 'XXO--O---'
     msg = 'Blocking move for P2 is "{}", not "{}"'
     assert str(b) == board_spots, msg.format(board_spots, b)
@@ -225,7 +224,7 @@ def ai():
 
 def bad_logical_move():
     """
-    
+
     """
     # AI should place winning move
     b = Board()
@@ -239,31 +238,30 @@ def bad_logical_move():
     b.board[2][0].player = b.P0 #7
     b.board[2][1].player = b.P0 #8
     b.board[2][2].player = b.P2 #9
-    
+
     b.this_player = b.P2
     b.next_player = b.P1
     b.ai()
-    
+
     # with this board
     # XXO
     # ---
     # --O
-    
+
     # ai: "O" should win
     # XXO
     # --O
     # --O
-    
+
     # but it does not
     # XXO
-    # -O-
+    # O--
     # --O
-    
+
     board_spots = 'XXO--O--O'
     msg = 'Winning Move for "{}" is "{}", not "{}"'
     assert str(b) == board_spots, msg.format(b.P2, board_spots, b)
     print str(b)
-    
 
 def tests():
     """Tests for the Board class"""
@@ -273,7 +271,7 @@ def tests():
     board_positions()
     game_winners()
     ai()
-    # bad_logical_move() 
+    # bad_logical_move()
 
     print "All tests have passed!"
 
