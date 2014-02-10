@@ -188,7 +188,7 @@ class GameScreen(object):
             msg = '* winning_player      = {}'
             self._display(msg.format(self.winning_player))
 
-            msg = '* this_player      = {}'
+            msg = '* this_player         = {}'
             self._display(msg.format(self.board.this_player))
 
             self._write_divider()
