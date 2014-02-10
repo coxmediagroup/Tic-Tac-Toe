@@ -1,7 +1,7 @@
 TODO
-[ - ] high score splash screen
+[ - ] Game score persistence
+[ - ] High scores on splash screen
 [ - ] Resizing terminal will crash game
-[ - ] Make Players into objects with attributes?
 [ - ] Game play preferences out of curses-game?
 [ - ] Add depth limiting for minimax on larger boards
 [ - ] Fix for "logical bad move"?
@@ -9,6 +9,7 @@ TODO
 Changes: 2014-02-10
 [ X ] Comments!
 [ X ] Refactor game play logic out of curses-game? (nofix)
+[ X ] Make Players into objects with attributes? (nofix)
 
 Changes: 2014-02-09
 [ X ] AB pruning 
