@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import unittest
 import board
@@ -52,7 +51,3 @@ class BoardTests(unittest.TestCase):
 
         for i in xrange(0, 9):
             check(i)
-
-
-if __name__ == "__main__":
-    unittest.main()

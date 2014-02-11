@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-import sys
-
 
 class BoardError(Exception):
     pass
@@ -10,7 +7,7 @@ class Board:
     """
     A very basic board class that could be used for any  game
     """
-    
+
     def __init__(self, size):
         self.squares = [None] * size
         self.size = size
@@ -55,10 +52,3 @@ class Board:
         empty square
         """
         self.squares[square] = None
-
-
-def main():
-    return -1
-
-if __name__ == "__main__":
-    sys.exit(main())
