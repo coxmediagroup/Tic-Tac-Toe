@@ -46,7 +46,7 @@ class TextGame(AbstractGame):
 
 
 class TextPlayer(AbstractPlayer):
-    def get_square(self, current_board, message):
+    def get_square(self, current_board, previous_move, message):
         if message:
             print "** %s" % message
 

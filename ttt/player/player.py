@@ -13,7 +13,7 @@ class AbstractPlayer:
     def __init__(self, marker):
         self.marker = marker
 
-    def get_square(self, current_board, message):
+    def get_square(self, current_board, previous_move, message):
         """
         Ask the player what square they would like to claim.
             current_board is the current board in play, only being passed here

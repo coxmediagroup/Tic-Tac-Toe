@@ -48,6 +48,7 @@ class AbstractGame:
         """
         Main game loop, only terminates when play results in a lose or a draw
         """
+        previous_move = None
         while True:
             if not isinstance(self.current_player, player.ComputerPlayer):
                 self.display_board()
@@ -58,8 +59,9 @@ class AbstractGame:
                 try:
                     square = self.current_player.get_square(
                         self.board,
+                        previous_move,
                         message)
-                    if not square:
+                    if square is None:
                         return  # no value, doesn't want to continue
                     square = int(square)
                     if self.board.square_free(square):
@@ -71,6 +73,7 @@ class AbstractGame:
                 message = "Invalid Square"
 
             self.board.place(square, self.current_player.marker)
+            previous_move = square
             if self.check_for_winner() or self.board.is_full():
                 break
 

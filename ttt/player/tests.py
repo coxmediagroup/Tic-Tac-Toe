@@ -10,7 +10,7 @@ class PlayerTests(unittest.TestCase):
         b = board.Board(9)
         p = player.ComputerPlayer("X")
 
-        i = p.get_square(b, "")
+        i = p.get_square(b, None, "")
 
         self.assertEqual(4, i, "PC first move")
 
@@ -18,8 +18,10 @@ class PlayerTests(unittest.TestCase):
         b = board.Board(9)
         p = player.ComputerPlayer("X")
         valid_moves = range(0, 9)
+        prev = None
 
         while not b.is_full():
-            i = p.get_square(b, "")
+            i = p.get_square(b, prev, "")
             self.assertTrue(i in valid_moves, "Invalid Move: %d" % i)
             b.place(i, p.marker)
+            prev = i
