@@ -4,6 +4,8 @@ import json
 from game.models import *
 from game.player import Computer
 
+from datetime import datetime
+
 
 class GameTest(TestCase):
     def test_basic_game_creation(self):
@@ -166,7 +168,6 @@ class GameTest(TestCase):
         """
         Test if the game is complete when game board is filled and no winner
         """
-        from datetime import datetime
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
@@ -177,7 +178,8 @@ class GameTest(TestCase):
 
         g = Game.objects.get(pk=g.id)
 
-        delta = datetime.now() - g.ended if g.ended is not None else None
+        delta = ((datetime.utcnow() - g.ended.replace(tzinfo=None))
+                 if g.ended is not None else None)
 
         assert delta is not None
         assert delta.seconds < 2
@@ -190,7 +192,6 @@ class GameTest(TestCase):
         """
         Test if the game is complete when game board is filled and no winner
         """
-        from datetime import datetime
 
         g = Game.create_new()
         g[0][0] = PLAYER_X
@@ -202,7 +203,8 @@ class GameTest(TestCase):
 
         g = Game.objects.get(pk=g.id)
 
-        delta = datetime.now() - g.ended if g.ended is not None else None
+        delta = ((datetime.utcnow() - g.ended.replace(tzinfo=None))
+                 if g.ended is not None else None)
 
         assert delta is not None
         assert delta.seconds < 2
@@ -337,5 +339,3 @@ class ComputerTest(TestCase):
         assert move == (1, 0) or move == (1, 2)
 
         #if we have gotten here, then we know the algorithms are working
-
-
