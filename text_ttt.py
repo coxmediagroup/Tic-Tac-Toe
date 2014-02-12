@@ -39,7 +39,7 @@ class TextGame(AbstractGame):
         if not self.winner:
             print "You have fought to a draw"
         else:
-            print "The winner is: %s" % self.winner
+            print "The winner is: %s" % self.winner.marker
 
         print ""
         print ""

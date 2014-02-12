@@ -39,7 +39,13 @@ class AbstractGame:
             if self.board.squares[a] \
                     and self.board.squares[a] == self.board.squares[b] \
                     and self.board.squares[a] == self.board.squares[c]:
-                self.winner = self.board.squares[a]
+
+                winner = self.board.squares[a]
+                if self.player1.marker == winner:
+                    self.winner = self.player1
+                else:
+                    self.winner = self.player2
+
                 return self.winner
 
         return None

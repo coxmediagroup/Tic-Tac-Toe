@@ -2,6 +2,7 @@
 import unittest
 import itertools
 from ttt.board import board
+from ttt.player import player
 import game
 
 
@@ -33,7 +34,10 @@ class GameTests(unittest.TestCase):
             self.assertIsNone(g.check_for_winner(), i)
 
     def test_check_for_winner_triples(self):
-        g = game.AbstractGame(None, None)
+        player1 = player.ComputerPlayer("X")
+        player2 = player.ComputerPlayer("O")
+        g = game.AbstractGame(player1, player2)
+
         winners = [
             [0, 1, 2],
             [3, 4, 5],
@@ -50,6 +54,6 @@ class GameTests(unittest.TestCase):
             g.board = GameTests.create_board(test, [])
 
             if test in winners:
-                self.assertEqual("O", g.check_for_winner(), test)
+                self.assertEqual(player2, g.check_for_winner(), test)
             else:
                 self.assertIsNone(g.check_for_winner(), test)
