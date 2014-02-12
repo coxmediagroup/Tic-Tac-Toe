@@ -1,0 +1,49 @@
+<html>
+<head>
+<link rel='stylesheet' type='text/css' href='/static/css/tictactoe.css'>
+<script type='text/javascript' src='/static/js/jquery-1.7.1.js'></script>
+<script type='text/javascript' src='/static/js/tictactoe.js'></script>
+</head>
+<body>
+<div class='ttt_index'>
+  <a href="/">Game Index</a>
+</div>
+<div class='content'>
+{% if game %}
+  <form>
+  {% csrf_token %}
+  <div class='ttt_board'>
+  <input type='hidden' id='ttt_player' value='{{ player }}'></input>
+  <input type='hidden' id='ttt_game_id' value='{{ game.id }}'></input>
+  {% for row in game.rows %}
+    {% with ri=forloop.counter0 %}
+      {% for cell in row %}
+        <div 
+          id='ttt_cell_{{ forloop.counter0 }}{{ ri }}'
+          class='ttt_cell 
+            {% ifequal cell PLAYER_X %}ttt_x{% endifequal %}
+            {% ifequal cell PLAYER_O %}ttt_o{% endifequal %}
+            {% if game_done %}ttt_done{% endif %}
+            '
+            >
+            {% ifequal cell PLAYER_X %}X{% endifequal %}
+            {% ifequal cell PLAYER_O %}O{% endifequal %}
+          <label></label>
+        </div>
+      {% endfor %}
+    {% endwith %}
+  {% endfor %}
+  </div>
+  </form>
+{% endif %}
+</div>
+<form action='{{ post_to }}' method='post'>
+  {% csrf_token %}
+  <input type='submit' value='New Game' class='ttt_new' 
+    {% if not game_done %}style='display:none;'{% endif %}
+    >
+  </input>
+</form>
+</div>
+</body>
+</html>

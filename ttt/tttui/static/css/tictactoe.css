@@ -1,0 +1,51 @@
+
+.content
+{
+    width: 800px;
+}
+
+.ttt_board
+{
+    background-color: black;
+    width: 300px;
+    height: 300px;
+}
+
+.ttt_cell
+{
+    background-color: white;
+    border-style:   solid;
+    border-color:   gray;
+    border-width:   1.5%;
+    float:          left;
+    height:         27%;
+    margin:         1.5%;
+    width:          27%;
+    text-align:     center;
+}
+
+.ttt_x
+{
+    border-color: red;
+    border-style: solid;
+    border-width: 1.5%;
+}
+
+.ttt_o
+{
+    border-color: blue;
+    border-style: solid;
+    border-width: 1.5%;
+}
+
+.ttt_new
+{
+    border-top:       lightgray solid 3px;
+    border-left:      lightgray solid 3px;
+    border-right:     dimgray solid 3px;
+    border-bottom:    dimgray solid 3px;
+    background-color: darkgray;
+    color:            white;
+    width:            20em;
+    text-align:       center;
+}
