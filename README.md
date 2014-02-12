@@ -5,7 +5,7 @@
 
 ### Requirements
 1. Windows. If you are using Linux, you will need to provide Python 2.7, 
-    "django", and "django-bootstrap3"
+    *django*, and *django-bootstrap3*
 2. If On Windows: CygWin or some other Terminal Emulator
 3. Optional: Visual Studio 2013 with Python Tools for Visual Studio 2.0
 

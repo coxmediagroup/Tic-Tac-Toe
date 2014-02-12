@@ -89,6 +89,7 @@
   <ItemGroup>
     <Content Include="main\static\css\bootstrap.min.css" />
     <Content Include="main\static\css\main.css" />
+    <Content Include="README.md" />
     <Content Include="tic_tac_toe\templates\tic_tac_toe\base.html" />
     <Content Include="tic_tac_toe\templates\tic_tac_toe\index.html" />
   </ItemGroup>
