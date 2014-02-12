@@ -61,4 +61,5 @@ class Board:
         Remove a player marker from a square.  Can be called on an already
         empty square
         """
+        self._is_valid_square(square)
         self.squares[square] = None
