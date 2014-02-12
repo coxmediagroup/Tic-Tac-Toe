@@ -59,11 +59,11 @@ class TextPlayer(AbstractPlayer):
 
 
 def x_or_o():
-    valid = ["X", "O"]
+    valid = ["X", "O", "N"]
     answer = None
     while True:
         try:
-            answer = raw_input("Are you X or O?> ").upper()
+            answer = raw_input("Are you X, O, or (N)either?> ").upper()
         except KeyboardInterrupt:
             return None
 
@@ -82,7 +82,10 @@ def main():
 
     player1 = None
     player2 = None
-    if response == "X":
+    if response == "N":
+        player1 = ComputerPlayer("X")
+        player2 = ComputerPlayer("O")
+    elif response == "X":
         player1 = TextPlayer("X")
         player2 = ComputerPlayer("O")
     else:
