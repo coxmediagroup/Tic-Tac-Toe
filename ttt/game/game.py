@@ -1,5 +1,6 @@
 
 from ttt.board import board
+from ttt.player import player
 
 
 class AbstractGame:
@@ -48,7 +49,8 @@ class AbstractGame:
         Main game loop, only terminates when play results in a lose or a draw
         """
         while True:
-            self.display_board()
+            if not isinstance(self.current_player, player.ComputerPlayer):
+                self.display_board()
 
             message = ""
             square = None
