@@ -21,6 +21,6 @@
 3. Click *Start Debugging* or press *F5*
 
 ### Why Django?
-    I choose Django for this chalenage for a number of reasons: Amy said it 
+  I choose Django for this chalenage for a number of reasons: Amy said it 
 was what you used at Cox Media Group, Python is fun and easy, Django is the 
 simplest way to get a Web environment up and running, and it is cross-platform.
