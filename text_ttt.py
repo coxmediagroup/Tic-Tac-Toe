@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import argparse
 from ttt.game.game import AbstractGame
 from ttt.player.player import AbstractPlayer, ComputerPlayer
 
@@ -58,12 +59,32 @@ class TextPlayer(AbstractPlayer):
         return rtn
 
 
-def x_or_o():
-    valid = ["X", "O", "N"]
+def get_human_count():
+    valid = [0, 1, 2]
     answer = None
     while True:
         try:
-            answer = raw_input("Are you X, O, or (N)either?> ").upper()
+            answer = raw_input("# of human players? [0,1,2]> ")
+            answer = int(answer)
+        except KeyboardInterrupt:
+            return None
+        except ValueError:
+            pass
+
+        if answer in valid:
+            break
+
+        print "Invalid number."
+
+    return answer
+
+
+def get_x_or_o():
+    valid = ["X", "O"]
+    answer = None
+    while True:
+        try:
+            answer = raw_input("Which marker are you? [X,O]> ").upper()
         except KeyboardInterrupt:
             return None
 
@@ -74,22 +95,63 @@ def x_or_o():
     return answer
 
 
+def get_cmd_args():
+    parser = argparse.ArgumentParser(description="Text Based Tic-Tac-Toe")
+    parser.add_argument(
+        "-p",
+        dest="humans",
+        type=int,
+        help="# of human players. [0|1|2]")
+    parser.add_argument(
+        "-m",
+        dest="marker",
+        help="marker to use in single human player game [X|O]")
+    args = parser.parse_args()
+    return args.humans, args.marker.upper()
+
+
 def main():
-    response = x_or_o()
-    if not response:
+    humans, marker = get_cmd_args()
+
+    if humans is None:
+        humans = get_human_count()
+
+    if humans is None:
         print ""
+        return 0
+
+    if humans not in [0, 1, 2]:
+        print ""
+        print "Invalid number of human players"
+        return 1
+
+    if humans == 1 and marker is None:
+        marker = get_x_or_o()
+
+    if humans == 1 and marker is None:
+        print ""
+        return 0
+
+    if humans == 1 and marker not in ["X", "O"]:
+        print ""
+        print "Invalid marker option"
         return 1
 
     player1 = None
     player2 = None
-    if response == "N":
+
+    if humans == 0:
         player1 = ComputerPlayer("X")
         player2 = ComputerPlayer("O")
-    elif response == "X":
-        player1 = TextPlayer("X")
-        player2 = ComputerPlayer("O")
+    elif humans == 1:
+        if marker == "X":
+            player1 = TextPlayer("X")
+            player2 = ComputerPlayer("O")
+        else:
+            player1 = ComputerPlayer("X")
+            player2 = TextPlayer("O")
     else:
-        player1 = ComputerPlayer("X")
+        player1 = TextPlayer("X")
         player2 = TextPlayer("O")
 
     game = TextGame(player1, player2)
