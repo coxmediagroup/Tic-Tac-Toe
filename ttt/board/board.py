@@ -27,6 +27,16 @@ class Board:
         """
         return not(None in self.squares)
 
+    def is_empty(self):
+        """
+        Are there any taken squares on the board?
+        """
+        for s in self.squares:
+            if s:
+                return False
+
+        return True
+
     def square_free(self, square):
         """
         Has a player already used the requested square?

@@ -53,7 +53,7 @@ class AbstractGame:
             message = ""
             square = None
             while True:
-                square = self.current_player.get_square(message)
+                square = self.current_player.get_square(self.board, message)
                 if self.board.square_free(square):
                     break
                 message = "Invalid Square"

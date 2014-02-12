@@ -24,6 +24,19 @@ class BoardTests(unittest.TestCase):
         b.place(8, "X")
         self.assertTrue(b.is_full())
 
+    def test_is_empty_yes(self):
+        b = board.Board(9)
+        self.assertTrue(b.is_empty())
+
+    def test_is_empty_no(self):
+        def check(square):
+            b = board.Board(9)
+            b.place(square, "X")
+            self.assertFalse(b.is_empty(), square)
+
+        for i in xrange(0, 9):
+            check(i)
+
     def test_square_free(self):
         b = board.Board(9)
         for i in xrange(0, 9):
