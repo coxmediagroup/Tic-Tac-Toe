@@ -14,6 +14,17 @@ class AbstractPlayer:
         self.marker = marker
 
     def get_square(self, current_board, message):
+        """
+        Ask the player what square they would like to claim.
+            current_board is the current board in play, only being passed here
+                for sake of ComputerPlayer
+            message will be a string contain any warnings or errors from the
+                game engine (i.e. bad input)
+
+            You are expected to return a number corresponding to the square
+                the player wishes to claim.  If you return a NoneType, you
+                are signalling to end the game
+        """
         raise NotImplemented
 
 

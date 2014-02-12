@@ -55,8 +55,12 @@ class AbstractGame:
             message = ""
             square = None
             while True:
-                square = self.current_player.get_square(self.board, message)
                 try:
+                    square = self.current_player.get_square(
+                        self.board,
+                        message)
+                    if not square:
+                        return  # no value, doesn't want to continue
                     square = int(square)
                     if self.board.square_free(square):
                         break
