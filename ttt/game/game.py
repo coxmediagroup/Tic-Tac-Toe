@@ -54,8 +54,14 @@ class AbstractGame:
             square = None
             while True:
                 square = self.current_player.get_square(self.board, message)
-                if self.board.square_free(square):
-                    break
+                try:
+                    square = int(square)
+                    if self.board.square_free(square):
+                        break
+                except (ValueError, board.BoardError):
+                    pass  # normally wouldn't do this but okay here, they
+                          # gave us either not a number or an invalid square
+                          # number
                 message = "Invalid Square"
 
             self.board.place(square, self.current_player.marker)
