@@ -1,0 +1,12 @@
+sys
+unittest
+pkg_resources
+urllib2
+httplib
+HTTPError
+unicode
+distutils
+setuptools
+IndexServer
+TestPackageIndex
+TestContentCheckers
