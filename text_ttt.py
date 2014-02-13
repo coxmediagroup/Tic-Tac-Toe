@@ -107,7 +107,8 @@ def get_cmd_args():
         dest="marker",
         help="marker to use in single human player game [X|O]")
     args = parser.parse_args()
-    return args.humans, args.marker.upper()
+
+    return args.humans, args.marker.upper() if args.marker else None
 
 
 def main():
