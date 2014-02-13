@@ -2,11 +2,10 @@
 
 import sys
 import argparse
-from ttt.game.game import AbstractGame
-from ttt.player.player import AbstractPlayer, ComputerPlayer
+import ttt
 
 
-class TextGame(AbstractGame):
+class TextGame(ttt.AbstractGame):
     def display_board(self):
 
         pretty_board = []
@@ -46,7 +45,7 @@ class TextGame(AbstractGame):
         print ""
 
 
-class TextPlayer(AbstractPlayer):
+class TextPlayer(ttt.AbstractPlayer):
     def get_square(self, current_board, previous_move, message):
         if message:
             print "** %s" % message
@@ -142,14 +141,14 @@ def main():
     player2 = None
 
     if humans == 0:
-        player1 = ComputerPlayer("X")
-        player2 = ComputerPlayer("O")
+        player1 = ttt.ComputerPlayer("X")
+        player2 = ttt.ComputerPlayer("O")
     elif humans == 1:
         if marker == "X":
             player1 = TextPlayer("X")
-            player2 = ComputerPlayer("O")
+            player2 = ttt.ComputerPlayer("O")
         else:
-            player1 = ComputerPlayer("X")
+            player1 = ttt.ComputerPlayer("X")
             player2 = TextPlayer("O")
     else:
         player1 = TextPlayer("X")
