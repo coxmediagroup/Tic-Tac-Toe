@@ -76,20 +76,22 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="main\" />
-    <Folder Include="main\static\" />
-    <Folder Include="main\static\css\" />
     <Folder Include="tic_tac_toe\" />
     <Folder Include="tic_tac_toe\static\" />
+    <Folder Include="tic_tac_toe\static\css\" />
     <Folder Include="tic_tac_toe\static\tic_tac_toe\" />
     <Folder Include="tic_tac_toe\static\tic_tac_toe\css\" />
-    <Folder Include="tic_tac_toe\static\tic_tac_toe\css\tic_tac_toe.css\" />
+    <Folder Include="tic_tac_toe\static\tic_tac_toe\js\" />
     <Folder Include="tic_tac_toe\templates\" />
     <Folder Include="tic_tac_toe\templates\tic_tac_toe\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="main\static\css\bootstrap.min.css" />
-    <Content Include="main\static\css\main.css" />
+    <Content Include="tic_tac_toe\static\css\bootstrap.min.css" />
+    <Content Include="tic_tac_toe\static\css\main.css" />
+    <Content Include="tic_tac_toe\static\tic_tac_toe\js\knockout-3.0.0.js" />
     <Content Include="README.md" />
+    <Content Include="tic_tac_toe\static\tic_tac_toe\css\tic_tac_toe.css" />
+    <Content Include="tic_tac_toe\static\tic_tac_toe\js\tic_tac_toe.js" />
     <Content Include="tic_tac_toe\templates\tic_tac_toe\base.html" />
     <Content Include="tic_tac_toe\templates\tic_tac_toe\index.html" />
   </ItemGroup>
