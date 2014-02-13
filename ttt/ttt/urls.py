@@ -1,5 +1,4 @@
-from django.conf.urls import patterns, include, url
-
+import game.urls as rest
 import tttui.urls as ui
 
-urlpatterns = ui.urlpatterns
+urlpatterns = rest.urlpatterns + ui.urlpatterns

@@ -26,9 +26,10 @@
             {% if game_done %}ttt_done{% endif %}
             '
             >
+          <span>
             {% ifequal cell PLAYER_X %}X{% endifequal %}
             {% ifequal cell PLAYER_O %}O{% endifequal %}
-          <label></label>
+          </span>
         </div>
       {% endfor %}
     {% endwith %}
@@ -37,9 +38,9 @@
   </form>
 {% endif %}
 </div>
-<form action='{{ post_to }}' method='post'>
+<form>
   {% csrf_token %}
-  <input type='submit' value='New Game' class='ttt_new' 
+  <input type='button' value='New Game' class='ttt_new' 
     {% if not game_done %}style='display:none;'{% endif %}
     >
   </input>

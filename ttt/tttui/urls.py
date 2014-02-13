@@ -1,12 +1,8 @@
 from django.conf.urls import patterns, include, url
 
-from views import all, new, get, move
+from views import all, get
 
-urlpatterns = patterns('game.views',
-    # GET methods
+urlpatterns = patterns('tttui.views',
     url(r'^$', all),
     url(r'^(?P<game_id>\d+)/$', get),
-    # POST methods
-    url(r'^new$', new),
-    url(r'^(?P<game_id>\d+)/move$', move),
 )

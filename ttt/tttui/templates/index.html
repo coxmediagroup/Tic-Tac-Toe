@@ -1,4 +1,5 @@
 {% load staticfiles %}
+<!DOCTYPE html>
 <html>
 <head>
 <link rel='stylesheet' type='text/css' href='{% static "css/tictactoe.css" %}'>
@@ -9,16 +10,16 @@
 {% if games %}
   <ul>
   {% for game in games %}
-    <li><a href="/game/{{ game.id }}/">Game {{ game.id }}</a></il>
+    <li><a href="/{{ game.id }}/">Game {{ game.id }}</a> {{ game.status }}</il>
   {% endfor %}
   </ul>
 {% else %}
   No Games Currently Exist
 {% endif %}
 
-<form action='{{ post_to }}' method='post'>
+<form>
 {% csrf_token %}
-<input type='submit' class='ttt_new' value='New Game'></input>
+<input type='button' class='ttt_new' value='New Game'></input>
 </form>
 
 </body>

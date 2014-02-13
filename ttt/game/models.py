@@ -8,8 +8,9 @@ PLAYER_O = -1
 
 
 class Game(models.Model):
-    is_user_x = models.BooleanField(default=True)
+    user_token = models.SmallIntegerField(default=PLAYER_X)
     started = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default='In Progress')
     ended = models.DateTimeField(null=True, default=None)
 
     __board_by_col = (('upper_left', 'center_left', 'lower_left'),
@@ -49,13 +50,19 @@ class Game(models.Model):
 
             state = self.game._determine_state()
             if state[1]:
+                if state[0] != PLAYER_NONE:
+                    player = self.game.user_token
+                    self.game.status = (
+                        'User won' if state[0] == player else 'Computer won')
+                else:
+                    self.game.status = 'Draw'
                 self.game.ended = datetime.utcnow()
                 self.game.save()
 
     @classmethod
     def create_new(cls, is_user_x=True):
         game = Game()
-        game.is_user_x = is_user_x
+        game.user_token = PLAYER_X if is_user_x else PLAYER_O
         game.save()
 
         board = Board()
@@ -137,13 +144,13 @@ class Game(models.Model):
 
 class Board(models.Model):
     game = models.OneToOneField(Game, related_name='_board')
-    upper_left = models.SmallIntegerField(default=0)
-    upper_center = models.SmallIntegerField(default=0)
-    upper_right = models.SmallIntegerField(default=0)
-    center_left = models.SmallIntegerField(default=0)
-    center = models.SmallIntegerField(default=0)
-    center_right = models.SmallIntegerField(default=0)
-    lower_left = models.SmallIntegerField(default=0)
-    lower_center = models.SmallIntegerField(default=0)
-    lower_right = models.SmallIntegerField(default=0)
+    upper_left = models.SmallIntegerField(default=PLAYER_NONE)
+    upper_center = models.SmallIntegerField(default=PLAYER_NONE)
+    upper_right = models.SmallIntegerField(default=PLAYER_NONE)
+    center_left = models.SmallIntegerField(default=PLAYER_NONE)
+    center = models.SmallIntegerField(default=PLAYER_NONE)
+    center_right = models.SmallIntegerField(default=PLAYER_NONE)
+    lower_left = models.SmallIntegerField(default=PLAYER_NONE)
+    lower_center = models.SmallIntegerField(default=PLAYER_NONE)
+    lower_right = models.SmallIntegerField(default=PLAYER_NONE)
     last_played = models.DateTimeField(auto_now=True)

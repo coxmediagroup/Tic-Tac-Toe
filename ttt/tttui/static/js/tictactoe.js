@@ -37,45 +37,91 @@ $(document).ajaxSend(function(event, xhr, settings) {
 
 // my code
 $(function() {
+  var cell_coord_map = {
+    '00': 'upper_left',
+    '10': 'upper_center',
+    '20': 'upper_right',
+    '01': 'center_left',
+    '11': 'center',
+    '21': 'center_right',
+    '02': 'lower_left',
+    '12': 'lower_center',
+    '22': 'lower_right'
+  };
+  var cell_name_map = {
+    'upper_left': '00',
+    'upper_center': '10',
+    'upper_right': '20',
+    'center_left': '01',
+    'center': '11',
+    'center_right': '21',
+    'lower_left': '02',
+    'lower_center': '12',
+    'lower_right': '22'
+  };
+  $('.ttt_new').click(function(e) {
+      e.preventDefault();
+      $.post('/api/v1/game/', '{}', null, 'json').done(function(obj) {
+          var uri = obj.resource_uri.split('/');
+          var game = uri[uri.length - 2];
+          window.location.assign('/' + game);
+      }).fail(function() {
+          alert('oops');
+      });
+  });
   $('.ttt_board').each(function(index, board) {
     board = $(board);
     var game_id = board.children('#ttt_game_id')[0].value;
     var player = board.children('#ttt_player')[0].value;
+    if(player === "1") {
+      player = 'x';
+    } else {
+      player = 'o';
+    }
     var player_token = player.toUpperCase();
     board.children('.ttt_cell').click(function(event) {
       var source = $(event.target);
       if(source.hasClass('ttt_x') || source.hasClass('ttt_o') || source.hasClass('ttt_done')) return;
       var id = source[0].id.slice(-2);
-      var col = id.charAt(0);
-      var row = id.charAt(1);
+      var cell = cell_coord_map[id];
+
+      var data = {};
+
+      if(player === 'x') {
+          data[cell] = 1;
+      } else {
+          data[cell] = -1;
+      }
     
-      url = window.location.href + 'move'
+      url = '/api/v1/game/' + game_id + '/';
       $.ajax({
         'url': url,
         'type': 'POST',
-        'data': { 'player':player, 'col':col, 'row':row },
+        'headers': {"X-HTTP-Method-Override": "PATCH"},
+        'data': JSON.stringify(data),
         'dataType': 'json',
-        'success': function(content, response)
-          {
-            source.addClass('ttt_' + player);
-            source[0].innerHTML = player_token;
-            if(content['player'] !== '-')
-            {
-                var cell = board.children('#ttt_cell_' + content['col'] + content['row']).first()
-                cell.addClass('ttt_' + content['player']);
-                cell[0].innerHTML = content['player'].toUpperCase();
+        'success': function(content, response) {
+            var isEnded = (content.ended !== null);
+            for(var cell in content.board) {
+              var $cell = $('#ttt_cell_' + cell_name_map[cell]);
+              if(isEnded) $cell.addClass('ttt_done');
+              if(content.board[cell] === 1) {
+                 $cell.addClass('ttt_x');
+                 $cell.children('span').text('X');
+              } else if(content.board[cell] === -1) {
+                 $cell.addClass('ttt_o');
+                 $cell.children('span').text('O');
+              }
             }
-            if(content['is_complete'])
-            {
+            if(isEnded) {
                 board.children('.ttt_cell').addClass('ttt_done');
                 $('.ttt_new').show();
             }
-          },
-        'error': function()
-          {
+        },
+        'error': function() {
             alert('Something bad happened');
-          }
-        }); //end ajax
+        }
+      }); //end ajax
     }); // end board children
   }); // end board
 });
