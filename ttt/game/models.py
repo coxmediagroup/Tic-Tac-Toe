@@ -1,6 +1,8 @@
 from django.db import models
 
 from datetime import datetime
+from django.utils.timezone import utc
+
 
 PLAYER_X = 1
 PLAYER_NONE = 0
@@ -56,7 +58,7 @@ class Game(models.Model):
                         'User won' if state[0] == player else 'Computer won')
                 else:
                     self.game.status = 'Draw'
-                self.game.ended = datetime.utcnow()
+                self.game.ended = datetime.utcnow().replace(tzinfo=utc)
                 self.game.save()
 
     @classmethod

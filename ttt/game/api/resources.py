@@ -26,13 +26,14 @@ class urlencodeSerializer(Serializer):
         'urlencode': 'application/x-www-form-urlencoded',
         }
 
-    def from_urlencode(self, data,options=None):
+    def from_urlencode(self, data, options=None):
         """ handles basic formencoded url posts """
-        qs = dict((k, v if len(v)>1 else v[0] )
+        qs = dict(
+            (k, v if len(v) > 1 else v[0])
             for k, v in urlparse.parse_qs(data).iteritems())
         return qs
 
-    def to_urlencode(self,content): 
+    def to_urlencode(self, content):
         pass
 
 
@@ -40,6 +41,7 @@ class BoardResource(ModelResource):
     class Meta:
         object_class = Board
         excludes = ['id', 'resource_uri']
+
 
 def _move_computer(game):
     comp = game.who_moves()
@@ -49,11 +51,15 @@ def _move_computer(game):
 
 
 class GameResource(ModelResource):
-    started = fields.DateTimeField(attribute='started', readonly=True, use_in='all')
-    user_token = fields.IntegerField(attribute='user_token', readonly=True, use_in='all')
-    status = fields.CharField(attribute='status', readonly=True, use_in='all')
-    board = fields.ToOneField(BoardResource, '_board', use_in='detail', full=True)
-    
+    started = fields.DateTimeField(
+        attribute='started', readonly=True, use_in='all')
+    user_token = fields.IntegerField(
+        attribute='user_token', readonly=True, use_in='all')
+    status = fields.CharField(
+        attribute='status', readonly=True, use_in='all')
+    board = fields.ToOneField(
+        BoardResource, '_board', use_in='detail', full=True)
+
     class Meta:
         resource_name = 'game'
         object_class = Game
@@ -65,7 +71,7 @@ class GameResource(ModelResource):
 
     def obj_create(self, bundle, **kwargs):
         # create a new row
-        bundle.obj = Game.create_new(is_user_x=choice([True,False]))
+        bundle.obj = Game.create_new(is_user_x=choice([True, False]))
 
         _move_computer(bundle.obj)
 
@@ -110,4 +116,3 @@ class GameResource(ModelResource):
         _move_computer(bundle.obj)
 
         return bundle
-        

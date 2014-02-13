@@ -7,7 +7,7 @@ v1_api = Api(api_name='v1')
 v1_api.register(GameResource())
 v1_api.register(BoardResource())
 
-urlpatterns = patterns('',
-  (r'^api/', include(v1_api.urls))
+urlpatterns = patterns(
+    '',
+    (r'^api/', include(v1_api.urls))
 )
-
