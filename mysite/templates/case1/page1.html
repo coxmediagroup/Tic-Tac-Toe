@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- code by Hao Lu --->
+<html>
+
+    <head>
+        <title>Rango</title>
+		<style type="text/css">
+body {
+ color:black;
+ background-color:white;
+ font-family:Tahoma,Verdana,Helvetica,Arial,sans-serif;
+}
+.cell {
+ background-color:blue;
+ color:white;
+ font-size:2cm;
+ font-family:Courier New,Courier,monospaced;
+ font-weight:bold;
+}
+input.cell {
+ border:none;
+ width:2cm;
+ vertical-align:bottom;
+}
+td.cell {
+ border:thick blue outset;
+}
+.board {
+ border:thin black ridge;
+ background-color:gray;
+ margin-right:1cm;
+}
+}
+</style>
+		
+    </head>
+
+    <body>
+        <h1><center>Tic tac toe</center></h1>
+        <form action="." method="post">{% csrf_token %}
+			<p><button type="submit" name="reset" style="position: absolute; top: 0; right: 150px;"> Again</a></button> </p> 
+		
+		<table align=center class=board cellspacing=6 style="position: absolute; top: 20%; right: 40%;">
+		<tr>
+		 <td class=cell><input class=cell name="c7" type=submit value="{{C7}}" ;"></td>
+		 <td class=cell><input class=cell name="c8" type=submit value="{{C8}}" ;"></td>
+		 <td class=cell><input class=cell name="c9" type=submit value="{{C9}}" ;"></td>
+		</tr><tr>
+		 <td class=cell><input class=cell name="c4" type=submit value="{{C4}}" ;"></td>
+		 <td class=cell><input class=cell name="c5" type=submit value="{{C5}}";"></td>
+		 <td class=cell><input class=cell name="c6" type=submit value="{{C6}}" ;"></td>
+		</tr><tr>
+		 <td class=cell><input class=cell name="c1" type=submit value="{{C1}}" ;"></td>
+		 <td class=cell><input class=cell name="c2" type=submit value="{{C2}}" ;"></td>
+		 <td class=cell><input class=cell name="c3" type=submit value="{{C3}}" ;"></td>
+		</tr>
+		</table></form>
+		<h1>{{who1}}</h1>		
+		<p style="color: blue; position: absolute; bottom:10px;right:10px;">Design and created by Hao Lu, if you have any problems contact luha@indiana.edu</p>
+    </body>
+
+</html>
