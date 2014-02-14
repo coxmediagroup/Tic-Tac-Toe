@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="tictactoeApp">
+<head>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js'></script>
+    <script src='js/game.js'></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+<div class="container">
+
+      <div class="div-game" ng-controller="GameCtrl">
+        <h1>Tic-Tac-Toe</h1>
+        <p class="lead">{{test}}</p>
+        
+        <game-button></game-button>
+        
+        <table class='table-game'>
+        <tr>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
+        </tr>
+        </table>
+        
+      </div>
+
+    </div>
+
+</body>
+</html>
