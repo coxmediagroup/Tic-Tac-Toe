@@ -11,6 +11,7 @@ class Board:
     """
 
     def __init__(self):
+        self.emptyMarker = EMPTY_MARKER#this is really only here to pass to minimax easily
         self.reset()
 
     def printBoardCLI(self):
@@ -21,8 +22,7 @@ class Board:
             print y
 
     def reset(self):
-        self.winner = None
-        self.board = [[EMPTY_MARKER]*3 for i in range(3)]
+        self.board = [[self.emptyMarker]*3 for i in range(3)]
 
     def move(self, player, x, y):
         """
@@ -31,7 +31,7 @@ class Board:
         """
         if x < 0 or x > 2 or y < 0 or y > 2:
             raise IndexError("x and y must be between 0 and 2, inclusive")
-        if self.board[y][x] != EMPTY_MARKER:
+        if self.board[y][x] != self.emptyMarker and player != self.emptyMarker:
             raise ValueError("Can't move at (%d,%d), it's already taken by %s"%(x,y,self.board[y][x]))
         self.board[y][x] = player
 
@@ -39,7 +39,7 @@ class Board:
         """
         all available moves, makes minimax simpler
         """
-        return [(x,y) for x in range(3) for y in range(3) if self.board[y][x]==EMPTY_MARKER]
+        return [(x,y) for x in range(3) for y in range(3) if self.board[y][x]==self.emptyMarker]
 
     def finished(self):
         """
@@ -50,26 +50,22 @@ class Board:
         #test horizontal
         for y in range(3):
             marker = self.board[y][0]
-            if marker != EMPTY_MARKER and all(mark==marker for mark in self.board[y]):
-                self.winner = marker
-                return True, self.winner
+            if marker != self.emptyMarker and all(mark==marker for mark in self.board[y]):
+                return True, marker 
         #test vertical
         for x in range(3):
             marker = self.board[0][x]
-            if marker != EMPTY_MARKER and all(mark==marker for mark in [self.board[y][x] for y in range(3)]):
-                self.winner = marker
-                return True, self.winner
+            if marker != self.emptyMarker and all(mark==marker for mark in [self.board[y][x] for y in range(3)]):
+                return True, marker
         #test diagonals
         marker = self.board[1][1]
-        if marker != EMPTY_MARKER:
+        if marker != self.emptyMarker:
             corners = [[self.board[0][0],self.board[2][2]],[self.board[0][2],self.board[2][0]]]
             for diagonal in corners:
                 if all(mark == marker for mark in diagonal):
-                    self.winner = marker
-                    return True, self.winner
+                    return True, marker 
         #no winner, check for tie
-        if all(self.board[x][y] != EMPTY_MARKER for x in range(3) for y in range(3)):
-            self.winner = None
-            return True, self.winner
+        if all(self.board[x][y] != self.emptyMarker for x in range(3) for y in range(3)):
+            return True, None
         #no winner, no tie
         return False, None
