@@ -5,6 +5,10 @@ implements tic-tac-toe board
 EMPTY_MARKER = '?'
 
 class Board:
+    """
+    Tic-Tac-Toe board
+    Interact with it primarily through the move and finished functions
+    """
 
     def __init__(self):
         self.reset()

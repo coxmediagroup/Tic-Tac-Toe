@@ -1,5 +1,6 @@
 import unittest
 import board
+import minimax
 
 class BoardTest(unittest.TestCase):
 
@@ -70,6 +71,22 @@ class BoardTest(unittest.TestCase):
         self.board.move('X', 2, 0)
         self.assertEqual(self.board.finished(), (True, None))
 
+
+
+class MinimaxTest(unittest.TestCase):
+    #I can't think of a lot of ways to test minimax thoroughly
+
+    def setUp(self):
+        self.board = board.Board()
+        self.calc = minimax.MinimaxCalculator()
+
+    def test_trivial_wins(self):
+        self.board.move('X', 1, 1)
+        self.board.move('O', 0, 1)
+        self.board.move('X', 0, 2)
+        self.board.move('O', 0, 0)#O, you're such an idiot
+        bestMove = self.calc.bestMove('X', self.board)
+        self.assertEqual(bestMove, (2,0))
 
 
 if __name__ == "__main__":
