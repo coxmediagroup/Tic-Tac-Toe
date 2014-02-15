@@ -3,6 +3,7 @@
 <head>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js'></script>
     <script src='js/game.js'></script>
+    <script src='js/ai.js'></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css" />
 </head>
@@ -12,7 +13,7 @@
 
       <div class="div-game" ng-controller="GameCtrl">
         <h1>Tic-Tac-Toe</h1>
-        <p class="lead"></p>
+        <p class="lead">{{getTurnText()}}</p>
         
         <span class='span-game-grid'>
         
