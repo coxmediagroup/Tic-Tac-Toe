@@ -108,7 +108,7 @@ class MinimaxTest(unittest.TestCase):
 
     def test_minimax_against_itself(self):#if it's actually perfect, it will always tie itself
         players = ['X', 'O']
-        for gameNum in range(5):
+        for gameNum in range(100):
             moveNum = 0
             while not self.board.finished()[0]:
                 move = self.calc.bestMove(players[moveNum%2], self.board)

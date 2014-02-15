@@ -24,6 +24,9 @@ class Board:
     def reset(self):
         self.board = [[self.emptyMarker]*3 for i in range(3)]
 
+    def boardHash(self):
+        return hash(tuple(tuple(row) for row in self.board))
+
     def move(self, player, x, y):
         """
         play move at (x,y)

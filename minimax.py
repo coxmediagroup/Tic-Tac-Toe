@@ -4,8 +4,8 @@ implementation of the minimax algorithm (http://en.wikipedia.org/wiki/Minimax) f
 
 class MinimaxCalculator:
 
-    def __init__(self):
-        pass
+    def __init__(self, moveCache={}):
+        self.moveCache = moveCache
 
     def bestMove(self, player, board):
         return self.minimax(player, board)[0]
@@ -15,6 +15,11 @@ class MinimaxCalculator:
         returns maximized move for player.
         player is assumed to be either 'X' or 'O'
         """
+        cacheEntry = self.moveCache.get(board.boardHash(), None)
+        if cacheEntry != None:
+            playerMove = cacheEntry.get(player, None)
+            if playerMove != None:
+                return playerMove['move'], playerMove['score']
         bestScore = None
         bestMove = None
         for square in board.getEmptySquares():
@@ -40,5 +45,10 @@ class MinimaxCalculator:
                 bestScore = adjustedScore
                 bestMove = square
             board.move(board.emptyMarker, square[0], square[1])#undoes last move
+        cacheAddition = {'move':bestMove,'score':bestScore}
+        if cacheEntry != None:
+            self.moveCache[board.boardHash()][player] = cacheAddition
+        else:
+            self.moveCache[board.boardHash()] = {player: cacheAddition}
         return bestMove, bestScore
 
