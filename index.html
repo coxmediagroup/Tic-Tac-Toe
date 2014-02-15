@@ -16,7 +16,7 @@
         
         <span class='span-game-grid'>
         
-        <button class="btn btn-primary btn-game {{getButtonClass($index)}}" ng-repeat="box in grid">{{getButtonText($index)}}</button>
+        <button class="btn btn-primary btn-game {{getButtonClass($index)}}" ng-repeat="box in grid track by $index" ng-click="clickButton($index)">{{getButtonText($index)}}</button>
 
         </span>
 

@@ -1,10 +1,17 @@
 var mainModule = angular.module('tictactoeApp', []);
 
 var gameCtrl = mainModule.controller('GameCtrl', function ($scope) {
-  $scope.grid = ["0","1","2","3","4","5","6","7","8"];
-  
+  $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
   $scope.getButtonText = function(index){
-      return index;
+      switch($scope.grid[index]){
+          case 0:
+              return "";
+          case 1:
+              return "O";
+          case 2:
+              return "X";
+      }
   }
   
   $scope.getButtonClass = function(index){
@@ -14,5 +21,10 @@ var gameCtrl = mainModule.controller('GameCtrl', function ($scope) {
           return "";
       }
   }
+  
+  $scope.clickButton = function(index){
+      $scope.grid[index] = 1;
+  }
+  
 });
 
