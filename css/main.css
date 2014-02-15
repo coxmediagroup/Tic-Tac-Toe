@@ -12,9 +12,19 @@ body {
     margin-right: auto;
 }
 
+.span-game-grid {
+    text-align:center;
+    display:inline-block;
+}
+
 .btn-game {
+    float: left;
     margin: 10px;
     width: 50px;
     height: 50px;
     font-size: 20px;
+}
+
+.clear-left {
+    clear: left;
 }

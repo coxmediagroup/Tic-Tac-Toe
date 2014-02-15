@@ -12,28 +12,14 @@
 
       <div class="div-game" ng-controller="GameCtrl">
         <h1>Tic-Tac-Toe</h1>
-        <p class="lead">{{test}}</p>
+        <p class="lead"></p>
         
-        <game-button></game-button>
+        <span class='span-game-grid'>
         
-        <table class='table-game'>
-        <tr>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-        </tr>
-        <tr>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-        </tr>
-        <tr>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-            <td><button type="button" class="btn btn-primary btn-game">?</button></td>
-        </tr>
-        </table>
-        
+        <button class="btn btn-primary btn-game {{getButtonClass($index)}}" ng-repeat="box in grid">{{getButtonText($index)}}</button>
+
+        </span>
+
       </div>
 
     </div>
