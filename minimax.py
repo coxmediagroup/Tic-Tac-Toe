@@ -7,10 +7,10 @@ class MinimaxCalculator:
     def __init__(self):
         pass
 
-    def bestMove(self, player, board):
-        return self.minimax(player, board)[0]
+    def bestMove(self, player, board, printResults=False):
+        return self.minimax(player, board, printResults)[0]
 
-    def minimax(self, player, board):
+    def minimax(self, player, board, printResults=False,level=0):
         """
         returns maximized move for player.
         player is assumed to be either 'X' or 'O'
@@ -30,11 +30,15 @@ class MinimaxCalculator:
                 adjustedScore = score
             else:
                 opponentPlayer = 'O' if player=='X' else 'X'
-                opponentMove, score = self.minimax(opponentPlayer, board)
+                opponentMove, score = self.minimax(opponentPlayer, board,printResults, level+1)
+                score *= -1
                 if score > 0:
                     adjustedScore = 0.5#prefer winning now to winning later
                 else:
                     adjustedScore = score
+            if level==0 and printResults:
+                print 'move: ',square
+                print 'score: ',adjustedScore
             if bestScore == None or adjustedScore > bestScore:
                 bestScore = adjustedScore
                 bestMove = square

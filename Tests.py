@@ -96,8 +96,16 @@ class MinimaxTest(unittest.TestCase):
         bestMove = self.calc.bestMove('O', self.board)
         self.assertEqual(bestMove, (0,1))
 
-     def test_blocks(self):#if it's unbeatable, it must always block
-        pass
+    def test_blocks(self):#if it's unbeatable, it must always block
+        self.board.move('X', 1, 1)
+        self.board.move('O', 0, 0)
+        self.board.move('X', 0, 2)
+        self.board.printBoardCLI()
+        bestMove = self.calc.bestMove('O', self.board, True)
+        self.assertEqual(bestMove, (2, 0))
+        self.board.move('O', 2, 0)
+        bestMove = self.calc.bestMove('X', self.board)
+        self.assertEqual(bestMove, (1, 0))
 
 if __name__ == "__main__":
     unittest.main()
