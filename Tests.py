@@ -100,12 +100,23 @@ class MinimaxTest(unittest.TestCase):
         self.board.move('X', 1, 1)
         self.board.move('O', 0, 0)
         self.board.move('X', 0, 2)
-        self.board.printBoardCLI()
-        bestMove = self.calc.bestMove('O', self.board, True)
+        bestMove = self.calc.bestMove('O', self.board)
         self.assertEqual(bestMove, (2, 0))
         self.board.move('O', 2, 0)
         bestMove = self.calc.bestMove('X', self.board)
         self.assertEqual(bestMove, (1, 0))
+
+    def test_minimax_against_itself(self):#if it's actually perfect, it will always tie itself
+        players = ['X', 'O']
+        for gameNum in range(5):
+            moveNum = 0
+            while not self.board.finished()[0]:
+                move = self.calc.bestMove(players[moveNum%2], self.board)
+                self.board.move(players[moveNum%2], move[0], move[1])
+                moveNum+=1
+            self.assertEqual(self.board.finished()[1], None)
+            self.board.reset()
+
 
 if __name__ == "__main__":
     unittest.main()
