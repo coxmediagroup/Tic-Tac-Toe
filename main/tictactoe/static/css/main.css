@@ -1,0 +1,27 @@
+
+.well {
+
+    min-height: 150px !important;
+}
+
+p {
+    font-size: larger;
+}
+
+* {
+    font-family: "Josefin Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.X {
+    font-size: 8em;
+    text-align: center;
+    vertical-align: center;
+    font-weight: bold;
+}
+
+.O {
+    font-size: 8em;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: center;
+}
