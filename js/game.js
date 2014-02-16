@@ -1,6 +1,6 @@
-var mainModule = angular.module('tictactoeApp', []);
+var mainModule = angular.module('tictactoeApp', ['ui.bootstrap']);
 
-var gameCtrl = mainModule.controller('GameCtrl', function ($scope, aiFactory) {
+var gameCtrl = mainModule.controller('GameCtrl', function ($scope, $modal, aiFactory) {
     $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     $scope.getTurnText = function () {
@@ -9,27 +9,53 @@ var gameCtrl = mainModule.controller('GameCtrl', function ($scope, aiFactory) {
         return turnText[$scope.turn];
     }
 
-    $scope.getButtonText = function ( index ) {
-        var playerSymbol = { 0 : "", 1 : "O", 2 : "X" };
-        return playerSymbol [ $scope.grid [ index ] ];
-    }
-  
     $scope.getButtonClass = function ( index ) {
+        playerClasses = { 0: "btn-default", 1: "btn-computer", 2: "btn-player" };
+        var btnClass = playerClasses [ $scope.grid [ index ] ];
+        
         if (( index % 3 ) == 0 ) {
-            return "clear-left";
-        } else{
-            return "";
+            btnClass += " clear-left";
         }
+        return btnClass;
     }
   
     $scope.clickButton = function ( index ) {
         $scope.grid [ index ] = 2;
-        var nextMove = aiFactory.calculateMove( $scope.grid.slice( 0 ) );
-        console.log( "Next move: " + nextMove );
+        var nextMove = aiFactory.calculateMove ( $scope.grid.slice( 0 ) );
         if ( nextMove != undefined ) {
             $scope.grid [ nextMove ] = 1;
         }
+        var gameStatus = aiFactory.getGameStatus ( $scope.grid.slice( 0 ) );
+        if ( gameStatus.status > 0 ) {
+            var statusMessage = { 1: "It is a tie!", 2: "The computer has won!", 3: "The player has won!" };
+            $scope.endOfGame( statusMessage [ gameStatus.status ] );
+        }
     }
-  
+
+    $scope.endOfGame = function (status) {
+        //Modal dialog that pops up when the game ends
+        var modalInstance = $modal.open({
+            templateUrl: 'modal-gameend.html',
+            controller: function ($scope, $modalInstance, status) {
+                $scope.status = status;
+                $scope.ok = function () {
+                    $modalInstance.close();
+                };
+            },
+            windowClass: 'modal-gameend',
+            backdrop: false,
+            resolve: {
+                status: function () {
+                    return status;
+                }
+            }
+        });
+    
+        modalInstance.result.then(function () {
+            $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        });
+    };
+
+
 });
 

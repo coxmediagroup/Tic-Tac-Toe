@@ -2,6 +2,7 @@
 <html ng-app="tictactoeApp">
 <head>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js'></script>
+    <script src='js/ui-bootstrap-tpls-0.10.0.min.js'></script>
     <script src='js/game.js'></script>
     <script src='js/ai.js'></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" />
@@ -17,13 +18,12 @@
         
         <span class='span-game-grid'>
         
-        <button class="btn btn-primary btn-game {{getButtonClass($index)}}" ng-repeat="box in grid track by $index" ng-click="clickButton($index)">{{getButtonText($index)}}</button>
+        <button class="btn btn-game {{getButtonClass($index)}}" ng-repeat="box in grid track by $index" ng-click="clickButton($index)"></button>
 
         </span>
 
       </div>
-
-    </div>
+</div>
 
 </body>
 </html>

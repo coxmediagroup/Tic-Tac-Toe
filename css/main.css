@@ -25,6 +25,21 @@ body {
     font-size: 20px;
 }
 
+.btn-computer {
+    background-color: #DB3232;
+    background-image:url('../img/x.png');
+}
+
+.btn-player {
+    background-color: #3246DB;
+    background-image:url('../img/o.png');
+}
+
 .clear-left {
     clear: left;
+}
+
+.modal-gameend .modal-dialog {
+    width: 250px;
+    margin-top: 50%;
 }

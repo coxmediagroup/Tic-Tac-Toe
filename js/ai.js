@@ -2,29 +2,29 @@ mainModule.factory('aiFactory', function() {
     
     var ai = {};
     
-    ai.getCombinations = function ( playerID, grid ) {
-        /* This function will return an array containing only -1 if any 3 
-           squares in a row are filled by the given playerID. If 2 in a row are 
-           filled by the given playerID it will add the index of the square not 
-           yet filled to an array that will be returned */
+    //Array containing all combinations that would result in a win
+    ai.combinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-        var combinations = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
-        
+    ai.getCombinations = function ( playerID, grid ) {
+        /* This function will return an array containing the indices of the
+           squares that, if filled, would give the given playerID 3 squares in
+           a row */
+
         var returnList = [];
         
         //We first check if we already have any two in a row so that we can
         //complete the set
-        for ( var i = 0; i < combinations.length; i++ ){
-            var combination = combinations[i];
+        for ( var i = 0; i < ai.combinations.length; i++ ){
+            var combination = ai.combinations[i];
             
             var filledCount = 0;
             var notFilled = -1; //Holds which square hasn't yet been filled
@@ -34,12 +34,6 @@ mainModule.factory('aiFactory', function() {
                 } else {
                     notFilled = combination [ j ];
                 }
-            }
-            
-            if ( filledCount == 3 ){
-                //We have filled 3 spaces in a row. Return -1 to represent
-                //that we have won the game
-                return [ -1 ];
             }
             
             if ( filledCount == 2 ){
@@ -53,22 +47,22 @@ mainModule.factory('aiFactory', function() {
     }
 
     ai.calculateMove = function ( grid ) {
+        /* This function will return the index of the square that would be the
+        best next move for the computer to make */
         
-        //If we have either won or there are already 2 in a row then fill the
-        //last space
+        //If there are already 2 in a row then fill the last space
         var winningMoves = ai.getCombinations ( 1, grid );
         if ( winningMoves.length ) {
-            console.log("Found a winning move");
             return winningMoves [ 0 ];
         }
 
-        //If the player has two in a row then fill his last space
+        //If the player has two in a row then block his last space
         var blockingMoves = ai.getCombinations ( 2, grid );
         if ( blockingMoves.length ) {
             return blockingMoves [ 0 ];
         }
 
-        //Iterate through the open blocks, finding the moves that the player
+        //Iterate through the open spaces, finding the moves that the player
         //will use to become winning combinations
         var playerNextMoves = [];
         for ( var i = 0; i < 9; i++ ){
@@ -85,7 +79,7 @@ mainModule.factory('aiFactory', function() {
             }
         }
 
-        //Iterate through the open blocks, finding the moves that will result in
+        //Iterate through the open spaces, finding the moves that will result in
         //the best possible winning combinations
         var bestMoveList = [[],[],[]];
         for ( var i = 0; i < 9; i++ ){
@@ -96,13 +90,13 @@ mainModule.factory('aiFactory', function() {
                 tempGrid [ i ] = 1;
                 var winningCombos = ai.getCombinations ( 1, tempGrid );
                 
-                //If we have found a block that would give us two possible ways
+                //If we have found a space that would give us two possible ways
                 //to win
                 if ( winningCombos.length == 2 ){
                     if ( playerNextMoves.indexOf( i ) != -1 ){
                         
-                        //If filling the block would also block the player
-                        //then definitely use this block
+                        //If filling the space would also block the player
+                        //then definitely use this space
                         return i;
                     } else {
                         
@@ -112,12 +106,12 @@ mainModule.factory('aiFactory', function() {
                     }
                 }
 
-                //If we have found a block that would give us a possible way
+                //If we have found a space that would give us a possible way
                 //to win
                 if ( winningCombos.length == 1 ){
                     if ( playerNextMoves.indexOf( i ) != -1 ){
                         
-                        //If filling the block would also block the player
+                        //If filling the space would also block the player
                         //then add this to the second level of our move list
                         bestMoveList [ 1 ].push( i );
                     } else {
@@ -160,6 +154,59 @@ mainModule.factory('aiFactory', function() {
                 return i;
             }
         }
+    }
+    
+    ai.getGameStatus = function ( grid ) {
+        /* This function will return a dictionary containing an integer
+        representing the status of the game
+        0 - No win
+        1 - Tie
+        2 - Computer wins
+        3 - Player wins
+        It will also return a winning combination if the computer of player won
+        */
+
+        //Check if the computer or player has 3 in a row on any combination
+        for ( var i = 0; i < ai.combinations.length; i++ ){
+            var combination = ai.combinations[i];
+            
+            var computerFilledCount = 0;
+            var playerFilledCount = 0;
+            for ( var j = 0; j < combination.length; j++ ){
+                if ( grid [ combination [ j ] ] == 1 ){
+                    computerFilledCount ++;
+                }
+                if ( grid [ combination [ j ] ] == 2 ){
+                    playerFilledCount ++;
+                }
+            }
+            
+            if ( computerFilledCount == 3 ){
+                
+                //The computer has won
+                return { status: 2, combination: combination };
+            }
+            
+            if ( computerFilledCount == 3 ){
+                
+                //The player has won
+                return { status: 3, combination: combination };
+            }
+        }
+        
+        //Iterate through all spaces, and if all are filled then there is
+        //a tie
+        var allFilled = true;
+        for ( var i = 0; i < 9; i++ ){
+            if ( grid [ i ] === 0 ) {
+                allFilled = false;
+            }
+        }
+        if ( allFilled == true ) {
+            return { status: 1 };
+        }
+        
+        return { status: 0 };
     }
 
     return ai;
