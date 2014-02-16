@@ -2,12 +2,7 @@ var mainModule = angular.module('tictactoeApp', ['ui.bootstrap']);
 
 var gameCtrl = mainModule.controller('GameCtrl', function ($scope, $modal, aiFactory) {
     $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-    $scope.getTurnText = function () {
-        var turnText = { 0: "Computer's turn. Please wait...",
-                         1: "Your turn. Click any open squre." }
-        return turnText[$scope.turn];
-    }
+    $scope.turn = 1 //Start on the player's turn
 
     $scope.getButtonClass = function ( index ) {
         playerClasses = { 0: "btn-default", 1: "btn-computer", 2: "btn-player" };
@@ -27,7 +22,7 @@ var gameCtrl = mainModule.controller('GameCtrl', function ($scope, $modal, aiFac
         }
         var gameStatus = aiFactory.getGameStatus ( $scope.grid.slice( 0 ) );
         if ( gameStatus.status > 0 ) {
-            var statusMessage = { 1: "It is a tie!", 2: "The computer has won!", 3: "The player has won!" };
+            var statusMessage = { 1: "It is a tie!", 2: "The computer has won!", 3: "You have won!" };
             $scope.endOfGame( statusMessage [ gameStatus.status ] );
         }
     }
@@ -44,6 +39,7 @@ var gameCtrl = mainModule.controller('GameCtrl', function ($scope, $modal, aiFac
             },
             windowClass: 'modal-gameend',
             backdrop: false,
+            keyboard: false,
             resolve: {
                 status: function () {
                     return status;
@@ -52,7 +48,13 @@ var gameCtrl = mainModule.controller('GameCtrl', function ($scope, $modal, aiFac
         });
     
         modalInstance.result.then(function () {
-            $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+            if ( $scope.turn == 0 ) {
+                $scope.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $scope.turn = 1;
+            } else {
+                $scope.grid = [0, 0, 0, 0, 1, 0, 0, 0, 0];
+                $scope.turn = 0;
+            }
         });
     };
 
