@@ -14,9 +14,13 @@ class Board(object):
             (2,4,6))
 
     def __init__(self, *args, **kwargs):
-        self.the_board = [None, None, None,
-                             None, None, None,
-                             None, None, None]
+        """
+            The board is the passed in board or a blank board since this AI always wins, we will always render
+            an initialized board where the computer takes the middle
+        """
+
+        self.the_board = kwargs.get('the_board',[None, None, None, None, None, None, None, None, None])
+
 
     def draw(self):
         """

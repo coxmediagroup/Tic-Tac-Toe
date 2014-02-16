@@ -10,7 +10,12 @@ def home(request):
         so that the view only ever renders one tic tac toe game at the time
     """
     # here we need to parse out the current state of the board so we can pass it to the class and render it
-    board = Board()
+    try:
+        board = list(request.POST['board'])
+    except:
+        board = ['','','','','X','','','','']
 
-    da_board = board.draw()
+    the_board = Board(the_board=board)
+
+    board_html = the_board.draw()
     return render_to_response('play/home.html',locals())
