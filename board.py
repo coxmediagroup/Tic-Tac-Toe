@@ -22,9 +22,15 @@ class Board:
             print y
 
     def reset(self):
+        """
+        clears anything on the board
+        """
         self.board = [[self.emptyMarker]*3 for i in range(3)]
 
     def boardHash(self):
+        """
+        unique identifier for this particular state of the board
+        """
         return hash(tuple(tuple(row) for row in self.board))
 
     def move(self, player, x, y):

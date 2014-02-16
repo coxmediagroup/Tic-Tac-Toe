@@ -5,15 +5,25 @@ implementation of the minimax algorithm (http://en.wikipedia.org/wiki/Minimax) f
 class MinimaxCalculator:
 
     def __init__(self, moveCache={}):
+        """
+        moveCache is dict-like key-value store of moves and results
+        """
         self.moveCache = moveCache
 
     def bestMove(self, player, board):
+        """
+        returns best move calculated by minimax
+        move is tuple in form of (x, y)
+        player is assumed to be either 'X' or 'O'
+        """
         return self.minimax(player, board)[0]
 
     def minimax(self, player, board):
         """
         returns maximized move for player.
         player is assumed to be either 'X' or 'O'
+        return value is tuple in form of (<move>, <score>)
+        move is a tuple in form of (x, y)
         """
         cacheEntry = self.moveCache.get(board.boardHash(), None)
         if cacheEntry != None:
@@ -47,7 +57,8 @@ class MinimaxCalculator:
             board.move(board.emptyMarker, square[0], square[1])#undoes last move
         cacheAddition = {'move':bestMove,'score':bestScore}
         if cacheEntry != None:
-            self.moveCache[board.boardHash()][player] = cacheAddition
+            cacheEntry[player] = cacheAddition
+            self.moveCache[board.boardHash()] = cacheEntry
         else:
             self.moveCache[board.boardHash()] = {player: cacheAddition}
         return bestMove, bestScore
