@@ -1,6 +1,20 @@
+import random
 import unittest
 
 from app.ttt import *
+
+
+O_MOVES = ((0, 0b000000000000000010), (1, 0b000000000000001000), 
+           (2, 0b000000000000100000), (3, 0b000000000010000000), 
+           (4, 0b000000001000000000), (5, 0b000000100000000000),
+           (6, 0b000010000000000000), (7, 0b001000000000000000), 
+           (8, 0b100000000000000000))
+
+X_MOVES = ((0, 0b000000000000000011), (1, 0b000000000000001100), 
+           (2, 0b000000000000110000), (3, 0b000000000011000000), 
+           (4, 0b000000001100000000), (5, 0b000000110000000000),
+           (6, 0b000011000000000000), (7, 0b001100000000000000), 
+           (8, 0b110000000000000000))
 
 
 class TicTacToeBoardTests(unittest.TestCase):
@@ -15,20 +29,12 @@ class TicTacToeBoardTests(unittest.TestCase):
     def test__convert_move(self):
         ttt = TicTacToeBoard()
         # testing for O
-        for move, expected in ((0, 0b000000000000000010), (1, 0b000000000000001000),
-                               (2, 0b000000000000100000), (3, 0b000000000010000000),
-                               (4, 0b000000001000000000), (5, 0b000000100000000000),
-                               (6, 0b000010000000000000), (7, 0b001000000000000000),
-                               (8, 0b100000000000000000)):
+        for move, expected in O_MOVES:
             self.assertEquals(expected, ttt._convert_move(move))
         
         # testing for X
         ttt.turn = 1
-        for move, expected in ((0, 0b000000000000000011), (1, 0b000000000000001100),
-                               (2, 0b000000000000110000), (3, 0b000000000011000000),
-                               (4, 0b000000001100000000), (5, 0b000000110000000000),
-                               (6, 0b000011000000000000), (7, 0b001100000000000000),
-                               (8, 0b110000000000000000)):
+        for move, expected in X_MOVES:
             self.assertEquals(expected, ttt._convert_move(move))
             
         # should return None for integers 0 <= move <= 8
@@ -40,7 +46,26 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertIsNone(ttt._convert_move(move))
     
     def test__is_valid(self):
-        self.assertTrue(False, "Test not implemented")
+        def generate_empty_square(square):
+            # creates a randomly-filled board, except for one empty square
+            board = 0
+            for i in range(8, -1, -1):
+                match = not (square == i)
+                new_square = (int(match) << 1) + (random.randint(0, 1) 
+                                                  if match else 0)
+                board = (board << 2) + new_square
+            return board
+        
+        ttt = TicTacToeBoard()
+        
+        # running an exhaustive test
+        for empty_square in range(9):
+            ttt.board = generate_empty_square(empty_square)
+            
+            for moveset in (O_MOVES, X_MOVES):
+                for square, move in moveset:
+                    self.assertEquals((square == empty_square), 
+                                      ttt._is_valid_move(move))
     
     def test__set_turn(self):
         ttt = TicTacToeBoard()
@@ -75,7 +100,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt.board = 0b101011101110101111
         for turn in (0, 1):
             ttt.turn = turn
-            for move in range(0, 9):
+            for move in range(9):
                 self.assertFalse(ttt.apply_move(move))
                 self.assertEquals(0b101011101110101111, ttt.board)
     

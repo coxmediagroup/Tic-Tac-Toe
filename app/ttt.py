@@ -2,8 +2,6 @@
 Functions and classes for playing the game. The UI classes can be found in
 run.py
 """
-import re
-
 
 class TicTacToeBoard(object):
     """
@@ -85,7 +83,7 @@ class TicTacToeBoard(object):
             return None
         return (self.turn + 2) << (2* move)
     
-    def _is_valid(self, move):
+    def _is_valid_move(self, move):
         """
         Checks if a current move is going to an empty square on the board.
         Returns True if the square is empty, and False if the square is filled
@@ -95,8 +93,11 @@ class TicTacToeBoard(object):
         :param move: an integer that has been generated using self._convert_move
         :return: boolean
         """
-        # TODO: implement
-        return False
+        if move is None:
+            return False
+        # if the move doesn't match up with anything on the board, we should
+        # have a zero value if we try to `and` them
+        return not (move & self.board)
     
     def _set_turn(self):
         """Alternates the current self.turn between 0 and 1."""
@@ -111,7 +112,7 @@ class TicTacToeBoard(object):
         :return: boolean
         """
         move = self._convert_move(square)
-        if self._is_valid(move):
+        if self._is_valid_move(move):
             self.board += move
             return True
         return False
