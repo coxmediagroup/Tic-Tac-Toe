@@ -67,6 +67,24 @@ class TicTacToeBoard(object):
             return None
         return (self.turn + 2) << (2* square)
     
+    def _is_valid(self, move):
+        # TODO: implement
+        return False
+    
+    def apply_move(self, square):
+        """
+        Checks the validity of a given move, and if valid, applies it to the
+        game board. Returns True if the move was applied; False otherwise.
+        
+        :param square: integer between 0 and 8
+        :return: boolean
+        """
+        move = self._convert_move(square)
+        if self._is_valid(move):
+            self.board += move
+            return True
+        return False
+    
     def is_computer_turn(self):
         """
         Determines whether it's the computer's turn to make a move. The human

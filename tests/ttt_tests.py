@@ -4,6 +4,8 @@ from app.ttt import *
 
 
 class TicTacToeBoardTests(unittest.TestCase):
+    # Testing done in binary as a second check to hex calculations in main class
+    
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
@@ -28,6 +30,37 @@ class TicTacToeBoardTests(unittest.TestCase):
                                (6, 0b000011000000000000), (7, 0b001100000000000000),
                                (8, 0b110000000000000000)):
             self.assertEquals(expected, ttt._convert_move(move))
+    
+    def test__is_valid(self):
+        self.assertTrue(False, "Test not implemented")
+    
+    def test_apply_move(self):
+        ttt = TicTacToeBoard()
+        self.assertEquals(0, ttt.board)
+        self.assertEquals(0, ttt.turn)
+        
+        # empty board should always apply
+        self.assertTrue(ttt.apply_move(3))
+        self.assertEquals(0b000000000010000000, ttt.board)
+        
+        # some intermediate test cases
+        ttt.turn = 1
+        self.assertTrue(ttt.apply_move(5))
+        self.assertEquals(0b000000110010000000, ttt.board)
+        
+        ttt.turn = 0
+        self.assertFalse(ttt.apply_move(5))
+        self.assertEquals(0b000000110010000000, ttt.board)
+        self.assertTrue(ttt.apply_move(8))
+        self.assertEquals(0b100000110010000000, ttt.board)
+        
+        # full board should never apply
+        ttt.board = 0b101011101110101111
+        for turn in (0, 1):
+            ttt.turn = turn
+            for move in range(0, 9):
+                self.assertFalse(ttt.apply_move(move))
+                self.assertEquals(0b101011101110101111, ttt.board)
     
     def test_is_computer_turn(self):
         ttt = TicTacToeBoard()
