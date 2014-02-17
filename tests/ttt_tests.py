@@ -15,3 +15,12 @@ class TicTacToeBoardTests(unittest.TestCase):
         for turn in (0, 1):
             ttt.turn = turn
             self.assertEquals(bool(turn), ttt.is_computer_turn())
+            
+    def test_set_turn(self):
+        ttt = TicTacToeBoard()
+        self.assertEquals(0, ttt.turn)
+        
+        # should alternate between 1 and 0
+        for turn in (1, 0, 1, 0, 1, 0, 1, 0):
+            ttt.set_turn()
+            self.assertEquals(turn, ttt.turn)

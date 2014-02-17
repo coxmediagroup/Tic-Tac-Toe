@@ -60,3 +60,9 @@ class TicTacToeBoard(object):
         :return: boolean
         """
         return bool(self.turn)
+    
+    def set_turn(self):
+        """
+        Alternates the current self.turn between 0 and 1.
+        """
+        self.turn = ~self.turn & 0x1
