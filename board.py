@@ -10,9 +10,16 @@ class Board:
     Interact with it primarily through the move and finished functions
     """
 
-    def __init__(self):
-        self.emptyMarker = EMPTY_MARKER#this is really only here to pass to minimax easily
+    def __init__(self, board=None):
+        self.emptyMarker = EMPTY_MARKER#this is really only here to pass to minimax easilya
         self.reset()
+        if board != None:
+            if len(board) != 3 or any(len(row)!=3 for row in board):
+                raise ValueError("Invalid board")
+            for y in range(len(board)):
+                for x in range(len(board[y])):
+                    if board[y][x] in ['X','O']:
+                        self.board[y][x] = board[y][x]
 
     def printBoardCLI(self):
         """
