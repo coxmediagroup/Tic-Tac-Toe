@@ -30,6 +30,14 @@ class TicTacToeBoardTests(unittest.TestCase):
                                (6, 0b000011000000000000), (7, 0b001100000000000000),
                                (8, 0b110000000000000000)):
             self.assertEquals(expected, ttt._convert_move(move))
+            
+        # should return None for integers 0 <= move <= 8
+        for move in (-2, -1, 9, 10):
+            self.assertIsNone(ttt._convert_move(move))
+        
+        # should return None for moves that can't be converted to integers
+        for move in ('a', None, {}):
+            self.assertIsNone(ttt._convert_move(move))
     
     def test__is_valid(self):
         self.assertTrue(False, "Test not implemented")

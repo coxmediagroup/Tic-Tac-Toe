@@ -76,21 +76,30 @@ class TicTacToeBoard(object):
         :param square: integer between 0 and 8
         :return: integer
         """
-        if not 0 <= square <= 8:
+        try:
+            move = int(square)
+        except (ValueError, TypeError):
             return None
-        return (self.turn + 2) << (2* square)
+        
+        if not 0 <= move <= 8:
+            return None
+        return (self.turn + 2) << (2* move)
     
     def _is_valid(self, move):
         """
+        Checks if a current move is going to an empty square on the board.
+        Returns True if the square is empty, and False if the square is filled
+        or if move is None (i.e., self._convert_move decided that move was
+        originally invalid input).
         
+        :param move: an integer that has been generated using self._convert_move
+        :return: boolean
         """
         # TODO: implement
         return False
     
     def _set_turn(self):
-        """
-        Alternates the current self.turn between 0 and 1.
-        """
+        """Alternates the current self.turn between 0 and 1."""
         self.turn = ~self.turn & 0x1
     
     def apply_move(self, square):
