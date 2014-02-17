@@ -159,10 +159,10 @@ mainModule.factory('aiFactory', function() {
     ai.getGameStatus = function ( grid ) {
         /* This function will return a dictionary containing an integer
         representing the status of the game
-        0 - No win
-        1 - Tie
-        2 - Computer wins
-        3 - Player wins
+        -1 - No win
+        0 - Player wins
+        1 - Computer wins
+        2 - Tie
         It will also return a winning combination if the computer of player won
         */
 
@@ -184,13 +184,13 @@ mainModule.factory('aiFactory', function() {
             if ( computerFilledCount == 3 ){
                 
                 //The computer has won
-                return { status: 2, combination: combination };
+                return { status: 1, combination: combination };
             }
             
             if ( computerFilledCount == 3 ){
                 
                 //The player has won
-                return { status: 3, combination: combination };
+                return { status: 0, combination: combination };
             }
         }
         
@@ -203,10 +203,10 @@ mainModule.factory('aiFactory', function() {
             }
         }
         if ( allFilled == true ) {
-            return { status: 1 };
+            return { status: 2 };
         }
         
-        return { status: 0 };
+        return { status: -1 };
     }
 
     return ai;

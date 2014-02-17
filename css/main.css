@@ -3,9 +3,26 @@ body {
   background-color: #bbb;
 }
 
+.navbar-default {
+    background-color: rgb(34,34,34);
+    border-color: rgb(18, 18, 18);
+}
+
+h2 {
+    color: #FFF;
+    padding-bottom: 5px;
+}
+
+.navbar-info {
+    color: #fff;
+    margin-top: 27px;
+    margin-left: 15px;
+}
+
 .div-game {
   padding: 40px 15px;
   text-align: center;
+  margin-top: 80px;
 }
 
 .table-game {

@@ -5,15 +5,28 @@
     <script src='js/ui-bootstrap-tpls-0.10.0.min.js'></script>
     <script src='js/game.js'></script>
     <script src='js/ai.js'></script>
+    <script src='js/score.js'></script>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
 
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container" ng-controller="ScoreCtrl">
+    <div class="navbar-header">
+      <h2 class="pull-left">Tic-Tac-Toe</h2>
+    </div>
+    <p class="navbar-info navbar-right">Ties: {{getScore ( 2 )}}</p>
+    <p class="navbar-info navbar-right">Computer: {{getScore ( 1 )}}</p>
+    <p class="navbar-info navbar-right">Humans: {{getScore ( 0 )}}</p>
+  </div>
+</div>
+
+
 <div class="container">
 
       <div class="div-game" ng-controller="GameCtrl">
-        <h1>Tic-Tac-Toe</h1>
         <p class="lead">Click on any open square</p>
         
         <span class='span-game-grid'>
