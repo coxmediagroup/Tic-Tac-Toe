@@ -16,6 +16,11 @@ X_MOVES = ((0, 0b000000000000000011), (1, 0b000000000000001100),
            (6, 0b000011000000000000), (7, 0b001100000000000000), 
            (8, 0b110000000000000000))
 
+WINNING_MOVES = (0b010101000000000000, 0b010000000100000001,
+                 0b010000000000010100, 0b000100000001000001,
+                 0b000001010100000000, 0b000001000000010001,
+                 0b000000010000000101, 0b000000000101010000)
+
 
 class TicTacToeBoardTests(unittest.TestCase):
     # Testing done in binary as a second check to hex calculations in main class
@@ -33,12 +38,54 @@ class TicTacToeBoardTests(unittest.TestCase):
                                               if match else 0)
             board = (board << 2) + new_square
         return board
+    
+    def insert_random_moves(self, winning_board, winning_player, pieces=2):
+        """
+        Helper method to insert random pieces into an existing game board.
+        The game board should consist of one of the 'WINNING_MOVES' boards 
+        above, and the winning player should be the one that has won the game.
+        
+        Note: do not include more pieces than there are empty slots on the 
+            board.
+        
+        :param winning_board: an integer from WINNING_MOVES
+        :param winning_player: integer representing the player, either 1 or 2
+        :param pieces: number of random pieces to insert for the losing. Note 
+            that inserting more than 2 pieces may result in a board where the
+            losing player actually wins
+        :return: integer
+        """
+        if not pieces:
+            return winning_board
+        
+        # WINNING_MOVES has values for Player 1. We need to update them to
+        # Player 2 if that player was specified
+        if winning_player == 2:
+            for i in range(0, 18, 2):
+                mask = 2 << i
+                if mask & winning_board:
+                    winning_board = winning_board | (1 << i)
+            
+        # this isn't intended to be a smart algorithm; simply a quick-and-dirty
+        # one for testing purposes to get as random as possible
+        losing_player = ~winning_player & 0b11
+        while pieces:
+            for i in range(0, 18, 2):
+                mask = 2 << i
+                if not mask & winning_board:
+                    winning_board = winning_board | (losing_player << i)
+                    pieces -= 1
+                    if not pieces:
+                        return winning_board
 
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
         for attr in ('board', 'turn', 'player_wins', 'player_losses', 'ties'):
             self.assertEquals(0, getattr(ttt, attr))
+    
+    def test__board_for_player(self):
+        self.assertTrue(False, "Not Implemented")
     
     def test__convert_move(self):
         ttt = TicTacToeBoard()
@@ -60,8 +107,33 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertIsNone(ttt._convert_move(move))
     
     def test__has_won(self):
-        self.assertTrue(False, "Not Implemented")
-    
+        ttt = TicTacToeBoard()
+        
+        # winning circumstances
+        for player in (1, 2):
+            for board in WINNING_MOVES:
+                # winning circumstances
+                ttt.board = self.insert_random_moves(board, player)
+                self.assertTrue(ttt._has_won(player))
+                
+                # losing circumstances
+                ttt.board = self.insert_random_moves(board, (~player & 0b11))
+                self.assertFalse(ttt._has_won(player))
+        
+        # some tie boards
+        for board in (0b101011101111101110, 0b111011111011101010,
+                      0b111110111010111010, 0b101110101110111110):
+            ttt.board = board
+            for player in (1, 2):
+                self.assertFalse(ttt._has_won(player))
+        
+        # incomplete games
+        for board in (0b000000000000000000, 0b110010000000111010,
+                      0b100000001110110010, 0b000011101100100010):
+            ttt.board = board
+            for player in (1, 2):
+                self.assertFalse(ttt._has_won(player))
+
     def test__is_board_full(self):
         ttt = TicTacToeBoard()
         
@@ -94,6 +166,9 @@ class TicTacToeBoardTests(unittest.TestCase):
                 for square, move in moveset:
                     self.assertEquals((square == empty_square), 
                                       ttt._is_valid_move(move))
+    
+    def test__is_win(self):
+        self.assertTrue(False, "Not Implemented")
     
     def test__set_turn(self):
         ttt = TicTacToeBoard()
