@@ -50,3 +50,13 @@ class TicTacToeBoard(object):
         self.player_wins = 0
         self.player_losses = 0
         self.ties = 0
+        
+    def is_computer_turn(self):
+        """
+        Determines whether it's the computer's turn to make a move. The human
+        player always goes when self.turn=0, and the computer goes when
+        self.turn=1
+        
+        :return: boolean
+        """
+        return bool(self.turn)
