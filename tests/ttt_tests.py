@@ -20,6 +20,20 @@ X_MOVES = ((0, 0b000000000000000011), (1, 0b000000000000001100),
 class TicTacToeBoardTests(unittest.TestCase):
     # Testing done in binary as a second check to hex calculations in main class
     
+    def generate_board(self, empty_squares):
+        """
+        A helper method to randomly generate a game board.
+        
+        :param empty_squares: list of squares that should not have an 'X' or 'O'
+        """
+        board = 0
+        for i in range(8, -1, -1):
+            match = not (i in empty_squares)
+            new_square = (int(match) << 1) + (random.randint(0, 1) 
+                                              if match else 0)
+            board = (board << 2) + new_square
+        return board
+    
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
@@ -45,22 +59,33 @@ class TicTacToeBoardTests(unittest.TestCase):
         for move in ('a', None, {}):
             self.assertIsNone(ttt._convert_move(move))
     
-    def test__is_valid(self):
-        def generate_empty_square(square):
-            # creates a randomly-filled board, except for one empty square
-            board = 0
-            for i in range(8, -1, -1):
-                match = not (square == i)
-                new_square = (int(match) << 1) + (random.randint(0, 1) 
-                                                  if match else 0)
-                board = (board << 2) + new_square
-            return board
+    def test__is_board_full(self):
+        ttt = TicTacToeBoard()
         
+        # a few random tests where board is full
+        for i in range(9):
+            ttt.board = self.generate_board([])
+            self.assertTrue(ttt._is_board_full())
+        
+        # comprehensive, but not exhaustive non-full tests.
+        # we'll run each non-full set of tests twice
+        for trial in range(2):
+            for empty in range(1, 9):
+                open_squares = list(range(empty))
+                empty_squares = []
+                for sqr in range(empty):
+                    square = random.choice(open_squares)
+                    empty_squares.append(open_squares.pop(open_squares.index(square)))
+                
+                ttt.board = self.generate_board(empty_squares)
+                self.assertFalse(ttt._is_board_full())
+    
+    def test__is_valid_move(self):
         ttt = TicTacToeBoard()
         
         # running an exhaustive test
         for empty_square in range(9):
-            ttt.board = generate_empty_square(empty_square)
+            ttt.board = self.generate_board([empty_square])
             
             for moveset in (O_MOVES, X_MOVES):
                 for square, move in moveset:

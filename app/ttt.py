@@ -83,6 +83,16 @@ class TicTacToeBoard(object):
             return None
         return (self.turn + 2) << (2* move)
     
+    def _is_board_full(self):
+        """
+        Determines if there are no open squares left on the board.
+        Returns False if there are no open squares; True otherwise.
+        
+        :return: boolean
+        """
+        full_board = 0x2aaaa  # all squares filled, ignoring which player
+        return full_board == full_board & self.board
+    
     def _is_valid_move(self, move):
         """
         Checks if a current move is going to an empty square on the board.
