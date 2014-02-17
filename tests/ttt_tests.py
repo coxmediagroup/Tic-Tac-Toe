@@ -11,4 +11,7 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(0, getattr(ttt, attr))
     
     def test_is_computer_turn(self):
-        pass
+        ttt = TicTacToeBoard()
+        for turn in (0, 1):
+            ttt.turn = turn
+            self.assertEquals(bool(turn), ttt.is_computer_turn())
