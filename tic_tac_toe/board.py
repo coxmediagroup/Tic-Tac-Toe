@@ -1,10 +1,25 @@
-import copy
+"""
+Everything to do with the game board
+
+"""
 import logging
 import random
 
-logging.basicConfig(filename='/tmp/tic-tac-toe.log',level=logging.DEBUG)
+logging.basicConfig(filename='/tmp/tic-tac-toe.log', level=logging.DEBUG)
+
+# minimax infinity replacement
+INFINITY = 999
+
+# the minimum and maximum board sides
+MIN_DIM = 3
+MAX_DIM = 16
 
 class BoardException(Exception):
+    """Board Errors"""
+    pass
+
+class BoardMoveException(Exception):
+    """Invalid Move"""
     pass
 
 class BoardSpace(object):
@@ -28,18 +43,10 @@ class BoardSpace(object):
 class Board(object):
     """
     Game board is represented as a 2 dimensional list of BoardSpaces
-    
+
     Players are described by a single character
 
     """
-    # minimax infinity replacement
-    INFINITY = 999
-    
-    # the minimum board side
-    MIN_DIM = 3
-    
-    # the maximum board side
-    MAX_DIM = 16
 
     def __init__(self, **kwargs):
 
@@ -47,26 +54,26 @@ class Board(object):
         self.node_depth = 0
 
         # Board settings
-        self.ROWS = kwargs.get('rows', 3)
-        self.COLS = kwargs.get('cols', 3)
+        self.rows = kwargs.get('rows', 3)
+        self.cols = kwargs.get('cols', 3)
 
         # Game rules
-        self.IN_A_ROW = kwargs.get('in_a_row', 3)
+        self.in_a_row = kwargs.get('in_a_row', 3)
 
         # Players
-        self.P0 = kwargs.get('p0', '-') # player null (blank spaces)
-        self.P1 = kwargs.get('p1', 'X') # player one
-        self.P2 = kwargs.get('p2', 'O') # player two
-        self.P1_AI = kwargs.get('p1_ai', False) # player one AI or human
-        self.P2_AI = kwargs.get('p2_ai', False) # player one AI or human
+        self.player0 = kwargs.get('player0', '-') # player null (blank spaces)
+        self.player1 = kwargs.get('player1', 'X') # player one
+        self.player2 = kwargs.get('player2', 'O') # player two
+        self.player1_ai = kwargs.get('player1_ai', False) # AI or human
+        self.player2_ai = kwargs.get('player2_ai', False) # AI or human
         self.this_player = kwargs.get('this_player', None)
         self.next_player = kwargs.get('next_player', None)
 
         # Score Board
         self.score_board = {
-            self.P0: 0,
-            self.P1: 0,
-            self.P2: 0,
+            self.player0: 0,
+            self.player1: 0,
+            self.player2: 0,
         }
 
         # Put a game board together
@@ -80,28 +87,28 @@ class Board(object):
         """
         # Test the rows and cols are the minimal size
         msg = '"{}" must be an integer larger than {} and smaller than {}.'
-        if not int(self.ROWS) >= self.MIN_DIM <= self.MAX_DIM:
-            row_msg = msg.format('rows', self.MIN_DIM, self.MAX_DIM)
+        if not int(self.rows) >= MIN_DIM <= MAX_DIM:
+            row_msg = msg.format('rows', MIN_DIM, MAX_DIM)
             raise BoardException(row_msg)
-        if not int(self.COLS) >= self.MIN_DIM <= self.MAX_DIM:
-            row_msg = msg.format('cols', self.MIN_DIM, self.MAX_DIM)
+        if not int(self.cols) >= MIN_DIM <= MAX_DIM:
+            row_msg = msg.format('cols', MIN_DIM, MAX_DIM)
             raise BoardException(row_msg)
 
         # Test that the width of the character for blanks and player is 1 wide
-        if not len(self.P0) == 1:
+        if not len(self.player0) == 1:
             raise BoardException("Blank spaces must be one character wide")
-        if not len(self.P1) == 1:
+        if not len(self.player1) == 1:
             raise BoardException("Player 1 must be one character wide")
-        if not len(self.P2) == 1:
+        if not len(self.player2) == 1:
             raise BoardException("Player 1 must be one character wide")
 
         # Test that there arent any duplicated players or blank characters
         msg = '"{}" must be unique'
-        if self.P0 in (self.P1, self.P2):
+        if self.player0 in (self.player1, self.player2):
             raise BoardException(msg.format("Blank spaces"))
-        if self.P1 in (self.P0, self.P2):
+        if self.player1 in (self.player0, self.player2):
             raise BoardException(msg.format("Player 1"))
-        if self.P2 in (self.P0, self.P1):
+        if self.player2 in (self.player0, self.player1):
             raise BoardException(msg.format("Player 2"))
 
         return True
@@ -113,12 +120,12 @@ class Board(object):
         """
         board = []
         counter = 1
-        for x in range(self.ROWS):
-            board.append([])
-            for y in range(self.COLS):
-                s = BoardSpace(player=self.P0, board_index=counter)
-                board[-1].append(s)
-                counter += 1
+        while counter <= (self.rows * self.cols):
+            if counter % self.cols == 1:
+                board.append([])
+            board_space = BoardSpace(player=self.player0, board_index=counter)
+            board[-1].append(board_space)
+            counter += 1
         return board
 
     def clear_board(self):
@@ -130,7 +137,7 @@ class Board(object):
         self.node_depth = 0
         self.board = self.new_board()
 
-    def ai(self):
+    def ai_move(self):
         """
         For whichever player is the "current" player, auto-play their move.
 
@@ -139,7 +146,7 @@ class Board(object):
 
         # Choose random, if starting on empty board
         remaining_spaces = self.remaining_spaces()
-        if len(remaining_spaces) == (self.COLS * self.ROWS):
+        if len(remaining_spaces) == (self.cols * self.rows):
             this_space = random.choice(remaining_spaces)
 
         # Or use minimax
@@ -155,58 +162,80 @@ class Board(object):
             # AI can't place a move if no spaces are left!
             raise BoardException("No available spaces for ai to place!")
 
+    def _max_turn_player(self, max_turn):
+        """
+        swap players for minimax moves
+
+        """
+        if max_turn:
+            this_player = self.this_player
+        else:
+            this_player = self.next_player
+        return this_player
+
+    def _minimax_winner(self, max_turn):
+        """
+        point value for player in minimax
+
+        """
+        point = 1
+        if max_turn:
+            value = -point
+            alpha = value
+            beta = INFINITY
+        else:
+            value = point
+            alpha = -INFINITY
+            beta = value
+        # logging.debug('Pt:{}'.format(v))
+        # logging.debug('*' * 30)
+        return (value, alpha, beta, None)
+
+    def _minimax_draw(self, max_turn):
+        """
+        point value for draw in minimax
+
+        """
+        if max_turn:
+            value = 0
+            alpha = 0
+            beta = -INFINITY
+        else:
+            value = 0
+            alpha = INFINITY
+            beta = 0
+        # logging.debug('Pt:{}'.format(v))
+        # logging.debug('*' * 30)
+        return (value, alpha, beta, None)
+
     def _minimax(self, max_turn=True):
         """
         Minimax algorithm with alpha-beta pruning
 
         """
         # establish who is max and who is min
-        if max_turn:
-            this_player = self.this_player
-        else:
-            this_player = self.next_player
+        this_player = self._max_turn_player(max_turn)
 
         # Available spaces on board
         remaining_spaces = self.remaining_spaces()
 
         # board has a winner?
         if self.winning_space():
-            point = 1
-            if max_turn:
-                v = -point
-                a = v
-                b = self.INFINITY
-            else:
-                v = point
-                a = -self.INFINITY
-                b = v
-            # logging.debug('Pt:{}'.format(v))
-            # logging.debug('*' * 30)
-            return (v, a, b, None)
+            return self._minimax_winner(max_turn)
 
-        # Draw        
+        # Draw
         if len(remaining_spaces) == 0:
-            if max_turn:
-                v = 0
-                a = 0
-                b = -self.INFINITY
-            else:
-                v = 0
-                a = self.INFINITY
-                b = 0
-            # logging.debug('Pt:{}'.format(v))
-            # logging.debug('*' * 30)
-            return (v, a, b, None)
+            return self._minimax_draw(max_turn)
 
         # player max moves
         if max_turn:
-            v = -self.INFINITY
-            a = -self.INFINITY
-            b = self.INFINITY
-            best_move = (v, a, b, None)
+            value = -INFINITY
+            alpha = -INFINITY
+            beta = INFINITY
+            best_move = (value, alpha, beta, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # max: if v > alpha; alpha-cut
+                # max: if value > alpha; alpha-cut
                 if best_move[0] <= best_move[1]:
                     self.node_depth += 1
                     self._place_player(this_player, space.board_index)
@@ -218,13 +247,13 @@ class Board(object):
 
         # player min moves
         else:
-            v = self.INFINITY
-            a = self.INFINITY
-            b = -self.INFINITY
-            best_move = (v, a, b, None)
+            value = INFINITY
+            alpha = INFINITY
+            beta = -INFINITY
+            best_move = (value, alpha, beta, None)
             for space in remaining_spaces:
                 self.node_counter += 1
-                # min: if v < beta; beta-cut
+                # min: if value < beta; beta-cut
                 if best_move[0] >= best_move[2]:
                     self.node_depth += 1
                     self._place_player(this_player, space.board_index)
@@ -245,7 +274,7 @@ class Board(object):
         these_spaces = []
         for row in self.board:
             for space in row:
-                if space.player == self.P0:
+                if space.player == self.player0:
                     these_spaces.append(space)
         return these_spaces
 
@@ -254,9 +283,9 @@ class Board(object):
         Check if the last placed move was a winning move, regardless of player
 
         """
-        if self.player_win_round(self.P1, flag_winner=False):
+        if self.player_win_round(self.player1, flag_winner=False):
             return True
-        elif self.player_win_round(self.P2, flag_winner=False):
+        elif self.player_win_round(self.player2, flag_winner=False):
             return True
         else:
             return False
@@ -275,7 +304,7 @@ class Board(object):
                     spaces_in_a_row.append(space)
                 else:
                     spaces_in_a_row = []
-            if len(spaces_in_a_row) >= self.IN_A_ROW:
+            if len(spaces_in_a_row) >= self.in_a_row:
                 winning_spaces += spaces_in_a_row
         return winning_spaces
 
@@ -355,7 +384,7 @@ class Board(object):
         """
         Game is won if player has N-in-a-row spots filled X times
 
-        Player = self.P1 or self.P2
+        Player = self.player1 or self.player2
 
         """
         winning_spaces = []
@@ -432,14 +461,14 @@ class Board(object):
         """
 
         # Raise exception if not possible
-        if board_index < 1 or board_index > (self.ROWS * self.COLS):
+        if board_index < 1 or board_index > (self.rows * self.cols):
             msg = '"{}" is out of range for this board.'.format(board_index)
             raise BoardException(msg)
 
-        for x, row in enumerate(self.board):
-            for y, space in enumerate(row):
+        for x_pos, row in enumerate(self.board):
+            for y_pos, space in enumerate(row):
                 if space.board_index == board_index:
-                    return [x,y]
+                    return [x_pos, y_pos]
 
         msg = '"{}" was not found on this board.'.format(board_index)
         raise BoardException(msg)
@@ -461,17 +490,17 @@ class Board(object):
         If the targeted space is not a "blank" space then return False
 
         """
-        x, y = self.board_position_by_index(board_index)
+        x_pos, y_pos = self.board_position_by_index(board_index)
         # Check to see if the space is already occupied
-        if self.board[x][y].player == self.P0:
+        if self.board[x_pos][y_pos].player == self.player0:
             # set space to player
-            self.board[x][y].player = this_player
+            self.board[x_pos][y_pos].player = this_player
             # flag the set space as a last move
             self._reset_last_move_flag()
-            self.board[x][y].last_move = True
-            return True
+            self.board[x_pos][y_pos].last_move = True
         else:
-            return False
+            msg = 'Not a valid move for player "{}"'
+            raise BoardMoveException(msg.format(this_player))
 
     def _place_player(self, this_player, board_index):
         """
@@ -479,16 +508,16 @@ class Board(object):
         but not to change the last move flag
 
         """
-        x, y = self.board_position_by_index(board_index)
-        self.board[x][y].player = this_player
+        x_pos, y_pos = self.board_position_by_index(board_index)
+        self.board[x_pos][y_pos].player = this_player
 
     def _un_place_player(self, board_index):
         """
         unplay a placed player set by minimax
 
         """
-        x, y = self.board_position_by_index(board_index)
-        self.board[x][y].player = self.P0
+        x_pos, y_pos = self.board_position_by_index(board_index)
+        self.board[x_pos][y_pos].player = self.player0
 
     def swap_players(self):
         """

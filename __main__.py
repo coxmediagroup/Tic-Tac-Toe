@@ -1,12 +1,16 @@
+"""
+The main game play
+
+"""
 import sys
 import curses
-from curses_game_screen import GameScreen
+from tic_tac_toe.curses_game_screen import GameScreen
 
 def main(screen):
-
+    """main"""
     # Make new Game
-    s = GameScreen(screen)
-    s.run_game()
+    _game = GameScreen(screen)
+    _game.run_game()
 
 if __name__ == "__main__":
     try:
