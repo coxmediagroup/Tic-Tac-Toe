@@ -9,7 +9,6 @@ counter2 = Counter()
 
 
 # Choose a random move. The arguments are not used, but are required for syntactical reasons.
-# The second return value None tells the calling function not to display any messages.
 def random_move(x, y):
     return choice([k for k in range(1, 10) if GRID[k] == BLANK])
 
