@@ -16,10 +16,10 @@ X_MOVES = ((0, 0b000000000000000011), (1, 0b000000000000001100),
            (6, 0b000011000000000000), (7, 0b001100000000000000), 
            (8, 0b110000000000000000))
 
-WINNING_MOVES = (0b010101000000000000, 0b010000000100000001,
-                 0b010000000000010100, 0b000100000001000001,
-                 0b000001010100000000, 0b000001000000010001,
-                 0b000000010000000101, 0b000000000101010000)
+WINNING_MOVES = (0b101010000000000000, 0b100000001000000010,
+                 0b100000000000101000, 0b001000000010000010,
+                 0b000010101000000000, 0b000010000000100010,
+                 0b000000100000001010, 0b000000001010100000)
 
 
 class TicTacToeBoardTests(unittest.TestCase):
@@ -66,18 +66,37 @@ class TicTacToeBoardTests(unittest.TestCase):
                 if mask & winning_board:
                     winning_board = winning_board | (1 << i)
             
+        losing_player = ~winning_player & 0b11
+        return self.insert_random_opponent_moves(winning_board, 
+                                                 losing_player, 
+                                                 pieces)
+        
+    def insert_random_opponent_moves(self, board, opponent, moves=2):
+        """
+        Helper method that inserts moves from an opponent into a board.
+        Returns the integer representation of the updated board
+        
+        :param board: integer representing a board
+        :param opponent: integer representing the opponent (1 or 2)
+        :param moves: number of moves to insert
+        :return: integer
+        """
+        if not moves:
+            return board
+        
         # this isn't intended to be a smart algorithm; simply a quick-and-dirty
         # one for testing purposes to get as random as possible
-        losing_player = ~winning_player & 0b11
-        while pieces:
+        while moves:
             for i in range(0, 18, 2):
                 mask = 2 << i
-                if not mask & winning_board:
-                    winning_board = winning_board | (losing_player << i)
-                    pieces -= 1
-                    if not pieces:
-                        return winning_board
-
+                #import pdb; pdb.set_trace()
+                if not mask & board:
+                    if random.randint(0, 1):
+                        board = board | ((opponent + 1) << i)
+                        moves -= 1
+                        if not moves:
+                            return board
+    
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
@@ -176,7 +195,18 @@ class TicTacToeBoardTests(unittest.TestCase):
                                       ttt._is_valid_move(move))
     
     def test__is_win(self):
-        self.assertTrue(False, "Not Implemented")
+        # we only need to test for Player 1 because 
+        # TicTacToeBoard._board_for_player converts the board to a Player 1
+        # perspective
+        ttt = TicTacToeBoard()
+        
+        # we only care that it detects the combo amongst the noise, not
+        # whether the board is valid
+        for combo in WINNING_MOVES:
+            board = self.insert_random_opponent_moves(combo, 1, moves=1)
+            for test_combo in WINNING_MOVES:
+                self.assertEquals((test_combo == combo), ttt._is_win(board, 
+                                                                     test_combo))
     
     def test__set_turn(self):
         ttt = TicTacToeBoard()

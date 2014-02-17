@@ -3,8 +3,8 @@ Functions and classes for playing the game. The UI classes can be found in
 run.py
 """
 
-WINNING_MOVES = (0x15000, 0x10101, 0x10014, 0x04041,  
-                 0x01500, 0x01011, 0x00405, 0x00150)
+WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,  
+                 0x02a00, 0x02022, 0x0080a, 0x002a0)
 
 
 class TicTacToeBoard(object):
@@ -145,7 +145,16 @@ class TicTacToeBoard(object):
         return not (move & self.board)
     
     def _is_win(self, player_board, winning_combo):
-        raise NotImplementedError
+        """
+        Checks if a given player board contains a winning combination.
+        Returns True if the combination is in the board; otherwise False.
+        
+        :param player_board: a integer that has been generated using 
+                self._board_for_player
+        :param winning_combo: an integer representing a board from WINNING_MOVES
+        :return: boolean
+        """
+        return winning_combo == player_board & winning_combo
     
     def _set_turn(self):
         """Alternates the current self.turn between 0 and 1."""
@@ -186,7 +195,7 @@ class TicTacToeBoard(object):
             self._set_win(winner)
             return (True, winner)
         
-        if self._board_full():
+        if self._is_board_full():
             return (True, None)
         
         return (False, None)
