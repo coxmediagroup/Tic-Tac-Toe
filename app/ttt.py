@@ -51,6 +51,22 @@ class TicTacToeBoard(object):
         self.player_losses = 0
         self.ties = 0
         
+    def _convert_move(self, square):
+        """
+        Converts the number of a square into its binary representation.
+        
+        As explaned in the docs for the class, if an 'X' occupies the square, 
+        the square takes the binary value '1 1' [decimal: 3], or for
+        an '0' it takes '1 0' [decimal: 2]. If you add 2 to self.turn, you get
+        the value for the square.
+        
+        :param square: integer between 0 and 8
+        :return: integer
+        """
+        if not 0 <= square <= 8:
+            return None
+        return (self.turn + 2) << (2* square)
+    
     def is_computer_turn(self):
         """
         Determines whether it's the computer's turn to make a move. The human
