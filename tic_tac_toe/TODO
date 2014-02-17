@@ -6,6 +6,9 @@ TODO
 [ - ] Add depth limiting for minimax on larger boards
 [ - ] Fix for "logical bad move"?
 
+Changes: 2014-02-17
+[ X ] Refactor based on Pylint report
+
 Changes: 2014-02-10
 [ X ] Comments!
 [ X ] Refactor game play logic out of curses-game? (nofix)
