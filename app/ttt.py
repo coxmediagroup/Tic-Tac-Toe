@@ -67,7 +67,20 @@ class TicTacToeBoard(object):
         self.ties = 0
         
     def _board_for_player(self, player):
-        raise NotImplementedError
+        """
+        Converts current board to one with only the indicated player's pieces.
+        Returns an integer representation of a board.
+        
+        :parameter player: integer for the player, either 1 or 2 (human or
+                computer, respectively)
+        :return: integer
+        """
+        assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
+        
+        if player == 1:
+            return (~self.board & 0x3ffff) << 1
+        if player == 2:
+            return (self.board & 0x15555) << 1
     
     def _convert_move(self, square):
         """

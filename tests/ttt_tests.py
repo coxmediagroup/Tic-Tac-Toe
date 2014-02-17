@@ -85,7 +85,15 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(0, getattr(ttt, attr))
     
     def test__board_for_player(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        
+        for i, board in enumerate((0b111011101110111011, 0b101110111011101110)):
+            ttt.board = board
+            for player, playerboards in ((1, (0b001000100010001000,
+                                              0b100010001000100010)),
+                                         (2, (0b100010001000100010, 
+                                              0b001000100010001000))):
+                self.assertEquals(playerboards[i], ttt._board_for_player(player))
     
     def test__convert_move(self):
         ttt = TicTacToeBoard()
