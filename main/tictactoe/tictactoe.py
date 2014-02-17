@@ -58,7 +58,7 @@ class Board(object):
                 <div id="cell_8" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-            </div>""" % (self.the_board[6],self.the_board[7],self.the_board[8],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[0],self.the_board[1],self.the_board[2])
+            </div>""" % (self.the_board[0],self.the_board[1],self.the_board[2],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[6],self.the_board[7],self.the_board[8])
         return(draw_this)
 
 class Player(object):
