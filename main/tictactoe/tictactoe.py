@@ -18,7 +18,6 @@ class Board(object):
             The board is the passed in board or a blank board since this AI always wins, we will always render
             an initialized board where the computer takes the middle
         """
-
         self.the_board = kwargs.get('the_board',[None, None, None, None, None, None, None, None, None])
 
 
@@ -27,37 +26,36 @@ class Board(object):
             This function will draw a bootstrap html table based on a sequence received in the argument board
             so that a board [0,1,2,3,4,5,6,7,8]
         """
-
-        draw_this = """<div class="row-fluid">
-                <div class="offset1 span3 well">
+        draw_this = """<div  class="row-fluid">
+                <div id="cell_0" class="offset1 span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_1" class="span3 well">
                    <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_2" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="offset1 span3 well">
+                <div id="cell_3" class="offset1 span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_4" class="span3 well">
                    <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_5" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="offset1 span3 well">
+                <div id="cell_6" class="offset1 span3 well">
                    <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_7" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-                <div class="span3 well">
+                <div id="cell_8" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
             </div>""" % (self.the_board[6],self.the_board[7],self.the_board[8],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[0],self.the_board[1],self.the_board[2])

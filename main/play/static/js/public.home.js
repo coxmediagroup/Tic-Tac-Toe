@@ -13,4 +13,13 @@ $(document).ready(function () {
         }).get());
     boxes.height(maxHeight);
 
+    var the_board = ['','','','','','','','',''];
+
+    $("[id^='cell']").on("click",function(e){
+        //here we build the board from the cell
+        $(this).children().html('O')
+        var x = $("[id^='cell']").map(function(){return $(this).children().html()}).get().slice();
+        console.log(x);
+    });
+
 });
