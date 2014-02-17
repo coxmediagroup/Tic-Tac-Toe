@@ -83,6 +83,9 @@ class TicTacToeBoard(object):
             return None
         return (self.turn + 2) << (2* move)
     
+    def _has_won(self, player):
+        raise NotImplementedError
+    
     def _is_board_full(self):
         """
         Determines if there are no open squares left on the board.
@@ -113,6 +116,9 @@ class TicTacToeBoard(object):
         """Alternates the current self.turn between 0 and 1."""
         self.turn = ~self.turn & 0x1
     
+    def _set_win(self, player):
+        raise NotImplementedError
+    
     def apply_move(self, square):
         """
         Checks the validity of a given move and applies it to the game board. 
@@ -126,6 +132,29 @@ class TicTacToeBoard(object):
             self.board += move
             return True
         return False
+    
+    def game_over_validation(self):
+        """
+        Determines if the game is over based on the state of the board.
+        Returns a tuple in the format (<is game over>, <who won>).
+        
+        Possible Values:
+            (True, 1) - human player won
+            (True, 2) - computer won
+            (True, None) - there was a tie
+            (False, None) - the game is still going
+        
+        :return: (boolean, integer)
+        """
+        winner = self._has_won(1) or self._has_won(2)  # human or computer, respectively
+        if winner:
+            self._set_win(winner)
+            return (True, winner)
+        
+        if self._board_full():
+            return (True, None)
+        
+        return (False, None)
     
     def is_computer_turn(self):
         """

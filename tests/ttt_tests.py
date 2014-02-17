@@ -33,7 +33,7 @@ class TicTacToeBoardTests(unittest.TestCase):
                                               if match else 0)
             board = (board << 2) + new_square
         return board
-    
+
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
@@ -58,6 +58,9 @@ class TicTacToeBoardTests(unittest.TestCase):
         # should return None for moves that can't be converted to integers
         for move in ('a', None, {}):
             self.assertIsNone(ttt._convert_move(move))
+    
+    def test__has_won(self):
+        self.assertTrue(False, "Not Implemented")
     
     def test__is_board_full(self):
         ttt = TicTacToeBoard()
@@ -100,6 +103,9 @@ class TicTacToeBoardTests(unittest.TestCase):
         for turn in (1, 0, 1, 0, 1, 0, 1, 0):
             ttt._set_turn()
             self.assertEquals(turn, ttt.turn)
+            
+    def test__set_win(self):
+        self.assertTrue(False, "Not Implemented")
     
     def test_apply_move(self):
         ttt = TicTacToeBoard()
@@ -128,6 +134,25 @@ class TicTacToeBoardTests(unittest.TestCase):
             for move in range(9):
                 self.assertFalse(ttt.apply_move(move))
                 self.assertEquals(0b101011101110101111, ttt.board)
+    
+    def test_game_over_validation(self):
+        ttt = TicTacToeBoard()
+        
+        # player won (shouldn't happen, but we should detect if it does)
+        ttt.board = 0b101110111000110010
+        self.assertEquals((True, 1), ttt.game_over_validation())
+        
+        # computer won
+        ttt.board = 0b101011101111110010
+        self.assertEquals((True, 2), ttt.game_over_validation())
+        
+        # tie
+        ttt.board = 0b101011101111101110
+        self.assertEquals((True, None), ttt.game_over_validation())
+        
+        # game is still going
+        ttt.board = 0b111011001000000010
+        self.assertEquals((False, None), ttt.game_over_validation())
     
     def test_is_computer_turn(self):
         ttt = TicTacToeBoard()
