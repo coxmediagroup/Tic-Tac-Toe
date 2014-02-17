@@ -13,7 +13,7 @@ def home(request):
 
     try:
         board = simplejson.loads(str(request.GET['board']))
-        print("board from json")
+
     except:
         board = ['','','','','X','','','','']
 
