@@ -44,6 +44,19 @@ class TicTacToeBoard(object):
     be represented as 0x3080c2.
     """
     def __init__(self):
+        """
+        Sets the default attributes for the class. No parameters are accepted.
+        
+        :attr board: an integer representation of the board. Defaults to 0.
+        :attr turn: an integer representation of which player is moving. Can be
+                    be 0 or 1. Defaults to 0.
+        :attr player_wins: integer count of how many times the player has won
+                    against the computer. Defaults to 0.
+        :attr player_losses: integer count of how many times the player has
+                    lost to the computer. Defaults to 0.
+        :attr ties: integer count of tied games between player and computer.
+                    Defaults to 0.
+        """
         super(TicTacToeBoard, self).__init__()
         self.board = 0x00000
         self.turn = 0
@@ -68,13 +81,22 @@ class TicTacToeBoard(object):
         return (self.turn + 2) << (2* square)
     
     def _is_valid(self, move):
+        """
+        
+        """
         # TODO: implement
         return False
     
+    def _set_turn(self):
+        """
+        Alternates the current self.turn between 0 and 1.
+        """
+        self.turn = ~self.turn & 0x1
+    
     def apply_move(self, square):
         """
-        Checks the validity of a given move, and if valid, applies it to the
-        game board. Returns True if the move was applied; False otherwise.
+        Checks the validity of a given move and applies it to the game board. 
+        Returns True if the move was applied; False otherwise.
         
         :param square: integer between 0 and 8
         :return: boolean
@@ -87,16 +109,12 @@ class TicTacToeBoard(object):
     
     def is_computer_turn(self):
         """
-        Determines whether it's the computer's turn to make a move. The human
-        player always goes when self.turn=0, and the computer goes when
-        self.turn=1
+        Determines whether it's the computer's turn to make a move. 
+        The human player always goes when self.turn=0, and the computer goes 
+        when self.turn=1
         
         :return: boolean
         """
         return bool(self.turn)
     
-    def set_turn(self):
-        """
-        Alternates the current self.turn between 0 and 1.
-        """
-        self.turn = ~self.turn & 0x1
+    
