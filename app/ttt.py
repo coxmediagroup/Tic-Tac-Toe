@@ -161,7 +161,14 @@ class TicTacToeBoard(object):
         self.turn = ~self.turn & 0x1
     
     def _set_win(self, player):
-        raise NotImplementedError
+        """
+        Increments self.player_wins, self.player_losses, and self.ties for player.
+        
+        :param player: integer representing which player won the game
+        """
+        self.player_wins += int(player == 1)
+        self.player_losses += int(player == 2)
+        self.ties += (int(player is None))
     
     def apply_move(self, square):
         """
@@ -196,6 +203,7 @@ class TicTacToeBoard(object):
             return (True, winner)
         
         if self._is_board_full():
+            self._set_win(winner)
             return (True, None)
         
         return (False, None)

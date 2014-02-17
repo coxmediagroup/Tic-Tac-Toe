@@ -89,7 +89,6 @@ class TicTacToeBoardTests(unittest.TestCase):
         while moves:
             for i in range(0, 18, 2):
                 mask = 2 << i
-                #import pdb; pdb.set_trace()
                 if not mask & board:
                     if random.randint(0, 1):
                         board = board | ((opponent + 1) << i)
@@ -218,7 +217,25 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(turn, ttt.turn)
             
     def test__set_win(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        self.assertEquals((0, 0, 0), (ttt.player_wins, ttt.player_losses, ttt.ties))
+        
+        # human player wins (should not happen, but we need to test for it)
+        ttt._set_win(1)
+        self.assertEquals((1, 0, 0), (ttt.player_wins, ttt.player_losses, ttt.ties))
+        
+        # computer wins
+        ttt._set_win(2)
+        self.assertEquals((1, 1, 0), (ttt.player_wins, ttt.player_losses, ttt.ties))
+        
+        # human and computer tie
+        ttt._set_win(None)
+        self.assertEquals((1, 1, 1), (ttt.player_wins, ttt.player_losses, ttt.ties))
+        
+        # and another loss for good measure, to make sure we're not just setting
+        # it to 1
+        ttt._set_win(2)
+        self.assertEquals((1, 2, 1), (ttt.player_wins, ttt.player_losses, ttt.ties))
     
     def test_apply_move(self):
         ttt = TicTacToeBoard()
