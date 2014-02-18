@@ -233,13 +233,12 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertFalse(ttt._has_won(player))
 
     def test__is_board_full(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # a few random tests where board is full
         for i in range(9):
-            ttt.board = self.generate_board([])
-            self.assertTrue(ttt._is_board_full())
+            board = self.generate_board([])
+            self.assertTrue(ttt._is_board_full(board))
         
         # comprehensive, but not exhaustive non-full tests.
         # we'll run each non-full set of tests twice
@@ -251,8 +250,8 @@ class TicTacToeBoardTests(unittest.TestCase):
                     square = random.choice(open_squares)
                     empty_squares.append(open_squares.pop(open_squares.index(square)))
                 
-                ttt.board = self.generate_board(empty_squares)
-                self.assertFalse(ttt._is_board_full())
+                board = self.generate_board(empty_squares)
+                self.assertFalse(ttt._is_board_full(board))
     
     def test__is_valid_move(self):
         ttt = TicTacToeBoard()
