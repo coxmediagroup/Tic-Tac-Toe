@@ -255,17 +255,16 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertFalse(ttt._is_board_full())
     
     def test__is_valid_move(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # running an exhaustive test
         for empty_square in range(9):
-            ttt.board = self.generate_board([empty_square])
+            board = self.generate_board([empty_square])
             
             for moveset in (O_MOVES, X_MOVES):
                 for square, move in moveset:
                     self.assertEquals((square == empty_square), 
-                                      ttt._is_valid_move(move))
+                                      ttt._is_valid_move(move, board))
     
     def test__is_win(self):
         # we only need to test for Player 1 because 
