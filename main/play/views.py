@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from tictactoe.tictactoe import Board
+from tictactoe.tictactoe import AIPlayer
 import simplejson
 def home(request):
     """
@@ -17,7 +18,16 @@ def home(request):
     except:
         board = ['','','','','X','','','','']
 
-    the_board = Board(the_board=board)
+    if request.GET['board']:
 
-    board_html = the_board.draw()
+
+
+
+        ai = AIPlayer('X')
+
+        board.look_for_win(the_board,ai)
+
+    else:
+        the_board = Board(the_board=board)
+        board_html = the_board.draw()
     return render_to_response('play/home.html',locals())
