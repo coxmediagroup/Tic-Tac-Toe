@@ -82,6 +82,7 @@ class TicTacToeBoard(object):
         computer_move
         human_move
         is_computer_turn
+        player_stats
         reset_board
     
     """
@@ -418,6 +419,9 @@ class TicTacToeBoard(object):
         :return: boolean
         """
         return bool(self.turn)
+    
+    def player_stats(self, player):
+        return str(player)
     
     def reset_board(self):
         """
