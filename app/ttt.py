@@ -80,7 +80,7 @@ class TicTacToeBoard(object):
         self.player_losses = 0
         self.ties = 0
         
-    def _apply_move(self, square, board):
+    def _apply_move(self, square, board=None):
         """
         Checks the validity of a given move and applies it to the game board. 
         Returns True if the move was applied; False otherwise.
@@ -88,6 +88,7 @@ class TicTacToeBoard(object):
         :param square: integer between 0 and 8
         :return: boolean
         """
+        board = board or self.board
         move = self._convert_move(square)
         if self._is_valid_move(move, board):
             board += move
@@ -118,13 +119,7 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _causes_loss(self, move):
-        raise NotImplementedError
-    
-    def _causes_win(self, move):
-        raise NotImplementedError
-    
-    def _choose_square(self, board, current_value=0):
+    def _choose_square(self, board, value=0):
         """
         Picks a square for the computer to make its move.
         
@@ -138,12 +133,19 @@ class TicTacToeBoard(object):
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")
             
-            potential_moves = PotentialMoves()
-            for move in valid_moves:
-                board =
-            PLAYBOOK[board] = potential_moves
+            PLAYBOOK[board] = {}
+            for square in valid_moves:
+                next_board = self._apply_move(square, board)[1]
+                if self._has_won(2, board):
+                    PLAYBOOK[board][square] = value - 1
+                elif self._has_won(1, board):
+                    PLAYBOOK[board][square] = value
+                else:
+                    PLAYBOOK[board][square] = self._choose_square(board, value+1)
+                
+            potential_moves = PLAYBOOK[board]
         
-        return potential_moves.best_move(current_value)
+        return self._best_move(potential_moves)
     
     def _convert_move(self, square):
         """
@@ -166,7 +168,7 @@ class TicTacToeBoard(object):
             return None
         return (self.turn + 2) << (2* move)
     
-    def _game_over_validation(self):
+    def _game_over_validation(self, board=None):
         """
         Determines if the game is over based on the state of the board.
         Returns a tuple in the format (<is game over>, <who won>).
@@ -179,6 +181,7 @@ class TicTacToeBoard(object):
         
         :return: (boolean, integer)
         """
+        board = board or self.board
         winner = self._has_won(1) or self._has_won(2)  # human or computer, respectively
         if winner:
             self._set_win(winner)
@@ -190,13 +193,14 @@ class TicTacToeBoard(object):
         
         return (False, None)
     
-    def _get_valid_moves(self, board):
+    def _get_valid_moves(self, board=None):
         """
         Returns a list of open spaces on the board.
         
         :param board: integer representation of a board
         :return: list of integers between 0 and 8
         """
+        board = board or self.board
         i = 0
         moves = []
         tmp_board = ~board & 0x3ffff
@@ -207,7 +211,7 @@ class TicTacToeBoard(object):
             i += 1
         return moves
     
-    def _has_won(self, player):
+    def _has_won(self, player, board=None):
         """
         Checks to see if the indicated player has won the game.
         Returns True if the player has won; False otherwise
@@ -216,19 +220,21 @@ class TicTacToeBoard(object):
                     respectively
         :return: boolean
         """
+        
         player_board = self._board_for_player(player)
         for combo in WINNING_MOVES:
             if self._is_win(player_board, combo):
                 return player
         return None
     
-    def _is_board_full(self):
+    def _is_board_full(self, board=None):
         """
         Determines if there are no open squares left on the board.
         Returns False if there are no open squares; True otherwise.
         
         :return: boolean
         """
+        board = board or self.board
         full_board = 0x2aaaa  # all squares filled, ignoring which player
         return full_board == full_board & self.board
     
@@ -291,9 +297,7 @@ class TicTacToeBoard(object):
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
-        return (move, ) + self._game_over_validation()
-        
-        raise NotImplementedError    
+        return (move, ) + self._game_over_validation()   
     
     def human_move(self, square):
         """
@@ -329,12 +333,4 @@ class TicTacToeBoard(object):
         their scores.
         """
         self.board = 0
-
-
-class PotentialMoves(object):
-    def __init__(self):
-        pass
-    
-    def min(self):
-        pass
  
