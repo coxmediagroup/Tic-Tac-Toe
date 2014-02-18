@@ -10,6 +10,12 @@ WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,
 PLAYBOOK = {0x00000: {}}
 
 
+# values used when calculating the best move for the computer
+WIN_VALUE = -10
+LOSS_VALUE = 10
+TIE_VALUE = 1
+
+
 class InvalidStateException(Exception):
     pass
 
@@ -135,11 +141,19 @@ class TicTacToeBoard(object):
         """
         Picks a square for the computer to make its move.
         
-        :param board: 
+        The method iterates through possible outcomes (wins, losses, ties)
+        and picks the path with the lowest cost. Outcomes that take longer to
+        achieve will cost more; losses will cost significantly more and wins
+        will cost significantly less.
+        
+        Cost calculations are stored in the PLAYBOOK dictionary to minimize
+        repetition of calculations if they're needed again.
+        
+        :param board: integer representing a board
+        :param cost: integer for the cost of this move, defaults to 0
         :return: integer
         :throws: InvalidStateException
         """
-        raise Exception("Update the tests and docs")
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             valid_moves = self._get_valid_moves(board)
@@ -151,11 +165,11 @@ class TicTacToeBoard(object):
             for square in valid_moves:
                 next_board = self._apply_move(square, board)[1]
                 if self._has_won(2, board):
-                    PLAYBOOK[board][square] = value - 1
+                    PLAYBOOK[board][square] = value + WIN_VALUE
                 elif self._has_won(1, board):
-                    PLAYBOOK[board][square] = value
+                    PLAYBOOK[board][square] = value + LOSS_VALUE
                 else:
-                    PLAYBOOK[board][square] = self._choose_square(board, value+1)
+                    PLAYBOOK[board][square] = self._choose_square(board, value+TIE_VALUE)
                 
             potential_moves = PLAYBOOK[board]
         
