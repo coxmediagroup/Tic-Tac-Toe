@@ -165,13 +165,54 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _calculate_board_costs(self, board_list, board_dict=None):
+    def _calculate_board_costs(self, boards, board_dict=None):
         """
         Calculates the cost the next play for specific boards from a list.
-        U
+        Returns a dictionary in the same format as PLAYBOOK.
+        
+        :param boards: list of tuples in the format 
+                (<board integer>, <current cost>, <current player>, <next move>)
+        :param board_dict: dictionary in format similar to PLAYBOOK
+        :return: dictionary
         """
+        board_dict = board_dict or {}
+        if not board_list:
+            return board_dict
+        
+        board, cost, player, next_move = board_list.pop()
+        if board not in PLAYER_DICT:
+            if board not in board_dict:
+                board_dict[board] = {}
+            cost_dict = board_dict[board]
+            
+            valid_moves = ([next_move] if next_move is not None 
+                           else self._get_valid_moves(board))
+            for square in valid_moves:
+                new_board = self._apply_move(square, board)
+                if new_board in board_dict:
+                    try:
+                        cost_dict[square] = self._best_move(board_dict[new_board])
+                    except TypeError:
+                        # new_board is not yet calculated, so put current
+                        # board back into board_list
+                        board_list.extend([(board, cost, player, square)])
+                        cost_dict[square] = None
+                else:
+                    if self._has_won(player, new_board):
+                        if player == 1:
+                            cost_dict[square] = cost + LOSS_VALUE
+                        else:
+                            cost_dict[square] = cost + WIN_VALUE
+                    elif self._is_board_full(new_board):
+                        cost_dict[square] = cost + TIE_VALUE
+                    else:
+                        new_player = ~player_turn | 0x2 
+                        board_list.extend([(board, cost+1, new_player, square)])
+                        cost_dict[square] = None
+
+        return self._calculate_board_costs(board_list, board_dict)
     
-    def _choose_square(self, board, cost=0, player_turn=2):
+    def _choose_square(self, board):
         """
         Picks a square for the computer to make its move.
         
@@ -184,8 +225,6 @@ class TicTacToeBoard(object):
         repetition of calculations if they're needed again.
         
         :param board: integer representing a board
-        :param cost: integer for the cost of this move, defaults to 0
-        :param player_turn: integer for the current player, either 1 or 2
         :return: integer
         :throws: InvalidStateException
         """
@@ -193,33 +232,11 @@ class TicTacToeBoard(object):
         
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
-            valid_moves = self._get_valid_moves(board)
-            if not valid_moves:
+            new_moves = self._calculate_board_costs([(board, 0, 2)])
+            if not new_moves:
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")
-
-            cost_dict = {}
-            PLAYBOOK[board] = cost_dict
-
-            # TODO: how do I rewrite this with tail recursion?
-            for square in valid_moves:
-                next_board = self._apply_move(square, board)[1]
-                if self._has_won(player_turn, next_board):
-                    if player_turn == 1:
-                        cost += LOSS_VALUE
-                    else:
-                        cost += WIN_VALUE
-                elif self._is_board_full(next_board):
-                    cost += TIE_VALUE
-                else:
-                    new_player = ~player_turn | 0x2 
-                    cost = self._choose_square(new_board, cost+1, new_player)[1]
-
-                if cost_dict.get(cost):
-                    cost_dict[cost].append(cost)
-                else:
-                    cost_dict[cost] = [cost]
-                
+            PLAYBOOK.update(new_moves)                
             potential_moves = PLAYBOOK[board]
         
         return self._best_move(potential_moves)
