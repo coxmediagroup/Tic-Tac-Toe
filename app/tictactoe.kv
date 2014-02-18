@@ -2,15 +2,8 @@
 
 #:set DEFAULT_FONT 'fonts/AnnieUseYourTelescope.ttf'
 #:set DEFAULT_FONT_SIZE 30
-#:set DEFAULT_FONT_COLOR (0, 0, 0, 1)
 
 <TicTacToeFrame>:
-    canvas.before:
-        Color:
-            rgba: 1, 1, 1, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
     BoxLayout:
         orientation: 'vertical'
         BoxLayout:
@@ -18,14 +11,21 @@
             Label:
                 text: "[color=c60f13]You[/color] " + root.player_text(1)
                 markup: True
-                color: DEFAULT_FONT_COLOR
                 font_name: DEFAULT_FONT
                 font_size: DEFAULT_FONT_SIZE
                 bold: True
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Image:
+                    source: 'img/tic_tac_toe.png'
             Label:
                 text: "[color=2ba6cb]Hal[/color] " + root.player_text(2)
                 markup: True
-                color: DEFAULT_FONT_COLOR
                 font_name: DEFAULT_FONT
                 font_size: DEFAULT_FONT_SIZE
                 bold: True

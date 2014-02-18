@@ -5,25 +5,24 @@ import kivy
 kivy.require('1.8.0')
 
 from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 
 from ttt import TicTacToeBoard
 
 
-class TicTacToeFrame(FloatLayout):
+class TicTacToeFrame(BoxLayout):
     """ Main container for other elements """
     board = TicTacToeBoard()
     
     def player_text(self, player_number):
         return self.board.player_stats(player_number)
-    pass
 
 
 class TicTacToeApp(App):
     """ Primary class for running the game """
     
     def build(self):
-        frame = TicTacToeFrame(size=(300, 300))
+        frame = TicTacToeFrame(size=(600, 600))
         return frame
 
 
