@@ -80,7 +80,7 @@ class TicTacToeBoard(object):
         self.player_losses = 0
         self.ties = 0
         
-    def _apply_move(self, square):
+    def _apply_move(self, square, board):
         """
         Checks the validity of a given move and applies it to the game board. 
         Returns True if the move was applied; False otherwise.
@@ -89,10 +89,10 @@ class TicTacToeBoard(object):
         :return: boolean
         """
         move = self._convert_move(square)
-        if self._is_valid_move(move):
-            self.board += move
-            return True
-        return False
+        if self._is_valid_move(move, board):
+            board += move
+            return True, board
+        return False, board
     
     def _board_for_player(self, player):
         """
@@ -140,7 +140,7 @@ class TicTacToeBoard(object):
             
             potential_moves = PotentialMoves()
             for move in valid_moves:
-                pass
+                board =
             PLAYBOOK[board] = potential_moves
         
         return potential_moves.best_move(current_value)
@@ -232,7 +232,7 @@ class TicTacToeBoard(object):
         full_board = 0x2aaaa  # all squares filled, ignoring which player
         return full_board == full_board & self.board
     
-    def _is_valid_move(self, move):
+    def _is_valid_move(self, move, board):
         """
         Checks if a current move is going to an empty square on the board.
         Returns True if the square is empty, and False if the square is filled
@@ -246,7 +246,7 @@ class TicTacToeBoard(object):
             return False
         # if the move doesn't match up with anything on the board, we should
         # have a zero value if we try to `and` them
-        return not (move & self.board)
+        return not (move & board)
     
     def _is_win(self, player_board, winning_combo):
         """
@@ -287,7 +287,7 @@ class TicTacToeBoard(object):
         if not self.is_computer_turn():
             return (False, False, None)
         
-        move = self._apply_move(self._choose_square(self.board))
+        move = self._apply_move(self._choose_square(self.board), self.board)[0]
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
@@ -306,7 +306,7 @@ class TicTacToeBoard(object):
         if self.is_computer_turn():
             return (False, False, None)
         
-        move = self._apply_move(square)
+        move = self._apply_move(square, self.board)
         if move:
             self._set_turn()
         return (move,) + self._game_over_validation()
