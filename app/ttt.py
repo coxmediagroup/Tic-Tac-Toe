@@ -2,6 +2,8 @@
 Functions and classes for playing the game. The UI classes can be found in
 run.py
 """
+import random
+
 
 WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,  
                  0x02a00, 0x02022, 0x0080a, 0x002a0)
@@ -16,16 +18,16 @@ WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,
 # a human move, but it seems more interesting and challenging to the player if
 # the computer has multiple possibilities of equal cost to choose from
 # when possible.
-PLAYBOOK = {0x00000: {8: -100, 6: -100, 4: -100, 2: -100},
-            0x20000: {0: -100},
-            0x02000: {0: -100},
-            0x00200: {0: -100},
-            0x00020: {0: -100},
-            0x00002: {8: -100, 6: -100, 4: -100, 2: -100},
-            0x08000: {8: -100, 6: -100},
-            0x00800: {6: -100, 4: -100},
-            0x00080: {4: -100, 2: -100},
-            0x00008: {8: -100, 2: -100}}
+PLAYBOOK = {0x00000: {-100: [8, 6, 4, 2]},
+            0x20000: {-100: [0]},
+            0x02000: {-100: [0]},
+            0x00200: {-100: [0]},
+            0x00020: {-100: [0]},
+            0x00002: {-100: [8, 6, 4, 2]},
+            0x08000: {-100: [8, 6]},
+            0x00800: {-100: [6, 4]},
+            0x00080: {-100: [4, 2]},
+            0x00008: {-100: [8, 2]}}
 
 
 # values used when calculating the best move for the computer
@@ -122,14 +124,22 @@ class TicTacToeBoard(object):
     def _best_move(self, potential_moves, current_cost):
         """
         Selects the best (lowest cost) from a list of potential moves.
+        Returns a tuple in the form (<move>, <cost).
         
         :param potential_moves: dictionary of integers representing squares, 
             0 to 8, paired with a calculated cost for making that move
         :param current_cost: integer representing a cost that should be added
             on to any costs from potential_moves
-        :return: integer
+        :return: (integer, integer) or (None, None)
         """
-        raise NotImplementedError
+        # we'll just return None and let self.computer_move handle it as an
+        # InvalidStateException
+        if not potential_moves:
+            return None, None
+        
+        cost = min(potential_moves.keys()) # chosen for Python 3 forward considerations
+        best_moves = potential_moves[cost] # choosing for Python 3 considerations
+        return random.choice(best_moves), current_cost + cost
     
     def _board_for_player(self, player, board):
         """
@@ -172,6 +182,8 @@ class TicTacToeBoard(object):
         :return: integer
         :throws: InvalidStateException
         """
+        raise Exception("Update for new return format of _best_move")
+        raise Exception("Update for new format of PLAYBOOK")
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             valid_moves = self._get_valid_moves(board)

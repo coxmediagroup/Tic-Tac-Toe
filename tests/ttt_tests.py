@@ -133,7 +133,26 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertEquals(0b101011101110101111, board)
     
     def test__best_move(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        
+        # some standard test cases
+        potential_moves = {1: [3]}
+        move, cost = ttt._best_move(potential_moves, -5)
+        self.assertEquals(3, move)
+        self.assertEquals(-4, cost)
+        
+        potential_moves = {0: [1, 3], -22: [6, 7], 3: [8, 2]}
+        move, cost = ttt._best_move(potential_moves, 0)
+        self.assertTrue(move in [6, 7])
+        self.assertEquals(-22, cost)
+        
+        potential_moves = {-1: [1, 5], 2: [3, 4, 6, 8]}
+        move, cost = ttt._best_move(potential_moves, 3)
+        self.assertTrue(move in [1, 5])
+        self.assertEquals(2, cost)
+        
+        # problem case
+        self.assertEquals((None, None), ttt._best_move({}, 2))
     
     def test__board_for_player(self):
         ttt = TicTacToeBoard()
