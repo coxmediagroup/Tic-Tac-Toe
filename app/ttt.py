@@ -324,7 +324,7 @@ class TicTacToeBoard(object):
         if self.is_computer_turn():
             return (False, False, None)
         
-        move = self._apply_move(square, self.board)
+        move, self.board = self._apply_move(square, self.board)
         if move:
             self._set_turn()
         return (move,) + self._game_over_validation(self.board)
