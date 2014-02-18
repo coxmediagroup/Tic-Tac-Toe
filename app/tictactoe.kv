@@ -1,7 +1,10 @@
 #:kivy 1.8.0
 
-#:set DEFAULT_FONT 'fonts/AnnieUseYourTelescope.ttf'
+#:set DEFAULT_FONT 'fonts/Schoolbell.ttf'
 #:set DEFAULT_FONT_SIZE 30
+
+
+
 
 <TicTacToeFrame>:
     BoxLayout:
@@ -36,6 +39,7 @@
                         spacing: .02*self.parent.width
                         Button:
                             text: "8"
+                            font_name: DEFAULT_FONT
                         Button:
                             text: "7"
                         Button:
