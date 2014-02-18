@@ -141,23 +141,17 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt = TicTacToeBoard()
         
         # some standard test cases
-        potential_moves = {1: [3]}
-        move, cost = ttt._best_move(potential_moves, -5)
-        self.assertEquals(3, move)
-        self.assertEquals(-4, cost)
+        potential_moves = {3: 1}
+        self.assertEquals(3, ttt._best_move(potential_moves))
         
-        potential_moves = {0: [1, 3], -22: [6, 7], 3: [8, 2]}
-        move, cost = ttt._best_move(potential_moves, 0)
-        self.assertTrue(move in [6, 7])
-        self.assertEquals(-22, cost)
+        potential_moves = {1: 0, 3: 0, 6: -22, 7: -22, 8: 3, 2: 3}
+        self.assertTrue(ttt._best_move(potential_moves) in [6, 7])
         
-        potential_moves = {-1: [1, 5], 2: [3, 4, 6, 8]}
-        move, cost = ttt._best_move(potential_moves, 3)
-        self.assertTrue(move in [1, 5])
-        self.assertEquals(2, cost)
+        potential_moves = {1: -1, 5: -1, 3: 2, 4: 2, 6: 2, 8: 2}
+        self.assertTrue(ttt._best_move(potential_moves) in [1, 5])
         
         # problem case
-        self.assertEquals((None, None), ttt._best_move({}, 2))
+        self.assertEquals(None, ttt._best_move({}))
     
     def test__board_for_player(self):
         ttt = TicTacToeBoard()

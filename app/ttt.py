@@ -18,16 +18,16 @@ WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,
 # a human move, but it seems more interesting and challenging to the player if
 # the computer has multiple possibilities of equal cost to choose from
 # when possible.
-PLAYBOOK = {0x00000: {-100: [8, 6, 4, 2]},
-            0x20000: {-100: [0]},
-            0x02000: {-100: [0]},
-            0x00200: {-100: [0]},
-            0x00020: {-100: [0]},
-            0x00002: {-100: [8, 6, 4, 2]},
-            0x08000: {-100: [8, 6]},
-            0x00800: {-100: [6, 4]},
-            0x00080: {-100: [4, 2]},
-            0x00008: {-100: [8, 2]}}
+PLAYBOOK = {0x00000: {8: -100, 6: -100, 4: -100, 2: -100},
+            0x20000: {0: -100},
+            0x02000: {0: -100},
+            0x00200: {0: -100},
+            0x00020: {0: -100},
+            0x00002: {8: -100, 6: -100, 4: -100, 2: -100},
+            0x08000: {8: -100, 6: -100},
+            0x00800: {6: -100, 4: -100},
+            0x00080: {4: -100, 2: -100},
+            0x00008: {8: -100, 2: -100}}
 
 
 # values used when calculating the best move for the computer
@@ -124,22 +124,22 @@ class TicTacToeBoard(object):
     def _best_move(self, potential_moves):
         """
         Selects the best (lowest cost) from a list of potential moves.
-        Returns a tuple in the form (<move>, <cost).
+        Returns the best move.
         
         :param potential_moves: dictionary of integers representing squares, 
             0 to 8, paired with a calculated cost for making that move
-        :param current_cost: integer representing a cost that should be added
-            on to any costs from potential_moves
-        :return: (integer, integer) or (None, None)
+        :return: integer
         """
         # we'll just return None and let self.computer_move handle it as an
-        # InvalidStateException
+        # InvalidStateException. Shouldn't happen if non-public methods are
+        # respected
         if not potential_moves:
-            return None, None
+            return None
         
-        cost = min(potential_moves.keys()) # chosen for Python 3 forward considerations
-        best_moves = potential_moves[cost] 
-        return random.choice(best_moves), cost
+        # we want to introduce a little bit of randomness for equal values
+        move, cost = min(potential_moves.items(), 
+                         key=lambda x: x[1] + .01 * random.randint(0, 99))
+        return move
     
     def _board_for_player(self, player, board):
         """
@@ -164,6 +164,12 @@ class TicTacToeBoard(object):
             i += 2
 
         return player_board
+    
+    def _calculate_board_costs(self, board_list, board_dict=None):
+        """
+        Calculates the cost the next play for specific boards from a list.
+        U
+        """
     
     def _choose_square(self, board, cost=0, player_turn=2):
         """
