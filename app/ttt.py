@@ -86,10 +86,9 @@ class TicTacToeBoard(object):
         Returns True if the move was applied; False otherwise.
         
         :param square: integer between 0 and 8
+        :param board: integer representing board
         :return: boolean
         """
-        raise Exception("Update the tests and references")
-        
         move = self._convert_move(square)
         if self._is_valid_move(move, board):
             board += move
@@ -113,16 +112,15 @@ class TicTacToeBoard(object):
         Converts current board to one with only the indicated player's pieces.
         Returns an integer representation of a board.
         
-        :parameter player: integer for the player, either 1 or 2 (human or
+        :param player: integer for the player, either 1 or 2 (human or
                 computer, respectively)
+        :param board: integer representing a board
         :return: integer
         """
-        raise Exception("Update the tests and references")
         assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
         
         mod = player + 1
         player_board = 0
-        board = self.board
         i = 0
         while board:
             last_two_digits = board & 3
@@ -141,7 +139,7 @@ class TicTacToeBoard(object):
         :return: integer
         :throws: InvalidStateException
         """
-        raise Exception("Update the tests")
+        raise Exception("Update the tests and docs")
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             valid_moves = self._get_valid_moves(board)
@@ -195,15 +193,15 @@ class TicTacToeBoard(object):
             (True, None) - there was a tie
             (False, None) - the game is still going
         
+        :param board: integer representing a board
         :return: (boolean, integer)
         """
-        raise Exception("Update the tests and references")
-        winner = self._has_won(1) or self._has_won(2)  # human or computer, respectively
+        winner = self._has_won(1, board) or self._has_won(2, board)  # human or computer, respectively
         if winner:
             self._set_win(winner)
             return (True, winner)
         
-        if self._is_board_full():
+        if self._is_board_full(self.board):
             self._set_win(winner)
             return (True, None)
         
@@ -216,7 +214,6 @@ class TicTacToeBoard(object):
         :param board: integer representation of a board
         :return: list of integers between 0 and 8
         """
-        raise Exception("Update the tests and references")
         i = 0
         moves = []
         tmp_board = ~board & 0x3ffff
@@ -234,10 +231,10 @@ class TicTacToeBoard(object):
         
         :param player: the player number, either 1 or 2, human or computer, 
                     respectively
+        :param board: integer representing a board
         :return: boolean
         """
-        raise Exception("Update the tests and references")
-        player_board = self._board_for_player(player)
+        player_board = self._board_for_player(player, board)
         for combo in WINNING_MOVES:
             if self._is_win(player_board, combo):
                 return player
@@ -248,11 +245,11 @@ class TicTacToeBoard(object):
         Determines if there are no open squares left on the board.
         Returns False if there are no open squares; True otherwise.
         
+        :param board: integer representing a board
         :return: boolean
         """
-        raise Exception("Update the tests and references")
         full_board = 0x2aaaa  # all squares filled, ignoring which player
-        return full_board == full_board & self.board
+        return full_board == full_board & board
     
     def _is_valid_move(self, move, board):
         """
@@ -262,9 +259,9 @@ class TicTacToeBoard(object):
         originally invalid input).
         
         :param move: an integer that has been generated using self._convert_move
+        :param board: integer representing a board
         :return: boolean
         """
-        raise Exception("Update the tests and references")
         if move is None:
             return False
         # if the move doesn't match up with anything on the board, we should
@@ -314,7 +311,7 @@ class TicTacToeBoard(object):
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
-        return (move, ) + self._game_over_validation()   
+        return (move, ) + self._game_over_validation(self.board)   
     
     def human_move(self, square):
         """
@@ -330,7 +327,7 @@ class TicTacToeBoard(object):
         move = self._apply_move(square, self.board)
         if move:
             self._set_turn()
-        return (move,) + self._game_over_validation()
+        return (move,) + self._game_over_validation(self.board)
     
     def is_computer_turn(self):
         """

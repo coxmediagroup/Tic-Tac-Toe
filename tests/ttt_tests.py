@@ -103,6 +103,7 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(0, getattr(ttt, attr))
     
     def test__apply_move(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         self.assertEquals(0, ttt.board)
         self.assertEquals(0, ttt.turn)
@@ -134,6 +135,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertTrue(False, "Not Implemented")
     
     def test__board_for_player(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         for i, board in enumerate((0b111011101110111011, 0b101110111011101110)):
@@ -167,6 +169,7 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertIsNone(ttt._convert_move(move))
     
     def test__game_over_validation(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # player won (shouldn't happen, but we should detect if it does)
@@ -186,6 +189,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertEquals((False, None), ttt._game_over_validation())
     
     def test__get_valid_moves(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # empty board
@@ -200,6 +204,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertEquals([0, 1, 4, 6], ttt._get_valid_moves(0b111000100011110000))
     
     def test__has_won(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # winning circumstances
@@ -228,6 +233,7 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertFalse(ttt._has_won(player))
 
     def test__is_board_full(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # a few random tests where board is full
@@ -249,6 +255,7 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertFalse(ttt._is_board_full())
     
     def test__is_valid_move(self):
+        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # running an exhaustive test
