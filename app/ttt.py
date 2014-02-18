@@ -6,8 +6,26 @@ run.py
 WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,  
                  0x02a00, 0x02022, 0x0080a, 0x002a0)
 
-# a cache to minimize calculation, populated with some default starting values
-PLAYBOOK = {0x00000: {}}
+# a cache to minimize calculation, populated with some default starting values.
+#
+# Ideally for opening moves the computer should always take a corner or the
+# center, and if the human player is going first, the computer should take
+# whichever the player didn't take.
+#
+# This could be set so the computer always makes the same move in response to
+# a human move, but it seems more interesting and challenging to the player if
+# the computer has multiple possibilities of equal cost to choose from
+# when possible.
+PLAYBOOK = {0x00000: {8: -100, 6: -100, 4: -100, 2: -100},
+            0x20000: {0: -100},
+            0x02000: {0: -100},
+            0x00200: {0: -100},
+            0x00020: {0: -100},
+            0x00002: {8: -100, 6: -100, 4: -100, 2: -100},
+            0x08000: {8: -100, 6: -100},
+            0x00800: {6: -100, 4: -100},
+            0x00080: {4: -100, 2: -100},
+            0x00008: {8: -100, 2: -100}}
 
 
 # values used when calculating the best move for the computer
