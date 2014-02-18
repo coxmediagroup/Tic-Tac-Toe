@@ -21,6 +21,11 @@ WINNING_MOVES = (0b101010000000000000, 0b100000001000000010,
                  0b000010101000000000, 0b000010000000100010,
                  0b000000100000001010, 0b000000001010100000)
 
+LAST_MOVES = ((0b100010000000000000, 7), (0b100000001000000000, 0),
+              (0b000000000000101000, 8), (0b001000000000000010, 3),
+              (0b000010100000000000, 4), (0b000010000000000010, 3),
+              (0b000000000000001010, 5), (0b000000001000100000, 3))
+
 
 class TicTacToeBoardTests(unittest.TestCase):
     # Testing done in binary as a second check to hex calculations in main class
@@ -166,7 +171,35 @@ class TicTacToeBoardTests(unittest.TestCase):
                                   ttt._board_for_player(player, board))
     
     def test__choose_square(self):
-        self.assertTrue(False, "NotImplemented")
+        ttt = TicTacToeBoard()
+        
+        # should follow moves from PLAYBOOK
+        for board in PLAYBOOK:
+            move, cost = ttt._choose_square(board)
+            expected_cost = min(PLAYBOOK[board].keys())
+            self.assertEquals(expected, cost)
+            self.assertEquals(move in PLAYBOOK[board][expected_cost])
+        
+        # should always go for a win if next move
+        for board, expected_move in LAST_MOVES:
+            winning_board = self.insert_random_moves(board, 2, pieces=0)
+            move, cost = ttt._choose_square(winning_board)
+            self.assertEquals(expected_move, move)
+            self.assertEquals(10, cost)
+        
+        # should always block immediate future win from opponent.
+        # we'll ignore calculating cost, because it's irrelevant to this
+        # particular test
+        for board, expected_move in LAST_MOVES:
+            move = ttt._choose_square(board)
+            self.assertEquals(expected_move, move)
+        
+        # scenarios where computer should avoid giving human the advantage
+        
+        # if we run two computers against each other, would they tie 100 times?
+        
+        
+        self.assertTrue(False, "Not Completed")
     
     def test__convert_move(self):
         ttt = TicTacToeBoard()

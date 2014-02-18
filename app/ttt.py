@@ -32,7 +32,7 @@ PLAYBOOK = {0x00000: {-100: [8, 6, 4, 2]},
 
 # values used when calculating the best move for the computer
 WIN_VALUE = -10
-LOSS_VALUE = 10
+LOSS_VALUE = 100
 TIE_VALUE = 1
 
 
@@ -165,7 +165,7 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _choose_square(self, board, cost=0):
+    def _choose_square(self, board, cost=0, player_turn=1):
         """
         Picks a square for the computer to make its move.
         
@@ -184,6 +184,7 @@ class TicTacToeBoard(object):
         """
         raise Exception("Update for new return format of _best_move")
         raise Exception("Update for new format of PLAYBOOK")
+        raise Exception("Update for using player_turn")
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             valid_moves = self._get_valid_moves(board)
