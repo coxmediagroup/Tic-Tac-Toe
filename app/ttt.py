@@ -111,6 +111,9 @@ class TicTacToeBoard(object):
 
         return player_board
     
+    def _choose_square(self):
+        raise NotImplementedError
+    
     def _convert_move(self, square):
         """
         Converts the number of a square into its binary representation.
@@ -224,6 +227,22 @@ class TicTacToeBoard(object):
         self.ties += (int(player is None))
     
     def computer_move(self):
+        """
+        Autogenerates a move for the computer.
+        Returns a tuple indicating (<move successful>, <game over>, <winner>).
+        
+        :return: (boolean, boolean, int or None)
+        :throws: Exception
+        """
+        if not self.is_computer_turn():
+            return (False, False, None)
+        
+        move = self._apply_move(self._choose_square())
+        if not move:
+            raise Exception("Illegal move by computer") # let the UI handle it
+        self._set_turn()
+        return (move, ) + self._game_over_validation()
+        
         raise NotImplementedError    
     
     def human_move(self, square):

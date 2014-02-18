@@ -113,6 +113,9 @@ class TicTacToeBoardTests(unittest.TestCase):
                                               0b001000100010001000))):
                 self.assertEquals(playerboards[i], ttt._board_for_player(player))
     
+    def test__choose_square(self):
+        self.assertTrue(False, "NotImplemented")
+    
     def test__convert_move(self):
         ttt = TicTacToeBoard()
         # testing for O
@@ -288,7 +291,24 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertEquals(0b101011101110101111, ttt.board)
     
     def test_computer_move(self):
-        self.assertTrue(False, "NotImplemented")
+        ttt = TicTacToeBoard()
+        
+        # default case: game is still in progress
+        ttt.board = 0b101000001011000011
+        self.assertEquals((True, False, None), ttt.computer_move())
+        self.assertEquals(0b101011001011000011, ttt.board)
+        self.assertEquals(1, ttt.turn)
+        
+        # it is not the computer's turn
+        self.assertEquals((False, False, None), ttt.computer_move())
+        self.assertEquals(0b101011001011000011, ttt.board)
+        self.assertEquals(1, ttt.turn)
+        
+        # the game has ended
+        ttt.turn = 0
+        self.assertEquals((True, True, 2), ttt.computer_move())
+        self.assertEquals(0b101011001011110011, ttt.board)
+        self.assertEquals(1, ttt.turn)
     
     def test_human_move(self):
         ttt = TicTacToeBoard()
