@@ -135,16 +135,15 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertTrue(False, "Not Implemented")
     
     def test__board_for_player(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         for i, board in enumerate((0b111011101110111011, 0b101110111011101110)):
-            ttt.board = board
             for player, playerboards in ((1, (0b001000100010001000,
                                               0b100010001000100010)),
                                          (2, (0b100010001000100010, 
                                               0b001000100010001000))):
-                self.assertEquals(playerboards[i], ttt._board_for_player(player))
+                self.assertEquals(playerboards[i], 
+                                  ttt._board_for_player(player, board))
     
     def test__choose_square(self):
         self.assertTrue(False, "NotImplemented")
