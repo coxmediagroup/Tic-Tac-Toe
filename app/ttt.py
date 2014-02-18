@@ -121,7 +121,7 @@ class TicTacToeBoard(object):
             return True, board
         return False, board
     
-    def _best_move(self, potential_moves, current_cost):
+    def _best_move(self, potential_moves):
         """
         Selects the best (lowest cost) from a list of potential moves.
         Returns a tuple in the form (<move>, <cost).
@@ -138,8 +138,8 @@ class TicTacToeBoard(object):
             return None, None
         
         cost = min(potential_moves.keys()) # chosen for Python 3 forward considerations
-        best_moves = potential_moves[cost] # choosing for Python 3 considerations
-        return random.choice(best_moves), current_cost + cost
+        best_moves = potential_moves[cost] 
+        return random.choice(best_moves), cost
     
     def _board_for_player(self, player, board):
         """
@@ -165,7 +165,7 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _choose_square(self, board, cost=0, player_turn=1):
+    def _choose_square(self, board, cost=0, player_turn=2):
         """
         Picks a square for the computer to make its move.
         
@@ -179,32 +179,44 @@ class TicTacToeBoard(object):
         
         :param board: integer representing a board
         :param cost: integer for the cost of this move, defaults to 0
+        :param player_turn: integer for the current player, either 1 or 2
         :return: integer
         :throws: InvalidStateException
         """
-        raise Exception("Update for new return format of _best_move")
-        raise Exception("Update for new format of PLAYBOOK")
-        raise Exception("Update for using player_turn")
+        assert player_turn in (1, 2) # should not fail if non-public is respected
+        
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             valid_moves = self._get_valid_moves(board)
             if not valid_moves:
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")
-            
-            PLAYBOOK[board] = {}
+
+            cost_dict = {}
+            PLAYBOOK[board] = cost_dict
+
+            # TODO: how do I rewrite this with tail recursion?
             for square in valid_moves:
                 next_board = self._apply_move(square, board)[1]
-                if self._has_won(2, board):
-                    PLAYBOOK[board][square] = value + WIN_VALUE
-                elif self._has_won(1, board):
-                    PLAYBOOK[board][square] = value + LOSS_VALUE
+                if self._has_won(player_turn, next_board):
+                    if player_turn == 1:
+                        cost += LOSS_VALUE
+                    else:
+                        cost += WIN_VALUE
+                elif self._is_board_full(next_board):
+                    cost += TIE_VALUE
                 else:
-                    PLAYBOOK[board][square] = self._choose_square(board, value+TIE_VALUE)
+                    new_player = ~player_turn | 0x2 
+                    cost = self._choose_square(new_board, cost+1, new_player)[1]
+
+                if cost_dict.get(cost):
+                    cost_dict[cost].append(cost)
+                else:
+                    cost_dict[cost] = [cost]
                 
             potential_moves = PLAYBOOK[board]
         
-        return self._best_move(potential_moves, cost)
+        return self._best_move(potential_moves)
     
     def _convert_move(self, square):
         """
