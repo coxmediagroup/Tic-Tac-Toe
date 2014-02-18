@@ -1,5 +1,8 @@
 #:kivy 1.8.0
 
+#:set DEFAULT_FONT 'fonts/AnnieUseYourTelescope.ttf'
+#:set DEFAULT_FONT_SIZE 25
+
 <TicTacToeFrame>:
     BoxLayout:
         orientation: 'vertical'
@@ -7,5 +10,11 @@
             orientation: 'horizontal'
             Label:
                 text: root.player_text(1)
+                font_name: DEFAULT_FONT
+                font_size: DEFAULT_FONT_SIZE
+                bold: True
             Label:
                 text: root.player_text(2)
+                font_name: DEFAULT_FONT
+                font_size: DEFAULT_FONT_SIZE
+                bold: True
