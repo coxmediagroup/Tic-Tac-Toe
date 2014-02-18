@@ -6,6 +6,13 @@ run.py
 WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,  
                  0x02a00, 0x02022, 0x0080a, 0x002a0)
 
+# a cache to minimize calculation, populated with some default starting values
+PLAYBOOK = {0x00000: {}}
+
+
+class InvalidStateException(Exception):
+    pass
+
 
 class TicTacToeBoard(object):
     """
@@ -111,8 +118,32 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _choose_square(self):
+    def _causes_loss(self, move):
         raise NotImplementedError
+    
+    def _causes_win(self, move):
+        raise NotImplementedError
+    
+    def _choose_square(self, board, current_value=0):
+        """
+        Picks a square for the computer to make its move.
+        
+        :return: integer
+        :throws: InvalidStateException
+        """
+        potential_moves = PLAYBOOK.get(board)
+        if not potential_moves:
+            valid_moves = self._get_valid_moves(board)
+            if not valid_moves:
+                # let the UI handle it
+                raise InvalidStateException("No valid moves for the computer")
+            
+            potential_moves = PotentialMoves()
+            for move in valid_moves:
+                pass
+            PLAYBOOK[board] = potential_moves
+        
+        return potential_moves.best_move(current_value)
     
     def _convert_move(self, square):
         """
@@ -158,6 +189,9 @@ class TicTacToeBoard(object):
             return (True, None)
         
         return (False, None)
+    
+    def _get_valid_moves(self):
+        raise NotImplementedError
     
     def _has_won(self, player):
         """
@@ -231,15 +265,17 @@ class TicTacToeBoard(object):
         Autogenerates a move for the computer.
         Returns a tuple indicating (<move successful>, <game over>, <winner>).
         
+        May throw an Exception of the game board is not in a valid state or t
+        
         :return: (boolean, boolean, int or None)
-        :throws: Exception
+        :throws: InvalidStateException
         """
         if not self.is_computer_turn():
             return (False, False, None)
         
         move = self._apply_move(self._choose_square())
         if not move:
-            raise Exception("Illegal move by computer") # let the UI handle it
+            raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
         return (move, ) + self._game_over_validation()
         
@@ -279,5 +315,12 @@ class TicTacToeBoard(object):
         their scores.
         """
         self.board = 0
+
+
+class PotentialMoves(object):
+    def __init__(self):
+        pass
     
-    
+    def min(self):
+        pass
+ 
