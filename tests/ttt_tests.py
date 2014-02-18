@@ -132,6 +132,28 @@ class TicTacToeBoardTests(unittest.TestCase):
         for move in ('a', None, {}):
             self.assertIsNone(ttt._convert_move(move))
     
+    def test__game_over_validation(self):
+        ttt = TicTacToeBoard()
+        
+        # player won (shouldn't happen, but we should detect if it does)
+        ttt.board = 0b101110111000110010
+        self.assertEquals((True, 1), ttt._game_over_validation())
+        
+        # computer won
+        ttt.board = 0b101011101111110010
+        try:
+            self.assertEquals((True, 2), ttt._game_over_validation())
+        except:
+            import pdb; pdb.set_trace()
+        
+        # tie
+        ttt.board = 0b101011101111101110
+        self.assertEquals((True, None), ttt._game_over_validation())
+        
+        # game is still going
+        ttt.board = 0b111011001000000010
+        self.assertEquals((False, None), ttt._game_over_validation())
+    
     def test__has_won(self):
         ttt = TicTacToeBoard()
         
@@ -237,24 +259,24 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt._set_win(2)
         self.assertEquals((1, 2, 1), (ttt.player_wins, ttt.player_losses, ttt.ties))
     
-    def test_apply_move(self):
+    def test__apply_move(self):
         ttt = TicTacToeBoard()
         self.assertEquals(0, ttt.board)
         self.assertEquals(0, ttt.turn)
         
         # empty board should always apply
-        self.assertTrue(ttt.apply_move(3))
+        self.assertTrue(ttt._apply_move(3))
         self.assertEquals(0b000000000010000000, ttt.board)
         
         # some intermediate test cases
         ttt.turn = 1
-        self.assertTrue(ttt.apply_move(5))
+        self.assertTrue(ttt._apply_move(5))
         self.assertEquals(0b000000110010000000, ttt.board)
         
         ttt.turn = 0
-        self.assertFalse(ttt.apply_move(5))
+        self.assertFalse(ttt._apply_move(5))
         self.assertEquals(0b000000110010000000, ttt.board)
-        self.assertTrue(ttt.apply_move(8))
+        self.assertTrue(ttt._apply_move(8))
         self.assertEquals(0b100000110010000000, ttt.board)
         
         # full board should never apply
@@ -262,34 +284,43 @@ class TicTacToeBoardTests(unittest.TestCase):
         for turn in (0, 1):
             ttt.turn = turn
             for move in range(9):
-                self.assertFalse(ttt.apply_move(move))
+                self.assertFalse(ttt._apply_move(move))
                 self.assertEquals(0b101011101110101111, ttt.board)
     
-    def test_game_over_validation(self):
+    def test_computer_move(self):
+        self.assertTrue(False, "NotImplemented")
+    
+    def test_human_move(self):
         ttt = TicTacToeBoard()
         
-        # player won (shouldn't happen, but we should detect if it does)
-        ttt.board = 0b101110111000110010
-        self.assertEquals((True, 1), ttt.game_over_validation())
+        # default case: game is still in progress
+        ttt.board = 0b100000001011000011
+        self.assertEquals((True, False, None), ttt.human_move(7))
+        self.assertEquals(0b101000001011000011, ttt.board)
+        self.assertEquals(1, ttt.turn)
         
-        # computer won
-        ttt.board = 0b101011101111110010
-        try:
-            self.assertEquals((True, 2), ttt.game_over_validation())
-        except:
-            import pdb; pdb.set_trace()
+        # it is not the human's turn
+        self.assertEquals((False, False, None), ttt.human_move(6))
+        self.assertEquals(0b101000001011000011, ttt.board)
+        self.assertEquals(1, ttt.turn)
         
-        # tie
-        ttt.board = 0b101011101111101110
-        self.assertEquals((True, None), ttt.game_over_validation())
+        # the move isn't valid
+        ttt.turn = 0
+        self.assertEquals((False, False, None), ttt.human_move(3))
+        self.assertEquals(0b101000001011000011, ttt.board)
+        self.assertEquals(0, ttt.turn)
         
-        # game is still going
-        ttt.board = 0b111011001000000010
-        self.assertEquals((False, None), ttt.game_over_validation())
+        # the game has ended
+        self.assertEquals((True, True, 1), ttt.human_move(6))
+        self.assertEquals(0b101010001011000011, ttt.board)
+        self.assertEquals(1, ttt.turn)
     
     def test_is_computer_turn(self):
         ttt = TicTacToeBoard()
         for turn in (0, 1):
             ttt.turn = turn
             self.assertEquals(bool(turn), ttt.is_computer_turn())
+            
+    def test_reset_board(self):
+        self.assertTrue(False, "Not Implemented")
 
