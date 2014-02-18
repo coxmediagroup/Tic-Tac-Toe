@@ -144,10 +144,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # computer won
         ttt.board = 0b101011101111110010
-        try:
-            self.assertEquals((True, 2), ttt._game_over_validation())
-        except:
-            import pdb; pdb.set_trace()
+        self.assertEquals((True, 2), ttt._game_over_validation())
         
         # tie
         ttt.board = 0b101011101111101110
@@ -156,6 +153,20 @@ class TicTacToeBoardTests(unittest.TestCase):
         # game is still going
         ttt.board = 0b111011001000000010
         self.assertEquals((False, None), ttt._game_over_validation())
+    
+    def test__get_valid_moves(self):
+        ttt = TicTacToeBoard()
+        
+        # empty board
+        self.assertEquals(list(range(9)), ttt._get_valid_moves(0b000000000000000000))
+        
+        # full board
+        self.assertEquals([], ttt._get_valid_moves(0b101110111011101110))
+        
+        # various samples
+        self.assertEquals([3, 5, 7], ttt._get_valid_moves(0b100010001100111110))
+        self.assertEquals([2, 8], ttt._get_valid_moves(0b001011101111001011))
+        self.assertEquals([0, 1, 4, 6], ttt._get_valid_moves(0b111000100011110000))
     
     def test__has_won(self):
         ttt = TicTacToeBoard()

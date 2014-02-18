@@ -190,8 +190,22 @@ class TicTacToeBoard(object):
         
         return (False, None)
     
-    def _get_valid_moves(self):
-        raise NotImplementedError
+    def _get_valid_moves(self, board):
+        """
+        Returns a list of open spaces on the board.
+        
+        :param board: integer representation of a board
+        :return: list of integers between 0 and 8
+        """
+        i = 0
+        moves = []
+        tmp_board = ~board & 0x3ffff
+        while tmp_board:
+            if (tmp_board & 3) == 3:
+                moves.append(i)
+            tmp_board = tmp_board >> 2
+            i += 1
+        return moves
     
     def _has_won(self, player):
         """
@@ -273,7 +287,7 @@ class TicTacToeBoard(object):
         if not self.is_computer_turn():
             return (False, False, None)
         
-        move = self._apply_move(self._choose_square())
+        move = self._apply_move(self._choose_square(self.board))
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
