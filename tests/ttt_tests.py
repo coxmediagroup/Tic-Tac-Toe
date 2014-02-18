@@ -204,33 +204,30 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertEquals([0, 1, 4, 6], ttt._get_valid_moves(0b111000100011110000))
     
     def test__has_won(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # winning circumstances
         for player in (1, 2):
             for board in WINNING_MOVES:
                 # winning circumstances
-                ttt.board = self.insert_random_moves(board, player)
-                self.assertTrue(ttt._has_won(player))
+                test_board = self.insert_random_moves(board, player)
+                self.assertTrue(ttt._has_won(player, test_board))
                 
                 # losing circumstances
-                ttt.board = self.insert_random_moves(board, (~player & 0b11))
-                self.assertFalse(ttt._has_won(player))
+                test_board = self.insert_random_moves(board, (~player & 0b11))
+                self.assertFalse(ttt._has_won(player, test_board))
         
         # some tie boards
         for board in (0b101011101111101110, 0b111011111011101010,
                       0b111110111010111010, 0b101110101110111110):
-            ttt.board = board
             for player in (1, 2):
-                self.assertFalse(ttt._has_won(player))
+                self.assertFalse(ttt._has_won(player, board))
         
         # incomplete games
         for board in (0b000000000000000000, 0b110010000000111010,
                       0b100000001110110010, 0b000011101100100010):
-            ttt.board = board
             for player in (1, 2):
-                self.assertFalse(ttt._has_won(player))
+                self.assertFalse(ttt._has_won(player, board))
 
     def test__is_board_full(self):
         ttt = TicTacToeBoard()
