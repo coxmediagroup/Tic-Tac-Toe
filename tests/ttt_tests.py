@@ -130,6 +130,9 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertFalse(ttt._apply_move(move))
                 self.assertEquals(0b101011101110101111, ttt.board)
     
+    def test__best_move(self):
+        self.assertTrue(False, "Not Implemented")
+    
     def test__board_for_player(self):
         ttt = TicTacToeBoard()
         
