@@ -16,7 +16,7 @@
                 font_size: DEFAULT_FONT_SIZE
                 bold: True
             BoxLayout:
-                padding: 30, 0, 30, 0
+                padding: 20, (self.height-self.width+20)/2, 20, (self.height-self.width+20)/2
                 canvas.before:
                     Color:
                         rgba: 1, 1, 1, 1
@@ -25,7 +25,33 @@
                         size: self.size
                 RelativeLayout:
                     Image:
+                        size_hint: None, None
+                        size: self.parent.width, self.parent.width
                         source: 'img/tic_tac_toe.png'
+                    GridLayout:
+                        pos: .141*self.parent.width, .145*self.parent.width
+                        size_hint: None, None
+                        size: .7*self.parent.width, .7*self.parent.width
+                        cols: 3
+                        spacing: .02*self.parent.width
+                        Button:
+                            text: "8"
+                        Button:
+                            text: "7"
+                        Button:
+                            text: "6"
+                        Button:
+                            text: "1"
+                        Button:
+                            text: "0"
+                        Button:
+                            text: "5"
+                        Button:
+                            text: "2"
+                        Button:
+                            text: "3"
+                        Button:
+                            text: "4"
             Label:
                 size_hint: (.5, 1)
                 text: "[color=2ba6cb]Hal[/color] " + root.player_text(2)
