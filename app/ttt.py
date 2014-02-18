@@ -253,6 +253,12 @@ class TicTacToeBoard(object):
         return bool(self.turn)
     
     def reset_board(self):
-        raise NotImplementedError
+        """
+        Sets self.board back to 0.
+        Does not reset turns, wins, losses, or ties, because for the purposes
+        of this game the player will have to exit the game in order to reset
+        their scores.
+        """
+        self.board = 0
     
     

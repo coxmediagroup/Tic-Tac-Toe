@@ -322,5 +322,10 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(bool(turn), ttt.is_computer_turn())
             
     def test_reset_board(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        ttt.board = "0b101111100000100000"
+        self.assertNotEquals(0, ttt.board)
+        
+        ttt.reset_board()
+        self.assertEquals(0, ttt.board)
 
