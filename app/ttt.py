@@ -436,8 +436,8 @@ class TicTacToeBoard(object):
         losses = self.player_losses if player == 1 else self.player_wins
         ties = self.ties
         
-        return "Player %s\n\nWins: %s\nLosses: %s\nTies: %s" % (plyr, wins,
-                                                                losses, ties)
+        return "(Player %s)\n\nWins: %s\nLosses: %s\nTies: %s" % (plyr, wins,
+                                                                  losses, ties)
     
     def reset_board(self):
         """
