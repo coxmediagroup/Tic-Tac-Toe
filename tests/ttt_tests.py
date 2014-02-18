@@ -366,6 +366,22 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertEquals(0b101011001011110011, ttt.board)
         self.assertEquals(1, ttt.turn)
     
+    def get_square_label(self):
+        ttt = TicTacToeBoard()
+        ttt.board = 0b111011001011001000
+        
+        # human
+        for square in (7, 4, 1):
+            self.assertEquals(PLAYER1, ttt.get_square_label(square))
+        
+        # computer
+        for square in (8, 6, 3):
+            self.assertEquals(PLAYER2, ttt.get_square_label(square))
+        
+        # no one
+        for square in (5, 2, 0):
+            self.assertEquals("", ttt.get_square_label(square))
+    
     def test_human_move(self):
         ttt = TicTacToeBoard()
         

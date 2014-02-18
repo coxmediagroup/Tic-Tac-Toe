@@ -84,6 +84,7 @@ class TicTacToeBoard(object):
     
     Public methods:
         computer_move
+        get_square_label
         human_move
         is_computer_turn
         player_stats
@@ -233,8 +234,6 @@ class TicTacToeBoard(object):
         :return: integer
         :throws: InvalidStateException
         """
-        assert player_turn in (1, 2) # should not fail if non-public is respected
-        
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
             new_moves = self._calculate_board_costs([(board, 0, 2)])
@@ -397,6 +396,18 @@ class TicTacToeBoard(object):
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
         return (move, ) + self._game_over_validation(self.board)   
+    
+    def get_square_label(self, square):
+        """
+        Finds the appropriate 'X' or 'O' label for a given square
+        
+        :param square: integer representing the desired square
+        :return: string
+        """
+        value = (self.board >> ((square - 1)*2)) & 0x3
+        if not value:
+            return ''
+        return [PLAYER1, PLAYER2][value-2]
     
     def human_move(self, square):
         """
