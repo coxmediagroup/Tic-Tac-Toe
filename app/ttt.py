@@ -201,7 +201,7 @@ class TicTacToeBoard(object):
             self._set_win(winner)
             return (True, winner)
         
-        if self._is_board_full(self.board):
+        if self._is_board_full(board):
             self._set_win(winner)
             return (True, None)
         

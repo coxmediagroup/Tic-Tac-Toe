@@ -169,27 +169,21 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertIsNone(ttt._convert_move(move))
     
     def test__game_over_validation(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # player won (shouldn't happen, but we should detect if it does)
-        ttt.board = 0b101110111000110010
-        self.assertEquals((True, 1), ttt._game_over_validation())
+        self.assertEquals((True, 1), ttt._game_over_validation(0b101110111000110010))
         
         # computer won
-        ttt.board = 0b101011101111110010
-        self.assertEquals((True, 2), ttt._game_over_validation())
+        self.assertEquals((True, 2), ttt._game_over_validation(0b101011101111110010))
         
         # tie
-        ttt.board = 0b101011101111101110
-        self.assertEquals((True, None), ttt._game_over_validation())
+        self.assertEquals((True, None), ttt._game_over_validation(0b101011101111101110))
         
         # game is still going
-        ttt.board = 0b111011001000000010
-        self.assertEquals((False, None), ttt._game_over_validation())
+        self.assertEquals((False, None), ttt._game_over_validation(0b111011001000000010))
     
     def test__get_valid_moves(self):
-        self.assertTrue(False, "Update me")
         ttt = TicTacToeBoard()
         
         # empty board
