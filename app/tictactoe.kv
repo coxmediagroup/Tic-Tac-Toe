@@ -9,21 +9,25 @@
         BoxLayout:
             orientation: 'horizontal'
             Label:
+                size_hint: (.5, 1)
                 text: "[color=c60f13]You[/color] " + root.player_text(1)
                 markup: True
                 font_name: DEFAULT_FONT
                 font_size: DEFAULT_FONT_SIZE
                 bold: True
             BoxLayout:
+                padding: 30, 0, 30, 0
                 canvas.before:
                     Color:
                         rgba: 1, 1, 1, 1
                     Rectangle:
                         pos: self.pos
                         size: self.size
-                Image:
-                    source: 'img/tic_tac_toe.png'
+                RelativeLayout:
+                    Image:
+                        source: 'img/tic_tac_toe.png'
             Label:
+                size_hint: (.5, 1)
                 text: "[color=2ba6cb]Hal[/color] " + root.player_text(2)
                 markup: True
                 font_name: DEFAULT_FONT

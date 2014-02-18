@@ -22,7 +22,7 @@ class TicTacToeApp(App):
     """ Primary class for running the game """
     
     def build(self):
-        frame = TicTacToeFrame(size=(600, 600))
+        frame = TicTacToeFrame()
         return frame
 
 
