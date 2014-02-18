@@ -274,7 +274,10 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # computer won
         ttt.board = 0b101011101111110010
-        self.assertEquals((True, 2), ttt.game_over_validation())
+        try:
+            self.assertEquals((True, 2), ttt.game_over_validation())
+        except:
+            import pdb; pdb.set_trace()
         
         # tie
         ttt.board = 0b101011101111101110

@@ -77,10 +77,18 @@ class TicTacToeBoard(object):
         """
         assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
         
-        if player == 1:
-            return (~self.board & 0x3ffff) << 1
-        if player == 2:
-            return (self.board & 0x15555) << 1
+        mod = player + 1
+        player_board = 0
+        board = self.board
+        i = 0
+        while board:
+            last_two_digits = board & 3
+            if last_two_digits and not last_two_digits % mod:
+                player_board += (0b10 << i)
+            board = board >> 2
+            i += 2
+
+        return player_board
     
     def _convert_move(self, square):
         """
