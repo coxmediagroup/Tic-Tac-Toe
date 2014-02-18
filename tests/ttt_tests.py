@@ -397,8 +397,19 @@ class TicTacToeBoardTests(unittest.TestCase):
             ttt.turn = turn
             self.assertEquals(bool(turn), ttt.is_computer_turn())
             
-    def player_stats(self):
-        self.assertTrue(False, "Not Implemented")
+    def test_player_stats(self):
+        ttt = TicTacToeBoard()
+        ttt.player_wins = 1
+        ttt.player_losses = 2
+        ttt.ties = 4
+        
+        # player 1 (human)
+        self.assertEquals("Player O\n\nWins: 1\nLosses: 2\nTies: 4",
+                          ttt.player_stats(1))
+        
+        # player 2 (computer)
+        self.assertEquals("Player X\n\nWins: 2\nLosses: 1\nTies: 4",
+                          ttt.player_stats(2))
     
     def test_reset_board(self):
         ttt = TicTacToeBoard()

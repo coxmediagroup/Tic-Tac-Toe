@@ -4,6 +4,9 @@ run.py
 """
 import random
 
+PLAYER1 = 'O'
+PLAYER2 = 'X'
+
 
 WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,  
                  0x02a00, 0x02022, 0x0080a, 0x002a0)
@@ -76,7 +79,8 @@ class TicTacToeBoard(object):
              1 1  0 0  0 0  1 0  0 0  1 1  0 0  0 0  1 0
              
     This value is stored as a hex value to make it shorter, so this board would 
-    be represented as 0x3080c2.
+    be represented as 0x3080c2. Please also note that these settings can be
+    changed by setting the global 'PLAYER1' and 'PLAYER2' constants above.
     
     Public methods:
         computer_move
@@ -421,7 +425,19 @@ class TicTacToeBoard(object):
         return bool(self.turn)
     
     def player_stats(self, player):
-        return str(player)
+        """
+        Generates a string showing player wins, losses, and ties
+        
+        :param player: integer representing the player, either 1 or 2
+        :return: string
+        """
+        plyr = [PLAYER1, PLAYER2][player-1]
+        wins = self.player_wins if player == 1 else self.player_losses
+        losses = self.player_losses if player == 1 else self.player_wins
+        ties = self.ties
+        
+        return "Player %s\n\nWins: %s\nLosses: %s\nTies: %s" % (plyr, wins,
+                                                                losses, ties)
     
     def reset_board(self):
         """
