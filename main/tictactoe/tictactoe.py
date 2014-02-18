@@ -102,7 +102,6 @@ class Player(object):
 class AIPlayer(Player):
     """I am the AI player for this game"""
     # These are the positions to target in order
-    # after the first turn and any checks for wins/blocks
     # Each list index aligns with the corresponding board position
     STRATEGIES = [(4, 8, 2),
                   (4, 8, 6, 2, 0),
