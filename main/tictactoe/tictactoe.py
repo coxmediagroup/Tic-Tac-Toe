@@ -26,7 +26,7 @@ class Board(object):
     def select_position(self, position, player):
         """Sets a position on the board as owned by a player"""
 
-        if self.tttboard[position] is not None:
+        if self.the_board[position] is not None:
             raise PositionAlreadyTakenError()
 
         self.the_board[position] = player.board_value
@@ -48,6 +48,10 @@ class Board(object):
             This function will draw a bootstrap html table based on a sequence received in the argument board
             so that a board [0,1,2,3,4,5,6,7,8]
         """
+        for index,value in enumerate(self.the_board):
+            if value == None:
+                self.the_board[index] = str('')
+
         draw_this = """<div  class="row-fluid">
                 <div id="cell_0" class="offset1 span3 well">
                     <h1 class="text-center">%s</h1>
@@ -80,7 +84,7 @@ class Board(object):
                 <div id="cell_8" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-            </div>""" % (self.the_board[0],self.the_board[1],self.the_board[2],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[6],self.the_board[7],self.the_board[8])
+            </div>""" % (self.the_board[0] ,self.the_board[1],self.the_board[2],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[6],self.the_board[7],self.the_board[8])
         return(draw_this)
 
 class Player(object):
@@ -145,7 +149,7 @@ class AIPlayer(Player):
         This is a fallback to be used when there are no wins or win blockers.
         """
 
-        open_positions = [i for i, value in enumerate(board.tttboard) if value is None]
+        open_positions = [i for i, value in enumerate(board.the_board) if value is None]
 
         # default no priority position then see if there's a position open
         # which fits the chosen strategy
@@ -162,14 +166,14 @@ class AIPlayer(Player):
         """Implement the logic for a single turn of the AI player"""
 
         # Always pick the middle box on the first round
-        position = 4 if self.turn_count == 0 else None
+        position = None
 
-        if self.turn_count == 1:
-            # On the second turn, after the human player has picked
-            # their first spot so we can determine our strategy
-            assert other_player.board_value in board.tttboard
-            player2_position = board.tttboard.index(other_player.board_value)
-            self.strategy = AIPlayer.STRATEGIES[player2_position]
+
+        # On the second turn, after the human player has picked
+        # their first spot so we can determine our strategy
+        assert other_player.board_value in board.the_board
+        player2_position = board.the_board.index(other_player.board_value)
+        self.strategy = AIPlayer.STRATEGIES[player2_position]
 
         if position is None:
             position = self.look_for_win(board)
@@ -180,5 +184,5 @@ class AIPlayer(Player):
         if position is None:
             position = self.pick_open_position(board)
 
-        self.turn_count += 1
+
         return position

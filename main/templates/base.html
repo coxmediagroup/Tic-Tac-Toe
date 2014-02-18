@@ -29,18 +29,11 @@
 
 
 {% block navigation %}
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="muted brand" href="/">TRICK TAC TOE</a>
 
-                <!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
 {% endblock navigation %}
 <div id="main" class="container-fluid">
-    <h1 class="text-error"> Would you like to play a game...<small> I am X, you are O</small></h1>
+
+    <h1 class="text-error"> Would you like to play a game...<small> I am X, you are O</small></h1><a href="/">start over</a>
     {% block content %}
 
     {% endblock content %}
@@ -59,10 +52,17 @@
                     </div>
                 </div>
                 <div class="span4 text-center">
-                    <div class="span12">Test</div>
+                    <div class="span12">
+                        {% if win_message %}
+                            <h1 class="text-error pull-left">{{ win_message }}</h1>
+                            <input type="hidden" id="win_message" value="1"/>
+                        {% else %}
+                            <input type="hidden" id="win_message" value="0"/>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="span4 text-right">
-                    <div class="span12">Test</div>
+                    <div class="span12">HAL 90000000</div>
                 </div>
             </div>
 

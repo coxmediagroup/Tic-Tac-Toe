@@ -13,12 +13,7 @@ $(document).ready(function () {
         }).get());
     boxes.height(maxHeight);
 
-    var the_board = ['','','','','','','','',''];
-
-    $("[id^='cell']").each(function(index,value){
-        if ($(value).children().html() == "None") $(this).children().html('');
-    });
-
+    //bind the onclick event to all my boxes
     $("[id^='cell']").on("click",function(e){
         //here we build the board from the cell
         $(this).children().html('O')
@@ -26,10 +21,13 @@ $(document).ready(function () {
         $.each(x,function(index, value){
             if (!value.length || value == "None") x[index] = null
         });
-        console.log(x);
+
         s = '/?board=' + JSON.stringify(x);
         window.location = s;
 
     });
-
+    //if we win we need to unbind the onclick event
+    if($('#win_message').val() == 1){
+       $("[id^='cell']").unbind();
+    }
 });
