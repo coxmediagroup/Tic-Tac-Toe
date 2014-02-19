@@ -156,6 +156,7 @@ class TicTacToeBoard(object):
                 computer, respectively)
         :param board: integer representing a board
         :return: integer
+        :throws: AssertionError
         """
         assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
         
@@ -180,13 +181,15 @@ class TicTacToeBoard(object):
                 (<board integer>, <current cost>, <current player>, <next move>)
         :param board_dict: dictionary in format similar to PLAYBOOK
         :return: dictionary
+        :throws: AssertionError
         """
         board_dict = board_dict or {}
-        if not board_list:
+        if not boards:
             return board_dict
         
-        board, cost, player, next_move = board_list.pop()
-        if board not in PLAYER_DICT:
+        board, cost, player, next_move = boards.pop()
+        assert player in (1, 2)
+        if board not in PLAYBOOK:
             if board not in board_dict:
                 board_dict[board] = {}
             cost_dict = board_dict[board]
@@ -194,14 +197,14 @@ class TicTacToeBoard(object):
             valid_moves = ([next_move] if next_move is not None 
                            else self._get_valid_moves(board))
             for square in valid_moves:
-                new_board = self._apply_move(square, board)
+                new_board = self._apply_move(square, board)[1]
                 if new_board in board_dict:
                     try:
                         cost_dict[square] = self._best_move(board_dict[new_board])
                     except TypeError:
                         # new_board is not yet calculated, so put current
-                        # board back into board_list
-                        board_list.extend([(board, cost, player, square)])
+                        # board back into boards
+                        boards.extend([(board, cost, player, square)])
                         cost_dict[square] = None
                 else:
                     if self._has_won(player, new_board):
@@ -212,11 +215,11 @@ class TicTacToeBoard(object):
                     elif self._is_board_full(new_board):
                         cost_dict[square] = cost + TIE_VALUE
                     else:
-                        new_player = ~player_turn | 0x2 
-                        board_list.extend([(board, cost+1, new_player, square)])
+                        new_player = ~player & 0x3
+                        boards.extend([(board, cost+1, new_player, square)])
                         cost_dict[square] = None
 
-        return self._calculate_board_costs(board_list, board_dict)
+        return self._calculate_board_costs(boards, board_dict)
     
     def _choose_square(self, board):
         """
@@ -236,7 +239,7 @@ class TicTacToeBoard(object):
         """
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
-            new_moves = self._calculate_board_costs([(board, 0, 2)])
+            new_moves = self._calculate_board_costs([(board, 0, 2, None)])
             if not new_moves:
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")
