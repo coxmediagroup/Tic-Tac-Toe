@@ -65,7 +65,7 @@ def killcomp_map_check_done():
     return False
 
 
-def count_corner():
+def which_corner():
     counter = 0
     corner = [1, 3, 7, 9]
     for i in range(0, 3):
@@ -175,7 +175,7 @@ def computer_moves():
 
     if m is not 1:
         m = killer_move()
-        comp_count = count_corner()
+        comp_count = which_corner()
         if comp_count >= 0 and m is not 1:
             place_corner()
             m = 1
