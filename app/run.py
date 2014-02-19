@@ -38,7 +38,7 @@ class TicTacToeFrame(BoxLayout):
 
         if game_over:
             self.update_scores()
-            self.set_next_game_button(hide=False)
+            self.set_new_game_button(hide=False)
     
     def player_text(self, player_number):
         if player_number == 1:
@@ -48,7 +48,7 @@ class TicTacToeFrame(BoxLayout):
         return name_text + self.board.player_stats(player_number)
     
     def reset_game(self, btn):
-        self.set_next_game_button(hide=True)
+        self.set_new_game_button(hide=True)
         self.board.reset_board()
         self.update_squares()
         
@@ -58,13 +58,13 @@ class TicTacToeFrame(BoxLayout):
         else:
             self.set_turn_label("You go first...")
     
-    def set_next_game_button(self, hide=False):
+    def set_new_game_button(self, hide):
         ph = self.board_wrapper.placeholder
         
         if hide:
             ph.remove_widget(self.new_game_btn)
             ph.add_widget(ph.placeholder_label)
-            self.new_game_button = None
+            self.new_game_btn = None
         else:
             ph.remove_widget(ph.placeholder_label)
             if not getattr(self, 'new_game_btn', None):
