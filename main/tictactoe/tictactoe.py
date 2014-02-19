@@ -1,32 +1,32 @@
 __author__ = 'henryadam'
 
-
-
 import random
+
 
 class PositionAlreadyTakenError(Exception):
     pass
+
 
 class Board(object):
     """
         a tic tac toe matrix
 
     """
-    wins = ((0,1,2), # rows
-            (3,4,5),
-            (6,7,8),
-            (0,3,6), # columns
-            (1,4,7),
-            (2,5,8),
-            (0,4,8), # diagonals
-            (2,4,6))
+    wins = ((0, 1, 2), # rows
+            (3, 4, 5),
+            (6, 7, 8),
+            (0, 3, 6), # columns
+            (1, 4, 7),
+            (2, 5, 8),
+            (0, 4, 8), # diagonals
+            (2, 4, 6))
 
     def __init__(self, *args, **kwargs):
         """
             The board is the passed in board or a blank board since this AI always wins, we will always render
             an initialized board where the computer takes the middle
         """
-        self.the_board = kwargs.get('the_board',[None, None, None, None, None, None, None, None, None])
+        self.the_board = kwargs.get('the_board', [None, None, None, None, None, None, None, None, None])
 
     def select_position(self, position, player):
         """Sets a position on the board as owned by a player"""
@@ -41,8 +41,8 @@ class Board(object):
         winner = False
         for group in Board.wins:
             if self.the_board[group[0]] == player.board_value \
-                    and self.the_board[group[1]] == player.board_value \
-                    and self.the_board[group[2]] == player.board_value:
+                and self.the_board[group[1]] == player.board_value \
+                and self.the_board[group[2]] == player.board_value:
                 winner = True
                 break
 
@@ -53,7 +53,7 @@ class Board(object):
             This function will draw a bootstrap html table based on a sequence received in the argument board
             so that a board [0,1,2,3,4,5,6,7,8]
         """
-        for index,value in enumerate(self.the_board):
+        for index, value in enumerate(self.the_board):
             if value == None:
                 self.the_board[index] = str('')
 
@@ -89,8 +89,10 @@ class Board(object):
                 <div id="cell_8" class="span3 well">
                     <h1 class="text-center">%s</h1>
                 </div>
-            </div>""" % (self.the_board[0] ,self.the_board[1],self.the_board[2],self.the_board[3],self.the_board[4],self.the_board[5],self.the_board[6],self.the_board[7],self.the_board[8])
-        return(draw_this)
+            </div>""" % (self.the_board[0], self.the_board[1], self.the_board[2], self.the_board[3], self.the_board[4],
+                         self.the_board[5], self.the_board[6], self.the_board[7], self.the_board[8])
+        return (draw_this)
+
 
 class Player(object):
     """A tic tact toe player"""
@@ -105,6 +107,7 @@ class Player(object):
         #use them to define the players when the view calls it, maybe later on we persist the players
         self.board_value = board_value
         self.turn_count = 0
+
 
 class AIPlayer(Player):
     """I am the AI player for this game"""
@@ -136,14 +139,14 @@ class AIPlayer(Player):
             # and creates a list of tuples of the element and its value.
             not_mine = [(i, val) for i, val in enumerate(board.the_board)
                         if i in group
-                        and val != player.board_value]
+                and val != player.board_value]
 
             # If there's only one not owned by the ai player and not owned by
             # the other player then select it and we've won
             if len(not_mine) == 1 and not_mine[0][1] is None:
                 # Maybe this should return the selection rather than
                 # modifying the board in here.  Decide later.
-                win_spot=not_mine[0][0]
+                win_spot = not_mine[0][0]
                 break
 
         return win_spot
@@ -189,6 +192,5 @@ class AIPlayer(Player):
 
         if position is None:
             position = self.pick_open_position(board)
-
 
         return position
