@@ -5,21 +5,21 @@ def print_board():
     for i in range(0, 3):
         for j in range(0, 3):
             print map[2-i][j],
-            if j != 2:
+            if j is not 2:
                 print "|",
         print ""
 
 
 def check_done():
     for i in range(0, 3):
-        if map[i][0] == map[i][1] == map[i][2] != " " \
-        or map[0][i] == map[1][i] == map[2][i] != " ":
-            print turn, "Winner!"
+        if map[i][0] == map[i][1] == map[i][2] is not " " \
+        or map[0][i] == map[1][i] == map[2][i] is not " ":
+            print turn, "is winner!"
             return True
 
-    if map[0][0] == map[1][1] == map[2][2] != " " \
-    or map[0][2] == map[1][1] == map[2][0] != " ":
-        print turn, "Winner!"
+    if map[0][0] == map[1][1] == map[2][2] is not " " \
+    or map[0][2] == map[1][1] == map[2][0] is not " ":
+        print turn, "is winner!"
         return True
 
     if " " not in map[0] and " " not in map[1] and " " not in map[2]:
@@ -32,12 +32,12 @@ def check_done():
 def comp_map_check_done():
     global comp_map
     for i in range(0, 3):
-        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == player!= " " \
-        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == player != " ":
+        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == player is not " " \
+        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == player is not " ":
             return True
 
-    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == comp_map != " " \
-    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == player != " ":
+    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == player is not " " \
+    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == player is not " ":
         return True
 
     if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
@@ -50,12 +50,12 @@ def comp_map_check_done():
 def killcomp_map_check_done():
     global comp_map
     for i in range(0, 3):
-        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == computer != " " \
-        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == computer != " ":
+        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == computer is not " " \
+        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == computer is not " ":
             return True
 
-    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == computer != " " \
-    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == computer != " ":
+    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == computer is not " " \
+    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == computer is not " ":
         return True
 
     if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
@@ -65,7 +65,7 @@ def killcomp_map_check_done():
     return False
 
 
-def which_corner():
+def count_corner():
     counter = 0
     corner = [1, 3, 7, 9]
     for i in range(0, 3):
@@ -73,7 +73,7 @@ def which_corner():
         if comp_pos <= 9 and comp_pos >= 1:
             Y = comp_pos / 3
             X = comp_pos % 3
-            if X != 0:
+            if X is not 0:
                 X -= 1
             else:
                 X = 2
@@ -92,7 +92,7 @@ def random_corner():
     if comp_pos <= 9 and comp_pos >= 1:
         Y = comp_pos / 3
         X = comp_pos % 3
-        if X != 0:
+        if X is not 0:
             X -= 1
         else:
             X = 2
@@ -111,7 +111,7 @@ def place_corner():
             if comp_pos <= 9 and comp_pos >= 1:
                 Y = comp_pos / 3
                 X = comp_pos % 3
-                if X != 0:
+                if X is not 0:
                     X -= 1
                 else:
                     X = 2
@@ -121,16 +121,16 @@ def place_corner():
                 m = 1
 
 
-def comp_kill():
+def killer_move():
     m = 0
     for i in range(0, 3):
         for j in range(0, 3):
-            if m != 1:
+            if m is not 1:
                 if comp_map[2-i][j] == " ":
                     comp_map[2-i][j] = computer
                     comp_done = killcomp_map_check_done()
                     comp_map[2-i][j] = " "
-                    if comp_done == True:
+                    if comp_done is True:
                         map[2-i][j] = computer
                         m = 1
                         comp_done = False
@@ -152,7 +152,6 @@ def computer_moves():
             comp_map[2-i][j] = map[2-i][j]
             if map[2-i][j] == " ":
                 count = count + 1
-
     m = 0
 
     if count == 9:
@@ -165,7 +164,7 @@ def computer_moves():
                 if comp_map[2-i][j] == " ":
                     comp_map[2-i][j] = player
                     comp_done = comp_map_check_done()
-                    m = comp_kill()
+                    m = killer_move()
                     comp_map[2-i][j] = " "
                     if comp_done is True and m is not 1:
                         map[2-i][j] = computer
@@ -175,12 +174,12 @@ def computer_moves():
                     comp_done = False
 
     if m is not 1:
-        m = comp_kill()
-        comp_count = which_corner()
+        m = killer_move()
+        comp_count = count_corner()
         if comp_count >= 0 and m is not 1:
             place_corner()
             m = 1
-
+    #checks if the centre is unoccupied
     if m is not 1:
         if map[1][1] == " ":
             map[1][1] = computer
@@ -191,7 +190,7 @@ computer = ""
 correct_input = False
 
 while correct_input is not True:
-    player = raw_input("Please select X or O \n").upper()
+    player = raw_input("Please enter X or O \n").upper()
     if player == "X":
         computer = "O"
         correct_input = True
@@ -202,21 +201,19 @@ while correct_input is not True:
         print "Wrong input please try again"
         correct_input = False
 
-
 import random
 turn = "X"
 map = [[" ", " ", " "],
        [" ", " ", " "],
        [" ", " ", " "]]
 done = False
-# This is the computers map
+#comp_map is the computers copy of the main map, which the computer uses to estimate its moves
 comp_map = [[" ", " ", " "],
            [" ", " ", " "],
            [" ", " ", " "]]
 
-
 while done is not True:
-    print "View of the board."
+    print "View of the board"
     print_board()
     print
     print turn, "'s turn"
@@ -228,7 +225,7 @@ while done is not True:
         computer_moves()
         moved = True
         done = check_done()
-        if done is not False:
+        if done is False:
             if turn == "X":
                 turn = "O"
             else:
@@ -246,7 +243,7 @@ while done is not True:
             if pos <= 9 and pos >= 1:
                 Y = pos / 3
                 X = pos % 3
-                if X != 0:
+                if X is not 0:
                     X -= 1
                 else:
                     X = 2
@@ -257,7 +254,7 @@ while done is not True:
                     moved = True
                     done = check_done()
 
-                    if done is not False:
+                    if done is False:
                         if turn == "X":
                             turn = "O"
                         else:
