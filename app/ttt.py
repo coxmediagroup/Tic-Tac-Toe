@@ -391,11 +391,12 @@ class TicTacToeBoard(object):
         if not self.is_computer_turn():
             return (False, False, None)
         
-        move = self._apply_move(self._choose_square(self.board), self.board)[0]
+        square = self._choose_square(self.board)
+        move, self.board = self._apply_move(square, self.board)
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
-        return (move, ) + self._game_over_validation(self.board)   
+        return (square,) + self._game_over_validation(self.board)   
     
     def get_square_label(self, square):
         """

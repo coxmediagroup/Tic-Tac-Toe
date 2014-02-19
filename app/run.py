@@ -14,9 +14,16 @@ class TicTacToeFrame(BoxLayout):
     """ Main container for other elements """
     board = TicTacToeBoard()
     
-    def move(self, square, btn):
-        self.board.human_move(square)
+    def player_move(self, square, btn, btn_parent):
+        move, game_over, winner = self.board.human_move(square)
         btn.text = self.square_label(square)
+        
+        if not game_over:
+            square, game_over, winner = self.board.computer_move()
+            getattr(btn_parent, "square%s" % square).text = self.square_label(square)
+
+        if game_over:
+            pass
     
     def player_text(self, player_number):
         return self.board.player_stats(player_number)
