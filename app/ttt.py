@@ -285,16 +285,12 @@ class TicTacToeBoard(object):
         
         return self._best_move(potential_moves)
     
-    def _convert_move(self, square):
+    def _convert_move(self, square, player):
         """
-        Converts the number of a square into its binary representation.
-        
-        As explaned in the docs for this class, if an 'X' occupies the square, 
-        the square takes the binary value '1 1' [decimal: 3], or for
-        an '0' it takes '1 0' [decimal: 2]. If you add 2 to self.turn, you get
-        the value for the square.
+        Converts the number of a square into its integer representation for player.
         
         :param square: integer between 0 and 8
+        :param player: integer representing player (1 or 2)
         :return: integer
         """
         try:
@@ -304,7 +300,10 @@ class TicTacToeBoard(object):
         
         if not 0 <= move <= 8:
             return None
-        return (self.turn + 2) << (2* move)
+        
+        # player 1 is represented by '1 0' on the board and player 2 is '1 1',
+        # so we add 1 to the player number to get the binary representation
+        return (player + 1) << (2* move)
     
     def _game_over_validation(self, board):
         """

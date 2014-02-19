@@ -217,22 +217,22 @@ class TicTacToeBoardTests(unittest.TestCase):
     
     def test__convert_move(self):
         ttt = TicTacToeBoard()
-        # testing for O
-        for move, expected in O_MOVES:
-            self.assertEquals(expected, ttt._convert_move(move))
         
-        # testing for X
-        ttt.turn = 1
+        # testing for player 1
+        for move, expected in O_MOVES:
+            self.assertEquals(expected, ttt._convert_move(move, 1))
+        
+        # testing for player 2
         for move, expected in X_MOVES:
-            self.assertEquals(expected, ttt._convert_move(move))
+            self.assertEquals(expected, ttt._convert_move(move, 2))
             
         # should return None for integers 0 <= move <= 8
         for move in (-2, -1, 9, 10):
-            self.assertIsNone(ttt._convert_move(move))
+            self.assertIsNone(ttt._convert_move(move, 1))
         
         # should return None for moves that can't be converted to integers
         for move in ('a', None, {}):
-            self.assertIsNone(ttt._convert_move(move))
+            self.assertIsNone(ttt._convert_move(move, 2))
     
     def test__game_over_validation(self):
         ttt = TicTacToeBoard()
