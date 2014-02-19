@@ -15,7 +15,7 @@ I DO NOT PLAY NICE...I GO FIRST
             I AM JaCK`s AnGry PAraKEet
 
 
- Thanks to http://forum.codecall.net/topic/50892-tic-tac-toe-in-python/ for the inspiration
+ Thanks to http://forum.codecall.net/topic/50892-tic-tac-toe-in-python/ for the inspiration.
  Thanks to http://bash-shell.net/blog/2013/jan/04/python-tic-tac-toe-ai/ for the class based approach and interesting
  design aspects, an accurate reflection of basic game theory, there are tomes upon tomes of information on the concept of tic-tac-toe in game theory
  and zero-sum games and their strategies, I found this approach easiest to understand and implement in a Django view.
