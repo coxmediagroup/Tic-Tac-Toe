@@ -110,8 +110,8 @@ class TicTacToeBoard(object):
         self.turn = 0
         self.player_wins = 0
         self.player_losses = 0
-        self.ties = 0
-        
+        self.ties = 0        
+    
     def _apply_move(self, square, board):
         """
         Checks the validity of a given move and applies it to the game board. 
@@ -404,7 +404,7 @@ class TicTacToeBoard(object):
         :param square: integer representing the desired square
         :return: string
         """
-        value = (self.board >> ((square - 1)*2)) & 0x3
+        value = (self.board >> (square*2)) & 0x3
         if not value:
             return ''
         return [PLAYER1, PLAYER2][value-2]

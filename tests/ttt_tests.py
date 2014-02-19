@@ -366,7 +366,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertEquals(0b101011001011110011, ttt.board)
         self.assertEquals(1, ttt.turn)
     
-    def get_square_label(self):
+    def test_get_square_label(self):
         ttt = TicTacToeBoard()
         ttt.board = 0b111011001011001000
         
