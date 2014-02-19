@@ -21,16 +21,16 @@ WINNING_MOVES = (0x2a000, 0x20202, 0x20028, 0x08082,
 # a human move, but it seems more interesting and challenging to the player if
 # the computer has multiple possibilities of equal cost to choose from
 # when possible.
-PLAYBOOK = {0x00000: {8: -100, 6: -100, 4: -100, 2: -100},
-            0x20000: {0: -100},
-            0x02000: {0: -100},
-            0x00200: {0: -100},
-            0x00020: {0: -100},
-            0x00002: {8: -100, 6: -100, 4: -100, 2: -100},
-            0x08000: {8: -100, 6: -100},
-            0x00800: {6: -100, 4: -100},
-            0x00080: {4: -100, 2: -100},
-            0x00008: {8: -100, 2: -100}}
+PLAYBOOK = {(0x00000, 2): {8: -100, 6: -100, 4: -100, 2: -100},
+            (0x20000, 2): {0: -100},
+            (0x02000, 2): {0: -100},
+            (0x00200, 2): {0: -100},
+            (0x00020, 2): {0: -100},
+            (0x00002, 2): {8: -100, 6: -100, 4: -100, 2: -100},
+            (0x08000, 2): {8: -100, 6: -100},
+            (0x00800, 2): {6: -100, 4: -100},
+            (0x00080, 2): {4: -100, 2: -100},
+            (0x00008, 2): {8: -100, 2: -100}}
 
 
 # values used when calculating the best move for the computer
@@ -202,7 +202,7 @@ class TicTacToeBoard(object):
         while boards:
             board, cost, player, next_move = boards.pop(0)
             self._assert_valid_player(player)
-            if board not in PLAYBOOK:
+            if (board, player) not in PLAYBOOK:
                 if board not in board_dict:
                     board_dict[board] = {}
                 cost_dict = board_dict[board]
@@ -243,6 +243,7 @@ class TicTacToeBoard(object):
     def _calculate_board_variations(self, board, current_cost, player):
         board_list = []
         board_dict = {}
+        revisit_list = []
         
         valid_moves = self._get_valid_moves(board)
         for square in valid_moves:
@@ -258,7 +259,10 @@ class TicTacToeBoard(object):
                 other_player = ~player & 0x3
                 board_list.append((new_board, current_cost+1, other_player))
                 
-        revisit_list = [(board, current_cost, player)] if board_list else []
+                # we'll calculate this later
+                board_dict[new_board] = None
+                revisit_list.append((board, current_cost, player, new_board))
+        
         return board_list, board_dict, revisit_list
             
     def _choose_square(self, board):
@@ -277,14 +281,14 @@ class TicTacToeBoard(object):
         :return: integer
         :raises: InvalidStateException
         """
-        potential_moves = PLAYBOOK.get(board)
+        potential_moves = PLAYBOOK.get((board, 2))
         if not potential_moves:
             new_moves = self._calculate_board_costs([(board, 0, 2, None)])
             if not new_moves:
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")             
             potential_moves = new_moves.get(board)
-            PLAYBOOK[board] = potential_moves
+            PLAYBOOK[(board, 2)] = potential_moves
         
         return self._best_move(potential_moves)
     
