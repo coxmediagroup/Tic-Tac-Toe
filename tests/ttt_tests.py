@@ -342,17 +342,6 @@ class TicTacToeBoardTests(unittest.TestCase):
                 board = self.generate_board(empty_squares)
                 self.assertFalse(ttt._is_board_full(board))
     
-    def test__is_human(self):
-        ttt = TicTacToeBoard()
-        
-        # default cases
-        self.assertTrue(ttt._is_human(1))
-        self.assertFalse(ttt._is_human(2))
-        
-        # exception -- should not happen!
-        for player in (-1, 0, 3):
-            self.assertRaises(AssertionError, ttt._is_human, player)
-    
     def test__is_valid_move(self):
         ttt = TicTacToeBoard()
         
