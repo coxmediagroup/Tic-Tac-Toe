@@ -35,7 +35,7 @@ PLAYBOOK = {0x00000: {8: -100, 6: -100, 4: -100, 2: -100},
 
 # values used when calculating the best move for the computer
 WIN_VALUE = -10
-LOSS_VALUE = 100
+LOSS_VALUE = -100
 TIE_VALUE = 1
 
 
@@ -172,7 +172,7 @@ class TicTacToeBoard(object):
 
         return player_board
     
-    def _calculate_board_costs(self, boards, board_dict=None):
+    def _calculate_board_costs(self, boards):
         """
         Calculates the cost the next play for specific boards from a list.
         Returns a dictionary in the same format as PLAYBOOK.
@@ -183,43 +183,53 @@ class TicTacToeBoard(object):
         :return: dictionary
         :throws: AssertionError
         """
-        board_dict = board_dict or {}
-        if not boards:
-            return board_dict
-        
-        board, cost, player, next_move = boards.pop()
-        assert player in (1, 2)
-        if board not in PLAYBOOK:
-            if board not in board_dict:
-                board_dict[board] = {}
-            cost_dict = board_dict[board]
-            
-            valid_moves = ([next_move] if next_move is not None 
-                           else self._get_valid_moves(board))
-            for square in valid_moves:
-                new_board = self._apply_move(square, board)[1]
-                if new_board in board_dict:
-                    try:
-                        cost_dict[square] = self._best_move(board_dict[new_board])
-                    except TypeError:
-                        # new_board is not yet calculated, so put current
-                        # board back into boards
-                        boards.extend([(board, cost, player, square)])
-                        cost_dict[square] = None
-                else:
-                    if self._has_won(player, new_board):
-                        if player == 1:
-                            cost_dict[square] = cost + LOSS_VALUE
-                        else:
-                            cost_dict[square] = cost + WIN_VALUE
-                    elif self._is_board_full(new_board):
-                        cost_dict[square] = cost + TIE_VALUE
+        board_dict = {}
+        def insert_into_boards(board, cost, player, move, insert=None):
+            if (board, cost, player, move) not in boards:
+                boards.insert(insert or len(boards), (board, cost, player, move))
+        i = 0        
+        while boards:
+            i += 1
+            if i > 1000:
+                import pdb; pdb.set_trace()
+            board, cost, player, next_move = boards.pop(0)
+            assert player in (1, 2)
+            if board not in PLAYBOOK:
+                if board not in board_dict:
+                    board_dict[board] = {}
+                cost_dict = board_dict[board]
+                
+                valid_moves = ([next_move] if next_move is not None 
+                               else self._get_valid_moves(board))
+                
+                for square in valid_moves:
+                    applied, new_board = self._apply_move(square, board)
+                    if not applied:
+                        continue
+                    if new_board in board_dict:
+                        try:
+                            cost_dict[square] = self._best_move(board_dict[new_board])
+                        except TypeError:
+                            # new_board is not yet calculated, so put current
+                            # board back into boards
+                            insert_into_boards(board, cost, player, square)
+                            cost_dict[square] = None
                     else:
-                        new_player = ~player & 0x3
-                        boards.extend([(board, cost+1, new_player, square)])
-                        cost_dict[square] = None
+                        if self._has_won(player, new_board):
+                            if player == 1:
+                                cost_dict[square] = cost + LOSS_VALUE
+                            else:
+                                cost_dict[square] = cost + WIN_VALUE
+                        elif self._is_board_full(new_board):
+                            cost_dict[square] = cost + TIE_VALUE
+                        else:
+                            new_player = ~player & 0x3
+                            insert_into_boards(new_board, cost+1, new_player, None, insert=0)
+                            # come back to this one later
+                            insert_into_boards(board, cost, player, square)
+                            cost_dict[square] = None
 
-        return self._calculate_board_costs(boards, board_dict)
+        return board_dict
     
     def _choose_square(self, board):
         """
@@ -243,7 +253,7 @@ class TicTacToeBoard(object):
             if not new_moves:
                 # let the UI handle it
                 raise InvalidStateException("No valid moves for the computer")
-            PLAYBOOK.update(new_moves)                
+            PLAYBOOK.update(new_moves)              
             potential_moves = PLAYBOOK[board]
         
         return self._best_move(potential_moves)
@@ -252,7 +262,7 @@ class TicTacToeBoard(object):
         """
         Converts the number of a square into its binary representation.
         
-        As explaned in the docs for the class, if an 'X' occupies the square, 
+        As explaned in the docs for this class, if an 'X' occupies the square, 
         the square takes the binary value '1 1' [decimal: 3], or for
         an '0' it takes '1 0' [decimal: 2]. If you add 2 to self.turn, you get
         the value for the square.
@@ -286,6 +296,7 @@ class TicTacToeBoard(object):
         winner = self._has_won(1, board) or self._has_won(2, board)  # human or computer, respectively
         if winner:
             self._set_win(winner)
+            import pdb; pdb.set_trace()
             return (True, winner)
         
         if self._is_board_full(board):
@@ -305,7 +316,7 @@ class TicTacToeBoard(object):
         moves = []
         tmp_board = ~board & 0x3ffff
         while tmp_board:
-            if (tmp_board & 3) == 3:
+            if (tmp_board & 0x3) == 3:
                 moves.append(i)
             tmp_board = tmp_board >> 2
             i += 1
