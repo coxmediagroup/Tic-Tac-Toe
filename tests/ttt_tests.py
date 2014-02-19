@@ -106,8 +106,10 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt = TicTacToeBoard()
         for attr in ('board', 'turn', 'player_wins', 'player_losses', 'ties'):
             self.assertEquals(0, getattr(ttt, attr))
+        self.assertTrue(False, "Update Me")
     
     def test__apply_move(self):
+        self.assertTrue(False, "Update Me")
         ttt = TicTacToeBoard()
         
         # should error if invalid player is used

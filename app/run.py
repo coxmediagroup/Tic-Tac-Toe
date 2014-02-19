@@ -18,16 +18,20 @@ class TicTacToeFrame(BoxLayout):
     def computer_move(self):
         square, game_over, winner = self.board.computer_move()
         self.set_square(square)
+        #if self.board.player_wins or self.board.ties or self.board.player_losses:
+        #    import pdb; pdb.set_trace()
         return game_over, winner
     
     def player_move(self, square, btn):
         self.set_turn_label("")
         
         square, game_over, winner = self.board.human_move(square)
-        btn.text = self.square_label(square)
+        self.set_square(square)
         
         if not game_over:
             game_over, winner = self.computer_move()
+        #if game_over:
+        #    import pdb; pdb.set_trace()
 
         if game_over:
             self.update_scores()
@@ -43,6 +47,7 @@ class TicTacToeFrame(BoxLayout):
     def reset_game(self, btn):
         self.set_next_game_button(hide=True)
         self.board.reset_board()
+        #import pdb; pdb.set_trace()
         self.update_squares()
         
         if self.board.is_computer_turn():
@@ -57,18 +62,21 @@ class TicTacToeFrame(BoxLayout):
         if hide:
             ph.remove_widget(self.new_game_btn)
             ph.add_widget(ph.placeholder_label)
+            self.new_game_button = None
         else:
             ph.remove_widget(ph.placeholder_label)
-            self.new_game_btn = Button(text='[color=000000]Start Another Game[/color]',
-                                       background_normal="img/new-game-btn.png",
-                                       on_press=self.reset_game,
-                                       size_hint=(1, .15))
-            ph.add_widget(self.new_game_btn)
+            if not getattr(self, 'new_game_btn', None):
+                self.new_game_btn = Button(text='[color=000000]Start Another Game[/color]',
+                                           background_normal="img/next-game-btn.png",
+                                           on_press=self.reset_game,
+                                           size_hint=(1, .15))
+                ph.add_widget(self.new_game_btn)
     
     def set_square(self, square):
-        btn_grid = self.board_wrapper.game_board.game_board_buttons
-        getattr(btn_grid, "square%s" % square).text = self.square_label(square)
-    
+        if square is not None:
+            btn_grid = self.board_wrapper.game_board.game_board_buttons
+            getattr(btn_grid, "square%s" % square).text = self.square_label(square)
+
     def set_turn_label(self, text):
         self.board_wrapper.board_text.go_first_label.text = text
     

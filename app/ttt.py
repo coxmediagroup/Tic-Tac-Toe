@@ -113,7 +113,8 @@ class TicTacToeBoard(object):
         self.turn = 0
         self.player_wins = 0
         self.player_losses = 0
-        self.ties = 0        
+        self.ties = 0
+        self.game_over = False      
     
     def _apply_move(self, square, board, player):
         """
@@ -127,10 +128,11 @@ class TicTacToeBoard(object):
         """
         self._assert_valid_player(player)
         
-        move = self._convert_move(square, player)
-        if self._is_valid_move(move, board):
-            board += move
-            return square, board
+        if not self.game_over:
+            move = self._convert_move(square, player)
+            if self._is_valid_move(move, board):
+                board += move
+                return square, board
         return None, board
     
     def _assert_valid_player(self, player):
@@ -449,7 +451,8 @@ class TicTacToeBoard(object):
         if square is None:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
-        return (square,) + self._game_over_validation(self.board)   
+        self.game_over, winner = self._game_over_validation(self.board)
+        return (square, self.game_over, winner)   
     
     def get_square_label(self, square):
         """
@@ -475,9 +478,11 @@ class TicTacToeBoard(object):
             return (False, False, None)
         
         square, self.board = self._apply_move(square, self.board, self.turn+1)
+        winner = None
         if square is not None:
             self._set_turn()
-        return (square,) + self._game_over_validation(self.board)
+            self.game_over, winner = self._game_over_validation(self.board)
+        return (square, self.game_over, winner)
     
     def is_computer_turn(self):
         """
@@ -512,4 +517,5 @@ class TicTacToeBoard(object):
         their scores.
         """
         self.board = 0
+        self.game_over = False
  
