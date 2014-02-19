@@ -459,7 +459,7 @@ class TicTacToeBoard(object):
         player = (self.board >> (square*2)) & 0x3
         if not player:
             return ''
-        return [PLAYER1, PLAYER2][player is COMPUTER]
+        return [PLAYER1, PLAYER2][(player - 1) is COMPUTER]
     
     def human_move(self, square):
         """
