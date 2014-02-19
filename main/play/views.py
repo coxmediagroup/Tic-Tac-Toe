@@ -18,7 +18,13 @@ def home(request):
         #were playing a game cause i got the board in the url
         win_message = None
         board = str(request.GET['board'])
-        board = simplejson.loads(board)
+
+        try:
+            #lets try to decode the board
+            board = simplejson.loads(board)
+        except:
+            #someone messed with the url payload for the board redirect home
+            return HttpResponseRedirect('/')
 
         #create the board
         the_board = Board(the_board=board)

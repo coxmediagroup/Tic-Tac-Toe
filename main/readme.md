@@ -99,3 +99,6 @@ I DO NOT PLAY NICE...I GO FIRST
  and zero-sum games and their strategies, I found this approach easiest to understand and implement in a Django view.
 
  Thanks to http://www.me.utexas.edu/~jensen/ORMM/supplements/units/game_theory/game_thry.pdf for a cool read on game theory and tic tac toe
+
+ start server from
+    /main$ python manage.py runserver

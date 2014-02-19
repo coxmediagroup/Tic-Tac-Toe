@@ -12,13 +12,15 @@ $(document).ready(function () {
             return $(this).height();
         }).get());
     boxes.height(maxHeight);
-
+    boxes.css('cursor', 'pointer');
     //bind the onclick event to all my boxes
-    $("[id^='cell']").on("click",function(e){
+    $("[id^='cell']").on("click", function (e) {
         //here we build the board from the cell
         $(this).children().html('O')
-        var x = $("[id^='cell']").map(function(){return $(this).children().html()}).get().slice();
-        $.each(x,function(index, value){
+        var x = $("[id^='cell']").map(function () {
+            return $(this).children().html()
+        }).get().slice();
+        $.each(x, function (index, value) {
             if (!value.length || value == "None") x[index] = null
         });
 
@@ -27,7 +29,7 @@ $(document).ready(function () {
 
     });
     //if we win we need to unbind the onclick event
-    if($('#win_message').val() == 1){
-       $("[id^='cell']").unbind();
+    if ($('#win_message').val() == 1) {
+        $("[id^='cell']").unbind();
     }
 });
