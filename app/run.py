@@ -14,19 +14,37 @@ class TicTacToeFrame(BoxLayout):
     """ Main container for other elements """
     board = TicTacToeBoard()
     
-    def player_move(self, square, btn, btn_parent):
+    def computer_move(self):
+        square, game_over, winner = self.board.computer_move()
+        getattr(self.get_btn_parent(), "square%s" % square).text = self.square_label(square)
+        return game_over, winner
+    
+    def get_btn_parent(self):
+        return self.wrapper.board_wrapper.game_board.game_board_buttons
+    
+    def player_move(self, square, btn):
+        self.wrapper.board_wrapper.board_text.go_first_label.text = ""
         move, game_over, winner = self.board.human_move(square)
         btn.text = self.square_label(square)
         
         if not game_over:
-            square, game_over, winner = self.board.computer_move()
-            getattr(btn_parent, "square%s" % square).text = self.square_label(square)
+            game_over, winner = self.computer_move()
 
         if game_over:
             pass
     
+    def update_scores(self):
+        pass
+    
     def player_text(self, player_number):
         return self.board.player_stats(player_number)
+    
+    def reset_game(self):
+        self.board.reset_board()
+        if self.board.is_computer_turn():
+            self.computer_move()
+        else:
+            self.wrapper.board_wrapper.board_text.go_first_label.text = "You go first..."
     
     def square_label(self, square):
         return self.board.get_square_label(square)
