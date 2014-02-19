@@ -138,7 +138,13 @@ class TicTacToeBoardTests(unittest.TestCase):
                 self.assertEquals(0b101011101110101111, board)
     
     def test__assert_valid_player(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        
+        for bad_player in (-1, 0, 3, None):
+            self.assertRaises(AssertionError, ttt._assert_valid_player, bad_player)
+            
+        for good_player in (1, 2):
+            self.assertIsNone(ttt._assert_valid_player(good_player))
     
     def test__best_move(self):
         ttt = TicTacToeBoard()
