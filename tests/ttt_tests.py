@@ -184,21 +184,16 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # should follow moves from PLAYBOOK
         for board in PLAYBOOK:
-            move, cost = ttt._choose_square(board)
-            expected_cost = min(PLAYBOOK[board].keys())
-            self.assertEquals(expected, cost)
-            self.assertEquals(move in PLAYBOOK[board][expected_cost])
+            move = ttt._choose_square(board)
+            self.assertTrue(move in PLAYBOOK[board])
         
         # should always go for a win if next move
         for board, expected_move in LAST_MOVES:
             winning_board = self.insert_random_moves(board, 2, pieces=0)
-            move, cost = ttt._choose_square(winning_board)
+            move = ttt._choose_square(winning_board)
             self.assertEquals(expected_move, move)
-            self.assertEquals(10, cost)
         
         # should always block immediate future win from opponent.
-        # we'll ignore calculating cost, because it's irrelevant to this
-        # particular test
         for board, expected_move in LAST_MOVES:
             move = ttt._choose_square(board)
             self.assertEquals(expected_move, move)

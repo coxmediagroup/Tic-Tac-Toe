@@ -230,7 +230,7 @@ class TicTacToeBoard(object):
                             cost_dict[square] = cost + TIE_VALUE
                         else:
                             other_player = ~player & 0x3
-                            insert_into_boards(new_board, cost+1, new_player, None, insert=0)
+                            insert_into_boards(new_board, cost+1, other_player, None, insert=0)
                             # come back to this one later
                             insert_into_boards(board, cost, player, square)
                             cost_dict[square] = None
