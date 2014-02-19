@@ -425,9 +425,11 @@ class TicTacToeBoard(object):
         
         :param player: integer representing which player won the game
         """
-        self.player_wins += int(self._is_human(player))
-        self.player_losses += int(not self._is_human(player))
-        self.ties += (int(player is None))
+        if player is None:
+            self.ties += 1
+        else:
+            self.player_wins += int(self._is_human(player))
+            self.player_losses += int(not self._is_human(player))
     
     def computer_move(self):
         """

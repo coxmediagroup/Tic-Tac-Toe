@@ -301,8 +301,14 @@ class TicTacToeBoardTests(unittest.TestCase):
     
     def test__is_human(self):
         ttt = TicTacToeBoard()
-        for player in (1, 2)
-        self.assertTrue(False, "Not Implemented")
+        
+        # default cases
+        self.assertTrue(ttt._is_human(1))
+        self.assertFalse(ttt._is_human(2))
+        
+        # exception -- should not happen!
+        for player in (-1, 0, 3):
+            self.assertRaises(AssertionError, ttt._is_human, player)
     
     def test__is_valid_move(self):
         ttt = TicTacToeBoard()
