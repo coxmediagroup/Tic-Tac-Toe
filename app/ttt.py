@@ -212,15 +212,16 @@ class TicTacToeBoard(object):
                             insert_into_boards(board, cost, player, square)
                             cost_dict[square] = None
                     else:
+                        other_player = ~player & 0x3
                         if self._has_won(player, new_board):
-                            if player == 1:
+                            if self._is_human(player):
                                 cost_dict[square] = cost + LOSS_VALUE
                             else:
                                 cost_dict[square] = cost + WIN_VALUE
                         elif self._is_board_full(new_board):
                             cost_dict[square] = cost + TIE_VALUE
                         else:
-                            new_player = ~player & 0x3
+                            other_player = ~player & 0x3
                             insert_into_boards(new_board, cost+1, new_player, None, insert=0)
                             # come back to this one later
                             insert_into_boards(board, cost, player, square)
@@ -228,6 +229,27 @@ class TicTacToeBoard(object):
 
         return board_dict
     
+    def _calculate_board_variations(self, board, current_cost, player):
+        board_list = []
+        board_dict = {}
+        
+        valid_moves = self._get_valid_moves(board)
+        for square in valid_moves:
+            new_board = self._apply_move(square, board)[1]
+            if self._has_won(player):
+                if self._is_human(player):
+                    board_dict[new_board] = (square, current_cost + LOSS_VALUE)
+                else:
+                    board_dict[new_board] = (square, current_cost + WIN_VALUE)
+            elif self._is_board_full(new_board):
+                board_dict[new_board] = (square, current_cost + TIE_VALUE)
+            else:
+                other_player = ~player & 0x3
+                board_list.append((new_board, current_cost+1, other_player))
+                
+        revist_list = [(board, current_cost, player)] if board_list else []
+        return board_list, board_dict, revisit_list
+            
     def _choose_square(self, board):
         """
         Picks a square for the computer to make its move.
@@ -249,9 +271,9 @@ class TicTacToeBoard(object):
             new_moves = self._calculate_board_costs([(board, 0, 2, None)])
             if not new_moves:
                 # let the UI handle it
-                raise InvalidStateException("No valid moves for the computer")
-            PLAYBOOK.update(new_moves)              
-            potential_moves = PLAYBOOK[board]
+                raise InvalidStateException("No valid moves for the computer")             
+            potential_moves = new_moves.get(board)
+            PLAYBOOK[board] = potential_moves
         
         return self._best_move(potential_moves)
     
@@ -293,6 +315,8 @@ class TicTacToeBoard(object):
         winner = self._has_won(1, board) or self._has_won(2, board)  # human or computer, respectively
         if winner:
             self._set_win(winner)
+            if self._is_human(winner):
+                import pdb; pdb.set_trace()
             return (True, winner)
         
         if self._is_board_full(board):
@@ -345,6 +369,9 @@ class TicTacToeBoard(object):
         full_board = 0x2aaaa  # all squares filled, ignoring which player
         return full_board == full_board & board
     
+    def _is_human(self, player):
+        return player == 1
+    
     def _is_valid_move(self, move, board):
         """
         Checks if a current move is going to an empty square on the board.
@@ -384,8 +411,8 @@ class TicTacToeBoard(object):
         
         :param player: integer representing which player won the game
         """
-        self.player_wins += int(player == 1)
-        self.player_losses += int(player == 2)
+        self.player_wins += int(self._is_human(player))
+        self.player_losses += int(not self._is_human(player))
         self.ties += (int(player is None))
     
     def computer_move(self):
@@ -454,8 +481,8 @@ class TicTacToeBoard(object):
         :return: string
         """
         plyr = [PLAYER1, PLAYER2][player-1]
-        wins = self.player_wins if player == 1 else self.player_losses
-        losses = self.player_losses if player == 1 else self.player_wins
+        wins = self.player_wins if self._is_human(player) else self.player_losses
+        losses = self.player_losses if self._is_human(player) else self.player_wins
         ties = self.ties
         
         return "(Player %s)\n\nWins: %s\nLosses: %s\nTies: %s" % (plyr, wins,

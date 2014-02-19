@@ -290,6 +290,9 @@ class TicTacToeBoardTests(unittest.TestCase):
                 board = self.generate_board(empty_squares)
                 self.assertFalse(ttt._is_board_full(board))
     
+    def test__is_human(self):
+        self.assertTrue(False, "Not Implemented")
+    
     def test__is_valid_move(self):
         ttt = TicTacToeBoard()
         
