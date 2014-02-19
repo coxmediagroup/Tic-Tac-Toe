@@ -1,12 +1,17 @@
 __author__ = 'henryadam'
 
+
+
 import random
 
 class PositionAlreadyTakenError(Exception):
     pass
 
 class Board(object):
-    """a tic tac toe matrix"""
+    """
+        a tic tac toe matrix
+
+    """
     wins = ((0,1,2), # rows
             (3,4,5),
             (6,7,8),
@@ -96,6 +101,8 @@ class Player(object):
         """
 
         # the value which will represent the player behind the scenes
+        #im leaving this in in case we want to make game more interactive but for this iteration it is not needed, but we'll
+        #use them to define the players when the view calls it, maybe later on we persist the players
         self.board_value = board_value
         self.turn_count = 0
 

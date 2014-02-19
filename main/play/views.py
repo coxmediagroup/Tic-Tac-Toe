@@ -43,9 +43,9 @@ def home(request):
         board_html = the_board.draw()
 
         if the_board.check_for_win(ai):
-            win_message = "HAL9000000 WINS"
+            win_message = "JaCK`s AnGry PAraKEet WINS"
         elif "" not in the_board.the_board:
-            win_message = "HAL9000000 WINS (cause HAL wins draws)"
+            win_message = "JaCK`s AnGry PAraKEet WINS (cause JACK wins draws)"
     else:
         #draw the first step of the game, the computer always goes first
         board = ['','','','','X','','','','']
