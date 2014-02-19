@@ -29,6 +29,42 @@ def check_done():
     return False
 
 
+def comp_map_check_done():
+    global comp_map
+    for i in range(0, 3):
+        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == player!= " " \
+        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == player != " ":
+            return True
+
+    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == comp_map != " " \
+    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == player != " ":
+        return True
+
+    if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
+        print "It is a tie."
+        return True
+
+    return False
+
+
+def killcomp_map_check_done():
+    global comp_map
+    for i in range(0, 3):
+        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == computer != " " \
+        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == computer != " ":
+            return True
+
+    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == computer != " " \
+    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == computer != " ":
+        return True
+
+    if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
+        print "It is a tie."
+        return True
+
+    return False
+
+
 def which_corner():
     counter = 0
     corner = [1, 3, 7, 9]
@@ -85,42 +121,6 @@ def place_corner():
                 m = 1
 
 
-def comp_map_check_done():
-    global comp_map
-    for i in range(0, 3):
-        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == player!= " " \
-        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == player != " ":
-            return True
-
-    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == comp_map != " " \
-    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == player != " ":
-        return True
-
-    if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
-        print "It is a tie."
-        return True
-
-    return False
-
-
-def killcomp_map_check_done():
-    global comp_map
-    for i in range(0, 3):
-        if comp_map[i][0] == comp_map[i][1] == comp_map[i][2] == computer != " " \
-        or comp_map[0][i] == comp_map[1][i] == comp_map[2][i] == computer != " ":
-            return True
-
-    if comp_map[0][0] == comp_map[1][1] == comp_map[2][2] == computer != " " \
-    or comp_map[0][2] == comp_map[1][1] == comp_map[2][0] == computer != " ":
-        return True
-
-    if " " not in comp_map[0] and " " not in comp_map[1] and " " not in comp_map[2]:
-        print "It is a tie."
-        return True
-
-    return False
-
-
 def comp_kill():
     m = 0
     for i in range(0, 3):
@@ -130,7 +130,7 @@ def comp_kill():
                     comp_map[2-i][j] = computer
                     comp_done = killcomp_map_check_done()
                     comp_map[2-i][j] = " "
-                    if comp_done is True:
+                    if comp_done == True:
                         map[2-i][j] = computer
                         m = 1
                         comp_done = False
