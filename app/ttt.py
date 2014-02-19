@@ -199,52 +199,45 @@ class TicTacToeBoard(object):
         :raises: AssertionError
         """
         board_dict = {}
-        def insert_into_boards(board, cost, player, move, insert=None):
-            if (board, cost, player, move) not in boards:
-                boards.insert(insert or len(boards), (board, cost, player, move))
-       
+        revisit_list = []
+        
+        boards = [(board, 0, 2)]
         while boards:
-            board, cost, player, next_move = boards.pop(0)
-            self._assert_valid_player(player)
-            if (board, player) not in PLAYBOOK:
-                if board not in board_dict:
-                    board_dict[board] = {}
-                cost_dict = board_dict[board]
-                
-                valid_moves = ([next_move] if next_move is not None 
-                               else self._get_valid_moves(board))
-                
-                for square in valid_moves:
-                    applied, new_board = self._apply_move(square, board, player)
-                    if not applied:
-                        continue
-                    if new_board in board_dict:
-                        try:
-                            cost_dict[square] = self._best_move(board_dict[new_board])
-                        except TypeError:
-                            # new_board is not yet calculated, so put current
-                            # board back into boards
-                            insert_into_boards(board, cost, player, square)
-                            cost_dict[square] = None
-                    else:
-                        other_player = ~player & 0x3
-                        if self._has_won(player, new_board):
-                            if player is HUMAN:
-                                cost_dict[square] = cost + LOSS_VALUE
-                            else:
-                                cost_dict[square] = cost + WIN_VALUE
-                        elif self._is_board_full(new_board):
-                            cost_dict[square] = cost + TIE_VALUE
-                        else:
-                            other_player = ~player & 0x3
-                            insert_into_boards(new_board, cost+1, other_player, None, insert=0)
-                            # come back to this one later
-                            insert_into_boards(board, cost, player, square)
-                            cost_dict[square] = None
+            board, cost, player = boards.pop(0)
+            if (board, player) not in board_dict:
+                new_boards, board_costs, revisit = self._calculate_board_variations(
+                                                            board, cost, player)
+                boards.extend(new_boards)
+                revisit_list.extend(revisit)
+                board_dict[(board, player)] = board_costs
 
+        while revisit_list:
+            # starting at the end, where there are more complete boards (and 
+            # more likely to be fully calculated)
+            board, cost, player, square, new_board = revisit_list.pop()
+            try:
+                next_move = board_dict[(new_board, ~player & 0x3)]
+                board_dict[(board, player)][square] = (self._best_move(next_move)
+                                                       + cost)
+            except TypeError:
+                # the next move still has to be calculated
+                revisit_list.insert(0, (board, cost, player, square, new_board))
+        
         return board_dict
     
     def _calculate_board_variations(self, board, current_cost, player):
+        """
+        Finds all possible next moves for the specified board.
+        Returns a list of boards that still need to be investigated, a 
+        dictionary of calculated costs for the current board, and board
+        moves that need to be calculated later after its sub-moves have been
+        calculated.
+        
+        :param board: integer representing a board
+        :param current_cost: integer cost of making moves up to this point
+        :param player: integer representing a player (1 or 2)
+        :return: (list, dict, list)
+        """
         board_list = []
         board_dict = {}
         revisit_list = []
@@ -254,18 +247,18 @@ class TicTacToeBoard(object):
             new_board = self._apply_move(square, board, player)[1]
             if self._has_won(player, new_board):
                 if player is HUMAN:
-                    board_dict[new_board] = (square, current_cost + LOSS_VALUE)
+                    board_dict[square] = current_cost + LOSS_VALUE
                 else:
-                    board_dict[new_board] = (square, current_cost + WIN_VALUE)
+                    board_dict[square] = current_cost + WIN_VALUE
             elif self._is_board_full(new_board):
-                board_dict[new_board] = (square, current_cost + TIE_VALUE)
+                board_dict[square] = current_cost + TIE_VALUE
             else:
                 other_player = ~player & 0x3
                 board_list.append((new_board, current_cost+1, other_player))
                 
                 # we'll calculate this later
-                board_dict[new_board] = None
-                revisit_list.append((board, current_cost, player, new_board))
+                board_dict[square] = None
+                revisit_list.append((board, current_cost, player, square, new_board))
         
         return board_list, board_dict, revisit_list
             

@@ -205,6 +205,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         for next_move in board_list:
             self.assertTrue(next_move[0] in board_dict)
             self.assertIsNone(board_dict[next_move[0]])
+            assert False # fix this later
             self.assertTrue((board, 0, 2, next_move[0]) in revisit)
         
         # some game-ending moves, some continuing moves
