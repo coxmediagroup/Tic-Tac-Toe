@@ -22,6 +22,9 @@ class TicTacToeFrame(BoxLayout):
         #    import pdb; pdb.set_trace()
         return game_over, winner
     
+    def get_me_outta_here(self):
+        import pdb; pdb.set_trace()
+    
     def player_move(self, square, btn):
         self.set_turn_label("")
         
@@ -47,7 +50,6 @@ class TicTacToeFrame(BoxLayout):
     def reset_game(self, btn):
         self.set_next_game_button(hide=True)
         self.board.reset_board()
-        #import pdb; pdb.set_trace()
         self.update_squares()
         
         if self.board.is_computer_turn():
@@ -67,7 +69,7 @@ class TicTacToeFrame(BoxLayout):
             ph.remove_widget(ph.placeholder_label)
             if not getattr(self, 'new_game_btn', None):
                 self.new_game_btn = Button(text='[color=000000]Start Another Game[/color]',
-                                           background_normal="img/next-game-btn.png",
+                                           background_normal="img/new-game-btn.png",
                                            on_press=self.reset_game,
                                            size_hint=(1, .15))
                 ph.add_widget(self.new_game_btn)
@@ -88,7 +90,7 @@ class TicTacToeFrame(BoxLayout):
         self.player2_score.text = self.player_text(2)
         
     def update_squares(self):
-        for square in range(8):
+        for square in range(9):
             self.set_square(square)
 
 
