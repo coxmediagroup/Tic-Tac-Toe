@@ -112,7 +112,7 @@ class TicTacToeBoard(object):
         self.player_losses = 0
         self.ties = 0        
     
-    def _apply_move(self, square, board):
+    def _apply_move(self, square, board, player):
         """
         Checks the validity of a given move and applies it to the game board. 
         Returns True if the move was applied; False otherwise.
@@ -121,7 +121,7 @@ class TicTacToeBoard(object):
         :param board: integer representing board
         :return: boolean
         """
-        move = self._convert_move(square)
+        move = self._convert_move(square, player)
         if self._is_valid_move(move, board):
             board += move
             return True, board
@@ -244,7 +244,7 @@ class TicTacToeBoard(object):
         valid_moves = self._get_valid_moves(board)
         for square in valid_moves:
             new_board = self._apply_move(square, board)[1]
-            if self._has_won(player):
+            if self._has_won(player, new_board):
                 if self._is_human(player):
                     board_dict[new_board] = (square, current_cost + LOSS_VALUE)
                 else:
@@ -255,7 +255,7 @@ class TicTacToeBoard(object):
                 other_player = ~player & 0x3
                 board_list.append((new_board, current_cost+1, other_player))
                 
-        revist_list = [(board, current_cost, player)] if board_list else []
+        revisit_list = [(board, current_cost, player)] if board_list else []
         return board_list, board_dict, revisit_list
             
     def _choose_square(self, board):

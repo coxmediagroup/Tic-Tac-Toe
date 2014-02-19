@@ -177,7 +177,17 @@ class TicTacToeBoardTests(unittest.TestCase):
         self.assertTrue(False, "Not Implemented")
         
     def test__calculate_board_variations(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        
+        # simple test: only one move
+        board = 0b001011101011101111
+        board_list, board_dict, revisit = ttt._calculate_board_variations(
+                                                            board, 4, 2)
+        self.assertEquals([], board_list)
+        self.assertEquals({0b111011101011101111: (8, 5)}, board_dict)
+        self.assertEquals([], revisit)       
+        
+        self.assertTrue(False, "Not Completed")
     
     def test__choose_square(self):
         ttt = TicTacToeBoard()
