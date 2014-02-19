@@ -72,7 +72,7 @@ class PlayerTest(unittest.TestCase):
         board = Board(the_board=self.initial_state)
         # Check that the response is 200 OK.
 
-        #check for win can win
+        #check for win, with the above board i cant win
         self.assertFalse(board.check_for_win(self.aiPlayer))
 
     def test_canWin(self):
@@ -80,8 +80,8 @@ class PlayerTest(unittest.TestCase):
 
         board = Board(the_board=[ u'X',u'X',u'X',None, None, None, None, u'O', None])
         # Check that the response is 200 OK.
-        print(board.the_board)
-        #check for win win, i should be able
+
+        #check for win win, with the passed in board the ai player should win
         self.assertTrue(board.check_for_win(self.aiPlayer))
 
 
