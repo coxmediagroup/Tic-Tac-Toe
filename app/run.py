@@ -31,13 +31,18 @@ class TicTacToeFrame(BoxLayout):
             game_over, winner = self.computer_move()
 
         if game_over:
-            pass
+            self.update_scores()
     
     def update_scores(self):
-        pass
+        self.wrapper.player1_score.text = self.player_text(1)
+        self.wrapper.player2_score.text = self.player_text(2)
     
     def player_text(self, player_number):
-        return self.board.player_stats(player_number)
+        if player_number == 1:
+            name_text = "[color=c60f13]You[/color] "
+        else:
+            name_text = "[color=2ba6cb]Hal[/color] " 
+        return name_text + self.board.player_stats(player_number)
     
     def reset_game(self):
         self.board.reset_board()

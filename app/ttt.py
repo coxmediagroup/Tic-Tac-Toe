@@ -187,11 +187,8 @@ class TicTacToeBoard(object):
         def insert_into_boards(board, cost, player, move, insert=None):
             if (board, cost, player, move) not in boards:
                 boards.insert(insert or len(boards), (board, cost, player, move))
-        i = 0        
+       
         while boards:
-            i += 1
-            if i > 1000:
-                import pdb; pdb.set_trace()
             board, cost, player, next_move = boards.pop(0)
             assert player in (1, 2)
             if board not in PLAYBOOK:
@@ -296,7 +293,6 @@ class TicTacToeBoard(object):
         winner = self._has_won(1, board) or self._has_won(2, board)  # human or computer, respectively
         if winner:
             self._set_win(winner)
-            import pdb; pdb.set_trace()
             return (True, winner)
         
         if self._is_board_full(board):
