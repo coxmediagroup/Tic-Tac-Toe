@@ -110,32 +110,34 @@ class TicTacToeBoardTests(unittest.TestCase):
     def test__apply_move(self):
         ttt = TicTacToeBoard()
         
+        # should error if invalid player is used
+        for player in (-1, 0, 3):
+            self.assertRaises(AssertionError, ttt._apply_move, 0, 0, player)
+        
         # empty board should always apply
-        move, ttt.board = ttt._apply_move(3, ttt.board)
+        move, ttt.board = ttt._apply_move(3, ttt.board, 1)
         self.assertTrue(move)
         self.assertEquals(0b000000000010000000, ttt.board)
         
         # some intermediate test cases
-        ttt.turn = 1
-        move, ttt.board = ttt._apply_move(5, ttt.board)
+        move, ttt.board = ttt._apply_move(5, ttt.board, 2)
         self.assertTrue(move)
         self.assertEquals(0b000000110010000000, ttt.board)
         
-        ttt.turn = 0
-        move, ttt.board = ttt._apply_move(5, ttt.board)
+        move, ttt.board = ttt._apply_move(5, ttt.board, 1)
         self.assertFalse(move)
         self.assertEquals(0b000000110010000000, ttt.board)
-        move, ttt.board = ttt._apply_move(8, ttt.board)
+        move, ttt.board = ttt._apply_move(8, ttt.board, 1)
         self.assertTrue(move)
         self.assertEquals(0b100000110010000000, ttt.board)
         
         # full board should never apply
         board = 0b101011101110101111
-        for turn in (0, 1):
+        for player in (1, 2):
             for square in range(9):
-                move, board = ttt._apply_move(square, board)
+                move, board = ttt._apply_move(square, board, player)
                 self.assertFalse(move)
-                self.assertEquals(0b101011101110101111, board)
+                self.assertEquals(0b101011101110101111, board, player)
     
     def test__assert_valid_player(self):
         ttt = TicTacToeBoard()

@@ -120,7 +120,10 @@ class TicTacToeBoard(object):
         :param square: integer between 0 and 8
         :param board: integer representing board
         :return: boolean
+        :raises: AssertionError
         """
+        self._assert_valid_player(player)
+        
         move = self._convert_move(square, player)
         if self._is_valid_move(move, board):
             board += move
@@ -208,7 +211,7 @@ class TicTacToeBoard(object):
                                else self._get_valid_moves(board))
                 
                 for square in valid_moves:
-                    applied, new_board = self._apply_move(square, board)
+                    applied, new_board = self._apply_move(square, board, player)
                     if not applied:
                         continue
                     if new_board in board_dict:
@@ -243,7 +246,7 @@ class TicTacToeBoard(object):
         
         valid_moves = self._get_valid_moves(board)
         for square in valid_moves:
-            new_board = self._apply_move(square, board)[1]
+            new_board = self._apply_move(square, board, player)[1]
             if self._has_won(player, new_board):
                 if self._is_human(player):
                     board_dict[new_board] = (square, current_cost + LOSS_VALUE)
@@ -444,7 +447,7 @@ class TicTacToeBoard(object):
             return (False, False, None)
         
         square = self._choose_square(self.board)
-        move, self.board = self._apply_move(square, self.board)
+        move, self.board = self._apply_move(square, self.board, self.turn+1)
         if not move:
             raise InvalidStateException("Illegal move by computer") # let the UI handle it
         self._set_turn()
@@ -473,7 +476,7 @@ class TicTacToeBoard(object):
         if self.is_computer_turn():
             return (False, False, None)
         
-        move, self.board = self._apply_move(square, self.board)
+        move, self.board = self._apply_move(square, self.board, self.turn+1)
         if move:
             self._set_turn()
         return (move,) + self._game_over_validation(self.board)
