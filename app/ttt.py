@@ -31,9 +31,9 @@ PLAYBOOK = {(0x00000, 2): {8: -100, 6: -100, 4: -100, 2: -100},
 
 
 # values used when calculating the best move for the computer
-WIN_VALUE = -10
-LOSS_VALUE = -100
-TIE_VALUE = 1
+WIN_VALUE = 10
+LOSS_VALUE = -10
+TIE_VALUE = 0
 
 HUMAN = 1
 COMPUTER = 2
@@ -141,16 +141,16 @@ class TicTacToeBoard(object):
         :raises: AssertionError
         """
         # this shouldn't fail if the non-public methods are respected
-        assert player in (HUMAN, COMPUTER) 
+        assert player in (HUMAN, COMPUTER)
     
     def _best_move(self, potential_moves):
         """
-        Selects the best (lowest cost) from a list of potential moves.
-        Returns the best move.
+        Selects the best move from a list of potential moves.
+        Returns the best move, and the cost for that move.
         
         :param potential_moves: dictionary of integers representing squares, 
             0 to 8, paired with a calculated cost for making that move
-        :return: integer
+        :return: integer, integer
         """
         # we'll just return None and let self.computer_move handle it as an
         # InvalidStateException. Shouldn't happen if non-public methods are
@@ -159,9 +159,8 @@ class TicTacToeBoard(object):
             return None
         
         # we want to introduce a little bit of randomness for equal values
-        move, cost = min(potential_moves.items(), 
-                         key=lambda x: x[1] + .01 * random.randint(0, 99))
-        return move
+        return max(potential_moves.items(), 
+                   key=lambda x: x[1] + .01 * random.randint(0, 99))
     
     def _board_for_player(self, player, board):
         """
@@ -215,13 +214,15 @@ class TicTacToeBoard(object):
             # starting at the end, where there are more complete boards (and 
             # more likely to be fully calculated)
             board, cost, player, square, new_board = revisit_list.pop()
-            try:
-                next_move = board_dict[(new_board, ~player & 0x3)]
-                board_dict[(board, player)][square] = (self._best_move(next_move)
-                                                       + cost)
-            except TypeError:
-                # the next move still has to be calculated
-                revisit_list.insert(0, (board, cost, player, square, new_board))
+            
+            board_values = board_dict[(board, player)]
+            if None in board_values.values():
+                try:
+                    next_move = board_dict[(new_board, ~player & 0x3)]
+                    board_dict[(board, player)][square] = self._best_move(next_move)[1]
+                except TypeError:
+                    # the next move still has to be calculated
+                    revisit_list.insert(0, (board, cost, player, square, new_board))
         
         return board_dict
     
@@ -247,11 +248,19 @@ class TicTacToeBoard(object):
             new_board = self._apply_move(square, board, player)[1]
             if self._has_won(player, new_board):
                 if player is HUMAN:
-                    board_dict[square] = current_cost + LOSS_VALUE
+                    # losses are better to contemplate farther out, so we add
+                    # current cost to the LOSS_VALUE; we'll also assume that 
+                    # every value becomes a loss because the human player 
+                    # will probably take the move that causes the computer to
+                    # lose
+                    for i in range(9):
+                        board_dict[i] = LOSS_VALUE + current_cost
+                    break
                 else:
-                    board_dict[square] = current_cost + WIN_VALUE
+                    # wins become more desirable closer in
+                    board_dict[square] = WIN_VALUE - current_cost
             elif self._is_board_full(new_board):
-                board_dict[square] = current_cost + TIE_VALUE
+                board_dict[square] = TIE_VALUE + current_cost
             else:
                 other_player = ~player & 0x3
                 board_list.append((new_board, current_cost+1, other_player))
@@ -286,7 +295,7 @@ class TicTacToeBoard(object):
             PLAYBOOK.update(new_moves)
             
         potential_moves = PLAYBOOK[(board, COMPUTER)]
-        return self._best_move(potential_moves)
+        return self._best_move(potential_moves)[0]
     
     def _convert_move(self, square, player):
         """

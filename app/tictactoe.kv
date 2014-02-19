@@ -107,6 +107,14 @@
                     id: square4
                     text: root.square_label(4)
                     on_press: root.player_move(4, self)
+            BoxLayout:
+                id: placeholder
+                orientation: 'vertical'
+                size_hint: (1, .15)
+                placeholder_label: placeholder_label.__self__
+                Label:
+                    id: placeholder_label
+                    text: ""
     Label:
         id: player2_score
         size_hint: (.5, 1)
