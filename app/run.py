@@ -18,8 +18,6 @@ class TicTacToeFrame(BoxLayout):
     def computer_move(self):
         square, game_over, winner = self.board.computer_move()
         self.set_square(square)
-        #if self.board.player_wins or self.board.ties or self.board.player_losses:
-        #    import pdb; pdb.set_trace()
         return game_over, winner
     
     def get_me_outta_here(self):
@@ -33,8 +31,6 @@ class TicTacToeFrame(BoxLayout):
         
         if not game_over:
             game_over, winner = self.computer_move()
-        #if game_over:
-        #    import pdb; pdb.set_trace()
 
         if game_over:
             self.update_scores()
@@ -44,7 +40,7 @@ class TicTacToeFrame(BoxLayout):
         if player_number == 1:
             name_text = "[color=c60f13]You[/color] "
         else:
-            name_text = "[color=2ba6cb]Hal[/color] " 
+            name_text = "[color=2ba6cb]WOPR[/color] " 
         return name_text + self.board.player_stats(player_number)
     
     def reset_game(self, btn):
@@ -54,9 +50,9 @@ class TicTacToeFrame(BoxLayout):
         
         if self.board.is_computer_turn():
             self.computer_move()
-            self.set_turn_label("Your turn...")
+            self.set_turn_label("[color=000000]Your turn...[/color]")
         else:
-            self.set_turn_label("You go first...")
+            self.set_turn_label("[color=000000]You go first...[/color]")
     
     def set_new_game_button(self, hide):
         ph = self.board_wrapper.placeholder
