@@ -127,6 +127,15 @@ class TicTacToeBoard(object):
             return True, board
         return False, board
     
+    def _assert_valid_player(self, player):
+        """
+        Verifies that a player integer passed is a valid player integer (1 or 2)
+        
+        :param player: integer representing a player
+        :raises: AssertionError
+        """
+        assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
+    
     def _best_move(self, potential_moves):
         """
         Selects the best (lowest cost) from a list of potential moves.
@@ -156,9 +165,9 @@ class TicTacToeBoard(object):
                 computer, respectively)
         :param board: integer representing a board
         :return: integer
-        :throws: AssertionError
+        :raises: AssertionError
         """
-        assert player in (1, 2) # this shouldn't fail if the non-public methods are respected
+        self._assert_valid_player(player) 
         
         mod = player + 1
         player_board = 0
@@ -179,9 +188,8 @@ class TicTacToeBoard(object):
         
         :param boards: list of tuples in the format 
                 (<board integer>, <current cost>, <current player>, <next move>)
-        :param board_dict: dictionary in format similar to PLAYBOOK
         :return: dictionary
-        :throws: AssertionError
+        :raises: AssertionError
         """
         board_dict = {}
         def insert_into_boards(board, cost, player, move, insert=None):
@@ -190,7 +198,7 @@ class TicTacToeBoard(object):
        
         while boards:
             board, cost, player, next_move = boards.pop(0)
-            assert player in (1, 2)
+            self._assert_valid_player(player)
             if board not in PLAYBOOK:
                 if board not in board_dict:
                     board_dict[board] = {}
@@ -264,7 +272,7 @@ class TicTacToeBoard(object):
         
         :param board: integer representing a board
         :return: integer
-        :throws: InvalidStateException
+        :raises: InvalidStateException
         """
         potential_moves = PLAYBOOK.get(board)
         if not potential_moves:
@@ -315,8 +323,6 @@ class TicTacToeBoard(object):
         winner = self._has_won(1, board) or self._has_won(2, board)  # human or computer, respectively
         if winner:
             self._set_win(winner)
-            if self._is_human(winner):
-                import pdb; pdb.set_trace()
             return (True, winner)
         
         if self._is_board_full(board):
@@ -370,6 +376,14 @@ class TicTacToeBoard(object):
         return full_board == full_board & board
     
     def _is_human(self, player):
+        """
+        Checks if the indicated player is the human player (i.e., player 1)
+        
+        :param: integer representing the player
+        :return: boolean
+        :raises: AssertionError
+        """
+        self._assert_valid_player(player)
         return player == 1
     
     def _is_valid_move(self, move, board):
@@ -423,7 +437,7 @@ class TicTacToeBoard(object):
         May throw an Exception of the game board is not in a valid state or t
         
         :return: (boolean, boolean, int or None)
-        :throws: InvalidStateException
+        :raises: InvalidStateException
         """
         if not self.is_computer_turn():
             return (False, False, None)
