@@ -1,8 +1,5 @@
 __author__ = 'henryadam'
 
-import random
-
-
 class PositionAlreadyTakenError(Exception):
     pass
 
