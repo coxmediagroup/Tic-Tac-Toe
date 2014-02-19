@@ -19,6 +19,7 @@ def home(request):
         win_message = None
         board = str(request.GET['board'])
         board = simplejson.loads(board)
+        print(board)
         #create the board
         the_board = Board(the_board=board)
         #set the AI
@@ -48,7 +49,7 @@ def home(request):
             win_message = "JaCK`s AnGry PAraKEet WINS (cause JACK wins draws)"
     else:
         #draw the first step of the game, the computer always goes first
-        board = ['','','','','X','','','','']
+        board = [None,None,None,None,'X',None,None,None,None]
         the_board = Board(the_board=board)
         board_html = the_board.draw()
 
