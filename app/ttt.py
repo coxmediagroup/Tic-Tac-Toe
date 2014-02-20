@@ -38,8 +38,8 @@ TIE_VALUE = 0
 HUMAN = 1
 COMPUTER = 2
 
-PLAYER1 = 'O'
-PLAYER2 = 'X'
+PLAYER1 = 'X'
+PLAYER2 = 'O'
 
 
 class InvalidStateException(Exception):
@@ -66,8 +66,8 @@ class TicTacToeBoard(object):
              0 0  0 0  0 0  0 0  0 0  0 0  0 0  0 0  0 0
              
     The first bit of the two-bit representation of a square indicates whether
-    or not the position is filled. The second bit represents either an 'X' (1)
-    or an 'O' (0). For example:
+    or not the position is filled. The second bit represents player 1 (1 0) or
+    player 2 (1 1). For example, if player 2 is X:
                     ___________
                    | X |   |   |
                     -----------
@@ -82,8 +82,8 @@ class TicTacToeBoard(object):
              1 1  0 0  0 0  1 0  0 0  1 1  0 0  0 0  1 0
              
     This value is stored as a hex value to make it shorter, so this board would 
-    be represented as 0x3080c2. Please also note that these settings can be
-    changed by setting the global 'PLAYER1' and 'PLAYER2' constants above.
+    be represented as 0x3080c2. Please also note that the X and O settings can 
+    be changed by setting the global 'PLAYER1' and 'PLAYER2' constants above.
     
     Public methods:
         computer_move
