@@ -31,8 +31,12 @@ instructions on their website for installation and setup if you would like to
 run the project using the source files or to create an executable for your
 particular platform.
 
+Once you have kivy installed correctly, you can run the code using:
+
+    kivy app/run.py
+
 In addition to installing Kivy, you should also install everything in
-requirements.txt:
+requirements.txt for development:
 
     pip install -r requirements.txt
 
@@ -40,3 +44,5 @@ The necessary project files can be found in the `app` folder. Tests are in the
 `tests` directory and can be run using nose:
 
     nosetests
+
+Please see nose's own documentation for further information on running tests.
