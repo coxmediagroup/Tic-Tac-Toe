@@ -63,8 +63,12 @@ class TicTacToeFrame(BoxLayout):
             name_text = COMPUTER_NAME
         return name_text + self.board.player_stats(player_number)
     
-    def reset_game(self):
-        """Resets the game board (but not the scores) for another game"""
+    def reset_game(self, btn):
+        """
+        Resets the game board (but not the scores) for another game
+        
+        :param button: argument passed by kivy, but not used by this function
+        """
         self.set_new_game_button(hide=True)
         self.board.reset_board()
         self.update_squares()
@@ -82,14 +86,14 @@ class TicTacToeFrame(BoxLayout):
         :param hide: boolean indicating whether to hide the button (True) or
                 show the button (False)
         """
-        ph = self.board_wrapper.placeholder
+        ph = self.placeholder
         
         if hide:
             ph.remove_widget(self.new_game_btn)
-            ph.add_widget(ph.placeholder_label)
+            ph.add_widget(self.placeholder_label)
             self.new_game_btn = None
         else:
-            ph.remove_widget(ph.placeholder_label)
+            ph.remove_widget(self.placeholder_label)
             if not getattr(self, 'new_game_btn', None):
                 self.new_game_btn = Button(text='[color=000000]Start Another Game[/color]',
                                            background_normal="img/new-game-btn.png",
@@ -104,8 +108,7 @@ class TicTacToeFrame(BoxLayout):
         :param square: integer representing the square to update (0 to 8)
         """
         if square is not None:
-            btn_grid = self.board_wrapper.game_board.game_board_buttons
-            getattr(btn_grid, "square%s" % square).text = self.square_label(square)
+            getattr(self, "square%s" % square).text = self.square_label(square)
 
     def set_turn_label(self, text):
         """
@@ -114,7 +117,7 @@ class TicTacToeFrame(BoxLayout):
         :param text: what the label should say. Becomes an empty string during
                 game play
         """
-        self.board_wrapper.board_text.go_first_label.text = text
+        self.go_first_label.text = text
     
     def square_label(self, square):
         """

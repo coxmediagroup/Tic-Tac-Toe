@@ -34,11 +34,22 @@
 
 
 <TicTacToeFrame>:
-    # it seems we need to explicitly declare ids with __self__ for kivy to recognize them
     orientation: 'horizontal'
-    board_wrapper: board_wrapper.__self__
+    # it seems we need to explicitly declare ids with __self__ for kivy to recognize them
+    go_first_label: go_first_label.__self__
+    placeholder: placeholder.__self__
+    placeholder_label: placeholder_label.__self__
     player1_score: player1_score.__self__
     player2_score: player2_score.__self__
+    square8: square8.__self__
+    square7: square7.__self__
+    square6: square6.__self__
+    square5: square5.__self__
+    square4: square4.__self__
+    square3: square3.__self__
+    square2: square2.__self__
+    square1: square1.__self__
+    square0: square0.__self__
     BoxLayout:
         orientation: 'vertical'
         size_hint: (.5, 1)
@@ -50,7 +61,6 @@
             text: root.player_text(1)
             font_size: DEFAULT_FONT_SIZE
     BoxLayout:
-        id: board_wrapper
         orientation: 'vertical'
         padding: 20, 20, 20, 20
         canvas.before:
@@ -59,41 +69,24 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-        board_text: board_text.__self__
-        game_board: game_board.__self__
-        placeholder: placeholder.__self__
         BoxLayout:
-            id: board_text
             orientation: 'vertical'
             size_hint: (1, .15)
-            go_first_label: go_first_label.__self__
             Label:
                 id: go_first_label
                 text: "[color=000000]You go first...[/color]"
         RelativeLayout:
-            id: game_board
-            game_board_buttons: game_board_buttons.__self__
             Image:
                 pos: 0, 30
                 size_hint: None, None
                 size: self.parent.width, self.parent.width
                 source: 'img/tic_tac_toe.png'
             GridLayout:
-                id: game_board_buttons
                 pos: .141*self.parent.width, .145*self.parent.width + 30
                 size_hint: None, None
                 size: .7*self.parent.width, .7*self.parent.width
                 cols: 3
                 spacing: .02*self.parent.width
-                square8: square8.__self__
-                square7: square7.__self__
-                square6: square6.__self__
-                square5: square5.__self__
-                square4: square4.__self__
-                square3: square3.__self__
-                square2: square2.__self__
-                square1: square1.__self__
-                square0: square0.__self__
                 Button:
                     id: square8
                     text: root.square_label(8)
@@ -143,7 +136,6 @@
             id: placeholder
             orientation: 'vertical'
             size_hint: (1, .15)
-            placeholder_label: placeholder_label.__self__
             Label:
                 id: placeholder_label
                 text: ""
