@@ -10,6 +10,9 @@ from kivy.uix.button import Button
 
 from ttt import TicTacToeBoard 
 
+HUMAN_NAME = "[color=c60f13]You[/color] "
+COMPUTER_NAME = "[color=2ba6cb]Josh[/color] "
+
 
 class OpeningFrame(BoxLayout):
     pass
@@ -42,9 +45,9 @@ class TicTacToeFrame(BoxLayout):
     
     def player_text(self, player_number):
         if player_number == 1:
-            name_text = "[color=c60f13]You[/color] "
+            name_text = HUMAN_NAME
         else:
-            name_text = "[color=2ba6cb]Josh[/color] " 
+            name_text = COMPUTER_NAME
         return name_text + self.board.player_stats(player_number)
     
     def reset_game(self, btn):
@@ -94,19 +97,37 @@ class TicTacToeFrame(BoxLayout):
             self.set_square(square)
 
 
+class ExitFrame(BoxLayout):
+    def exit_text(self):
+        return "A strange game. The only winning move is not to play."
+    
+    def player1_score(self):
+        return "%s\n%s" % (HUMAN_NAME, 0)
+    
+    def player2_score(self):
+        return "%s\n%s" % (COMPUTER_NAME, 0)
+
+
 class TicTacToeApp(App):
     """ Primary class for running the game """
     
     def build(self):
+        # the three screens we'll use for this game
         self.root = BoxLayout()
         self.opening = OpeningFrame()
         self.tic_tac_toe = TicTacToeFrame()
+        self.exit_screen = ExitFrame()
+        
         self.root.add_widget(self.opening)
         return self.root
     
     def load_game(self):
         self.root.remove_widget(self.opening)
         self.root.add_widget(self.tic_tac_toe)
+        
+    def quit_game(self):
+        self.root.remove_widget(self.tic_tac_toe)
+        self.root.add_widget(self.exit_screen)
 
 
 if __name__ == '__main__':

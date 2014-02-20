@@ -156,7 +156,25 @@
             background_normal: "img/new-game-btn.png"
             size_hint: (.8, .1)
             pos_hint: {'center_x': .5}
+            on_press: app.quit_game()
         Label:
             id: player2_score
             text: root.player_text(2)
             font_size: DEFAULT_FONT_SIZE
+
+
+<ExitFrame>:
+    orientation: 'vertical'
+    padding: 0, 0, 0, self.height/5
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: root.player1_score()
+        Label:
+            text: "Vs."
+        Label:
+            text: root.player2_score()
+    Label:
+        text: root.exit_text()
+        text_size: self.width, self.height
+        halign: 'center'
