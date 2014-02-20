@@ -15,22 +15,30 @@ COMPUTER_NAME = "[color=2ba6cb]Josh[/color] "
 
 
 class OpeningFrame(BoxLayout):
+    """First screen player will see. Layout in tictactoe.kv"""
     pass
 
 
 class TicTacToeFrame(BoxLayout):
-    """ Main container for other elements """
+    """Screen where game is played. Layout in tictactoe.kv"""
     board = TicTacToeBoard()
     
     def computer_move(self):
+        """
+        Computer takes a turn, then returns if game is finished and who won
+        
+        :return: (boolean, integer)
+        """
         square, game_over, winner = self.board.computer_move()
         self.set_square(square)
         return game_over, winner
     
-    def get_me_outta_here(self):
-        import pdb; pdb.set_trace()
-    
-    def player_move(self, square, btn):
+    def player_move(self, square):
+        """
+        Player takes a turn, then the computer moves if player didn't win
+        
+        :param square: integer of the square that the player just selected
+        """
         self.set_turn_label("")
         
         square, game_over, winner = self.board.human_move(square)
@@ -44,13 +52,19 @@ class TicTacToeFrame(BoxLayout):
             self.set_new_game_button(hide=False)
     
     def player_text(self, player_number):
+        """
+        Text to display scores of players
+        
+        :param player_number: integer representing the player (1, 2)
+        """
         if player_number == 1:
             name_text = HUMAN_NAME
         else:
             name_text = COMPUTER_NAME
         return name_text + self.board.player_stats(player_number)
     
-    def reset_game(self, btn):
+    def reset_game(self):
+        """Resets the game board (but not the scores) for another game"""
         self.set_new_game_button(hide=True)
         self.board.reset_board()
         self.update_squares()
@@ -62,6 +76,12 @@ class TicTacToeFrame(BoxLayout):
             self.set_turn_label("[color=000000]You go first...[/color]")
     
     def set_new_game_button(self, hide):
+        """
+        Hides or displays the 'Start Another Game' button.
+        
+        :param hide: boolean indicating whether to hide the button (True) or
+                show the button (False)
+        """
         ph = self.board_wrapper.placeholder
         
         if hide:
@@ -78,27 +98,52 @@ class TicTacToeFrame(BoxLayout):
                 ph.add_widget(self.new_game_btn)
     
     def set_square(self, square):
+        """
+        Sets the text for the indicated square based on the state of the board
+        
+        :param square: integer representing the square to update (0 to 8)
+        """
         if square is not None:
             btn_grid = self.board_wrapper.game_board.game_board_buttons
             getattr(btn_grid, "square%s" % square).text = self.square_label(square)
 
     def set_turn_label(self, text):
+        """
+        Updates a label that displays at the beginning of each game.
+        
+        :param text: what the label should say. Becomes an empty string during
+                game play
+        """
         self.board_wrapper.board_text.go_first_label.text = text
     
     def square_label(self, square):
+        """
+        Gets the 'X' or 'O' label for the indicated square
+        
+        :param square: integer representing the square (0 to 8)
+        """
         return self.board.get_square_label(square)
     
     def update_scores(self):
+        """Updates the text displaying player scores"""
         self.player1_score.text = self.player_text(1)
         self.player2_score.text = self.player_text(2)
         
     def update_squares(self):
+        """Updates all squares with the current board state"""
         for square in range(9):
             self.set_square(square)
 
 
 class ExitFrame(BoxLayout):
+    """Last screen of the game, showing a summary of player scores"""
+    
     def exit_text(self):
+        """
+        The text to display to the player, depending on game outcome.
+        
+        :return: string        
+        """
         try:
             board = self.board
             if not (board.player_wins or board.player_losses or board.ties):
@@ -109,6 +154,11 @@ class ExitFrame(BoxLayout):
             return ""
     
     def player1_score(self):
+        """
+        Number of wins for player 1 (the human)
+        
+        :return: string
+        """
         try:
             return "%s\n%s" % (HUMAN_NAME, self.board.player_wins)
         except AttributeError:
@@ -116,6 +166,11 @@ class ExitFrame(BoxLayout):
             return ""
     
     def player2_score(self):
+        """
+        Number of wins for player 2 (the computer)
+        
+        :return: string
+        """
         try:
             return "%s\n%s" % (COMPUTER_NAME, self.board.player_losses)
         except AttributeError:
@@ -123,6 +178,11 @@ class ExitFrame(BoxLayout):
             return ""
     
     def tie_score(self):
+        """
+        Number of ties for the players
+        
+        :return: string
+        """
         try:
             return "[color=e2c925]Ties[/color]: %s" % self.board.ties
         except AttributeError:
@@ -130,6 +190,7 @@ class ExitFrame(BoxLayout):
             return ""
     
     def update_text(self):
+        """Updates all labels on this screen"""
         self.player1.text = self.player1_score()
         self.player2.text = self.player2_score()
         self.ties.text = self.tie_score()
@@ -137,7 +198,7 @@ class ExitFrame(BoxLayout):
 
 
 class TicTacToeApp(App):
-    """ Primary class for running the game """
+    """Primary class for running the game"""
     
     def build(self):
         # the three screens we'll use for this game
@@ -151,10 +212,12 @@ class TicTacToeApp(App):
         return self.root
     
     def load_game(self):
+        """Exchanges the opening screen for the game board"""
         self.root.remove_widget(self.opening)
         self.root.add_widget(self.tic_tac_toe)
         
     def quit_game(self):
+        """Replaces the game board with the exit screen"""
         self.exit_screen.update_text()
         self.root.remove_widget(self.tic_tac_toe)
         self.root.add_widget(self.exit_screen)

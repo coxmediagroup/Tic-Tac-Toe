@@ -338,13 +338,13 @@ class TicTacToeBoard(object):
         winner = (self._has_won(HUMAN, board) or self._has_won(COMPUTER, board))
         if winner:
             self._set_win(winner)
-            return (True, winner)
+            return True, winner
         
         if self._is_board_full(board):
             self._set_win(winner)
-            return (True, None)
+            return True, None
         
-        return (False, None)
+        return False, None
     
     def _get_valid_moves(self, board):
         """
