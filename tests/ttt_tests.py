@@ -109,7 +109,6 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertEquals(0, getattr(ttt, attr))
     
     def test__apply_move(self):
-        self.assertTrue(False, "Update Me")
         ttt = TicTacToeBoard()
         
         # should error if invalid player is used
@@ -118,19 +117,19 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # empty board should always apply
         move, ttt.board = ttt._apply_move(3, ttt.board, 1)
-        self.assertTrue(move)
+        self.assertEquals(3, move)
         self.assertEquals(0b000000000010000000, ttt.board)
         
         # some intermediate test cases
         move, ttt.board = ttt._apply_move(5, ttt.board, 2)
-        self.assertTrue(move)
+        self.assertEquals(5, move)
         self.assertEquals(0b000000110010000000, ttt.board)
         
         move, ttt.board = ttt._apply_move(5, ttt.board, 1)
-        self.assertFalse(move)
+        self.assertIsNone(move)
         self.assertEquals(0b000000110010000000, ttt.board)
         move, ttt.board = ttt._apply_move(8, ttt.board, 1)
-        self.assertTrue(move)
+        self.assertEquals(8, move)
         self.assertEquals(0b100000110010000000, ttt.board)
         
         # full board should never apply
@@ -138,7 +137,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         for player in (1, 2):
             for square in range(9):
                 move, board = ttt._apply_move(square, board, player)
-                self.assertFalse(move)
+                self.assertIsNone(move)
                 self.assertEquals(0b101011101110101111, board, player)
     
     def test__assert_valid_player(self):
