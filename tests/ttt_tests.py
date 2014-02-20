@@ -411,23 +411,29 @@ class TicTacToeBoardTests(unittest.TestCase):
     
     def test_computer_move(self):
         ttt = TicTacToeBoard()
+        ttt.turn = 1
         
         # default case: game is still in progress
         ttt.board = 0b101000001011000011
-        self.assertEquals((True, False, None), ttt.computer_move())
+        
+        move, game_over, winner = ttt.computer_move()
+        self.assertEquals((False, None), (game_over, winner))
+        self.assertTrue(move in [6, 5, 2, 1])
         self.assertEquals(0b101011001011000011, ttt.board)
-        self.assertEquals(1, ttt.turn)
+        self.assertEquals(0, ttt.turn)
         
         # it is not the computer's turn
-        self.assertEquals((False, False, None), ttt.computer_move())
+        self.assertEquals((None, False, None), ttt.computer_move())
         self.assertEquals(0b101011001011000011, ttt.board)
-        self.assertEquals(1, ttt.turn)
+        self.assertEquals(0, ttt.turn)
         
         # the game has ended
-        ttt.turn = 0
-        self.assertEquals((True, True, 2), ttt.computer_move())
+        ttt.turn = 1
+        move, game_over, winner = ttt.computer_move()
+        self.assertEquals((True, 2), (game_over, winner))
+        self.assertEquals(2, move)
         self.assertEquals(0b101011001011110011, ttt.board)
-        self.assertEquals(1, ttt.turn)
+        self.assertEquals(0, ttt.turn)
     
     def test_get_square_label(self):
         ttt = TicTacToeBoard()

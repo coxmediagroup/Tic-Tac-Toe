@@ -448,7 +448,7 @@ class TicTacToeBoard(object):
         :raises: InvalidStateException
         """
         if not self.is_computer_turn():
-            return (False, False, None)
+            return (None, False, None)
         
         square = self._choose_square(self.board)
         square, self.board = self._apply_move(square, self.board, self.turn+1)
