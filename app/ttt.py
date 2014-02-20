@@ -145,7 +145,7 @@ class TicTacToeBoard(object):
         # this shouldn't fail if the non-public methods are respected
         assert player in (HUMAN, COMPUTER)
     
-    def _best_move(self, potential_moves):
+    def _best_move(self, potential_moves, player):
         """
         Selects the best move from a list of potential moves.
         Returns the best move, and the cost for that move.
@@ -153,7 +153,10 @@ class TicTacToeBoard(object):
         :param potential_moves: dictionary of integers representing squares, 
             0 to 8, paired with a calculated cost for making that move
         :return: integer, integer
+        :raises: AssertionError
         """
+        self._assert_valid_player(player)
+        
         # we'll just return None and let self.computer_move handle it as an
         # InvalidStateException. Shouldn't happen if non-public methods are
         # respected
@@ -161,7 +164,10 @@ class TicTacToeBoard(object):
             return None
         
         # we want to introduce a little bit of randomness for equal values
-        return max(potential_moves.items(), 
+        if player is COMPUTER:
+            return max(potential_moves.items(), 
+                       key=lambda x: x[1] + .01 * random.randint(0, 99))
+        return min(potential_moves.items(), 
                    key=lambda x: x[1] + .01 * random.randint(0, 99))
     
     def _board_for_player(self, player, board):
@@ -191,7 +197,7 @@ class TicTacToeBoard(object):
     
     def _calculate_board_costs(self, board):
         """
-        Calculates the cost the next play for specific boards from a list.
+        Calculates the cost for the next play for specific boards from a list.
         Returns a dictionary in the same format as PLAYBOOK.
         
         :param boards: list of tuples in the format 
@@ -202,33 +208,39 @@ class TicTacToeBoard(object):
         board_dict = {}
         revisit_list = []
         
-        boards = [(board, 0, 2)]
+        boards = [(board, 2)]
         while boards:
-            board, cost, player = boards.pop(0)
+            board, player = boards.pop(0)
             if (board, player) not in board_dict:
                 new_boards, board_costs, revisit = self._calculate_board_variations(
-                                                            board, cost, player)
+                                                                board, player)
                 boards.extend(new_boards)
                 revisit_list.extend(revisit)
                 board_dict[(board, player)] = board_costs
-
+        
         while revisit_list:
             # starting at the end, where there are more complete boards (and 
             # more likely to be fully calculated)
-            board, cost, player, square, new_board = revisit_list.pop()
+            board, player, square, new_board = revisit_list.pop()
             
             board_values = board_dict[(board, player)]
             if None in board_values.values():
                 try:
-                    next_move = board_dict[(new_board, ~player & 0x3)]
-                    board_dict[(board, player)][square] = self._best_move(next_move)[1]
+                    new_player = ~player & 0x3
+                    next_move = board_dict[(new_board, new_player)]
+                    best_move = self._best_move(next_move, new_player)[1]
+                    if best_move:
+                        # we want wins to happen sooner, and losses to happen
+                        # later
+                        best_move += [-1, 1][best_move < 0]
+                    board_dict[(board, player)][square] = best_move
                 except TypeError:
                     # the next move still has to be calculated
-                    revisit_list.insert(0, (board, cost, player, square, new_board))
+                    revisit_list.insert(0, (board, player, square, new_board))
         
         return board_dict
     
-    def _calculate_board_variations(self, board, current_cost, player):
+    def _calculate_board_variations(self, board, player):
         """
         Finds all possible next moves for the specified board.
         Returns a list of boards that still need to be investigated, a 
@@ -250,26 +262,18 @@ class TicTacToeBoard(object):
             new_board = self._apply_move(square, board, player)[1]
             if self._has_won(player, new_board):
                 if player is HUMAN:
-                    # losses are better to contemplate farther out, so we add
-                    # current cost to the LOSS_VALUE; we'll also assume that 
-                    # every value becomes a loss because the human player 
-                    # will probably take the move that causes the computer to
-                    # lose
-                    for i in range(9):
-                        board_dict[i] = LOSS_VALUE + current_cost
-                    break
+                    board_dict[square] = LOSS_VALUE
                 else:
-                    # wins become more desirable closer in
-                    board_dict[square] = WIN_VALUE - current_cost
+                    board_dict[square] = WIN_VALUE
             elif self._is_board_full(new_board):
-                board_dict[square] = TIE_VALUE + current_cost
+                board_dict[square] = TIE_VALUE
             else:
                 other_player = ~player & 0x3
-                board_list.append((new_board, current_cost+1, other_player))
+                board_list.append((new_board, other_player))
                 
                 # we'll calculate this later
                 board_dict[square] = None
-                revisit_list.append((board, current_cost, player, square, new_board))
+                revisit_list.append((board, player, square, new_board))
         
         return board_list, board_dict, revisit_list
             
@@ -297,7 +301,7 @@ class TicTacToeBoard(object):
             PLAYBOOK.update(new_moves)
             
         potential_moves = PLAYBOOK[(board, COMPUTER)]
-        return self._best_move(potential_moves)[0]
+        return self._best_move(potential_moves, COMPUTER)[0]
     
     def _convert_move(self, square, player):
         """
