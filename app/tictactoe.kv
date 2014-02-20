@@ -16,6 +16,22 @@
     markup: True
 
 
+<OpeningFrame>:
+    orientation: 'vertical'
+    padding: 0, 0, 0, self.height/8
+    Label:
+        text: "Hello. My name is [color=2ba6cb]Josh[/color]. Shall we play a game?"
+    Label:
+        text: "[color=c60f13]You[/color]:\nLove to. How about Tic-Tac-Toe?"
+        size_hint: (1, .7)
+        halign: 'center'
+    Button:
+        text: "Start the Game --->"
+        background_normal: "img/new-game-btn.png"
+        size_hint: (.7, .4)
+        pos_hint: {'center_x':.5}
+
+
 <TicTacToeFrame>:
     # it seems we need to explicitly declare ids with __self__ for kivy to recognize them
     orientation: 'horizontal'

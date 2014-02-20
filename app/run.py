@@ -11,6 +11,10 @@ from kivy.uix.button import Button
 from ttt import TicTacToeBoard 
 
 
+class OpeningFrame(BoxLayout):
+    pass
+
+
 class TicTacToeFrame(BoxLayout):
     """ Main container for other elements """
     board = TicTacToeBoard()
@@ -40,7 +44,7 @@ class TicTacToeFrame(BoxLayout):
         if player_number == 1:
             name_text = "[color=c60f13]You[/color] "
         else:
-            name_text = "[color=2ba6cb]WOPR[/color] " 
+            name_text = "[color=2ba6cb]Josh[/color] " 
         return name_text + self.board.player_stats(player_number)
     
     def reset_game(self, btn):
@@ -94,8 +98,10 @@ class TicTacToeApp(App):
     """ Primary class for running the game """
     
     def build(self):
-        frame = TicTacToeFrame()
+        frame = OpeningFrame()
         return frame
+        #frame = TicTacToeFrame()
+        #return frame
 
 
 if __name__ == '__main__':
