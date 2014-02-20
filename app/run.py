@@ -11,6 +11,10 @@ from kivy.uix.button import Button
 from ttt import TicTacToeBoard 
 
 
+class RootWindow(BoxLayout):
+    pass
+
+
 class OpeningFrame(BoxLayout):
     pass
 
@@ -98,10 +102,15 @@ class TicTacToeApp(App):
     """ Primary class for running the game """
     
     def build(self):
-        frame = OpeningFrame()
-        return frame
-        #frame = TicTacToeFrame()
-        #return frame
+        self.root = RootWindow()
+        self.opening = OpeningFrame()
+        self.tic_tac_toe = TicTacToeFrame()
+        self.root.add_widget(self.opening)
+        return self.root
+    
+    def load_game(self):
+        self.root.remove_widget(self.opening)
+        self.root.add_widget(self.tic_tac_toe)
 
 
 if __name__ == '__main__':
