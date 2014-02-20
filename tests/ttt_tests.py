@@ -195,45 +195,49 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # simple test: only one move
         board = 0b001011101011101111
-        board_list, board_dict, revisit = ttt._calculate_board_variations(
-                                                            board, 4, 2)
+        board_list, board_dict, revisit = ttt._calculate_board_variations(board, 2)
         self.assertEquals([], board_list)
-        self.assertEquals({0b111011101011101111: (8, 5)}, board_dict)
+        self.assertEquals({8: 0}, board_dict)
         self.assertEquals([], revisit)
         
         # complex test: lots of moves
         board = 0b110000000000000010
-        board_list, board_dict, revisit = ttt._calculate_board_variations(
-                                                            board, 0, 2)
-        self.assertEquals([(0b110000000000001110, 1, 1),
-                           (0b110000000000110010, 1, 1),
-                           (0b110000000011000010, 1, 1),
-                           (0b110000001100000010, 1, 1),
-                           (0b110000110000000010, 1, 1),
-                           (0b110011000000000010, 1, 1),
-                           (0b111100000000000010, 1, 1)], board_list)
+        board_list, board_dict, revisit = ttt._calculate_board_variations(board, 2)
+        self.assertEquals([(0b110000000000001110, 1),
+                           (0b110000000000110010, 1),
+                           (0b110000000011000010, 1),
+                           (0b110000001100000010, 1),
+                           (0b110000110000000010, 1),
+                           (0b110011000000000010, 1),
+                           (0b111100000000000010, 1)], board_list)
         self.assertEquals(len(board_list), len(board_dict))
         self.assertEquals(len(board_list), len(revisit))
-        for next_move in board_list:
-            self.assertTrue(next_move[0] in board_dict)
-            self.assertIsNone(board_dict[next_move[0]])
-            assert False # fix this later
-            self.assertTrue((board, 0, 2, next_move[0]) in revisit)
         
+        expected_moves = [1, 2, 3, 4, 5, 6, 7]
+        for move in expected_moves:
+            self.assertTrue(move in board_dict)
+            self.assertIsNone(board_dict[move])
+        
+        for square, next_move in zip(expected_moves, board_list):
+            self.assertTrue((board, 2, square, next_move[0]) in revisit)
+
         # some game-ending moves, some continuing moves
         board = 0b000011101111100010
-        board_list, board_dict, revisit = ttt._calculate_board_variations(
-                                                            board, 2, 1)
-        self.assertEquals([(0b001011101111100010, 3, 2),
-                           (0b100011101111100010, 3, 2)], board_list)
+        board_list, board_dict, revisit = ttt._calculate_board_variations(board, 1)
+        self.assertEquals([(0b001011101111100010, 2),
+                           (0b100011101111100010, 2)], board_list)
         self.assertEquals(3, len(board_dict))
-        self.assertEquals((1, -98), board_dict.get(0b000011101111101010))
+        self.assertEquals(LOSS_VALUE, board_dict[1])
         self.assertEquals(len(board_list), len(revisit))
-        for next_move in board_list:
-            self.assertTrue(next_move[0] in board_dict)
-            self.assertIsNone(board_dict[next_move[0]])
-            self.assertTrue((board, 2, 1, next_move[0]) in revisit)
-    
+        
+        expected_moves = [7, 8]
+        for move in expected_moves:
+            self.assertTrue(move in board_dict)
+            self.assertIsNone(board_dict[move])
+        
+        for square, next_move in zip(expected_moves, board_list):
+            self.assertTrue((board, 1, square, next_move[0]) in revisit)
+
     def test__choose_square(self):
         ttt = TicTacToeBoard()
         
