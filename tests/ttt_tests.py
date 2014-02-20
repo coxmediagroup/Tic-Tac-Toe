@@ -23,7 +23,7 @@ WINNING_MOVES = (0b101010000000000000, 0b100000001000000010,
 
 LAST_MOVES = ((0b100010000000000000, 7), (0b100000001000000000, 0),
               (0b000000000000101000, 8), (0b001000000000000010, 3),
-              (0b000010100000000000, 4), (0b000010000000000010, 3),
+              (0b000010100000000000, 4), (0b000010000000000010, 2),
               (0b000000000000001010, 5), (0b000000001000100000, 3))
 
 
@@ -233,7 +233,6 @@ class TicTacToeBoardTests(unittest.TestCase):
             self.assertTrue(move in PLAYBOOK[(board, 2)])
         
         # should always go for a win if next move
-        '''
         for board, expected_move in LAST_MOVES:
             winning_board = self.insert_random_moves(board, 2, pieces=0)
             move = ttt._choose_square(winning_board)
@@ -243,20 +242,8 @@ class TicTacToeBoardTests(unittest.TestCase):
         for board, expected_move in LAST_MOVES:
             move = ttt._choose_square(board)
             self.assertEquals(expected_move, move)
-        '''
-        # two moves out
-        board = 0b111011001011001010 # 2 leads to loss, 5 leads to tie
-        self.assertEquals(5, ttt._choose_square(board))
-        self.assertEquals(1, PLAYBOOK[(board, 2)][5])
-        self.assertEquals(LOSS_VALUE+1, PLAYBOOK[(board, 2)][2])
         
-        # four moves out
-        
-        
-        # if we run two computers against each other, would they tie 100 times?
-        
-        
-        self.assertTrue(False, "Not Completed")
+        # and the rest will be tested in `test_forty_two`
     
     def test__convert_move(self):
         ttt = TicTacToeBoard()
