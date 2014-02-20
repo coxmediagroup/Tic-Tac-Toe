@@ -104,9 +104,9 @@ class TicTacToeBoardTests(unittest.TestCase):
     def test__init(self):
         # defaults
         ttt = TicTacToeBoard()
-        for attr in ('board', 'turn', 'player_wins', 'player_losses', 'ties'):
+        for attr in ('board', 'turn', 'player_wins', 'player_losses', 
+                     'ties', 'game_over'):
             self.assertEquals(0, getattr(ttt, attr))
-        self.assertTrue(False, "Update Me")
     
     def test__apply_move(self):
         self.assertTrue(False, "Update Me")
