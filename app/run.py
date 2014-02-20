@@ -122,9 +122,17 @@ class ExitFrame(BoxLayout):
             # the tic-tac-toe screen hasn't passed control over yet
             return ""
     
+    def tie_score(self):
+        try:
+            return "[color=e2c925]Ties[/color]: %s" % self.board.ties
+        except AttributeError:
+            # yes, we know tic-tac-toe screen still has control of the board
+            return ""
+    
     def update_text(self):
         self.player1.text = self.player1_score()
         self.player2.text = self.player2_score()
+        self.ties.text = self.tie_score()
         self.exit.text = self.exit_text()
 
 
@@ -138,6 +146,7 @@ class TicTacToeApp(App):
         self.tic_tac_toe = TicTacToeFrame()
         self.exit_screen = ExitFrame()
         
+        self.exit_screen.board = self.tic_tac_toe.board
         self.root.add_widget(self.opening)
         return self.root
     
@@ -146,10 +155,7 @@ class TicTacToeApp(App):
         self.root.add_widget(self.tic_tac_toe)
         
     def quit_game(self):
-        # we'll hand the logic object over to the exit screen
-        self.exit_screen.board = self.tic_tac_toe.board
         self.exit_screen.update_text()
-        
         self.root.remove_widget(self.tic_tac_toe)
         self.root.add_widget(self.exit_screen)
 

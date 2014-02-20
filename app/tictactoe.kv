@@ -168,6 +168,7 @@
     padding: 0, 0, 0, self.height/5
     player1: player1_score.__self__
     player2: player2_score.__self__
+    ties: tie_score.__self__
     exit: exit_text.__self__
     BoxLayout:
         orientation: 'horizontal'
@@ -179,6 +180,10 @@
         Label:
             id: player2_score
             text: root.player2_score()
+    Label:
+        id: tie_score
+        text: root.tie_score()
+        halign: 'center'
     Label:
         id: exit_text
         text: root.exit_text()
