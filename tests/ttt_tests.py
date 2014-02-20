@@ -497,3 +497,43 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         ttt.reset_board()
         self.assertEquals(0, ttt.board)
+        
+    def test_forty_two(self):
+        # comprehensive testing of the computer selection mechanic
+        ttt = TicTacToeBoard()
+        
+        # since this is probabilistic, let's run this a few times to
+        # increase likelihood that the computer doesn't lose
+        for i in range(4):
+            # reset PLAYBOOK from previous trials
+            PLAYBOOK = {(0x00000, 2): {8: -100, 6: -100, 4: -100, 2: -100},
+                        (0x20000, 2): {0: -100},
+                        (0x02000, 2): {0: -100},
+                        (0x00200, 2): {0: -100},
+                        (0x00020, 2): {0: -100},
+                        (0x00002, 2): {8: -100, 6: -100, 4: -100, 2: -100},
+                        (0x08000, 2): {8: -100, 6: -100},
+                        (0x00800, 2): {6: -100, 4: -100},
+                        (0x00080, 2): {4: -100, 2: -100},
+                        (0x00008, 2): {8: -100, 2: -100}}
+            
+            game_in_the_known_universe = [0x00000, 0x20000, 0x02000, 0x00200, 
+                                          0x00020, 0x00002, 0x08000, 0x00800, 
+                                          0x00080, 0x00008] # starting moves
+            
+            while game_in_the_known_universe:
+                current_game = game_in_the_known_universe.pop(0)
+                moves = ttt._get_valid_moves(current_game)
+                for square in moves:
+                    ttt.board = current_game
+                    ttt.turn = 0
+                    square, game_over, winner = ttt.human_move(square)
+                    self.assertNotEquals(1, winner)
+                    
+                    if not game_over:
+                        game_over = ttt.computer_move()[1]
+                        if not game_over and ttt.board not in game_in_the_known_universe:
+                            game_in_the_known_universe.append(ttt.board)
+
+            
+            
