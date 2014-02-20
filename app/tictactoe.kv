@@ -39,11 +39,16 @@
     board_wrapper: board_wrapper.__self__
     player1_score: player1_score.__self__
     player2_score: player2_score.__self__
-    Label:
-        id: player1_score
+    BoxLayout:
+        orientation: 'vertical'
         size_hint: (.5, 1)
-        text: root.player_text(1)
-        font_size: DEFAULT_FONT_SIZE
+        Label:
+            text: ""
+            size_hint: (1, .1)
+        Label:
+            id: player1_score
+            text: root.player_text(1)
+            font_size: DEFAULT_FONT_SIZE
     BoxLayout:
         id: board_wrapper
         orientation: 'vertical'
@@ -65,11 +70,6 @@
             Label:
                 id: go_first_label
                 text: "[color=000000]You go first...[/color]"
-            Button:
-                text: "Get Me Outta Here"
-                background_normal: "img/new-game-btn.png"
-                on_press: root.get_me_outta_here()
-                size_hint: (1, .1)
         RelativeLayout:
             id: game_board
             game_board_buttons: game_board_buttons.__self__
@@ -147,8 +147,16 @@
             Label:
                 id: placeholder_label
                 text: ""
-    Label:
-        id: player2_score
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0, 30, 0, 0
         size_hint: (.5, 1)
-        text: root.player_text(2)
-        font_size: DEFAULT_FONT_SIZE
+        Button:
+            text: "Quit"
+            background_normal: "img/new-game-btn.png"
+            size_hint: (.8, .1)
+            pos_hint: {'center_x': .5}
+        Label:
+            id: player2_score
+            text: root.player_text(2)
+            font_size: DEFAULT_FONT_SIZE
