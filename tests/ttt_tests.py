@@ -178,7 +178,18 @@ class TicTacToeBoardTests(unittest.TestCase):
                                   ttt._board_for_player(player, board))
     
     def test__calculate_board_costs(self):
-        self.assertTrue(False, "Not Implemented")
+        ttt = TicTacToeBoard()
+        board = 0b110011101000100011
+        
+        cost_dict = ttt._calculate_board_costs(board)
+        self.assertEquals(6, len(cost_dict))
+        for board, player, value_dict in ((0b110011101000100011, 2, {1: -9, 3:0, 7: 10}),
+                                          (0b110011101011100011, 1, {1: 9, 7:0}),
+                                          (0b111011101011100011, 2, {1: 0}),
+                                          (0b110011101011101011, 2, {7: 10}),
+                                          (0b110011101000101111, 1, {3: -10, 7: 0}),
+                                          (0b111011101000101111, 2, {3: 0})):
+            self.assertEquals(value_dict, cost_dict[(board, player)])        
         
     def test__calculate_board_variations(self):
         ttt = TicTacToeBoard()

@@ -197,11 +197,10 @@ class TicTacToeBoard(object):
     
     def _calculate_board_costs(self, board):
         """
-        Calculates the cost for the next play for specific boards from a list.
+        Calculates the cost for next computer play for the indicated board.
         Returns a dictionary in the same format as PLAYBOOK.
         
-        :param boards: list of tuples in the format 
-                (<board integer>, <current cost>, <current player>, <next move>)
+        :param board: integer representing the current state of the board
         :return: dictionary
         :raises: AssertionError
         """
@@ -249,7 +248,6 @@ class TicTacToeBoard(object):
         calculated.
         
         :param board: integer representing a board
-        :param current_cost: integer cost of making moves up to this point
         :param player: integer representing a player (1 or 2)
         :return: (list, dict, list)
         """
