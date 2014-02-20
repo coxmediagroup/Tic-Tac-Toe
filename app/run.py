@@ -57,7 +57,7 @@ class TicTacToeFrame(BoxLayout):
         
         if self.board.is_computer_turn():
             self.computer_move()
-            self.set_turn_label("[color=000000]Your turn...[/color]")
+            self.set_turn_label("[color=000000]Now your turn...[/color]")
         else:
             self.set_turn_label("[color=000000]You go first...[/color]")
     
@@ -99,13 +99,33 @@ class TicTacToeFrame(BoxLayout):
 
 class ExitFrame(BoxLayout):
     def exit_text(self):
-        return "A strange game. The only winning move is not to play."
+        try:
+            board = self.board
+            if not (board.player_wins or board.player_losses or board.ties):
+                return "Running away so soon?"
+            return "A strange game. The only winning move is not to play."
+        except AttributeError:
+            # the tic-tac-toe screen hasn't passed control over yet
+            return ""
     
     def player1_score(self):
-        return "%s\n%s" % (HUMAN_NAME, 0)
+        try:
+            return "%s\n%s" % (HUMAN_NAME, self.board.player_wins)
+        except AttributeError:
+            # the tic-tac-toe screen hasn't passed control over yet
+            return ""
     
     def player2_score(self):
-        return "%s\n%s" % (COMPUTER_NAME, 0)
+        try:
+            return "%s\n%s" % (COMPUTER_NAME, self.board.player_losses)
+        except AttributeError:
+            # the tic-tac-toe screen hasn't passed control over yet
+            return ""
+    
+    def update_text(self):
+        self.player1.text = self.player1_score()
+        self.player2.text = self.player2_score()
+        self.exit.text = self.exit_text()
 
 
 class TicTacToeApp(App):
@@ -126,6 +146,10 @@ class TicTacToeApp(App):
         self.root.add_widget(self.tic_tac_toe)
         
     def quit_game(self):
+        # we'll hand the logic object over to the exit screen
+        self.exit_screen.board = self.tic_tac_toe.board
+        self.exit_screen.update_text()
+        
         self.root.remove_widget(self.tic_tac_toe)
         self.root.add_widget(self.exit_screen)
 

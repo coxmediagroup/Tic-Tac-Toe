@@ -166,15 +166,21 @@
 <ExitFrame>:
     orientation: 'vertical'
     padding: 0, 0, 0, self.height/5
+    player1: player1_score.__self__
+    player2: player2_score.__self__
+    exit: exit_text.__self__
     BoxLayout:
         orientation: 'horizontal'
         Label:
+            id: player1_score
             text: root.player1_score()
         Label:
             text: "Vs."
         Label:
+            id: player2_score
             text: root.player2_score()
     Label:
+        id: exit_text
         text: root.exit_text()
         text_size: self.width, self.height
         halign: 'center'
