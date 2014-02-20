@@ -483,11 +483,11 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt.ties = 4
         
         # player 1 (human)
-        self.assertEquals("(Player O)\n\nWins: 1\nLosses: 2\nTies: 4",
+        self.assertEquals("(Player %s)\n\nWins: 1\nLosses: 2\nTies: 4" % PLAYER1,
                           ttt.player_stats(1))
         
         # player 2 (computer)
-        self.assertEquals("(Player X)\n\nWins: 2\nLosses: 1\nTies: 4",
+        self.assertEquals("(Player %s)\n\nWins: 2\nLosses: 1\nTies: 4" % PLAYER2,
                           ttt.player_stats(2))
     
     def test_reset_board(self):
@@ -503,7 +503,7 @@ class TicTacToeBoardTests(unittest.TestCase):
         ttt = TicTacToeBoard()
         
         # since this is probabilistic, let's run this a few times to
-        # increase likelihood that the computer doesn't lose
+        # increase our confidence that the computer won't lose
         for i in range(4):
             # reset PLAYBOOK from previous trials
             PLAYBOOK = {(0x00000, 2): {8: -100, 6: -100, 4: -100, 2: -100},
