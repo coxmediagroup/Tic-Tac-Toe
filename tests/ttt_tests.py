@@ -450,25 +450,32 @@ class TicTacToeBoardTests(unittest.TestCase):
         
         # default case: game is still in progress
         ttt.board = 0b100000001011000011
-        self.assertEquals((True, False, None), ttt.human_move(7))
+        self.assertEquals((7, False, None), ttt.human_move(7))
         self.assertEquals(0b101000001011000011, ttt.board)
         self.assertEquals(1, ttt.turn)
         
         # it is not the human's turn
-        self.assertEquals((False, False, None), ttt.human_move(6))
+        self.assertEquals((None, False, None), ttt.human_move(6))
         self.assertEquals(0b101000001011000011, ttt.board)
         self.assertEquals(1, ttt.turn)
         
         # the move isn't valid
         ttt.turn = 0
-        self.assertEquals((False, False, None), ttt.human_move(3))
+        self.assertEquals((None, False, None), ttt.human_move(3))
         self.assertEquals(0b101000001011000011, ttt.board)
         self.assertEquals(0, ttt.turn)
         
         # the game has ended
-        self.assertEquals((True, True, 1), ttt.human_move(6))
+        self.assertEquals((6, True, 1), ttt.human_move(6))
         self.assertEquals(0b101010001011000011, ttt.board)
         self.assertEquals(1, ttt.turn)
+        
+        # making a move after the game has ended
+        ttt.turn = 0
+        self.assertEquals((None, True, None), ttt.human_move(1))
+        self.assertEquals(0b101010001011000011, ttt.board)
+        self.assertEquals(0, ttt.turn)
+        
     
     def test_is_computer_turn(self):
         ttt = TicTacToeBoard()

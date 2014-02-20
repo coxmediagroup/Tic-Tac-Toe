@@ -479,7 +479,7 @@ class TicTacToeBoard(object):
         :return: (boolean, boolean, integer or None)
         """
         if self.is_computer_turn():
-            return (False, False, None)
+            return (None, False, None)
         
         square, self.board = self._apply_move(square, self.board, self.turn+1)
         winner = None
