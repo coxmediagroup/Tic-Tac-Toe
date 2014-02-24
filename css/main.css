@@ -21,6 +21,14 @@
 .x {
     background-image: url('../x.png');
 }
+.o {
+    background-image: url('../o.png');
+}
+#options {
+    position: relative;
+    top: 200px;
+    float: left;
+}
 a {
     font-size: 49px;
     text-align: center;
@@ -29,3 +37,16 @@ a {
 body {
     margin: 0;
 }
+#startgame {
+    color: #283744;  
+    display: inline-block;  
+    width: auto;  
+    text-align: center;  
+    text-decoration: none;  
+    line-height: 40px;
+    font-size: 11pt;
+    padding: 0 5px 0 5px;
+}
+a:hover, a:active {  
+    background-color: #8c99a4;  
+} 
