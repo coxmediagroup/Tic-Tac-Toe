@@ -1,0 +1,31 @@
+.square {
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    float: left;
+    position: relative;
+}
+.top {
+    border-right: white solid 1px;
+}
+.middle {
+    border-right: white solid 1px;
+    top: 51px;
+    left: -153px;
+}
+.bottom {
+    border-right: white solid 1px;
+    top: 102px;
+    left: -306px;
+}
+.x {
+    background-image: url('../x.png');
+}
+a {
+    font-size: 49px;
+    text-align: center;
+    width: 100%;
+}
+body {
+    margin: 0;
+}
