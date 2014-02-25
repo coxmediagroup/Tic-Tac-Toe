@@ -10,13 +10,14 @@ var turn        = true; // true = computer turn
 $(document).ready(function() {
     console.log(numTurns);
     $( ".square" ).click(function() {
-        if (gamestarted) {
+        var alreadyClicked = checkAlreadyClicked(this);
+        if (gamestarted && !alreadyClicked) {
             if (turn) {
                 addComputerSymbol();
                 changeTurn();
             }
             else {
-                if (numTurns != 9)  {
+                if (numTurns < 9)  {
                     addHumanSymbol(this);
                     changeTurn();
                     numTurns = numTurns + 1;
@@ -24,10 +25,56 @@ $(document).ready(function() {
                 }
                 else {
                     $( ".square" ).off();
+                    if (checkifWon()) {
+                        $( "#result" ).html("I won.");
+                    }
+                    else {
+                        $( "#result" ).html("We tied.");
+                    }
                 }
             }
         }
+
+        if (numTurns >= 9)  {
+            $( ".square" ).off();
+            if (checkifWon()) {
+                $( "#result" ).html("I won.");
+            }
+            else {
+                $( "#result" ).html("We tied.");
+            }
+        }
     });
+
+    function checkifWon() {
+        if ((compmoves.indexOf(1) > -1 )&& (compmoves.indexOf(2) > -1) && (compmoves.indexOf(3)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(4) > -1) && (compmoves.indexOf(5) > -1) && (compmoves.indexOf(6)) > -1) {
+            console.log("in here");
+            return true;
+        }
+        if ((compmoves.indexOf(7) > -1) && (compmoves.indexOf(8) > -1) && (compmoves.indexOf(9)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(1) > -1) && (compmoves.indexOf(4) > -1) && (compmoves.indexOf(7)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(2) > -1) && (compmoves.indexOf(5) > -1) && (compmoves.indexOf(8)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(3) > -1) && (compmoves.indexOf(6) > -1) && (compmoves.indexOf(9)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(1) > -1) && (compmoves.indexOf(5) > -1) && (compmoves.indexOf(9)) > -1) {
+            return true;
+        }
+        if ((compmoves.indexOf(3) > -1) && (compmoves.indexOf(5) > -1) && (compmoves.indexOf(7)) > -1) {
+            return true;
+        }
+        
+        return false;
+    }
 
     $( "#startgame" ).click(function() {
         if (!gamestarted) {
@@ -60,6 +107,26 @@ $(document).ready(function() {
             numTurns = numTurns +1;
         }
 
+        $( "#startgame" ).css("display", "none");
+        $( "#reset" ).css("display", "inline-block");
+
+    });
+
+    // reset the game when button pushed
+    $( "#reset" ).click(function() {
+        // numTurns = 0;
+        // $( ".square" ).removeClass("o");
+        // $( ".square" ).removeClass("x");
+
+        // humanmoves  = Array();
+        // compmoves   = Array();
+
+        // $( "#startgame" ).css("display", "inline-block");
+        // $( "#startgame" ).on();
+        // $( "#reset" ).css("display", "none");
+        // $( "#result" ).html("");
+        window.location.reload();
+
     });
 
     function changeTurn() {
@@ -74,8 +141,14 @@ $(document).ready(function() {
             console.log(numTurns + " num turns");
         }
 
-        if (numTurns == 9) {
+        if (numTurns >= 9) {
             $( ".square" ).off();
+            if (checkifWon()) {
+                $( "#result" ).html("I won.");
+            }
+            else {
+                $( "#result" ).html("We tied.");
+            }
         }
     }
 
@@ -104,32 +177,43 @@ $(document).ready(function() {
                     console.log("can win");
                     // making square unclickable bc game is over
                     $( ".square" ).off();
+                    // display text that says computer won
+                    $( "#result" ).html("I win.");
                     switch (canWin) {
                         case 1:
+                            compmoves.push(1);
                             addComputerSymbolHelper(document.getElementById("top-left"));
                             break;
                         case 2:
+                            compmoves.push(2);
                             addComputerSymbolHelper(document.getElementById("top-middle"));
                             break;
                         case 3:
+                            compmoves.push(3);
                             addComputerSymbolHelper(document.getElementById("top-right"));
                             break;
                         case 4:
+                            compmoves.push(4);
                             addComputerSymbolHelper(document.getElementById("middle-left"));
                             break;
                         case 5:
+                            compmoves.push(5);
                             addComputerSymbolHelper(document.getElementById("middle-middle"));
                             break;
                         case 6:
+                            compmoves.push(6);
                             addComputerSymbolHelper(document.getElementById("middle-right"));
                             break;
                         case 7:
+                            compmoves.push(7);
                             addComputerSymbolHelper(document.getElementById("bottom-left"));
                             break;
                         case 8:
+                            compmoves.push(8);
                             addComputerSymbolHelper(document.getElementById("bottom-middle"));
                             break;
                         case 9:
+                            compmoves.push(9);
                             addComputerSymbolHelper(document.getElementById("bottom-right"));
                             break;
                     }
@@ -266,30 +350,39 @@ $(document).ready(function() {
                         }
                         switch (number) {
                             case 1:
+                                compmoves.push(1);
                                 addComputerSymbolHelper(document.getElementById("top-left"));
                                 break;
                             case 2:
+                                compmoves.push(2);
                                 addComputerSymbolHelper(document.getElementById("top-middle"));
                                 break;
                             case 3:
+                                compmoves.push(3);
                                 addComputerSymbolHelper(document.getElementById("top-right"));
                                 break;
                             case 4:
+                                compmoves.push(4);
                                 addComputerSymbolHelper(document.getElementById("middle-left"));
                                 break;
                             case 5:
+                                compmoves.push(5);
                                 addComputerSymbolHelper(document.getElementById("middle-middle"));
                                 break;
                             case 6:
+                                compmoves.push(6);
                                 addComputerSymbolHelper(document.getElementById("middle-right"));
                                 break;
                             case 7:
+                                compmoves.push(7);
                                 addComputerSymbolHelper(document.getElementById("bottom-left"));
                                 break;
                             case 8:
+                                compmoves.push(8);
                                 addComputerSymbolHelper(document.getElementById("bottom-middle"));
                                 break;
                             case 9:
+                                compmoves.push(9);
                                 addComputerSymbolHelper(document.getElementById("bottom-right"));
                                 break;
                         }
@@ -308,6 +401,9 @@ $(document).ready(function() {
                 console.log("can win");
                 // make square unclickable bc the game is over
                 $( ".square" ).off();
+
+                // displaying text result
+                $( "#result" ).html("I win.");
                 switch (canWin) {
                     case 1:
                         addComputerSymbolHelper(document.getElementById("top-left"));
@@ -325,6 +421,7 @@ $(document).ready(function() {
                         addComputerSymbolHelper(document.getElementById("middle-middle"));
                         break;
                     case 6:
+                        compmoves.push(6);
                         addComputerSymbolHelper(document.getElementById("middle-right"));
                         break;
                     case 7:
@@ -908,4 +1005,101 @@ $(document).ready(function() {
         }
         return false;
     }
+
+    function checkAlreadyClicked(a) {
+        switch (a.id) {
+            case 'top-left':
+                if (humanmoves.indexOf(1) > -1 || compmoves.indexOf(1) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'top-middle':
+                if (humanmoves.indexOf(2) > -1 || compmoves.indexOf(2) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'top-right':
+                if (humanmoves.indexOf(3) > -1 || compmoves.indexOf(3) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'middle-left':
+                if (humanmoves.indexOf(4) > -1 || compmoves.indexOf(4) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'middle-middle':
+                if (humanmoves.indexOf(5) > -1 || compmoves.indexOf(5) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'middle-right':
+                if (humanmoves.indexOf(6) > -1 || compmoves.indexOf(6) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'bottom-left':
+                if (humanmoves.indexOf(7) > -1 || compmoves.indexOf(7) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'bottom-middle':
+                if (humanmoves.indexOf(8) > -1 || compmoves.indexOf(8) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            case 'bottom-right':
+                if (humanmoves.indexOf(9) > -1 || compmoves.indexOf(9) > -1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+        }
+        return false;
+    }
+
+    var w = $(window).width();
+    var x = w/2 - 76;
+    $( "#board" ).css("left", x+"px");
+    $( "#board" ).css("top", "50px");
+    $( "#options" ).css("left", (x-190)+"px");
+    $( "#startgame" ).css("left", (x-430)+"px");
+    $( "#result" ).css("left", (x+200)+"px");
+    $( "#reset" ).css("left", (x-430)+"px");
+});
+
+$(window).resize(function(){  
+    var w = $(window).width();
+    var x = w/2 - 76;
+    $( "#board" ).css("left", x+"px");
+    $( "#options" ).css("left", (x-190)+"px");
+    $( "#startgame" ).css("left", (x-430)+"px");
+    $( "#result" ).css("left", (x+200)+"px");
+    $( "#reset" ).css("left", (x-430)+"px");
 });

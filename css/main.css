@@ -25,14 +25,9 @@
     background-image: url('../o.png');
 }
 #options {
-    position: relative;
-    top: 200px;
-    float: left;
-}
-a {
-    font-size: 49px;
-    text-align: center;
-    width: 100%;
+    position: absolute;
+    top: 270px;
+    /*float: left;*/
 }
 body {
     margin: 0;
@@ -41,12 +36,41 @@ body {
     color: #283744;  
     display: inline-block;  
     width: auto;  
-    text-align: center;  
     text-decoration: none;  
     line-height: 40px;
     font-size: 11pt;
     padding: 0 5px 0 5px;
+    position: relative;
+    top: 230px;
 }
 a:hover, a:active {  
     background-color: #8c99a4;  
 } 
+
+#board {
+    position: relative;
+}
+#options1 {
+    position: relative;
+}
+#options2 {
+    position: relative;
+    left: 300px;
+    top: -85px;
+}
+#result {
+    position: relative;
+    top: 62px;
+}
+#reset {
+    color: #283744;  
+    display: inline-block;  
+    width: auto;  
+    text-decoration: none;  
+    line-height: 40px;
+    font-size: 11pt;
+    padding: 0 5px 0 5px;
+    position: relative;
+    top: 230px;
+    display: none;
+}
