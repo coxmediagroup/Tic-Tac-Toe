@@ -28,19 +28,22 @@ def playerTurn(board):
 
         row = 0
         col = 0
-        for line in board:
-            try:
-                col = line.index(userInput)
+        if userInput != 'X' and userInput != 'O':
+            for line in board:
+                try:
+                    col = line.index(userInput)
 
-                line[col] = 'X'
+                    line[col] = 'X'
 
-                validInput = True
-            except:
-                if row==2:
-                    print "Please enter a valid square."
-                    validInput = False
-                else:
-                    row+=1
+                    validInput = True
+                except:
+                    if row==2:
+                        validInput = False
+                    else:
+                        row+=1
+
+        if validInput == False:
+            print "Please enter a valid square."
 
 def checkWin(board):
     #Check horizontal wins
@@ -126,22 +129,31 @@ def aiTurn(board):
     board=zip(*rotatedBoard)[::-1]
     board=[list(line) for line in board]
 
+    #Opposite Diagonal
+    if validMove == False:
+        if (board[0].count('X') + board[1].count('X') + board[2].count('X') == 1):
+            if board[1][1] == '5':
+                board[1][1] = 'O'
+            else:
+                board[0][0] = 'O'
+            validMove = True
+        elif board[0][0] != '1' and board[2][2] == '9':
+            board[2][2] = 'O'
+            validMove = True
+        elif board[2][2] != '9' and board[0][0] == '1':
+            board[0][0] = 'O'
+            validMove = True
+        elif board[0][2] != '3' and board[2][0] == '7':
+            board[2][0] = 'O'
+            validMove = True
+        elif board[2][0] != '7' and board[0][2] == '3':
+            board[0][2] = 'O'
+            validMove = True
+
     #If no win/block, then center, corners, sides, in that order of availability
     if validMove == False:
         if board[1][1] == '5':
             board[1][1] = 'O'
-            validMove = True
-        elif board[0][0] == '1':
-            board[0][0] = 'O'
-            validMove = True
-        elif board[0][2] == '3':
-            board[0][2] = 'O'
-            validMove = True
-        elif board[2][0] == '7':
-            board[2][0] = 'O'
-            validMove = True
-        elif board[2][2] == '9':
-            board[2][2] = 'O'
             validMove = True
         elif board[0][1] == '2':
             board[0][1] = 'O'
@@ -154,6 +166,18 @@ def aiTurn(board):
             validMove = True
         elif board[2][1] == '8':
             board[2][1] = 'O'
+            validMove = True
+        elif board[0][0] == '1':
+            board[0][0] = 'O'
+            validMove = True
+        elif board[0][2] == '3':
+            board[0][2] = 'O'
+            validMove = True
+        elif board[2][0] == '7':
+            board[2][0] = 'O'
+            validMove = True
+        elif board[2][2] == '9':
+            board[2][2] = 'O'
             validMove = True
 
     return board
