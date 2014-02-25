@@ -59,13 +59,14 @@ $(document).ready(function() {
         else {
             turn = true;
             addComputerSymbol();
+            changeTurn();
         }
     }
 
     function addComputerSymbol() {
         // if computer went first
         if (realfirst) {
-            console.log(humanmoves);
+            //console.log(humanmoves);
             if (compmoves.length == 0 && humanmoves.length == 0) {
                 // tic tac toe board, numbered from top to bottom, left to right
                 // top-left = 1, middle-middle = 5, bottom-right = 9
@@ -83,101 +84,145 @@ $(document).ready(function() {
             else {
                 var humanLast = humanmoves[humanmoves.length-1];
                 // logic for any possible next move after human
-                switch (humanLast) {
-                    case 1:
-                        if (humanmoves.indexOf(2) == -1) {
-                            compmoves.push(2);
-                            addComputerSymbolHelper(document.getElementById("top-middle"));
-                            
-                        }
-                        else if (humanmoves.indexOf(4) == -1) {
-                            compmoves.push(4);
-                            addComputerSymbolHelper(document.getElementById("middle-left"));
-                        }
-                        break;
-                    case 2:
-                        if (humanmoves.indexOf(3) == -1) {
-                            compmoves.push(3);
-                            addComputerSymbolHelper(document.getElementById("top-right"));
-                            
-                        }
-                        else if (humanmoves.indexOf(1) == -1) {
-                            compmoves.push(1);
+                console.log("adding computer symbol");
+                console.log(compmoves);
+                console.log("did i win");
+
+                var canWin = computerCanWin();
+                console.log(canWin);
+                if (canWin > 0) {
+                    console.log("can win");
+                    switch (canWin) {
+                        case 1:
                             addComputerSymbolHelper(document.getElementById("top-left"));
-                        }
-                        break;
-                    case 3:
-                        if (humanmoves.indexOf(2) == -1) {
-                            compmoves.push(2);
+                            break;
+                        case 2:
                             addComputerSymbolHelper(document.getElementById("top-middle"));
-                            
-                        }
-                        else if (humanmoves.indexOf(6) == -1) {
-                            compmoves.push(6);
-                            addComputerSymbolHelper(document.getElementById("middle-right"));
-                        }
-                        break;
-                    case 4:
-                        if (humanmoves.indexOf(1) == -1) {
-                            compmoves.push(1);
-                            addComputerSymbolHelper(document.getElementById("top-left"));
-                            
-                        }
-                        else if (humanmoves.indexOf(7) == -1) {
-                            compmoves.push(7);
-                            addComputerSymbolHelper(document.getElementById("bottom-left"));
-                        }
-                        break;
-                    // no case 5 because computer always picks middle (5) first
-                    // case 5:
-                    //     compmoves.push(5);
-                    //     $("#middle-middle").addClass('x');
-                    //     break;
-                    case 6:
-                        if (humanmoves.indexOf(3) == -1) {
-                            compmoves.push(3);
+                            break;
+                        case 3:
                             addComputerSymbolHelper(document.getElementById("top-right"));
-                            
-                        }
-                        else if (humanmoves.indexOf(9) == -1) {
-                            compmoves.push(9);
-                            addComputerSymbolHelper(document.getElementById("bottom-right"));
-                        }
-                        break;
-                    case 7:
-                        if (humanmoves.indexOf(8) == -1) {
-                            compmoves.push(8);
-                            addComputerSymbolHelper(document.getElementById("bottom-middle"));
-                            
-                        }
-                        else if (humanmoves.indexOf(4) == -1) {
-                            compmoves.push(4);
+                            break;
+                        case 4:
                             addComputerSymbolHelper(document.getElementById("middle-left"));
-                        }
-                        break;
-                    case 8:
-                        if (humanmoves.indexOf(9) == -1) {
-                            compmoves.push(9);
-                            addComputerSymbolHelper(document.getElementById("bottom-right"));
-                            
-                        }
-                        else if (humanmoves.indexOf(7) == -1) {
-                            compmoves.push(7);
+                            break;
+                        case 5:
+                            addComputerSymbolHelper(document.getElementById("middle-middle"));
+                            break;
+                        case 6:
+                            addComputerSymbolHelper(document.getElementById("middle-left"));
+                            break;
+                        case 7:
                             addComputerSymbolHelper(document.getElementById("bottom-left"));
-                        }
-                        break;
-                    case 9:
-                        if (humanmoves.indexOf(8) == -1) {
-                            compmoves.push(8);
+                            break;
+                        case 8:
                             addComputerSymbolHelper(document.getElementById("bottom-middle"));
-                            
-                        }
-                        else if (humanmoves.indexOf(6) == -1) {
-                            compmoves.push(6);
-                            addComputerSymbolHelper(document.getElementById("middle-right"));
-                        }
-                        break;
+                            break;
+                        case 9:
+                            addComputerSymbolHelper(document.getElementById("bottom-right"));
+                            break;
+                    }
                 }
+                else {
+                    console.log("cant win yet");
+                    console.log("humanmoves");
+                    console.log(humanmoves);
+                    switch (humanLast) {
+                        case 1:
+                            if (humanmoves.indexOf(2) == -1) {
+                                compmoves.push(2);
+                                addComputerSymbolHelper(document.getElementById("top-middle"));
+                                
+                            }
+                            else if (humanmoves.indexOf(4) == -1) {
+                                compmoves.push(4);
+                                addComputerSymbolHelper(document.getElementById("middle-left"));
+                            }
+                            break;
+                        case 2:
+                            if (humanmoves.indexOf(3) == -1) {
+                                compmoves.push(3);
+                                addComputerSymbolHelper(document.getElementById("top-right"));
+                                
+                            }
+                            else if (humanmoves.indexOf(1) == -1) {
+                                compmoves.push(1);
+                                addComputerSymbolHelper(document.getElementById("top-left"));
+                            }
+                            break;
+                        case 3:
+                            if (humanmoves.indexOf(2) == -1) {
+                                compmoves.push(2);
+                                addComputerSymbolHelper(document.getElementById("top-middle"));
+                                
+                            }
+                            else if (humanmoves.indexOf(6) == -1) {
+                                compmoves.push(6);
+                                addComputerSymbolHelper(document.getElementById("middle-right"));
+                            }
+                            break;
+                        case 4:
+                            if (humanmoves.indexOf(1) == -1) {
+                                compmoves.push(1);
+                                addComputerSymbolHelper(document.getElementById("top-left"));
+                                
+                            }
+                            else if (humanmoves.indexOf(7) == -1) {
+                                compmoves.push(7);
+                                addComputerSymbolHelper(document.getElementById("bottom-left"));
+                            }
+                            break;
+                        // no case 5 because computer always picks middle (5) first
+                        // case 5:
+                        //     compmoves.push(5);
+                        //     $("#middle-middle").addClass('x');
+                        //     break;
+                        case 6:
+                            if (humanmoves.indexOf(3) == -1 &&  compmoves.indexOf(3) == -1) {
+                                compmoves.push(3);
+                                addComputerSymbolHelper(document.getElementById("top-right"));
+                                
+                            }
+                            else if (humanmoves.indexOf(9) == -1) {
+                                compmoves.push(9);
+                                addComputerSymbolHelper(document.getElementById("bottom-right"));
+                            }
+                            break;
+                        case 7:
+                            if (humanmoves.indexOf(8) == -1) {
+                                compmoves.push(8);
+                                addComputerSymbolHelper(document.getElementById("bottom-middle"));
+                                
+                            }
+                            else if (humanmoves.indexOf(4) == -1) {
+                                compmoves.push(4);
+                                addComputerSymbolHelper(document.getElementById("middle-left"));
+                            }
+                            break;
+                        case 8:
+                            if (humanmoves.indexOf(9) == -1) {
+                                compmoves.push(9);
+                                addComputerSymbolHelper(document.getElementById("bottom-right"));
+                                
+                            }
+                            else if (humanmoves.indexOf(7) == -1) {
+                                compmoves.push(7);
+                                addComputerSymbolHelper(document.getElementById("bottom-left"));
+                            }
+                            break;
+                        case 9:
+                            if (humanmoves.indexOf(8) == -1 && compmoves.indexOf(8) == -1) {
+                                compmoves.push(8);
+                                addComputerSymbolHelper(document.getElementById("bottom-middle"));
+                                
+                            }
+                            else if (humanmoves.indexOf(6) == -1) {
+                                compmoves.push(6);
+                                addComputerSymbolHelper(document.getElementById("middle-right"));
+                            }
+                            break;
+                    }
+                }
+                
                  
             }
         }
@@ -238,6 +283,193 @@ $(document).ready(function() {
                 humanmoves.push(9);
                 break;
         }
+        console.log("humanmoves");
         console.log(humanmoves);
+    }
+
+    function computerCanWin() {
+        if (contains(1, compmoves)) {
+            if (contains(2, compmoves)) {
+                if (!contains(3, humanmoves)) {
+                    return computerCanWinHelper(3);
+                }
+                
+            }
+            else if (contains(3, compmoves)) {
+                if (!contains(2, humanmoves)) {
+                    return computerCanWinHelper(2);
+                }
+                
+            }
+            else if (contains(4, compmoves)) {
+                if (!contains(7, humanmoves)) {
+                    return computerCanWinHelper(7);
+                }
+                
+            }
+            else if (contains(5, compmoves)) {
+                if (!contains(9, humanmoves)) {
+                    return computerCanWinHelper(9);
+                }
+                
+            }
+            else if (contains(7, compmoves)) {
+                if (!contains(4, humanmoves)) {
+                    return computerCanWinHelper(4);
+                }
+                
+            }
+            else if (contains(9, compmoves)) {
+                if (!contains(5, humanmoves)) {
+                    return computerCanWinHelper(5);
+                }
+                
+            }
+        }
+        if (contains(2, compmoves)) {
+            if (contains(3, compmoves)) {
+                if (!contains(1, humanmoves)) {
+                    return computerCanWinHelper(1);
+                }
+                
+            }
+            else if (contains(5, compmoves)) {
+                if (!contains(8, humanmoves)) {
+                    return computerCanWinHelper(8);
+                }
+
+            }
+            else if (contains(8, compmoves)) {
+                if (!contains(5, humanmoves)) {
+                    return computerCanWinHelper(5);
+                }
+                
+            }
+        }
+        if (contains(3, compmoves)) {
+            if (contains(9, compmoves)) {
+                if (!contains(6, humanmoves)) {
+                    return computerCanWinHelper(6);
+                }
+                
+            }
+            else if (contains(6, compmoves)) {
+                if (!contains(9, humanmoves)) {
+                    return computerCanWinHelper(9);
+                }
+                
+            }
+            else if (contains(5, compmoves)) {
+                if (!contains(7, humanmoves)) {
+                    return computerCanWinHelper(7);
+                }
+                 
+            }
+            else if (contains(7, compmoves)) {
+                if (!contains(5, humanmoves)) {
+                    return computerCanWinHelper(5);
+                }
+                
+            }
+        }
+        if (contains(4, compmoves)) {
+            if (contains(5, compmoves)) {
+                if (!contains(6, humanmoves)) {
+                    return computerCanWinHelper(6);
+                }
+                
+            }
+            else if (contains(6, compmoves)) {
+                if (!contains(5, humanmoves)) {
+                    return computerCanWinHelper(5);
+                }
+                
+            }
+            else if (contains(7, compmoves)) {
+                if (!contains(1, humanmoves)) {
+                    return computerCanWinHelper(1);
+                }
+                   
+            }
+        }
+        if (contains(5, compmoves)) {
+            if (contains(6, compmoves)) {
+                if (!contains(4, humanmoves)) {
+                    return computerCanWinHelper(4);
+                }
+                
+            }
+            else if (contains(8, compmoves)) {
+                if (!contains(2, humanmoves)) {
+                    return computerCanWinHelper(2);
+                }
+                
+            }
+            else if (contains(7, compmoves)) {
+                if (!contains(3, humanmoves)) {
+                    return computerCanWinHelper(3);
+                }
+                
+            }
+            else if (contains(9, compmoves)) {
+                if (!contains(1, humanmoves)) {
+                    return computerCanWinHelper(1);
+                }
+                
+            }
+        }
+        if (contains(6, compmoves)) {
+            if (contains(9, compmoves)) {
+                if (!contains(3, humanmoves)) {
+                    return computerCanWinHelper(3);
+                }
+                 
+            }
+        }
+        if (contains(7, compmoves)) {
+            if (contains(8, compmoves)) {
+                if (!contains(9, humanmoves)) {
+                    return computerCanWinHelper(9);
+                }
+                
+            }
+            else if (contains(9, compmoves)) {
+                if (!contains(8, humanmoves)) {
+                    return computerCanWinHelper(8);
+                }
+                  
+            }
+        }
+        if (contains(8, compmoves)) {
+            if (contains(9, compmoves)) {
+                if (!contains(7, humanmoves)) {
+                    return computerCanWinHelper(7);
+                }
+                
+            }
+        }
+
+        return 0;
+    }
+
+    function computerCanWinHelper(i) {
+        if (contains(i, humanmoves)) {
+            return 0;
+        }
+        else {
+            return i;
+        }
+    }
+
+    function contains(a, obj) {
+        //console.log("contains, and array");
+        //console.log(obj);
+        //console.log(a);
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i] == a) {
+                return true;
+            }
+        }
+        return false;
     }
 });
