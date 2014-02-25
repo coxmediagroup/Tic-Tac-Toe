@@ -60,12 +60,13 @@ def checkWin(board):
     return False
 
 def checkCat(board):
-    #Check to see if the board has any numbers remaining.
-    if ((board[0].count('1') == 0 and board[0].count('2') == 0 and board[0].count('3') == 0) and
-        (board[1].count('4') == 0 and board[1].count('5') == 0 and board[1].count('6') == 0) and
-        (board[2].count('7') == 0 and board[2].count('8') == 0 and board[2].count('9') == 0)):
-        return True
-    return False
+    #Check if non X or O value exists
+    catGame = True
+    for line in board:
+        for item in line:
+            if item != 'X' and item != 'O':
+                catGame = False
+    return catGame
 
 def aiTurn(board):
     validMove = False
@@ -170,7 +171,7 @@ while checkWin(board) == False and checkCat(board) == False:
         board = aiTurn(board)
         printBoard(board)
         print "Computer Turn"
-        time.sleep(2)
+        time.sleep(1)
 
 if checkWin(board) == True:
     print "Winner"
