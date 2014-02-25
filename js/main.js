@@ -4,9 +4,11 @@ var turn        = true; // true = computer turn
     realfirst   = true // true = computer first
     humanmoves  = Array();
     compmoves   = Array();
+    numTurns    = 0;  //if game not over, end it after 9 turns
 
 // wait for everything to load
 $(document).ready(function() {
+    console.log(numTurns);
     $( ".square" ).click(function() {
         if (gamestarted) {
             if (turn) {
@@ -14,8 +16,15 @@ $(document).ready(function() {
                 changeTurn();
             }
             else {
-                addHumanSymbol(this);
-                changeTurn();
+                if (numTurns != 9)  {
+                    addHumanSymbol(this);
+                    changeTurn();
+                    numTurns = numTurns + 1;
+                    console.log(numTurns + " num turns");
+                }
+                else {
+                    $( ".square" ).off();
+                }
             }
         }
     });
@@ -48,6 +57,7 @@ $(document).ready(function() {
         // starting the game if computer goes first
         if (turn) {
             document.getElementById("top-left").click();
+            numTurns = numTurns +1;
         }
 
     });
@@ -60,6 +70,12 @@ $(document).ready(function() {
             turn = true;
             addComputerSymbol();
             changeTurn();
+            numTurns = numTurns + 1;
+            console.log(numTurns + " num turns");
+        }
+
+        if (numTurns == 9) {
+            $( ".square" ).off();
         }
     }
 
@@ -86,6 +102,8 @@ $(document).ready(function() {
                 console.log(canWin);
                 if (canWin > 0) {
                     console.log("can win");
+                    // making square unclickable bc game is over
+                    $( ".square" ).off();
                     switch (canWin) {
                         case 1:
                             addComputerSymbolHelper(document.getElementById("top-left"));
@@ -120,49 +138,56 @@ $(document).ready(function() {
                     console.log("cant win yet");
                     console.log("humanmoves");
                     console.log(humanmoves);
+                    var somethingAdded = false;
                     switch (humanLast) {
                         case 1:
                             if (humanmoves.indexOf(2) == -1 &&  compmoves.indexOf(2) == -1) {
                                 compmoves.push(2);
                                 addComputerSymbolHelper(document.getElementById("top-middle"));
-                                
+                                somethingAdded = true;
                             }
                             else if (humanmoves.indexOf(4) == -1 &&  compmoves.indexOf(4) == -1) {
                                 compmoves.push(4);
                                 addComputerSymbolHelper(document.getElementById("middle-left"));
+                                somethingAdded = true;
                             }
                             break;
                         case 2:
                             if (humanmoves.indexOf(3) == -1 &&  compmoves.indexOf(3) == -1) {
                                 compmoves.push(3);
                                 addComputerSymbolHelper(document.getElementById("top-right"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(1) == -1 &&  compmoves.indexOf(1) == -1) {
                                 compmoves.push(1);
                                 addComputerSymbolHelper(document.getElementById("top-left"));
+                                somethingAdded = true;
                             }
                             break;
                         case 3:
                             if (humanmoves.indexOf(2) == -1 &&  compmoves.indexOf(2) == -1) {
                                 compmoves.push(2);
                                 addComputerSymbolHelper(document.getElementById("top-middle"));
-                                
+                                somethingAdded = true;
                             }
                             else if (humanmoves.indexOf(6) == -1 &&  compmoves.indexOf(6) == -1) {
                                 compmoves.push(6);
                                 addComputerSymbolHelper(document.getElementById("middle-right"));
+                                somethingAdded = true;
                             }
                             break;
                         case 4:
                             if (humanmoves.indexOf(1) == -1 &&  compmoves.indexOf(1) == -1) {
                                 compmoves.push(1);
                                 addComputerSymbolHelper(document.getElementById("top-left"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(7) == -1 &&  compmoves.indexOf(7) == -1) {
                                 compmoves.push(7);
                                 addComputerSymbolHelper(document.getElementById("bottom-left"));
+                                somethingAdded = true;
                             }
                             break;
                         // no case 5 because computer always picks middle (5) first
@@ -174,46 +199,100 @@ $(document).ready(function() {
                             if (humanmoves.indexOf(3) == -1 &&  compmoves.indexOf(3) == -1) {
                                 compmoves.push(3);
                                 addComputerSymbolHelper(document.getElementById("top-right"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(9) == -1 &&  compmoves.indexOf(9) == -1) {
                                 compmoves.push(9);
                                 addComputerSymbolHelper(document.getElementById("bottom-right"));
+                                somethingAdded = true;
                             }
                             break;
                         case 7:
                             if (humanmoves.indexOf(8) == -1 &&  compmoves.indexOf(8) == -1) {
                                 compmoves.push(8);
                                 addComputerSymbolHelper(document.getElementById("bottom-middle"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(4) == -1 &&  compmoves.indexOf(4) == -1) {
                                 compmoves.push(4);
                                 addComputerSymbolHelper(document.getElementById("middle-left"));
+                                somethingAdded = true;
                             }
                             break;
                         case 8:
                             if (humanmoves.indexOf(9) == -1 &&  compmoves.indexOf(9) == -1) {
                                 compmoves.push(9);
                                 addComputerSymbolHelper(document.getElementById("bottom-right"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(7) == -1 &&  compmoves.indexOf(7) == -1) {
                                 compmoves.push(7);
                                 addComputerSymbolHelper(document.getElementById("bottom-left"));
+                                somethingAdded = true;
                             }
                             break;
                         case 9:
                             if (humanmoves.indexOf(8) == -1 && compmoves.indexOf(8) == -1) {
                                 compmoves.push(8);
                                 addComputerSymbolHelper(document.getElementById("bottom-middle"));
+                                somethingAdded = true;
                                 
                             }
                             else if (humanmoves.indexOf(6) == -1 &&  compmoves.indexOf(6) == -1) {
                                 compmoves.push(6);
                                 addComputerSymbolHelper(document.getElementById("middle-right"));
+                                somethingAdded = true;
                             }
                             break;
+                    }
+
+                    console.log("made it this far");
+                    console.log(somethingAdded);
+                    // failsafe if nothing is added above for computer
+                    if (!somethingAdded) {
+                        var number = 1;
+                        var check = true;
+                        while (check) {
+                            if (contains(number, compmoves) || contains(number, humanmoves)) {
+                                check = true
+                                number = number + 1;
+                            }
+                            else {
+                                check = false;
+                            }
+                        }
+                        switch (number) {
+                            case 1:
+                                addComputerSymbolHelper(document.getElementById("top-left"));
+                                break;
+                            case 2:
+                                addComputerSymbolHelper(document.getElementById("top-middle"));
+                                break;
+                            case 3:
+                                addComputerSymbolHelper(document.getElementById("top-right"));
+                                break;
+                            case 4:
+                                addComputerSymbolHelper(document.getElementById("middle-left"));
+                                break;
+                            case 5:
+                                addComputerSymbolHelper(document.getElementById("middle-middle"));
+                                break;
+                            case 6:
+                                addComputerSymbolHelper(document.getElementById("middle-right"));
+                                break;
+                            case 7:
+                                addComputerSymbolHelper(document.getElementById("bottom-left"));
+                                break;
+                            case 8:
+                                addComputerSymbolHelper(document.getElementById("bottom-middle"));
+                                break;
+                            case 9:
+                                addComputerSymbolHelper(document.getElementById("bottom-right"));
+                                break;
+                        }
                     }
                 }
                 
@@ -227,6 +306,8 @@ $(document).ready(function() {
             console.log(canWin);
             if (canWin > 0) {
                 console.log("can win");
+                // make square unclickable bc the game is over
+                $( ".square" ).off();
                 switch (canWin) {
                     case 1:
                         addComputerSymbolHelper(document.getElementById("top-left"));
