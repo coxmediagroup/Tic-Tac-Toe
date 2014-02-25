@@ -9,6 +9,8 @@ var turn        = true; // true = computer turn
 // wait for everything to load
 $(document).ready(function() {
     console.log(numTurns);
+    
+    // add click listener for all tic tac toe square
     $( ".square" ).click(function() {
         var alreadyClicked = checkAlreadyClicked(this);
         if (gamestarted && !alreadyClicked) {
@@ -35,17 +37,28 @@ $(document).ready(function() {
             }
         }
 
+        // always check for winner.
+        // this check for winner before 9 turns
+        if (checkifWon()) {
+            $( "#result" ).html("I won.");
+            $( ".square" ).off();
+        }
+
+        // this checks for result after game has had 9 turns
         if (numTurns >= 9)  {
             $( ".square" ).off();
             if (checkifWon()) {
                 $( "#result" ).html("I won.");
+                $( ".square" ).off();
             }
             else {
                 $( "#result" ).html("We tied.");
+                $( ".square" ).off();
             }
         }
     });
-
+    
+    // function that check if computer has won
     function checkifWon() {
         if ((compmoves.indexOf(1) > -1 )&& (compmoves.indexOf(2) > -1) && (compmoves.indexOf(3)) > -1) {
             return true;
@@ -76,6 +89,7 @@ $(document).ready(function() {
         return false;
     }
 
+    // click listener on start game button. starts the game when clicked
     $( "#startgame" ).click(function() {
         if (!gamestarted) {
             gamestarted = true;
@@ -85,7 +99,7 @@ $(document).ready(function() {
         var f = document.getElementById("xoro");
         var xoro = f.options[f.selectedIndex].value;
         
-        // adding setting to the game
+        // adding settings to the game
         if (whofirst == 1) {
             turn = false;
             realfirst = false;
@@ -114,21 +128,11 @@ $(document).ready(function() {
 
     // reset the game when button pushed
     $( "#reset" ).click(function() {
-        // numTurns = 0;
-        // $( ".square" ).removeClass("o");
-        // $( ".square" ).removeClass("x");
-
-        // humanmoves  = Array();
-        // compmoves   = Array();
-
-        // $( "#startgame" ).css("display", "inline-block");
-        // $( "#startgame" ).on();
-        // $( "#reset" ).css("display", "none");
-        // $( "#result" ).html("");
         window.location.reload();
 
     });
 
+    // changes player turn. if computer's turn, perform their turn
     function changeTurn() {
         if (turn) {
             turn = false;
@@ -141,6 +145,13 @@ $(document).ready(function() {
             console.log(numTurns + " num turns");
         }
 
+        // always check for winner
+        if (checkifWon()) {
+            $( "#result" ).html("I won.");
+            $( ".square" ).off();
+        }
+
+        //check for result of game when board is full
         if (numTurns >= 9) {
             $( ".square" ).off();
             if (checkifWon()) {
@@ -152,6 +163,10 @@ $(document).ready(function() {
         }
     }
 
+    // this is where most of the logic is
+    // this has the logic for performing all of the computer's turn
+    // and separates code for when computer goes first and second.
+    // there are so many variations so the logic is complicated
     function addComputerSymbol() {
         var humanLast = humanmoves[humanmoves.length-1];
         
@@ -589,6 +604,8 @@ $(document).ready(function() {
         }
     }
 
+    // helper function that checks which symbol computer has for games and 
+    // adds it to square that is sent in as parameter
     function addComputerSymbolHelper(e) {
         console.log(e);
         if (first) {
@@ -599,6 +616,8 @@ $(document).ready(function() {
         }
     } 
 
+    // helper function that checks which symbol human has for games and 
+    // adds it to square that is sent in as parameter
     function addHumanSymbol(e) {
         if (first) {
             $( e ).addClass("x");
@@ -610,6 +629,7 @@ $(document).ready(function() {
         addHumanSymbolHelper(e);
     }
 
+    // this adds the human square number to the humans array of moves.
     function addHumanSymbolHelper(e) {
         console.log(e.id);
         switch (e.id) {
@@ -645,6 +665,7 @@ $(document).ready(function() {
         console.log(humanmoves);
     }
 
+    // this checks if the computer can win on the next move
     function computerCanWin() {
         if (contains(1, compmoves)) {
             if (contains(2, compmoves)) {
@@ -810,6 +831,8 @@ $(document).ready(function() {
         return 0;
     }
 
+    // this helps check if computer can when on next move by checking that the human hasn't already
+    // clicked on the square that could win the game for the computer
     function computerCanWinHelper(i) {
         if (contains(i, humanmoves)) {
             return 0;
@@ -819,6 +842,7 @@ $(document).ready(function() {
         }
     }
 
+    // checks if the human can win on the next move so it can be blocked
     function humanCanWin() {
         var winner = 0;
         if (contains(1, humanmoves)) {
@@ -985,6 +1009,8 @@ $(document).ready(function() {
         return winner;
     }
 
+    // helps check if human can win on next move by checking if the square that can win the game
+    // hasn't already been chosen by computer
     function humanCanWinHelper(i) {
         if (contains(i, compmoves)) {
             return 0;
@@ -994,6 +1020,7 @@ $(document).ready(function() {
         }
     }
 
+    // function that checks if the array, obj, containt element a
     function contains(a, obj) {
         //console.log("contains, and array");
         //console.log(obj);
@@ -1006,6 +1033,8 @@ $(document).ready(function() {
         return false;
     }
 
+    // this function is used to prevent user from clicking on squares that have already
+    // been selected
     function checkAlreadyClicked(a) {
         switch (a.id) {
             case 'top-left':
@@ -1084,6 +1113,9 @@ $(document).ready(function() {
         return false;
     }
 
+
+    // code below is just to position all the visual aspects of the game in the center
+    // of browser window.
     var w = $(window).width();
     var x = w/2 - 76;
     $( "#board" ).css("left", x+"px");
@@ -1094,6 +1126,7 @@ $(document).ready(function() {
     $( "#reset" ).css("left", (x-430)+"px");
 });
 
+// code below positions visual aspects of the game after window is resized
 $(window).resize(function(){  
     var w = $(window).width();
     var x = w/2 - 76;

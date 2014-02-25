@@ -4,6 +4,7 @@
     background-color: black;
     float: left;
     position: relative;
+    cursor: pointer;
 }
 .top {
     border-right: white solid 1px;
