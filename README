@@ -11,3 +11,10 @@ We are a Django shop, but it is not a requirement that you implement your progra
 Solution:
 1. Implemented in pure client-side JavaScript, built upon the JSFiddle [here](http://jsfiddle.net/5wKfF/15/). To help with evaluation, the changes to the JSFiddle are separated across commits.
 2. To run, `python -m SimpleHTTPServer 8000` and navigate to [localhost:8000](http://0.0.0.0:8000).
+3. Note that all games start with the human player making the first move.
+
+Synopsis:
+The solution takes a fuzzy logic approach to the problem. The algorithm watches the human player's moves, then blocks their winning possibility using the following logic:
+1. Choose one of the winning rows, with a preference given to diagonal where the human player is seen to be progressing.
+2. Choose one of the squares on that row, with a preference given to the square closer to opponent.
+3. This repeats until either the automaton (O) wins against human (X), or the game leads to a tie, popularly called ``cat's game''.
