@@ -76,20 +76,21 @@
     },
 
     computer = function(e) {
-        console.log("human moved: (" + e.row + ', ' + e.col + ')');
-
         var maximumMatch = 0;
         var idx;
         for (i = 0; i < wins.length; i += 1) {
             var match = wins[i] & score['X'];
             var blocked = match | (wins[i] & score['O']);
             
+            // If a win is already not blocked, and current win possiblity is greater, store it
             if((blocked !== wins[i]) && (countOneWeightsInIntOnRadix2(match) > countOneWeightsInIntOnRadix2(maximumMatch))) {
-                console.log(countOneWeightsInIntOnRadix2(match) + ":" + countOneWeightsInIntOnRadix2(maximumMatch));
                 maximumMatch = match;
                 idx = i;
             }            
         }
+
+        // After finding our target win to block, we need to determine which exact index we are going to block
+        // This elaborate algorithm exactly does that.
 
         var blockIdx = blockIndices[wins[idx]];
         console.log("REQ block at: " + blockIdx);
@@ -102,18 +103,31 @@
             })
         }
 
+        console.log("Opponent moved: " + e.row + ', ' + e.col);
+        var opPrevMove = {row: e.row, col: e.col};
+        var targetMove;
+        var targetMoveSelector;
+
+        // Determine the block key with the lowest possible loseQuotient
         for (var i in blockKeys) {
-            var move = {row: 'row=', col: 'col='};
-            move.row += parseInt(blockKeys[i].row);
-            move.col += parseInt(blockKeys[i].col);
-            var selector = '[' + move.row + ']' + '[' + move.col + ']';
+            var move = {
+                row: blockKeys[i].row,
+                col: blockKeys[i].col
+            };
+            var moveQuery = {row: 'row=', col: 'col='};
+            moveQuery.row += move.row;
+            moveQuery.col += move.col;
+            var selector = '[' + moveQuery.row + ']' + '[' + moveQuery.col + ']';
             if ($(selector).text() === EMPTY) {
-                console.log('(' + blockKeys[i].row + ', ' + blockKeys[i].col + ')');
-                $(selector).trigger('click');
-                break;
+                if (!targetMove || (loseQuotient(targetMove, opPrevMove) > loseQuotient(move, opPrevMove))) {
+                    targetMove = move;
+                    targetMoveSelector = selector;
+                }
             }
         }
-
+        
+        console.log('(' + targetMove.row + ', ' + targetMove.col + ')');
+        $(targetMoveSelector).trigger('click');
     },
 
     /*
@@ -199,6 +213,16 @@
     $(document.body).on('human', computer);
 }());
 
+// Calculates a quotient using a prospective move and previous opponent move
+// Basically, a measure of closeness - close moves lead to no possiblities for opponent wining
+function loseQuotient(move, opPrevMove) {
+    console.dir(move);
+    console.log(Math.abs(move.row - opPrevMove.row) + Math.abs(move.col - opPrevMove.col));
+    return Math.abs(move.row - opPrevMove.row) + Math.abs(move.col - opPrevMove.col);
+}
+
+// Since the score of each component in a 9-bit integer, counting number of 1s in its radix-2 form is useful
+// for measuring the state of the tic-tac-toe board
 function countOneWeightsInIntOnRadix2(number) {
     var total = 0;
     while (number != 0) {
