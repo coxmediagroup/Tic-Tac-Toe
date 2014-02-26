@@ -11,6 +11,7 @@
         EMPTY = "\xA0",
         score,
         moves,
+        track,
         turn = "X",
         oldOnload,
 
@@ -64,6 +65,17 @@
         return false;
     },
 
+    computer = function(e) {
+        console.log("human moved: (" + e.row + ', ' + e.col + ')');
+        var move = {row: 'row=', col: 'col='};
+        move.row += parseInt(e.row) + 1;
+        move.col += parseInt(e.col) + 1;
+
+        var selector = '[' + move.row + ']' + '[' + move.col + ']';
+        console.log(selector);
+        $(selector).trigger('click');
+    },
+
     /*
      * Sets the clicked-on square to the current player's mark,
      * then checks for a win or cats game.  Also changes the
@@ -85,6 +97,11 @@
         } else {
             turn = turn === "X" ? "O" : "X";
         }
+
+        var event = jQuery.Event( "human" );
+        event.row = this.getAttribute('row');
+        event.col = this.getAttribute('col');
+        $( "body" ).trigger( event );
     },
 
     /*
@@ -104,6 +121,8 @@
             board.appendChild(row);
             for (j = 0; j < 3; j += 1) {
                 cell = document.createElement("td");
+                cell.setAttribute('row', i);
+                cell.setAttribute('col', j);
                 cell.width = cell.height = 50;
                 cell.align = cell.valign = 'center';
                 cell.indicator = indicator;
@@ -133,5 +152,7 @@
     } else {
         window.onload = play;
     }
-}());
 
+    // Register human event that will trigger the computer move
+    $(document.body).on('human', computer);
+}());
