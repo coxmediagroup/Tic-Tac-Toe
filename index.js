@@ -34,7 +34,7 @@
      *         73   146   292
      *
      */
-    wins = [7, 56, 448, 73, 146, 292, 273, 84],
+    wins = [273, 84, 7, 56, 448, 73, 146, 292],
 
     blockIndices = {
         7:   [0, 1, 2],
@@ -83,6 +83,7 @@
             var blocked = match | (wins[i] & score['O']);
             
             // If a win is already not blocked, and current win possiblity is greater, store it
+            // NOTE: preference given to diagonal wins
             if((blocked !== wins[i]) && (countOneWeightsInIntOnRadix2(match) > countOneWeightsInIntOnRadix2(maximumMatch))) {
                 maximumMatch = match;
                 idx = i;
@@ -93,7 +94,6 @@
         // This elaborate algorithm exactly does that.
 
         var blockIdx = blockIndices[wins[idx]];
-        console.log("REQ block at: " + blockIdx);
 
         var blockKeys = [];
         for (var i = 0; i < blockIdx.length; i++) {
@@ -103,7 +103,7 @@
             })
         }
 
-        console.log("Opponent moved: " + e.row + ', ' + e.col);
+        console.log("Opponent moved: (" + e.row + ', ' + e.col + ')');
         var opPrevMove = {row: e.row, col: e.col};
         var targetMove;
         var targetMoveSelector;
@@ -126,7 +126,7 @@
             }
         }
         
-        console.log('(' + targetMove.row + ', ' + targetMove.col + ')');
+        console.log('Computer moved: (' + targetMove.row + ', ' + targetMove.col + ')');
         $(targetMoveSelector).trigger('click');
     },
 
@@ -216,8 +216,6 @@
 // Calculates a quotient using a prospective move and previous opponent move
 // Basically, a measure of closeness - close moves lead to no possiblities for opponent wining
 function loseQuotient(move, opPrevMove) {
-    console.dir(move);
-    console.log(Math.abs(move.row - opPrevMove.row) + Math.abs(move.col - opPrevMove.col));
     return Math.abs(move.row - opPrevMove.row) + Math.abs(move.col - opPrevMove.col);
 }
 
