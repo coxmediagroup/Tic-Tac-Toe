@@ -9,5 +9,5 @@ If you don't want to broadcast your intentions by forking this, feel free to clo
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
 Solution:
-1. Implemented in pure client-side JavaScript, built upon the JSFiddle [here](http://jsfiddle.net/5wKfF/15/).
+1. Implemented in pure client-side JavaScript, built upon the JSFiddle [here](http://jsfiddle.net/5wKfF/15/). To help with evaluation, the changes to the JSFiddle are separated across commits.
 2. To run, `python -m SimpleHTTPServer 8000` and navigate to [localhost:8000](http://0.0.0.0:8000).

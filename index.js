@@ -11,7 +11,6 @@
         EMPTY = "\xA0",
         score,
         moves,
-        track,
         turn = "X",
         oldOnload,
 
@@ -36,6 +35,17 @@
      *
      */
     wins = [7, 56, 448, 73, 146, 292, 273, 84],
+
+    blockIndices = {
+        7:   [0, 1, 2],
+        56:  [3, 4, 5],
+        448: [6, 7, 8],
+        73:  [0, 3, 6],
+        146: [1, 4, 7],
+        292: [2, 5, 8],
+        273: [0, 4, 8],
+        84:  [2, 4, 6]
+    },
 
     /*
      * Clears the score and move count, erases the board, and makes it
@@ -67,13 +77,43 @@
 
     computer = function(e) {
         console.log("human moved: (" + e.row + ', ' + e.col + ')');
-        var move = {row: 'row=', col: 'col='};
-        move.row += parseInt(e.row) + 1;
-        move.col += parseInt(e.col) + 1;
 
-        var selector = '[' + move.row + ']' + '[' + move.col + ']';
-        console.log(selector);
-        $(selector).trigger('click');
+        var maximumMatch = 0;
+        var idx;
+        for (i = 0; i < wins.length; i += 1) {
+            var match = wins[i] & score['X'];
+            var blocked = match | (wins[i] & score['O']);
+            
+            if((blocked !== wins[i]) && (countOneWeightsInIntOnRadix2(match) > countOneWeightsInIntOnRadix2(maximumMatch))) {
+                console.log(countOneWeightsInIntOnRadix2(match) + ":" + countOneWeightsInIntOnRadix2(maximumMatch));
+                maximumMatch = match;
+                idx = i;
+            }            
+        }
+
+        var blockIdx = blockIndices[wins[idx]];
+        console.log("REQ block at: " + blockIdx);
+
+        var blockKeys = [];
+        for (var i = 0; i < blockIdx.length; i++) {
+            blockKeys.push({
+                row: parseInt(blockIdx[i]/3),
+                col: blockIdx[i] % 3
+            })
+        }
+
+        for (var i in blockKeys) {
+            var move = {row: 'row=', col: 'col='};
+            move.row += parseInt(blockKeys[i].row);
+            move.col += parseInt(blockKeys[i].col);
+            var selector = '[' + move.row + ']' + '[' + move.col + ']';
+            if ($(selector).text() === EMPTY) {
+                console.log('(' + blockKeys[i].row + ', ' + blockKeys[i].col + ')');
+                $(selector).trigger('click');
+                break;
+            }
+        }
+
     },
 
     /*
@@ -98,10 +138,12 @@
             turn = turn === "X" ? "O" : "X";
         }
 
-        var event = jQuery.Event( "human" );
-        event.row = this.getAttribute('row');
-        event.col = this.getAttribute('col');
-        $( "body" ).trigger( event );
+        if (turn === "O") {
+            var event = jQuery.Event( "human" );
+            event.row = this.getAttribute('row');
+            event.col = this.getAttribute('col');
+            $( "body" ).trigger( event );
+        }
     },
 
     /*
@@ -156,3 +198,12 @@
     // Register human event that will trigger the computer move
     $(document.body).on('human', computer);
 }());
+
+function countOneWeightsInIntOnRadix2(number) {
+    var total = 0;
+    while (number != 0) {
+        total += (number % 2);
+        number = parseInt(number / 2);
+    }
+    return total;
+}
