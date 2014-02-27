@@ -11,7 +11,20 @@ def get_open_spaces(board):
     return spaces
 
 print "Let's play Tic Tac Toe"
-print get_open_spaces(board)
+
+def setup_players():
+    valid_setup = False
+    while not valid_setup:
+        plr = raw_input("Enter player type (x or o): ")
+        if plr.lower() != "x" and plr.lower() != "o":
+            print "Invalid player type! Please type \"x\" or \"o\""
+        elif plr.lower() == "x":
+            com = "o"
+            valid_setup = True
+        elif plr.lower() == "o":
+            com = "x"
+            valid_setup = True
+
 
 plr = "x"
 com = "o"
@@ -66,12 +79,14 @@ def request_move(b):
     while not valid_move:
         try:
             row = int(raw_input("Guess Row:")) - 1
-            if row < 0 or row > 2: raise Exception("Invalid row given!")
+            if row < 0 or row > 2:
+                raise Exception("Invalid row given!")
             col = int(raw_input("Guess Col:")) - 1
-            if col < 0 or col > 2: raise Exception("Invalid col given!")
+            if col < 0 or col > 2:
+                raise Exception("Invalid col given!")
         except ValueError as e:
-            print "Must be a numeric value"
-            cotinue
+            print "That's not a valid number!"
+            continue
         except Exception as e:
             print e
             continue
@@ -84,6 +99,7 @@ def request_move(b):
 def move(row, col, p, b):
     b[row][col] = p
 
+setup_players()
 while not winner:
     print_board(board)
     plr_move = request_move(board)
