@@ -9,7 +9,6 @@ class TicTacToeBoard:
     def __init__(self, board_clone=None):
         self.current_play = 'X'
         self.opponent_play = 'O'
-        self.empty = ' '
         self.width = 3
         self.height = 3
         self.positions = {}
@@ -19,6 +18,8 @@ class TicTacToeBoard:
             self.__dict__ = copy.deepcopy(board_clone.__dict__)
 
     def _is_empty(self, position):
+        """Simple 'is it empty' checker'
+        """
         return position != "X" and position != "O"
 
     def checker(self, player):
@@ -30,9 +31,9 @@ class TicTacToeBoard:
         """
         if self.check_win():
             if player:
-                return -1, None
+                return -1, None     # minimizing player
             else:
-                return 1, None
+                return 1, None      # maximizing player
         elif self.check_draw():
             return 0, None
         elif player:    # check the minimizing player
@@ -156,7 +157,7 @@ def print_header():
     print ""
     print "Begin!"
     print ""
-    print "Pick a spot (available spots are numbered)"
+    print "Pick a position (available positions are numbered)"
 
 
 def print_winner(winner, plays):
@@ -164,9 +165,7 @@ def print_winner(winner, plays):
     print ""
 
 if __name__ == "__main__":
-    # initial board
-    game_over = False
-    plays = 0
+    game_over, plays = False, 0
     print_header()
     board = TicTacToeBoard()
     print board.print_board()
