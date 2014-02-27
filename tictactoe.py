@@ -71,21 +71,6 @@ def check_win(b):
     # Catch All for tie
     return "-"
 
-def rand_row(board):
-    return randint(0, len(board) - 1)
-
-def rand_col(board):
-    return randint(0, len(board) - 1)
-
-com_row = rand_row(board)
-com_col = rand_col(board)
-
-def plr_turn(p):
-    if p == "x":
-        return "o"
-    else:
-        return "x"
-
 def request_move(b):
     row = None
     col = None
@@ -113,17 +98,30 @@ def request_move(b):
 def move(row, col, p, b):
     b[row][col] = p
 
+def plr_turn(p):
+    if p == "x":
+        return "o"
+    else:
+        return "x"
+
 setup_players()
 while not winner:
     print_board(board)
     if plr in com:
         print "Computer is contemplating..."
+        def rand_row(board):
+            return randint(0, len(board) - 1)
+
+        def rand_col(board):
+            return randint(0, len(board) - 1)
+
+        com_row = rand_row(board)
+        com_col = rand_col(board)
         plr_move = (com_row, com_col)
     else:
         plr_move = request_move(board)
     move(plr_move[0], plr_move[1], plr, board)
     winner = check_win(board)
     plr = plr_turn(plr)
-    print plr
 
 print print_board(board)
