@@ -1,0 +1,71 @@
+/*================================\
+  Elements
+\================================*/
+
+* {margin:0; padding:0; border: none;}
+
+body {
+	background-color: rgb(234, 234, 234);
+	font-family: Georgia, Times, serif;
+	color: #555;
+	padding: 0;
+	margin: 0; 
+}
+
+h1 {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 64px;
+	line-height: 64px;
+	margin-bottom: 12px;
+}
+
+/*===============================\
+  IDs
+\===============================*/
+
+#container {
+	width: 800px;
+	margin: 3em auto;
+}
+
+#title {
+	text-align: center;
+}
+
+#ttt_grid {
+	margin: auto;
+	width: 490px;
+}
+
+/*===============================\
+  Classes
+\===============================*/
+.ttt_cell {
+	width: 160px;
+	height: 160px;
+	float: left;
+}
+
+.null_cell {
+	background-image: url(../images/null-mark.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.hilite_cell {
+	background-image: url(../images/hilite-mark.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.x_cell {
+	background-image: url(../images/x-mark.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.o_cell {
+	background-image: url(../images/o-mark.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
