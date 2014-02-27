@@ -107,8 +107,14 @@ def plr_turn(p):
 setup_players()
 while not winner:
     print_board(board)
+    turn_no = 0
     if plr in com:
         print "Computer is contemplating..."
+        if turn_no == 0:
+            com_row = 2
+            com_col = 1
+            plr_move = (com_row, com_col)
+            turn_no += 1
         def rand_row(board):
             return randint(0, len(board) - 1)
 
@@ -118,6 +124,9 @@ while not winner:
         com_row = rand_row(board)
         com_col = rand_col(board)
         plr_move = (com_row, com_col)
+        turn_no += 1
+        print plr_move
+        print turn_no
     else:
         plr_move = request_move(board)
     move(plr_move[0], plr_move[1], plr, board)
