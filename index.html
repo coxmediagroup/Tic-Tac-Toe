@@ -2,32 +2,8 @@
 <head>
 	<title>Tic-Tac-Toe</title>
 	<script src="js/jquery.js"></script>
+	<script src="js/libttt.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-
-	<script>
-	function markCell(cell)
-	{
-		$(cell).removeClass("null_cell");
-		$(cell).addClass("x_cell");
-		$(cell).unbind("click");
-	}
-
-	$(document).ready(function() {
-		$(".null_cell").hover(function() {
-			// Hi-lite the cell, and make it clickable
-			$(this).removeClass("null_cell");
-			$(this).addClass("hilite_cell");
-			$(this).bind("click", function() {
-				markCell(this);
-			});
-		}, function() {
-			// Un-hi-lite the cell, and remove clickability
-			$(this).removeClass("hilite_cell");
-			$(this).addClass("null_cell");
-			$(this).unbind("click");
-		});
-	});
-	</script>
 </head>
 <body>
 
@@ -35,6 +11,11 @@
 	<h1 id="title">Tic-Tac-Toe</h1>
 
 	<div id="ttt_grid">
+		<div id="row0">
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+		</div>
 		<div id="row1">
 			<div class="ttt_cell null_cell"></div>
 			<div class="ttt_cell null_cell"></div>
@@ -45,12 +26,8 @@
 			<div class="ttt_cell null_cell"></div>
 			<div class="ttt_cell null_cell"></div>
 		</div>
-		<div id="row3">
-			<div class="ttt_cell null_cell"></div>
-			<div class="ttt_cell null_cell"></div>
-			<div class="ttt_cell null_cell"></div>
-		</div>
 	</div>
+	<a href="javascript: clearBoard();">Clear board</a>
 </div>
 
 </body>
