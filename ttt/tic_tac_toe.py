@@ -22,7 +22,7 @@ class TicTacToe:
         # TODO - I should propbably test that the open value is actualy None
         # First along the x axis
         for i in range(3):
-            if self.board[i][0] == mark and self.board[i][1] == mark:
+            if places_match([(i, 0, mark), (i, 1, make), (i, 2, None):
                 return (i, 2)
             if self.board[i][1] == mark and self.board[i][2] == mark:
                 return (i, 0)
