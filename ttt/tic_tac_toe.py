@@ -1,3 +1,12 @@
+"""
+Never loose algo from:
+http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+"""
+
+
+import copy
+
+
 class TicTacToe:
     def __init__(self, xo='X', first=False):
         self.board = [[None]*3, [None]*3, [None]*3]
@@ -24,30 +33,32 @@ class TicTacToe:
         if board is None:
             board = self.board
 
+        winning_moves = []
+
 
         # First along the x axis
         for i in range(3):
             if self.places_match(board, [(i, 0, mark), (i, 1, mark),
                                          (i, 2, None)]):
-                return (i, 2)
+                winning_moves.append((i, 2))
             if self.places_match(board, [(i, 0, mark), (i, 2, mark),
                                          (i, 1, None)]):
-                return (i, 1)
+                winning_moves.append((i, 1))
             if self.places_match(board, [(i, 1, mark), (i, 2, mark),
                                          (i, 0, None)]):
-                return (i, 0)
+                winning_moves.append((i, 0))
 
         # Then along the y axis
         for i in range(3):
             if self.places_match(board, [(0, i, mark), (1, i, mark),
                                          (2, i, None)]):
-                return (2, i)
+                winning_moves.append((2, i))
             if self.places_match(board, [(0, i, mark), (2, i, mark),
                                          (1, i, None)]):
-                return (1, i)
+                winning_moves.append((1, i))
             if self.places_match(board, [(1, i, mark), (2, i, mark),
                                          (0, i, None)]):
-                return (0, i)
+                winning_moves.append((0, i))
 
         # Now diagonal
         # (1,1) is always going to be set for diagonals, all we need to do is
@@ -60,58 +71,41 @@ class TicTacToe:
         for diags, ret in diagonals.items():
             if (self.places_match(board, [(diags[0], diags[1], mark),
                                          (1, 1, mark), (ret[0], ret[1], None)])):
-                return ret
+                winning_moves.append(ret)
 
-        return False
+        winning_moves = list(set(winning_moves))
 
-    def has_fork(self, mark='O'):    
+        if len(winning_moves) == 1:
+            return winning_moves[0]
+        elif winning_moves:
+            return winning_moves
+        else:
+            return False
+            
+
+
+    def has_fork(self, mark='O'):
         """
         A fork is when there exists two possibilities that create a winning
         move. 
         """
-        win_moves = []
-#        new_board = self.board[:]
+        POS = {0: (0, 0), 1: (0, 1), 2: (0, 2),
+               3: (1, 0), 4: (1, 1), 5: (1, 2),
+               6: (2, 0), 7: (2, 1), 8: (2, 2)} 
 
-
-        # along the X
-        for i in range(3):
-            new_board = [[None]*3, [None]*3, [None]*3]
-            new_board[i][0] = self.board[i][0]
-            new_board[i][1] = self.board[i][1]
-            new_board[i][2] = self.board[i][2]
-            self.output(new_board)
-            print self.has_win_move(new_board)
-            win_moves.append(self.has_win_move(new_board))
-            
-
-        # along the Y
-        for i in range(3):
-            new_board = [[None]*3, [None]*3, [None]*3]
-            new_board[0][i] = self.board[0][i]
-            new_board[1][i] = self.board[1][i]
-            new_board[2][i] = self.board[2][i]
-            self.output(new_board)
-            print self.has_win_move(new_board)
-            win_moves.append(self.has_win_move(new_board))
-
-        new_board = [[None]*3, [None]*3, [None]*3]
-        new_board[0][0] = self.board[0][0]
-        new_board[1][1] = self.board[1][1]
-        new_board[2][2] = self.board[2][2]
-        self.output(new_board)
-        print self.has_win_move(new_board)
-        win_moves.append(self.has_win_move(new_board))
-
-        new_board = [[None]*3, [None]*3, [None]*3]
-        new_board[0][2] = self.board[0][2]
-        new_board[1][1] = self.board[1][1]
-        new_board[2][0] = self.board[2][0]
-        self.output(new_board)
-        print self.has_win_move(new_board)
-        win_moves.append(self.has_win_move(new_board))
-
-        print win_moves
+        for i in range(9):
+            board = copy.deepcopy(self.board)
+            x, y = POS[i]
     
+            if board[x][y] is not None: 
+                continue
+
+            board[x][y] = mark
+#            self.output(board)
+            wins = self.has_win_move(board)
+#            print POS[i], wins
+            if type(wins) is type([]) and len(wins) == 2:
+                return POS[i]
 
     def places_match(self, board, places):
         """
@@ -140,3 +134,33 @@ class TicTacToe:
         where = self.has_win_move(mark=self.xo)
         if where:
             self.board[where[0]][where[1]] = self.xo
+            return 
+
+        # win move for opponent
+        where = self.has_win_move(mark=opponent)
+        if where:
+            self.board[where[0]][where[1]] = self.xo
+            return 
+
+        #Block an opponent's fork
+        #Special Case
+        if self.board[0][0] == opponent and self.board[2][2] == opponent:
+            self.board[0][1] = self.xo
+            return 
+
+        where = self.has_fork(mark=opponent)
+        if where:
+            self.board[where[0]][where[1]] = self.xo
+            return 
+
+        #Look for our own forks
+        where = self.has_fork()
+        if where
+            self.board[where[0]][where[1]] = self.xo
+            return 
+       
+        #Center 
+        if self.board[1][1] is None:
+            self.board[1][1] = self.xo
+
+
