@@ -5,6 +5,7 @@ http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 
 
 import copy
+from collections import OrderedDict
 
 
 class TicTacToe:
@@ -155,12 +156,39 @@ class TicTacToe:
 
         #Look for our own forks
         where = self.has_fork()
-        if where
+        if where:
             self.board[where[0]][where[1]] = self.xo
             return 
        
         #Center 
         if self.board[1][1] is None:
             self.board[1][1] = self.xo
+            return 
 
+        # Opposite Corner
+        CORNERS = {(0, 0): (2, 2), (0, 2): (2, 0),
+                   (2, 0): (0, 2), (2, 2): (0, 0)}
+        CORNERS = OrderedDict(sorted(CORNERS.items(), key=lambda t: t[0]))
+        for corner, opposite in CORNERS.items():
+            x, y = corner
+            if self.board[x][y] == opponent:
+                x, y = opposite
+                if self.board[x][y] is None:
+                    self.board[x][y] = self.xo
+                    return 
 
+        # Empty corner
+        for corner in CORNERS.keys():
+            x, y = corner
+            if self.board[x][y] is None:
+                self.board[x][y] = self.xo
+                return 
+
+        # Empty side
+        SIDES = [(0, 1), (1, 0), (1, 2), (2, 1)]
+        for side in SIDES:
+            x,y = side
+            if self.board[x][y] is None:
+                self.board[x][y] = self.xo
+                return 
+    

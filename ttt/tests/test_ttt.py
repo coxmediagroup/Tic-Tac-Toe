@@ -91,21 +91,74 @@ class TestTicTacToe(TestCase):
         assert match == True
 
     def test_ai_move_we_win(self):
+        """
+        If we can win do so.
+        """
         ttt = TicTacToe(first=False)
         ttt.board = [['X', None, 'X'], [None]*3, [None]*3]
         ttt.ai_move()
         assert ttt.board[0][1] == 'X'
 
     def test_ai_move_block_win(self):
+        """
+        Block opponent win.
+        """
         ttt = TicTacToe(xo='O', first=False)
         ttt.board = [['X', None, 'X'], [None]*3, [None]*3]
         ttt.ai_move()
         assert ttt.board[0][1] == 'O'
         
     def test_ai_move_block_opp_fork(self): 
+        """
+        Block opponent fork.
+        """
         ttt = TicTacToe(xo='O', first=False)
         ttt.board = [['X', None, None],
                      [None, 'O', None],
                      [None, None, 'X']]
         ttt.ai_move()
         assert ttt.board[0][1] == 'O'
+
+    def test_ai_move_center(self):
+        """
+        If center is open use it.
+        Also tests that it is the first move.
+        """
+        ttt = TicTacToe(xo='O', first=False)
+        ttt.board = [[None, None, None],
+                     [None, None, None],
+                     [None, None, None]]
+        ttt.ai_move()
+        assert ttt.board[1][1] == 'O'
+
+        ttt = TicTacToe(xo='O', first=True)
+        assert ttt.board[1][1] == 'O'
+
+    def test_ai_move_opp_corner(self):
+        """
+        If opponent is in one corner, go to the opposite corner.
+        """
+        ttt = TicTacToe(xo='O', first=False)
+        ttt.board = [['X', None, None],
+                     [None, 'O', None],
+                     [None, None, None]]
+        ttt.ai_move()
+        assert ttt.board[2][2] == 'O'
+
+    def test_ai_move_open_corner(self):
+        """
+        Go to the first open corner.
+        """
+        ttt = TicTacToe()
+        ttt.board = [[None, None, None],
+                     [None, 'O', None],
+                     [None, None, None]]
+        ttt.ai_move()
+        assert ttt.board[0][0] == 'X'
+
+        ttt = TicTacToe()
+        ttt.board = [['X', 'O', 'X'],
+                     ['O', 'O', 'X'],
+                     ['X', 'X', None]]
+        ttt.ai_move()
+        assert ttt.board[2][2] == 'X'
