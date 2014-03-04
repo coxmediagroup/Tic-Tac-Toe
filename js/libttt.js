@@ -43,8 +43,19 @@ function markPlayerCell(cell)
 	removeInteractivityFromCell(cell);
 	$(cell).addClass("x_cell");
 
-	markAICell(Math.floor(Math.random() * 3), Math.floor(Math.random() * 3));
-	//alert(getBoardState());
+	submitMove()
+}
+
+// Sends the move to the logic engine, via AJAX
+function submitMove()
+{
+	$.ajax({
+		type: "POST",
+		url: "http://localhost:8000/gameengine",
+		data: {state: getBoardState() }
+	}).done(function(msg) {
+		alert(msg);
+	});
 }
 
 // Marks a cell returned from the AI
