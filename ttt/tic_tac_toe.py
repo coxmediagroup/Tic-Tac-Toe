@@ -19,32 +19,31 @@ class TicTacToe:
         Returns a where to place the opposite mark to bloack the win.
         """
 
-        # TODO - I should propbably test that the open value is actualy None
         # First along the x axis
         for i in range(3):
-            if places_match([(i, 0, mark), (i, 1, make), (i, 2, None):
+            if self.places_match([(i, 0, mark), (i, 1, mark), (i, 2, None)]):
                 return (i, 2)
-            if self.board[i][1] == mark and self.board[i][2] == mark:
+            if self.places_match([(i, 1, mark), (i, 2, mark), (i, 0, None)]):
                 return (i, 0)
 
         # Then along the y axis
         for i in range(3):
-            if self.board[0][i] == mark and self.board[1][i] == mark:
+            if self.places_match([(0, i, mark), (1, i, mark), (2, i, None)]):
                 return (2, i)
-            if self.board[1][i] == mark and self.board[2][i] == mark:
+            if self.places_match([(1, i, mark), (2, i, mark), (0, i, None)]):
                 return (0, i)
 
         # Now diagonal
         # (1,1) is always going to be set for diagonals, all we need to do is
-        # match the corners
+        # match the corners.
+        # TODO - I should propbably test that the open value is actualy None
         diagonals = {(0, 0): (2, 2),
                      (2, 2): (0, 0),
                      (0, 2): (2, 0),
                      (2, 0): (0, 2)}
 
         for diags, ret in diagonals.items():
-            if (self.board[diags[0]][diags[1]] == mark and
-                self.board[1][1] == mark):
+            if self.places_match([(diags[0], diags[1], mark), (1, 1, mark)]):
                 return ret
 
         return False
