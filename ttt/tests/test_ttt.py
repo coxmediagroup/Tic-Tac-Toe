@@ -56,25 +56,27 @@ class TestTicTacToe(TestCase):
 
     def test_has_fork(self):
         ttt = TicTacToe(first=False)
-        ttt.board = [[None, None, None],
-                     ['O', 'O', None], 
+        ttt.board = [['O', None, None],
+                     [None, 'O', None],
                      ['O', None, None]]
+        
         where = ttt.has_fork()
+
 
     def test_places_match(self):
         ttt = TicTacToe(first=False)
-        ttt.board = [[None]*3, [None, 'O', None], [None]*3]
-        match = ttt.places_match([(1, 1, 'O')])
+        board = [[None]*3, [None, 'O', None], [None]*3]
+        match = ttt.places_match(board, [(1, 1, 'O')])
         assert match == True
 
         ttt = TicTacToe(first=False)
-        ttt.board = [[None]*3, [None, None, 'O'], [None]*3]
-        match = ttt.places_match([(1, 1, 'O')])
+        board = [[None]*3, [None, None, 'O'], [None]*3]
+        match = ttt.places_match(board, [(1, 1, 'O')])
         assert match == False
 
         ttt = TicTacToe(first=False)
-        ttt.board = [[None]*3, ['O', None, 'O'], [None]*3]
-        match = ttt.places_match([(1, 0, 'O'), (1, 2, 'O')])
+        board = [[None]*3, ['O', None, 'O'], [None]*3]
+        match = ttt.places_match(board, [(1, 0, 'O'), (1, 2, 'O')])
         assert match == True
 
 
