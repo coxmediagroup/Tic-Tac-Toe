@@ -20,7 +20,6 @@ class TicTacToe:
         """
 
         # TODO - I should propbably test that the open value is actualy None
-
         # First along the x axis
         for i in range(3):
             if self.board[i][0] == mark and self.board[i][1] == mark:
@@ -50,7 +49,40 @@ class TicTacToe:
 
         return False
 
-    
+    def has_fork(self, mark='O'):    
+        """
+        A fork is when there exists two possibilities that create a winning
+        move. 
+        
+        They are either a diagonal and straight or two straights.
+        """
+
+        forks = [[(0, 0), (1, 0), (2, 0), (1, 1), (2, 2)],
+                 [(0, 0), (1, 0), (2, 0), (0, 1), (0, 2)],
+                 [(0, 0), (0, 1), (0, 2), (1, 1), (2, 2)],
+                 [(0, 0), (0, 1), (0, 2), (1, 0), (2, 0)]]
+
+#        for fork in forks:
+#            missing = []
+#            for f in fork:
+#
+    def places_match(self, places):
+        """
+        Check if the places are taken by xo.
+
+        places is a list of tuple of (x,y,xo).
+        """
+        found=True
+        if not places:
+            return False
+
+        for place in places:
+            x, y, xo = place
+            if self.board[x][y] != xo:
+                found = False
+
+        return found
+
 
 
     def ai_move(self):
