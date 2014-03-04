@@ -72,5 +72,10 @@ class TestTicTacToe(TestCase):
         match = ttt.places_match([(1, 1, 'O')])
         assert match == False
 
+        ttt = TicTacToe(first=False)
+        ttt.board = [[None]*3, ['O', None, 'O'], [None]*3]
+        match = ttt.places_match([(1, 0, 'O'), (1, 2, 'O')])
+        assert match == True
+
 
 
