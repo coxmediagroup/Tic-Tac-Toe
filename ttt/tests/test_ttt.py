@@ -26,6 +26,11 @@ class TestTicTacToe(TestCase):
         assert where == (2, 0)
 
         ttt = TicTacToe(first=False)
+        ttt.board = [['O', None,  None], [None]*3, ['O', None, None]]
+        where = ttt.has_win_move()
+        assert where == (1, 0)
+
+        ttt = TicTacToe(first=False)
         ttt.board = [[None]*3, ['O', None, None], ['O', None, None]]
         where = ttt.has_win_move()
         assert where == (0, 0)
@@ -59,7 +64,7 @@ class TestTicTacToe(TestCase):
         ttt.board = [['O', None, None],
                      [None, 'O', None],
                      ['O', None, None]]
-        
+        ttt.output() 
         where = ttt.has_fork()
 
 

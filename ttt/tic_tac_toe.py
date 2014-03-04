@@ -5,12 +5,15 @@ class TicTacToe:
         if first:
             self.ai_move()
 
-    def output(self):
+    def output(self, board=None):
         """
         Print the board.
         """
+        if board is None:
+            board = self.board
         for i in range(3):
-            print self.board[i]
+            print board[i]
+        print
 
     def has_win_move(self, board=None, mark='O'):
         """
@@ -27,6 +30,9 @@ class TicTacToe:
             if self.places_match(board, [(i, 0, mark), (i, 1, mark),
                                          (i, 2, None)]):
                 return (i, 2)
+            if self.places_match(board, [(i, 0, mark), (i, 2, mark),
+                                         (i, 1, None)]):
+                return (i, 1)
             if self.places_match(board, [(i, 1, mark), (i, 2, mark),
                                          (i, 0, None)]):
                 return (i, 0)
@@ -36,6 +42,9 @@ class TicTacToe:
             if self.places_match(board, [(0, i, mark), (1, i, mark),
                                          (2, i, None)]):
                 return (2, i)
+            if self.places_match(board, [(0, i, mark), (2, i, mark),
+                                         (1, i, None)]):
+                return (1, i)
             if self.places_match(board, [(1, i, mark), (2, i, mark),
                                          (0, i, None)]):
                 return (0, i)
@@ -61,10 +70,49 @@ class TicTacToe:
         move. 
         """
         win_moves = []
-        board = self.board[:]
+#        new_board = self.board[:]
+
+
+        # along the X
         for i in range(3):
-            self.has_win(
+            new_board = [[None]*3, [None]*3, [None]*3]
+            new_board[i][0] = self.board[i][0]
+            new_board[i][1] = self.board[i][1]
+            new_board[i][2] = self.board[i][2]
+            self.output(new_board)
+            print self.has_win_move(new_board)
+            win_moves.append(self.has_win_move(new_board))
+            
+
+        # along the Y
+        for i in range(3):
+            new_board = [[None]*3, [None]*3, [None]*3]
+            new_board[0][i] = self.board[0][i]
+            new_board[1][i] = self.board[1][i]
+            new_board[2][i] = self.board[2][i]
+            self.output(new_board)
+            print self.has_win_move(new_board)
+            win_moves.append(self.has_win_move(new_board))
+
+        new_board = [[None]*3, [None]*3, [None]*3]
+        new_board[0][0] = self.board[0][0]
+        new_board[1][1] = self.board[1][1]
+        new_board[2][2] = self.board[2][2]
+        self.output(new_board)
+        print self.has_win_move(new_board)
+        win_moves.append(self.has_win_move(new_board))
+
+        new_board = [[None]*3, [None]*3, [None]*3]
+        new_board[0][2] = self.board[0][2]
+        new_board[1][1] = self.board[1][1]
+        new_board[2][0] = self.board[2][0]
+        self.output(new_board)
+        print self.has_win_move(new_board)
+        win_moves.append(self.has_win_move(new_board))
+
+        print win_moves
     
+
     def places_match(self, board, places):
         """
         Check if the places are taken by xo.
