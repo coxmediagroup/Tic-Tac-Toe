@@ -10,6 +10,9 @@ def get_params(request):
     return render(request, 'start.html')
 
 def start(request):
+    """
+    Start the game off.
+    """
     if request.method == 'POST':
         # This is if the player wants to go first.
         # first param is if AI goes first
@@ -19,7 +22,6 @@ def start(request):
             go_first = True
 
         ttt = TicTacToe(xo=request.POST['mark'], first=go_first)
-
         request.session['ttt'] = ttt
 
     if 'ttt' not in request.session:
@@ -28,6 +30,20 @@ def start(request):
         return HttpResponseRedirect('/play/') 
 
 def play(request):
-    display = DisplayTicTacToe(request.session['ttt'])
+    """
+    Make player move and then ai move.
+    """
+    ttt = request.session['ttt']
+    if request.method == 'POST':
+        if 'ttt' not in request.session:
+            return HttpResponseRedirect('/') 
+        idx = request.POST['move']
+
+        ttt.make_move(int(idx))
+        ttt.ai_move()
+
+        request.session['ttt'] = ttt
+
+    display = DisplayTicTacToe(ttt)
     return render(request, 'play.html', {'display': display.as_dict()})
 

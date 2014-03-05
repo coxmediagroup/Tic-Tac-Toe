@@ -9,8 +9,12 @@ Play Tic-Tac-Toe
     width: 100px;
     height: 100px;
     float: left;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-bottom: 20px;
+    padding-top: 0px;
+    font-size: 95px;
 }
-
 .right {
     border-right: 3px solid black;
 }
@@ -18,20 +22,40 @@ Play Tic-Tac-Toe
 .bottom {
     border-bottom: 3px solid black;
 }
+
+.clear-left {
+    clear: left;
+}
 </style>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.box').click(function(e) {  
+        $("input:text[name=move]").val(this.id); 
+        $("#make_move").submit();
+    });
+});
+</script>
+</head>
 <body>
+<form id="make_move" method="POST" action="/play/">
+{% csrf_token %}
+Move(1-9): <input type="text" name="move">
+</form>
 
-<div class="box right bottom">1{{ display.1 }}</div>
-<div class="box right bottom">2{{ display.2 }}</div>
-<div class="box bottom">3{{ display.3 }}</div>
 
-<div class="box right bottom" style="clear: left">4{{ display.4 }}</div>
-<div class="box right bottom">5{{ display.5 }}</div>
-<div class="box bottom">6{{ display.6 }}</div>
 
-<div class="box right" style="clear: left">7{{ display.7 }}</div>
-<div class="box right">8{{ display.8 }}</div>
-<div class="box">9{{ display.9 }}</div>
+<div class="box right bottom" id="1">{% if display.1 %}{{ display.1 }}{% endif %}</div>
+<div class="box right bottom" id="2">{% if display.2 %}{{ display.2 }}{% endif %}</div>
+<div class="box bottom" id="3">{% if display.3 %}{{ display.3 }}{% endif %}</div>
+
+<div class="box right bottom clear-left" id="4">{% if display.4 %}{{ display.4 }}{% endif %}</div>
+<div class="box right bottom" id="5">{% if display.5 %}{{ display.5 }}{% endif %}</div>
+<div class="box bottom" id="6">{% if display.6 %}{{ display.6 }}{% endif %}</div>
+
+<div class="box right clear-left" id="7">{% if display.7 %}{{ display.7 }}{% endif %}</div>
+<div class="box right" id="8">{% if display.8 %}{{ display.8 }}{% endif %}</div>
+<div class="box" id="9">{% if display.9 %}{{ display.9 }}{% endif %}</div>
 
 
 </body>

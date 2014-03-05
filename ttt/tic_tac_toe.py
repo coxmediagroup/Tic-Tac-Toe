@@ -5,6 +5,10 @@ http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 import copy
 from collections import OrderedDict
 
+
+POS = {0: (0, 0), 1: (0, 1), 2: (0, 2),
+       3: (1, 0), 4: (1, 1), 5: (1, 2),
+       6: (2, 0), 7: (2, 1), 8: (2, 2)} 
 class DisplayTicTacToe:
     def __init__(self, ttt):
         self.ttt = ttt
@@ -24,28 +28,38 @@ class DisplayTicTacToe:
         """
         Returns a dict, suitable for passing to render()
         """
-    
-        return {'1': self.ttt.board[0][0],
-                '2': self.ttt.board[0][1],
-                '3': self.ttt.board[0][2],
-                '4': self.ttt.board[1][0],
-                '5': self.ttt.board[1][1],
-                '6': self.ttt.board[1][2],
-                '7': self.ttt.board[2][0],
-                '8': self.ttt.board[2][1],
-                '9': self.ttt.board[2][2]}
+        dct = {}
+        for idx, xy in POS.items():
+            x, y = xy   
+            dct[idx+1] = self.ttt.board[x][y]
 
-    
-    
-
+        return dct
+ 
 
 class TicTacToe:
     def __init__(self, xo='X', first=False):
+        print "init"
         self.board = [[None]*3, [None]*3, [None]*3]
         self.xo = xo
         if first:
             self.ai_move()
 
+    def make_move(self, idx):
+        """
+        Move the opponent on the board.
+        """
+        if self.xo == 'X':
+            opponent = 'O'
+        else:
+            opponent = 'X'
+
+        x, y = POS[idx-1]
+        self.board[x][y] = opponent
+
+    def won(self):
+        """
+        The game has been won by somebody.
+        """
 
     def has_win_move(self, board=None, mark='O'):
         """
@@ -112,9 +126,6 @@ class TicTacToe:
         A fork is when there exists two possibilities that create a winning
         move. 
         """
-        POS = {0: (0, 0), 1: (0, 1), 2: (0, 2),
-               3: (1, 0), 4: (1, 1), 5: (1, 2),
-               6: (2, 0), 7: (2, 1), 8: (2, 2)} 
 
         for i in range(9):
             board = copy.deepcopy(self.board)
