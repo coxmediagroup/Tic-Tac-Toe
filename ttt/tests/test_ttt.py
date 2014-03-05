@@ -162,3 +162,22 @@ class TestTicTacToe(TestCase):
                      ['X', 'X', None]]
         ttt.ai_move()
         assert ttt.board[2][2] == 'X'
+
+    def test_won(self):
+        """
+        Somebody won.
+        """
+        ttt = TicTacToe()
+        ttt.board = [[None, None, None],
+                     ['O', 'O', 'O'],
+                     [None, None, None]]
+        won = ttt.won()
+        assert won == 'O'
+
+        ttt = TicTacToe()
+        ttt.board = [['O', None, None],
+                     [None, 'O', None],
+                     [None, None, 'O']]
+        won = ttt.won()
+        assert won == 'O'
+    

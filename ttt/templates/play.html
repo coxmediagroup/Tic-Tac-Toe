@@ -26,6 +26,12 @@ Play Tic-Tac-Toe
 .clear-left {
     clear: left;
 }
+
+.won {
+    font-size: 50px;
+    color: blue;
+}
+
 </style>
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
@@ -40,9 +46,13 @@ $(document).ready(function(){
 <body>
 <form id="make_move" method="POST" action="/play/">
 {% csrf_token %}
-Move(1-9): <input type="text" name="move">
+Move(1-9): <input type="text" name="move"> {% if not won %}<a href="/">Start again</a>{% endif %}
 </form>
 
+{% if won %}
+<div class="won">{{ won }} WON THE GAME!!</div>
+<div><a href="/">Start again</a></div>
+{% endif %}
 
 
 <div class="box right bottom" id="1">{% if display.1 %}{{ display.1 }}{% endif %}</div>

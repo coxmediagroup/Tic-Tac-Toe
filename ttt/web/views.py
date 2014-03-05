@@ -44,6 +44,8 @@ def play(request):
 
         request.session['ttt'] = ttt
 
+    won = ttt.won()
     display = DisplayTicTacToe(ttt)
-    return render(request, 'play.html', {'display': display.as_dict()})
+    return render(request, 'play.html', {'display': display.as_dict(), 
+                                         'won': won})
 

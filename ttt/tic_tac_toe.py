@@ -38,7 +38,6 @@ class DisplayTicTacToe:
 
 class TicTacToe:
     def __init__(self, xo='X', first=False):
-        print "init"
         self.board = [[None]*3, [None]*3, [None]*3]
         self.xo = xo
         if first:
@@ -60,6 +59,31 @@ class TicTacToe:
         """
         The game has been won by somebody.
         """
+        MARKS = ['X', 'O']
+
+        for i in range(3):
+            for mark in MARKS:
+                if self.places_match(None, [(i, 0, mark), (i, 1, mark), 
+                                            (i, 2, mark)]):
+                    return mark
+
+        for i in range(3):
+            for mark in MARKS:
+                if self.places_match(None, [(0, i, mark), (1, i, mark), 
+                                            (2, i, mark)]):
+                    return mark
+
+        for mark in MARKS:
+            if self.places_match(None, [(0, 0, mark), (1, 1, mark), 
+                                        (2, 2, mark)]):
+                return mark
+
+        for mark in MARKS:
+            if self.places_match(None, [(0, 2, mark), (1, 1, mark), 
+                                        (2, 0, mark)]):
+                return mark
+        
+        
 
     def has_win_move(self, board=None, mark='O'):
         """
@@ -139,12 +163,15 @@ class TicTacToe:
             if type(wins) is type([]) and len(wins) == 2:
                 return POS[i]
 
-    def places_match(self, board, places):
+    def places_match(self, board=None, places=None):
         """
         Check if the places are taken by xo.
 
         places is a list of tuple of (x,y,xo).
         """
+        if board is None:
+            board = self.board
+
         found=True
         if not places:
             return False
