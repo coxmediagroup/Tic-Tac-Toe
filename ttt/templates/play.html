@@ -4,9 +4,34 @@
 <title>
 Play Tic-Tac-Toe
 </title>
+<style>
+.box {
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+
+.right {
+    border-right: 3px solid black;
+}
+
+.bottom {
+    border-bottom: 3px solid black;
+}
+</style>
 <body>
 
-{{ display.1 }}
+<div class="box right bottom">1{{ display.1 }}</div>
+<div class="box right bottom">2{{ display.2 }}</div>
+<div class="box bottom">3{{ display.3 }}</div>
+
+<div class="box right bottom" style="clear: left">4{{ display.4 }}</div>
+<div class="box right bottom">5{{ display.5 }}</div>
+<div class="box bottom">6{{ display.6 }}</div>
+
+<div class="box right" style="clear: left">7{{ display.7 }}</div>
+<div class="box right">8{{ display.8 }}</div>
+<div class="box">9{{ display.9 }}</div>
 
 
 </body>
