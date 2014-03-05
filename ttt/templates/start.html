@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Start Tic-Tac-Toe
+</title>
+</head>
+<body>
+
+<form method='POST' action='/start'>
+{% csrf_token %}
+Go First: <input type='radio' name='go_first' value='Y'> Yes<input type='radio' name='go_first' value='N'> No<br/>
+Marker: <input type='radio' name='mark' value='X'> X<input type='radio' name='mark' value='O'> O<br/>
+
+<input type='submit' value='Play'>
+</form>
+
+</body>
+</html>

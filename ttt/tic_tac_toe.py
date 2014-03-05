@@ -2,10 +2,41 @@
 Never loose algo from:
 http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 """
-
-
 import copy
 from collections import OrderedDict
+
+class DisplayTicTacToe:
+    def __init__(self, ttt):
+        self.ttt = ttt
+
+    def output(self, board=None):
+        """
+        Print the board.
+        """
+        if board is None:
+            board = self.ttt.board
+        for i in range(3):
+            print board[i]
+        print
+
+
+    def as_dict(self):
+        """
+        Returns a dict, suitable for passing to render()
+        """
+    
+        return {'1': self.ttt.board[0][0],
+                '2': self.ttt.board[0][1],
+                '3': self.ttt.board[0][2],
+                '4': self.ttt.board[1][0],
+                '5': self.ttt.board[1][1],
+                '6': self.ttt.board[1][2],
+                '7': self.ttt.board[2][0],
+                '8': self.ttt.board[2][1],
+                '9': self.ttt.board[2][2]}
+
+    
+    
 
 
 class TicTacToe:
@@ -15,15 +46,6 @@ class TicTacToe:
         if first:
             self.ai_move()
 
-    def output(self, board=None):
-        """
-        Print the board.
-        """
-        if board is None:
-            board = self.board
-        for i in range(3):
-            print board[i]
-        print
 
     def has_win_move(self, board=None, mark='O'):
         """
@@ -102,9 +124,7 @@ class TicTacToe:
                 continue
 
             board[x][y] = mark
-#            self.output(board)
             wins = self.has_win_move(board)
-#            print POS[i], wins
             if type(wins) is type([]) and len(wins) == 2:
                 return POS[i]
 
