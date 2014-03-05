@@ -214,7 +214,8 @@ class TicTacToe:
 
         #Block an opponent's fork
         #Special Case
-        if self.board[0][0] == opponent and self.board[2][2] == opponent:
+        if ((self.board[0][0] == opponent and self.board[2][2] == opponent) or
+            self.board[0][2] == opponent and self.board[2][0] == opponent):
             self.board[0][1] = self.xo
             return 
 

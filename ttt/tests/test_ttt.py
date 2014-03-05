@@ -1,5 +1,5 @@
 from django.test import TestCase
-from tic_tac_toe import TicTacToe
+from tic_tac_toe import TicTacToe, DisplayTicTacToe
 
 class TestTicTacToe(TestCase):
     def test_has_win_move_along_x(self):
@@ -119,6 +119,13 @@ class TestTicTacToe(TestCase):
         ttt.ai_move()
         assert ttt.board[0][1] == 'O'
 
+        ttt = TicTacToe(xo='O', first=False)
+        ttt.board = [[None, None, 'X'],
+                     [None, 'O', None],
+                     ['X', None, None]]
+        ttt.ai_move()
+        assert ttt.board[0][1] == 'O'
+
     def test_ai_move_center(self):
         """
         If center is open use it.
@@ -165,7 +172,7 @@ class TestTicTacToe(TestCase):
 
     def test_won(self):
         """
-        Somebody won.
+        Somebody won or cats.
         """
         ttt = TicTacToe()
         ttt.board = [[None, None, None],
