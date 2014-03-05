@@ -181,3 +181,10 @@ class TestTicTacToe(TestCase):
         won = ttt.won()
         assert won == 'O'
     
+        ttt = TicTacToe()
+        ttt.board = [['X', 'X', 'O'],
+                     ['O', 'O', 'X'],
+                     ['X', 'X', 'O']]
+        won = ttt.won()
+        assert won == 'cats'
+

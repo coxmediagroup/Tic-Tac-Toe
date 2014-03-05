@@ -50,7 +50,11 @@ Move(1-9): <input type="text" name="move"> {% if not won %}<a href="/">Start aga
 </form>
 
 {% if won %}
-<div class="won">{{ won }} WON THE GAME!!</div>
+{% if won == 'cats' %}
+    <div class="won">CATS GAME!!</div>
+{% else %}
+    <div class="won">{{ won }} WON THE GAME!!</div>
+{% endif %}
 <div><a href="/">Start again</a></div>
 {% endif %}
 

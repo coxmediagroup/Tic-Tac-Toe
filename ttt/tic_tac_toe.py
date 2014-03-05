@@ -61,18 +61,20 @@ class TicTacToe:
         """
         MARKS = ['X', 'O']
 
+        # X
         for i in range(3):
             for mark in MARKS:
                 if self.places_match(None, [(i, 0, mark), (i, 1, mark), 
                                             (i, 2, mark)]):
                     return mark
-
+        # Y
         for i in range(3):
             for mark in MARKS:
                 if self.places_match(None, [(0, i, mark), (1, i, mark), 
                                             (2, i, mark)]):
                     return mark
-
+        
+        #diagonals
         for mark in MARKS:
             if self.places_match(None, [(0, 0, mark), (1, 1, mark), 
                                         (2, 2, mark)]):
@@ -82,6 +84,15 @@ class TicTacToe:
             if self.places_match(None, [(0, 2, mark), (1, 1, mark), 
                                         (2, 0, mark)]):
                 return mark
+            
+        # Cats game
+        for i in range(9):
+            x, y = POS[i]
+            if self.board[x][y] is None:
+                return None
+    
+        return 'cats'
+        
         
         
 
