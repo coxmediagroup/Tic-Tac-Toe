@@ -9,7 +9,7 @@ def get_params(request):
     """
     return render(request, 'start.html')
 
-def play(request):
+def start(request):
     if request.method == 'POST':
         # This is if the player wants to go first.
         # first param is if AI goes first
@@ -25,7 +25,9 @@ def play(request):
     if 'ttt' not in request.session:
         return HttpResponseRedirect('/') 
     else:
-        display = DisplayTicTacToe(request.session['ttt'])
-        return render(request, 'play.html', {'display': display.as_dict()})
+        return HttpResponseRedirect('/play/') 
 
+def play(request):
+    display = DisplayTicTacToe(request.session['ttt'])
+    return render(request, 'play.html', {'display': display.as_dict()})
 
