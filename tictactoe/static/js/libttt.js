@@ -50,11 +50,11 @@ function markPlayerCell(cell)
 function submitMove()
 {
 	$.ajax({
-		type: "POST",
-		url: "http://localhost:8000/gameengine",
+		type: "GET",
+		url: "http://localhost:8000/gameengine/",
 		data: {state: getBoardState() }
 	}).done(function(msg) {
-		alert(msg);
+		markAICell(msg.charAt(0), msg.charAt(1));
 	});
 }
 

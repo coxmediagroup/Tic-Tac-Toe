@@ -1,9 +1,10 @@
+{% load staticfiles %}
 <html>
 <head>
 	<title>Tic-Tac-Toe</title>
-	<script src="js/jquery.js"></script>
-	<script src="js/libttt.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="{% static "js/jquery.js" %}"></script>
+	<script src="{% static "js/libttt.js" %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
 </head>
 <body>
 
