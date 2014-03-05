@@ -21,7 +21,12 @@ def start(request):
         else:
             go_first = True
 
-        ttt = TicTacToe(xo=request.POST['mark'], first=go_first)
+        if request.POST['mark'] == 'X':
+            mark = 'O'
+        else:
+            mark = 'X'
+
+        ttt = TicTacToe(xo=mark, first=go_first)
         request.session['ttt'] = ttt
 
     if 'ttt' not in request.session:
