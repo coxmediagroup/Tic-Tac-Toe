@@ -37,13 +37,13 @@ h1 {
 	width: 490px;
 }
 
-#thinking_box {
-	position: absolute;
-	margin: auto;
-	width: 650px;
-	height: 450px;
-	background-color: white;
-	border: 2px dashed black;
+#win_text {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 64px;
+	line-height: 64px;
+	margin-bottom: 12px;
+	text-align: center;
+	vertical-align: middle;
 }
 
 /*===============================\

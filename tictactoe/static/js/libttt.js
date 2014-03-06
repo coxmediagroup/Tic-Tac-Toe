@@ -49,11 +49,15 @@ function markPlayerCell(cell)
 // Sends the move to the logic engine, via AJAX
 function submitMove()
 {
+	checkEndState();
+	$("#dialog").dialog("open");
+	$(".ui-dialog-titlebar-close").hide();
 	$.ajax({
 		type: "GET",
 		url: "http://localhost:8000/gameengine/",
 		data: {state: getBoardState() }
 	}).done(function(msg) {
+		$("#dialog").dialog("close");
 		markAICell(msg.charAt(0), msg.charAt(1));
 	});
 }
@@ -69,6 +73,7 @@ function markAICell(i, k)
 			$(this).addClass("o_cell");
 		}
 	});
+	checkEndState();
 }
 
 // Clears the board for a new game
@@ -81,6 +86,66 @@ function clearBoard()
 			bindHoverFunction($(this));
 			$(this).addClass("null_cell");
 		});
+	}
+}
+
+function checkColumns()
+{
+	var board = getBoardState();
+	if (board.charAt(0) != '-' && board.charAt(0) == board.charAt(3) && board.charAt(3) == board.charAt(6))
+		return board.charAt(0);
+	if (board.charAt(1) != '-' && board.charAt(1) == board.charAt(4) && board.charAt(4) == board.charAt(7))
+		return board.charAt(1);
+	if (board.charAt(2) != '-' && board.charAt(2) == board.charAt(5) && board.charAt(5) == board.charAt(8))
+		return board.charAt(2);
+
+	return null;
+}
+
+function checkRows()
+{
+	var board = getBoardState();
+	if (board.charAt(0) != '-' && board.charAt(0) == board.charAt(1) && board.charAt(1) == board.charAt(2))
+		return board.charAt(0);
+	if (board.charAt(3) != '-' && board.charAt(3) == board.charAt(4) && board.charAt(4) == board.charAt(5))
+		return board.charAt(3);
+	if (board.charAt(6) != '-' && board.charAt(6) == board.charAt(7) && board.charAt(7) == board.charAt(8))
+		return board.charAt(6);
+
+	return null;
+}
+
+function checkDiagonals()
+{
+	var board = getBoardState();
+	if (board.charAt(0) != '-' && board.charAt(0) == board.charAt(4) && board.charAt(4) == board.charAt(8))
+		return board.charAt(0);
+	if (board.charAt(2) != '-' && board.charAt(2) == board.charAt(4) && board.charAt(4) == board.charAt(6))
+		return board.charAt(2);
+	return null;
+}
+
+// Checks for a win, lose, or tie
+function checkEndState()
+{
+	var winner = checkColumns();
+	if (winner == null)
+		winner = checkRows();
+	if (winner == null)
+		winner = checkDiagonals();
+	if (winner == null && getBoardState().indexOf('-') < 0)
+		winner = '-';
+
+	if (winner != null)
+	{
+		var winText = "IT'S A TIE!";
+		if (winner == 'x')
+			winText = "YOU WIN!";
+		if (winner == 'o')
+			winText = "I WIN!";
+
+		$("#win_state").dialog("open");
+		$("#win_text").html(winText);
 	}
 }
 
@@ -104,5 +169,39 @@ function bindHoverFunction(cell)
 $(document).ready(function() {
 	$(".null_cell").each(function() {
 		bindHoverFunction($(this));
+	});
+	$( "#dialog" ).dialog({
+		width: 500,
+		height: 250,
+		modal: true,
+		autoOpen: false,
+		show: {
+			effect: "fade",
+			duration: 333
+		},
+		hide: {
+			effect: "puff",
+			duration: 333
+		}
+    });
+    $( "#win_state" ).dialog({
+			width: 500,
+			height: 250,
+			modal: true,
+			autoOpen: false,
+			show: {
+				effect: "fade",
+				duration: 333
+			},
+			hide: {
+				effect: "puff",
+				duration: 333
+			}
+    });
+    $( "button" )
+		.button()
+		.click(function( event ) {
+			event.preventDefault();
+			location.href = "/";
 	});
 });
