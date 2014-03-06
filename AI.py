@@ -9,7 +9,7 @@ class AI:
         self.board = board
 
     def __generateBoards(self):
-        return {option:Board(self.board.fetch(), self.board.turn).move(option) for option in self.board.validPositions()}
+        return {option:Board(self.board.fetch(), self.board.getPlayer()).move(option) for option in self.board.validPositions()}
 
     def __isFirstMove(self):
         if self.board.isEmpty():

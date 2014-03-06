@@ -1,12 +1,12 @@
 
 class Board:
-    def __init__(self, layout = None, turn = 'X'):
+    def __init__(self, layout = None, player = 'X'):
         if layout == None or self.isInvalidBoard(layout):
             layout = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-        if turn != 'X' and turn != 'O':
-            turn = 'X'
+        if player != 'X' and player != 'O':
+            player = 'X'
         self.layout = layout
-        self.turn = turn
+        self.player = player
 
     def isInvalidBoard(self, board):
         valid = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'X', 'O']
@@ -17,6 +17,9 @@ class Board:
 
     def fetch(self):
         return [[column for column in row] for row in self.layout]
+
+    def getPlayer(self):
+        return self.player
 
     def validPositions(self):
         return [position for row in self.layout for position in row if position != 'X' and position != 'O']
@@ -46,12 +49,12 @@ class Board:
     def isValidMove(self, position):
         return position in self.validPositions()
 
-    def changeTurn(self):
-        self.turn = 'O' if self.turn == 'X' else 'X'
+    def __changePlayer(self):
+        self.player = 'O' if self.player == 'X' else 'X'
 
     def move(self, position):
         if self.isValidMove(position):
             (row, column) = self.__getRowColumn(position)
-            self.layout[row][column] = self.turn
-            self.changeTurn()
+            self.layout[row][column] = self.player
+            self.__changePlayer()
         return self

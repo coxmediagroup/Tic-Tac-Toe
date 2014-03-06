@@ -16,6 +16,7 @@ class View:
         self.__displayRow(boardData[1])
         self.__displaySeparator()
         self.__displayRow(boardData[2])
+        print "\n"
 
     def __displayInvalidMove(self):
         print "Invalid move. Please enter a valid move."
@@ -36,6 +37,7 @@ class View:
         move = 0
         while move not in validMoves:
             move = raw_input("Enter move: (" + stringValidMoves + "): ")
+            print "\n"
             move = self.__validateMove(validMoves, move)
         return move
 
@@ -57,6 +59,7 @@ class View:
         player = 0
         while player not in validOptions:
             player = raw_input("Enter startng player (1 - Human, 2 - Computer): ")
+            print "\n"
             player = self.__validateStartingPlayer(validOptions, player)
         return player
 
