@@ -16,7 +16,7 @@ class Board:
         return False
 
     def fetch(self):
-        return self.layout
+        return [[column for column in row] for row in self.layout]
 
     def validPositions(self):
         return [position for row in self.layout for position in row if position != 'X' and position != 'O']
@@ -54,8 +54,4 @@ class Board:
             (row, column) = self.__getRowColumn(position)
             self.layout[row][column] = self.turn
             self.changeTurn()
-            return True
-        return False
-
-    
-                
+        return self
