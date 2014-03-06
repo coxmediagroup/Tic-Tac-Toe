@@ -34,7 +34,7 @@ class Board:
                 print column, " ",
             print "\n"
 
-    def getRowColumn(self, position):
+    def __getRowColumn(self, position):
         try:
             pos = int(position)
             if pos < 1 or pos > 9:
@@ -49,9 +49,9 @@ class Board:
     def changeTurn(self):
         self.turn = 'O' if self.turn == 'X' else 'X'
 
-    def setPosition(self, position):
+    def move(self, position):
         if self.isValidMove(position):
-            (row, column) = self.getRowColumn(position)
+            (row, column) = self.__getRowColumn(position)
             self.layout[row][column] = self.turn
             self.changeTurn()
             return True
