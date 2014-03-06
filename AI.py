@@ -1,5 +1,9 @@
+#!/usr/bin/python
 
 from random import choice
+
+from Board import Board
+from Evaluation import Evaluation
 
 class AI:
     def __init__(self, player, board):

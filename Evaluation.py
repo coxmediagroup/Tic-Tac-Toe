@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+from Board import Board
 
 class Evaluation:
     def __init__(self, board):

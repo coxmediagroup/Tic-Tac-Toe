@@ -1,3 +1,9 @@
+#!/usr/bin/python
+
+from Board import Board
+from Evaluation import Evaluation
+from AI import AI
+from View import View
 
 class Game:
     def __init__(self):
