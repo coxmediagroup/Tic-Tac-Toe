@@ -8,7 +8,7 @@ class AI:
         self.otherPlayer = 'O' if player == 'X' else 'X'
         self.board = board
 
-    def generateBoards(self):
+    def __generateBoards(self):
         return {option:Board(self.board.fetch(), self.board.turn).move(option) for option in self.board.validPositions()}
 
     def __isFirstMove(self):
@@ -36,14 +36,14 @@ class AI:
             return 5
         return choice([1, 3, 5, 7, 9])
     
-    def findWinner(self, boards):
+    def __findWinner(self, boards):
         for (option, board) in boards.items():
             e = Evaluation(board)
             if e.winner() == self.player:
                 return option
         return None
 
-    def mustBlock(self):
+    def __mustBlock(self):
         for move in self.board.validPositions():
             test = Board(self.board.fetch(), self.otherPlayer).move(move)
             evaluation = Evaluation(test)
@@ -51,7 +51,7 @@ class AI:
                 return move
         return None
 
-    def wouldWin(self, board):
+    def __wouldWin(self, board):
         for move in board.validPositions():
             test = Board(board.fetch(), self.player).move(move)
             evaluation = Evaluation(test)
@@ -59,7 +59,7 @@ class AI:
                 return True
         return False
 
-    def countLosingMoves(self, board):
+    def __countLosingMoves(self, board):
         count = 0
         for move in board.validPositions():
             test = Board(board.fetch(), self.otherPlayer).move(move)
@@ -68,44 +68,44 @@ class AI:
                 count = count + 1
         return count
 
-    def countBlocks(self, board):
+    def __countBlocks(self, board):
         maxCount = 0
         for move in board.validPositions():
             test = Board(board.fetch(), self.otherPlayer).move(move)
             # if this move would allow a win, then there are no must blocks
             count = 0
-            if not self.wouldWin(test):
-                count = self.countLosingMoves(test)
+            if not self.__wouldWin(test):
+                count = self.__countLosingMoves(test)
             maxCount = count if count > maxCount else maxCount
         return maxCount
 
-    def multiBlockMoves(self, boards):
+    def __multiBlockMoves(self, boards):
         multiBlockMoves = []
         for (move, board) in boards.items():
             for otherMove in board.validPositions():
                 test = Board(board.fetch(), self.otherPlayer).move(move)
-                if self.countBlocks(test) > 1:
+                if self.__countBlocks(test) > 1:
                     multiBlockMoves = multiBlockMoves + [move]
                     break
         return multiBlockMoves
 
-    def noMultiBlockMoves(self, boards):
-        multiBlockMoves = self.multiBlockMoves(boards)
+    def __noMultiBlockMoves(self, boards):
+        multiBlockMoves = self.__multiBlockMoves(boards)
         return [move for move in boards.keys() if move not in multiBlockMoves]
             
-    def selectBestMove(self):
+    def __selectBestMove(self):
         if self.__isFirstMove():
             return self.__selectFirstMove()
         if self.__isSecondMove():
             return self.__selectSecondMove()
-        boards = self.generateBoards()
-        win = self.findWinner(boards)
+        boards = self.__generateBoards()
+        win = self.__findWinner(boards)
         if win != None:
             return win
-        mustBlock = self.mustBlock()
+        mustBlock = self.__mustBlock()
         if mustBlock != None:
             return mustBlock
-        noMultiBlockMoves = self.noMultiBlockMoves(boards)
+        noMultiBlockMoves = self.__noMultiBlockMoves(boards)
         if noMultiBlockMoves != []:
             return choice(noMultiBlockMoves)
         # somehow, all moves are multiblock moves, and this fails
@@ -113,4 +113,4 @@ class AI:
         return choice(self.board.validPositions())      
         
     def makeMove(self):
-        self.board.move(self.selectBestMove())
+        self.board.move(self.__selectBestMove())
