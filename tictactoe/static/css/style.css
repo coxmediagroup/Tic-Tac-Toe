@@ -37,6 +37,15 @@ h1 {
 	width: 490px;
 }
 
+#thinking_box {
+	position: absolute;
+	margin: auto;
+	width: 650px;
+	height: 450px;
+	background-color: white;
+	border: 2px dashed black;
+}
+
 /*===============================\
   Classes
 \===============================*/
