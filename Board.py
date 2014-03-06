@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 class Board:
     def __init__(self, layout = None, player = 'X'):
         if layout == None or self.isInvalidBoard(layout):
