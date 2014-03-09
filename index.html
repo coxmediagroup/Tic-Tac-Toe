@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heads of State</title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0;" />
+    <link rel="stylesheet" type="text/css" href="appframework/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="appframework/icons.css" />
+    <script type="text/javascript" charset="utf-8" src="appframework/appframework.ui.min.js"></script>
+
+	<!-- Used for giving app access to native phone features -->    
+	<script src="intelxdk.js"></script>
+	<script src="xhr.js"></script>
+	<script>    
+		function onDeviceReady(){ 
+			$.ui.launch();
+			intel.xdk.device.hideSplashScreen();
+		}
+		document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
+	</script>
+	<!-- Used for giving app access to native phone features --> 
+    
+    <script>   
+        $.ui.autoLaunch = false; 
+        $.ui.animateHeaders = false;
+                
+        $(document).ready(function(){
+            $.ui.launch();
+        });
+    </script>    
+
+	<!-- ~~~~~~~~~~~~Knockout~~~~~~~~~~~~ -->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js" ></script>
+	
+	<style>
+	body, #afui {background-color:#000}  
+	#afui #settingsList.list li {padding: 10px}       
+
+	#play_as input.toggle:checked + label > span {
+		transform: translate3d(58px, 0px, 0px);
+	}
+
+	#play_as input.toggle + label:before, #play_as input.toggle:checked + label:before {
+	 width: 50px;
+	}
+	
+	
+	</style>    
+</head>
+<body> 
+	<div id="afui">
+		<div id="content" >
+			
+			<!-- ~~~~main panel~~~~~ -->
+			<div class="panel" title="Title" id="main"  selected="true">
+				<header>
+					<h1>Heads of State</h1>
+					<a href="#backpage" data-transition="up" class="button icon settings" style="float:right"></a>
+				</header>
+				<p>Play Tic Tac Toe Here.</p>
+			</div>
+			<!-- ~~~~main panel~~~~~ -->
+			
+			<!-- ~~~~settings panel~~~~~ -->
+			<div class="panel" title="Settings" id="backpage"  >
+				<header>
+					<h1>Settings</h1>
+					<a onclick="$.ui.goBack();" class="button icon close" style="float:right"></a>
+				</header>
+				<p>Adjust App Settings</p>
+				
+				<ul class="list inset" id="settingsList">
+					<li>
+						<label>Play As</label>
+						<div id="play_as">
+							<input id="toggle1" type="checkbox" name="toggle1" value="1" class="toggle" checked>
+								<label style="left:70%; width:85px" for="toggle1" data-on="Obama" data-off="Putin">
+									<span ></span>
+								</label>
+						</div>
+					</li>
+					<li>
+						<label>Sound</label>
+						<input id="toggle2" type="checkbox" name="toggle2" value="0" class="toggle"><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
+					</li>
+				</ul> 
+			</div>
+			<!-- ~~~~settings panel~~~~~ -->
+			
+			
+		</div>
+		
+            <div id="navbar">
+                <a href="#start" class='icon refresh'>Start Over</a>			
+                <a href="#app" class='icon home'>home</a>
+            </div>		
+	</div>
+</body>
+</html>    
