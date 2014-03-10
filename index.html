@@ -32,19 +32,58 @@
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js" ></script>
 	
 	<style>
-	body, #afui {background-color:#000}  
-	#afui #settingsList.list li {padding: 10px}       
+		body, #afui {background-color:#000}  
+		#afui #settingsList.list li {padding: 10px}       
 
-	#play_as input.toggle:checked + label > span {
-		transform: translate3d(58px, 0px, 0px);
-	}
 
-	#play_as input.toggle + label:before, #play_as input.toggle:checked + label:before {
-	 width: 50px;
-	}
+		#play_as input.toggle:checked + label > span {
+			transform: translate3d(58px, 0px, 0px);
+		}
+
+		#play_as input.toggle + label:before, #play_as input.toggle:checked + label:before {
+		 width: 50px;
+		}
+
+		table
+		{
+		border-collapse:collapse;
+		 margin: 0 auto;
+		}
+		
+		table, td, th {
+			border:5px solid black;
+			width: 250px;
+			height: 100px;
+		}
+
+		.enabled {
+			cursor:pointer;
+		}
+		
+		.enabled:hover, .enabled:focus {
+			background-color: rgb(0,136,209);
+		}
+		
+		.notShown{
+			visibility:hidden;
+		}
+		.shown{
+			visibility:visible;
+		}
+		#turnMessage{
+			text-align:center;
+			padding:20px;
+			font-weight:bold;
+			font-size:300%; 
+		}
+		.humanTurnMessage{
+			text-shadow:2px	2px 3px black, 3px 7px 30px blue;	
+		}
+		.opponentTurnMessage{
+			text-shadow:2px	2px 3px black, 3px 7px 30px red;	
+		}
+	</style>   
 	
-	
-	</style>    
 </head>
 <body> 
 	<div id="afui">
@@ -53,10 +92,22 @@
 			<!-- ~~~~main panel~~~~~ -->
 			<div class="panel" title="Title" id="main"  selected="true">
 				<header>
-					<h1>Heads of State</h1>
+					<h1>Heads of State: Tic Tac Toe</h1>
 					<a href="#backpage" data-transition="up" class="button icon settings" style="float:right"></a>
 				</header>
-				<p>Play Tic Tac Toe Here.</p>
+
+				<div id="turnMessage" data-bind="text: vm.turnNotifier, attr:{'class': vm.turnMessageStyle() }"></div>
+				<table>
+					<tbody data-bind="foreach:vm.table.rows">
+						<tr data-bind="foreach:grids">
+							<td data-bind="click:userClicked , attr:{'class': enabled() }">
+								<img data-bind="attr:{'src': image, 'class': imageClass() }" height="80" width="80"> 
+							</td>
+						</tr>					
+					</tbody>
+				</table>
+
+				
 			</div>
 			<!-- ~~~~main panel~~~~~ -->
 			
@@ -66,21 +117,21 @@
 					<h1>Settings</h1>
 					<a onclick="$.ui.goBack();" class="button icon close" style="float:right"></a>
 				</header>
-				<p>Adjust App Settings</p>
+				<div style="height:30px;"></div>
 				
 				<ul class="list inset" id="settingsList">
 					<li>
 						<label>Play As</label>
 						<div id="play_as">
-							<input id="toggle1" type="checkbox" name="toggle1" value="1" class="toggle" checked>
-								<label style="left:70%; width:85px" for="toggle1" data-on="Obama" data-off="Putin">
-									<span ></span>
-								</label>
+							<input onchange="vm.toggleSelectedCharacter()" id="toggle1" type="checkbox" name="toggle1" class="toggle" checked>
+							<label style="left:70%; width:85px" for="toggle1" data-on="Obama" data-off="Putin">
+								<span ></span>
+							</label>
 						</div>
 					</li>
 					<li>
 						<label>Sound</label>
-						<input id="toggle2" type="checkbox" name="toggle2" value="0" class="toggle"><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
+						<input id="toggle2" type="checkbox" name="toggle2" class="toggle"><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
 					</li>
 				</ul> 
 			</div>
@@ -90,9 +141,194 @@
 		</div>
 		
             <div id="navbar">
-                <a href="#start" class='icon refresh'>Start Over</a>			
-                <a href="#app" class='icon home'>home</a>
+                <a href="#main" class='icon refresh' onclick="vm.resetTable()" >Start Over</a>			
             </div>		
 	</div>
+	
+	<script>
+	
+	ko.bindingHandlers.valueFirstText =
+	{
+		/*
+			This function replaces only the first child. Not all the children
+			as the current text binding does. function must occur before view model is instantiated
+		*/
+		init: function(element, valueAccessor, allBindings, viewModel, bindingContext)
+		{
+		   var valueBeingBinded = ko.unwrap(valueAccessor());
+		   element.replaceChild(document.createTextNode(valueBeingBinded), element.firstChild);
+		},
+		update: function(element, valueAccessor, allBindings, viewModel, bindingContext)
+		{
+
+		   var valueBeingBinded = ko.unwrap(valueAccessor());
+		   element.replaceChild(document.createTextNode(valueBeingBinded), element.firstChild);
+		}
+	};	
+	
+		/*
+			0	= not selected
+			1 	= selected by player
+			-1	= selected by computer	
+		*/
+		
+		function grid(x,y, app_parent) {
+			var self = this;
+			
+			self.x				= x;
+			self.y				= y;
+			self.value 			= ko.observable(0);					
+			
+			self.userClicked= function() {
+				if(app_parent.humans_turn()){
+					self.value(1);
+				}
+			}		
+			
+			self.imageClass = ko.computed(function(){
+				//hides image tag when there's no image
+			
+				if(self.value() === 0) {
+					return 'notShown';
+				} else {
+					return 'shown';
+				}
+			
+			});
+			
+			self.image 	= ko.computed(function() {
+
+					//sets the image for grid
+					if( self.value() === 0 ){
+					
+						return '';				
+					}else if( self.value() === 1){
+					
+						if( app_parent.play_as() === 'obama') {
+							return 'static/obama.png';
+						}else {
+							return 'static/putin.png';
+						}					
+					}else if( self.value() === -1){
+				
+						if( app_parent.play_as() === 'obama') {
+							return 'static/putin.png';
+						}else {
+							return 'static/obama.png';
+						}
+					}
+
+				});
+			
+			self.enabled 	= ko.computed(function() {
+					//enable grid if its the players turn and grid is not yet selected
+					if( app_parent.humans_turn() === true && self.value() === 0 ){
+						return 'enabled';				
+					}else{
+						return '';
+					}
+				});	
+
+
+			
+
+		}	
+
+		function row(j, app_parent)
+		{
+			var self 	= this;
+			self.grids	= [];
+			
+			//--------------------create grids in row
+			for(var i=0; i<=2; i++) {
+			
+				newGrid = new grid(i , j , app_parent);		
+				self.grids.push(newGrid);
+			}
+			//--------------------create grids in row			
+		}
+		
+		function table(app_parent) {
+			var self 	= this;
+			var newGrid;
+			self.rows 	= [];
+
+			//--------------------create rows in table
+			for(j=0; j<=2; j++){
+
+				newRow = new row(j, app_parent);		
+				self.rows.push(newRow);
+			}
+			//--------------------create rows in table
+		}
+		
+		function app() {
+			var self				= this;
+			self.play_as 			= ko.observable('obama');			
+
+			//----------------------------choose first turn
+			if (Math.random() <= 0.5) {
+				self.humans_turn 		= ko.observable(true);
+				self.turnMessageStyle	= ko.observable('humanTurnMessage');	
+			} else {
+				self.humans_turn 		= ko.observable(false);
+				self.turnMessageStyle	= ko.observable('opponentTurnMessage');	
+			}
+			//----------------------------choose first turn			
+
+			self.table	= new table(self);	
+			
+			self.resetTable		= function() {
+			
+				//function sets the value of all grids to 0
+				for(j=0; j< self.table.rows.length; j++) {
+					for(i=0; i< self.table.rows[j].grids.length; i++) {
+						self.table.rows[j].grids[i].value(0)
+					}
+				}
+				
+				//toggles the turn, so the other player can play
+				self.humans_turn( !self.humans_turn() );
+			}
+
+			self.turnNotifier 	= ko.computed(function() {
+			
+					//gives the user feedback on who's turn it is
+					if( self.humans_turn () === true ){
+						self.turnMessageStyle('humanTurnMessage');	
+						return "Your Play";				
+					}else{
+						self.turnMessageStyle('opponentTurnMessage');	
+						return "Opponent Play";
+					}
+				});	
+
+			self.toggleSelectedCharacter	= function() {
+				if(self.play_as() === 'obama') {
+					self.play_as('putin');
+				} else {
+					self.play_as('obama');
+				}
+			}
+			
+		}
+		
+		var vm = new app();
+
+		ko.applyBindings(vm);	
+	
+	</script>
+	
 </body>
 </html>    
+
+
+
+
+
+
+
+
+
+
+
