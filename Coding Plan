@@ -12,6 +12,8 @@ Human’s turn – Gets keyboard input for where the human wants to play. Each s
 
 Computer’s turn – Searches for the best move. First check whether the human has two of the necessary squares for a win, then check for the best offensive move. (May be subdivided into different methods)
 
+Check Block - first thing done when it's the computer's turn - checks to see if it needs to make a blocking play (when the human has two out of the 3 for a win and the third square is empty)
+
 Check for Win – checks to see if someone has won the game. There are 8 possible ways to win: 123, 456, 789, 159, 357, 147, 258, and 369.
 
 Main menu – give options to start new game (if so, who goes first), exit, maybe some other things.
