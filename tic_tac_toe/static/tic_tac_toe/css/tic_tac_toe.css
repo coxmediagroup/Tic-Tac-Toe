@@ -30,3 +30,7 @@
 #turn {
     text-align: center;
 }
+
+.side {
+    display: none;
+}

@@ -145,17 +145,16 @@ def ai(request):
                          index = 6
                 if (index == -1 and squares[6] != ""):
                      if (squares[2] == ""): 
-                         index = 2
-                # go for center
-                if (index == -1 and squares[4] == ""):
-                    index = 4
-               
-                elif (index == -1):
+                         index = 2           
+                if (index == -1):
                     # go for some corner
                     for test_index in [0, 2, 6, 8]:
                         if (squares[test_index] == ""):
                             index = test_index
-                    if (index == -1):
+                    # go for center    
+                    if (index == -1 and squares[4] == ""):
+                        index = 4
+                    elif (index == -1):
                         # go for first open space
                         for test_index in [1, 3, 5, 7]:
                             if (squares[test_index] == ""):

@@ -1,6 +1,7 @@
 ﻿function ViewModel() {
     // Data
     var self = this;
+    self.allow_change_sides = false;
     self.player = "X";
     self.ai = "O";
     self.not_player_turn = ko.observable(true);
@@ -16,60 +17,69 @@
             self.reset_ai_message();
             self.not_player_turn(true);
 
-            var temp_squares = Array();
-            // Use values in DOM to detect if player is trying to cheat
-            for (var index = 0; index < 9; index++) {
-                value = $( $(tic_tac_toe).children()[index] ).text();
-                if (value != self.squares[index]() || (value != "X" && value != "O" && value != "")) {
-                    self.end_cheat();
-                }
-                temp_squares.push(value);
-            };
-
-            if (self.check_win(self.player)) {
-                self.end_win();
-            }
-            else if (self.check_tie()) {
-                self.end_tie();
-            }
-            else {
-                $.ajax({
-                    type: 'POST',
-                    url: $("#tic_tac_toe").attr("data-process-url"),
-                    data: {
-                        "squares": JSON.stringify(temp_squares),
-                        "ai": self.ai
-                    },
-                    success: function (data) {
-                        if (data.success) {
-                            if (data.move_index != -1) {
-                                self.squares[data.move_index](self.ai);
-                            }
-                            if (self.check_win(self.ai)) {
-                                self.end_lose();
-                            }
-                            else {
-                                self.not_player_turn(false);
-                            }
-                        }
-                        else if (data.error == -1) {
-                            self.end_cheat();
-                        }
-                        else {
-                            self.end_broke();
-                        }
-                    },
-                    error: function (data) {
-                        self.end_broke();
-                    }
-                });
-            }
+            self.make_ai_move();
         }
     };
 
-    self.new_game = function () {
+    self.make_ai_move = function () {
+        var temp_squares = Array();
+        // Use values in DOM to detect if player is trying to cheat
+        for (var index = 0; index < 9; index++) {
+            value = $($(tic_tac_toe).children()[index]).text();
+            if (value != self.squares[index]() || (value != "X" && value != "O" && value != "")) {
+                self.end_cheat();
+            }
+            temp_squares.push(value);
+        };
+
+        if (self.check_win(self.player)) {
+            self.end_win();
+        }
+        else if (self.check_tie()) {
+            self.end_tie();
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: $("#tic_tac_toe").attr("data-process-url"),
+                data: {
+                    "squares": JSON.stringify(temp_squares),
+                    "ai": self.ai
+                },
+                success: function (data) {
+                    if (data.success) {
+                        if (data.move_index != -1) {
+                            self.squares[data.move_index](self.ai);
+                        }
+                        if (self.check_win(self.ai)) {
+                            self.end_lose();
+                        }
+                        else {
+                            self.not_player_turn(false);
+                        }
+                    }
+                    else if (data.error == -1) {
+                        self.end_cheat();
+                    }
+                    else {
+                        self.end_broke();
+                    }
+                },
+                error: function (data) {
+                    self.end_broke();
+                }
+            });
+        }
+    }
+
+    self.new_game = function (first) {
+        if (first == null) {
+            first = false;
+        }
         self.not_player_turn(true);
-        $("#turn .not_turn").text("Restarting...");
+        if (!first) {
+            $("#turn .not_turn").text("Restarting...");
+        }
         $.ajax({
             type: 'POST',
             url: $("#tic_tac_toe").attr("data-new-url"),
@@ -77,13 +87,36 @@
                 $.each(self.squares, function (index, value) {
                     value("");
                 });
-                self.not_player_turn(false);
-                self.reset_ai_message();
+                $("#turn .not_turn").text("Pick a side:");
+                self.allow_change_sides = true;
+                $(".side").show();
             },
             error: function (data) {
                 location.reload();
             }
         });
+    }
+
+    self.choose_x = function () {
+        if (self.allow_change_sides) {
+            self.allow_change_sides = false;
+            self.player = "X";
+            self.ai = "O";
+            self.not_player_turn(false);
+            self.reset_ai_message();
+            $(".side").hide();
+        }
+    }
+
+    self.choose_o = function () {
+        if (self.allow_change_sides) {
+            self.allow_change_sides = false;
+            self.player = "O";
+            self.ai = "X";
+            self.reset_ai_message();
+            self.make_ai_move();
+            $(".side").hide();
+        }
     }
 
     self.check_win = function (side) {
@@ -171,6 +204,8 @@
         self.not_player_turn(true);
     }
 
+    // the only way this can occur, is if player goes first and chooses a corner
+    //  it is impossible for the AI to stop the player (if player knows what to do)
     self.end_win = function () {
         $("#turn .not_turn").text("You won!");
         self.not_player_turn(true);
@@ -191,7 +226,7 @@
     }
 
     setTimeout(function () {
-        self.not_player_turn(false);
+        self.new_game(true);
     }, 2000);
 };
 
