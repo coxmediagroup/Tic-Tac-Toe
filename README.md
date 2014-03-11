@@ -1,7 +1,7 @@
 # Tic Tac Toe
 ## Christopher Bailey
 
-### Written In: Python/Django/jQuery
+### Written In: Python/Django/jQuery/KnockoutJS
 
 ### Requirements
 1. Windows. If you are using Linux, you will need to provide Python 2.7, 
