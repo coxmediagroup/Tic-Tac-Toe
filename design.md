@@ -34,9 +34,6 @@ Row
 Location
 -------------
 - occupying entity
-- do I really need a model for this, or will a list of lists work?
-    - this seems to be the django way
-    - seems like a waste of resources
 - claim(entity_id) to claim location for given entity
 
 
@@ -45,3 +42,4 @@ Location
 Questions to Answer
 ===================
 - Can I replace models.py with models/__init__.py?
+- DB starts id's with 1, maybe update logic to agree
