@@ -42,4 +42,16 @@ class Board(object):
 
          return winner
 
+class Player(object):
+     """A tic tact toe player"""
+
+     def __init__(self, board_value, *args, **kwargs):
+         """
+         board_value should be a single character to display such as X or O.
+         """
+
+         # the value which will represent the player behind the scenes
+         self.board_value = board_value
+         self.turn_count = 0
+
 
