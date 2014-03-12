@@ -15,7 +15,17 @@ function grid(x,y, indexInGridsArray, app_parent) {
 		} else if( newValue === -1) {
 			app_parent.computer.computerPlays.push(self.index);	
 			app_parent.switchTurns();					
-		}				
+		}
+		
+		if(app_parent.isOkayToReset === true)
+		{
+			app_parent.playCount++;			
+			app_parent.checkForWinner();
+		}
+
+		
+
+		
 	});
 	
 	self.userClicked= function() {

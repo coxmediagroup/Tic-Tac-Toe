@@ -424,7 +424,36 @@ function computersLogic(app_parent) {
 		} 
 		
 		return false;
-		
+
+	}
+	
+	self.checkForWinningCombination = function(playArray){
+		//the playArray is an array of the indices (in app.table.grids array) selected by the human or the computer
+		//it returns the winning combination or false
+
+		for(i=0; i<self.winningGridCombinations.length; i++) {
+
+			combination = self.winningGridCombinations[i];
+			
+			accept = true;			
+			for(j=0; j< combination.length; j++) {
+				
+				//checks to see if element in combination is in the playArray
+				if( playArray.indexOf(combination[j]) === -1 ){
+
+					//the entire combination can not be accepted b/c this 
+					//element in the combination was not selected
+					accept = false
+					break;
+				}
+			}
+			if( accept === true ) {
+				//if all of the wining combinations were selected
+				//then the human/computer won, return the combination elements selected
+				return combination;
+			}			
+		}
+		return false;
 
 	
 	}
