@@ -22,6 +22,19 @@ class Entity(models.Model):
             pass
         pass
 
+class Game(models.Model):
+    current_player = models.ForeignKey(Entity)
+
+    def get_location(self, x, y):
+        # get the location object of the given location
+        pass
+class Board(models.Model):
+    game = models.ForeignKey(Game)
+
+class Row(models.Model):
+    board = models.ForeignKey(Board)
+    row = models.IntegerField()
+
 class Location(models.Model):
     column = models.IntegerField()
     row = models.ForeignKey(Row)
@@ -31,17 +44,3 @@ class Location(models.Model):
         # set the occupier of this field to the given entity id
         pass
 
-class Row(models.Model):
-    board = models.ForeignKey(Board)
-    row = models.IntegerField()
-
-class Board(model.Model):
-    game = models.ForeignKey(Game)
-
-class Game(model.Model):
-    board = models.ForeignKey(Board)
-    current_player = models.ForeignKey(Entity)
-
-    def get_location(self, x, y):
-        # get the location object of the given location
-        pass
