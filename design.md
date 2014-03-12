@@ -18,6 +18,7 @@ Entity
     - make a decision (if ai)
     - render page and retrieve decision (if human)
     - execute a move
+- maybe subclass for human or ai to overload get_decision()?
 
 GameBoard
 -------------
@@ -36,3 +37,10 @@ Location
     - this seems to be the django way
     - seems like a waste of resources
 - claim(entity_id) to claim location for given entity
+
+
+
+
+Questions to Answer
+-------------------
+- Can I replace models.py with models/__init__.py?
