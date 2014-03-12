@@ -163,4 +163,52 @@ def draw(board):
          if position == 2 or position == 5:
              print '-' * 5
          
-         
+# A singleton object could be used for the game, but it does't really
+ # add anything other than some extra complication with the given requirements.
+ def play_game(board, player1, player2):
+     """The main game loop/logic"""
+
+     playing = True
+     while playing:
+         draw(board)
+
+         if None not in board.tttboard:
+             print 'No more moves left.'
+             break
+
+         aichoice = player1.take_turn(board, player2)
+         board.select_position(aichoice, player1)
+
+         draw(board)
+         if board.check_for_win(player1):
+             print "Computer Wins!"
+             break
+
+         if None not in board.tttboard:
+             print 'No more moves left.'
+             break
+
+         #player selection
+         while True:
+             selection = raw_input('Pick a spot: ')
+             if selection.lower() == 'q':
+                 playing = False
+                 break
+
+             try:
+                 board.select_position(int(selection), player2)
+             except PositionAlreadyTakenError:
+                 print 'That position is already taken.'
+             else:
+                 if board.check_for_win(player2):
+                     # Well, this isn't supposed to happen.
+                     print "You Win!"
+                     playing = False
+                 break
+
+ if __name__ == '__main__':
+     player1 = AIPlayer('X')
+     player2 = Player('Y')
+     board = Board()
+
+     play_game(board, player1, player2)
