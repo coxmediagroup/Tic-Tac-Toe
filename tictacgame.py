@@ -145,6 +145,22 @@ class AIPlayer(Player):
          self.turn_count += 1
          return position
          
-         #board placeholder....
+def draw(board):
+     """Draw the game board on screen"""
+     # ANSI code to clear the screen
+     print chr(27) + "[2J"
+     for position, value in enumerate(board.tttboard):
+         if value is None:
+             sys.stdout.write(str(position))
+         else:
+             sys.stdout.write(str(value))
+
+         if (position + 1) % 3 != 0:
+             sys.stdout.write('|')
+         else:
+             print ''
+
+         if position == 2 or position == 5:
+             print '-' * 5
          
          
