@@ -1,0 +1,18 @@
+<h1>Tic Tac Toe</h1>
+<table>
+    {% for row in board %}
+        <tr>
+            {% for row_i, cell_i, symbol in row %}
+                <td>
+                    {% if symbol == '' %}
+                        <form action="{% url 'tic_tac_toe.views.make_move' row_i cell_i %}">
+                            <input type="submit" value="Move Here" />
+                        </form>
+                    {% else %}
+                        {{ symbol }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>

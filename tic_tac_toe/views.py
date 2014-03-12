@@ -54,13 +54,10 @@ def index(request):
     # invert the grid vertically so we can build from the top down
     locations = locations[::-1]
 
-    # DEBUG: show locations, so it can be verified
-    import pprint
-    rendered_html = pprint.pformat(locations)
-
     # and let's get some input
 
-    return HttpResponse(rendered_html)
+    context = {'board':locations}
+    return render(request, 'board.html', context)
 
 def make_move(request, row_id, column_id):
     return HttpResponse('Move')
