@@ -67,7 +67,7 @@ class Row(models.Model):
 class Location(models.Model):
     column = models.IntegerField()
     row = models.ForeignKey(Row)
-    occupier = models.ForeignKey(Entity)
+    occupier = models.ForeignKey(Entity, null=True)
 
     def claim(self, entity_id):
         # set the occupier of this field to the given entity id
