@@ -1,5 +1,5 @@
 GameLoop
--------------
+=============
 - display game board
 - get human input
     - should be displyed as buttons in board
@@ -12,7 +12,7 @@ GameLoop
     - destroy lingering variables
 
 Entity
-=============
+-------------
 - entity type (human or ai)
 - get_decision() to perform actions to either
     - make a decision (if ai)
@@ -21,17 +21,17 @@ Entity
 - maybe subclass for human or ai to overload get_decision()?
 
 GameBoard
--------------
+=============
 - collection of Rows
     - y-coordinate measured from bottom, starting at 0
 - get_location(x, y) to retrieve the value of a cell
 
 Row
-=============
+-------------
 - list of Locations
     - x-coordinate measured from left, starting at 0
 Location
-=============
+-------------
 - occupying entity
 - do I really need a model for this, or will a list of lists work?
     - this seems to be the django way
@@ -42,5 +42,5 @@ Location
 
 
 Questions to Answer
--------------------
+===================
 - Can I replace models.py with models/__init__.py?
