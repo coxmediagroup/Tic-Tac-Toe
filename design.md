@@ -30,6 +30,7 @@ Row
 -------------
 - list of Locations
     - x-coordinate measured from left, starting at 0
+
 Location
 -------------
 - occupying entity
