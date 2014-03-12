@@ -170,8 +170,6 @@ function app() {
 						if(self.computer.computerPlays.length===1) {
 							//when the computer has made one play already
 							self.computer.makeSecondPlayAttackMode();
-						} else if( self.computer.makeSecondPlayAttackModeForCornerCornerDiagonal() ){
-							//this is for making the corner-corner diagonal better
 						}else {
 							//when the computer has made more than 2 moves with the attack strategy
 							if(self.computer.steadyStateAlgorithm()) {}

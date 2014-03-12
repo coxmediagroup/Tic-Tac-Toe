@@ -228,54 +228,6 @@ function computersLogic(app_parent) {
 	
 	}
 	
-	self.makeSecondPlayAttackModeForCornerCornerDiagonal = function(){
-		//returns true if situation meets criteria and computer is able to select
-		
-		if( self.computerPlays.length === 2) {
-			//checks to see if first two computer selections were corners
-			computerIndex0	= self.computerPlays[0];  
-			computerIndex1	= self.computerPlays[1];  
-			
-			computerIndexType0 	= self.classifyPlayType(computerIndex0);
-			computerIndexType1 	= self.classifyPlayType(computerIndex1);
-			
-			if(computerIndexType0 === 'corner' && computerIndexType1 === 'corner'){
-			
-				acceptValue = true;
-			
-				for(i=0; i< self.corners.length; i++) {
-
-					corner = self.corners[i];	
-					localCornerGrid	= 	app_parent.table.grids[ corner ];
-					gridValue	=	app_parent.table.grids[ corner ].value();					
-					
-					if(gridValue ===0) {
-						//corner has not been chosen yet
-						
-						for(j=0; j< self.humanPlays.length; j++) {
-						
-							//uses humanPreviousPlayIndex to find the last actual grid selected
-							localHumanGrid 	= app_parent.table.grids[ j ];
-							
-							if(self.sharesSideWith(localHumanGrid, localCornerGrid)) {
-								acceptValue = false;
-							}
-						
-						}	
-						
-						if(acceptValue === true) {
-							app_parent.table.grids[ corner ].value(-1);
-							return true;
-						}
-					
-					}
-				}
-			}
-
-		}
-		return false;				
-	}
-	
 	
 	self.makeFirstPlayDefenseMode = function() {
 		//find out what move the human last made
