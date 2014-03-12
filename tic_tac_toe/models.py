@@ -38,6 +38,7 @@ class Game(models.Model):
 class Entity(models.Model):
     is_ai = models.BooleanField(default=False)
     game = models.ForeignKey(Game)
+    symbol = models.CharField(max_length=1)
 
     def get_type(self):
         # get a human-readable string of this entity's type
