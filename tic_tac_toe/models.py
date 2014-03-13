@@ -61,12 +61,6 @@ class Entity(models.Model):
         return 'Human'
 
     def get_decision(self):
-        # get a decision from either the human or the ai
-        #    this may need to change as I figure out django
-        if(self.get_type() == 'Human'):
-            pass
-        else:
-            pass
         pass
 
 
