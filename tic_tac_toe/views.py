@@ -10,12 +10,13 @@ def index(request):
     game = util.get_game(request) # get the game object from the session
 
     # is it the computer's turn?
+    current_player = game.current_player == '1' and game.player_one or game.player_two
+    if current_player.is_ai:
         # if so, he should go on and take his turn
+        current_player.get_decision()
 
-    # it's our turn, so:
-
-    # display the board
-
+    # now, it's our turn
+    ### display the board
     board = game.board_set.first() # get the board
     rows = board.row_set.all() # get the board's rows
 
@@ -51,6 +52,8 @@ def make_move(request, row_id, column_id):
     location = game.get_location(row_id, column_id) # get Location object
     location.occupier = player # the location is occupied by the player
     location.save()
+
+    game.next_player()
 
     return redirect('tic_tac_toe.views.index')
 
