@@ -43,3 +43,32 @@ Questions to Answer
 ===================
 - Can I replace models.py with models/__init__.py?
 - DB starts id's with 1, maybe update logic to agree
+
+
+Possible Scenarios
+==================
+
+AI takes corner
+---------------------
+- user takes center
+    - ai takes corner vertically aligned, horizontally opposed original choice
+    - user takes horizontal middle vertically aligned with original and second choice
+        - ai takes middle of column opposite original and second choice
+        - user takes center-top
+            - ai takes center-bottom
+        - user takes any other cell
+            - ai takes center-top
+    - user takes any other cell
+        - ai takes horizontal middle vertically aligned with original and second choice
+- user any other cell
+    - ai takes cell horizontally or vertically aligned with original choice
+    - user takes cell between ai's original and second choice
+        - if open, ai takes cell opposite original choice
+        - otherwise, ai takes cell horizontally or vertically aligned with second choice
+            - user takes center
+                -ai takes cell between first and 3 choice or second and third choice
+            - user any other cell
+                -ai takes center
+    - user takes any other cell
+        - ai takes cell between ai's original and second choice
+
