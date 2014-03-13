@@ -61,3 +61,10 @@ def make_move(request, row_id, column_id):
 
     return redirect('tic_tac_toe.views.index')
 
+def reset(request):
+    # abandon any games that may currently be in the session
+    request.session['game_id'] = None
+
+    # redirect to index
+    return redirect('tic_tac_toe.views.index')
+

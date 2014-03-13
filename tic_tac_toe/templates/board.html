@@ -1,6 +1,6 @@
 <h1>Tic Tac Toe</h1>
 {% if winner %}
-    <b>{{ winner }}</b>
+    <h2>{{ winner }}</h2>
 {% endif %}
 <table>
     {% for row in board %}
@@ -21,3 +21,6 @@
         </tr>
     {% endfor %}
 </table>
+<br />
+<br />
+<a href="{% url 'tic_tac_toe.views.reset' %}">Reset Game</a>
