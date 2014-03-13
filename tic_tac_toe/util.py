@@ -20,7 +20,11 @@ def get_game(request):
 
     return game
 
+def _get_player_of_type(game, is_ai):
+    if game.player_one.is_ai == is_ai:
+        return game.player_one
+    return game.player_two
 def get_human_player(game):
-    if game.player_one.is_ai:
-        return game.player_two
-    return game.player_one
+    return _get_player_of_type(game, False)
+def get_ai_player(game):
+    return _get_player_of_type(game, True)
