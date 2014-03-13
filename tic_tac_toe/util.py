@@ -19,3 +19,8 @@ def get_game(request):
         request.session['game_id'] = game.id
 
     return game
+
+def get_human_player(game):
+    if game.player_one.is_ai:
+        return game.player_two
+    return game.player_one
