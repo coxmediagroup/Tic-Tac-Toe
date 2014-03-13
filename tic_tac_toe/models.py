@@ -9,6 +9,10 @@ class Game(models.Model):
     player_one = models.ForeignKey('Entity', null=True, related_name='+')
     player_two = models.ForeignKey('Entity', null=True, related_name='+')
 
+    def next_player(self):
+        self.current_player = '2' if self.current_player == '1' else '1'
+        self.save()
+
     def get_location(self, row_id, col_id):
         # get the location object of the given location
         board = self.board_set.first()
@@ -61,7 +65,15 @@ class Entity(models.Model):
         return 'Human'
 
     def get_decision(self):
-        pass
+        game = self.game
+        first_choice = (0,0)
+
+        first_choice_location = game.get_location(*first_choice)
+        if first_choice_location.occupier == None:
+            first_choice_location.occupier = self
+            first_choice_location.save()
+            game.next_player()
+
 
 
 class Board(models.Model):
