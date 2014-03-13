@@ -51,6 +51,45 @@ class Game(models.Model):
                 loc = Location(column=i, row=row)
                 loc.save()
 
+    def get_win_scenarios(self):
+        possibles = []
+
+        # left-down diagonal
+        possibles.append((
+            (0, 0),
+            (1, 1),
+            (2, 2),
+        ))
+        # right-down diagonal
+        possibles.append((
+            (0, 2),
+            (1, 1),
+            (2, 0),
+        ))
+        # horizontals
+        for i in range(3):
+            possibles.append((
+                (i, 0),
+                (i, 1),
+                (i, 2),
+            ))
+        # verticals
+        for i in range(3):
+            possibles.append((
+                (0, i),
+                (1, i),
+                (2, i),
+            ))
+        return possibles
+
+    def get_winner(self):
+        possibles = self.get_win_scenarios()
+        for streak in possibles:
+            occupiers = [self.get_location(*coords).occupier for coords in streak]
+            if occupiers[0] != None and occupiers.count(occupiers[0]) == 3:
+                return occupiers[0]
+        return None
+
 class Entity(models.Model):
     is_ai = models.BooleanField(default=False)
     game = models.ForeignKey(Game)
@@ -74,34 +113,7 @@ class Entity(models.Model):
             pass # we'll claim it in a bt
         else:
             # check for possible wins
-            possibles = []
-
-            # check the left-down diagonal
-            possibles.append((
-                (0, 0),
-                (1, 1),
-                (2, 2),
-                ))
-            # check the right-down diagonal
-            possibles.append((
-                (0, 2),
-                (1, 1),
-                (2, 0),
-                ))
-            # check horizontals
-            for i in range(3):
-                possibles.append((
-                    (i, 0),
-                    (i, 1),
-                    (i, 2),
-                    ))
-            # check verticals
-            for i in range(3):
-                possibles.append((
-                    (0, i),
-                    (1, i),
-                    (2, i),
-                    ))
+            possibles = game.get_win_scenarios()
 
             immediate_wins = []
             immediate_losses = []

@@ -9,11 +9,15 @@ import tic_tac_toe.util as util
 def index(request):
     game = util.get_game(request) # get the game object from the session
 
+    # check for a winner
+    winner = game.get_winner()
+
     # is it the computer's turn?
     current_player = game.current_player == 1 and game.player_one or game.player_two
-    if current_player.is_ai:
+    if not winner and current_player.is_ai:  # Don't bother if someone has won
         # if so, he should go on and take his turn
         current_player.get_decision()
+        winner = game.get_winner()  # the board has changed, check for a winner
 
     # now, it's our turn
     ### display the board
@@ -39,7 +43,7 @@ def index(request):
 
     # and let's get some input
 
-    context = {'board':locations}
+    context = {'board':locations, 'winner':(winner and winner.get_type() or winner)}
     return render(request, 'board.html', context)
 
 def make_move(request, row_id, column_id):
