@@ -64,15 +64,65 @@ class Entity(models.Model):
             return 'Computer'
         return 'Human'
 
-    def get_decision(self):
+    def get_decision(self, decision_tree=None):
         game = self.game
-        first_choice = (0,0)
 
-        first_choice_location = game.get_location(*first_choice)
-        if first_choice_location.occupier == None:
-            first_choice_location.occupier = self
-            first_choice_location.save()
-            game.next_player()
+        # for the first move, take the bottom left corner
+        choice_location = game.get_location(0,0)
+        if choice_location.occupier == None:
+            # this will never fail if the ai does not occupy the space
+            #    because the ai goes first
+            choice_location.occupier = self
+        else:
+            # check for possible wins
+            possibles = []
+
+            # check the left-down diagonal
+            possibles.append((
+                (0, 0),
+                (1, 1),
+                (2, 2),
+                ))
+            # check the right-down diagonal
+            possibles.append((
+                (0, 2),
+                (1, 1),
+                (2, 0),
+                ))
+            # check horizontals
+            for i in range(3):
+                possibles.append((
+                    (i, 0),
+                    (i, 1),
+                    (i, 2),
+                    ))
+            # check verticals
+            for i in range(3):
+                possibles.append((
+                    (0, i),
+                    (1, i),
+                    (2, i),
+                    ))
+
+            found_win = False
+            for possible in possibles: # go through possible win scenarios
+                # get status of each cell in the scenario
+                results = [game.get_location(*cell).occupier for cell in possible]
+                # if ai owns 2 cells, and there's an empty, just claim the empty
+                if results.count(self) == 2 and results.count(None) == 1:
+                    # we have a winner, figure out which one is empty and take it
+                    continue # TODO: figure out which cell to claim and claim it
+                    found_win = True
+                    break
+            # if we didn't find a winnable scenario, get into the hairy bits of
+            #   figuring out what the next best option is
+            if not found_win:
+                # figure out who is where and what is the best move
+                pass
+
+
+        choice_location.save()
+        game.next_player()
 
 
 
