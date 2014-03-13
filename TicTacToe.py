@@ -24,11 +24,20 @@ class TicTacToe():
                 'D1': [1, 5, 9],
                 'D2': [3, 5, 7]}
 
+        self.board="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
+1    |    2    |    3\
+\n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
+4    |    5    |    6\
+\n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
+7    |    8    |    9"
+
 game=TicTacToe()
 players=['X', 'O']
 
 if __name__ == '__main__':
     while True:
+        print re.sub('[0-9]', '-', game.board)
+        #print game.board
         move = raw_input("Pick a spot: ")
         game.availSquares.discard(int(move))
         
