@@ -1,3 +1,18 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    table tr td {
+        border-right: solid black thin;
+        border-bottom: solid black thin;
+    }
+    table tr td:last-child {
+        border-right: none;
+    }
+    table tr:last-child td {
+        border-bottom: none;
+    }
+</style>
 <h1>Tic Tac Toe</h1>
 {% if winner %}
     <h2>{{ winner }}</h2>
