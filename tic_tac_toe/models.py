@@ -4,7 +4,7 @@ from django.db import models
 
 class Game(models.Model):
     # should be 1 or 2 to indicate first or second player
-    current_player = models.IntegerField()
+    current_player = models.IntegerField(default=2)
 
     player_one = models.ForeignKey('Entity', null=True, related_name='+')
     player_two = models.ForeignKey('Entity', null=True, related_name='+')
