@@ -86,13 +86,20 @@ class Game(models.Model):
         moves_available = False
         possibles = self.get_win_scenarios()
         for streak in possibles:
+            # resolve a streak to its occupiers
             occupiers = [self.get_location(*coords).occupier for coords in streak]
             if occupiers[0] != None and occupiers.count(occupiers[0]) == 3:
+                # if all three cells in this streak are the same, it's a winner
                 return '%s Wins!'%(occupiers[0].get_type(),)
+
             elif None in occupiers:
+                # if one of the cells is empty, make note
                 moves_available = True
+
         if not moves_available:
+            # if we didn't find any empty cells, we must have a draw
             return "It's a Draw!"
+
         return None
 
 class Entity(models.Model):
