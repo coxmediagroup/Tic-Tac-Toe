@@ -104,46 +104,35 @@ class Entity(models.Model):
                     (2, i),
                     ))
 
-            break_out = False # a variable that when true will cause the
-                              #    successive checks to halt
+            immediate_wins = []
+            immediate_losses = []
+            possible_losses = []
             for possible in possibles: # go through possible win scenarios
                 # get status of each cell in the scenario
                 results = [game.get_location(*cell).occupier for cell in possible]
-                # if ai owns 2 cells, and there's an empty, just claim the empty
+
                 if results.count(self) == 2 and results.count(None) == 1:
                     # we have a winner, figure out which one is empty and take it
-                    continue # TODO: figure out which cell to claim and claim it
-                    break_out = True
-                    break
-            # if we didn't find a winnable scenario, get into the hairy bits of
-            #   figuring out what the next best option is
-            if not break_out:
-                # check for immediate losses
-                for possible in possibles: # go through possible win scenarios
-                    # get status of each cell in the scenario
-                    results = [game.get_location(*cell).occupier for cell in possible]
-                    # if ai owns 0 cells, and there's 1 empty, just claim the empty
-                    if results.count(self) == 0 and results.count(None) == 1:
-                        # we have an immenent loss, figure out which one is empty and take it
-                        continue # TODO: figure out which cell to claim and claim it
-                        break_out = True
-                        break
-                # check for possible losses
-                if not break_out:
-                    # check for immediate losses
-                    for possible in possibles: # go through possible win scenarios
-                        # get status of each cell in the scenario
-                        results = [game.get_location(*cell).occupier for cell in possible]
-                        # if ai owns 0 cells, and there's 1 empty, just claim the empty
-                        if results.count(self) == 0:
-                            # we have an possible loss, figure out which one is empty and take it
-                            continue # TODO: figure out which cell to claim and claim it
-                            break_out = True
-                            break
-                    if not break_out:
-                        # if we've gotten here, we have a claim in each possible
-                        #   loss route, so we can just pick a random cell
-                        pass
+                    immediate_wins.append(possible)
+
+                elif results.count(self) == 0 and results.count(None) == 1:
+                    # we have an immenent loss, figure out which one is empty and take it
+                    immediate_losses.append(possible)
+
+                elif results.count(self) == 0:
+                    # we have an possible loss, figure out which one is empty and take it
+                    possible_losses.append(possible)
+
+            if immediate_wins:
+                pass # TODO: figure out which cell to claim and claim it
+            elif immediate_losses:
+                pass # TODO: figure out which cell to claim and claim it
+            elif possible_losses:
+                pass # TODO: figure out which cell to claim and claim it
+            else:
+                # if we've gotten here, we have a claim in each possible
+                #   loss route, so we can just pick a random cell
+                pass
 
 
         choice_location.save()
