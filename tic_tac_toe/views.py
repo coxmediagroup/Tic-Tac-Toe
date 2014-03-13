@@ -10,7 +10,7 @@ def index(request):
     game = util.get_game(request) # get the game object from the session
 
     # is it the computer's turn?
-    current_player = game.current_player == '1' and game.player_one or game.player_two
+    current_player = game.current_player == 1 and game.player_one or game.player_two
     if current_player.is_ai:
         # if so, he should go on and take his turn
         current_player.get_decision()
