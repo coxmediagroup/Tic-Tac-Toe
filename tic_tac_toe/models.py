@@ -67,12 +67,11 @@ class Entity(models.Model):
     def get_decision(self, decision_tree=None):
         game = self.game
 
-        # for the first move, take the bottom left corner
         choice_location = game.get_location(0,0)
         if choice_location.occupier == None:
             # this will never fail if the ai does not occupy the space
             #    because the ai goes first
-            choice_location.occupier = self
+            pass # we'll claim it in a bt
         else:
             # check for possible wins
             possibles = []
@@ -113,27 +112,37 @@ class Entity(models.Model):
 
                 if results.count(self) == 2 and results.count(None) == 1:
                     # we have a winner, figure out which one is empty and take it
-                    immediate_wins.append(possible)
+                    immediate_wins.append(possible[results.index(None)])
 
                 elif results.count(self) == 0 and results.count(None) == 1:
                     # we have an immenent loss, figure out which one is empty and take it
-                    immediate_losses.append(possible)
+                    immediate_losses.append(possible[results.index(None)])
 
                 elif results.count(self) == 0:
                     # we have an possible loss, figure out which one is empty and take it
-                    possible_losses.append(possible)
+                    possible_losses.append(possible[results.index(None)])
 
             if immediate_wins:
-                pass # TODO: figure out which cell to claim and claim it
+                choice_location = game.get_location(*immediate_wins[0])
             elif immediate_losses:
-                pass # TODO: figure out which cell to claim and claim it
+                choice_location = game.get_location(*immediate_losses[0])
             elif possible_losses:
-                pass # TODO: figure out which cell to claim and claim it
+                choice_location = game.get_location(*possible_losses[0])
             else:
                 # if we've gotten here, we have a claim in each possible
                 #   loss route, so we can just pick a random cell
-                pass
+                choice_location = None
+                for row_i in range(3):
+                    for col_i in range(3):
+                        possible_location = game.get_location(row_i, col_i)
+                        if possible_location.occupier == None:
+                            choice_location = possible_location
+                            break
+                    if choice_location:
+                        break
 
+        # claim whatever cell we wound up on
+        choice_location.occupier = self
 
         choice_location.save()
         game.next_player()
