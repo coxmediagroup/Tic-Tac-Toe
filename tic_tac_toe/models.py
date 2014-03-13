@@ -9,9 +9,12 @@ class Game(models.Model):
     player_one = models.ForeignKey('Entity', null=True, related_name='+')
     player_two = models.ForeignKey('Entity', null=True, related_name='+')
 
-    def get_location(self, x, y):
+    def get_location(self, row_id, col_id):
         # get the location object of the given location
-        pass
+        board = self.board_set.first()
+        row = board.row_set.get(row=row_id)
+        location = row.location_set.get(column=col_id)
+        return location
 
     def setup_new_game(self):
         self.save() # save so that we get a primary key

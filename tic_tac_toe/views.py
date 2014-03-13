@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -42,4 +42,15 @@ def index(request):
     return render(request, 'board.html', context)
 
 def make_move(request, row_id, column_id):
-    return HttpResponse('Move')
+    game = util.get_game(request) # get game from session
+
+    # TODO: check row id is between 0 and 2 inclusive
+    # TODO: check column id is between 0 and 2 inclusive
+
+    player = util.get_human_player(game) # get human player from game
+    location = game.get_location(row_id, column_id) # get Location object
+    location.occupier = player # the location is occupied by the player
+    location.save()
+
+    return redirect('tic_tac_toe.views.index')
+
