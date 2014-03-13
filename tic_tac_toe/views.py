@@ -47,17 +47,20 @@ def index(request):
     return render(request, 'board.html', context)
 
 def make_move(request, row_id, column_id):
-    game = util.get_game(request) # get game from session
+    # check that the requested location is valid
+    # row id and column id should be numbers between 0 and 2 inclusive
+    row_valid = row_id.isdigit() and int(row_id) in range(3)
+    column_valid = column_id.isdigit() and int(column_id) in range(3)
 
-    # TODO: check row id is between 0 and 2 inclusive
-    # TODO: check column id is between 0 and 2 inclusive
+    if row_valid and column_valid:
+        game = util.get_game(request) # get game from session
 
-    player = util.get_human_player(game) # get human player from game
-    location = game.get_location(row_id, column_id) # get Location object
-    location.occupier = player # the location is occupied by the player
-    location.save()
+        player = util.get_human_player(game) # get human player from game
+        location = game.get_location(row_id, column_id) # get Location object
+        location.occupier = player # the location is occupied by the player
+        location.save()
 
-    game.next_player()
+        game.next_player()
 
     return redirect('tic_tac_toe.views.index')
 
