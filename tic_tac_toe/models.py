@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class Game(models.Model):
     # should be 1 or 2 to indicate first or second player
@@ -44,28 +43,29 @@ class Game(models.Model):
         board.save()
 
         # create a 3x3 grid, saving each object along the way
-        for i in range(3):
-            row = Row(row=i, board=board)
+        for row_i in range(3):
+            row = Row(row=row_i, board=board)
             row.save()
-            for i in range(3):
-                loc = Location(column=i, row=row)
+            for col_i in range(3):
+                loc = Location(column=col_i, row=row)
                 loc.save()
 
     def get_win_scenarios(self):
-        possibles = []
+        possibles = [
+            # left-down diagonal
+            (
+                (0, 0),
+                (1, 1),
+                (2, 2),
+            ),
+            # right-down diagonal
+            (
+                (0, 2),
+                (1, 1),
+                (2, 0),
+            ),
+        ]
 
-        # left-down diagonal
-        possibles.append((
-            (0, 0),
-            (1, 1),
-            (2, 2),
-        ))
-        # right-down diagonal
-        possibles.append((
-            (0, 2),
-            (1, 1),
-            (2, 0),
-        ))
         # horizontals
         for i in range(3):
             possibles.append((
@@ -102,6 +102,7 @@ class Game(models.Model):
 
         return None
 
+
 class Entity(models.Model):
     is_ai = models.BooleanField(default=False)
     game = models.ForeignKey(Game)
@@ -115,11 +116,11 @@ class Entity(models.Model):
             return 'Computer'
         return 'Human'
 
-    def get_decision(self, decision_tree=None):
+    def get_decision(self):
         game = self.game
 
-        choice_location = game.get_location(0,0)
-        if choice_location.occupier == None:
+        choice_location = game.get_location(0, 0)
+        if choice_location.occupier is None:
             # this will never fail if the ai does not occupy the space
             #    because the ai goes first
             pass # we'll claim it in a bt
@@ -135,15 +136,15 @@ class Entity(models.Model):
                 results = [game.get_location(*cell).occupier for cell in possible]
 
                 if results.count(self) == 2 and results.count(None) == 1:
-                    # we have a winner, figure out which one is empty and take it
+                    # we have a winner, claim the cell
                     immediate_wins.append(possible[results.index(None)])
 
                 elif results.count(self) == 0 and results.count(None) == 1:
-                    # we have an immenent loss, figure out which one is empty and take it
+                    # we have an imminent loss, claim the cell to prevent
                     immediate_losses.append(possible[results.index(None)])
 
                 elif results.count(self) == 0:
-                    # we have an possible loss, figure out which one is empty and take it
+                    # we have an possible loss, claim the cell to prevent
                     possible_losses.append(possible[results.index(None)])
 
             if immediate_wins:
@@ -159,7 +160,7 @@ class Entity(models.Model):
                 for row_i in range(3):
                     for col_i in range(3):
                         possible_location = game.get_location(row_i, col_i)
-                        if possible_location.occupier == None:
+                        if possible_location.occupier is None:
                             choice_location = possible_location
                             break
                     if choice_location:
@@ -176,9 +177,11 @@ class Entity(models.Model):
 class Board(models.Model):
     game = models.ForeignKey(Game)
 
+
 class Row(models.Model):
     board = models.ForeignKey(Board)
     row = models.IntegerField()
+
 
 class AlreadyOccupied(Exception):
     pass
@@ -189,7 +192,7 @@ class Location(models.Model):
 
     def claim(self, entity):
         # set the occupier of this field to the given entity
-        if self.occupier == None:
+        if self.occupier is None:
             self.occupier = entity
         else:
             raise AlreadyOccupied('The given location is already occupied!')

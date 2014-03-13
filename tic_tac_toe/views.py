@@ -7,7 +7,7 @@ import tic_tac_toe.util as util
 # Create your views here.
 
 def index(request):
-    game = util.get_game(request) # get the game object from the session
+    game = util.get_game(request)  # get the game object from the session
 
     # check for a winner
     winner = game.get_winner()
@@ -21,22 +21,22 @@ def index(request):
 
     # now, it's our turn
     ### display the board
-    board = game.board_set.first() # get the board
-    rows = board.row_set.all() # get the board's rows
+    board = game.board_set.first()  # get the board
+    rows = board.row_set.all()  # get the board's rows
 
-    locations = [] # this will hold each cell and its contents
+    locations = []  # this will hold each cell and its contents
     for row_i, row in enumerate(rows):
         row_locations_set = row.location_set.all()
-        row_locations = [] # this will be our translated row
+        row_locations = []  # this will be our translated row
         for loc_i, location in enumerate(row_locations_set):
             # figure out who owns the cell
-            symbol = '' # default to unowned
-            if(location.occupier != None):
+            symbol = ''  # default to unowned
+            if location.occupier is not None:
                 symbol = location.occupier.symbol
 
             location_tpl = (row_i, loc_i, symbol)
-            row_locations.append(location_tpl) # add the location to the row
-        locations.append(row_locations) # add the row to the board
+            row_locations.append(location_tpl)  # add the location to the row
+        locations.append(row_locations)  # add the row to the board
 
     # invert the grid vertically so we can build from the top down
     locations = locations[::-1]
@@ -53,11 +53,11 @@ def make_move(request, row_id, column_id):
     column_valid = column_id.isdigit() and int(column_id) in range(3)
 
     if row_valid and column_valid:
-        game = util.get_game(request) # get game from session
+        game = util.get_game(request)  # get game from session
 
-        player = util.get_human_player(game) # get human player from game
-        location = game.get_location(row_id, column_id) # get Location object
-        location.claim(player) # claim the location for the player
+        player = util.get_human_player(game)  # get human player from game
+        location = game.get_location(row_id, column_id)  # get Location object
+        location.claim(player)  # claim the location for the player
         location.save()
 
         game.next_player()
