@@ -1,6 +1,6 @@
 from tic_tac_toe.models import Game
 
-def get_game(request): # THIS IS NOT A VIEW
+def get_game(request):
     # get our game
     game_id = request.session.get('game_id')
 
