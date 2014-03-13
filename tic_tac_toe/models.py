@@ -166,7 +166,7 @@ class Entity(models.Model):
                         break
 
         # claim whatever cell we wound up on
-        choice_location.occupier = self
+        choice_location.claim(self)
 
         choice_location.save()
         game.next_player()
@@ -180,12 +180,16 @@ class Row(models.Model):
     board = models.ForeignKey(Board)
     row = models.IntegerField()
 
+class AlreadyOccupied(Exception):
+    pass
 class Location(models.Model):
     column = models.IntegerField()
     row = models.ForeignKey(Row)
     occupier = models.ForeignKey(Entity, null=True)
 
-    def claim(self, entity_id):
-        # set the occupier of this field to the given entity id
-        #TODO: how do I get an entity by its index?
-        pass
+    def claim(self, entity):
+        # set the occupier of this field to the given entity
+        if self.occupier == None:
+            self.occupier = entity
+        else:
+            raise AlreadyOccupied('The given location is already occupied!')

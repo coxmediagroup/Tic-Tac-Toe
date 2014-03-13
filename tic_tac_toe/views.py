@@ -57,7 +57,7 @@ def make_move(request, row_id, column_id):
 
         player = util.get_human_player(game) # get human player from game
         location = game.get_location(row_id, column_id) # get Location object
-        location.occupier = player # the location is occupied by the player
+        location.claim(player) # claim the location for the player
         location.save()
 
         game.next_player()
