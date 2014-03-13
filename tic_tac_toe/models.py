@@ -20,8 +20,8 @@ class Game(models.Model):
         self.save() # save so that we get a primary key
 
         # 1 entity for the player, 1 for the computer
-        human = Entity(is_ai=False, game=self)
-        ai = Entity(is_ai=True, game=self)
+        human = Entity(is_ai=False, game=self, symbol='X')
+        ai = Entity(is_ai=True, game=self, symbol='O')
 
         # save what we have so far
         human.save()
