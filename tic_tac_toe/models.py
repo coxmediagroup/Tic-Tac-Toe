@@ -10,7 +10,7 @@ class Game(models.Model):
     player_two = models.ForeignKey('Entity', null=True, related_name='+')
 
     def next_player(self):
-        self.current_player = '2' if self.current_player == '1' else '1'
+        self.current_player = (2 if self.current_player == 1 else 1)
         self.save()
 
     def get_location(self, row_id, col_id):
