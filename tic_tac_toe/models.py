@@ -3,14 +3,18 @@ from django.db import models
 # Create your models here.
 
 class Game(models.Model):
-    current_player = models.ForeignKey('Entity', null=True, related_name='+')
+    # should be 1 or 2 to indicate first or second player
+    current_player = models.IntegerField()
+
+    player_one = models.ForeignKey('Entity', null=True, related_name='+')
+    player_two = models.ForeignKey('Entity', null=True, related_name='+')
 
     def get_location(self, x, y):
         # get the location object of the given location
         pass
 
     def setup_new_game(self):
-        self.save()
+        self.save() # save so that we get a primary key
 
         # 1 entity for the player, 1 for the computer
         human = Entity(is_ai=False, game=self)
@@ -20,8 +24,13 @@ class Game(models.Model):
         human.save()
         ai.save()
 
+        # set entities as players
+        self.player_one = human
+        self.player_two = ai
+
         # ai starts
-        self.current_player = ai #TODO: randomize starting order
+        self.current_player = 2 #TODO: randomize starting order
+
         self.save()
 
         board = Board(game=self)
