@@ -43,7 +43,7 @@ def index(request):
 
     # and let's get some input
 
-    context = {'board':locations, 'winner':(winner and winner.get_type() or winner)}
+    context = {'board':locations, 'winner':winner}
     return render(request, 'board.html', context)
 
 def make_move(request, row_id, column_id):

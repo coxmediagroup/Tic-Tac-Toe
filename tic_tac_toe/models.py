@@ -83,11 +83,16 @@ class Game(models.Model):
         return possibles
 
     def get_winner(self):
+        moves_available = False
         possibles = self.get_win_scenarios()
         for streak in possibles:
             occupiers = [self.get_location(*coords).occupier for coords in streak]
             if occupiers[0] != None and occupiers.count(occupiers[0]) == 3:
-                return occupiers[0]
+                return '%s Wins!'%(occupiers[0].get_type(),)
+            elif None in occupiers:
+                moves_available = True
+        if not moves_available:
+            return "It's a Draw!"
         return None
 
 class Entity(models.Model):
