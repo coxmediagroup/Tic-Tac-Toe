@@ -5,9 +5,9 @@
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0;" />
 		
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ App Framework ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-		<link rel="stylesheet" type="text/css" href="appframework/af.ui.css" />
-		<link rel="stylesheet" type="text/css" href="appframework/icons.css" />
-		<script type="text/javascript" charset="utf-8" src="appframework/appframework.ui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="static/appframework/af.ui.css" />
+		<link rel="stylesheet" type="text/css" href="static/appframework/icons.css" />
+		<script type="text/javascript" charset="utf-8" src="static/appframework/appframework.ui.min.js"></script>
 
 		<!-- ~~~~~~~~Used for giving app access to native phone feature~~~~~~~~~ -->    
 		<script src="intelxdk.js"></script>
@@ -23,16 +23,19 @@
 		
 	</head>
 	<body> 
+		<span id="musicContainer"></span>
+
+	
 		<div id="afui">
-			<div id="content" >
+			<div id="content" style="background-color:white" >
 				
 				<!-- ~~~~main panel~~~~~ -->
 				<div class="panel" title="Title" id="main"  selected="true">
 					<header>
 						<h1>Heads of State: Tic Tac Toe</h1>
-						<a href="#backpage" data-transition="up" class="button icon settings" style="float:right"></a>
+						<a href="#settings" onclick="vm.music.toggleOnMain()" data-transition="up" class="button icon settings" style="float:right"></a>
 					</header>
-					
+
 					<div id="turnMessage" data-bind="text: vm.turnNotifier, attr:{'class': vm.turnMessageStyle() }"></div>
 					<table>
 						<tbody>
@@ -57,10 +60,10 @@
 				<!-- ~~~~main panel~~~~~ -->
 				
 				<!-- ~~~~settings panel~~~~~ -->
-				<div class="panel" title="Settings" id="backpage"  >
+				<div class="panel" title="Settings" id="settings"  >
 					<header>
 						<h1>Settings</h1>
-						<a onclick="$.ui.goBack();" class="button icon close" style="float:right"></a>
+						<a onclick="vm.music.toggleOnMain(); $.ui.goBack()" class="button icon close" style="float:right"></a>
 					</header>
 					<div style="height:30px;"></div>
 					
@@ -75,8 +78,8 @@
 							</div>
 						</li>
 						<li>
-							<label>Sound</label>
-							<input id="toggle2" type="checkbox" name="toggle2" class="toggle"><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
+							<label>Music</label>
+							<input onchange="vm.music.toggleMusic()" id="toggle2" type="checkbox" name="toggle2" class="toggle" checked><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
 						</li>
 					</ul> 
 				</div>
@@ -92,7 +95,8 @@
 		
 		<script src="static/js/grid_object.js"></script>	
 		<script src="static/js/table_object.js"></script>	
-		<script src="static/js/computer_object.js"></script>	
+		<script src="static/js/computer_object.js"></script>
+		<script src="static/js/music_object.js"></script>			
 		<script src="static/js/app_object.js"></script>			
 		
 	</body>

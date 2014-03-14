@@ -4,6 +4,7 @@ body, #afui {background-color:#000}
 
 #play_as input.toggle:checked + label > span {
 	transform: translate3d(58px, 0px, 0px);
+	-webkit-transform: translate(58px,0px); /* Chrome, Safari, Opera */
 }
 
 #play_as input.toggle + label:before, #play_as input.toggle:checked + label:before {
@@ -48,3 +49,8 @@ table, td, th {
 .computerTurnMessage{
 	text-shadow:2px	2px 3px black, 3px 7px 30px red;	
 }
+
+#music{
+	position:absolute; 
+}
+

@@ -133,26 +133,14 @@ function computersLogic(app_parent) {
 		
 		
 		if( humanPreviousPlayType === 'edge') {
-			//the computer will select a corner which does not share a side with the human's previous play
-			
-			nonSideSharingCorners = [];
-			for(i=0; i< self.corners.length; i++) {
-			
-				if( app_parent.table.grids[ self.corners[i] ].value() !== 0) {
-					//if grid has been selected, then skip it
-					continue;
-				}
-			
-				localGrid = app_parent.table.grids[ self.corners[i] ];
-				if( self.sharesSideWith(lastGridHumanSelected, localGrid) === false ) {
-					nonSideSharingCorners.push(self.corners[i]);
-				}
-			}
-			
-			
-			//if center is not taken, then choose corner that is not diagonal to the the computers 1st selection
+			//the computer will select the center if its availabale. 
+			//Otherwise, it will select a corner which does not share a side with the human's previous play
+					
+			//if center is not taken, then take it !!
 			if (app_parent.table.grids[4].value() ===0) {
-				
+				app_parent.table.grids[4].value(-1)
+				/*
+				//if center is not taken, then choose corner that is not diagonal to the the computers 1st selection
 				for(i=0; i<nonSideSharingCorners.length; i++) {
 					localGrid = app_parent.table.grids[ nonSideSharingCorners[i] ];
 					
@@ -163,9 +151,25 @@ function computersLogic(app_parent) {
 				}
 				
 					//computer takes the index and uses it to select a corner
-					app_parent.table.grids[ selectedCornerIndex ].value(-1);	
-					
+					app_parent.table.grids[ selectedCornerIndex ].value(-1);					
+				*/
+				
+	
 			} else {
+			
+				nonSideSharingCorners = [];
+				for(i=0; i< self.corners.length; i++) {
+
+					if( app_parent.table.grids[ self.corners[i] ].value() !== 0) {
+					//if grid has been selected, then skip it
+					continue;
+					}
+
+					localGrid = app_parent.table.grids[ self.corners[i] ];
+					if( self.sharesSideWith(lastGridHumanSelected, localGrid) === false ) {
+					nonSideSharingCorners.push(self.corners[i]);
+					}
+				}
 			
 				//computer randomly chooses a corner from the non sharing side corners
 				selectedCornerIndex = self.randomNumberBetweenZeroAndN(nonSideSharingCorners.length - 1);
@@ -228,6 +232,70 @@ function computersLogic(app_parent) {
 	
 	}
 	
+	self.makeSecondPlayAttackModeForCornerCornerDiagonal = function(){
+		//returns true if situation meets criteria and computer is able to select
+		
+		//this disables this function, might be useful later so kept code here
+		return false;
+		if( self.computerPlays.length === 2) {
+			//checks to see if first two computer selections were corners
+			computerIndex0	= self.computerPlays[0];  
+			computerIndex1	= self.computerPlays[1];  
+			
+			computerIndexType0 	= self.classifyPlayType(computerIndex0);
+			computerIndexType1 	= self.classifyPlayType(computerIndex1);
+			
+			if(computerIndexType0 === 'corner' && computerIndexType1 === 'corner'){
+			
+				acceptValue = true;
+			
+				for(i=0; i< self.corners.length; i++) {
+
+					corner = self.corners[i];	
+					localCornerGrid	= 	app_parent.table.grids[ corner ];
+					gridValue	=	app_parent.table.grids[ corner ].value();					
+					
+					if(gridValue ===0) {
+						//corner has not been chosen yet
+						
+						for(j=0; j< self.humanPlays.length; j++) {
+						
+							//uses humanPreviousPlayIndex to find the last actual grid selected
+							localHumanGrid 	= app_parent.table.grids[ j ];
+							
+							if(self.sharesSideWith(localHumanGrid, localCornerGrid)) {
+								acceptValue = false;
+							}
+						
+						}	
+						
+						if(acceptValue === true) {
+							app_parent.table.grids[ corner ].value(-1);
+							return true;
+						}
+					
+					}
+				}
+			}
+
+		}
+		return false;				
+	}
+	
+	
+	self.defendAgainstCornerCornerDiagonal = function()
+	{
+		if( (self.humanPlays.indexOf(0) !== -1 && self.humanPlays.indexOf(8) !== -1) || 
+			(self.humanPlays.indexOf(2) !== -1 && self.humanPlays.indexOf(6) !== -1)
+		){
+			//select an edge to defend against the corner-corner diagonal
+			//note at this point, computer would have selected the center
+			self.selectRemainingEdges();
+			return true;
+		}
+		
+		return false;
+	}
 	
 	self.makeFirstPlayDefenseMode = function() {
 		//find out what move the human last made
@@ -252,34 +320,14 @@ function computersLogic(app_parent) {
 	
 	self.makeSecondPlayDefenseMode = function() {	
 		
-		//find out what move the human currently made
-		humanPreviousPlayIndex 		= self.getLastItemInArray( self.humanPlays );
-
-		computerPreviousPlayIndex 		= self.getLastItemInArray( self.computerPlays );
-		//classify humans current play
-		computerPreviousPlayType 	= self.classifyPlayType(computerPreviousPlayIndex);				
-
+		if(self.steadyStateAlgorithm()) {}
+		else if(self.defendAgainstCornerCornerDiagonal()){}			
+		else if(self.selectRemainingCorners()){}	
+		else {self.selectRemainingEdges() }				
 				
-
-		if(  ([0,2,6,8].indexOf(humanPreviousPlayIndex) !== -1) && computerPreviousPlayType === 'center' ) {
-			//this is a "corner corner-diagonal" situation
-			
-			if(self.steadyStateAlgorithm()) {}
-			else{
-				self.selectRemainingEdges();
-			}					
-		} else {
-		
-			//for all other situations:
-			//the computer will select something to block opponent or select a corner
-			if(self.steadyStateAlgorithm()) {}
-			else{
-				self.selectRemainingCorners();
-			}				
-		}
-
-	
 	}			
+	
+	
 	
 	self.selectRemainingCorners = function() {
 		//function returns true if it selected grid and false otherwise			
