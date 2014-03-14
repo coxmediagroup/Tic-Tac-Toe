@@ -1,6 +1,7 @@
 import sys
 import re
 import itertools
+import random
 
 class TicTacToe():
     def __init__(self):
@@ -93,7 +94,8 @@ class TicTacToe():
 
     # Assess any opportunities to create a fork (2 routes to win).
     def evalForkability(self):
-        forkOpps = set()
+        #forkOpps = set()
+        forkOpps = {'X': [], 'O': []}
         for square in self.availSquares:
             forkOppX = -1
             forkOppO = -1
@@ -106,11 +108,15 @@ class TicTacToe():
                         forkOppO += 1
 
                 if forkOppX >= 1:
-                    forkOpps.add(('X', square)) 
+                    #forkOpps.add(('X', square)) 
+                    forkOpps['X'].append(square)
                 if forkOppO >= 1:
-                    forkOpps.add(('O', square))
-        for player, square in forkOpps:
-            print "forking opportunity for %s at: %d" % (player, square)
+                    #forkOpps.add(('O', square))
+                    forkOpps['O'].append(square)
+
+        #for player, square in forkOpps:
+        #    print "forking opportunity for %s at: %d" % (player, square)
+        return forkOpps
         
     # Keep track of the winning combinations.  Would help assess 
     # the above the other things.
@@ -127,7 +133,16 @@ class TicTacToe():
     # 3) Can I fork?
     # 4) What?
     def bestMove(self):
+#        if self.numTurn == 1:
+#            if self.aiMark == 'X':
+#                return random.choice(list(self.corners))
+#        if self.numTurn == 2:
+#            if self.aiMark == 'X':
+#                if self.center & self.availSquares:
+                    
+
         dangerousSquares = self.evalDanger()
+        forkOpps = self.evalForkability()
 
         #If I can win, take the first available winning box!
         if dangerousSquares[self.aiMark]:
@@ -136,8 +151,15 @@ class TicTacToe():
         elif dangerousSquares[self.humanMark]:
             return dangerousSquares[self.humanMark][0]
         #Can I create a fork?
+        elif forkOpps[self.aiMark]:
+            return forkOpps[self.aiMark][0]
+        
         #Can I create a dangerous situation?
+
         #Can my opponent create a fork on his next turn? If so, take one of his forks?
+        elif forkOpps[self.humanMark]:
+            return forkOpps[self.humanMark][0]
+
         #Do something else if none of the above
         else:
             return self.availSquares.pop()
