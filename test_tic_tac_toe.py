@@ -22,6 +22,16 @@ class TicTacPlayer(unittest.TestCase):
 
     def test_player_score_moves(self):
         self.assertEqual(self.player1._score_move_(1,1), 4)
-        
+
+
+class TicTacGame(unittest.TestCase):
+
+    def setUp(self):
+        self.game = Game(AIPlayer, AIPlayer)
+
+    def test_cats_game(self):
+        with self.assertRaises(EndGameException):
+            self.game.start()
+
 if __name__ == '__main__':
     unittest.main()

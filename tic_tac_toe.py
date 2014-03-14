@@ -1,7 +1,22 @@
+def print_grid(li_grid):
+    rstr =  "+-+-+-+\n"
+    for row in li_grid:
+        rstr += "|"
+        for col in row:
+            if col == None:
+                col = "-"
+            rstr += str(col) + "|"
+        rstr += "\n"
+    rstr += "+-+-+-+\n"
+    print rstr
 
 
 class PlayException(Exception):
     """You're cheating!"""
+
+
+class EndGameException(Exception):
+    """Game over dude"""
 
 
 class Board(object):
@@ -38,6 +53,22 @@ class Player(object):
 
 
 class AIPlayer(Player):
+
+    def take_your_turn(self):
+        available_moves = self._available_moves_()
+        if not available_moves:
+            raise EndGameException("I Quit!")
+        best_move = None
+        best_score = 0
+        for row, col in available_moves:
+            score = self._score_move_(row, col)
+            if score > best_score:
+                best_score = score
+                best_move = [row, col]
+        if best_move:
+            self.board.play(self.marker, best_move[0], best_move[1])
+        else:
+            self.board.play(self.marker, available_moves[0][0], available_moves[0][1])
 
     def _score_move_(self, row, col):
         """
@@ -82,3 +113,34 @@ class AIPlayer(Player):
             score = 1
             return score + sum([1 for x in li_series if x == self.marker])
 
+
+class Game(object):
+    def __init__(self, pl1_class, pl2_class):
+        self.board = Board()
+        self.pl1 = pl1_class(self.board, "X", "O")
+        self.pl2 = pl2_class(self.board, "O", "X")
+
+    def _check_winner_(self):
+        across_ur_lr = [(0, 0), (1, 1), (2, 2)]
+        across_lr_ur = [(2, 0), (1, 1), (0, 2)]
+
+        for p in ["X", "O"]:
+            for x in range(3):
+                row_series = self.board.li_grid[x]
+                col_series = [arow[x] for arow in self.board.li_grid]
+                diag1 = [self.board.li_grid[x[0]][x[1]] for x in across_ur_lr]
+                diag2 = [self.board.li_grid[x[0]][x[1]] for x in across_lr_ur]
+                for series in [row_series, col_series, diag1, diag2]:
+                    if all([amark == p for amark in series]):
+                        print "%s wins!!!" % p
+                        sys.exit(0)
+
+    def start(self):
+        print print_grid(self.board.li_grid)
+        while 1:
+            self.pl1.take_your_turn()
+            print print_grid(self.board.li_grid)
+            self._check_winner_()
+            self.pl2.take_your_turn()
+            print print_grid(self.board.li_grid)
+            self._check_winner_()
