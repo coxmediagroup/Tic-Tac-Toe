@@ -133,12 +133,18 @@ class TicTacToe():
     # 3) Can I fork?
     # 4) What?
     def bestMove(self):
-#        if self.numTurn == 1:
+        if self.numTurn == 1:
 #            if self.aiMark == 'X':
 #                return random.choice(list(self.corners))
+            if self.aiMark == 'O':
+                if self.center & self.availSquares:
+                    return list(self.center).pop()
 #        if self.numTurn == 2:
 #            if self.aiMark == 'X':
 #                if self.center & self.availSquares:
+#            if self.aiMark == 'O':
+#
+#                if 
                     
 
         dangerousSquares = self.evalDanger()
