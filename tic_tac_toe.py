@@ -57,7 +57,7 @@ class AIPlayer(Player):
     def take_your_turn(self):
         available_moves = self._available_moves_()
         if not available_moves:
-            raise EndGameException("I Quit!")
+            raise EndGameException("Cats game, I Quit!")
         best_move = None
         best_score = 0
         for row, col in available_moves:
@@ -120,7 +120,7 @@ class HumanPlayer(Player):
         available_moves = self._available_moves_()
 
         if not available_moves:
-            raise EndGameException("I Quit!")
+            raise EndGameException("Cats game, I Quit!")
 
         while 1:
             move = raw_input("Player %s, hit a number on they keypad to place your marker (Enter ? for key reference):" % self.marker)
