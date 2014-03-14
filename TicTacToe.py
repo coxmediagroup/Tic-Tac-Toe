@@ -113,6 +113,10 @@ class TicTacToe():
             if square in self.RDCs[RDC]:
                 self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
 
+    # Strategize and make best move.
+    def bestMove(self):
+        return self.availSquares.pop()
+
 if __name__ == '__main__':
     game=TicTacToe()
     players = itertools.cycle(game.players)
@@ -125,7 +129,10 @@ if __name__ == '__main__':
         game.evalDanger()
         game.evalForkability()
         print "Player %s's turn." % player
-        move = game.getMove()
+        if player == game.aiMark:
+            move = game.bestMove()
+        else:
+            move = game.getMove()
         game.availSquares.discard(move)
         game.markRDCs(move, player)
         game.board = game.board.replace(str(move), player)
