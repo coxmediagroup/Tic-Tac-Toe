@@ -63,8 +63,16 @@ class TicTacToe():
 
     # Is anyone one spot away from winning?
     # Signals either where to move to win or where one must block.
-    def danger(self):
-        pass
+    def evalDanger(self):
+        for RDC in self.RDCs:
+            mightWin = None
+            if ((self.RDCs[RDC].count('X') == 2) and (self.RDCs[RDC].count('O') == 0)):
+                mightWin = 'X'
+            elif ((self.RDCs[RDC].count('O') == 2) and (self.RDCs[RDC].count('X') == 0)):
+                mightWin = 'O'
+
+            if mightWin:
+                print "Watch out! %s is almost all filled up by %s's!" % (RDC, mightWin) 
 
     # Assess any opportunities to create a fork (2 routes to win).
     def forkability(self):
@@ -85,6 +93,7 @@ if __name__ == '__main__':
         #print game.board
         player = players.next()
         print game.RDCs
+        game.evalDanger()
         print "Player %s's turn." % player
         move = game.getMove()
         game.availSquares.discard(move)
