@@ -109,7 +109,6 @@ if __name__ == '__main__':
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
-        print game.RDCs
         game.evalDanger()
         game.evalForkability()
         print "Player %s's turn." % player
