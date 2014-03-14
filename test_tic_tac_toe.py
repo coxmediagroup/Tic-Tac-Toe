@@ -20,6 +20,8 @@ class TicTacPlayer(unittest.TestCase):
     def test_player_gets_all_moves(self):
         self.assertEqual(len(self.player1._available_moves_()), 9)
 
-
+    def test_player_score_moves(self):
+        self.assertEqual(self.player1._score_move_(1,1), 4)
+        
 if __name__ == '__main__':
     unittest.main()
