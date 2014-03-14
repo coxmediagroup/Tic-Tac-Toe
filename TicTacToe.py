@@ -1,3 +1,4 @@
+import sys
 import re
 import itertools
 
@@ -48,7 +49,17 @@ class TicTacToe():
 
     # Did somebody win? Is it a tie?
     def gameOver(self):
-        pass
+        if ['X','X','X'] in self.RDCs.values():
+            print 'Winner is Player X!'
+            sys.exit(0)
+        elif ['O','O','O'] in self.RDCs.values():
+            print 'Winner is Player O!'
+            sys.exit(0)
+        elif not self.availSquares:
+            print "It's a tie!"
+            sys.exit(0)
+        else: 
+            return False
 
     # Is anyone one spot away from winning?
     # Signals either where to move to win or where one must block.
@@ -69,7 +80,7 @@ class TicTacToe():
 if __name__ == '__main__':
     game=TicTacToe()
     players = itertools.cycle(['X', 'O'])
-    while True:
+    while not game.gameOver():
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
