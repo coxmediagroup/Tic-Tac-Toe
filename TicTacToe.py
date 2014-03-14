@@ -36,7 +36,7 @@ class TicTacToe():
     # Collect player's next move and make sure his response is valid.
     def getMove(self):
         try:
-            move = int(raw_input('Pick a spot: '))
+            move = int(raw_input('Pick a spot [1-9, left to right and top to bottom.  1 is top left, 9 is bottom right]: '))
         except ValueError:
             print 'Try Again'
             move = self.getMove() 
@@ -84,7 +84,6 @@ if __name__ == '__main__':
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
-        print game.RDCs
         print "Player %s's turn." % player
         move = game.getMove()
         game.availSquares.discard(move)
