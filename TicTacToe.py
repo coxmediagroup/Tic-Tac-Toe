@@ -32,6 +32,7 @@ class TicTacToe():
 \n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
 7    |    8    |    9"
 
+    # Collect player's next move and make sure his response is valid.
     def getMove(self):
         try:
             move = int(raw_input('Pick a spot: '))
@@ -44,6 +45,24 @@ class TicTacToe():
             move = self.getMove()
 
         return move
+
+    # Did somebody win? Is it a tie?
+    def gameOver(self):
+        pass
+
+    # Is anyone one spot away from winning?
+    # Signals either where to move to win or where one must block.
+    def danger(self):
+        pass
+
+    # Assess any opportunities to create a fork (2 routes to win).
+    def forkability(self):
+        pass
+
+    # Keep track of the winning combinations.  Would help assess 
+    # the above the other things.
+    def markRDCs(self):
+        pass
 
 
 if __name__ == '__main__':
