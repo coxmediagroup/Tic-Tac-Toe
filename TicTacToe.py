@@ -186,6 +186,10 @@ if __name__ == '__main__':
             move = game.bestMove()
         else:
             move = game.getMove()
+        if player == 'X':
+            game.xSquares.add(move)
+        else:
+            game.oSquares.add(move)
         game.availSquares.discard(move)
         game.markRDCs(move, player)
         game.board = game.board.replace(str(move), player)
