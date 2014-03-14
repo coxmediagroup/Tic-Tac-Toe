@@ -75,8 +75,22 @@ class TicTacToe():
                 print "Watch out! %s is almost all filled up by %s's!" % (RDC, mightWin) 
 
     # Assess any opportunities to create a fork (2 routes to win).
-    def forkability(self):
-        pass
+    def evalForkability(self):
+        for square in self.availSquares:
+            forkOppX = -1
+            forkOppO = -1
+            for RDC in self.RDCs:
+                if (square in self.RDCs[RDC]) and \
+                    ((self.RDCs[RDC].count('X') == 1) and (self.RDCs[RDC].count('O') == 0)):
+                        forkOppX += 1
+                elif (square in self.RDCs[RDC]) and \
+                    ((self.RDCs[RDC].count('O') == 1) and (self.RDCs[RDC].count('X') == 0)):
+                        forkOppO += 1
+
+                if forkOppX >= 1:
+                    print "forking opportunity for X at: %d" % square
+                if forkOppO >= 1:
+                    print "forking opportunity for O at: %d" % square
 
     # Keep track of the winning combinations.  Would help assess 
     # the above the other things.
@@ -94,19 +108,12 @@ if __name__ == '__main__':
         player = players.next()
         print game.RDCs
         game.evalDanger()
+        game.evalForkability()
         print "Player %s's turn." % player
         move = game.getMove()
         game.availSquares.discard(move)
         game.markRDCs(move, player)
         game.board = game.board.replace(str(move), player)
         
-        
-        
-    
-
-
-
-
-
 
 
