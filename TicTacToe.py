@@ -5,7 +5,7 @@ import itertools
 class TicTacToe():
     def __init__(self):
         #what stage of the game we are in. 
-        self.numTurn = 1 
+        self.numTurn = 0 
 
         #layout of basic info we may need to keep in mind. 
         self.squares = {1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -109,6 +109,8 @@ if __name__ == '__main__':
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
+        if player == 'X':
+            game.numTurn += 1
         game.evalDanger()
         game.evalForkability()
         print "Player %s's turn." % player
@@ -116,6 +118,8 @@ if __name__ == '__main__':
         game.availSquares.discard(move)
         game.markRDCs(move, player)
         game.board = game.board.replace(str(move), player)
+
+        
         
 
 
