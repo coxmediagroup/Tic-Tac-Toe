@@ -61,9 +61,11 @@ class TicTacToe():
 
     # Keep track of the winning combinations.  Would help assess 
     # the above the other things.
-    def markRDCs(self):
-        pass
-
+    def markRDCs(self, square, player):
+        for RDC in self.RDCs:
+            if square in self.RDCs[RDC]:
+                self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
+                print 'box is in %s' % RDC
 
 if __name__ == '__main__':
     game=TicTacToe()
@@ -72,9 +74,11 @@ if __name__ == '__main__':
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
+        print game.RDCs
         print "Player %s's turn." % player
         move = game.getMove()
         game.availSquares.discard(move)
+        game.markRDCs(move, player)
         game.board = game.board.replace(str(move), player)
         
         
