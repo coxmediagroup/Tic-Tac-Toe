@@ -37,11 +37,11 @@ class TicTacToe():
 
     def chooseSides(self):
         self.players = ['X', 'O']
-        humanMark = None
-        while humanMark not in self.players:
-            humanMark = raw_input("Choose a side [X or O]: ").upper()
-        print "You picked %s." % humanMark
-        self.aiMark = [mark for mark in self.players if mark != humanMark].pop()
+        self.humanMark = None
+        while self.humanMark not in self.players:
+            self.humanMark = raw_input("Choose a side [X or O]: ").upper()
+        print "You picked %s." % self.humanMark
+        self.aiMark = [mark for mark in self.players if mark != self.humanMark].pop()
         print "That leaves me with %s." % self.aiMark
 
     # Collect player's next move and make sure his response is valid.
@@ -75,6 +75,8 @@ class TicTacToe():
     # Is anyone one spot away from winning?
     # Signals either where to move to win or where one must block.
     def evalDanger(self):
+        #dangerousSquares = set()
+        dangerousSquares = {'X': [], 'O': []}
         for RDC in self.RDCs:
             mightWin = None
             if ((self.RDCs[RDC].count('X') == 2) and (self.RDCs[RDC].count('O') == 0)):
@@ -84,6 +86,10 @@ class TicTacToe():
 
             if mightWin:
                 print "Watch out! %s is almost all filled up by %s's!" % (RDC, mightWin) 
+                dangerousSquares[mightWin].extend([square for square in self.RDCs[RDC] if not isinstance(square, str)])
+                #dangerousSquares.add(mightWin, [square for square in self.RDCs[RDC] if not isinstance(square, str)][0])
+        return dangerousSquares
+
 
     # Assess any opportunities to create a fork (2 routes to win).
     def evalForkability(self):
@@ -119,7 +125,19 @@ class TicTacToe():
     # 3) Can I fork?
     # 4) What?
     def bestMove(self):
-        return self.availSquares.pop()
+        dangerousSquares = self.evalDanger()
+        #If I can win, take the first available winning box!
+        if dangerousSquares[self.aiMark]:
+            return dangerousSquares[self.aiMark][0]
+        #If I can't win but human can on his next turn, block the first danger!!
+        elif dangerousSquares[self.humanMark]:
+            return dangerousSquares[self.humanMark][0]
+        #Can I create a fork?
+        #Can I create a dangerous situation?
+        #Can my opponent create a fork on his next turn? If so, take one of his forks?
+        #Do something else if none of the above
+        else:
+            return self.availSquares.pop()
 
 if __name__ == '__main__':
     game=TicTacToe()
