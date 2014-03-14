@@ -114,6 +114,10 @@ class TicTacToe():
                 self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
 
     # Strategize and make best move.
+    # 1) Can I win? [Danger in my benefit]
+    # 2) Can human win? [Danger for human benefit, must block if so]
+    # 3) Can I fork?
+    # 4) What?
     def bestMove(self):
         return self.availSquares.pop()
 
