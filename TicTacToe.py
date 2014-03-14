@@ -1,4 +1,5 @@
 import re
+import itertools
 
 class TicTacToe():
     def __init__(self):
@@ -32,14 +33,17 @@ class TicTacToe():
 7    |    8    |    9"
 
 game=TicTacToe()
-players=['X', 'O']
+players = itertools.cycle(['X', 'O'])
 
 if __name__ == '__main__':
     while True:
         print re.sub('[0-9]', '-', game.board)
         #print game.board
+        player = players.next()
+        print "Player %s's turn." % player
         move = raw_input("Pick a spot: ")
         game.availSquares.discard(int(move))
+        game.board = game.board.replace(move, player)
         
         
         
