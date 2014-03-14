@@ -119,16 +119,22 @@ class AIPlayer(Player):
 class HumanPlayer(Player):
     def take_your_turn(self):
         moves = (("7", "8", "9"), ("4", "5", "6"), ("1", "2", "3"))
-        print_grid(moves)
         available_moves = self._available_moves_()
 
         if not available_moves:
             raise PlayException("I Quit!")
 
         while 1:
-            move = raw_input("Player %s, hit a number on they keypad to place your marker:" % self.marker)
+            move = raw_input("Player %s, hit a number on they keypad to place your marker (Enter ? for key reference):" % self.marker)
+            if move == "?":
+                print_grid(moves)
+                continue
+
             if not move.isdigit() or len(move) > 1 or move == "0":
                 print "Invalid move, try again"
+                continue
+
+            move_pos = None
             for row in range(3):
                 for col in range(3):
                     if moves[row][col] == move:
@@ -165,10 +171,10 @@ class Game(object):
         print_grid(self.board.li_grid)
         while 1:
             self.pl1.take_your_turn()
-            print print_grid(self.board.li_grid)
+            print_grid(self.board.li_grid)
             self._check_winner_()
             self.pl2.take_your_turn()
-            print print_grid(self.board.li_grid)
+            print_grid(self.board.li_grid)
             self._check_winner_()
 
 
