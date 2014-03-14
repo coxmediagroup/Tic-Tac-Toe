@@ -1,7 +1,7 @@
 import unittest
 from tic_tac_toe import *
 
-class TicTacTest(unittest.TestCase):
+class TicTacBoard(unittest.TestCase):
 
     def setUp(self):
         self.board = Board()
@@ -10,6 +10,16 @@ class TicTacTest(unittest.TestCase):
         self.board.play("0", 1, 1)
         with self.assertRaises(PlayException):
             self.board.play("X", 1, 1)
+
+class TicTacPlayer(unittest.TestCase):
+
+    def setUp(self):
+        self.board = Board()
+        self.player1 = AIPlayer(self.board, "X", "0")
+
+    def test_player_gets_all_moves(self):
+        self.assertEqual(len(self.player1._available_moves_()), 9)
+
 
 if __name__ == '__main__':
     unittest.main()
