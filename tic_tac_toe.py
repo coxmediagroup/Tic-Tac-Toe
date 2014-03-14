@@ -1,3 +1,5 @@
+import sys
+
 def print_grid(li_grid):
     rstr =  "+-+-+-+\n"
     for row in li_grid:
@@ -114,6 +116,31 @@ class AIPlayer(Player):
             return score + sum([1 for x in li_series if x == self.marker])
 
 
+class HumanPlayer(Player):
+    def take_your_turn(self):
+        moves = (("7", "8", "9"), ("4", "5", "6"), ("1", "2", "3"))
+        print_grid(moves)
+        available_moves = self._available_moves_()
+
+        if not available_moves:
+            raise PlayException("I Quit!")
+
+        while 1:
+            move = raw_input("Player %s, hit a number on they keypad to place your marker:" % self.marker)
+            if not move.isdigit() or len(move) > 1 or move == "0":
+                print "Invalid move, try again"
+            for row in range(3):
+                for col in range(3):
+                    if moves[row][col] == move:
+                        move_pos = [row, col]
+            if not move_pos in available_moves:
+                print "Invalid move, try again"
+            else:
+                break
+
+        self.board.play(self.marker, move_pos[0], move_pos[1])
+
+
 class Game(object):
     def __init__(self, pl1_class, pl2_class):
         self.board = Board()
@@ -132,11 +159,10 @@ class Game(object):
                 diag2 = [self.board.li_grid[x[0]][x[1]] for x in across_lr_ur]
                 for series in [row_series, col_series, diag1, diag2]:
                     if all([amark == p for amark in series]):
-                        print "%s wins!!!" % p
-                        sys.exit(0)
+                        raise EndGameException("%s wins!!!" % p)
 
     def start(self):
-        print print_grid(self.board.li_grid)
+        print_grid(self.board.li_grid)
         while 1:
             self.pl1.take_your_turn()
             print print_grid(self.board.li_grid)
@@ -144,3 +170,11 @@ class Game(object):
             self.pl2.take_your_turn()
             print print_grid(self.board.li_grid)
             self._check_winner_()
+
+
+if __name__ == "__main__":
+    game = Game(HumanPlayer, HumanPlayer)
+    try:
+        game.start()
+    except EndGameException, e:
+        print str(e)
