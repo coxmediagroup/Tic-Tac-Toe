@@ -4,6 +4,8 @@ import itertools
 
 class TicTacToe():
     def __init__(self):
+        self.chooseSides()
+
         #what stage of the game we are in. 
         self.numTurn = 0 
 
@@ -32,6 +34,15 @@ class TicTacToe():
 4    |    5    |    6\
 \n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
 7    |    8    |    9"
+
+    def chooseSides(self):
+        self.players = ['X', 'O']
+        humanMark = None
+        while humanMark not in self.players:
+            humanMark = raw_input("Choose a side [X or O]: ").upper()
+        print "You picked %s." % humanMark
+        self.aiMark = [mark for mark in self.players if mark != humanMark].pop()
+        print "That leaves me with %s." % self.aiMark
 
     # Collect player's next move and make sure his response is valid.
     def getMove(self):
@@ -104,7 +115,7 @@ class TicTacToe():
 
 if __name__ == '__main__':
     game=TicTacToe()
-    players = itertools.cycle(['X', 'O'])
+    players = itertools.cycle(game.players)
     while not game.gameOver():
         print re.sub('[0-9]', '-', game.board)
         #print game.board
