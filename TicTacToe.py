@@ -139,12 +139,14 @@ class TicTacToe():
             if self.aiMark == 'O':
                 if self.center & self.availSquares:
                     return list(self.center).pop()
-#        if self.numTurn == 2:
+        if self.numTurn == 2:
 #            if self.aiMark == 'X':
 #                if self.center & self.availSquares:
-#            if self.aiMark == 'O':
+            if self.aiMark == 'O':
 #
-#                if 
+                #If both X's are in corners, we know O is in middle.  Take an edge
+                if len(self.corners & self.xSquares) == 2:
+                    return random.choice(list(self.edges & self.availSquares))
                     
 
         dangerousSquares = self.evalDanger()
