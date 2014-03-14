@@ -65,7 +65,6 @@ class TicTacToe():
         for RDC in self.RDCs:
             if square in self.RDCs[RDC]:
                 self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
-                print 'box is in %s' % RDC
 
 if __name__ == '__main__':
     game=TicTacToe()
