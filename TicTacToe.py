@@ -76,6 +76,7 @@ class TicTacToe():
 
     # Assess any opportunities to create a fork (2 routes to win).
     def evalForkability(self):
+        forkOpps = set()
         for square in self.availSquares:
             forkOppX = -1
             forkOppO = -1
@@ -88,10 +89,12 @@ class TicTacToe():
                         forkOppO += 1
 
                 if forkOppX >= 1:
-                    print "forking opportunity for X at: %d" % square
+                    forkOpps.add(('X', square)) 
                 if forkOppO >= 1:
-                    print "forking opportunity for O at: %d" % square
-
+                    forkOpps.add(('O', square))
+        for player, square in forkOpps:
+            print "forking opportunity for %s at: %d" % (player, square)
+        
     # Keep track of the winning combinations.  Would help assess 
     # the above the other things.
     def markRDCs(self, square, player):
