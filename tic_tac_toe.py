@@ -122,7 +122,7 @@ class HumanPlayer(Player):
         available_moves = self._available_moves_()
 
         if not available_moves:
-            raise PlayException("I Quit!")
+            raise EndGameException("I Quit!")
 
         while 1:
             move = raw_input("Player %s, hit a number on they keypad to place your marker (Enter ? for key reference):" % self.marker)
@@ -171,15 +171,17 @@ class Game(object):
         print_grid(self.board.li_grid)
         while 1:
             self.pl1.take_your_turn()
+            print "Player X took his turn:"
             print_grid(self.board.li_grid)
             self._check_winner_()
             self.pl2.take_your_turn()
+            print "Player O took his turn:"
             print_grid(self.board.li_grid)
             self._check_winner_()
 
 
 if __name__ == "__main__":
-    game = Game(HumanPlayer, HumanPlayer)
+    game = Game(AIPlayer, HumanPlayer)
     try:
         game.start()
     except EndGameException, e:
