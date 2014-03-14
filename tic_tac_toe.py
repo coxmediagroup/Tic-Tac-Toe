@@ -52,8 +52,6 @@ class Player(object):
         return li_moves
 
 
-
-
 class AIPlayer(Player):
 
     def take_your_turn(self):
