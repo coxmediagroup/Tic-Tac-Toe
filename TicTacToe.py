@@ -120,12 +120,15 @@ class TicTacToe():
                 self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
 
     # Strategize and make best move.
+    # If it's my first turn, don't bother with rest, what's the best first
+    # move for O and X?
     # 1) Can I win? [Danger in my benefit]
     # 2) Can human win? [Danger for human benefit, must block if so]
     # 3) Can I fork?
     # 4) What?
     def bestMove(self):
         dangerousSquares = self.evalDanger()
+
         #If I can win, take the first available winning box!
         if dangerousSquares[self.aiMark]:
             return dangerousSquares[self.aiMark][0]
