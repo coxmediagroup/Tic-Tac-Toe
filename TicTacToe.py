@@ -32,18 +32,31 @@ class TicTacToe():
 \n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
 7    |    8    |    9"
 
-game=TicTacToe()
-players = itertools.cycle(['X', 'O'])
+    def getMove(self):
+        try:
+            move = int(raw_input('Pick a spot: '))
+        except ValueError:
+            print 'Try Again'
+            move = self.getMove() 
+        
+        if move not in self.availSquares:
+            print 'That was not an available space.  Pick one that does not have an X or O in it already.'
+            move = self.getMove()
+
+        return move
+
 
 if __name__ == '__main__':
+    game=TicTacToe()
+    players = itertools.cycle(['X', 'O'])
     while True:
         print re.sub('[0-9]', '-', game.board)
         #print game.board
         player = players.next()
         print "Player %s's turn." % player
-        move = raw_input("Pick a spot: ")
-        game.availSquares.discard(int(move))
-        game.board = game.board.replace(move, player)
+        move = game.getMove()
+        game.availSquares.discard(move)
+        game.board = game.board.replace(str(move), player)
         
         
         
