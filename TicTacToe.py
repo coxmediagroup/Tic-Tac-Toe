@@ -18,6 +18,7 @@ class TicTacToe():
         self.corners = {1, 3, 7, 9}
         self.center = {5}
         self.edges = {2, 4, 6, 8}
+        self.history = []
 
         #Winning combos I am calling RDCs(Rows, Diagonals, Columns)
         self.RDCs = {'R1': [1, 2, 3],
@@ -44,6 +45,7 @@ class TicTacToe():
         print "You picked %s." % self.humanMark
         self.aiMark = [mark for mark in self.players if mark != self.humanMark].pop()
         print "That leaves me with %s." % self.aiMark
+        #self.players = itertools.cycle(self.players)
 
     # Collect player's next move and make sure his response is valid.
     def getMove(self):
@@ -63,12 +65,15 @@ class TicTacToe():
     def gameOver(self):
         if ['X','X','X'] in self.RDCs.values():
             print 'Winner is Player X!'
+            return 'X'
             sys.exit(0)
         elif ['O','O','O'] in self.RDCs.values():
             print 'Winner is Player O!'
+            return 'O'
             sys.exit(0)
         elif not self.availSquares:
             print "It's a tie!"
+            return 'tie'
             sys.exit(0)
         else: 
             return False
@@ -140,7 +145,6 @@ class TicTacToe():
                 if self.center & self.availSquares:
                     return list(self.center).pop()
                     
-
         dangerousSquares = self.evalDanger()
         forkOpps = self.evalForkability()
 
@@ -162,36 +166,45 @@ class TicTacToe():
         #Can I create a dangerous situation?
 
         #Can my opponent create a fork on his next turn? If so, take one of his forks?
-        elif forkOpps[self.humanMark]:
+        if forkOpps[self.humanMark]:
             return forkOpps[self.humanMark][0]
 
         #Do something else if none of the above
         else:
             return self.availSquares.pop()
 
+
+    def printBoard(self):
+        print re.sub('[0-9]', '-', self.board)
+        #print self.board
+
+    def advanceMove(self, move=None):
+        self.whosTurn = self.players[0]
+        self.players.reverse()
+        if self.whosTurn == 'X':
+            self.numTurn += 1
+        print "Player %s's turn." % self.whosTurn
+
+        if self.whosTurn == self.aiMark:
+            move = self.bestMove()
+        elif (move is None) and (self.whosTurn == self.humanMark):
+            move = self.getMove()
+
+        if self.whosTurn == 'X':
+            self.xSquares.add(move)
+        else:
+            self.oSquares.add(move)
+
+        self.availSquares.discard(move)
+        self.markRDCs(move, self.whosTurn)
+        self.board = self.board.replace(str(move), self.whosTurn)
+        self.history.append(move)
+
 if __name__ == '__main__':
     game=TicTacToe()
-    players = itertools.cycle(game.players)
     while not game.gameOver():
-        print re.sub('[0-9]', '-', game.board)
-        #print game.board
-        player = players.next()
-        if player == 'X':
-            game.numTurn += 1
-        game.evalDanger()
-        game.evalForkability()
-        print "Player %s's turn." % player
-        if player == game.aiMark:
-            move = game.bestMove()
-        else:
-            move = game.getMove()
-        if player == 'X':
-            game.xSquares.add(move)
-        else:
-            game.oSquares.add(move)
-        game.availSquares.discard(move)
-        game.markRDCs(move, player)
-        game.board = game.board.replace(str(move), player)
+        game.printBoard()
+        game.advanceMove()
 
         
         
