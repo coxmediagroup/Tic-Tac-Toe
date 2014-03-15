@@ -7,6 +7,9 @@ import os.path
 #Default Strategy, but let user set a diff one in params.
 try:
     STRATEGY = os.path.splitext(sys.argv[1])[0]
+    if not os.path.exists('./strategies/%s.py' % STRATEGY):
+        print 'Warning: That is not a valid strategy file. Going to just use aiStrategy1'
+        STRATEGY = 'aiStrategy1'
 except:
     STRATEGY = 'aiStrategy1'
 
