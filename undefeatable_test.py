@@ -19,9 +19,67 @@ class TTTTest:
 
     #Branch a game: create all possible branches based on available squares.
     def branchGame(self, game):
-        pass
+        branches = []
+
+        #If not human turn, advance move
+        #If next player is ai, go ahead and play his turn
+        if game.players[0] == game.aiMark:
+            game.advanceMove()
+
+        #If game is over, don't bother branching, kill this game / return empty branches to replace it.
+        if self.checkGameOver(game):
+            return branches
+        else:
+            #Game is not over, so for eacy available move make a copy game and make that move.
+            #If that move ended the game, don't bother passing on/keeping that branch/clone. It died in infancy.
+            for square in game.availSquares:
+                x = copy.deepcopy(game)
+                x.advanceMove(move=square)
+                if not self.checkGameOver(x):
+                    branches.append(x)
+
+            return branches
 
     #Branch all games in the main game list
     def branchAllGames(self):
-        pass
+        newGameBranches = []
+        for game in self.games:
+            #If game is not over, branch it, replace its place in the ongoing games list with its living children.
+            if not self.checkGameOver(game):
+                newGameBranches.extend(self.branchGame(game))
+        self.games = newGameBranches
+
+    #Check if given game is over.  If it is, tally the result.
+    def checkGameOver(self, gameInst):
+        status = gameInst.gameOver()
+        if not status:
+            #Game is not over
+            return False
+        else:
+            #Game is over.  Tally results
+            self.tally[status] += 1
+            #If human/user won, this is bad.
+            if gameInst.humanMark == status:
+                self.tally['badGames'].append(gameInst)
+            return True
+
+    #Traverse through all possible games trajectories.
+    def runTest(self):
+        #Keep branching until we are left with nothing in the ongoing games list.
+        while self.games:
+            self.branchAllGames()
+
+    
+
+if __name__ == '__main__':
+    test = TTTTest()
+    test.runTest()
+    print test.tally
+    failures = len(test.tally['badGames'])
+    if failures > 0:
+        print 'FAIL: AI lost in %d scenarios!' % failures 
+    else:
+        print 'PASS: AI never lost!' 
+
+
 
