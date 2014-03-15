@@ -7,14 +7,22 @@ like finishing the project in 24 hours and having it be playable on windows, lin
 and android, on top of having at least some versions have a variable span game
 board.
 
-A plan to do a version in pytohn/django is in place and will likely happen shortly
+A plan to do a version in python/django is in place and will likely happen shortly
 after this java version is complete, albeit with different constraints. Code is best
 edited in Fedora 19 eclipse with egit plugin.
 
 A balance is chosen between lean code and extensibility, and was the target of
 much thought. I will add some of the more relevant musings below in a thought
 log type format, showing first context of the thought, then content, reverse
-sorted by date.
+sorted by date. Eventually I leaned toward keeping it slim, though the options
+remain in code to have bigger game boards, different a.i.'s, and maybe a couple
+other things. 
+
+Usage
+-----
+There are two options to run the program:
+1. From the root directory, execute 'runTicTacToe.sh'
+2. Download in eclipse and right click on TicTacToe -> Run as -> Java application.
 
 Entry 3
 -------
@@ -28,7 +36,7 @@ Oh so many options here... A day or two ago I thought of what a person
 evaluating this product would want, and I thought it may be helpful to 
 add difficulty modifiers. What could a difficulty modifier be, though?
 
-Different spans/board sizes was the msot obvious, where the computer
+Different spans/board sizes was the most obvious, where the computer
 could simply do tree/table lookups, whereas the human would have to
 scheme given the rulesets of the board. Maybe you could have a 10 width
 board but only need 4 slots (connect 4). Some of these could not be 
