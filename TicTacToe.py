@@ -163,6 +163,10 @@ class TicTacToe():
                 #If both X's are in corners, we know O is in middle.  Take an edge
                 if len(self.corners & self.xSquares) == 2:
                     return random.choice(list(self.edges & self.availSquares))
+            else:
+                #ai is X
+                if list(self.oSquares)[0] not in self.center :
+                    return 5
         #Can I create a dangerous situation?
 
         #Can my opponent create a fork on his next turn? If so, take one of his forks?
