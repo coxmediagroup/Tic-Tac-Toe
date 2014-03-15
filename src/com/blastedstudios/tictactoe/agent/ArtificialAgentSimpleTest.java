@@ -37,6 +37,14 @@ public class ArtificialAgentSimpleTest {
 		testRun(rand, ai, MarkTypeEnum.X);//random goes first
 	}
 
+	@Test public void testParse() throws Exception {
+		ArtificialAgentSimple ai = new ArtificialAgentSimple(MarkTypeEnum.O);
+		Board board = new Board(3);
+		board.execute("X4,O0,X3,O5,X8,O6,X1");
+		ai.turn(board);
+		assertEquals(board.getBoard()[7], ai.getMarkType());
+	}
+
 	public void testRun(Agent first, Agent second, MarkTypeEnum enemy) throws Exception {
 		for(int i=0; i<99999; i++){
 			Board board = new Board(3);

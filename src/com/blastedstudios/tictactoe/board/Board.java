@@ -78,6 +78,21 @@ public class Board {
 		return true;
 	}
 
+	/**
+	 * @return true if and only if the location is occupied
+	 */
+	public boolean isEmptyExcept(int... locations) {
+		for(int i=0; i<board.length; i++){
+			boolean skip = false;
+			for(int location : locations)
+				if(i==location)
+					skip=true;
+			if( !skip && board[i] != MarkTypeEnum.NONE)
+				return false;
+		}
+		return true;
+	}
+
 	private MarkTypeEnum getWinnerDiagonal(){
 		//if diagonal, must go through middle, so seed there
 		MarkTypeEnum middle = getMiddle();
@@ -153,5 +168,13 @@ public class Board {
 	
 	public String getMoves(){
 		return moves.toString();
+	}
+	
+	public void execute(String moves){
+		for(String move : moves.split(",")){
+			int location = Integer.parseInt(move.substring(1));
+			MarkTypeEnum mark = MarkTypeEnum.valueOf(move.substring(0,1)); 
+			board[location] = mark;
+		}
 	}
 }

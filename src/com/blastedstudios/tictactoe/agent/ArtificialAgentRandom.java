@@ -5,6 +5,10 @@ import java.util.Random;
 import com.blastedstudios.tictactoe.board.Board;
 import com.blastedstudios.tictactoe.board.MarkTypeEnum;
 
+/**
+ * Random agent, who picks whatever is not already marked and marks it.
+ * Makes testing a little easier, and is the simplest kind of agent.
+ */
 public class ArtificialAgentRandom extends Agent{
 	private final Random random = new Random();
 	
