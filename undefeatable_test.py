@@ -14,7 +14,8 @@ Idea is:
 class TTTTest:
     def __init__(self):
         self.games = [] #Main list of all currently active games
-        self.games.append(TicTacToe()) #Initiate a game.  No moves yet.
+        self.games.append(TicTacToe('X')) #Initiate a game.  No moves yet. X is human player.
+        self.games.append(TicTacToe('O')) #Initiate a game.  No moves yet. O is human player.
         self.tally = {'X': 0, 'O': 0, 'tie': 0, 'badGames': []}
 
     #Branch a game: create all possible branches based on available squares.
@@ -72,8 +73,14 @@ class TTTTest:
     
 
 if __name__ == '__main__':
+    import sys
+    stdout = sys.stdout
+    log = open('log.txt', 'w')
+    sys.stdout = log
+
     test = TTTTest()
     test.runTest()
+    sys.stdout = stdout
     print test.tally
     failures = len(test.tally['badGames'])
     if failures > 0:
