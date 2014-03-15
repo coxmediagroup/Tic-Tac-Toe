@@ -1,5 +1,16 @@
-from TicTacToe import *
+import sys
+import os
 import copy
+try:
+    STRATEGY = os.path.splitext(sys.argv[1])[0]
+except IndexError:
+    STRATEGY = 'aiStrategy1'
+
+if not os.path.exists('./strategies/%s.py' % STRATEGY):
+    print 'Warning: That is not a valid strategy file in the strategies folder. Canceling test.'
+    sys.exit(0)
+
+from TicTacToe import *
 
 '''
 Unit test that simultaneously plays out every game possibility.
@@ -19,7 +30,7 @@ class TTTTest:
         self.tally = {'X': 0, 'O': 0, 'tie': 0, 'badGames': []}
 
         for game in self.games:
-            game.setStrategy('aiStrategy1')
+            game.setStrategy(STRATEGY)
 
     #Branch a game: create all possible branches based on available squares.
     def branchGame(self, game):
@@ -76,7 +87,6 @@ class TTTTest:
     
 
 if __name__ == '__main__':
-    import sys
     stdout = sys.stdout
     log = open('log.txt', 'w')
     sys.stdout = log
