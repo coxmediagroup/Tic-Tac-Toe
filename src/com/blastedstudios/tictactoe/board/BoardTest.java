@@ -1,4 +1,4 @@
-package com.blastedstudios.tictactoe;
+package com.blastedstudios.tictactoe.board;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +20,7 @@ public class BoardTest {
 			assertEquals(MarkTypeEnum.NONE, new Board(span).getWinner());
 	}
 	
-	@Test public void testWinnerHorizontal() {
+	@Test public void testWinnerHorizontal() throws Exception {
 		for(int span=3; span < 10; span++){
 			Board board = new Board(span);
 			for(int x=0; x < span-1; x++)
@@ -33,7 +33,7 @@ public class BoardTest {
 		}
 	}
 
-	@Test public void testWinnerDiagonalTopDown() {
+	@Test public void testWinnerDiagonalTopDown() throws Exception {
 		Board board = new Board(3);
 		board.mark(0, MarkTypeEnum.X);
 		board.mark(4, MarkTypeEnum.X);
@@ -41,7 +41,7 @@ public class BoardTest {
 		assertEquals(MarkTypeEnum.X, board.getWinner());
 	}
 
-	@Test public void testWinnerDiagonalBottomUp() {
+	@Test public void testWinnerDiagonalBottomUp() throws Exception {
 		Board board = new Board(3);
 		board.mark(6, MarkTypeEnum.X);
 		board.mark(4, MarkTypeEnum.X);
@@ -49,7 +49,7 @@ public class BoardTest {
 		assertEquals(MarkTypeEnum.X, board.getWinner());
 	}
 	
-	@Test public void testWinnerDiagonal() {
+	@Test public void testWinnerDiagonal() throws Exception {
 		for(int span=3; span < 10; span++){
 			Board board = new Board(span);
 			for(int x=0; x<span; x++)

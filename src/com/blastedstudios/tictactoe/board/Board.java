@@ -1,4 +1,4 @@
-package com.blastedstudios.tictactoe;
+package com.blastedstudios.tictactoe.board;
 
 /**
  * Friday night, 21:14, ~30 minutes after fork
@@ -34,8 +34,11 @@ public class Board {
 	
 	/**
 	 * Change value on board to given space
+	 * @throws Exception if marking a spot which is already marked
 	 */
-	public void mark(int location, MarkTypeEnum space){
+	public void mark(int location, MarkTypeEnum space) throws Exception{
+		if(board[location] != MarkTypeEnum.NONE)
+			throw new Exception("Can't mark place on board which has been previously marked!");
 		board[location] = space;
 	}
 	
@@ -114,5 +117,9 @@ public class Board {
 		for(int dashes=0; dashes<span+2; dashes++)
 			buffer.append("-");
 		return buffer.toString();
+	}
+
+	public int getSpan() {
+		return span;
 	}
 }

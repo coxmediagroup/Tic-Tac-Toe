@@ -1,4 +1,4 @@
-package com.blastedstudios.tictactoe;
+package com.blastedstudios.tictactoe.board;
 
 public enum MarkTypeEnum {
 	NONE, X, O;
