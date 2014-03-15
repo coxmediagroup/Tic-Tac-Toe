@@ -4,8 +4,8 @@ import itertools
 import random
 
 class TicTacToe():
-    def __init__(self):
-        self.chooseSides()
+    def __init__(self, humanMark=None):
+        self.chooseSides(humanMark)
 
         #what stage of the game we are in. 
         self.numTurn = 0 
@@ -37,9 +37,9 @@ class TicTacToe():
 \n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
 7    |    8    |    9"
 
-    def chooseSides(self):
+    def chooseSides(self, humanMark):
         self.players = ['X', 'O']
-        self.humanMark = None
+        self.humanMark = humanMark
         while self.humanMark not in self.players:
             self.humanMark = raw_input("Choose a side [X or O]: ").upper()
         print "You picked %s." % self.humanMark
