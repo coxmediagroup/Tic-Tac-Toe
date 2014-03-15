@@ -16,7 +16,7 @@ public class ArtificialAgentRandom extends Agent{
 		super(markType);
 	}
 
-	@Override public void turn(Board board) {
+	@Override public int turn(Board board) {
 		int location = -1;
 		do{
 			location = random.nextInt(board.getBoard().length);
@@ -26,6 +26,7 @@ public class ArtificialAgentRandom extends Agent{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return location;
 	}
 
 }

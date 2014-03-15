@@ -11,13 +11,13 @@ public class TerminalAgent extends Agent{
 		super(markType);
 	}
 
-	@Override public void turn(Board board) {
+	@Override public int turn(Board board) {
 		while(true){
 			try{
-				int position = getPosition(board);
-				if(position != -1){
-					board.mark(position, markType);
-					return;
+				int location = getLocation(board);
+				if(location != -1){
+					board.mark(location, markType);
+					return location;
 				}
 				System.out.println("Invalid position!");
 			}catch(Exception e){
@@ -26,11 +26,11 @@ public class TerminalAgent extends Agent{
 		}
 	}
 	
-	private int getPosition(Board board){
+	private int getLocation(Board board){
 		String input = System.console().readLine();
-		int position = Integer.parseInt(input);
-		if(position < 0 || position > board.getBoard().length)
+		int location = Integer.parseInt(input);
+		if(location < 0 || location > board.getBoard().length)
 			return -1;
-		return position;
+		return location;
 	}
 }

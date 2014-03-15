@@ -23,5 +23,5 @@ public abstract class Agent {
 		return enemyType;
 	}
 	
-	public abstract void turn(Board board);
+	public abstract int turn(Board board);
 }

@@ -52,11 +52,12 @@ public class ArtificialAgentSimple extends Agent {
 	 * at certain stages rather than code it, and instead code a simplistic
 	 * model which does the job for 3x3.
 	 */
-	@Override public void turn(Board board) {
+	@Override public int turn(Board board) {
 		while(true)
 			try{
-				board.mark(choose(board), markType);
-				return;
+				int choice = choose(board);
+				board.mark(choice, markType);
+				return choice;
 			}catch(Exception e){
 				e.printStackTrace();
 			}
