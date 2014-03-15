@@ -41,11 +41,13 @@ class TicTacToe():
                 'D2': [3, 5, 7]}
 
         self.board="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
-1    |    2    |    3\
-\n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
-4    |    5    |    6\
-\n     |         |\n     |         |\n---------------------\n     |         |\n     |         |\n\
-7    |    8    |    9"
+\n            |           |\n            |           |\n\
+     (1)    |    (2)    |    (3)\
+\n            |           |\n            |           |\n  -----------------------------------\n            |           |\n            |           |\n\
+     (4)    |    (5)    |    (6)\
+\n            |           |\n            |           |\n  -----------------------------------\n            |           |\n            |           |\n\
+     (7)    |    (8)    |    (9)\
+\n            |           |\n            |           |\n\n"
 
     def chooseSides(self, humanMark):
         self.players = ['X', 'O']
@@ -141,8 +143,8 @@ class TicTacToe():
                 self.RDCs[RDC][self.RDCs[RDC].index(square)] = player
 
     def printBoard(self):
-        print re.sub('[0-9]', '-', self.board)
-        #print self.board
+        #print re.sub('[0-9]', '-', self.board)
+        print self.board
 
     def advanceMove(self, move=None):
         self.whosTurn = self.players[0]
@@ -163,7 +165,7 @@ class TicTacToe():
 
         self.availSquares.discard(move)
         self.markRDCs(move, self.whosTurn)
-        self.board = self.board.replace(str(move), self.whosTurn)
+        self.board = self.board.replace('(%s)' % str(move), ' %s ' % self.whosTurn)
         self.history.append(move)
 
     def setStrategy(self, stratFile):
