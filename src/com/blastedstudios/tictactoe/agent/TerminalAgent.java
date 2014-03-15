@@ -27,8 +27,6 @@ public class TerminalAgent extends Agent{
 	}
 	
 	private int getPosition(Board board){
-		System.out.println("Player " + markType.name() + ", please input the position [0-" + 
-				board.getBoard().length + "]\n" + board);
 		String input = System.console().readLine();
 		int position = Integer.parseInt(input);
 		if(position < 0 || position > board.getBoard().length)

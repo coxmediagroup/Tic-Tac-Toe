@@ -39,18 +39,13 @@ public class ArtificialAgentSimple extends Agent {
 	 * model which does the job for 3x3.
 	 */
 	@Override public void turn(Board board) {
-		int position = -1;
-		if(board.getMiddle() == MarkTypeEnum.NONE)
-			position = board.getMiddlePosition();
-		else if(board.getMiddle() == markType){
-			;
-		}else
-			System.out.println("Finish Artificial Agent");
-		try{
-			board.mark(position, markType);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		while(true)
+			try{
+				board.mark(choose(board), markType);
+				return;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 	}
 
 	/**
@@ -61,7 +56,10 @@ public class ArtificialAgentSimple extends Agent {
 	 * to choose to add some randomness. Initial iteration at least will be dummy easy
 	 */
 	private int choose(Board board){
-		//start with easier cases then get to harder
+		//start with easier cases then get to harder. note this means it can't
+		//pick up mid game, as a unit test uncovered if there exists the other
+		//mark in 0 and 2, it would choose middle instead of 1. Anyways, how the ai
+		// is built this would never happen, so leaving it.
 		if(board.getMiddle() == MarkTypeEnum.NONE)
 			return 4;
 		
@@ -79,8 +77,8 @@ public class ArtificialAgentSimple extends Agent {
 			(board.getBoard()[0] != markType && board.getBoard()[6] != markType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[5] == markType) ||
 			(board.getBoard()[4] != markType && board.getBoard()[5] != markType)) &&
-			!board.isMarked(4))
-			return 4;
+			!board.isMarked(3))
+			return 3;
 		//right
 		if(((board.getBoard()[2] == markType && board.getBoard()[8] == markType) ||
 			(board.getBoard()[2] != markType && board.getBoard()[8] != markType) ||
@@ -111,8 +109,28 @@ public class ArtificialAgentSimple extends Agent {
 			return 0;
 		
 		//top-right
+		if(((board.getBoard()[1] == markType && board.getBoard()[0] == markType) ||
+			(board.getBoard()[1] != markType && board.getBoard()[0] != markType) ||
+			(board.getBoard()[4] == markType && board.getBoard()[6] == markType) ||
+			(board.getBoard()[4] != markType && board.getBoard()[6] != markType) ||
+			(board.getBoard()[5] == markType && board.getBoard()[8] == markType) ||
+			(board.getBoard()[5] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[0] == markType && board.getBoard()[8] == markType) ||
+			(board.getBoard()[0] != markType && board.getBoard()[8] != markType)) &&
+			!board.isMarked(2))
+			return 2;
 		
 		//bottom-left
+		if(((board.getBoard()[3] == markType && board.getBoard()[0] == markType) ||
+			(board.getBoard()[3] != markType && board.getBoard()[0] != markType) ||
+			(board.getBoard()[4] == markType && board.getBoard()[2] == markType) ||
+			(board.getBoard()[4] != markType && board.getBoard()[2] != markType) ||
+			(board.getBoard()[7] == markType && board.getBoard()[8] == markType) ||
+			(board.getBoard()[7] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[0] == markType && board.getBoard()[8] == markType) ||
+			(board.getBoard()[0] != markType && board.getBoard()[8] != markType)) &&
+			!board.isMarked(6))
+			return 6;
 		
 		//bottom-right
 		//defaults if not much is down
