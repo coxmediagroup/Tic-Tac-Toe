@@ -18,6 +18,9 @@ class TTTTest:
         self.games.append(TicTacToe('O')) #Initiate a game.  No moves yet. O is human player.
         self.tally = {'X': 0, 'O': 0, 'tie': 0, 'badGames': []}
 
+        for game in self.games:
+            game.setStrategy('aiStrategy1')
+
     #Branch a game: create all possible branches based on available squares.
     def branchGame(self, game):
         branches = []
