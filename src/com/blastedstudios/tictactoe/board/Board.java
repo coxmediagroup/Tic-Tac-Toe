@@ -25,6 +25,7 @@ package com.blastedstudios.tictactoe.board;
 public class Board {
 	private final int span;
 	private final MarkTypeEnum[] board;
+	private final StringBuffer moves = new StringBuffer();
 	
 	public Board(int span){
 		this.span = span;
@@ -44,6 +45,7 @@ public class Board {
 		if(isMarked(location))
 			throw new Exception("Can't mark place on board which has been previously marked!");
 		board[location] = space;
+		moves.append(space.name() + location + ",");
 	}
 	
 	public void reset(){
@@ -61,7 +63,19 @@ public class Board {
 			winner = getWinner(true);
 		if(winner == MarkTypeEnum.NONE)
 			winner = getWinnerDiagonal();
+		if(winner == MarkTypeEnum.NONE &&  isFilled())
+			return MarkTypeEnum.DRAW;
 		return winner;
+	}
+
+	/**
+	 * @return true if every spot on the board is marked
+	 */
+	public boolean isFilled() {
+		for(MarkTypeEnum mark : board)
+			if(mark == MarkTypeEnum.NONE)
+				return false;
+		return true;
 	}
 
 	private MarkTypeEnum getWinnerDiagonal(){
@@ -84,7 +98,7 @@ public class Board {
 	private MarkTypeEnum getWinner(boolean vertical){
 		for(int i=0; i<span; i++){
 			//start with left/top mark, if different, no one wins this row
-			MarkTypeEnum type = board[vertical ? i*span : i];
+			MarkTypeEnum type = board[vertical ? i : i*span];
 			if(type != MarkTypeEnum.NONE && isWinnerRow(vertical, i, type))
 				return type;
 		}
@@ -104,10 +118,10 @@ public class Board {
 	
 	public String toString(){
 		//make top frame
-		StringBuffer buffer = new StringBuffer();
-		for(int dashes=0; dashes<span+2; dashes++)
+		StringBuffer buffer = new StringBuffer("/");
+		for(int dashes=0; dashes<span; dashes++)
 			buffer.append("-");
-		buffer.append("\n");
+		buffer.append("\\\n");
 		
 		//populate middle
 		for(int y=0; y<span; y++){
@@ -118,8 +132,10 @@ public class Board {
 		}
 
 		//make bottom frame
-		for(int dashes=0; dashes<span+2; dashes++)
+		buffer.append("\\");
+		for(int dashes=0; dashes<span; dashes++)
 			buffer.append("-");
+		buffer.append("/");
 		return buffer.toString();
 	}
 
@@ -133,5 +149,9 @@ public class Board {
 
 	public int getSpan() {
 		return span;
+	}
+	
+	public String getMoves(){
+		return moves.toString();
 	}
 }

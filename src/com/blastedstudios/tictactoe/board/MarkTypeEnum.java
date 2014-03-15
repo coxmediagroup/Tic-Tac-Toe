@@ -1,7 +1,7 @@
 package com.blastedstudios.tictactoe.board;
 
 public enum MarkTypeEnum {
-	NONE, X, O;
+	NONE, DRAW, X, O;
 
 	public String printed(){
 		if(this == NONE)

@@ -1,9 +1,13 @@
 package com.blastedstudios.tictactoe.agent;
 
+import java.util.Random;
+
 import com.blastedstudios.tictactoe.board.Board;
 import com.blastedstudios.tictactoe.board.MarkTypeEnum;
 
 public class ArtificialAgentSimple extends Agent {
+	private final Random random = new Random();
+	
 	public ArtificialAgentSimple(MarkTypeEnum markType) {
 		super(markType);
 	}
@@ -67,30 +71,30 @@ public class ArtificialAgentSimple extends Agent {
 		
 		//top
 		if(((board.getBoard()[0] == markType && board.getBoard()[2] == markType) ||
-			(board.getBoard()[0] != markType && board.getBoard()[2] != markType) ||
+			(board.getBoard()[0] == enemyType && board.getBoard()[2] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[7] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[7] != markType)) &&
+			(board.getBoard()[4] == enemyType && board.getBoard()[7] == enemyType)) &&
 			!board.isMarked(1))
 			return 1;
 		//left
 		if(((board.getBoard()[0] == markType && board.getBoard()[6] == markType) ||
-			(board.getBoard()[0] != markType && board.getBoard()[6] != markType) ||
+			(board.getBoard()[0] == enemyType && board.getBoard()[6] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[5] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[5] != markType)) &&
+			(board.getBoard()[4] == enemyType && board.getBoard()[5] == enemyType)) &&
 			!board.isMarked(3))
 			return 3;
 		//right
 		if(((board.getBoard()[2] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[2] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[2] == enemyType && board.getBoard()[8] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[3] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[3] != markType)) &&
+			(board.getBoard()[4] == enemyType && board.getBoard()[3] == enemyType)) &&
 			!board.isMarked(5))
 			return 5;
 		//bottom
 		if(((board.getBoard()[6] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[6] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[6] == enemyType && board.getBoard()[8] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[1] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[1] != markType)) &&
+			(board.getBoard()[4] == enemyType && board.getBoard()[1] == enemyType)) &&
 			!board.isMarked(7))
 			return 7;
 		
@@ -98,42 +102,50 @@ public class ArtificialAgentSimple extends Agent {
 		
 		//top-left
 		if(((board.getBoard()[1] == markType && board.getBoard()[2] == markType) ||
-			(board.getBoard()[1] != markType && board.getBoard()[2] != markType) ||
+			(board.getBoard()[1] == enemyType && board.getBoard()[2] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[4] == enemyType && board.getBoard()[8] == enemyType) ||
 			(board.getBoard()[3] == markType && board.getBoard()[6] == markType) ||
-			(board.getBoard()[3] != markType && board.getBoard()[6] != markType) ||
+			(board.getBoard()[3] == enemyType && board.getBoard()[6] == enemyType) ||
 			(board.getBoard()[6] == markType && board.getBoard()[2] == markType) ||
-			(board.getBoard()[6] != markType && board.getBoard()[2] != markType)) &&
+			(board.getBoard()[6] == enemyType && board.getBoard()[2] == enemyType)) &&
 			!board.isMarked(0))
 			return 0;
 		
 		//top-right
 		if(((board.getBoard()[1] == markType && board.getBoard()[0] == markType) ||
-			(board.getBoard()[1] != markType && board.getBoard()[0] != markType) ||
+			(board.getBoard()[1] == enemyType && board.getBoard()[0] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[6] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[6] != markType) ||
+			(board.getBoard()[4] == enemyType && board.getBoard()[6] == enemyType) ||
 			(board.getBoard()[5] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[5] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[5] == enemyType && board.getBoard()[8] == enemyType) ||
 			(board.getBoard()[0] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[0] != markType && board.getBoard()[8] != markType)) &&
+			(board.getBoard()[0] == enemyType && board.getBoard()[8] == enemyType)) &&
 			!board.isMarked(2))
 			return 2;
 		
 		//bottom-left
 		if(((board.getBoard()[3] == markType && board.getBoard()[0] == markType) ||
-			(board.getBoard()[3] != markType && board.getBoard()[0] != markType) ||
+			(board.getBoard()[3] == enemyType && board.getBoard()[0] == enemyType) ||
 			(board.getBoard()[4] == markType && board.getBoard()[2] == markType) ||
-			(board.getBoard()[4] != markType && board.getBoard()[2] != markType) ||
+			(board.getBoard()[4] == enemyType && board.getBoard()[2] == enemyType) ||
 			(board.getBoard()[7] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[7] != markType && board.getBoard()[8] != markType) ||
+			(board.getBoard()[7] == enemyType && board.getBoard()[8] == enemyType) ||
 			(board.getBoard()[0] == markType && board.getBoard()[8] == markType) ||
-			(board.getBoard()[0] != markType && board.getBoard()[8] != markType)) &&
+			(board.getBoard()[0] == enemyType && board.getBoard()[8] == enemyType)) &&
 			!board.isMarked(6))
 			return 6;
 		
 		//bottom-right
 		//defaults if not much is down
-		return 8;
+		if(!board.isMarked(8))
+			return 8;
+		
+		//otherwise, fill in the board
+		int location = -1;
+		do{
+			location = random.nextInt(board.getBoard().length);
+		}while(board.isMarked(location));
+		return location;
 	}
 }

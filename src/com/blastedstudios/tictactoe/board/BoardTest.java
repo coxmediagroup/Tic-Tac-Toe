@@ -20,15 +20,41 @@ public class BoardTest {
 			assertEquals(MarkTypeEnum.NONE, new Board(span).getWinner());
 	}
 	
-	@Test public void testWinnerHorizontal() throws Exception {
+	@Test public void testWinnerHorizontalVariableSpan() throws Exception {
 		for(int span=3; span < 10; span++){
 			Board board = new Board(span);
 			for(int x=0; x < span-1; x++)
 				board.mark(x, MarkTypeEnum.X);
-			System.out.println("Testing pre win for span==" + span);
+			System.out.println("Testing pre win for span: " + span);
 			assertEquals(MarkTypeEnum.NONE, board.getWinner());//verify not won yet
 			board.mark(span-1, MarkTypeEnum.X);
-			System.out.println("Testing post win for span==" + span);
+			System.out.println("Testing post win for span: " + span);
+			assertEquals(MarkTypeEnum.X, board.getWinner());
+		}
+	}
+
+	@Test public void testWinnerHorizontalSimple() throws Exception {
+		for(int start : new int[]{0,3,6}){
+			Board board = new Board(3);
+			board.mark(start, MarkTypeEnum.X);
+			board.mark(start+1, MarkTypeEnum.X);
+			System.out.println("Testing pre win for start: " + start);
+			assertEquals(MarkTypeEnum.NONE, board.getWinner());//verify not won yet
+			board.mark(start+2, MarkTypeEnum.X);
+			System.out.println("Testing post win for start: " + start);
+			assertEquals(MarkTypeEnum.X, board.getWinner());
+		}
+	}
+
+	@Test public void testWinnerVerticalSimple() throws Exception {
+		for(int start : new int[]{0,1,2}){
+			Board board = new Board(3);
+			board.mark(start, MarkTypeEnum.X);
+			board.mark(start+3, MarkTypeEnum.X);
+			System.out.println("Testing pre win for start: " + start);
+			assertEquals(MarkTypeEnum.NONE, board.getWinner());//verify not won yet
+			board.mark(start+6, MarkTypeEnum.X);
+			System.out.println("Testing post win for start: " + start);
 			assertEquals(MarkTypeEnum.X, board.getWinner());
 		}
 	}
@@ -57,5 +83,14 @@ public class BoardTest {
 			System.out.println("Testing diagonal for span==" + span);
 			assertEquals(MarkTypeEnum.O, board.getWinner());
 		}
+	}
+	
+	@Test public void testDrawSimple() throws Exception {
+		Board board = new Board(3);
+		for(int i=0; i<board.getBoard().length-1; i++)
+			board.mark(i, MarkTypeEnum.O);
+		assertFalse(board.isFilled());
+		board.mark(board.getBoard().length-1, MarkTypeEnum.O);
+		assertTrue(board.isFilled());
 	}
 }
