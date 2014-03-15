@@ -32,12 +32,16 @@ public class Board {
 		reset();
 	}
 	
+	public boolean isMarked(int location){
+		return board[location] != MarkTypeEnum.NONE;
+	}
+	
 	/**
 	 * Change value on board to given space
 	 * @throws Exception if marking a spot which is already marked
 	 */
 	public void mark(int location, MarkTypeEnum space) throws Exception{
-		if(board[location] != MarkTypeEnum.NONE)
+		if(isMarked(location))
 			throw new Exception("Can't mark place on board which has been previously marked!");
 		board[location] = space;
 	}
@@ -62,7 +66,7 @@ public class Board {
 
 	private MarkTypeEnum getWinnerDiagonal(){
 		//if diagonal, must go through middle, so seed there
-		MarkTypeEnum middle = board[span*(span/2)+span/2];
+		MarkTypeEnum middle = getMiddle();
 		if(isWinnerDiagonal(middle, true) || isWinnerDiagonal(middle, false))
 			return middle;
 		return MarkTypeEnum.NONE;
@@ -117,6 +121,14 @@ public class Board {
 		for(int dashes=0; dashes<span+2; dashes++)
 			buffer.append("-");
 		return buffer.toString();
+	}
+
+	public int getMiddlePosition(){
+		return span*(span/2)+span/2;
+	}
+	
+	public MarkTypeEnum getMiddle(){
+		return board[getMiddlePosition()];
 	}
 
 	public int getSpan() {
