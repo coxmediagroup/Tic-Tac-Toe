@@ -1,5 +1,5 @@
 Tic-Tac-Toe
-==============
+===========
 
 Tic-Tac-Toe is an externally monitored project. This version is made in java
 with the constraint that a machine never lose. I have self imposed constraints,
@@ -18,6 +18,7 @@ sorted by date.
 
 Entry 2
 -------
+
 ### Context
 When first writing the terminal based human vs human game client, some 1.5 hours in.
 Extracted from HumanVsHuman (near the bottom)
