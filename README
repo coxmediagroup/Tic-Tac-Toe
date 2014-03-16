@@ -1,0 +1,47 @@
+Tic Tac Toe
+============
+
+For an exercise in futility, try to beat the computer at Tic Tac Toe navigate in your terminal to
+this folder and run: 
+
+    python TicTacToe.py
+
+When you feel you have wasted enough of your time, you can gather confirmation of the hopelessness 
+by running:
+
+    python undefeatable_test.py
+
+That will give you the results of every possible game if the computer opponent uses the default
+strategy it is programmed with.  This strategy can be found in ./strategies/aiStrategy1.py.
+
+To play the game and have a chance at winning, run:
+    
+    python TicTacToe.py aiStrategy2
+
+That loads the computer with the strategy found in ./strategies/aiStrategy2.py.
+
+To see the results of every possible game when the AI opponent is loaded up with aiStrategy2, run:
+    
+    python undefeatable_test.py aiStrategy2
+
+Feel free to create and experiment with your own custom strategies to load the AI with.  Maybe
+you can come up with a more optimal strategy that results in less AI ties and more wins, but
+doing that is not one of my interests.  Just code up your own strategy in ./strategies/, defining 
+a bestMove() function.  Check the comments in the existing strategies for details.  Then run:
+    
+    python TicTacToe.py [your-strategy]
+                    and
+    python undefeatable_test.py [your-strategy]
+
+
+TO-DO, Future Development
+-------------------------
+* Code could be cleaned up plenty, proably made more efficient too.  For one, the use of sets is just sort
+  of legacy from my original thinking about how things might proceed, but in the end it probably just resulted
+  in unneccessary ugliness. 
+
+* The original debug printed output I had that evaluates forkability and various danger and opportunity that
+  is currently commented out could be leveraged for an optional "hints" feature to the human user.
+
+* Could probably come up with a much more effective default AI strategy if one really wanted to think about Tic
+  Tac Toe that much.
