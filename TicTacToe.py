@@ -40,7 +40,8 @@ class TicTacToe():
                 'D1': [1, 5, 9],
                 'D2': [3, 5, 7]}
 
-        self.board="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
+        self.board="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
+\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 \n            |           |\n            |           |\n\
      (1)    |    (2)    |    (3)\
 \n            |           |\n            |           |\n  -----------------------------------\n            |           |\n            |           |\n\
