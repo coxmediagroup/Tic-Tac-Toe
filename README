@@ -1,13 +1,13 @@
 Tic Tac Toe
 ============
 
-For an exercise in futility, try to beat the computer at Tic Tac Toe navigate in your
-terminal to this folder and run: 
+For an exercise in futility, try to beat the computer at Tic Tac Toe. Navigate in 
+your terminal to this folder and run: 
 
     python TicTacToe.py
 
-When you feel you have wasted enough of your time, you can gather confirmation of the
-hopelessness by running:
+When you feel you have wasted enough of your time, you can gather confirmation of 
+your sense of hopelessness by running:
 
     python undefeatable_test.py
 
