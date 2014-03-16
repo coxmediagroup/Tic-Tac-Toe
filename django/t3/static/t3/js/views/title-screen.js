@@ -20,8 +20,9 @@ define(['underscore', 'backbone-layout'], function(_, Layout) {
       '</div>'
     ),
 
-    handleYes: function() {
-      this.options.state.set('name', 't3:startup');
+    handleYes: function(event) {
+      // Bubble the event up. Let the application handle it.
+      this.trigger('click:yes', event, this);
     }
   });
 

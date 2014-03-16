@@ -25,7 +25,7 @@ define([
     // Run the application
     run: function() {
       this.trigger('application:run', this);
-      this.state.set('name', 'started');
+      this.state.set('name', 'app:started');
     },
 
     // Close the application
@@ -36,10 +36,22 @@ define([
     // Handle application state changes.
     onChangeState: function(model, state) {
       switch(state) {
-        case 'started':
-          this.layoutManager.showView(
-            new Views.TitleScreen({state: this.state}));
+
+        // The application has started, the game isn't running yet.
+        case 'app:started':
+
+          // Create the title screen view and handle click events
+          var titleScreen = new Views.TitleScreen();
+          titleScreen.on('click:yes', _.bind(function() {
+            this.state.set('name', 't3:started');
+          }, this));
+
+          // Now show the view.
+          this.layoutManager.showView(titleScreen);
           break;
+
+        default:
+          throw new Error('no available state handler for ' + state);
       }
     }
   });
