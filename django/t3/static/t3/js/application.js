@@ -50,6 +50,12 @@ define([
           this.layoutManager.showView(titleScreen);
           break;
 
+        // The tic-tac-toe game has been started
+        case 't3:started':
+          var t3game = new Views.T3();
+          this.layoutManager.showView(t3game);
+          break;
+
         default:
           throw new Error('no available state handler for ' + state);
       }
