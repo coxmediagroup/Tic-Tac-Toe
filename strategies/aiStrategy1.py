@@ -1,3 +1,17 @@
+'''
+This strategy file should just define a bestMove() function for the TicTacToe class.
+
+Since the function is a member of TicTacToe, it has access to all of that class's
+attributes: i.e. numTurn, whosTurn, aiMark, evalForkability(), evalDanger(),
+availSquares, etc.
+
+The bestMove() function *MUST* return an int representing a square to move to
+no matter what!
+'''
+
+
+
+
 # Strategize and make best move.
 # If it's my first turn, don't bother with rest, what's the best first
 # move for O and X?
