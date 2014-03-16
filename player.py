@@ -1,3 +1,4 @@
+from board import Board
 
 class KeyboardInputPlayer(object):
     ''' Tic-Tac-Toe player that accepts human input from a keyboard. '''
@@ -40,6 +41,7 @@ class AIPlayer(object):
         self.board = board
 
     def next_move(self):
+        ''' Make the next move '''
         move, score = self._find_move(self.player)
         self.board.move(move, self.player)
 
@@ -52,24 +54,26 @@ class AIPlayer(object):
         
         for test_move in self.board.open_moves():
             self.board.move(test_move, player)
-            
-            if(self.board.winner() is not None):
-                test_score = self._calc_score() * SIGN[me]
+
+            winner = self.board.winner()
+            if((winner is not None) or self.board.draw()):
+                test_score = self._calc_score(winner) * SIGN[me]
             else:
                 unused, test_score = self._find_move(not player)
 
             self.board.undo()
 
+            # Save off the move associated with the best (or worst) score
             if((score is None) or ((cmp(test_score, score) * SIGN[me]) > 0)):
                 score = test_score
                 move = test_move
 
         return move, score
 
-    def _calc_score(self):
+    def _calc_score(self, winner):
         ''' Very crude move scoring.  Adequate for the AI to not lose, but if
             a smarter AI is desired this is where the improvement is needed. '''
-        if(self.board.winner()):
+        if(winner is not None):
             return 10
         return 0
 

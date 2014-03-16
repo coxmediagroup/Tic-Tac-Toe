@@ -10,6 +10,7 @@ class Board(object):
 
     def __init__(self, x_first=True, size=DEFAULT_BOARD_SIZE):
         assert(size > 1)
+        self.x_first = x_first
         self.size = size
         self._state = self.OPEN * (size ** 2)
         self._players = (self.O, self.X) if x_first else (self.X, self.O)
@@ -24,8 +25,11 @@ class Board(object):
             position is an integer in the range 0-(board size ** 2)
             player is a boolean indicating the player who went first (True)
             or second (False) '''
-        if(self._state[position] != self.OPEN):
-            raise self.InvalidMove('That board position has already been played')
+        try:
+            if(self._state[position] != self.OPEN):
+                raise self.InvalidMove('That board position has already been played')
+        except IndexError:
+            raise self.InvalidMove('Invalid move location')
         self._mark_position(position, self._players[player])
         self._moves.append((position, player)) # add to the stack
 
