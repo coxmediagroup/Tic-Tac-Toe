@@ -2,8 +2,9 @@
 define([
   'underscore',
   'backbone',
-  'layout-manager'
-], function(_, Backbone, LayoutManager) {
+  'layout-manager',
+  'views'
+], function(_, Backbone, LayoutManager, Views) {
   'use strict';
 
   var Application = function() {
@@ -22,6 +23,9 @@ define([
     // Run the application
     run: function() {
       this.trigger('application:run', this);
+
+      // Show the title screen once the application starts up.
+      this.layoutManager.showView(new Views.TitleScreen());
     },
 
     // Close the application
