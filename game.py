@@ -6,11 +6,11 @@ from player import KeyboardInputPlayer, AIPlayer
 class TicTacToe(object):
     ''' Tic-Tac-Toe game.  Sets up the game board and pits the computer
         against a human opponent. '''
+
     @classmethod
     def main(cls):
         game = cls()
         game.play()
-
 
     def _game_over(self, board):
         winner = board.winner()
@@ -24,8 +24,9 @@ class TicTacToe(object):
 
         return draw
 
-
     def play(self):
+        print('Board layout:')
+        print(Board().get_layout())
         go = True
         while go:
             # Set up the game
@@ -34,10 +35,14 @@ class TicTacToe(object):
             player2 = KeyboardInputPlayer(False, board)
             while True:
                 # Play the game
+                print('Player 1 move')
                 player1.next_move()
+                print(str(board))
                 if(self._game_over(board)):
                     break
+                print('Player 2 move')
                 player2.next_move()
+                print(str(board))
                 if(self._game_over(board)):
                     break
 

@@ -61,8 +61,8 @@ class Board(object):
             if((first != self.OPEN) and (s.count(first) == len(s))):
                 return first
             # Accumulate diagonals
-            diag1 += s[(board_size * i) + i]
-            diag2 += s[(board_size * i) + (board_size - i - 1)]
+            diag1 += state[(board_size * i) + i]
+            diag2 += state[(board_size * i) + (board_size - i - 1)]
 
         # Check diagonals
         for s in (diag1, diag2):
@@ -73,11 +73,23 @@ class Board(object):
         return None
 
     def draw(self):
+        ''' Is this game a draw?  '''
         return not self.OPEN in self._state
 
-    def __str__(self):
-        print('-----\n'.join(
+    def _board_string(self, state):
+        return '-----\n'.join(
             '|'.join(
-                self._state[i * self.size:(i + 1) * self.size]) + '\n' for i in range(self.size)))
+                state[i * self.size:(i + 1) * self.size]) + '\n' for i in range(self.size))
+
+    def get_layout(self):
+        ''' Return a string showing the board layout with available moves
+            indicated by the move number for that spot. '''
+        state = self._state
+        return self._board_string(
+            ''.join(
+                state[i] if state[i] != self.OPEN else str(i + 1) for i in range(self.size ** 2)))
+
+    def __str__(self):
+        return self._board_string(self._state)
 
 

@@ -1,5 +1,7 @@
 
 class KeyboardInputPlayer(object):
+    ''' Tic-Tac-Toe player that accepts human input from a keyboard. '''
+
     def __init__(self, player, board):
         self.player = player
         self.board = board
@@ -7,15 +9,16 @@ class KeyboardInputPlayer(object):
     def next_move(self):
         ''' Take the next move from standard input.  Continue until a move
             has been successfully made. '''
-        while True:
+        moved = False
+        while not moved:
             value = raw_input('Your move: ')
 
             if((value == '?') or (value.lower() == 'help')):
-                # TODO: Display move grid
-                pass
+                print(self.board.get_layout())
+                continue
 
             try:
-                pos = int(value)
+                pos = int(value) - 1
             except ValueError:
                 print('Invalid move.  Please try again')
             else:
@@ -24,34 +27,40 @@ class KeyboardInputPlayer(object):
                 except Board.InvalidMove as e:
                     print(str(e))
                 else:
-                    break
+                    moved = True
 
+
+SIGN = (-1, 1)
 
 class AIPlayer(object):
+    ''' Tic-Tac-Toe computer AI player. '''
+
     def __init__(self, player, board):
         self.player = player
         self.board = board
 
     def next_move(self):
-        return self._find_move(self.player)
+        move, score = self._find_move(self.player)
+        self.board.move(move, self.player)
 
     def _find_move(self, player):
         ''' A simple negamax implementation for finding a reasonable next move.
         '''
         score = None
         move = None
+        me = (player == self.player)
         
         for test_move in self.board.open_moves():
             self.board.move(test_move, player)
             
             if(self.board.winner() is not None):
-                test_score = self._calc_score() # TODO: Negatives
+                test_score = self._calc_score() * SIGN[me]
             else:
-                test_move, test_score = self._find_move(not player)
+                unused, test_score = self._find_move(not player)
 
             self.board.undo()
-            
-            if((score == None) or (test_score > score)): # TODO: Sign
+
+            if((score is None) or ((cmp(test_score, score) * SIGN[me]) > 0)):
                 score = test_score
                 move = test_move
 
