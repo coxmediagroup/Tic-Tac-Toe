@@ -63,7 +63,7 @@ class TicTacToe():
     # Collect player's next move and make sure his response is valid.
     def getMove(self):
         try:
-            move = int(raw_input('Pick a spot [1-9, left to right and top to bottom.  1 is top left, 9 is bottom right]: '))
+            move = int(raw_input('Pick a spot to mark [1-9]: '))
         except ValueError:
             print 'Try Again'
             move = self.getMove() 
@@ -79,15 +79,12 @@ class TicTacToe():
         if ['X','X','X'] in self.RDCs.values():
             print 'Winner is Player X!'
             return 'X'
-            sys.exit(0)
         elif ['O','O','O'] in self.RDCs.values():
             print 'Winner is Player O!'
             return 'O'
-            sys.exit(0)
         elif not self.availSquares:
             print "It's a tie!"
             return 'tie'
-            sys.exit(0)
         else: 
             return False
 
@@ -104,15 +101,13 @@ class TicTacToe():
                 mightWin = 'O'
 
             if mightWin:
-                print "Watch out! %s is almost all filled up by %s's!" % (RDC, mightWin) 
+                #print "Watch out! %s is almost all filled up by %s's!" % (RDC, mightWin) 
                 dangerousSquares[mightWin].extend([square for square in self.RDCs[RDC] if not isinstance(square, str)])
-                #dangerousSquares.add(mightWin, [square for square in self.RDCs[RDC] if not isinstance(square, str)][0])
         return dangerousSquares
 
 
     # Assess any opportunities to create a fork (2 routes to win).
     def evalForkability(self):
-        #forkOpps = set()
         forkOpps = {'X': [], 'O': []}
         for square in self.availSquares:
             forkOppX = -1
@@ -126,10 +121,8 @@ class TicTacToe():
                         forkOppO += 1
 
                 if forkOppX >= 1:
-                    #forkOpps.add(('X', square)) 
                     forkOpps['X'].append(square)
                 if forkOppO >= 1:
-                    #forkOpps.add(('O', square))
                     forkOpps['O'].append(square)
 
         #for player, square in forkOpps:
