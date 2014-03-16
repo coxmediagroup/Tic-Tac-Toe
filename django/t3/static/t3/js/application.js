@@ -1,13 +1,14 @@
 /* global define */
 define([
   'underscore',
-  'backbone'
-], function(_, Backbone) {
+  'backbone',
+  'layout-manager'
+], function(_, Backbone, LayoutManager) {
   'use strict';
 
   var Application = function() {
     // The layout manager controls the `Layout` view for this application.
-    this.layoutManager = null;
+    this.layoutManager = new LayoutManager({anchor: '#content'});
 
     // Monitors the state of the application
     this.state = new (Backbone.Model.extend({
