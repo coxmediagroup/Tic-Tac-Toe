@@ -15,6 +15,8 @@ define([
     this.state = new (Backbone.Model.extend({
       defaults: {name: 'stopped'}
     }))();
+
+    this.listenTo(this.state, 'change:name', this.onChangeState);
   };
 
   // Extend Application with inheritable properties.
@@ -23,9 +25,7 @@ define([
     // Run the application
     run: function() {
       this.trigger('application:run', this);
-
-      // Show the title screen once the application starts up.
-      this.layoutManager.showView(new Views.TitleScreen());
+      this.state.set('name', 'started');
     },
 
     // Close the application
@@ -33,8 +33,14 @@ define([
       this.trigger('application:close', this);
     },
 
-    // Handle application state changes
-    onChangeState: function() {
+    // Handle application state changes.
+    onChangeState: function(model, state) {
+      switch(state) {
+        case 'started':
+          this.layoutManager.showView(
+            new Views.TitleScreen({state: this.state}));
+          break;
+      }
     }
   });
 
