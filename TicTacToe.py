@@ -77,12 +77,15 @@ class TicTacToe():
     # Did somebody win? Is it a tie?
     def gameOver(self):
         if ['X','X','X'] in self.RDCs.values():
+            self.printBoard()
             print 'Winner is Player X!'
             return 'X'
         elif ['O','O','O'] in self.RDCs.values():
+            self.printBoard()
             print 'Winner is Player O!'
             return 'O'
         elif not self.availSquares:
+            self.printBoard()
             print "It's a tie!"
             return 'tie'
         else: 
