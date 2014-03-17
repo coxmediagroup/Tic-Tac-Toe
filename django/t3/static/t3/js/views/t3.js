@@ -45,12 +45,89 @@ define([
       '    <label>Player:</label>' +
       '    <span class="value"><%= player %></span>' +
       '  </div>' +
+      '  <div class="game-move">' +
+      '    <label>Move:</label>' +
+      '    <span class="value"><%= move %></span>' +
+      '  </div>' +
       '</div>'
     ),
 
     initialize: function(options) {
       Layout.prototype.initialize.call(this, options);
       this.listenTo(this.model, 'change:player', this.render);
+      this.listenTo(this.model, 'change:move', this.render);
+    },
+
+    serialize: function() {
+      return {
+        player: this.model.get('player').get('name'),
+        move: this.model.get('move')
+      };
+    }
+  });
+
+  var Board = Backbone.Collection.extend({
+
+    // Returns the cells that could win the game for the player
+    findWins: function(pairs) {
+      var wins = this.filter(function(cell, index) {
+        if (index === 0) { return; }
+        if (!cell.get('owner')) {
+          if (pairs[15 - index]) {
+            return cell;
+          }
+        }
+      });
+
+      return wins;
+    },
+
+    deepClone: function() {
+      return new this.constructor(this.models.map(function(m) {
+        return m.clone();
+      }));
+    },
+
+    isCenterOpen: function() {
+      return _.isNull(this.at(5).get('owner'));
+    },
+
+    findOppositeCorners: function(player) {
+      var ownedCorners = this.filter(function(cell, index) {
+        if (index === 0) { return false; }
+
+        // All the corner cells are evens
+        var isCorner = !(function() {
+          return index % 2;
+        })();
+
+        return isCorner && cell.get('owner') === player;
+      });
+
+      return _.filter(ownedCorners, function(corner) {
+        var cornerIdx = this.indexOf(corner);
+
+        // The opposite corners always add up to 10
+        return _.isNull(this.at(10 - cornerIdx).get('owner'));
+      }, this);
+    },
+
+    findEmptyCorners: function() {
+      return this.filter(function(cell, index) {
+        if (index === 0) { return false; }
+        var isCorner = !(function() {
+          return index % 2;
+        })();
+        return isCorner && _.isNull(cell.get('owner'));
+      });
+    },
+
+    findEmptySides: function() {
+      return this.filter(function(cell, index) {
+        if (index === 0) { return false; }
+        var isSide = (function() { return index % 2; })();
+        return isSide && _.isNull(cell.get('owner'));
+      });
     }
   });
 
@@ -60,86 +137,217 @@ define([
     template: _.template(
       '<div class="game">' +
         '<div class="t3-row row-1">' +
-        '  <div class="t3-col col-1"></div>' +
-        '  <div class="t3-col col-2"></div>' +
-        '  <div class="t3-col col-3"></div>' +
+        '  <div data-val="8" class="t3-col col-1"><%= mark[8] %></div>' +
+        '  <div data-val="1" class="t3-col col-2"><%= mark[1] %></div>' +
+        '  <div data-val="6" class="t3-col col-3"><%= mark[6] %></div>' +
         '</div>' +
         '<div class="t3-row row-2">' +
-        '  <div class="t3-col col-1"></div>' +
-        '  <div class="t3-col col-2"></div>' +
-        '  <div class="t3-col col-3"></div>' +
+        '  <div data-val="3" class="t3-col col-1"><%= mark[3] %></div>' +
+        '  <div data-val="5" class="t3-col col-2"><%= mark[5] %></div>' +
+        '  <div data-val="7" class="t3-col col-3"><%= mark[7] %></div>' +
         '</div>' +
         '<div class="t3-row row-3">' +
-        '  <div class="t3-col col-1"></div>' +
-        '  <div class="t3-col col-2"></div>' +
-        '  <div class="t3-col col-3"></div>' +
+        '  <div data-val="4" class="t3-col col-1"><%= mark[4] %></div>' +
+        '  <div data-val="9" class="t3-col col-2"><%= mark[9] %></div>' +
+        '  <div data-val="2" class="t3-col col-3"><%= mark[2] %></div>' +
         '</div>' +
       '</div>'
     ),
 
-    initialize: function(options) {
-      Layout.prototype.initialize.call(this, options);
-
-      this.rows = [
-        new Cells([{mark: null}, {mark: null}, {mark: null}]),
-        new Cells([{mark: null}, {mark: null}, {mark: null}]),
-        new Cells([{mark: null}, {mark: null}, {mark: null}])
-      ];
-
-      _.each(this.rows, function(collection, index) {
-        var i = index + 1;
-        this.registerView(new Cell({
-          model: collection.models[0],
-          state: this.options.state
-        }), {
-          anchor: '.row-' + i + ' .col-1'
-        });
-        this.registerView(new Cell({
-          model: collection.models[1],
-          state: this.options.state
-        }), {
-          anchor: '.row-' + i + ' .col-2'
-        });
-        this.registerView(new Cell({
-          model: collection.models[2],
-          state: this.options.state
-        }), {
-          anchor: '.row-' + i + ' .col-3'
-        });
-
-        this.listenTo(collection, 'change:mark', function() {
-          this.options.state.swapPlayer();
-        }, this);
-      }, this);
-    }
-  });
-
-  var Cells = Backbone.Collection.extend();
-
-  var Cell = Layout.extend({
-    className: 'cell',
-
     events: {
-      'click': 'onClick'
+      'click .t3-col': 'handleClick'
     },
 
     initialize: function(options) {
       Layout.prototype.initialize.call(this, options);
-      this.listenTo(this.model, 'change:mark', function(model, value) {
-        this.$el.html(value);
-      });
+
+      this.board = new Board([
+        { owner: null }, // ignore index 0
+        { owner: null }, { owner: null }, { owner: null },
+        { owner: null }, { owner: null }, { owner: null },
+        { owner: null }, { owner: null }, { owner: null }
+      ]);
+
+      this.computer = new Player({name: 'computer', mark: 'X'});
+      this.human = new Player({name: 'human', mark: 'O'});
+      this.options.state.set('player', this.human);
+
+      this.listenTo(this.board, 'change:owner', this.handleChangeOwner);
+
+      // Track the number of moves
+      this.options.state.set('move', 0);
+      this.listenTo(this.options.state, 'change:move', this.handleMove);
     },
 
-    getMark: function(player) {
-      if (player === 'human') {
-        return 'X';
+    serialize: function() {
+      return {
+        mark: this.board.map(function(cell) {
+          if (!cell.get('owner')) {
+            return '';
+          } else {
+            return cell.get('owner').get('mark');
+          }
+        })
+      };
+    },
+
+    handleMove: function() {
+      this.swapPlayer();
+    },
+
+    handleChangeOwner: function(model, player) {
+      var cellId = model.collection.indexOf(model);
+
+      // Update the player's pairs
+      player.updatePairs(cellId);
+
+      // Mark this cell as taken
+      player.taken[cellId] = true;
+
+      this.render();
+
+      // Increment the move counter
+      this.options.state.set('move', this.options.state.get('move') + 1);
+    },
+
+    handleClick: function(event) {
+      var cellId = Number($(event.target).data('val'));
+      var player = this.options.state.get('player');
+
+      // Update the owner
+      this.board.at(cellId).set('owner', player);
+    },
+
+    swapPlayer: function() {
+      if (this.options.state.get('player') === this.human) {
+        this.options.state.set('player', this.computer);
       } else {
-        return 'O';
+        this.options.state.set('player', this.human);
       }
     },
 
-    onClick: function() {
-      this.model.set('mark', this.getMark(this.options.state.get('player')));
+    calculateMove: function() {
+      // Only the computer should do this
+      if (this.options.state.get('player') !== this.computer) {
+        return;
+      }
+
+      var winningCells = this.board.findWins(this.computer.pairs);
+      if (winningCells.length) {
+        // A winning cell was found, take it!
+        winningCells[0].set('owner', this.computer);
+        console.log('detected winning cell', winningCells[0]);
+      } else {
+        // No winning cell was found. Now the alternatives have to be
+        // considered
+
+        // First, check if there is a cell that blocks the human player from
+        // winning
+        // If things went correctly, the results should never be more than 1
+        var humanWins = this.board.findWins(this.human.pairs);
+
+        if (humanWins.length) {
+          // This cell would win for the human, block it.
+          humanWins[0].set('owner', this.computer);
+          console.log('detected winning human cell', humanWins);
+        } else {
+
+          // No cell was found to block the human from winning. Now, check if
+          // there is a place the human can fork next turn
+          var human = this.human;
+          var forkBlocks = this.board.filter(function(cell, index) {
+            var clone = human.deepClone();
+
+            // Ignore 0 index and any owned cells
+            if (index === 0 || cell.get('owner')) { return false; }
+
+            // Check if, after this cell has been taken, the human has a
+            // winning move.
+            clone.taken[index] = true;
+            clone.updatePairs(index);
+            var humanWins = this.findWins(clone.pairs);
+
+            // If there is just one win then it's safe to just ignore it
+            // because the algorithm already knows how to block a single
+            // winning move.
+            if (humanWins.length === 2) {
+
+              // If there are two wins, this is a potential fork. Return the
+              // index so we can access the correct cell.
+              return index;
+            }
+
+            // This cell doesn't block a fork.
+            return false;
+          }, this.board);
+
+          // Again, if things went right the forkBlocks should only ever
+          // contain at most one element.
+          if (forkBlocks.length) {
+
+            // A potential fork was found, block it!
+            forkBlocks[0].set('owner', this.computer);
+            console.log('detected potential fork', this.board.at(forkBlocks[0]));
+          } else if (this.board.isCenterOpen()) {
+
+            // If the center cell is open, take it.
+            this.board.at(5).set('owner', this.computer);
+            console.log('taking the center', this.board.at(5));
+          } else {
+
+            // Find the corners opposite the ones the human has claimed
+            var corners = this.board.findOppositeCorners(this.human);
+            if (corners.length) {
+
+              // A corner is open that is opposite the human player, take it.
+              corners[0].set('owner', this.computer);
+              console.log('taking the opposite corner', corners[0]);
+            } else {
+
+              // Find an empty corner
+              var emptyCorner = this.board.findEmptyCorners();
+              if (emptyCorner.length) {
+                emptyCorner[0].set('owner', this.computer);
+                console.log('taking an empty corner', emptyCorner[0]);
+              } else {
+
+                // Find an empty side
+                var emptySide = this.board.findEmptySides();
+                if (emptySide.length) {
+                  emptySide[0].set('owner', this.computer);
+                  console.log('taking an empty side', emptySide[0]);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      /*
+      var dummyBoard = this.board.clone();
+      nextMove = this.board.filter(function(cell, index) {
+        // Skip 0 index
+        if (index === 0) { return; }
+
+        if (!cell.get('owner')) {
+          if (computer.pairs[15 - index]) {
+            // This is a winning cell!
+            nextMove = cell;
+          } else {
+            if (human.pairs[15 - index]) {
+              // This cell blocks the human player from winning
+              nextMove = cell;
+            }
+          }
+        }
+
+        // Check for a fork by checking what would happen if the human moved
+        // to this cell
+        dummyBoard.at(index).set('owner', this.human);
+        dummyBoard.each(function(cell) {
+        });
+      });
+      */
     }
   });
 
@@ -189,8 +397,9 @@ define([
 
       // Listen to the state model's state changes.
       this.listenTo(this.options.state, 'change:name', this.onChangeState);
-
-      // Listen to the game view for turn swaps
+      this.listenTo(this.options.state, 'change:player', function() {
+        this.options.state.set('name', 't3:turn-start');
+      }, this);
     },
 
     afterRender: function() {
@@ -201,11 +410,54 @@ define([
     onChangeState: function(model, state) {
       switch(state) {
         case 't3:started':
-          model.set('player', 'human');
           break;
+
+        case 't3:turn-start':
+          // Check for win conditions, etc
+
+          var player = this.options.state.get('player');
+          this.options.state.set('name', 't3:' + player.get('name'));
+          break;
+
+        case 't3:computer':
+          this.game.calculateMove();
+          break;
+
+        case 't3:human':
+          break;
+
         default:
           break;
       }
+    }
+  });
+
+  var Player = Backbone.Model.extend({
+    initialize: function() {
+      this.taken = [false,  // Ignore 0 index
+                    false, false, false,
+                    false, false, false,
+                    false, false, false];
+
+      this.pairs = [false, false, false, false,
+                    false, false, false, false,
+                    false, false, false, false,
+                    false, false, false, false];
+    },
+
+    updatePairs: function(cellId) {
+      for (var i = 1; i <= 9; i++) {
+        if (this.taken[i] && i + cellId < 15) {
+          this.pairs[cellId + i] = true;
+        }
+      }
+    },
+
+    deepClone: function() {
+      var clone = this.clone();
+      clone.taken = _.clone(this.taken);
+      clone.pairs = _.clone(this.pairs);
+      return clone;
     }
   });
 

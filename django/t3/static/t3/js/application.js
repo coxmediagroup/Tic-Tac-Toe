@@ -16,14 +16,6 @@ define([
       defaults: {
         name: 'app:stopped',
         player: null
-      },
-
-      swapPlayer: function() {
-        if (this.get('player') === 'human') {
-          this.set('player', 'computer');
-        } else {
-          this.set('player', 'human');
-        }
       }
     }))();
 
@@ -62,7 +54,7 @@ define([
 
           // Now show the view.
           this.layoutManager.showView(titleScreen);
-          this.options.debug && this.state.set('name', 'app:choose');
+          this.options.debug && this.state.set('name', 't3:init');
           break;
 
         // Choose what game to play (better not try global thermonuclear war!)
