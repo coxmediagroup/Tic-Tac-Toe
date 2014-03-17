@@ -13,7 +13,18 @@ define([
 
     // Monitors the state of the application
     this.state = new (Backbone.Model.extend({
-      defaults: {name: 'app:stopped'}
+      defaults: {
+        name: 'app:stopped',
+        player: null
+      },
+
+      swapPlayer: function() {
+        if (this.get('player') === 'human') {
+          this.set('player', 'computer');
+        } else {
+          this.set('player', 'human');
+        }
+      }
     }))();
 
     options || (options = {});

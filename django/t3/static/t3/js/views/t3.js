@@ -74,19 +74,29 @@ define([
 
       _.each(this.rows, function(collection, index) {
         var i = index + 1;
-        this.registerView(new Cell({model: collection.models[0]}), {
+        this.registerView(new Cell({
+          model: collection.models[0],
+          state: this.options.state
+        }), {
           anchor: '.row-' + i + ' .col-1'
         });
-        this.registerView(new Cell({model: collection.models[1]}), {
+        this.registerView(new Cell({
+          model: collection.models[1],
+          state: this.options.state
+        }), {
           anchor: '.row-' + i + ' .col-2'
         });
-        this.registerView(new Cell({model: collection.models[2]}), {
+        this.registerView(new Cell({
+          model: collection.models[2],
+          state: this.options.state
+        }), {
           anchor: '.row-' + i + ' .col-3'
         });
-      }, this);
-    },
 
-    afterRender: function() {
+        this.listenTo(collection, 'change:mark', function() {
+          this.options.state.swapPlayer();
+        }, this);
+      }, this);
     }
   });
 
@@ -99,7 +109,24 @@ define([
       'click': 'onClick'
     },
 
-    onClick: function() {}
+    initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
+      this.listenTo(this.model, 'change:mark', function(model, value) {
+        this.$el.html(value);
+      });
+    },
+
+    getMark: function(player) {
+      if (player === 'human') {
+        return 'X';
+      } else {
+        return 'O';
+      }
+    },
+
+    onClick: function() {
+      this.model.set('mark', this.getMark(this.options.state.get('player')));
+    }
   });
 
   // TicTacToe
@@ -141,26 +168,26 @@ define([
       // rendered. (see `backbone-layout`)
       this.header = new Header({model: this.stats});
       this.footer = new Footer();
-      this.game = new Game();
+      this.game = new Game({state: this.options.state});
       this.registerView(this.header, {anchor: '.game-header', replace: true});
       this.registerView(this.footer, {anchor: '.game-footer', replace: true});
       this.registerView(this.game, {anchor: '.game-view', replace: true});
 
       // Listen to the state model's state changes.
       this.listenTo(this.options.state, 'change:name', this.onChangeState);
+
+      // Listen to the game view for turn swaps
     },
 
     afterRender: function() {
-      this.options.state.set('name', 't3:start');
+      this.options.state.set('name', 't3:started');
     },
 
     // Handle state changes that relate to the t3 game.
     onChangeState: function(model, state) {
       switch(state) {
-        case 't3:start':
-          this.options.state.set('name', 'started');
-          break;
         case 't3:started':
+          model.set('player', 'human');
           break;
         default:
           break;
