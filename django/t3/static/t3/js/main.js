@@ -30,7 +30,7 @@ require.config({
 define(['application', 'bootstrap'], function(Application) {
   'use strict';
 
-  var app = new Application();
+  var app = new Application({ debug: true });
 
   // Monitor the status of the application
   app.on('application:run', function() {

@@ -7,7 +7,7 @@ define([
 ], function(_, Backbone, LayoutManager, Views) {
   'use strict';
 
-  var Application = function() {
+  var Application = function(options) {
     // The layout manager controls the `Layout` view for this application.
     this.layoutManager = new LayoutManager({anchor: '#content'});
 
@@ -15,6 +15,9 @@ define([
     this.state = new (Backbone.Model.extend({
       defaults: {name: 'app:stopped'}
     }))();
+
+    options || (options = {});
+    this.options = options;
 
     this.listenTo(this.state, 'change:name', this.onChangeState);
   };
@@ -48,6 +51,7 @@ define([
 
           // Now show the view.
           this.layoutManager.showView(titleScreen);
+          this.options.debug && this.state.set('name', 't3:init');
           break;
 
         // The tic-tac-toe game initialization
