@@ -59,7 +59,6 @@ def checkBoard(gameBoard):
                 sum += -1
             else:
                 openLoc = loc
-        print sum
         if sum==3:
             return "X wins"
         elif sum == -3:
