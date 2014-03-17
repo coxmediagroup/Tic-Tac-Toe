@@ -11,21 +11,21 @@ define([
     className: 'game-header',
 
     template: _.template(
-      '<div>' +
+      '<div class="header">' +
       '  <div class="games-played">' +
-      '    <label>Played</label>' +
+      '    <label>Played:</label>' +
       '    <span class="value"><%= gamesPlayed %></span>' +
       '  </div>' +
       '  <div class="games-won">' +
-      '    <label>Won</label>' +
+      '    <label>Won:</label>' +
       '    <span class="value"><%= gamesWon %></span>' +
       '  </div>' +
       '  <div class="games-lost">' +
-      '    <label>Lost</label>' +
+      '    <label>Lost:</label>' +
       '    <span class="value"><%= gamesLost %></span>' +
       '  </div>' +
       '  <div class="games-tied">' +
-      '    <label>Tied</label>' +
+      '    <label>Tied:</label>' +
       '    <span class="value"><%= gamesTied %></span>' +
       '  </div>' +
       '</div>'

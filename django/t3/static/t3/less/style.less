@@ -23,6 +23,29 @@
       margin-top: 10px;
     }
   }
+
+  .t3-game {
+    .game-header {
+      .panel;
+      .panel-default;
+
+      .header {
+        .container-fluid;
+        .make-row();
+        .panel-body;
+
+        .games-played, .games-won, .games-lost, .games-tied {
+          .make-xs-column(3);
+
+          text-align: center;
+
+          label {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .btn-primary-block {
