@@ -68,6 +68,9 @@ define([
       switch(state) {
         case 't3:start':
           this.layoutManager.showView(new StartupView());
+          this.options.state.set('name', 'started');
+          break;
+        case 't3:started':
           break;
         default:
           break;
