@@ -46,12 +46,27 @@ define([
           // Create the title screen view and handle click events
           var titleScreen = new Views.TitleScreen();
           titleScreen.on('click:yes', _.bind(function() {
-            this.state.set('name', 't3:init');
+            this.state.set('name', 'app:choose');
           }, this));
 
           // Now show the view.
           this.layoutManager.showView(titleScreen);
-          this.options.debug && this.state.set('name', 't3:init');
+          this.options.debug && this.state.set('name', 'app:choose');
+          break;
+
+        // Choose what game to play (better not try global thermonuclear war!)
+        case 'app:choose':
+          var choose = new Views.Choose();
+          choose.on('play', _.bind(function(name) {
+            this.state.set('name', name + ':init');
+          }, this));
+          this.layoutManager.showView(choose);
+          break;
+
+        case 'chess:init':
+          break;
+
+        case 'gtnw:init':
           break;
 
         // The tic-tac-toe game initialization

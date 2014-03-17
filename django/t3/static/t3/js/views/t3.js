@@ -41,18 +41,6 @@ define([
     className: 'game-footer'
   });
 
-  var StartupView = Layout.extend({
-    className: 'game-startup',
-
-    template: _.template(
-      '<h3>How about a nice game of chess?</h3>' +
-      '<div class="buttons">' +
-      '  <button class="btn-chess btn-primary-block">Play: Chess</button>' +
-      '  <button class="btn-gtnw btn-primary-block">Play: Global Thermonuclear War</button>' +
-      '  <button class="btn-t3 btn-primary-block">Play: Tic-Tac-Toe</button>' +
-      '</div>'
-    )
-  });
 
   // TicTacToe
   // ---------
@@ -114,7 +102,6 @@ define([
     onChangeState: function(model, state) {
       switch(state) {
         case 't3:start':
-          this.layoutManager.showView(new StartupView());
           this.options.state.set('name', 'started');
           break;
         case 't3:started':
