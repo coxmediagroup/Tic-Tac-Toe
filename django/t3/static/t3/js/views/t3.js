@@ -42,7 +42,16 @@ define([
   });
 
   var StartupView = Layout.extend({
-    className: 'game-startup'
+    className: 'game-startup',
+
+    template: _.template(
+      '<h3>How about a nice game of chess?</h3>' +
+      '<div class="buttons">' +
+      '  <button class="btn-chess btn-primary-block">Play: Chess</button>' +
+      '  <button class="btn-gtnw btn-primary-block">Play: Global Thermonuclear War</button>' +
+      '  <button class="btn-t3 btn-primary-block">Play: Tic-Tac-Toe</button>' +
+      '</div>'
+    )
   });
 
   // TicTacToe
