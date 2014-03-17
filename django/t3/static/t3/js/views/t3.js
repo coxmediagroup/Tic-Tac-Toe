@@ -1,13 +1,40 @@
 /* global define */
 define([
   'underscore',
+  'backbone',
   'backbone-layout',
   'layout-manager'
-], function(_, Layout, LayoutManager) {
+], function(_, Backbone, Layout, LayoutManager) {
   'use strict';
 
   var Header = Layout.extend({
-    className: 'game-header'
+    className: 'game-header',
+
+    template: _.template(
+      '<div>' +
+      '  <div class="games-played">' +
+      '    <label>Played</label>' +
+      '    <span class="value"><%= gamesPlayed %></span>' +
+      '  </div>' +
+      '  <div class="games-won">' +
+      '    <label>Won</label>' +
+      '    <span class="value"><%= gamesWon %></span>' +
+      '  </div>' +
+      '  <div class="games-lost">' +
+      '    <label>Lost</label>' +
+      '    <span class="value"><%= gamesLost %></span>' +
+      '  </div>' +
+      '  <div class="games-tied">' +
+      '    <label>Tied</label>' +
+      '    <span class="value"><%= gamesTied %></span>' +
+      '  </div>' +
+      '</div>'
+    ),
+
+    initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
+      this.listenTo(this.model, 'change', this.render);
+    }
   });
 
   var Footer = Layout.extend({
@@ -40,7 +67,18 @@ define([
     ),
 
     initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
       options || (options = {});
+
+      // Keep some basic game stats
+      this.stats = new (Backbone.Model.extend({
+        defaults: {
+          gamesPlayed: 0,
+          gamesWon: 0,
+          gamesLost: 0,
+          gamesTied: 0
+        }
+      }))();
 
       // Create a manager for the actual game view (i.e. the area where views
       // may swap in/out)
@@ -50,7 +88,7 @@ define([
       });
 
       // Register sub views (see `backbone-layout`)
-      this.header = new Header();
+      this.header = new Header({model: this.stats});
       this.footer = new Footer();
       this.registerView(this.header, {anchor: '.game-header', replace: true});
       this.registerView(this.footer, {anchor: '.game-footer', replace: true});
