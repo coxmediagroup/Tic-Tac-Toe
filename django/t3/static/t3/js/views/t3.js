@@ -37,7 +37,21 @@ define([
   });
 
   var Footer = Layout.extend({
-    className: 'game-footer'
+    className: 'game-footer',
+
+    template: _.template(
+      '<div class="footer">' +
+      '  <div class="game-player">' +
+      '    <label>Player:</label>' +
+      '    <span class="value"><%= player %></span>' +
+      '  </div>' +
+      '</div>'
+    ),
+
+    initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
+      this.listenTo(this.model, 'change:player', this.render);
+    }
   });
 
   var Game = Layout.extend({
@@ -167,7 +181,7 @@ define([
       // Registered views will automatically be rendered when their parent is
       // rendered. (see `backbone-layout`)
       this.header = new Header({model: this.stats});
-      this.footer = new Footer();
+      this.footer = new Footer({model: this.options.state});
       this.game = new Game({state: this.options.state});
       this.registerView(this.header, {anchor: '.game-header', replace: true});
       this.registerView(this.footer, {anchor: '.game-footer', replace: true});
