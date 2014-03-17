@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import argparse
 
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'hi'
+    return render_template('main.html')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tic Tac Toe: The Crucible')
