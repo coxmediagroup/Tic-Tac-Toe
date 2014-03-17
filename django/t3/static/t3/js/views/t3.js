@@ -18,6 +18,18 @@ define([
     className: 'game-startup'
   });
 
+  // TicTacToe
+  // ---------
+
+  // The `Tic-Tac-Toe` game view is really more of an applicaiton. It is in
+  // charge of application state management that relate to the 't3'
+  // application.
+  //
+  // If I were to spend more time on this I'd probably make this an actual
+  // `Application` sub class and make sure that every time it changes
+  // application state, that the name of that state would be prepended with
+  // 't3:', but that would probably take a little longer to implement than is
+  // really required.
   var TicTacToe = Layout.extend({
     className: 't3-game',
 
