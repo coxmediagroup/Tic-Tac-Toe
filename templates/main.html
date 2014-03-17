@@ -1,5 +1,25 @@
 {% extends 'base.html' %}
 
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}" />
+{% endblock %}
+
 {% block content %}
-No!
+    <div id="gameboard">
+        <div class="row">
+            <div id="c1" class="cell"></div>
+            <div id="c2" class="cell"></div>
+            <div id="c3" class="cell"></div>
+        </div>
+        <div class="row">
+            <div id="c4" class="cell"></div>
+            <div id="c5" class="cell"></div>
+            <div id="c6" class="cell"></div>
+        </div>
+        <div class="row">
+            <div id="c7" class="cell"></div>
+            <div id="c8" class="cell"></div>
+            <div id="c9" class="cell"></div>
+        </div>
+    </div>
 {% endblock %}
