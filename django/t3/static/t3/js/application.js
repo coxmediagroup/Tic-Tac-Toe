@@ -13,7 +13,7 @@ define([
 
     // Monitors the state of the application
     this.state = new (Backbone.Model.extend({
-      defaults: {name: 'stopped'}
+      defaults: {name: 'app:stopped'}
     }))();
 
     this.listenTo(this.state, 'change:name', this.onChangeState);
