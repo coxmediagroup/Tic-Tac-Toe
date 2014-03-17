@@ -1,9 +1,20 @@
-Intructions:
-1. Fork this repo on GitHub
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send us a pull request.
+    usage: app.py [-h] [--debug] [--host HOST] [--port PORT]
 
-If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
+    Tic Tac Toe: The Crucible
 
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+    optional arguments:
+      -h, --help   show this help message and exit
+      --debug      run app in debug mode
+      --host HOST  host to bind to (default: 127.0.0.1)
+      --port PORT  port to bind to (default: 5000)
+
+I chose to use Flask as this is a relatively small app. I felt that Django would
+be a bit overkill.
+
+Setup
+-----
+1. Install the necessary packages with `pip install -r requirements.txt`
+2. Run the app with `./app.py` (default host and port are 127.0.0.1:5000)
+  * There are some cli args if you wish to change the default behavior
+
+
