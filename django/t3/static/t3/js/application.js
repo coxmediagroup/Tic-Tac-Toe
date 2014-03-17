@@ -43,21 +43,28 @@ define([
           // Create the title screen view and handle click events
           var titleScreen = new Views.TitleScreen();
           titleScreen.on('click:yes', _.bind(function() {
-            this.state.set('name', 't3:started');
+            this.state.set('name', 't3:init');
           }, this));
 
           // Now show the view.
           this.layoutManager.showView(titleScreen);
           break;
 
-        // The tic-tac-toe game has been started
-        case 't3:started':
-          var t3game = new Views.T3();
-          this.layoutManager.showView(t3game);
+        // The tic-tac-toe game initialization
+        case 't3:init':
+
+          // Make sure previous games are closed (if any)
+          this.game && this.game.close();
+
+          // Start the game up. The T3 game needs to have access to the state
+          // model (it's more of an application than a view anyway).
+          this.game = new Views.T3({state: this.state});
+          this.layoutManager.showView(this.game);
           break;
 
         default:
-          throw new Error('no available state handler for ' + state);
+          // do nothing (someone else may handle it)
+          break;
       }
     }
   });
