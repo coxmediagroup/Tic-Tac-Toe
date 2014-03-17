@@ -53,6 +53,11 @@
         .container-fluid;
         .panel-body;
 
+        .cell {
+          .size(100%, 100%);
+          text-align: center;
+        }
+
         .t3-row {
           .container-fluid;
           .make-row();
@@ -60,14 +65,11 @@
           .t3-col {
             .make-xs-column(4);
             height: 100px;
-
             border-right: 2px solid @gray;
             &:last-child {
               border-right: none;
             }
-
             border-bottom: 2px solid @gray;
-
             text-align: center;
           }
 

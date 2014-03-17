@@ -61,7 +61,45 @@ define([
         '  <div class="t3-col col-3"></div>' +
         '</div>' +
       '</div>'
-    )
+    ),
+
+    initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
+
+      this.rows = [
+        new Cells([{mark: null}, {mark: null}, {mark: null}]),
+        new Cells([{mark: null}, {mark: null}, {mark: null}]),
+        new Cells([{mark: null}, {mark: null}, {mark: null}])
+      ];
+
+      _.each(this.rows, function(collection, index) {
+        var i = index + 1;
+        this.registerView(new Cell({model: collection.models[0]}), {
+          anchor: '.row-' + i + ' .col-1'
+        });
+        this.registerView(new Cell({model: collection.models[1]}), {
+          anchor: '.row-' + i + ' .col-2'
+        });
+        this.registerView(new Cell({model: collection.models[2]}), {
+          anchor: '.row-' + i + ' .col-3'
+        });
+      }, this);
+    },
+
+    afterRender: function() {
+    }
+  });
+
+  var Cells = Backbone.Collection.extend();
+
+  var Cell = Layout.extend({
+    className: 'cell',
+
+    events: {
+      'click': 'onClick'
+    },
+
+    onClick: function() {}
   });
 
   // TicTacToe
