@@ -63,13 +63,15 @@ define([
           this.layoutManager.showView(choose);
           break;
 
+        // Initialize chess
         case 'chess:init':
           break;
 
+        // Initialize global thermonuclear war
         case 'gtnw:init':
           break;
 
-        // The tic-tac-toe game initialization
+        // Initialize tic-tac-toe
         case 't3:init':
 
           // Make sure previous games are closed (if any)

@@ -2,9 +2,8 @@
 define([
   'underscore',
   'backbone',
-  'backbone-layout',
-  'layout-manager'
-], function(_, Backbone, Layout, LayoutManager) {
+  'backbone-layout'
+], function(_, Backbone, Layout) {
   'use strict';
 
   var Header = Layout.extend({
@@ -41,6 +40,27 @@ define([
     className: 'game-footer'
   });
 
+  var Game = Layout.extend({
+    className: 'game-view',
+
+    template: _.template(
+      '<div class="t3-row row-1">' +
+      '  <div class="t3-col col-1"></div>' +
+      '  <div class="t3-col col-2"></div>' +
+      '  <div class="t3-col col-3"></div>' +
+      '</div>' +
+      '<div class="t3-row row-2">' +
+      '  <div class="t3-col col-1"></div>' +
+      '  <div class="t3-col col-2"></div>' +
+      '  <div class="t3-col col-3"></div>' +
+      '</div>' +
+      '<div class="t3-row row-3">' +
+      '  <div class="t3-col col-1"></div>' +
+      '  <div class="t3-col col-2"></div>' +
+      '  <div class="t3-col col-3"></div>' +
+      '</div>'
+    )
+  });
 
   // TicTacToe
   // ---------
@@ -77,18 +97,14 @@ define([
         }
       }))();
 
-      // Create a manager for the actual game view (i.e. the area where views
-      // may swap in/out)
-      this.layoutManager = new LayoutManager({
-        anchor: '.game-view',
-        context: this.$el
-      });
-
-      // Register sub views (see `backbone-layout`)
+      // Registered views will automatically be rendered when their parent is
+      // rendered. (see `backbone-layout`)
       this.header = new Header({model: this.stats});
       this.footer = new Footer();
+      this.game = new Game();
       this.registerView(this.header, {anchor: '.game-header', replace: true});
       this.registerView(this.footer, {anchor: '.game-footer', replace: true});
+      this.registerView(this.game, {anchor: '.game-view', replace: true});
 
       // Listen to the state model's state changes.
       this.listenTo(this.options.state, 'change:name', this.onChangeState);
@@ -114,3 +130,4 @@ define([
 
   return TicTacToe;
 });
+

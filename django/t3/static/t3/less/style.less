@@ -45,6 +45,28 @@
         }
       }
     }
+    .game-view {
+      .t3-row {
+        .make-row();
+
+        .t3-col {
+          .make-xs-column(4);
+          height: 100px;
+
+          border-right: 2px solid @gray;
+          &:last-child {
+            border-right: none;
+          }
+
+          text-align: center;
+        }
+
+        border-bottom: 2px solid @gray;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
   }
 }
 
