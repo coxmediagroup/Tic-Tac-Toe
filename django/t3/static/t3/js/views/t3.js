@@ -44,20 +44,22 @@ define([
     className: 'game-view',
 
     template: _.template(
-      '<div class="t3-row row-1">' +
-      '  <div class="t3-col col-1"></div>' +
-      '  <div class="t3-col col-2"></div>' +
-      '  <div class="t3-col col-3"></div>' +
-      '</div>' +
-      '<div class="t3-row row-2">' +
-      '  <div class="t3-col col-1"></div>' +
-      '  <div class="t3-col col-2"></div>' +
-      '  <div class="t3-col col-3"></div>' +
-      '</div>' +
-      '<div class="t3-row row-3">' +
-      '  <div class="t3-col col-1"></div>' +
-      '  <div class="t3-col col-2"></div>' +
-      '  <div class="t3-col col-3"></div>' +
+      '<div class="game">' +
+        '<div class="t3-row row-1">' +
+        '  <div class="t3-col col-1"></div>' +
+        '  <div class="t3-col col-2"></div>' +
+        '  <div class="t3-col col-3"></div>' +
+        '</div>' +
+        '<div class="t3-row row-2">' +
+        '  <div class="t3-col col-1"></div>' +
+        '  <div class="t3-col col-2"></div>' +
+        '  <div class="t3-col col-3"></div>' +
+        '</div>' +
+        '<div class="t3-row row-3">' +
+        '  <div class="t3-col col-1"></div>' +
+        '  <div class="t3-col col-2"></div>' +
+        '  <div class="t3-col col-3"></div>' +
+        '</div>' +
       '</div>'
     )
   });
