@@ -118,18 +118,20 @@ define([
 
       // Track the current turn
       this.state.set('move', 0);
-      this.listenTo(this.state, 'change:move', this.handleMove);
-
-      // Listen to the state change and route accordingly
-      this.listenTo(this.state, 'change:name', this.onStateChange);
-
-      // Listen to a player change and start a new turn
-      this.listenTo(this.state, 'change:player', this.startTurn);
 
       // Listen to a cell owner change and do calculations/game flow
       this.listenTo(this.layout.game, 'change:owner', this.handleChangeOwner);
+    },
 
-      // Someone won!
+
+    unbindState: function() {
+      this.stopListening(this.state);
+    },
+
+    bindState: function() {
+      this.listenTo(this.state, 'change:move', this.handleMove);
+      this.listenTo(this.state, 'change:name', this.onChangeState);
+      this.listenTo(this.state, 'change:player', this.startTurn);
       this.listenTo(this.state, 'change:winner', this.handleWinner);
     },
 
@@ -180,7 +182,7 @@ define([
     // ##startTurn
     // Starts the turn by setting the game state
     startTurn: function() {
-      this.options.state.set('name', 't3:turn-start');
+      this.state.set('name', 't3:turn-start');
     },
 
     // ##onChangeState:
@@ -192,8 +194,21 @@ define([
           name;
       switch(state) {
         case 't3:started':
-          // Kick start the game by setting the current player to 'human'
+
+          // First, unbind the state model so that the basic game state can be set.
+          this.unbindState();
+
+          // Set the basic game state
+          this.state.set('winner', null);
+          this.state.set('move', 0);
+          this.state.set('player', null);
+
+          // Bind to the state model again
+          this.bindState();
+
+          // Finally, start the game by setting the first player
           this.state.set('player', this.players.human);
+
           break;
 
         case 't3:turn-start':
@@ -230,7 +245,7 @@ define([
           });
           $('.game', this.el).append(this.gameOver.render().el);
 
-          this.updateStats();
+          this.updateStats({ winner: winner });
           break;
 
         case 't3:tie-game':
@@ -244,7 +259,26 @@ define([
       }
     },
 
-    updateStats: function() {
+    // ##updateStats
+    // Update the game stats
+    updateStats: function(options) {
+      options || (options = {});
+      var gamesPlayed = this.stats.get('gamesPlayed'),
+          gamesWon = this.stats.get('gamesWon'),
+          gamesLost = this.stats.get('gamesLost'),
+          gamesTied = this.stats.get('gamesTied');
+
+      var won = options.winner && options.winner === this.players.human;
+      var lost = options.winner && options.winner === this.players.computer;
+      var tied = false;
+      if (!won && !lost) { tied = true; }
+
+      this.stats.set({
+        gamesPlayed: gamesPlayed + 1,
+        gamesWon: won ? gamesWon + 1 : gamesWon,
+        gamesLost: lost ? gamesLost + 1 : gamesLost,
+        gamesTied: tied ? gamesTied + 1 : gamesTied
+      });
     },
 
     // ##makeMove
