@@ -64,10 +64,30 @@ define([
 
         // Initialize chess
         case 'chess:init':
+          // Just as a note about how this could work:
+          //
+          // The idea is that each of these init methods ('chess:init', etc)
+          // would initialize a sub application. I haven't implemented any of
+          // them except for the 't3' application. However, they would all get
+          // started similarly.
+          //
+          // Once a sub application starts, the State model would have new
+          // state routes available to it. For example, the 't3:started' route
+          // is only available when the t3 application has been initialized.
+          //
+          // The sub application would run itself (communicating back to the
+          // parent only via State model changes). Eventually, the sub
+          // application would stop running by issuing the 'exit' route (see
+          // 't3:exit').
+
+          $('.alert').html('Chess has not been installed').show().attr('title', '');
           break;
 
         // Initialize global thermonuclear war
         case 'gtnw:init':
+          $('.alert').html('Global Thermalnuclear War is not currently available.' +
+                           ' Please check back once Russia is scary again.').show();
+          $('.alert').attr('title', 'Oh wait, I forgot about China');
           break;
 
         // Initialize tic-tac-toe

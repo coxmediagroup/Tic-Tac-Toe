@@ -10,6 +10,7 @@ define([
 
     template: _.template(
       '<h3>How about a nice game of chess?</h3>' +
+      '<div class="alert alert-danger" style="display:none"></div>' +
       '<div class="buttons">' +
       '  <button data-opt="chess" class="btn-chess btn-primary-block">Play: Chess</button>' +
       '  <button data-opt="gtnw" class="btn-gtnw btn-primary-block">Play: Global Thermonuclear War</button>' +
