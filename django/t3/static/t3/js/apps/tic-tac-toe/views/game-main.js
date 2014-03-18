@@ -75,7 +75,9 @@ define([
 
       // Bind to the `CellView`'s bubbled up click event
       this.on('clicked', function(cellView) {
-        cellView.model.set('owner', this.state.get('player'));
+        if (_.isNull(cellView.model.get('owner'))) {
+          cellView.model.set('owner', this.state.get('player'));
+        }
       }, this);
     },
 
