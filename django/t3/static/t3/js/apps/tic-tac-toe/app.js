@@ -270,6 +270,8 @@ define([
     },
 
     exit: function() {
+      // Issue the 'exit' state, let the parent app close this application.
+      this.state.set('name', 't3:exit');
     },
 
     displayGameOver: function(options) {
@@ -388,6 +390,9 @@ define([
     close: function() {
       // Close everything down
       this.trigger('close', this);
+      this.layoutManager.currentView.close();
+      this.stopListening();
+      this.off();
     }
   });
 

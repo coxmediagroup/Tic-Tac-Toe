@@ -51,7 +51,6 @@ define([
 
           // Now show the view.
           this.layoutManager.showView(titleScreen);
-          this.options.debug && this.state.set('name', 't3:init');
           break;
 
         // Choose what game to play (better not try global thermonuclear war!)
@@ -74,6 +73,10 @@ define([
         // Initialize tic-tac-toe
         case 't3:init':
 
+          // If there's a current view, close it.
+          var view = this.layoutManager.currentView;
+          view.close();
+
           // The TicTacToe application shares the main app's layoutManager and
           // state.
           this.t3 && this.t3.close();
@@ -82,14 +85,11 @@ define([
             state: this.state
           });
           this.t3.run();
+          break;
 
-//          // Make sure previous games are closed (if any)
-//          this.game && this.game.close();
-//
-//          // Start the game up. The T3 game needs to have access to the state
-//          // model (it's more of an application than a view anyway).
-//          this.game = new Views.T3({state: this.state});
-//          this.layoutManager.showView(this.game);
+        case 't3:exit':
+          this.t3 && this.t3.close();
+          this.state.set('name', 'app:started');
           break;
 
         default:
