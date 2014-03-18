@@ -15,6 +15,14 @@
     width: 33%;
     height: 33%;
     float: left;
+    font-size: 72px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+#gameboard .cell:hover {
+    background-color: #444;
 }
 
 #c1, #c4, #c7 {
