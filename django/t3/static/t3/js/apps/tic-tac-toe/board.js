@@ -5,6 +5,15 @@ define([
 ], function(_, Backbone) {
   'use strict';
 
+  // To make checking for wins a little faster, just store the valid winning
+  // cell combinations as a constant.
+  var WINNING_COMBOS = [
+    // Rows       Cols      Diags
+    [8, 1, 6], [8, 3, 4], [8, 5, 2],
+    [3, 5, 7], [1, 5, 9], [6, 5, 4],
+    [4, 9, 2], [6, 7, 2]
+  ];
+
   var Board = Backbone.Collection.extend({
     initialize: function() {
       this.add([
@@ -13,6 +22,25 @@ define([
         { owner: null }, { owner: null }, { owner: null },
         { owner: null }, { owner: null }, { owner: null }
       ]);
+    },
+
+    // ##findWinningCells
+    // Returns the specific cells that constitute a winning combo
+    findWinningCells: function() {
+      var winning = [];
+      _.each(WINNING_COMBOS, function(cellIds) {
+        var cells = _.map(cellIds, function(num) {
+          return this.at(num);
+        }, this);
+        var byPlayer = _.countBy(cells, function(cell) {
+          var owner = cell.get('owner');
+          return owner ? owner.get('name') : '';
+        });
+        if (byPlayer.computer === 3 || byPlayer.human === 3) {
+          winning = cells;
+        }
+      }, this);
+      return winning;
     },
 
     findWinsFor: function(pairs) {

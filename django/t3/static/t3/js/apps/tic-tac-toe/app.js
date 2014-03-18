@@ -6,8 +6,9 @@ define([
   'backbone-layout',
   'apps/tic-tac-toe/views/header',
   'apps/tic-tac-toe/views/game-main',
-  'apps/tic-tac-toe/views/footer'
-], function(_, Backbone, AppBase, Layout, Header, Game, Footer) {
+  'apps/tic-tac-toe/views/footer',
+  'apps/tic-tac-toe/views/game-over'
+], function(_, Backbone, AppBase, Layout, Header, Game, Footer, GameOver) {
   'use strict';
 
   // MainLayout
@@ -122,6 +123,9 @@ define([
 
       // Listen to a cell owner change and do calculations/game flow
       this.listenTo(this.layout.game, 'change:owner', this.handleChangeOwner);
+
+      // Someone won!
+      this.listenTo(this.state, 'change:winner', this.handleWinner);
     },
 
     // ##run
@@ -133,6 +137,10 @@ define([
           this.state.set('name', 't3:started');
         }, this)
       });
+    },
+
+    handleWinner: function() {
+      this.state.set('name', 't3:winner');
     },
 
     // ##handleChangeOwner
@@ -182,6 +190,11 @@ define([
 
         case 't3:turn-start':
           // Check for win condition
+          var winningCells = this.game.findWinningCells();
+          if (winningCells.length) {
+            var winner = winningCells[0].get('owner');
+            this.state.set('winner', winner);
+          }
 
           // Route to the correct turn state
           var player = this.state.get('player');
@@ -195,10 +208,10 @@ define([
         case 't3:human':
           break;
 
-        case 't3:winner-computer':
-          break;
-
-        case 't3:winner-human':
+        case 't3:winner':
+//          var winner = this.state.get('winner');
+          this.gameOver = new GameOver();
+          $('.game', this.el).append(this.gameOver.render().el);
           break;
       }
     },

@@ -122,6 +122,10 @@ define([
 
     findBlockForFork: function(cell, player) {
       return this.collection.findBlockForFork(cell, player);
+    },
+
+    findWinningCells: function() {
+      return this.collection.findWinningCells();
     }
   });
 
