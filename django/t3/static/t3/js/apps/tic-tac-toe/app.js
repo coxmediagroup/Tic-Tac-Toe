@@ -71,6 +71,11 @@ define([
       clone.taken = _.clone(this.taken);
       clone.pairs = _.clone(this.pairs);
       return clone;
+    },
+
+    getDisplayName: function() {
+      var name = this.get('name');
+      return name.charAt(0).toUpperCase() + name.slice(1);
     }
   });
 
@@ -181,6 +186,10 @@ define([
     // ##onChangeState:
     // When the state changes, route accordingly.
     onChangeState: function(model, state) {
+      var winner,
+          winningCells,
+          player,
+          name;
       switch(state) {
         case 't3:started':
           // Kick start the game by setting the current player to 'human'
@@ -188,11 +197,11 @@ define([
           break;
 
         case 't3:turn-start':
-          var winningCells = this.game.findWinningCells();
+          winningCells = this.game.findWinningCells();
           if (winningCells.length) {
 
             // Check for win condition
-            var winner = winningCells[0].get('owner');
+            winner = winningCells[0].get('owner');
             this.state.set('winner', winner);
           } else if (this.state.get('move') >= 9) {
 
@@ -202,7 +211,7 @@ define([
 
           // Nothing is stopping the game from continuing...
           // Route to the correct turn state
-          var player = this.state.get('player');
+          player = this.state.get('player');
           this.state.set('name', 't3:' + player.get('name'));
           break;
 
@@ -214,15 +223,28 @@ define([
           break;
 
         case 't3:winner':
-//          var winner = this.state.get('winner');
-          this.gameOver = new GameOver();
+          winner = this.state.get('winner');
+          name = winner.getDisplayName();
+          this.gameOver = new GameOver({
+            message: '' + name + ' has won the game!'
+          });
           $('.game', this.el).append(this.gameOver.render().el);
+
+          this.updateStats();
           break;
 
         case 't3:tie-game':
-          this.gameOver = new GameOver();
+          this.gameOver = new GameOver({
+            message: 'No one wins!'
+          });
           $('.game', this.el).append(this.gameOver.render().el);
+
+          this.updateStats();
+          break;
       }
+    },
+
+    updateStats: function() {
     },
 
     // ##makeMove

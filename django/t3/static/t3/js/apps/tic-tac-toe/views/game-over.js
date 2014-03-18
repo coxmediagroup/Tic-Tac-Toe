@@ -10,12 +10,16 @@ define([
 
     template: _.template(
       '<h3>Game Over</h3>' +
-      '<div class="message">Some Message</div>' +
+      '<div class="message"><%= message %></div>' +
       '<div class="buttons">' +
       '  <button class="btn-new btn-primary-block">Play again</button>' +
       '  <button class="btn-exit btn-primary-block">I give up</button>' +
       '</div>'
-    )
+    ),
+
+    serialize: function() {
+      return this.options;
+    }
   });
 
   return GameOver;
