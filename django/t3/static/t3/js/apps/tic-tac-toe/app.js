@@ -157,7 +157,6 @@ define([
     // ##handleMove
     // Run after a move has been recorded
     handleMove: function() {
-
       // Just switch the current player record
       this.swapPlayers();
     },
@@ -189,13 +188,19 @@ define([
           break;
 
         case 't3:turn-start':
-          // Check for win condition
           var winningCells = this.game.findWinningCells();
           if (winningCells.length) {
+
+            // Check for win condition
             var winner = winningCells[0].get('owner');
             this.state.set('winner', winner);
+          } else if (this.state.get('move') >= 9) {
+
+            // Otherwise, check for a tie game
+            this.state.set('name', 't3:tie-game');
           }
 
+          // Nothing is stopping the game from continuing...
           // Route to the correct turn state
           var player = this.state.get('player');
           this.state.set('name', 't3:' + player.get('name'));
@@ -213,6 +218,10 @@ define([
           this.gameOver = new GameOver();
           $('.game', this.el).append(this.gameOver.render().el);
           break;
+
+        case 't3:tie-game':
+          this.gameOver = new GameOver();
+          $('.game', this.el).append(this.gameOver.render().el);
       }
     },
 
