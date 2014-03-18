@@ -254,6 +254,10 @@ define([
       // First, unbind the application (if it was bound)
       this.unbind();
 
+      // Re-initialize the players
+      this.players.human.initialize();
+      this.players.computer.initialize();
+
       // Reset the board
       this.game.reset();
 
