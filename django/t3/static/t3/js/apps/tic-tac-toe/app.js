@@ -4,8 +4,10 @@ define([
   'backbone',
   'app-base',
   'backbone-layout',
-  'apps/tic-tac-toe/views/game-main'
-], function(_, Backbone, AppBase, Layout, Game) {
+  'apps/tic-tac-toe/views/header',
+  'apps/tic-tac-toe/views/game-main',
+  'apps/tic-tac-toe/views/footer'
+], function(_, Backbone, AppBase, Layout, Header, Game, Footer) {
   'use strict';
 
   // MainLayout
@@ -25,14 +27,16 @@ define([
     initialize: function(options) {
       Layout.prototype.initialize.call(this, options);
 
-      this.header = null;
+      this.header = new Header({ model: this.options.stats });
       this.game = new Game({
         state: this.options.state,
         players: this.options.players
       });
-      this.footer = null;
+      this.footer = new Footer({ model: this.options.state });
 
+      this.registerView(this.header, {anchor: '.game-header', replace: true});
       this.registerView(this.game, {anchor: '.game-view', replace: true});
+      this.registerView(this.footer, {anchor: '.game-footer', replace: true});
     }
   });
 
@@ -82,6 +86,16 @@ define([
       this.state = options.state;
       this.listenTo(this.state, 'change:name', this.onChangeState);
 
+      // Record some basic game stats
+      this.stats = new (Backbone.Model.extend({
+        defaults: {
+          gamesPlayed: 0,
+          gamesWon: 0,
+          gamesLost: 0,
+          gamesTied: 0
+        }
+      }))();
+
       this.players = {
         human: new Player({name: 'human', mark: 'O'}),
         computer: new Player({name: 'computer', mark: 'X'})
@@ -89,7 +103,8 @@ define([
 
       this.layout = new MainLayout({
         state: this.state,
-        players: this.players
+        players: this.players,
+        stats: this.stats
       });
 
       // Grab a reference to the game view
