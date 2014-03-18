@@ -2,31 +2,28 @@
 define([
   'underscore',
   'backbone',
+  'app-base',
+  'apps',
   'layout-manager',
   'views'
-], function(_, Backbone, LayoutManager, Views) {
+], function(_, Backbone, AppBase, Apps, LayoutManager, Views) {
   'use strict';
 
-  var Application = function(options) {
-    // The layout manager controls the `Layout` view for this application.
-    this.layoutManager = new LayoutManager({anchor: '#content'});
+  var Application = AppBase.extend({
+    initialize: function() {
+      // The layout manager controls the `Layout` view for this application.
+      this.layoutManager = new LayoutManager({anchor: '#content'});
 
-    // Monitors the state of the application
-    this.state = new (Backbone.Model.extend({
-      defaults: {
-        name: 'app:stopped',
-        player: null
-      }
-    }))();
+      // Monitors the state of the application
+      this.state = new (Backbone.Model.extend({
+        defaults: {
+          name: 'app:stopped',
+          player: null
+        }
+      }))();
 
-    options || (options = {});
-    this.options = options;
-
-    this.listenTo(this.state, 'change:name', this.onChangeState);
-  };
-
-  // Extend Application with inheritable properties.
-  _.extend(Application.prototype, Backbone.Events, {
+      this.listenTo(this.state, 'change:name', this.onChangeState);
+    },
 
     // Run the application
     run: function() {
@@ -77,13 +74,22 @@ define([
         // Initialize tic-tac-toe
         case 't3:init':
 
-          // Make sure previous games are closed (if any)
-          this.game && this.game.close();
+          // The TicTacToe application shares the main app's layoutManager and
+          // state.
+          this.t3 && this.t3.close();
+          this.t3 = new Apps.TicTacToe.App({
+            layoutManager: this.layoutManager,
+            state: this.state
+          });
+          this.t3.run();
 
-          // Start the game up. The T3 game needs to have access to the state
-          // model (it's more of an application than a view anyway).
-          this.game = new Views.T3({state: this.state});
-          this.layoutManager.showView(this.game);
+//          // Make sure previous games are closed (if any)
+//          this.game && this.game.close();
+//
+//          // Start the game up. The T3 game needs to have access to the state
+//          // model (it's more of an application than a view anyway).
+//          this.game = new Views.T3({state: this.state});
+//          this.layoutManager.showView(this.game);
           break;
 
         default:
