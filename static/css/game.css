@@ -3,7 +3,10 @@
     margin-left: auto;
     margin-right: auto;
     height: 300px;
-    margin-top: 75px;
+}
+
+#gameboard h1 {
+    text-align: center;
 }
 
 #gameboard .row {
@@ -39,4 +42,27 @@
 
 #c7, #c8, #c9 {
     border-top: 1px solid white;
+}
+
+#narrative {
+    font-family: sans-serif;
+    margin-top: 100px;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#choices {
+    margin-top: 10px;
+}
+
+#choices input[type="submit"] {
+    background-color: #444;
+    border: 1px solid #999;
+    color: #ccc;
+    padding: 5px;
+}
+
+#choices input[type="submit"]:hover {
+    border: 1px solid orange;
 }

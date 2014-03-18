@@ -6,6 +6,7 @@
 
 {% block content %}
     <div id="gameboard">
+        <h1>Tic-Tac-Toe: The Crucible</h1>
         <div class="row">
             <div id="c1" class="cell"></div>
             <div id="c2" class="cell"></div>
@@ -20,6 +21,30 @@
             <div id="c7" class="cell"></div>
             <div id="c8" class="cell"></div>
             <div id="c9" class="cell"></div>
+        </div>
+    </div>
+    <div id="narrative">
+        Greetings, Human. Do you wish to face the perils of The Crucible? The buy in is cheap, 
+        but the stakes are high! Surely you can best me. C'mon, give it a try! I'll even let 
+        you decide who goes first. Such is my generosity.
+
+        <div id="choices">
+            <input id="player_first" type="submit" value="I'll go first." />
+            <input id="ai_first" type="submit" value="Computers first!" />
+            <script>
+                $('player_first').addEventListener('click', function() {
+                    require(['game'], function(game) {
+                        game.board.playerFirst();
+                    });
+                });
+
+                $('ai_first').addEventListener('click', function() {
+                    require(['game'], function(game) {
+                        game.board.aiFirst();
+                    });
+                });
+
+            </script>
         </div>
     </div>
 {% endblock %}

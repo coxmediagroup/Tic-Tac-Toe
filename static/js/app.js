@@ -1,5 +1,5 @@
-require(['lib/domReady', 'gameboard'], function(domReady, GameBoard) {
+require(['lib/domReady', 'gameboard', 'game'], function(domReady, GameBoard, game) {
     domReady(function() {
-        var gameBoard = new GameBoard('X');
+        game.board = new GameBoard(game.host, game.port);
     });
 });
