@@ -5,6 +5,10 @@ define([
 ], function(_, Layout) {
   'use strict';
 
+  // Header
+  // ------
+
+  // Displays some game stats while the game is being played.
   var Header = Layout.extend({
     className: 'game-header',
 

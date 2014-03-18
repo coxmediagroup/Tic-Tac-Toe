@@ -14,6 +14,11 @@ define([
     [4, 9, 2], [6, 7, 2]
   ];
 
+  // Board
+  // -----
+
+  // The game board is actually just a Collection of game cells. All
+  // information methods about the board state live here.
   var Board = Backbone.Collection.extend({
     initialize: function() {
       this.add([
@@ -43,6 +48,9 @@ define([
       return winning;
     },
 
+    // ##findWinsFor
+    // Returns all the winning moves for a player given the specific `pairs`
+    // data.
     findWinsFor: function(pairs) {
       var wins = this.filter(function(cell, index) {
         if (index === 0) { return ;}
@@ -55,12 +63,17 @@ define([
       return wins;
     },
 
+    // ##getWinFor
+    // Returns a single winning cell given the specific `pairs` data
     getWinFor: function(pairs) {
       var wins = this.findWinsFor(pairs);
       if (wins.length) { return wins[0]; }
       return null;
     },
 
+    // ##findForkFor
+    // Finds and returns a single cell that would result in a fork if the
+    // specified player were to take the cell.
     findForkFor: function(player) {
       var forks = this.filter(function(cell, index) {
         if (index === 0 || cell.get('owner')) { return; }
@@ -93,6 +106,9 @@ define([
       return this.getWinFor(clone.pairs);
     },
 
+    // ##getCornerOpposite
+    // Gets a single empty corner that is opposite a corner occupied by the
+    // specified player.
     getCornerOpposite: function(player) {
       var ownedCorners = this.filter(function(cell, index) {
         if (index === 0) { return false; }
@@ -120,6 +136,8 @@ define([
       return null;
     },
 
+    // ##getEmptyCorner
+    // Gets a single corner that is currently unoccupied
     getEmptyCorner: function() {
       var empty = this.filter(function(cell, index) {
         if (index === 0) { return; }
@@ -132,6 +150,8 @@ define([
       return null;
     },
 
+    // ##getEmptySide
+    // Gets a single side cell that is currently unoccupied
     getEmptySide: function() {
       var empty = this.filter(function(cell, index) {
         if (index === 0) { return; }

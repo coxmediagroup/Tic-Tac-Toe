@@ -5,6 +5,11 @@ define([
 ], function(_, Layout) {
   'use strict';
 
+  // Choose
+  // ------
+
+  // Displays the sub application choices. This view does not actually control
+  // state changes, that's left to the parent application to decide.
   var Choose = Layout.extend({
     className: 'game-startup',
 
@@ -22,6 +27,10 @@ define([
       'click button': 'handleButtonClick'
     },
 
+    // ##handleButtonClick
+    // Notice that this only issues the 'play' event rather than actually
+    // setting a specific application state.
+    // This is intentional; the parent app should control state changes.
     handleButtonClick: function(event) {
       this.trigger('play', $(event.target).data('opt'), this);
     }

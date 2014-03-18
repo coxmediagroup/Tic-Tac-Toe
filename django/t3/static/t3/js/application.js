@@ -9,8 +9,20 @@ define([
 ], function(_, Backbone, AppBase, Apps, LayoutManager, Views) {
   'use strict';
 
+  // Application
+  // -----------
+
+  // This is the main application. It is not the Tic Tac Toe game, instead it
+  // is a nexus for any application you may want to run through this parent
+  // application.
+  //
+  // Application process flow is controlled via the `this.state` model. The
+  // state model keeps track of some basic application state data and this
+  // application (and its sub applications) listen to its changes and respond
+  // accordingly.
   var Application = AppBase.extend({
     initialize: function() {
+
       // The layout manager controls the `Layout` view for this application.
       this.layoutManager = new LayoutManager({anchor: '#content'});
 
@@ -22,6 +34,8 @@ define([
         }
       }))();
 
+      // This is the core of the application process flow. Any changes made to
+      // the state's 'name' attribute will cause a state change.
       this.listenTo(this.state, 'change:name', this.onChangeState);
     },
 
@@ -107,6 +121,8 @@ define([
           this.t3.run();
           break;
 
+        // The 't3' application is done, make sure it is closed and then
+        // re-route to the title page.
         case 't3:exit':
           this.t3 && this.t3.close();
           this.state.set('name', 'app:started');

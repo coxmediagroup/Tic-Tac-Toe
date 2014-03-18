@@ -5,6 +5,10 @@ define([
 ], function(_, Layout) {
   'use strict';
 
+  // Footer
+  // ------
+
+  // Shows some state data in the footer section
   var Footer = Layout.extend({
     className: 'game-footer',
 

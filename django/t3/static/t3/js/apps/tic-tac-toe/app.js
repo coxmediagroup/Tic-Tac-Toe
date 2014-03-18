@@ -28,6 +28,7 @@ define([
     initialize: function(options) {
       Layout.prototype.initialize.call(this, options);
 
+      // Initialize and register the various child views.
       this.header = new Header({ model: this.options.stats });
       this.game = new Game({
         state: this.options.state,
@@ -58,6 +59,12 @@ define([
                     false, false, false, false];
     },
 
+    // ##updatePairs
+    // Update the list of 'pairs' data
+    //
+    // @see
+    // http://rowdy.msudenver.edu/~gordona/cs1050/progs/tictactoermccsc.pdf
+    //
     updatePairs: function(cellId) {
       for (var i = 1; i <= 9; i++) {
         if (this.taken[i] && i + cellId < 15) {
@@ -66,6 +73,8 @@ define([
       }
     },
 
+    // ##deepClone
+    // Clone the model but also make sure that the lists are cloned
     deepClone: function() {
       var clone = this.clone();
       clone.taken = _.clone(this.taken);
@@ -107,26 +116,35 @@ define([
         computer: new Player({name: 'computer', mark: 'X'})
       };
 
+      // Keep track of the main layout. This will end up being an interface
+      // into the `game` object -- but we'll try to mask that.
       this.layout = new MainLayout({
         state: this.state,
         players: this.players,
         stats: this.stats
       });
 
-      // Grab a reference to the game view
+      // Grab a reference to the game view (see, I told you it would get
+      // masked)
       this.game = this.layout.game;
 
       // Track the current turn
       this.state.set('move', 0);
     },
 
-
+    // ##unbind
+    // Unbinds all the important binds and listens. Useful when the game needs
+    // to reset.
     unbind: function() {
       // Listen to a cell owner change and do calculations/game flow
       this.stopListening(this.layout.game);
       this.stopListening(this.state);
     },
 
+    // ##bind
+    // Binds all the important objects. This is not happening in the
+    // `initialize` method because some setup work has to be done after
+    // `initialize` but before the game starts.
     bind: function() {
       this.listenTo(this.layout.game, 'change:owner', this.handleChangeOwner);
       this.listenTo(this.state, 'change:move', this.handleMove);
@@ -138,7 +156,6 @@ define([
     // ##run
     // Start the application by showing the game view
     run: function() {
-      console.log('running');
       this.layoutManager.showView(this.layout, {
         afterShow: _.bind(this.startNew, this)
       });
@@ -191,11 +208,14 @@ define([
           player,
           name;
       switch(state) {
+
+        // Start the game
         case 't3:started':
           // Start up by setting the human player as active
           this.state.set('player', this.players.human);
           break;
 
+        // A player turn has just started
         case 't3:turn-start':
           winningCells = this.game.findWinningCells();
           if (winningCells.length) {
@@ -215,13 +235,16 @@ define([
           this.state.set('name', 't3:' + player.get('name'));
           break;
 
+        // It is the computer's turn
         case 't3:computer':
           this.makeMove();
           break;
 
+        // It is the human's turn
         case 't3:human':
           break;
 
+        // A winner was detected
         case 't3:winner':
           winner = this.state.get('winner');
           name = winner.getDisplayName();
@@ -235,6 +258,7 @@ define([
           this.updateStats({ winner: winner });
           break;
 
+        // A tie was detected
         case 't3:tie-game':
           this.displayGameOver({
             message: 'No one wins!',
@@ -247,6 +271,10 @@ define([
       }
     },
 
+    // ##startNew
+    // All the logic for starting a fresh game is here. This should be called
+    // only when the game needs to be unbound and reset for a new game
+    // instance.
     startNew: function() {
       // Close any old game over dialogs
       this.gameOver && this.gameOver.close();
@@ -334,7 +362,6 @@ define([
       var winningCell = this.game.getWinFor(this.players.computer.pairs);
       if (winningCell) {
         winningCell.set('owner', this.players.computer);
-        console.log('found winning cell');
         return;
       }
 
@@ -342,7 +369,6 @@ define([
       var humanWin = this.game.getWinFor(this.players.human.pairs);
       if (humanWin) {
         humanWin.set('owner', this.players.computer);
-        console.log('blocking a human win');
         return;
       }
 
@@ -354,7 +380,6 @@ define([
         // cell that blocks the win.
         var blocker = this.game.findBlockForFork(forkCell, this.players.human);
         blocker.set('owner', this.players.computer);
-        console.log('blocking a fork');
         return;
       }
 
@@ -362,7 +387,6 @@ define([
       var center = this.game.getBoard().at(5);
       if (_.isNull(center.get('owner'))) {
         center.set('owner', this.players.computer);
-        console.log('playing the center');
         return;
       }
 
@@ -370,7 +394,6 @@ define([
       var opposite = this.game.getCornerOpposite(this.players.human);
       if (opposite) {
         opposite.set('owner', this.players.computer);
-        console.log('playing the opposite corner');
         return;
       }
 
@@ -378,7 +401,6 @@ define([
       var emptyCorner = this.game.getEmptyCorner();
       if (emptyCorner) {
         emptyCorner.set('owner', this.players.computer);
-        console.log('playing the empty corner');
         return;
       }
 
@@ -386,7 +408,6 @@ define([
       var emptySide = this.game.getEmptySide();
       if (emptySide) {
         emptySide.set('owner', this.players.computer);
-        console.log('playing the empty side');
         return;
       }
     },

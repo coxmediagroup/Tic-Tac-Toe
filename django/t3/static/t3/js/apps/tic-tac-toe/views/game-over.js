@@ -5,6 +5,10 @@ define([
 ], function(_, Layout) {
   'use strict';
 
+  // GameOver
+  // --------
+
+  // Just a simple display for when the game is done.
   var GameOver = Layout.extend({
     className: 't3-game-over',
 

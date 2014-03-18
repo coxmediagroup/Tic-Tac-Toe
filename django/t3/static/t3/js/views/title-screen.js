@@ -20,8 +20,8 @@ define(['underscore', 'backbone-layout'], function(_, Layout) {
       '</div>'
     ),
 
+    // Bubble the event up. Let the application handle it.
     handleYes: function(event) {
-      // Bubble the event up. Let the application handle it.
       this.trigger('click:yes', event, this);
     }
   });
