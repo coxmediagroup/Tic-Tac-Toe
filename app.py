@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import argparse
 
-from flask import Flask, render_template
+from flask import Flask, render_template, session, jsonify
+
+import game
 
 app = Flask(__name__)
 
@@ -18,7 +20,10 @@ def player_first():
 
 @app.route('/ai_first/')
 def ai_first():
-    return ''
+    data = dict(
+        mark_cell=game.calc_ai_first(),
+    )
+    return jsonify(data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tic Tac Toe: The Crucible')

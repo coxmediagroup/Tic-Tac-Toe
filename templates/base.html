@@ -8,12 +8,6 @@
         
         <script data-main="{{ url_for('static', filename='js/app.js') }}" src="{{ url_for('static', filename='js/lib/require.js') }}"></script>
         <script>
-            require(['game'], function(game) {
-                game.host = '{{ host }}', 
-                game.port = '{{ port }}'
-            });
-        </script>
-        <script>
             var $ = function(id) {
                 return document.getElementById(id);
             }
