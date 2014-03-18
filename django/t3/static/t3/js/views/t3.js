@@ -349,32 +349,6 @@ define([
           }
         }
       }
-
-      /*
-      var dummyBoard = this.board.clone();
-      nextMove = this.board.filter(function(cell, index) {
-        // Skip 0 index
-        if (index === 0) { return; }
-
-        if (!cell.get('owner')) {
-          if (computer.pairs[15 - index]) {
-            // This is a winning cell!
-            nextMove = cell;
-          } else {
-            if (human.pairs[15 - index]) {
-              // This cell blocks the human player from winning
-              nextMove = cell;
-            }
-          }
-        }
-
-        // Check for a fork by checking what would happen if the human moved
-        // to this cell
-        dummyBoard.at(index).set('owner', this.human);
-        dummyBoard.each(function(cell) {
-        });
-      });
-      */
     }
   });
 
