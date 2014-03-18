@@ -118,17 +118,17 @@ define([
 
       // Track the current turn
       this.state.set('move', 0);
-
-      // Listen to a cell owner change and do calculations/game flow
-      this.listenTo(this.layout.game, 'change:owner', this.handleChangeOwner);
     },
 
 
-    unbindState: function() {
+    unbind: function() {
+      // Listen to a cell owner change and do calculations/game flow
+      this.stopListening(this.layout.game);
       this.stopListening(this.state);
     },
 
-    bindState: function() {
+    bind: function() {
+      this.listenTo(this.layout.game, 'change:owner', this.handleChangeOwner);
       this.listenTo(this.state, 'change:move', this.handleMove);
       this.listenTo(this.state, 'change:name', this.onChangeState);
       this.listenTo(this.state, 'change:player', this.startTurn);
@@ -140,9 +140,7 @@ define([
     run: function() {
       console.log('running');
       this.layoutManager.showView(this.layout, {
-        afterShow: _.bind(function() {
-          this.state.set('name', 't3:started');
-        }, this)
+        afterShow: _.bind(this.startNew, this)
       });
     },
 
@@ -194,21 +192,8 @@ define([
           name;
       switch(state) {
         case 't3:started':
-
-          // First, unbind the state model so that the basic game state can be set.
-          this.unbindState();
-
-          // Set the basic game state
-          this.state.set('winner', null);
-          this.state.set('move', 0);
-          this.state.set('player', null);
-
-          // Bind to the state model again
-          this.bindState();
-
-          // Finally, start the game by setting the first player
+          // Start up by setting the human player as active
           this.state.set('player', this.players.human);
-
           break;
 
         case 't3:turn-start':
@@ -240,23 +225,59 @@ define([
         case 't3:winner':
           winner = this.state.get('winner');
           name = winner.getDisplayName();
-          this.gameOver = new GameOver({
-            message: '' + name + ' has won the game!'
+
+          this.displayGameOver({
+            message: '' + name + ' has won the game!',
+            newClick: this.startNew,
+            exitClick: this.exit
           });
-          $('.game', this.el).append(this.gameOver.render().el);
 
           this.updateStats({ winner: winner });
           break;
 
         case 't3:tie-game':
-          this.gameOver = new GameOver({
-            message: 'No one wins!'
+          this.displayGameOver({
+            message: 'No one wins!',
+            newClick: this.startNew,
+            exitClick: this.exit
           });
-          $('.game', this.el).append(this.gameOver.render().el);
 
           this.updateStats();
           break;
       }
+    },
+
+    startNew: function() {
+      // Close any old game over dialogs
+      this.gameOver && this.gameOver.close();
+
+      // First, unbind the application (if it was bound)
+      this.unbind();
+
+      // Reset the board
+      this.game.reset();
+
+      // Set the basic game state
+      this.state.set('winner', null);
+      this.state.set('move', 0);
+      this.state.set('player', null);
+
+      // Bind the application again
+      this.bind();
+
+      // Set the state
+      this.state.set('name', 't3:started');
+    },
+
+    exit: function() {
+    },
+
+    displayGameOver: function(options) {
+      options || (options = {});
+      this.gameOver = new GameOver({ message: options.message });
+      this.listenTo(this.gameOver, 'clicked-new', options.newClick);
+      this.listenTo(this.gameOver, 'clicked-exit', options.exitClick);
+      $('.game', this.el).append(this.gameOver.render().el);
     },
 
     // ##updateStats

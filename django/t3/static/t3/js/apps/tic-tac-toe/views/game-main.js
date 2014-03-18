@@ -126,6 +126,12 @@ define([
 
     findWinningCells: function() {
       return this.collection.findWinningCells();
+    },
+
+    reset: function() {
+      this.collection.each(function(cell) {
+        cell.set('owner', null);
+      });
     }
   });
 
