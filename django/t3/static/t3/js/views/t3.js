@@ -66,6 +66,15 @@ define([
     }
   });
 
+  // To make checking for wins a little faster, just store the valid winning
+  // cell combinations as a constant.
+  var WINNING_COMBOS = [
+    // Rows       Cols      Diags
+    [8, 1, 6], [8, 3, 4], [8, 5, 2],
+    [3, 5, 7], [1, 5, 9], [6, 5, 4],
+    [4, 9, 2], [6, 7, 2]
+  ];
+
   var Board = Backbone.Collection.extend({
 
     // Returns the cells that could win the game for the player
@@ -128,6 +137,24 @@ define([
         var isSide = (function() { return index % 2; })();
         return isSide && _.isNull(cell.get('owner'));
       });
+    },
+
+    findWinningCells: function() {
+      _.each(WINNING_COMBOS, function(cellIds) {
+        var cells = _.map(cellIds, function(num) {
+          return this.at(num);
+        }, this);
+        var byPlayer = _.countBy(cells, function(cell) {
+          return cell.player.get('name');
+        });
+        if (byPlayer.computer === 3) {
+          return cells;
+        } else if (byPlayer.human === 3) {
+          return cells;
+        }
+      }, this);
+
+      return [];
     }
   });
 
@@ -406,6 +433,10 @@ define([
       this.options.state.set('name', 't3:started');
     },
 
+    checkWin: function() {
+      return this.game.board.findWinningCells();
+    },
+
     // Handle state changes that relate to the t3 game.
     onChangeState: function(model, state) {
       switch(state) {
@@ -414,6 +445,12 @@ define([
 
         case 't3:turn-start':
           // Check for win conditions, etc
+          var winningCells = this.checkWin();
+          if (winningCells) {
+            this.game.highlight(winningCells);
+            var winner = winningCells[0].get('owner');
+            this.options.state.set('name', 't3:winner-' + winner.get('name'));
+          }
 
           var player = this.options.state.get('player');
           this.options.state.set('name', 't3:' + player.get('name'));
@@ -424,6 +461,12 @@ define([
           break;
 
         case 't3:human':
+          break;
+
+        case 't3:winner-computer':
+          break;
+
+        case 't3:winner-human':
           break;
 
         default:
