@@ -104,7 +104,7 @@ This algorithm let me create some fun game logic (check out the `makeMove`
 method on the tic-tac-toe application's main file).
 
 I also optimized the computer's movements somewhat by making it prefer some
-movements which are generally more advantagous over others (e.g. attempting to
+movements which are generally more advantageous over others (e.g. attempting to
 move to an empty corner opposite a corner owned by the human).
 
 
