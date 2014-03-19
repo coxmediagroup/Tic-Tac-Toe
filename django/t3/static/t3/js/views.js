@@ -1,9 +1,8 @@
 /* global define */
 define([
   'views/choose',
-  'views/title-screen',
-  'views/t3',
-], function(Choose, TitleScreen, T3) {
+  'views/title-screen'
+], function(Choose, TitleScreen) {
   'use strict';
 
   // Views
@@ -13,8 +12,7 @@ define([
   // views for easy packaging and reference later.
   var Views = {
     Choose: Choose,
-    TitleScreen: TitleScreen,
-    T3: T3
+    TitleScreen: TitleScreen
   };
 
   return Views;
