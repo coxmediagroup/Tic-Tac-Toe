@@ -83,7 +83,7 @@ The 'Tic-Tac-Toe' application is a sub application of the main application. It
 has no direct control over the main application. However, once it is started it
 is able to redraw the screen and define new state end points. Once the
 Tic-Tac-Toe application is started, the game begins. When the game is over and
-teh user decides to quit, the main application picks up and closes down the
+the user decides to quit, the main application picks up and closes down the
 Tic-Tac-Toe application.
 
 As a note, if you check out the main `application.js` source code you should be
