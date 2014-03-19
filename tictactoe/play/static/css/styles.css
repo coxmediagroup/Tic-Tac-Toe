@@ -27,3 +27,28 @@ body {
 #board .cell.o {
     background-image: url('../img/o.png');
 }
+
+
+/* Scoring */
+#score {
+    font-size: 20pt;
+    font-weight: bold;
+    float: right;
+    font-family: Verdana, sans-serif;
+}
+
+#score div {
+    float: left;
+    margin-right: 1em;
+}
+
+#score div span {
+}
+
+#losses {
+    color: #f88;
+}
+
+#draws {
+    color: #88f;
+}
