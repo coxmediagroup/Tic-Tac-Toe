@@ -27,19 +27,30 @@ class Strategy:
     # address the greatest threat on the board.  Make a random move
     # from amongst those we're considering.
     def next_move(self):
-        threats = row_scores(self.board, 'x')
-        opportunities = row_scores(self.board, 'o')
+        threats = self.row_scores('x')
+        opportunities = self.row_scores('o')
         
         # Test for potential winning moves
         for idx, score in enumerate(opportunities):
             if score == 2:
                 # Test for an open space
-                if first_available_cell(idx) is not None:
-                    return first_available_cell(idx)
-                
+                if self.first_available_cell(idx) is not None:
+                    return self.first_available_cell(idx)
+        
         # Search for greatest potential threat
+        highest_threat = -1
+        threat_indexes = []
         for idx, score in enumerate(threats):
-            pass
+            if self.first_available_cell(idx) is None:
+                continue
+            if score > highest_threat:
+                highest_threat = score
+                threat_indexes = [idx]
+            elif score == highest_threat:
+                threat_indexes = threat_indexes + [idx]
+        # Randomize next move.
+        random.shuffle(threat_indexes)
+        return self.random_available_cell(threat_indexes[0])
 
     # Return the first available cell in a given row.
     def first_available_cell(self, row):
