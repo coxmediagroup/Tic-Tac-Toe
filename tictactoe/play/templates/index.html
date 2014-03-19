@@ -1,1 +1,21 @@
-index page
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Tic Tac Toe!</title>
+        <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
+    </head>
+    <body>
+        <h1>Tic Tac Toe</h1>
+        <div id="board">
+            <div class="cell x"></div>
+            <div class="cell o"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+    </body>
+</html>
