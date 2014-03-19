@@ -1,3 +1,132 @@
+Tic Tac Toe
+===========
+
+The Tic Tac Toe code project as implemented by me, Evan Stern.
+
+Preface
+-------
+
+I wasn't quite sure exactly how to approach this project. The position, as I
+understand it is for a full stack developer (python, html5, css3, etc, etc). So,
+I took that to mean that I should try to leverage those skills in the project.
+
+However, what I came up with is very JavaScript heavy (since it seemed to be the
+right solution for the job).
+
+So, at the last minute I decided to implement a smallish python script `t3.py`
+that simply runs the minmax algorithm to solve the tic-tac-toe problem.
+
+Hopefully that will cover me if you want to know if I can program Python :-)
+
+The rest of this README relates specifically to the large JavaScript project.
+
+
+See It In Action
+----------------
+
+To see the application running on my server...
+Check out: http://machineservant.com:8111/
+
+To read the documentation (which has lots of notes about why I did things and
+how the app works)...
+Check out: http://machineservant.com/t3-docs/main.html
+
+It's a 'docco' generated document, look on the top-right for navigation.
+
+
+Tech/Frameworks Used
+--------------------
+
+* Django as a page loader
+* BackboneJS for MVC
+* RequireJS as a package loader
+* Twitter Bootstrap for basic styles
+* LESS extensions to the base bootstrap styles
+* Grunt/Bower/Node for development utils
+
+
+How It Works
+------------
+
+The application itself runs through Django in a very minimal setup. Django's
+only purpose is to load the main web page.
+
+Were I to do this 'for real' I would probably just serve the static files
+directly; or, possibly I would use a simple expressjs server. Using Django for
+this project is like sand blasting a saltine.
+
+The real application is a single page load Backbone driven application.
+Everything is written modularly with RequireJS.
+
+
+The Application
+---------------
+
+The JavaScript application is structured so that there can be multiple
+"applications" within a main application instance. Each application can be
+thought of as a control scope; the application is in charge of only the things
+it owns.
+
+Applications can intercommunicate via state change events. Each application
+defines its own state end points and any time the application state changes
+those endpoints can be executed. (this is very similar to the Backbone Router
+concept -- and, in fact, for a web site that tracks history I would use Routers
+instead of a 'application state' model).
+
+For this project there are two applications:
+
+The main application which is in charge of all the main screens (title page,
+game choice page, etc). The main application is also in charge of all the logic
+related to spinning up and tearing down sub applications.
+
+The 'Tic-Tac-Toe' application is a sub application of the main application. It
+has no direct control over the main application. However, once it is started it
+is able to redraw the screen and define new state end points. Once the
+Tic-Tac-Toe application is started, the game begins. When the game is over and
+teh user decides to quit, the main application picks up and closes down the
+Tic-Tac-Toe application.
+
+As a note, if you check out the main `application.js` source code you should be
+able to see how easy it would be to define a 'Chess application' -- I ran out of
+time though.
+
+As for the game itself...
+
+Well, the "perfect tic-tac-toe" game is a solved problem and I could have used
+the 'minmax' algorithm to map out every possible move. But, that is too easy
+(again, if I were doing this 'for real' I would have jumped all over minmax).
+
+Instead, I implemented the algorithm that is semi-detailed in this article:
+
+http://rowdy.msudenver.edu/~gordona/cs1050/progs/tictactoermccsc.pdf
+
+This algorithm let me create some fun game logic (check out the `makeMove`
+method on the tic-tac-toe application's main file).
+
+I also optimized the computer's movements somewhat by making it prefer some
+movements which are generally more advantagous over others (e.g. attempting to
+move to an empty corner opposite a corner owned by the human).
+
+
+Why I Did Things The Way I Did Them
+-----------------------------------
+
+I wanted to show off.
+
+Really, thats mostly it. I wanted to show that I could stand up a Django
+project and show that I can program Python. But I also wanted to showcase my
+Backbone/RequireJS skills.
+
+My origial plan was to offload the computer's movement logic to the server by
+accessing a Django view via ajax. But, in the end I decided that just keeping
+the logic in the JavaScript would work just as well (setting up a Django view
+that responds with JSON isn't particularly impressive, anyway).
+
+If I were to do this project 'for real' I'd probably have stood up a very simple
+expressJS or flask application with a few basic routes to handle the movement
+calculations on the server.
+
+
 Intructions:
 1. Fork this repo on GitHub
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
