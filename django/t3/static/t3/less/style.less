@@ -1,0 +1,151 @@
+@import 'bootstrap';
+
+@background-color: #F7F7F7;
+body {
+  background-color: @background-color;
+}
+
+header {
+  background-color: darken(@background-color, 10%);
+}
+
+.page-header {
+  .container-fluid;
+  border-bottom: 1px solid @gray;
+  margin-top: 0;
+  padding-top: 20px;
+}
+
+#t3app {
+  .center-block();
+  width: 300px;
+}
+
+#content {
+  .container-fluid;
+  .size(500px, 100%);
+
+  img.banner {
+    .size(100%, auto);
+  }
+
+  .title-screen {
+    .buttons {
+      margin-top: 10px;
+    }
+  }
+
+  .t3-game {
+    .game-header {
+      .panel;
+      .panel-default;
+
+      .header {
+        .container-fluid;
+        .make-row();
+        .panel-body;
+
+        .games-played, .games-won, .games-lost, .games-tied {
+          .make-xs-column(3);
+
+          text-align: center;
+
+          label {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .game-footer {
+      .panel;
+      .panel-default;
+
+      .footer {
+        .container-fluid;
+        .make-row();
+        .panel-body;
+
+        .game-player {
+          .make-xs-column(4);
+
+          text-align: center;
+          label {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .game-view {
+      .panel;
+      .panel-default;
+
+      .game {
+        .container-fluid;
+        .panel-body;
+
+        position: relative;
+
+        .t3-game-over {
+          .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+
+          position: absolute;
+          padding: 25px;
+          left: 0;
+          right: 0;
+          top: 40px;
+          background-color: white;
+          margin: 10px;
+          border: 1px solid @gray-lighter;
+          border-radius: @border-radius-large;
+        }
+
+        .t3-col-view {
+          .size(100%, 100%);
+          text-align: center;
+
+          font-size: 30px;
+          font-weight: 700;
+          line-height: 100px;
+        }
+
+        .t3-row {
+          .container-fluid;
+          .make-row();
+
+          .t3-col {
+            .make-xs-column(4);
+            height: 100px;
+            border-right: 2px solid @gray;
+            &:last-child {
+              border-right: none;
+            }
+            border-bottom: 2px solid @gray;
+            text-align: center;
+
+            .t3-col-view {
+              .size(100%, 100%);
+            }
+          }
+
+          &:last-child {
+            .t3-col {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-primary-block {
+  .btn;
+  .btn-lg;
+  .btn-primary;
+  .btn-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+

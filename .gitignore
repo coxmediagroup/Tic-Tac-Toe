@@ -1,0 +1,6 @@
+db.sqlite3
+*.pyc
+node_modules
+components
+css
+docs

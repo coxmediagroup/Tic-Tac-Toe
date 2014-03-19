@@ -1,0 +1,176 @@
+/* global define */
+define([
+  'underscore',
+  'backbone-layout',
+  'views/collection',
+  'apps/tic-tac-toe/board'
+], function(_, Layout, CollectionView, Board) {
+  'use strict';
+
+  // CellView
+  // --------
+
+  // The view of a single cell's data.
+  var CellView = Layout.extend({
+    className: 't3-col-view',
+
+    events: {
+      'click': 'handleClick'
+    },
+
+    template: _.template(
+      '<%= mark %>'
+    ),
+
+    // ##handleClick
+    // Notice that this does not set the game state in any way, nor does it
+    // even set the owner of the cell. Instead, all of that work is delegated
+    // to the game itself.
+    handleClick: function() {
+      this.trigger('clicked', this);
+    },
+
+    initialize: function() {
+      // Re-render whenever this model changes owner
+      this.listenTo(this.model, 'change:owner', this.render);
+    },
+
+    serialize: function() {
+      var mark = '';
+      if (this.model.get('owner')) {
+        mark = this.model.get('owner').get('mark');
+      }
+      return { mark: mark };
+    }
+  });
+
+  // Game
+  // ----
+
+  // The game view is actually a `CollectionView`. The collection view is a
+  // view of a collection of models.
+  //
+  // Specifically, this collection view is a view of the `Board` collection of
+  // Cell models.
+  //
+  // All the display side logic for displaying and manipulating the game board
+  // goes here.
+  //
+  // Also, many of the methods on `Board` have been delegated here to make
+  // accessing them a bit easier.
+  var Game = CollectionView.extend({
+    tagName: 'div',
+
+    className: 'game-view',
+
+    // This is the view that each model will be rendered to
+    ElementView: CellView,
+
+    template: _.template(
+      '<div class="game">' +
+        '<div class="t3-row row-1">' +
+        '  <div data-val="8" class="t3-col"></div>' +
+        '  <div data-val="1" class="t3-col"></div>' +
+        '  <div data-val="6" class="t3-col"></div>' +
+        '</div>' +
+        '<div class="t3-row row-2">' +
+        '  <div data-val="3" class="t3-col"></div>' +
+        '  <div data-val="5" class="t3-col"></div>' +
+        '  <div data-val="7" class="t3-col"></div>' +
+        '</div>' +
+        '<div class="t3-row row-3">' +
+        '  <div data-val="4" class="t3-col"></div>' +
+        '  <div data-val="9" class="t3-col"></div>' +
+        '  <div data-val="2" class="t3-col"></div>' +
+        '</div>' +
+      '</div>'
+    ),
+
+    initialize: function(options) {
+      Layout.prototype.initialize.call(this, options);
+
+      // Store reference to the state object
+      this.state = this.options.state;
+      this.players = this.options.players;
+
+      this.collection = new Board();
+
+      // The game listens to the board to see when a cell has changed owners.
+      // When this happens, the game actually just bubbles the event upward so
+      // that the main game application can handle it.
+      this.listenTo(this.collection, 'change:owner', this.handleChangeOwner);
+
+      // Bind to the `CellView`'s bubbled up click event
+      this.on('clicked', function(cellView) {
+        if (_.isNull(cellView.model.get('owner'))) {
+          cellView.model.set('owner', this.state.get('player'));
+        }
+      }, this);
+    },
+
+    // ##getBoard
+    // External getter for the collection object.
+    getBoard: function() {
+      return this.collection;
+    },
+
+    // ##handleChangeOwner
+    // The `Game` just bubbles the event up to the parent application so that
+    // it can be handled there.
+    handleChangeOwner: function() {
+      var args = _.union('change:owner', arguments);
+      this.trigger.apply(this, args);
+    },
+
+    afterRender: function() {
+      this.addAll();
+    },
+
+    // ##renderElement
+    // This is overridden from the parent `CollectionView` class. The elements
+    // need to be placed in a specific order according to their index.
+    renderElement: function(view) {
+      var index = _.indexOf(this.viewManager.getViews(), view);
+      if (index === 0) {return;}
+      $('[data-val=' + index + ']', this.el).html(view.render().el);
+    },
+
+    // #From The Board Collection
+
+    getWinFor: function(pairs) {
+      return this.collection.getWinFor(pairs);
+    },
+
+    findForkFor: function(player) {
+      return this.collection.findForkFor(player);
+    },
+
+    getCornerOpposite: function(player) {
+      return this.collection.getCornerOpposite(player);
+    },
+
+    getEmptyCorner: function() {
+      return this.collection.getEmptyCorner();
+    },
+
+    getEmptySide: function() {
+      return this.collection.getEmptySide();
+    },
+
+    findBlockForFork: function(cell, player) {
+      return this.collection.findBlockForFork(cell, player);
+    },
+
+    findWinningCells: function() {
+      return this.collection.findWinningCells();
+    },
+
+    reset: function() {
+      this.collection.each(function(cell) {
+        cell.set('owner', null);
+      });
+    }
+  });
+
+  return Game;
+});
