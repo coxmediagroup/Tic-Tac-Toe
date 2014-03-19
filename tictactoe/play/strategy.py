@@ -35,7 +35,9 @@ class Strategy:
             if score == 2:
                 # Test for an open space
                 if self.first_available_cell(idx) is not None:
-                    return self.first_available_cell(idx)
+                    result = self.first_available_cell(idx)
+                    self.move('o', result)
+                    return result
         
         # Search for greatest potential threat
         highest_threat = -1
@@ -50,7 +52,11 @@ class Strategy:
                 threat_indexes = threat_indexes + [idx]
         # Randomize next move.
         random.shuffle(threat_indexes)
-        return self.random_available_cell(threat_indexes[0])
+        if len(threat_indexes):
+            result = self.random_available_cell(threat_indexes[0])
+            self.move('o', result)
+            return result
+        return None
 
     # Return the first available cell in a given row.
     def first_available_cell(self, row):
@@ -58,6 +64,11 @@ class Strategy:
             if self.board[cell] == " ":
                 return cell
         return None
+    
+    def cell_available(self, cell):
+        if self.board[cell] == ' ':
+            return True
+        return False
     
     # Return a random available cell in a given row.
     def random_available_cell(self, row):
@@ -98,7 +109,24 @@ class Strategy:
             for cell in cells:
                 if self.board[cell] == player:
                     score = score + 1
+                elif self.board[cell] != ' ':
+                    score = 0
+                    break
             scores[index] = score
             index = index + 1
         return scores
-        
+    
+    def game_state(self):
+        scores = self.row_scores("o")
+        for score in scores:
+            if score == 3:
+                return "win"
+        for i in xrange(0, 9):
+            if self.board[i] == " ":
+                return "in-play"
+        return "draw"
+    
+    def move(self, player, cell):
+        tmp = list(self.board)
+        tmp[cell] = player
+        self.board = ''.join(tmp)

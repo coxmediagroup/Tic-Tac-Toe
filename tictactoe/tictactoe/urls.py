@@ -1,8 +1,5 @@
 from django.conf.urls import patterns, include, url
 
-from django.contrib import admin
-admin.autodiscover()
-
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'tictactoe.views.home', name='home'),
@@ -12,5 +9,7 @@ urlpatterns = patterns('',
     # Since it's a one-page site, we'll direct all quries that don't
     # match another pattern to the `play` application's `index` view.
     url(r'^$', 'play.views.index', name="index"),
-    url(r'^move(/.*)?$', 'play.views.move', name="move"),
+    url(r'^move$', 'play.views.move', name="move"),
+    url(r'^new_game$', 'play.views.new_game', name="new_game"),
+    url(r'^get_details$', 'play.views.get_details', name="get_details"),
 )

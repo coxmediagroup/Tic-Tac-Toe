@@ -20,6 +20,12 @@ body {
     cursor: pointer;
 }
 
+#board .cell.x, #board .cell.o {
+    background-color: transparent;
+    cursor: default;
+    opacity: 1;
+}
+
 #board .cell.x {
     background-image: url('../img/x.png');
 }
@@ -39,7 +45,14 @@ body {
 
 #score div {
     float: left;
-    margin-right: 1em;
+    margin: 0 1em 1em 0;
+}
+
+#new-game {
+    float: none;
+    clear: both;
+    display: block;
+    margin: auto;
 }
 
 #score div span {
