@@ -34,12 +34,22 @@ module.exports = function(grunt) {
         files: [LESS + '/*.less'],
         tasks: ['less']
       }
+    },
+    docco: {
+      docs: {
+        src: [JS + '/**/*.js'],
+        options: {
+          output: 'docs/'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+
+  grunt.loadNpmTasks('grunt-docco');
 
   grunt.registerTask('develop', ['watch']);
 };
