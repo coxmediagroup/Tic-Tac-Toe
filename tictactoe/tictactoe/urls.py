@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     # We're going to serve the game from a catch-all URL.
     # Since it's a one-page site, we'll direct all quries that don't
     # match another pattern to the `play` application's `index` view.
-    url(r'^.*', 'play.views.index', name="index")
+    url(r'^$', 'play.views.index', name="index"),
+    url(r'^move(/.*)?$', 'play.views.move', name="move"),
 )
