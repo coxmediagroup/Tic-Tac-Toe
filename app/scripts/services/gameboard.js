@@ -82,5 +82,20 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     }
   };
 
+  this.toString = function() {
+    var buff = [];
+    angular.forEach([1, 2, 3], function(row) {
+      var rowBuff = [];
+      angular.forEach(['A', 'B', 'C'], function(col) {
+        var cell = col + row;
+        rowBuff.push(that[cell] || ' ');
+      });
+      buff.push(rowBuff.join('|'));
+    });
+
+    return buff.join('\n-+-+-\n');
+
+  };
+
   this.reset();
 });
