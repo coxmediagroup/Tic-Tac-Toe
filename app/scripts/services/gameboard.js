@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
-  var that = this;
 
 
   this.WINNING_SEQUENCES = [
@@ -21,6 +20,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
   ];
 
   this.reset = function() {
+    var that = this;
     angular.forEach(['A', 'B', 'C'], function(col) {
       angular.forEach([1, 2, 3], function(row) {
         that[col + row] = '';
@@ -31,6 +31,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
   };
 
   this.winner = function() {
+    var that = this;
     var theWinnerIs = '';
 
     angular.forEach(['X', 'O'], function(player) {
@@ -82,7 +83,21 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     }
   };
 
+  this.eachEmptyCell = function(f) {
+    var that = this;
+
+    angular.forEach(['A', 'B', 'C'], function(col) {
+      angular.forEach([1, 2, 3], function(row) {
+        var cell = col + row;
+        if (that[cell] === '') {
+          f(cell);
+        }
+      });
+    });
+  };
+
   this.toString = function() {
+    var that = this;
     var buff = [];
     angular.forEach([1, 2, 3], function(row) {
       var rowBuff = [];

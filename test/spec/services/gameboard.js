@@ -161,6 +161,20 @@ describe('Service: Gameboard', function () {
 
   });
 
+  it('should be able to iterate over empty cells', function() {
+    Gameboard.play('B2'); // X
+    Gameboard.play('B3'); // O
+
+    var called = 0;
+    Gameboard.eachEmptyCell(function(cell) {
+      expect(cell).not.toBe('B2');
+      expect(cell).not.toBe('B3');
+      called++;
+    });
+
+    expect(called).toBe(7);
+
+  });
 
   it('should detect a draw', function() {
     Gameboard.play('B2'); // X
