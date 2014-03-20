@@ -99,8 +99,12 @@ describe('Service: Gameboard', function () {
   });
 
   it('should detect diagonal (from top right) win', function () {
-    angular.extend(Gameboard, {'A3':'O', 'B2':'O', 'C1':'O'});
-    expect(Gameboard.winner()).toBe('O');
+    Gameboard.play('A3'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('B2'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('C1'); // X
+    expect(Gameboard.winner()).toBe('X');
   });
 
   it('should throw an exception if we try and play the same cell twice', function() {
