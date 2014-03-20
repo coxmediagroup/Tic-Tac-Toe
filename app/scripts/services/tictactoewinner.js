@@ -56,22 +56,53 @@ angular.module('ticTacToeApp').service('Tictactoewinner', ['Gameboard',
     }
 
     var sequenceThatCanWin;
-    angular.forEach(sequences[player], function(seq) {
-      if (sequenceThatCanWin) return;
+    var consideredSequenceDesireability = 0;
+    var goingToTryCenter = false;
 
+    angular.forEach(sequences[player], function(seq) {
       var opponentOccupied = false;
-      angular.forEach(sequences[player], function(cell) {
+      angular.forEach(seq, function(cell) {
         if (!opponentOccupied && Gameboard[cell] === opponent) {
           opponentOccupied = true;
         }
       });
 
       if (!opponentOccupied) {
-        sequenceThatCanWin = seq;
+        var desirablity = 0;
+        var triesCenter = false;
+        angular.forEach(seq, function(cell) {
+          if (Gameboard[cell] === player) {
+            desirablity++;
+          }
+
+          // favor schemes including center
+          if (cell === 'B2') {
+            desirablity += 3;
+            triesCenter = true;
+          }
+
+          // favor schemes with corners
+          if (cell === 'A1' || cell === 'A3' || cell === 'C1' || cell === 'C3') {
+            desirablity++;
+          }
+
+        });
+
+
+
+        if (!sequenceThatCanWin || (desirablity > consideredSequenceDesireability)) {
+          sequenceThatCanWin = seq;
+          consideredSequenceDesireability = desirablity;
+          goingToTryCenter = triesCenter;
+        }
       }
     });
 
     var schemedMove = '';
+
+    // go for the center!! 
+    if (goingToTryCenter && !Gameboard['B2']) return 'B2';
+
     angular.forEach([0, 2, 1], function(cellIndex) {
       var cell = sequenceThatCanWin[cellIndex];
       if (!schemedMove && Gameboard[cell] === '') {
