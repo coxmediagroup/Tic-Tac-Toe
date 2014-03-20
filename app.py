@@ -6,6 +6,7 @@ from flask import Flask, render_template, session, jsonify
 import game
 
 app = Flask(__name__)
+app.secret_key = 'ox\xc7o`\x14g0\xe52\x003,\xd6Y\x9c\x12\xca\xdfHk\xfe~\xe5'
 
 
 @app.route('/')
@@ -15,13 +16,18 @@ def index():
 
 @app.route('/player_first/')
 def player_first():
-    return ''
+    return jsonify(dict())
 
 
-@app.route('/ai_first/')
+@app.route('/ai_first/', methods=['GET'])
 def ai_first():
+    cell = game.ai_move_one()
+    session['game_state'] = dict(
+        ai_cells=[cell],
+        player_cells=[],
+    )
     data = dict(
-        mark_cell=game.calc_ai_first(),
+        mark_cell=cell,
     )
     return jsonify(data)
 

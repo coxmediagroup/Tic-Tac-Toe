@@ -1,6 +1,7 @@
 define(function () {
     function Game() {
         this.board = $('gameboard');
+        this.narrative = $('narrative');
         this.playerToken = null;
         this.aiToken = null;
         this.turn = null;
@@ -54,6 +55,7 @@ define(function () {
             this.turn = 'ai';
         } else {
             this.turn = 'player';
+            this.narrative.innerHTML = '';
         }
     };
 
