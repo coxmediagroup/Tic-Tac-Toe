@@ -3,7 +3,6 @@
 angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
   var that = this;
 
-  this._turn = 'X';
 
   this.WINNING_SEQUENCES = [
     // row wins
@@ -21,15 +20,18 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     ['A3', 'B2', 'C1']
   ];
 
-  angular.forEach(['A', 'B', 'C'], function(col) {
-    angular.forEach([1, 2, 3], function(row) {
-      that[col + row] = '';
-
+  this.reset = function() {
+    angular.forEach(['A', 'B', 'C'], function(col) {
+      angular.forEach([1, 2, 3], function(row) {
+        that[col + row] = '';
+      });
     });
-  });
+    this._turn = 'X';
+  };
 
   this.winner = function() {
     var theWinnerIs = '';
+
     angular.forEach(['X', 'O'], function(player) {
       angular.forEach(that.WINNING_SEQUENCES, function(seq) {
         var count = 0;
@@ -37,6 +39,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
           if (that[cell] === player) {
             count++;
           }
+
         });
 
         if (count === 3) {
@@ -44,6 +47,23 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
         }
       });
     });
+
+    if (theWinnerIs === '') {
+      var cellsUsed = 0;
+      angular.forEach(['A', 'B', 'C'], function(col) {
+        angular.forEach([1, 2, 3], function(row) {
+          if (that[col + row] !== '') {
+            cellsUsed++;
+          }
+        });
+      });
+
+      if (cellsUsed === 9) {
+        theWinnerIs = 'D'; // draw
+      }
+    }
+
+
     return theWinnerIs;
   };
 
@@ -60,4 +80,5 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     }
   };
 
+  this.reset();
 });

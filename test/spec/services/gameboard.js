@@ -100,4 +100,46 @@ describe('Service: Gameboard', function () {
     expect(Gameboard.winner()).toBe('O');
   });
 
+  it('should work if we play(), win, reset(), play() and win', function() {
+    Gameboard.play('A1'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('B3'); // X
+    Gameboard.play('C2'); // O
+    expect(Gameboard.winner()).toBe('O');
+    
+    Gameboard.reset();
+    
+    Gameboard.play('C1'); // should be X again, and we can play
+    expect(Gameboard.C1).toBe('X');    
+    expect(Gameboard.winner()).toBe('');
+
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('B3'); // X
+    Gameboard.play('C2'); // O
+
+    expect(Gameboard.winner()).toBe('O');
+
+
+  });
+
+
+  it('should detect a draw', function() {
+    Gameboard.play('B2'); // X
+    Gameboard.play('C2'); // O
+    Gameboard.play('C3'); // X
+    Gameboard.play('A1'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('A3'); // X
+    Gameboard.play('C1'); // O
+    Gameboard.play('A2'); // X
+
+    expect(Gameboard.winner()).toBe('D');
+  });
+
+
 });
