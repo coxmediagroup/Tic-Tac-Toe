@@ -28,43 +28,74 @@ describe('Service: Gameboard', function () {
   });
 
   it('should detect a row 1 win', function () {
-    angular.extend(Gameboard, {'A1':'X', 'B1':'X', 'C1':'X'});
+    Gameboard.play('A1'); // X
+    Gameboard.play('A3'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('C1'); // X
+
     expect(Gameboard.winner()).toBe('X');
   });
 
   it('should detect a row 2 win', function () {
-    angular.extend(Gameboard, {'A2':'O', 'B2':'O', 'C2':'O'});
+    Gameboard.play('A3'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('C1'); // X
+    Gameboard.play('C2'); // O
+
     expect(Gameboard.winner()).toBe('O');
   });
 
   it('should detect a row 3 win', function () {
-    angular.extend(Gameboard, {'A3':'X', 'B3':'X', 'C3':'X'});
-    expect(Gameboard.winner()).toBe('X');
+    Gameboard.play('A2'); // X
+    Gameboard.play('A3'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('C1'); // X
+    Gameboard.play('C3'); // O
+    expect(Gameboard.winner()).toBe('O');
   });
 
   it('should detect a col A win', function () {
-    angular.extend(Gameboard, {'A1':'X', 'A2':'X', 'A3':'X'});
+    Gameboard.play('A1'); // X
+    Gameboard.play('C3'); // O
+    Gameboard.play('A2'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('A3'); // X
+
     expect(Gameboard.winner()).toBe('X');
   });
 
   it('should detect a col B win', function () {
-    angular.extend(Gameboard, {'B1':'X', 'B2':'X', 'B3':'X'});
+    Gameboard.play('B1'); // X
+    Gameboard.play('C3'); // O
+    Gameboard.play('B2'); // X
+    Gameboard.play('A3'); // O
+    Gameboard.play('B3'); // X
+
     expect(Gameboard.winner()).toBe('X');
   });
 
   it('should detect a col C win', function () {
-    angular.extend(Gameboard, {'C1':'O', 'C2':'O', 'C3':'O'});
-    expect(Gameboard.winner()).toBe('O');
+    Gameboard.play('C1'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('C2'); // X
+    Gameboard.play('A3'); // O
+    Gameboard.play('C3'); // X
+
+    expect(Gameboard.winner()).toBe('X');
   });
 
-  it('should detect a col C win', function () {
-    angular.extend(Gameboard, {'C1':'O', 'C2':'O', 'C3':'O'});
-    expect(Gameboard.winner()).toBe('O');
-  });
 
   it('should detect diagonal (from top left) win', function () {
-    angular.extend(Gameboard, {'A1':'O', 'B2':'O', 'C3':'O'});
-    expect(Gameboard.winner()).toBe('O');
+    Gameboard.play('A1'); // X
+    Gameboard.play('B3'); // O
+    Gameboard.play('B2'); // X
+    Gameboard.play('A3'); // O
+    Gameboard.play('C3'); // X
+    expect(Gameboard.winner()).toBe('X');
   });
 
   it('should detect diagonal (from top right) win', function () {
@@ -141,5 +172,19 @@ describe('Service: Gameboard', function () {
     expect(Gameboard.winner()).toBe('D');
   });
 
+  it('should count moves', function() {
+    expect(Gameboard.moves).toBe(0);
+    Gameboard.play('B2'); // X
+    expect(Gameboard.moves).toBe(1);
+    Gameboard.play('C2'); // O
+    expect(Gameboard.moves).toBe(2);
+  });
 
+  it('should reset move count on reset()', function() {
+    expect(Gameboard.moves).toBe(0);
+    Gameboard.play('B2'); // X
+    expect(Gameboard.moves).toBe(1);
+    Gameboard.reset();
+    expect(Gameboard.moves).toBe(0);
+  });
 });

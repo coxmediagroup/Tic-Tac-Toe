@@ -27,6 +27,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
       });
     });
     this._turn = 'X';
+    this.moves = 0;
   };
 
   this.winner = function() {
@@ -73,6 +74,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     }
 
     if (this[cell] === '') {
+      this.moves++;
       this[cell] = this._turn;
       this._turn = (this._turn === 'X') ? 'O' : 'X';
     } else {
