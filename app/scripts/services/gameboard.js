@@ -3,6 +3,8 @@
 angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
   var that = this;
 
+  this._turn = 'X';
+
   this.WINNING_SEQUENCES = [
     // row wins
     ['A1', 'B1', 'C1'],
@@ -43,6 +45,19 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
       });
     });
     return theWinnerIs;
+  };
+
+  this.play = function(cell) {
+    if (this.winner() !== '') {
+      return;
+    }
+
+    if (this[cell] === '') {
+      this[cell] = this._turn;
+      this._turn = (this._turn === 'X') ? 'O' : 'X';
+    } else {
+      throw new Error('Cannot play the same cell twice');
+    }
   };
 
 });

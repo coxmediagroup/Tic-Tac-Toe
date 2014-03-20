@@ -72,4 +72,32 @@ describe('Service: Gameboard', function () {
     expect(Gameboard.winner()).toBe('O');
   });
 
+  it('should throw an exception if we try and play the same cell twice', function() {
+    Gameboard.play('B2');
+    expect(function() {Gameboard.play('B2')}).toThrow(new Error('Cannot play the same cell twice'));
+  });
+
+  it('should register a win when taking turns with the play() method', function() {
+    Gameboard.play('A1'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('B3'); // X
+    Gameboard.play('C2'); // O
+    expect(Gameboard.winner()).toBe('O');
+  });
+
+  it('play() method should be a no-op, once we\'ve won', function() {
+    Gameboard.play('A1'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('B3'); // X
+    Gameboard.play('C2'); // O
+    expect(Gameboard.winner()).toBe('O');
+    Gameboard.play('C1'); // X would win, but O already did
+    expect(Gameboard.C1).toBe('');    
+    expect(Gameboard.winner()).toBe('O');
+  });
+
 });
