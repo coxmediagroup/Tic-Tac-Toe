@@ -3,7 +3,7 @@ import random
 
 
 self_flag = None
-opponent_flag = None
+player_flag = None
 
 
 def can_win():
@@ -14,8 +14,8 @@ def can_win():
 
 def can_opponent_win():
     """Return tuple (boolean, tuple(integer, integer)"""
-    global opponent_flag
-    return model.can_player_win(opponent_flag) or can_fork()
+    global player_flag
+    return model.can_player_win(player_flag) or can_fork()
 
 
 def can_fork():
@@ -26,8 +26,8 @@ def can_fork():
 
 def break_opponent_fork():
     """Return tuple (row_index, column_index)"""
-    global opponent_flag
-    if model.can_player_fork(opponent_flag):
+    global player_flag
+    if model.can_player_fork(player_flag):
         return side()
     else:
         return square()
@@ -40,8 +40,10 @@ def corner(empty_corners):
 
 def side():
     """Return integer"""
-    return random.choice(model.empty_sides())
-
+    try:
+        return random.choice(model.empty_sides())
+    except IndexError:
+        return None
 
 def square():
     """Return integer"""

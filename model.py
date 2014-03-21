@@ -1,4 +1,4 @@
-true_board = [[None, None, None],
+board = [[None, None, None],
               [None, None, None],
               [None, None, None]]
 X = 1
@@ -12,14 +12,14 @@ MID_RIGHT = 1, 2
 BOT_LEFT = 2, 0
 BOT_MID = 2, 1
 BOT_RIGHT = 2, 2
-top_row = None
-middle_row = None
-bottom_row = None
-left_column = None
-middle_column = None
-right_column = None
-left_diagonal = None
-right_diagonal = None
+top_row = board[0]
+middle_row = board[1]
+bottom_row = board[2]
+left_column = [row[0] for row in board]
+middle_column = [row[1] for row in board]
+right_column = [row[2] for row in board]
+left_diagonal = [board[0][0], board[1][1], board[2],[2]]
+right_diagonal = [board[0][2], board[1][1], board[2][0]]
 state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
                      'middle_row': (MID_LEFT, CENTER, MID_RIGHT),
                      'bottom_row': (BOT_LEFT,BOT_MID, BOT_RIGHT),
@@ -31,8 +31,8 @@ state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
 
 
 def update_square(player, square):
-    true_board[square[0]][square[1]] = player
-    build_state(true_board)
+    board[square[0]][square[1]] = player
+    build_state(board)
 
 
 def build_state(board):
@@ -95,15 +95,17 @@ def can_player_win(player):
 def can_player_fork(player):
     test = 2, 1, 0
     left = test_line(left_diagonal, player)
+    print("Left result is {}".format(left))
     right = test_line(right_diagonal, player)
+    print("Right diagonal result is {}".format(right))
     if left == test or right == test:
-        return not true_board[1][1] == player
+        return not board[1][1] == player
     return False
 
 
 def is_board_empty():
     """Return boolean"""
-    for row in true_board:
+    for row in board:
         for square in row:
             if square is not None:
                 return False
@@ -113,7 +115,7 @@ def is_board_empty():
 
 def is_center_empty():
     """Return boolean"""
-    return true_board[1][1] is None
+    return board[1][1] is None
 
 
 def is_corner_empty():
@@ -121,7 +123,7 @@ def is_corner_empty():
     empty_corners = []
     corners = [TOP_LEFT, TOP_RIGHT, BOT_LEFT, BOT_RIGHT]
     for corner in corners:
-        if true_board[corner[0]][corner[1]] is None:
+        if board[corner[0]][corner[1]] is None:
             empty_corners.append(corner)
 
     return empty_corners
@@ -132,7 +134,7 @@ def empty_sides():
     empty_sides_list = []
     sides = [TOP_MID, MID_LEFT, MID_RIGHT, BOT_MID]
     for side in sides:
-        if true_board[side[0]][side[1]] is None:
-            empty_sides_list.append(corner)
+        if board[side[0]][side[1]] is None:
+            empty_sides_list.append(side)
 
     return empty_sides_list
