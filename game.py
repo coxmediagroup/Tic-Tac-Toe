@@ -8,8 +8,9 @@ class Game(object):
 
     def __init__(self):
 
-        self.board = Board.Board()
-        self.current_player = self.board.firstMove()
+        self.board = None
+        self.current_player = None
+        self._set_board()
 
     def main(self):
         """Run the game"""
@@ -19,8 +20,31 @@ class Game(object):
             self.board.inputPlayerLetter()
             self._print_message('The %s will go first.' % self.current_player)
             self.play()
-            self._print_message("Ok, I'll go play a nice game of global thermonuclear war.")
-            return
+            again = self.board.playAgain()
+            if again:
+                self._set_board()
+                continue
+            break
+        self._print_message("Ok, I'll go play a nice game of global thermonuclear war.")
+
+    def play(self):
+        """Here is where we play the game"""
+
+        turn = self.board.firstMove()
+        while True:
+            if self.current_player == 'player':
+                # Player's turn.
+                game_over = self._player_move()
+            else:
+                # Computer's turn. Give it Tabla Rasa
+                game_over = self._computer_move()
+            if game_over is True:
+                return
+            self._toggle_turn()
+
+    def _set_board(self):
+        self.board = Board.Board()
+        self.current_player = self.board.firstMove()
 
     def _toggle_turn(self):
         """switch the player"""
@@ -40,7 +64,6 @@ class Game(object):
         elif outcome == 'draw':
             self._print_message('The game is a tie!')
             return True
-        self._print_message(self.board.drawBoard())
         return False
 
     def _computer_move(self):
@@ -54,24 +77,7 @@ class Game(object):
         elif outcome == 'draw':
             self._print_message('The game is a tie!')
             return True
-        self._print_message(self.board.drawBoard())
         return False
-
-
-    def play(self):
-        """Here is where we play the game"""
-
-        turn = self.board.firstMove()
-        while True:
-            if self.current_player == 'player':
-                # Player's turn.
-                game_over = self._player_move()
-            else:
-                # Computer's turn. Give it Tabla Rasa
-                game_over = self._computer_move()
-            if not self.board.playAgain() and game_over is True:
-                return
-            self._toggle_turn()
 
 
 
