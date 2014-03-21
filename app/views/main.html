@@ -1,50 +1,68 @@
+
+
 <div class="row">
-  <div class="col-xs-6 col-xs-offset-3">
-    <div class="header">
-      <ul class="nav nav-pills pull-right">
-        <li><a ng-href="#">New Game</a></li>
-      </ul>
-      <h3 class="text-muted">Tic Tac Toe</h3>
-    </div>
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Tic Tac Toe</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a ng-show="canStartGame" href="#" ng-click="startGame('X')">New Game as X (go first)</a></li>
+            <li><a ng-show="canStartGame" href="#" ng-click="startGame('O')">New Game as O</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+
   </div>
 </div>
 
 <div class="row">
 
-  <div class="col-xs-6 col-xs-offset-3 game-board">
-    <div class="row">
-      <div class="col-xs-4 game-row-1 game-col-A">
-        {{ board.A1 }} X
-      </div>
-      <div class="col-xs-4 game-row-1 game-col-B">
-        {{ board.B1 }}
-      </div>
-      <div class="col-xs-4 game-row-1 game-col-C">
-        {{ board.C1 }} O
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-4 game-row-2 game-col-A">
-        {{ board.A2 }}
-      </div>
-      <div class="col-xs-4 game-row-2 game-col-B">
-        {{ board.B2 }} X
-      </div>
-      <div class="col-xs-4 game-row-2 game-col-C">
-        {{ board.C2 }}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-4 game-row-3 game-col-A">
-        {{ board.A3 }} O
-      </div>
-      <div class="col-xs-4 game-row-3 game-col-B">
-        {{ board.B3 }}
-      </div>
-      <div class="col-xs-4 game-row-3 game-col-C">
-        {{ board.C3 }} X
+  <div ng-show="neverStarted" class="col-xs-12 col-md-6 col-md-offset-3">
+    <h1>Please Start a Game<br /> as X or O</h1>
+  </div>
+</div>
+<div class="row">
+
+  <div ng-show="winner" class="col-xs-12 col-md-6 col-md-offset-3 end-game-message">
+    <h1 ng-if="youWon">You Won!</h1>
+    <h2 ng-if="youWon" class="text-muted">
+      (that means this doesn't work like I thought, but good for you!)
+    </h2>
+    <h1 ng-if="youLost">Sorry</h1>
+    <h2 ng-if="youLost">Try Again, you're still young</h2>
+
+    <h1 ng-if="draw">Draw</h1>
+    <h2 ng-if="draw">That was pretty close!</h2>
+  </div>
+
+  <div ng-hide="neverStarted" class="col-xs-6 col-xs-offset-3 game-board">
+    <div class="row" ng-repeat="row in rows">
+      <div class="col-xs-4 game-row-{{ row }} game-col-{{ col }}" 
+          ng-click="playTurn(col + row)"
+          ng-repeat="col in cols">
+        {{ board[col + row] }}
       </div>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div ng-hide="neverStarted" class="col-xs-12 col-md-6 col-md-offset-3 game-records">
+    <span class="pull-right label label-success">{{ wins }} Wins</span>
+    <span class="pull-right label label-danger">{{ losses }} Losses</span>
+    <span class="pull-right label label-default">{{ draws }} Draws</span>
   </div>
 
 </div>

@@ -26,6 +26,10 @@ body {
   border-right: 4px solid #666;
 }
 
+.game-records .label {
+  margin:0.7em 0 0 0.7em;
+
+}
 
 /* Customize container */
 @media (min-width: 768px) {

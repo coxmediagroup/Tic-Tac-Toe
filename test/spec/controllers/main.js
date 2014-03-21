@@ -16,7 +16,10 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  it('should take the 1st turn if you start as O', function () {
+    scope.startGame('O');
+    expect(scope.board.moves).toBe(1);
   });
+
+
 });

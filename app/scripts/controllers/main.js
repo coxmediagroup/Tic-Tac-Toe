@@ -1,10 +1,74 @@
 'use strict';
 
-angular.module('ticTacToeApp')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+angular.module('ticTacToeApp').controller('MainCtrl', function ($scope, Gameboard, TicTacToeWinner) {
+  $scope.rows = [1, 2, 3];
+  $scope.cols = ['A', 'B', 'C'];
+  $scope.board = Gameboard;
+  $scope.xy = '';
+  $scope.opponent = '';
+  $scope.canStartGame = true;
+  $scope.winner = '';
+  $scope.neverStarted = true;
+  $scope.youWon = false;
+  $scope.draw = false;
+  $scope.youLost = false;
+  $scope.wins = 0;
+  $scope.losses = 0;
+  $scope.draws = 0;
+
+
+  $scope.playTurn = function(cell) {
+    if ($scope.winner) {
+      return;
+    }
+
+    try {
+      Gameboard.play(cell);
+    } catch (e) {
+      // cell already played
+      return;
+    }
+    $scope.winner = Gameboard.winner();
+    if (!$scope.winner) {
+      Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
+      $scope.winner = Gameboard.winner();
+    }
+  };
+
+  $scope.startGame = function(xy) {
+    $scope.neverStarted = false;
+
+    Gameboard.reset();
+
+    $scope.xy = xy;
+    $scope.winner = '';
+    $scope.canStartGame = false;
+    $scope.opponent = (xy === 'X') ? 'O' : 'X';
+
+    if ($scope.opponent === 'X') {
+      Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
+    }
+  };
+
+  $scope.$watch('winner', function(winner) {
+    if (winner) {
+      $scope.canStartGame = true;
+      $scope.youWon = winner === $scope.xy;
+      $scope.draw = winner === 'D';
+      $scope.youLost = winner === $scope.opponent;
+
+      if ($scope.youLost) {
+        $scope.losses += 1;
+      }
+      if ($scope.youWon) {
+        $scope.wins += 1;
+      }
+      if ($scope.draw) {
+        $scope.draws += 1;
+      }
+
+    }
   });
+
+});
+

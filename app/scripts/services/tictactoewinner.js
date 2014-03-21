@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard', 
+angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
       function Tictactoewinner(Gameboard) {
   
   var OPPOSITE_CORNERS = {
@@ -8,7 +8,7 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     'C3':'A1',
     'C1':'A3',
     'A3':'C1'
-  }
+  };
 
 
   this.defend = function(player, returnAll, board) {
@@ -116,7 +116,9 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
 
 
       angular.forEach(Gameboard.WINNING_SEQUENCES, function(seq) {
-        if (move) return; // we found a move, stop trying
+        if (move) {
+          return; // we found a move, stop trying
+        }
         var emptyCount = 0;
         var playerCount = 0;
         angular.forEach(seq, function(cell) {
@@ -131,7 +133,9 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
         // has to play an unforkable cell to block this win
         if (playerCount === 1 && emptyCount === 2) {
           angular.forEach(seq, function(cell) {
-            if (move) return; // we found a move, stop trying
+            if (move) {
+              return; // we found a move, stop trying
+            }
 
             if (Gameboard[cell] === '' && forks2[cell] !== 1) {
               move = cell;
@@ -149,9 +153,12 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     return move;
   };
 
-  this.takeCenterIfWeCan = function(player) {
-    if (Gameboard.B2 === '') return 'B2';
-    return '';
+  this.takeCenterIfWeCan = function() {
+    if (Gameboard.B2 === '') {
+      return 'B2';
+    } else {
+      return '';
+    }
   };
 
   this.takeAnOppositeCorner = function(player) {
@@ -165,7 +172,7 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     return move;
   };
 
-  this.takeAnyCorner = function(player) {
+  this.takeAnyCorner = function() {
     var move = '';
     angular.forEach(OPPOSITE_CORNERS, function(opp, corner) {
       if (Gameboard[corner] === '') {
@@ -175,7 +182,7 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     return move;
   };
 
-  this.takeAnySide = function(player) {
+  this.takeAnySide = function() {
     var move = '';
     angular.forEach(['A2', 'B1', 'C2', 'B3'], function(side) {
       if (Gameboard[side] === '') {
@@ -190,15 +197,15 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
   this.suggestMoveFor = function(player) {
 
     if (player === 'X') {
-      return (this.winningMove(player) 
-          || this.defend(player) 
-          || this.forkOpponent(player) 
-          || this.blockFork(player) 
-          || this.takeCenterIfWeCan(player)
-          || this.takeAnOppositeCorner(player)
-          || this.takeAnyCorner(player)
-          || this.takeAnySide(player)
-          || this.punt());
+      return (this.winningMove(player) ||
+        this.defend(player) ||
+        this.forkOpponent(player) ||
+        this.blockFork(player) ||
+        this.takeCenterIfWeCan(player) ||
+        this.takeAnOppositeCorner(player) ||
+        this.takeAnyCorner(player) ||
+        this.takeAnySide(player) ||
+        this.punt());
 
     } else {
 
@@ -209,16 +216,16 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
         }
       }
 
-      return (this.winningMove(player)
-          || this.defend(player) 
-          || this.forkOpponent(player) 
-          || this.blockFork(player) 
-          || this.takeCenterIfWeCan(player)
-          || xStartCenterCounter
-          || this.takeAnySide(player)
-          || this.takeAnOppositeCorner(player)
-          || this.takeAnyCorner(player)
-          || this.punt());
+      return (this.winningMove(player) ||
+        this.defend(player) ||
+        this.forkOpponent(player) ||
+        this.blockFork(player) ||
+        this.takeCenterIfWeCan() ||
+        xStartCenterCounter ||
+        this.takeAnySide(player) ||
+        this.takeAnOppositeCorner(player) ||
+        this.takeAnyCorner(player) ||
+        this.punt());
 
 
     }
