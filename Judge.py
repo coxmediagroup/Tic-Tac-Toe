@@ -3,7 +3,6 @@ This is the rules object for the game.
 
 """
 
-
 class Judge(object):
 
     def __init__(self, board):
