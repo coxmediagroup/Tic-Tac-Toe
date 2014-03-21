@@ -1,3 +1,6 @@
+"""
+The Brains of the outfit
+"""
 from Judge import Judge
 from TicTacToeExceptions import TokenPlacementException
 
