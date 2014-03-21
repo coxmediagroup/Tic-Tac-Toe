@@ -26,11 +26,11 @@ class Game(object):
 
         self.board = None
         self.current_player = None
-        self._set_board()
 
     def main(self):
         """Run the game"""
 
+        self._set_board()
         self._print_message('Welcome to Tic Tac Toe!')
         while True:
             self.board.inputPlayerLetter()
