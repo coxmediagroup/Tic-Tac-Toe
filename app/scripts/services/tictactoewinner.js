@@ -1,22 +1,57 @@
 'use strict';
 
-angular.module('ticTacToeApp').service('Tictactoewinner', ['Gameboard', 
+angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard', 
       function Tictactoewinner(Gameboard) {
   
-  var sequences = {};
-  sequences['X'] = angular.copy(Gameboard.WINNING_SEQUENCES);
-  sequences['O'] = angular.copy(Gameboard.WINNING_SEQUENCES);
+  var OPPOSITE_CORNERS = {
+    'A1':'C3',
+    'C3':'A1',
+    'C1':'A3',
+    'A3':'C1'
+  }
 
 
-  this.defend = function(player) {
+  this.defend = function(player, returnAll, board) {
     var mustBlock = [];
     var opponent = (player === 'X') ? 'O': 'X';
+    board = board || Gameboard;
 
-    angular.forEach(sequences[player], function(seq) {
+    angular.forEach(Gameboard.WINNING_SEQUENCES, function(seq) {
 
       var count = 0;
       angular.forEach(seq, function(cell) {
-        if (Gameboard[cell] === opponent) {
+        if (board[cell] === opponent) {
+          count++;
+        }
+      });
+
+      if (count === 2) {
+        angular.forEach(seq, function(cell) {
+          if (board[cell] === '') {
+            mustBlock.push(cell);
+          }
+        });
+      }
+    });
+
+    if (returnAll) {
+      return mustBlock;
+    } else if (mustBlock.length) {
+      return mustBlock[0];
+    } else {
+      return '';
+    }
+
+  };
+
+
+  this.winningMove = function(player) {
+    var move = '';
+    angular.forEach(Gameboard.WINNING_SEQUENCES, function(seq) {
+
+      var count = 0;
+      angular.forEach(seq, function(cell) {
+        if (Gameboard[cell] === player) {
           count++;
         }
       });
@@ -24,97 +59,169 @@ angular.module('ticTacToeApp').service('Tictactoewinner', ['Gameboard',
       if (count === 2) {
         angular.forEach(seq, function(cell) {
           if (Gameboard[cell] === '') {
-            mustBlock.push(cell);
+            move = cell;
           }
         });
       }
     });
 
-    if (mustBlock.length > 0) {
-      return mustBlock[0];
-    }
-
+    return move;
   };
 
-  this.attack = function(player) {
-    var opponent = (player === 'X') ? 'O': 'X';
+  this.punt = function() {
+    var move = '';
+    Gameboard.eachEmptyCell(function(cell) {
+      move = cell;
+    });
+    return move;
+  };
 
-    var punt = '';
-    angular.forEach(['A', 'B', 'C'], function(col) {
-      angular.forEach([1, 2, 3], function(row) {
-        var cell = col + row;
-        if (!punt && Gameboard[cell] === '') {
-          punt = cell;
+  this.forkOpponent = function(player) {
+    var that = this;
+    var opponent = (player === 'X') ? 'O' : 'X';
+    var move = '';
+    Gameboard.eachEmptyCell(function(cell) {
+      var afterMove = Gameboard.hypothetical(cell);
+      var defend = that.defend(opponent, true, afterMove);
+      if (defend.length > 1) {
+        move = cell;
+      }
+    });
+    return move;
+  };
+
+  this.blockFork = function(player) {
+    var that = this;
+    var move = '';
+    var forks = [];
+    Gameboard.eachEmptyCell(function(move1) {
+      var after1 = Gameboard.hypothetical(move1);
+      after1.eachEmptyCell(function(move2) {
+        var after2 = after1.hypothetical(move2);
+        var defend = that.defend(player, true, after2);
+        if (defend.length > 1) {
+          forks.push(move2);
         }
       });
     });
 
-    // if 1st move, alter the sequence order to try a new plan
-    if (Gameboard.moves <= 1) {
-      var first = sequences[player].shift();
-      sequences[player].push(first);
-    }
+    if (forks.length === 1) {
+      move = forks[0];
+    } else if (forks.length > 1) {
 
-    var sequenceThatCanWin;
-    var consideredSequenceDesireability = 0;
-    var goingToTryCenter = false;
+      // if there are is than one move that could cause a fork
+      // then try and divert the player by going on the offensive
+      var forks2 = {};
+      angular.forEach(forks, function(f) { forks2[f] = 1; });
 
-    angular.forEach(sequences[player], function(seq) {
-      var opponentOccupied = false;
-      angular.forEach(seq, function(cell) {
-        if (!opponentOccupied && Gameboard[cell] === opponent) {
-          opponentOccupied = true;
-        }
-      });
 
-      if (!opponentOccupied) {
-        var desirablity = 0;
-        var triesCenter = false;
+      angular.forEach(Gameboard.WINNING_SEQUENCES, function(seq) {
+        if (move) return; // we found a move, stop trying
+        var emptyCount = 0;
+        var playerCount = 0;
         angular.forEach(seq, function(cell) {
           if (Gameboard[cell] === player) {
-            desirablity++;
+            playerCount++;
+          } else if (Gameboard[cell] === '') {
+            emptyCount++;
           }
-
-          // favor schemes including center
-          if (cell === 'B2') {
-            desirablity += 3;
-            triesCenter = true;
-          }
-
-          // favor schemes with corners
-          if (cell === 'A1' || cell === 'A3' || cell === 'C1' || cell === 'C3') {
-            desirablity++;
-          }
-
         });
 
+        // this might work, lets make sure the other player
+        // has to play an unforkable cell to block this win
+        if (playerCount === 1 && emptyCount === 2) {
+          angular.forEach(seq, function(cell) {
+            if (move) return; // we found a move, stop trying
 
+            if (Gameboard[cell] === '' && forks2[cell] !== 1) {
+              move = cell;
+            }
+          });
 
-        if (!sequenceThatCanWin || (desirablity > consideredSequenceDesireability)) {
-          sequenceThatCanWin = seq;
-          consideredSequenceDesireability = desirablity;
-          goingToTryCenter = triesCenter;
         }
-      }
-    });
 
-    var schemedMove = '';
+      });
 
-    // go for the center!! 
-    if (goingToTryCenter && !Gameboard['B2']) return 'B2';
 
-    angular.forEach([0, 2, 1], function(cellIndex) {
-      var cell = sequenceThatCanWin[cellIndex];
-      if (!schemedMove && Gameboard[cell] === '') {
-        schemedMove = cell;
-      }      
-    });
 
-    return schemedMove || punt;
+    }
+
+    return move;
   };
 
+  this.takeCenterIfWeCan = function(player) {
+    if (Gameboard.B2 === '') return 'B2';
+    return '';
+  };
+
+  this.takeAnOppositeCorner = function(player) {
+    var opponent = (player === 'X') ? 'O' : 'X';
+    var move = '';
+    angular.forEach(OPPOSITE_CORNERS, function(opp, corner) {
+      if (Gameboard[opp] === opponent && Gameboard[corner] === '') {
+        move = corner;
+      }
+    });
+    return move;
+  };
+
+  this.takeAnyCorner = function(player) {
+    var move = '';
+    angular.forEach(OPPOSITE_CORNERS, function(opp, corner) {
+      if (Gameboard[corner] === '') {
+        move = corner;
+      }
+    });
+    return move;
+  };
+
+  this.takeAnySide = function(player) {
+    var move = '';
+    angular.forEach(['A2', 'B1', 'C2', 'B3'], function(side) {
+      if (Gameboard[side] === '') {
+        move = side;
+      }
+    });
+    return move;
+  };
+
+
+
   this.suggestMoveFor = function(player) {
-    return this.defend(player) || this.attack(player);
+
+    if (player === 'X') {
+      return (this.winningMove(player) 
+          || this.defend(player) 
+          || this.forkOpponent(player) 
+          || this.blockFork(player) 
+          || this.takeCenterIfWeCan(player)
+          || this.takeAnOppositeCorner(player)
+          || this.takeAnyCorner(player)
+          || this.takeAnySide(player)
+          || this.punt());
+
+    } else {
+
+      var xStartCenterCounter = '';
+      if (Gameboard.moves === 1) {
+        if (Gameboard['B2'] === 'X') {
+          xStartCenterCounter = this.takeAnyCorner(player);
+        }
+      }
+
+      return (this.winningMove(player)
+          || this.defend(player) 
+          || this.forkOpponent(player) 
+          || this.blockFork(player) 
+          || this.takeCenterIfWeCan(player)
+          || xStartCenterCounter
+          || this.takeAnySide(player)
+          || this.takeAnOppositeCorner(player)
+          || this.takeAnyCorner(player)
+          || this.punt());
+
+
+    }
   };
 
 

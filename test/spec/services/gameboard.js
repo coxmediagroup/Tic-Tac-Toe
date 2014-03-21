@@ -205,4 +205,17 @@ describe('Service: Gameboard', function () {
     Gameboard.reset();
     expect(Gameboard.moves).toBe(0);
   });
+
+  it('should clone to hypothetical version which doesn\'t affect the original', function() {
+    Gameboard.play('A1'); // X
+    Gameboard.play('A2'); // O
+    Gameboard.play('B1'); // X
+    Gameboard.play('B2'); // O
+    Gameboard.play('B3'); // X
+    var hyp = Gameboard.hypothetical('C2'); // O
+
+    expect(hyp.winner()).toBe('O');
+    expect(Gameboard.winner()).toBe('');
+  });
+
 });

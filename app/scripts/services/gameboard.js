@@ -83,6 +83,12 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     }
   };
 
+  this.hypothetical = function(cell) {
+    var h = angular.copy(this);
+    h.play(cell);
+    return h;
+  };
+
   this.eachEmptyCell = function(f) {
     var that = this;
 
