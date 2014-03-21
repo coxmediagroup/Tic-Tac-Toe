@@ -1,7 +1,23 @@
+#!/usr/bin/env python
+"""
+The Main Game of Unbeatable Tic-Tac-Toe
+
+To run the tests 
+
+    %python -m unittest test
+
+To run the game from the command line
+
+First make sure the file is executable
+    % chmod +x Tic-Tac-Toe
+
+Then run the game
+    % Tic-Tac-Toe
+
+Enjoy!
+"""
 import Board
 import Brain
-
-
 
 
 class Game(object):
@@ -78,9 +94,6 @@ class Game(object):
             self._print_message('The game is a tie!')
             return True
         return False
-
-
-
 
     def _print_message(self, arg):
         print arg
