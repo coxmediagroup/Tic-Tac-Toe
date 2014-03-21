@@ -32,7 +32,10 @@ state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
 
 def update_square(player, square):
     """No return. Set game square to value of player."""
-    board[square[0]][square[1]] = player
+    if board[square[0]][square[1]] is None:
+        board[square[0]][square[1]] = player
+    else:
+        raise Exception
     build_state(board)
 
 
