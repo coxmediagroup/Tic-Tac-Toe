@@ -38,9 +38,6 @@ class Judge(object):
 
         return winner
 
-
-
-
     def rowsEqual(self, rows):
         """returns True if all the elements in a list are equal, or if the list is empty."""
 
