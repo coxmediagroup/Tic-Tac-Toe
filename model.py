@@ -30,12 +30,18 @@ state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
                      'right_diagonal': (TOP_RIGHT, CENTER, BOT_LEFT)}
 
 
+class DoubleMoveError(Exception):
+
+    def __init__(self):
+        super(Exception, self).__init__()
+
+
 def update_square(player, square):
     """No return. Set game square to value of player."""
     if board[square[0]][square[1]] is None:
         board[square[0]][square[1]] = player
     else:
-        raise Exception
+        raise DoubleMoveError
     build_state()
 
 
@@ -173,3 +179,4 @@ def clear_board():
     for row in board:
         for index in range(3):
             row[index] = None
+    build_state()

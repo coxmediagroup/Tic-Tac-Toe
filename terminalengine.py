@@ -119,6 +119,8 @@ def game_control():
                 print("Unrecognized command. Try again.")
         except IndexError:
             print("Value out of range. Please use the number pad.")
+        except model.DoubleMoveError:
+            print("You can't play on a space that's filled. Pick again.")
 
 
 if __name__ == '__main__':
