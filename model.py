@@ -36,14 +36,15 @@ def update_square(player, square):
         board[square[0]][square[1]] = player
     else:
         raise Exception
-    build_state(board)
+    build_state()
 
 
-def build_state(board):
+def build_state():
     """No return. Updates all lists used for tests."""
     global top_row, middle_row, bottom_row
     global left_column, middle_column, right_column
     global left_diagonal, right_diagonal
+    global board
 
     top_row = board[0]
     middle_row = board[1]
@@ -55,7 +56,7 @@ def build_state(board):
     right_diagonal = [board[0][2], board[1][1], board[2][0]]
 
 
-def test_line(line, player):
+def line_check(line, player):
     """Return tuple (player_spaces, opponent_spaces, empty_spaces)."""
     if player == X:
         opponent = O
@@ -79,21 +80,21 @@ def test_line(line, player):
 
 def can_player_win(player):
     """Return tuple of winning move or None"""
-    if test_line(top_row, player) == (2, 0, 1):
+    if line_check(top_row, player) == (2, 0, 1):
         return state_translation['top_row'][top_row.index(None)]
-    if test_line(middle_row, player) == (2, 0, 1):
+    if line_check(middle_row, player) == (2, 0, 1):
         return state_translation['middle_row'][middle_row.index(None)]
-    if test_line(bottom_row, player) == (2, 0, 1):
+    if line_check(bottom_row, player) == (2, 0, 1):
         return state_translation['bottom_row'][bottom_row.index(None)]
-    if test_line(left_column, player) == (2, 0, 1):
+    if line_check(left_column, player) == (2, 0, 1):
         return state_translation['left_column'][left_column.index(None)]
-    if test_line(middle_column, player) == (2, 0, 1):
+    if line_check(middle_column, player) == (2, 0, 1):
         return state_translation['middle_column'][middle_column.index(None)]
-    if test_line(right_column, player) == (2, 0, 1):
+    if line_check(right_column, player) == (2, 0, 1):
         return state_translation['right_column'][right_column.index(None)]
-    if test_line(left_diagonal, player) == (2, 0, 1):
+    if line_check(left_diagonal, player) == (2, 0, 1):
         return state_translation['left_diagonal'][left_diagonal.index(None)]
-    if test_line(right_column, player) == (2, 0, 1):
+    if line_check(right_column, player) == (2, 0, 1):
         return state_translation['right_column'][right_column.index(None)]
     return None
 
@@ -101,8 +102,8 @@ def can_player_win(player):
 def can_player_fork(player):
     """Return boolean"""
     test = 2, 1, 0
-    left = test_line(left_diagonal, player)
-    right = test_line(right_diagonal, player)
+    left = line_check(left_diagonal, player)
+    right = line_check(right_diagonal, player)
     if left == test or right == test:
         return not board[1][1] == player
     return False
@@ -147,21 +148,21 @@ def empty_sides():
 
 def did_player_win(player):
     """Return boolean"""
-    if test_line(top_row, player) == (3, 0, 0):
+    if line_check(top_row, player) == (3, 0, 0):
         return True
-    if test_line(middle_row, player) == (3, 0, 0):
+    if line_check(middle_row, player) == (3, 0, 0):
         return True
-    if test_line(bottom_row, player) == (3, 0, 0):
+    if line_check(bottom_row, player) == (3, 0, 0):
         return True
-    if test_line(left_column, player) == (3, 0, 0):
+    if line_check(left_column, player) == (3, 0, 0):
         return True
-    if test_line(middle_column, player) == (3, 0, 0):
+    if line_check(middle_column, player) == (3, 0, 0):
         return True
-    if test_line(right_column, player) == (3, 0, 0):
+    if line_check(right_column, player) == (3, 0, 0):
         return True
-    if test_line(left_diagonal, player) == (3, 0, 0):
+    if line_check(left_diagonal, player) == (3, 0, 0):
         return True
-    if test_line(right_diagonal, player) == (3, 0, 0):
+    if line_check(right_diagonal, player) == (3, 0, 0):
         return True
     return False
 
