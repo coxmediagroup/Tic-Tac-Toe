@@ -1,6 +1,6 @@
-board = [[None, None, None],
-         [None, None, None],
-         [None, None, None]]
+true_board = [[None, None, None],
+              [None, None, None],
+              [None, None, None]]
 X = 1
 O = 2
 TOP_LEFT = 0, 0
@@ -31,11 +31,11 @@ state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
 
 
 def update_square(player, square):
-    board[square[0]][square[1]] = player
-    build_state()
+    true_board[square[0]][square[1]] = player
+    build_state(true_board)
 
 
-def build_state():
+def build_state(board):
     global top_row, middle_row, bottom_row
     global left_column, middle_column, right_column
     global left_diagonal, right_diagonal
@@ -90,3 +90,49 @@ def can_player_win(player):
     if test_line(right_column, player) == (2, 0, 1):
         return state_translation['right_column'][right_column.index(None)]
     return None
+
+
+def can_player_fork(player):
+    test = 2, 1, 0
+    left = test_line(left_diagonal, player)
+    right = test_line(right_diagonal, player)
+    if left == test or right == test:
+        return not true_board[1][1] == player
+    return False
+
+
+def is_board_empty():
+    """Return boolean"""
+    for row in true_board:
+        for square in row:
+            if square is not None:
+                return False
+
+    return True
+
+
+def is_center_empty():
+    """Return boolean"""
+    return true_board[1][1] is None
+
+
+def is_corner_empty():
+    """Return list of empty corners"""
+    empty_corners = []
+    corners = [TOP_LEFT, TOP_RIGHT, BOT_LEFT, BOT_RIGHT]
+    for corner in corners:
+        if true_board[corner[0]][corner[1]] is None:
+            empty_corners.append(corner)
+
+    return empty_corners
+
+
+def empty_sides():
+    """Return list of empty corners"""
+    empty_sides_list = []
+    sides = [TOP_MID, MID_LEFT, MID_RIGHT, BOT_MID]
+    for side in sides:
+        if true_board[side[0]][side[1]] is None:
+            empty_sides_list.append(corner)
+
+    return empty_sides_list
