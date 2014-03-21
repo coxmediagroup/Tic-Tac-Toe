@@ -1,6 +1,6 @@
 board = [[None, None, None],
-              [None, None, None],
-              [None, None, None]]
+         [None, None, None],
+         [None, None, None]]
 X = 1
 O = 2
 TOP_LEFT = 0, 0
@@ -18,7 +18,7 @@ bottom_row = board[2]
 left_column = [row[0] for row in board]
 middle_column = [row[1] for row in board]
 right_column = [row[2] for row in board]
-left_diagonal = [board[0][0], board[1][1], board[2],[2]]
+left_diagonal = [board[0][0], board[1][1], board[2][2]]
 right_diagonal = [board[0][2], board[1][1], board[2][0]]
 state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
                      'middle_row': (MID_LEFT, CENTER, MID_RIGHT),
@@ -31,11 +31,13 @@ state_translation = {'top_row': (TOP_LEFT, TOP_MID, TOP_RIGHT),
 
 
 def update_square(player, square):
+    """No return. Set game square to value of player."""
     board[square[0]][square[1]] = player
     build_state(board)
 
 
 def build_state(board):
+    """No return. Updates all lists used for tests."""
     global top_row, middle_row, bottom_row
     global left_column, middle_column, right_column
     global left_diagonal, right_diagonal
@@ -46,29 +48,30 @@ def build_state(board):
     left_column = [row[0] for row in board]
     middle_column = [row[1] for row in board]
     right_column = [row[2] for row in board]
-    left_diagonal = [board[0][0], board[1][1], board[2],[2]]
+    left_diagonal = [board[0][0], board[1][1], board[2][2]]
     right_diagonal = [board[0][2], board[1][1], board[2][0]]
 
 
-def test_line(line, positive_result):
-    if positive_result == X:
-        negative_result = O
+def test_line(line, player):
+    """Return tuple (player_spaces, opponent_spaces, empty_spaces)."""
+    if player == X:
+        opponent = O
     else:
-        negative_result = X
+        opponent = X
 
-    positive_count = 0
-    negative_count = 0
-    null_count = 0
+    player_spaces = 0
+    opponent_spaces = 0
+    empty_spaces = 0
 
     for space in line:
-        if space == positive_result:
-            positive_count += 1
-        if space == negative_result:
-            negative_count += 1
+        if space == player:
+            player_spaces += 1
+        if space == opponent:
+            opponent_spaces += 1
         if space is None:
-            null_count += 1
+            empty_spaces += 1
 
-    return positive_count, negative_count, null_count
+    return player_spaces, opponent_spaces, empty_spaces
 
 
 def can_player_win(player):
@@ -93,11 +96,10 @@ def can_player_win(player):
 
 
 def can_player_fork(player):
+    """Return boolean"""
     test = 2, 1, 0
     left = test_line(left_diagonal, player)
-    print("Left result is {}".format(left))
     right = test_line(right_diagonal, player)
-    print("Right diagonal result is {}".format(right))
     if left == test or right == test:
         return not board[1][1] == player
     return False
@@ -138,3 +140,32 @@ def empty_sides():
             empty_sides_list.append(side)
 
     return empty_sides_list
+
+
+def did_player_win(player):
+    """Return boolean"""
+    if test_line(top_row, player) == (3, 0, 0):
+        return True
+    if test_line(middle_row, player) == (3, 0, 0):
+        return True
+    if test_line(bottom_row, player) == (3, 0, 0):
+        return True
+    if test_line(left_column, player) == (3, 0, 0):
+        return True
+    if test_line(middle_column, player) == (3, 0, 0):
+        return True
+    if test_line(right_column, player) == (3, 0, 0):
+        return True
+    if test_line(left_diagonal, player) == (3, 0, 0):
+        return True
+    if test_line(right_diagonal, player) == (3, 0, 0):
+        return True
+    return False
+
+
+def clear_board():
+    """No return."""
+    global board
+    for row in board:
+        for index in range(3):
+            row[index] = None

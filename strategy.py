@@ -2,30 +2,30 @@ import model
 import random
 
 
-self_flag = None
+computer_flag = None
 player_flag = None
 
 
 def can_win():
     """Return tuple representing space"""
-    global self_flag
-    return model.can_player_win(self_flag) or can_opponent_win()
+    global computer_flag
+    return model.can_player_win(computer_flag) or can_opponent_win()
 
 
 def can_opponent_win():
-    """Return tuple (boolean, tuple(integer, integer)"""
+    """Return tuple representing space"""
     global player_flag
     return model.can_player_win(player_flag) or can_fork()
 
 
 def can_fork():
-    """Return tuple (boolean, tuple(integer, integer)"""
-    global self_flag
+    """Return tuple representing space"""
+    global computer_flag
     return break_opponent_fork()
 
 
 def break_opponent_fork():
-    """Return tuple (row_index, column_index)"""
+    """Return tuple representing space"""
     global player_flag
     if model.can_player_fork(player_flag):
         return side()
@@ -34,19 +34,20 @@ def break_opponent_fork():
 
 
 def corner(empty_corners):
-    """Return tuple (row_index, column_index)"""
+    """Return tuple representing space"""
     return random.choice(empty_corners)
 
 
 def side():
-    """Return integer"""
+    """Return tuple representing space"""
     try:
         return random.choice(model.empty_sides())
     except IndexError:
         return None
 
+
 def square():
-    """Return integer"""
+    """Return tuple representing space"""
     if model.is_board_empty():
         return corner(model.is_corner_empty())
     if model.is_center_empty():
@@ -55,6 +56,7 @@ def square():
     if corners:
         return corner(corners)
     return side()
+
 
 def pick_move():
     """Return tuple representing space
