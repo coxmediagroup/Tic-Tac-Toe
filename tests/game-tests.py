@@ -13,9 +13,6 @@ class TestMoves(unittest.TestCase):
 
 class TestAIFirstCornerTurn3(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_player_edge(self):
         # | |
         #-----
@@ -45,6 +42,13 @@ class TestAIFirstCornerTurn3(unittest.TestCase):
         #A|P|
         actual = game.calc_ai_move(['cell-2:1'], ['cell-2:0'])
         self.assertEqual('cell-0:0', actual)
+        # | |X
+        #-----
+        # | |
+        #-----
+        # |P|A
+        actual = game.calc_ai_move(['cell-2:1'], ['cell-2:2'])
+        self.assertEqual('cell-0:2', actual)
 
     def test_player_corner(self):
         #X| |
@@ -61,3 +65,22 @@ class TestAIFirstCornerTurn3(unittest.TestCase):
         #A| |X
         actual = game.calc_ai_move(['cell-0:0'], ['cell-2:0'])
         self.assertEqual('cell-2:2', actual)
+
+
+class TestAIFirstCornerTurn5(unittest.TestCase):
+
+    def test_player_block(self):
+        #P| |X
+        #-----
+        # | |
+        #-----
+        #A|P|A
+        actual = game.calc_ai_move(['cell-0:0', 'cell-2:1'], ['cell-2:0', 'cell-2:2'])
+        self.assertEqual('cell-0:2', actual)
+        #X| |A
+        #-----
+        # | |P
+        #-----
+        # |P|A
+        actual = game.calc_ai_move(['cell-2:1', 'cell-1:2'], ['cell-2:2', 'cell-0:2'])
+        self.assertEqual('cell-0:0', actual)

@@ -58,6 +58,7 @@ def player_turn(cell):
         mark_cell=ai_cell,
     )
     session['game_state']['player_turn'] = True
+    session['game_state']['ai_cells'].append(ai_cell)
     return jsonify(data)
 
 if __name__ == '__main__':
