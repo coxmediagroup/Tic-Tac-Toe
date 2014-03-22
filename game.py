@@ -35,7 +35,7 @@ def calc_ai_move(player_cells, ai_cells):
         board[int(row)][int(col)] = 'AI'
 
     if turn == 3:
-        if ai_first and _is_corner(ai_cells[0]) and _is_edge(player_cells[0]):
+        if ai_first and _is_corner(ai_cells[0]):
             for row in range(3):
                 for col in range(3):
                     work_board = deepcopy(board)
