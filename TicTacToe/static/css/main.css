@@ -1,0 +1,35 @@
+body {
+    font-family: Helvetica;
+}
+
+.grid {
+    height: 600px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+}
+
+.cell {
+    border: 2px solid #ffffff;
+    height: 195px;
+    width: 195px;
+}
+
+.left {
+    border-right-color: #000;
+    float: left;
+}
+
+.middle {
+    border-right-color: #000;
+    float: left;
+}
+
+.right {
+    float: left;
+}
+
+.with_bottom {
+    border-bottom-color: #000;
+}
