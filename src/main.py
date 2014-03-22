@@ -1,12 +1,13 @@
 '''
 @author: Corey Hutton
 '''
-import Tkinter
+from Tkinter import Tk
 
 from tictactoe import TicTacToe
 
 def main():
-    root = Tkinter.Tk()
+    root = Tk()
+    root.wm_title("Tic-Tac-Toe")
 
     game = TicTacToe(master=root)
 
