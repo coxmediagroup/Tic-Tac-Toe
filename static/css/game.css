@@ -28,20 +28,13 @@
     background-color: #444;
 }
 
-#c1, #c4, #c7 {
+#cell-0\3A 0, #cell-0\3A 1, #cell-1\3A 0, #cell-1\3A 1, #cell-2\3A 0, #cell-2\3A 1 {
     border-right: 1px solid white;
 }
 
-#c3, #c6, #c9 {
-    border-left: 1px solid white;
-}
-
-#c1, #c2, #c3 {
-    border-bottom: 1px solid white;
-}
-
-#c7, #c8, #c9 {
+#cell-1\3A 0, #cell-1\3A 1, #cell-1\3A 2 {
     border-top: 1px solid white;
+    border-bottom: 1px solid white;
 }
 
 #narrative {

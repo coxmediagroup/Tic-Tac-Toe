@@ -5,7 +5,11 @@ from flask import Flask, render_template, session, jsonify
 
 import game
 
-VALID_CELLS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9']
+VALID_CELLS = [
+    'cell-0:0', 'cell-0:1', 'cell-0:2',
+    'cell-1:0', 'cell-1:1', 'cell-1:2',
+    'cell-2:0', 'cell-2:1', 'cell-2:2',
+]
 
 app = Flask(__name__)
 app.secret_key = 'ox\xc7o`\x14g0\xe52\x003,\xd6Y\x9c\x12\xca\xdfHk\xfe~\xe5'
@@ -31,25 +35,30 @@ def ai_first():
     )
     data = dict(
         mark_cell=cell,
-        player_turn=True,
     )
     return jsonify(data)
 
 
 @app.route('/player_turn/<cell>/', methods=['GET'])
 def player_turn(cell):
-    if session['game_state']['player_turn'] is False:
-        return jsonify(), 409
-
-    if cell in session['game_state']['ai_cells'] or cell in session['game_state']['player_cells']:
-        return jsonify(), 410
-
     if cell not in VALID_CELLS:
         return jsonify(), 404
+    elif session['game_state']['player_turn'] is False:
+        return jsonify(), 409
+    elif cell in session['game_state']['ai_cells'] or cell in session['game_state']['player_cells']:
+        return jsonify(), 410
 
     session['game_state']['player_turn'] = False
     session['game_state']['player_cells'].append(cell)
-    return jsonify()
+    ai_cell = game.calc_ai_move(
+        session['game_state']['player_cells'],
+        session['game_state']['ai_cells'],
+    )
+    data = dict(
+        mark_cell=ai_cell,
+    )
+    session['game_state']['player_turn'] = True
+    return jsonify(data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tic Tac Toe: The Crucible')

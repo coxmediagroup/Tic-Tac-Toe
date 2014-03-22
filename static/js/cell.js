@@ -1,6 +1,7 @@
 define(function() {
-    function Cell(element) {
+    function Cell(element, board) {
         this.element = element;
+        this.board = board;
         this.id = this.element.id;
         this.playerToken = null;
     }
@@ -13,6 +14,7 @@ define(function() {
             request.onload = function() {
                 if (this.status === 200) {
                     self.mark(self.playerToken);
+                    self.board.aiResponse(this.response);
                     return;
                 }
                 // swallow errors

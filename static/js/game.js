@@ -2,7 +2,6 @@ define(['cell'], function (Cell) {
     function Game() {
         this.board = $('gameboard');
         this.narrative = $('narrative');
-        this.turn = null;
 
         this.tokens = {
             player: null,
@@ -12,28 +11,17 @@ define(['cell'], function (Cell) {
         this.cells = {};
         var cells = this.board.querySelectorAll('.cell');
         for (var i = 0; i < cells.length; i++) {
-            var cell = new Cell(cells[i]);
+            var cell = new Cell(cells[i], this);
             this.cells[cells[i].id] = cell;
         }
     }
 
-    Game.prototype.update = function() {
-        if (this.status !== 200) {
-            // sad pants
-            return;
-        }
-        var data = JSON.parse(this.response);
-        this.board.cells[data.mark_cell].mark(this.board.tokens[this.board.turn]);
-        if (this.board.turn === 'player') {
-            this.board.turn = 'ai';
-        } else {
-            this.board.turn = 'player';
-            this.board.narrative.innerHTML = '';
-        }
+    Game.prototype.aiResponse = function(response) {
+        var data = JSON.parse(response);
+        this.cells[data.mark_cell].mark(this.tokens.ai);
     };
 
     Game.prototype.playerFirst = function() {
-        this.turn = 'player';
         this.tokens.player = 'X';
         this.tokens.ai = 'O';
 
@@ -45,7 +33,6 @@ define(['cell'], function (Cell) {
     };
 
     Game.prototype.aiFirst = function() {
-        this.turn = 'ai';
         this.tokens.player = 'O';
         this.tokens.ai = 'X';
 
@@ -56,7 +43,15 @@ define(['cell'], function (Cell) {
         var request = new XMLHttpRequest();
         request.board = this;
         var self = this;
-        request.onload = this.update;
+        request.onload = function() {
+            if (this.status != 200) {
+                // sad pants
+                return;
+            }
+            var data = JSON.parse(this.response);
+            self.cells[data.mark_cell].mark(self.tokens.ai);
+            self.narrative.innerHTML = '';
+        };
         request.open('get', '/ai_first/', true);
         request.send();
     };
