@@ -1,0 +1,337 @@
+{% extends "_base.html" %}
+{% block content %}
+
+	<h1>Tic Tac Toe</h1>
+
+	<script>
+		// start game
+		$(document).ready(
+			function()
+			{
+				showMessage("It's your turn first. Click a square to place a marker.");
+			});
+
+		// globals
+		var PlayerMove = {Player: 'player', Computer: 'computer'}
+		var move = PlayerMove.Player;
+		var userMsgId = 0;
+
+
+		// GAME ENGINE
+		$(document).on('click', '.boardSquare',
+			function()
+			{
+				if (move == PlayerMove.Player)
+				{
+					if (checkSquare($('.boardSquare').index($(this)) + 1) != 'none')
+						showMessage("You cannot place a marker there. Please select a different space.", 'error');
+					else
+						placeMarker($(this));
+				}
+				else
+					showMessage("It's not your turn.", 'error');
+			});
+
+		function placeMarker(square)
+		{
+			move = PlayerMove.Computer;
+
+			// place player marker
+			square.append('<div class="icon-x" />');
+
+			// check for win scenarios
+			win = checkWin();
+
+			if (!win)
+			{
+				computerMove();
+				showMessage("Let me think...");
+			}
+		}
+
+		function computerMove()
+		{
+			setTimeout(
+				function()
+				{
+					// make computer move
+					compMoveSq = calcComputerMove();
+					$( $('.boardSquare')[compMoveSq - 1] ).append('<div class="icon-o"></div>');
+
+					// check for win scenarios
+					win = checkWin();
+
+					if (!win)
+					{
+						// switch back to players turn
+						move = PlayerMove.Player;
+						showMessage("Your turn again.");
+					}
+				}, 3000);
+		}
+
+		function calcComputerMove()
+		{
+			// place in random open space
+			compMoveSq = Math.round(Math.random() * (9 - 1) + 1);
+			while (checkSquare(compMoveSq) != 'none')
+				compMoveSq = Math.round(Math.random() * (9 - 1) + 1);
+
+			// check for spaces player about to win
+			compMoveSq = checkPlayer1Away(compMoveSq, 1, 2, 3);
+			compMoveSq = checkPlayer1Away(compMoveSq, 4, 5, 6);
+			compMoveSq = checkPlayer1Away(compMoveSq, 7, 8, 9);
+			compMoveSq = checkPlayer1Away(compMoveSq, 1, 4, 7);
+			compMoveSq = checkPlayer1Away(compMoveSq, 2, 5, 8);
+			compMoveSq = checkPlayer1Away(compMoveSq, 3, 6, 9);
+			compMoveSq = checkPlayer1Away(compMoveSq, 1, 5, 9);
+			compMoveSq = checkPlayer1Away(compMoveSq, 3, 5, 7);
+
+			// check for spaces to win
+			compMoveSq = checkCompCanWin(compMoveSq, 1, 2, 3);
+			compMoveSq = checkCompCanWin(compMoveSq, 4, 5, 6);
+			compMoveSq = checkCompCanWin(compMoveSq, 7, 8, 9);
+			compMoveSq = checkCompCanWin(compMoveSq, 1, 4, 7);
+			compMoveSq = checkCompCanWin(compMoveSq, 2, 5, 8);
+			compMoveSq = checkCompCanWin(compMoveSq, 3, 6, 9);
+			compMoveSq = checkCompCanWin(compMoveSq, 1, 5, 9);
+			compMoveSq = checkCompCanWin(compMoveSq, 3, 5, 7);
+
+			return compMoveSq;
+		}
+
+		function checkSquare(squareIndex)
+		{
+			if ($($('.boardSquare')[squareIndex - 1]).find('.icon-x').length > 0)
+				return 'player';
+			else if ($($('.boardSquare')[squareIndex - 1]).find('.icon-o').length > 0)
+				return 'computer';
+			else
+				return 'none';
+		}
+
+		function checkPlayer1Away(currMoveIndex, index1, index2, index3)
+		{
+			sq1 = checkSquare(index1);
+			sq2 = checkSquare(index2);
+			sq3 = checkSquare(index3);
+
+			if (sq3 == 'none' && sq1 == sq2 && sq1 == 'player')
+				return index3
+			else if (sq2 == 'none' && sq1 == sq3 && sq1 == 'player')
+				return index2
+			else if (sq1 == 'none' && sq2 == sq3 && sq2 == 'player')
+				return index1
+			else
+				return currMoveIndex
+		}
+
+		function checkCompCanWin(currMoveIndex, index1, index2, index3)
+		{
+			sq1 = checkSquare(index1);
+			sq2 = checkSquare(index2);
+			sq3 = checkSquare(index3);
+
+			if (sq3 == 'none' && sq1 == sq2 && sq1 == 'computer')
+				return index3
+			else if (sq2 == 'none' && sq1 == sq3 && sq1 == 'computer')
+				return index2
+			else if (sq1 == 'none' && sq2 == sq3 && sq2 == 'computer')
+				return index1
+			else
+				return currMoveIndex
+		}
+
+		function checkWin()
+		{
+			winner = [];
+
+			// check horiz
+			winner[0] = checkWinLocation(1, 2, 3);
+			winner[1] = checkWinLocation(4, 5, 6);
+			winner[2] = checkWinLocation(7, 8, 9);
+
+			// check vert
+			winner[3] = checkWinLocation(1, 4, 7);
+			winner[4] = checkWinLocation(2, 5, 8);
+			winner[5] = checkWinLocation(3, 6, 9);
+
+			// check diag
+			winner[6] = checkWinLocation(1, 5, 9);
+			winner[7] = checkWinLocation(3, 5, 7);
+
+			if (winner.indexOf('player') >= 0)
+				win = winner[winner.indexOf('player')];
+			else if (winner.indexOf('computer') >= 0)
+				win = winner[winner.indexOf('computer')];
+			else if (isTie())
+				win = 'tie';
+			else
+				win = 'none';
+
+			if (win == 'player')
+				showMessage("You win! Refresh the page to play again!", 'win');
+			if (win == 'computer')
+				showMessage("I win. Refresh the page to play again!", 'win');
+			if (win == 'tie')
+				showMessage("It's a tie! Refresh the page to play again!", 'win');
+			
+			if (win == 'none')
+				return false;
+			else
+				return true;
+		}
+
+		function checkWinLocation(index1, index2, index3)
+		{
+			sq1 = checkSquare(index1);
+			sq2 = checkSquare(index2);
+			sq3 = checkSquare(index3);
+
+			if (sq1 == sq2 && sq1 == sq3 && sq1 != 'none')
+				return sq1;
+			else
+				return 'none';
+		}
+
+		function isTie()
+		{
+			sqs = [];
+			sqs[0] = checkSquare(1);
+			sqs[1] = checkSquare(2);
+			sqs[2] = checkSquare(3);
+			sqs[3] = checkSquare(4);
+			sqs[4] = checkSquare(5);
+			sqs[5] = checkSquare(6);
+			sqs[6] = checkSquare(7);
+			sqs[7] = checkSquare(8);
+			sqs[8] = checkSquare(9);
+
+			if (sqs.indexOf('none') < 0)
+				return true;
+			else
+				return false;
+		}
+
+
+		// USER MESSAGING
+		function showMessage(msg, type)
+		{
+			// create message element
+			$('.userMsgs').append('<div class="userMsg" id="userMsg-'+userMsgId+'">'+msg+'</div>');
+
+			newMsg = $('.userMsgs .userMsg#userMsg-'+userMsgId);
+
+			// render new message
+			origHeight = newMsg.height();
+			newMsg.css({'height': 0, 'display': 'block'}).animate({'height': origHeight, 'padding-top': 10, 'padding-bottom': 10, 'margin-bottom': 10}, {'duration': 350, 'easing': 'linear'});
+
+			// color the message according to type
+			if (type == 'error')
+				newMsg.css('background', '#900');
+			else if (type == 'win')
+				newMsg.css('background', '#090');
+			else
+				newMsg.css('background', '#db6700');
+
+			// remove message
+			if (type != 'win')
+				setMessageRemoval(userMsgId);
+
+			// increment user message ID
+			userMsgId++;
+		}
+
+		function setMessageRemoval(userMsgId)
+		{
+			setTimeout(
+				function()
+				{
+					userMsg = $('.userMsgs .userMsg#userMsg-'+userMsgId);
+					userMsg.animate({'height': 0, 'padding-top': 0, 'padding-bottom': 0, 'margin': 0}, {'duration': 850, 'easing': 'linear', 'complete': function(){ userMsg.remove(); } });
+				}, 2500);
+		}
+	</script>
+
+	<style type="text/css">
+		@font-face {
+			font-family: 'ticTacToe';
+			src:url('/static/fonts/ticTacToe.eot?-rqdcp6');
+			src:url('/static/fonts/ticTacToe.eot?#iefix-rqdcp6') format('embedded-opentype'),
+				url('/static/fonts/ticTacToe.woff?-rqdcp6') format('woff'),
+				url('/static/fonts/ticTacToe.ttf?-rqdcp6') format('truetype'),
+				url('/static/fonts/ticTacToe.svg?-rqdcp6#ticTacToe') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+
+		[class^="icon-"], [class*=" icon-"] {
+			font-family: 'ticTacToe';
+			speak: none;
+			font-style: normal;
+			font-weight: normal;
+			font-variant: normal;
+			text-transform: none;
+			line-height: 1;
+
+			/* Better Font Rendering =========== */
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		.icon-x:before {
+			content: "\e600";
+		}
+		.icon-o:before {
+			content: "\e601";
+		}
+
+
+		.userMsgs { margin: 0 auto; width: 640px; }
+			.userMsg { display: none; padding: 0 20px; background: #db6700; color: #FFF; font-size: 16px; overflow: hidden;
+						-webkit-border-radius: 10px;
+						-moz-border-radius: 10px;
+						border-radius: 10px; }
+
+		.board { margin: 0 auto; width: 600px; background: #FFF; padding: 20px; margin-bottom: 40px;
+					-webkit-border-radius: 10px;
+					-moz-border-radius: 10px;
+					border-radius: 10px; }
+			.boardSquare { width: 192px; height: 192px; border: 6px solid #000; float: left; cursor: pointer; }
+			.boardSquare:nth-child(1) { border-left: none; border-top: none; }
+			.boardSquare:nth-child(2) { border-top: none; }
+			.boardSquare:nth-child(3) { border-top: none; border-right: none; }
+			.boardSquare:nth-child(5) { border-left: none; }
+			.boardSquare:nth-child(7) { border-right: none; }
+			.boardSquare:nth-child(9) { border-left: none; border-bottom: none; }
+			.boardSquare:nth-child(10) { border-bottom: none; }
+			.boardSquare:nth-child(11) { border-bottom: none; border-right: none; }
+
+				.boardSquare .icon-x, .boardSquare .icon-o { font-size: 80px; margin-top: 50px; }
+				.boardSquare .icon-x { color: #090; }
+				.boardSquare .icon-o { color: #900; }
+	</style>
+
+	<div class="userMsgs"></div>
+
+	<div class="board">
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+
+		<div class="clear"></div>
+
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+
+		<div class="clear"></div>
+
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+		<div class="boardSquare"></div>
+
+		<div class="clear"></div>
+	</div>
+
+{% endblock %}
