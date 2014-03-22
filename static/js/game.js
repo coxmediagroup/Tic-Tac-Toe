@@ -1,61 +1,34 @@
-define(function () {
+define(['cell'], function (Cell) {
     function Game() {
         this.board = $('gameboard');
         this.narrative = $('narrative');
-        this.playerToken = null;
-        this.aiToken = null;
         this.turn = null;
 
         this.tokens = {
-            player: null, 
+            player: null,
             ai: null
         };
 
-        this.cells = this.board.querySelectorAll('.cell');
-        this.listeners = {};
+        this.cells = {};
+        var cells = this.board.querySelectorAll('.cell');
+        for (var i = 0; i < cells.length; i++) {
+            var cell = new Cell(cells[i]);
+            this.cells[cells[i].id] = cell;
+        }
     }
 
-    Game.prototype.addListeners = function() {
-        var self = this;
-        var updateCell = function() {
-            if (self.turn === 'player') {
-                self.markCell(this.id);
-                self.removeListener(this.id);
-                self.turn = 'ai';
-            }
-        };
-        for (var i = 0; i < this.cells.length; i++) {
-            this.cells[i].addEventListener('click', updateCell, false);
-            this.listeners[this.cells[i].id] = updateCell;
+    Game.prototype.update = function() {
+        if (this.status !== 200) {
+            // sad pants
+            return;
         }
-    };
-
-    Game.prototype.removeListener = function(cell) {
-        for (var i = 0; i < this.cells.length; i++) {
-            if (this.cells[i].id === cell) {
-                this.cells[i].removeEventListener('click', this.listeners[this.cells[i].id], false);
-            }
-        }
-    };
-
-    Game.prototype.markCell = function(cell) {
-        for (var i = 0; i < this.cells.length; i++) {
-            if (this.cells[i].id === cell) {
-                this.cells[i].innerHTML = this.tokens[this.turn];
-                this.cells[i].className = 'cell';
-            }
-        }
-    };
-
-    Game.prototype.update = function(response) {
-        var data = JSON.parse(response);
-        this.markCell(data.mark_cell);
-        this.removeListener(data.mark_cell);
-        if (this.turn === 'player') {
-            this.turn = 'ai';
+        var data = JSON.parse(this.response);
+        this.board.cells[data.mark_cell].mark(this.board.tokens[this.board.turn]);
+        if (this.board.turn === 'player') {
+            this.board.turn = 'ai';
         } else {
-            this.turn = 'player';
-            this.narrative.innerHTML = '';
+            this.board.turn = 'player';
+            this.board.narrative.innerHTML = '';
         }
     };
 
@@ -63,12 +36,10 @@ define(function () {
         this.turn = 'player';
         this.tokens.player = 'X';
         this.tokens.ai = 'O';
-        this.addListeners();
+
         var request = new XMLHttpRequest();
         var self = this;
-        request.onload = function() {
-            self.update(this.response);
-        };
+        request.onload = function() {};
         request.open('get', '/player_first/', true);
         request.send();
     };
@@ -77,12 +48,15 @@ define(function () {
         this.turn = 'ai';
         this.tokens.player = 'O';
         this.tokens.ai = 'X';
-        this.addListeners();
+
+        for (var key in this.cells) {
+            this.cells[key].enable(this.tokens.player);
+        }
+
         var request = new XMLHttpRequest();
+        request.board = this;
         var self = this;
-        request.onload = function() {
-            self.update(this.response);
-        };
+        request.onload = this.update;
         request.open('get', '/ai_first/', true);
         request.send();
     };

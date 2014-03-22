@@ -24,7 +24,7 @@
     text-align: center;
 }
 
-#gameboard .cell.open:hover {
+#gameboard .cell.active:hover {
     background-color: #444;
 }
 
