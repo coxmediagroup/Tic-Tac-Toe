@@ -50,15 +50,15 @@ def player_turn(cell):
 
     session['game_state']['player_turn'] = False
     session['game_state']['player_cells'].append(cell)
-    ai_cell = game.calc_ai_move(
+    ai_move = game.calc_ai_move(
         session['game_state']['player_cells'],
         session['game_state']['ai_cells'],
     )
     data = dict(
-        mark_cell=ai_cell,
+        mark_cell=ai_move['cell'],
     )
     session['game_state']['player_turn'] = True
-    session['game_state']['ai_cells'].append(ai_cell)
+    session['game_state']['ai_cells'].append(ai_move['cell'])
     return jsonify(data)
 
 if __name__ == '__main__':

@@ -57,7 +57,7 @@ class TestComputerFirst(unittest.TestCase):
 
     @mock.patch('app.game.calc_ai_move')
     def test_player_turn_added_to_session(self, _calc_ai_move):
-        _calc_ai_move.return_value = 'cell-2:2'
+        _calc_ai_move.return_value = dict(cell='cell-2:2')
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['game_state'] = dict(
@@ -95,13 +95,13 @@ class TestComputerFirst(unittest.TestCase):
                 )
             resp = c.get('/player_turn/cell-1:0/')
             self.assertEqual(200, resp.status_code)
-            expected_cell = game.calc_ai_move(['cell-1:0'], ['cell-0:0'])
+            expected = game.calc_ai_move(['cell-1:0'], ['cell-0:0'])
             actual = json.loads(resp.data)
-            self.assertEqual(actual['mark_cell'], expected_cell)
+            self.assertEqual(actual['mark_cell'], expected['cell'])
 
     @mock.patch('app.game.calc_ai_move')
     def test_ai_third_move_added_to_session(self, _calc_ai_move):
-        _calc_ai_move.return_value = 'cell-2:0'
+        _calc_ai_move.return_value = dict(cell='cell-2:0')
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['game_state'] = dict(

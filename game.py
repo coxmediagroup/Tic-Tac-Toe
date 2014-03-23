@@ -76,6 +76,10 @@ class Board(object):
     def diag2(self):
         return (self._workboard[0][2], self._workboard[1][1], self._workboard[2][0])
 
+    @property
+    def workboard(self):
+        return self._workboard
+
     def is_corner(self, cell):
         return cell in ['cell-0:0', 'cell-0:2', 'cell-2:0', 'cell-2:2']
 
@@ -130,12 +134,26 @@ class Board(object):
 
         raise NotImplementedError
 
-    @property
-    def workboard(self):
-        return self._workboard
-
     def reset_workboard(self):
         self._workboard = deepcopy(self.board)
+
+    def winning_cells(self):
+        if self.row1.count(AI) == 3:
+            return ('cell-0:0', 'cell-0:1', 'cell-0:2')
+        elif self.row2.count(AI) == 3:
+            return ('cell-1:0', 'cell-1:1', 'cell-1:2')
+        elif self.row3.count(AI) == 3:
+            return ('cell-2:0', 'cell-2:1', 'cell-2:2')
+        elif self.col1.count(AI) == 3:
+            return ('cell-0:0', 'cell-1:0', 'cell-2:0')
+        elif self.col2.count(AI) == 3:
+            return ('cell-0:1', 'cell-1:1', 'cell-2:1')
+        elif self.col3.count(AI) == 3:
+            return ('cell-0:2', 'cell-1:2', 'cell-2:2')
+        elif self.diag1.count(AI) == 3:
+            return ('cell-0:0', 'cell-1:1', 'cell-2:2')
+        elif self.diag2.count(AI) == 3:
+            return ('cell-0:2', 'cell-1:1', 'cell-2:0')
 
 
 def ai_move_one():
@@ -153,7 +171,7 @@ def calc_ai_move(player_cells, ai_cells):
         if board.ai_first and board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
             chosen_cell = board.determine_corner_move()
-            return chosen_cell
+            return dict(cell=chosen_cell)
 
     elif board.turn == 5:
         if board.ai_first and board.is_corner(ai_cells[0]):
@@ -164,16 +182,16 @@ def calc_ai_move(player_cells, ai_cells):
                 logging.debug('block attempt detected')
                 # it's a tarp!
                 chosen_cell = board.determine_corner_move()
-                return chosen_cell
+                return dict(cell=chosen_cell)
             else:
                 logging.debug('no block attempt made')
                 # go for the win
                 chosen_cell = board.determine_win_move()
-                return chosen_cell
-
+                winning_cells = board.winning_cells()
                 return dict(
                     cell=chosen_cell,
                     victor='ai',
+                    winning_cells=winning_cells,
                 )
 
     raise NotImplementedError
