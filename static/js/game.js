@@ -1,7 +1,8 @@
 define(['cell'], function (Cell) {
     function Game() {
         this.board = $('gameboard');
-        this.narrative = $('narrative');
+        this.initialStart = $('initial-start');
+        this.restart = $('restart');
 
         this.tokens = {
             player: null,
@@ -32,9 +33,13 @@ define(['cell'], function (Cell) {
             var cellName = data.winning_cells[i];
             this.cells[cellName].winner();
         }
+
+        // prompt for restart
+        this.restart.style.display = 'block';
     };
 
     Game.prototype.aiFirst = function() {
+        this.restart.style.display = 'none';
         this.tokens.player = 'O';
         this.tokens.ai = 'X';
 
@@ -52,7 +57,7 @@ define(['cell'], function (Cell) {
             }
             var data = JSON.parse(this.response);
             self.cells[data.mark_cell].mark(self.tokens.ai);
-            self.narrative.innerHTML = '';
+            self.initialStart.style.display = 'none';
         };
         request.open('get', '/ai_first/', true);
         request.send();

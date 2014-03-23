@@ -8,6 +8,8 @@ define(function() {
 
     Cell.prototype.enable = function(playerToken) {
         this.playerToken = playerToken;
+        this.element.className = 'cell active';
+        this.element.innerHTML = '';
         var self = this;
         this.onClick = function() {
             var request = new XMLHttpRequest();

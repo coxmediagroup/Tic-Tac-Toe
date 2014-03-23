@@ -24,20 +24,35 @@
         </div>
     </div>
     <div id="narrative">
-        Greetings, Human. Do you wish to face the perils of The Crucible? The buy in is cheap,
-        but the stakes are high! Surely you can best me. C'mon, give it a try! I can tell you're
-        stressed looking at this empty board. It's a big decision making your first mark. I'm feeling
-        generous so I'll do you a favor and take the first move, with absolutely no strategic
-        benefit to myself.
-        <div id="choices">
-            <input id="ai_first" type="submit" value="Gee, thanks! Let's do this!" />
-            <script>
-                $('ai_first').addEventListener('click', function() {
-                    require(['game'], function(game) {
-                        game.board.aiFirst();
+        <div id="initial-start">
+            Greetings, Human. Do you wish to face the perils of The Crucible? The buy in is cheap,
+            but the stakes are high! Surely you can best me. C'mon, give it a try! I can tell you're
+            stressed looking at this empty board. It's a big decision making your first mark. I'm feeling
+            generous so I'll do you a favor and take the first move, with absolutely no strategic
+            benefit to myself.
+            <div class="choices">
+                <input id="ai_first" type="submit" value="Gee, thanks! Let's do this!" />
+                <script>
+                    $('ai_first').addEventListener('click', function() {
+                        require(['game'], function(game) {
+                            game.board.aiFirst();
+                        });
                     });
-                });
-            </script>
+                </script>
+            </div>
+        </div>
+        <div id="restart" style="display: none;" />
+            Care to try your luck again?
+            <div class="choices">
+                <input id="restart" type="submit" value="Restart" />
+                <script>
+                    $('restart').addEventListener('click', function() {
+                        require(['game'], function(game) {
+                            game.board.aiFirst();
+                        });
+                    });
+                </script>
+            </div>
         </div>
     </div>
 {% endblock %}

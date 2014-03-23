@@ -14,6 +14,10 @@ AI = 'AI'
 P = 'P'
 
 
+class NoWinningMove(Exception):
+    pass
+
+
 class Board(object):
     def __init__(self, player_cells, ai_cells):
         self.player_cells = player_cells
@@ -195,7 +199,7 @@ class Board(object):
                     logging.debug('ai wins')
                     return chosen_cell
 
-        raise NotImplementedError
+        raise NoWinningMove
 
     def reset_workboard(self):
         self._workboard = deepcopy(self.board)
@@ -272,6 +276,7 @@ def calc_ai_move(player_cells, ai_cells):
     elif board.turn == 7:
         if board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
+            # TODO: catch NoWinningMove and handle tie game
             chosen_cell = board.determine_win_move()
             winning_cells = board.winning_cells()
             return dict(

@@ -147,3 +147,16 @@ class TestAIFirstCornerTurn7(unittest.TestCase):
             winning_cells=('cell-0:2', 'cell-1:2', 'cell-2:2'),
         )
         self.assertEqual(expected, actual)
+
+    def test_draw(self):
+        #A|A|P
+        #-----
+        # |P|
+        #-----
+        # |P|A
+        self.assertRaises(
+            game.NoWinningMove,
+            game.calc_ai_move,
+            ['cell-1:1', 'cell-2:1', 'cell-0:2'],
+            ['cell-0:0', 'cell-2:2', 'cell-0:1'],
+        )

@@ -49,17 +49,17 @@
     margin-right: auto;
 }
 
-#choices {
+.choices {
     margin-top: 10px;
 }
 
-#choices input[type="submit"] {
+.choices input[type="submit"] {
     background-color: #444;
     border: 1px solid #999;
     color: #ccc;
     padding: 5px;
 }
 
-#choices input[type="submit"]:hover {
+.choices input[type="submit"]:hover {
     border: 1px solid orange;
 }
