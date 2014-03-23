@@ -85,6 +85,7 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
         actual = game.calc_ai_move(['cell-2:1', 'cell-1:2'], ['cell-2:2', 'cell-0:2'])
         self.assertEqual('cell-0:0', actual)
 
+    @unittest.skip('unfinished')
     def test_player_no_block(self):
         #P| |P
         #-----
@@ -92,11 +93,21 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
         #-----
         #A|X|A
         actual = game.calc_ai_move(['cell-0:0', 'cell-0:2'], ['cell-2:0', 'cell-2:2'])
-        self.assertEqual('cell-2:1', actual)
+        expected = dict(
+            cell='cell-2:1',
+            victor='ai',
+            row=('cell-2:0', 'cell-2:1', 'cell-2:2'),
+        )
+        self.assertEqual(expected, actual)
         #A| |P
         #-----
         #X| |
         #-----
         #A| |P
         actual = game.calc_ai_move(['cell-2:2', 'cell-0:2'], ['cell-2:0', 'cell-0:0'])
-        self.assertEqual('cell-1:0', actual)
+        expected = dict(
+            cell='cell-1:0',
+            victor='ai',
+            row=('cell-0:0', 'cell-1:0', 'cell-2:0'),
+        )
+        self.assertEqual(expected, actual)
