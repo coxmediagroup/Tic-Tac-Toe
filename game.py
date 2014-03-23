@@ -168,13 +168,13 @@ def calc_ai_move(player_cells, ai_cells):
     logging.debug('turn: %s', board.turn)
 
     if board.turn == 3:
-        if board.ai_first and board.is_corner(ai_cells[0]):
+        if board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
             chosen_cell = board.determine_corner_move()
             return dict(cell=chosen_cell)
 
     elif board.turn == 5:
-        if board.ai_first and board.is_corner(ai_cells[0]):
+        if board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
             logging.debug('checking for block attempt')
 
@@ -193,5 +193,15 @@ def calc_ai_move(player_cells, ai_cells):
                     victor='ai',
                     winning_cells=winning_cells,
                 )
+    elif board.turn == 7:
+        if board.is_corner(ai_cells[0]):
+            logging.debug('ai started in corner cell')
+            chosen_cell = board.determine_win_move()
+            winning_cells = board.winning_cells()
+            return dict(
+                cell=chosen_cell,
+                victor='ai',
+                winning_cells=winning_cells,
+            )
 
     raise NotImplementedError
