@@ -1,16 +1,15 @@
 import json
 
 from django.db import models
-from django.db.models.signals import post_init
 
 
 DEFAULT_BOARD = '000000000'
+EMPTY_MARK = '0'
 COMPUTER_MARK = '1'
 PLAYER_MARK = '2'
-
+SIZE = 3
 
 class Game(models.Model):
-    name = models.CharField(max_length=100)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -20,39 +19,70 @@ class Game(models.Model):
 
 
 class TicTacToe(Game):
-    board = models.CharField(max_length=9, default=DEFAULT_BOARD)
+    board = models.CharField(max_length=SIZE, default=DEFAULT_BOARD)
     move_count = models.PositiveIntegerField(null=True, blank=True)
 
+    class Meta(Game.Meta):
+        verbose_name = 'Tic Tac Toe'
+
     def __unicode__(self):
-        return 'Tic-Tac-Toe - {}'.format(self.name)
+        return '{}'.format(self.__class__.__name__)
 
     def move_player(self, position):
-        try:
-            isinstance(position, int)
-        except:
-            print 'OH NOEZ'
+
+        if int(position) <= len(self.board) and self._is_valid_move(position):
+            self.board = list(self.board)
+            self.board.pop(position)
+            self.board.insert(position, PLAYER_MARK)
+            self.board = ''.join(self.board)
+            self.save()
+
+            # Check if the game is complete.
+            if self._is_complete():
+                print "GAME OVER"
         else:
-            if int(position) <= len(self.board):
-                self.board = list(self.board)
-                self.board.pop(position)
-                self.board.insert(position, COMPUTER_MARK)
-                self.board = ''.join(self.board)
-                self.save()
+            print 'OH NOEZ NOT VALID MOVE'
         return
 
     def move_computer(self):
         return
 
-    def status(self):
-        return
+    def _is_complete(self):
+        """Collect all the winning paths and check if game is won or stalemate."""
+        winners = []
+        board = [list(self.board[x:x+SIZE]) for x in range(0, len(self.board), SIZE)]
+       
+        # Find all horizontal winning paths.
+        for row in board:
+            winners.append(row)
+       
+        # Find all vertical winning paths.
+        for x in range(0, SIZE):
+            cols = []
+            for row in board:
+                cols.append(row[x])
+            winners.append(cols)
 
-    def _is_valid_move(self):
-        return
+        # Find all diagonal winning paths.
+        winners.append([x[i] for i, x in enumerate(board)])
+        winners.append([x[-i-1] for i, x in enumerate(board)])
+
+        # Iterate through winning paths to check if game is won.
+        for item in winners:
+            if all(item[0] == x and x != EMPTY_MARK for x in item):
+                print "WINNER"
+                return True
+
+        # Check if there is a stalemate.
+        if not EMPTY_MARK in self.board:
+            print "STALEMATE!!!"
+            return True
+
+        # Game not over, return False.
+        return False
 
 
-def set_board(sender, **kwargs):
-    instance = kwargs.get('instance')
-    instance.build()
-    instance.save()
+    def _is_valid_move(self, position):
+        return list(self.board).pop(position) == EMPTY_MARK
 
-#post_init.connect(set_board, TicTacToe)
+
