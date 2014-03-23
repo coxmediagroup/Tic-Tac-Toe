@@ -39,10 +39,25 @@ class Board(object):
 
     @property
     def block_attempt(self):
-        return (self.row1.count(AI) == 2 and P in self.row1
-                or self.row3.count(AI) == 2 and P in self.row3
-                or self.col1.count(AI) == 2 and P in self.col1
-                or self.col3.count(AI) == 2 and P in self.col3)
+        results = filter(
+            None,
+            map(
+                lambda x: x.count(AI) == 2 and P in x,
+                [self.row1, self.row3, self.col1, self.col3],
+            ),
+        )
+        return len(results) > 0
+
+    @property
+    def potential_win(self):
+        results = filter(
+            None,
+            map(
+                lambda x: x.count(P) == 2 and P not in x,
+                [self.row1, self.row2, self.row3, self.col1, self.col2, self.col3, self.diag1, self.diag2],
+            ),
+        )
+        return len(results) > 0
 
     @property
     def row1(self):
@@ -86,6 +101,31 @@ class Board(object):
     def is_edge(self, cell):
         return cell in ['cell-0:1', 'cell-1:0', 'cell-1:2', 'cell-2:1']
 
+    def is_center(self, cell):
+        return cell == 'cell-1:1'
+
+    def block_win(self):
+        for row in range(3):
+            for col in range(3):
+                self.reset_workboard()
+                chosen_cell = 'cell-{}:{}'.format(row, col)
+                if self.workboard[row][col] != '':
+                    logging.debug('%s is occupied, moving on', chosen_cell)
+                    continue
+
+                self.workboard[row][col] = AI
+
+                results = filter(
+                    None,
+                    map(
+                        lambda x: x.count(P) == 2 and AI in x,
+                        [self.row1, self.row2, self.row3, self.col1, self.col2, self.col3, self.diag1, self.diag2],
+                    ),
+                )
+                if len(results) > 0 and not self.potential_win:
+                    logging.debug('next ai move: %s', chosen_cell)
+                    return chosen_cell
+
     def determine_corner_move(self):
         for row in range(3):
             for col in range(3):
@@ -100,14 +140,37 @@ class Board(object):
 
                 self.workboard[row][col] = AI
 
-                if (self.row1.count(AI) == 2 and P not in self.row1
-                        or self.row3.count(AI) == 2 and P not in self.row3
-                        or self.col1.count(AI) == 2 and P not in self.col1
-                        or self.col3.count(AI) == 2 and P not in self.col3):
+                results = filter(
+                    None,
+                    map(
+                        lambda x: x.count(AI) == 2 and P not in x,
+                        [self.row1, self.row3, self.col1, self.col3],
+                    ),
+                )
+                if len(results) > 0:
                     logging.debug('next ai move: %s', chosen_cell)
                     return chosen_cell
 
         raise NotImplementedError
+
+    def determine_straight_diagonal(self, cell):
+        for row in range(3):
+            for col in range(3):
+                self.reset_workboard()
+                chosen_cell = 'cell-{}:{}'.format(row, col)
+                if self.workboard[row][col] != '':
+                    logging.debug('%s is occupied, moving on', chosen_cell)
+                    continue
+                elif self.is_edge(chosen_cell):
+                    logging.debug('%s is an edge cell, moving on', chosen_cell)
+                    continue
+
+                self.workboard[row][col] = AI
+
+                if (self.diag1.count(AI) == 2
+                        or self.diag2.count(AI) == 2):
+                    logging.debug('next ai move: %s', chosen_cell)
+                    return chosen_cell
 
     def determine_win_move(self):
         for row in range(3):
@@ -168,13 +231,19 @@ def calc_ai_move(player_cells, ai_cells):
     logging.debug('turn: %s', board.turn)
 
     if board.turn == 3:
-        if board.is_corner(ai_cells[0]):
+        if board.is_corner(ai_cells[0]) and not board.is_center(player_cells[0]):
             logging.debug('ai started in corner cell')
+            logging.debug('player chose non-center cell as first move')
             chosen_cell = board.determine_corner_move()
+            return dict(cell=chosen_cell)
+        elif board.is_corner(ai_cells[0]):
+            logging.debug('ai started in corner cell')
+            logging.debug('player chose center cell as first move')
+            chosen_cell = board.determine_straight_diagonal(ai_cells[0])
             return dict(cell=chosen_cell)
 
     elif board.turn == 5:
-        if board.is_corner(ai_cells[0]):
+        if board.is_corner(ai_cells[0]) and not board.is_center(player_cells[0]):
             logging.debug('ai started in corner cell')
             logging.debug('checking for block attempt')
 
@@ -193,6 +262,13 @@ def calc_ai_move(player_cells, ai_cells):
                     victor='ai',
                     winning_cells=winning_cells,
                 )
+        elif board.is_corner(ai_cells[0]):
+            logging.debug('ai started in corner cell')
+            logging.debug('player chose center cell as first move')
+            # every move is a counter
+            chosen_cell = board.block_win()
+            return dict(cell=chosen_cell)
+
     elif board.turn == 7:
         if board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')

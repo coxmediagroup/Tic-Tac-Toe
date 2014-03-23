@@ -66,6 +66,15 @@ class TestAIFirstCornerTurn3(unittest.TestCase):
         actual = game.calc_ai_move(['cell-0:0'], ['cell-2:0'])
         self.assertEqual(dict(cell='cell-2:2'), actual)
 
+    def test_player_center(self):
+        #A| |
+        #-----
+        # |P|
+        #-----
+        # | |X
+        actual = game.calc_ai_move(['cell-1:1'], ['cell-0:0'])
+        self.assertEqual(dict(cell='cell-2:2'), actual)
+
 
 class TestAIFirstCornerTurn5(unittest.TestCase):
 
@@ -110,6 +119,15 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
             winning_cells=('cell-0:0', 'cell-1:0', 'cell-2:0'),
         )
         self.assertEqual(expected, actual)
+
+    def test_player_center(self):
+        #A| |P
+        #-----
+        # |P|
+        #-----
+        #X| |A
+        actual = game.calc_ai_move(['cell-1:1', 'cell-0:2'], ['cell-0:0', 'cell-2:2'])
+        self.assertEqual(dict(cell='cell-2:0'), actual)
 
 
 class TestAIFirstCornerTurn7(unittest.TestCase):
