@@ -20,11 +20,6 @@ def index():
     return render_template('main.html', **dict(host=app.config['HOST'], port=app.config['PORT']))
 
 
-@app.route('/player_first/')
-def player_first():
-    return jsonify(dict())
-
-
 @app.route('/ai_first/', methods=['GET'])
 def ai_first():
     cell = game.ai_move_one()
@@ -59,6 +54,11 @@ def player_turn(cell):
     )
     session['game_state']['player_turn'] = True
     session['game_state']['ai_cells'].append(ai_move['cell'])
+
+    if 'winning_cells' in ai_move:
+        session['game_state']['player_turn'] = False
+        data['victor'] = ai_move['victor']
+        data['winning_cells'] = ai_move['winning_cells']
     return jsonify(data)
 
 if __name__ == '__main__':

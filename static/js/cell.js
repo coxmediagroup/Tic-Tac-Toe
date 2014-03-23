@@ -36,5 +36,9 @@ define(function() {
         this.disable();
     };
 
+    Cell.prototype.winner = function() {
+        this.element.className = 'cell winner';
+    };
+
     return Cell;
 });

@@ -19,17 +19,19 @@ define(['cell'], function (Cell) {
     Game.prototype.aiResponse = function(response) {
         var data = JSON.parse(response);
         this.cells[data.mark_cell].mark(this.tokens.ai);
-    };
+        if (data.winning_cells === undefined) {
+            return;
+        }
 
-    Game.prototype.playerFirst = function() {
-        this.tokens.player = 'X';
-        this.tokens.ai = 'O';
+        // disable all cells since there is a winner
+        for (var key in this.cells) {
+            this.cells[key].disable();
+        }
 
-        var request = new XMLHttpRequest();
-        var self = this;
-        request.onload = function() {};
-        request.open('get', '/player_first/', true);
-        request.send();
+        for (var i = 0; i < data.winning_cells.length; i++) {
+            var cellName = data.winning_cells[i];
+            this.cells[cellName].winner();
+        }
     };
 
     Game.prototype.aiFirst = function() {
