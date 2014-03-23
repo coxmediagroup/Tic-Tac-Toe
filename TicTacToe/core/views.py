@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
+
 
 def standard(request):
-    o = dict(test='you suck')
-    return render_to_response('grid.html', 0)
+    msg = None
+    return render(request, 'grid.html', {'msg': msg})

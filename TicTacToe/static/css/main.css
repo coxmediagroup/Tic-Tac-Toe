@@ -7,13 +7,18 @@ body {
     width: 600px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .cell {
     border: 2px solid #ffffff;
+    display: block;
     height: 195px;
     width: 195px;
+}
+
+.cell:hover {
+    cursor: pointer;
 }
 
 .left {
@@ -21,9 +26,25 @@ body {
     float: left;
 }
 
+.legend {
+    vertical-align: middle;
+}
+
 .middle {
     border-right-color: #000;
     float: left;
+}
+
+.legend_container {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.legend {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 75px;
 }
 
 .right {
