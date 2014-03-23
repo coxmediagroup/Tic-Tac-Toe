@@ -123,7 +123,6 @@ class TestComputerFirst(unittest.TestCase):
         _calc_ai_move.return_value = dict(
             cell='cell-1:0',
             winning_cells=('cell-0:0', 'cell-1:0', 'cell-2:0'),
-            victor='ai'
         )
         with self.client as c:
             with c.session_transaction() as sess:
@@ -140,8 +139,33 @@ class TestComputerFirst(unittest.TestCase):
             )
             expected_response = dict(
                 mark_cell='cell-1:0',
-                victor='ai',
                 winning_cells=['cell-0:0', 'cell-1:0', 'cell-2:0'],
+            )
+            actual_session = session['game_state']
+            self.assertEqual(expected_session, actual_session)
+            actual_response = json.loads(resp.data)
+            self.assertEqual(expected_response, actual_response)
+
+    def test_draw_handled(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['game_state'] = dict(
+                    player_turn=True,
+                    ai_cells=['cell-0:0', 'cell-2:2', 'cell-0:1'],
+                    player_cells=['cell-1:1', 'cell-2:1'],
+                )
+            resp = c.get('/player_turn/cell-0:2/')
+            expected_session = dict(
+                player_turn=True,
+                ai_cells=['cell-0:0', 'cell-2:2', 'cell-0:1'],
+                player_cells=['cell-1:1', 'cell-2:1'],
+            )
+            expected_response = dict(
+                draw_cell='cell-0:2',
+                message=("I'm pretty sure you just misclicked. I mean, it's almost as if you want the game "
+                         "to end in a draw. I'm going to give you the benefit of the doubt and just assume "
+                         "you totally did not intend for this match to be a tie. Lucky you! You get to pick "
+                         "again!")
             )
             actual_session = session['game_state']
             self.assertEqual(expected_session, actual_session)

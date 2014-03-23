@@ -3,6 +3,7 @@ define(['cell'], function (Cell) {
         this.board = $('gameboard');
         this.initialStart = $('initial-start');
         this.restart = $('restart');
+        this.messages = $('messages');
 
         this.tokens = {
             player: null,
@@ -17,20 +18,31 @@ define(['cell'], function (Cell) {
         }
     }
 
-    Game.prototype.aiResponse = function(response) {
-        var data = JSON.parse(response);
-        this.cells[data.mark_cell].mark(this.tokens.ai);
-        if (data.winning_cells === undefined) {
+    Game.prototype.aiResponse = function(responseData) {
+        this.hideMessage();
+
+        if (responseData.mark_cell !== undefined) {
+            this.cells[responseData.mark_cell].mark(this.tokens.ai);
+        }
+
+        if (responseData.draw_cell !== undefined) {
+            // player trying to force a draw
+            this.cells[responseData.draw_cell].angry();
+            this.showMessage(responseData.message);
             return;
         }
 
+        if (responseData.winning_cells === undefined) {
+            return;
+        }
+        // winner winner chicken dinner
         // disable all cells since there is a winner
         for (var key in this.cells) {
             this.cells[key].disable();
         }
 
-        for (var i = 0; i < data.winning_cells.length; i++) {
-            var cellName = data.winning_cells[i];
+        for (var i = 0; i < responseData.winning_cells.length; i++) {
+            var cellName = responseData.winning_cells[i];
             this.cells[cellName].winner();
         }
 
@@ -39,7 +51,8 @@ define(['cell'], function (Cell) {
     };
 
     Game.prototype.aiFirst = function() {
-        this.restart.style.display = 'none';
+        this.hideRestart();
+        this.hideMessage();
         this.tokens.player = 'O';
         this.tokens.ai = 'X';
 
@@ -61,6 +74,23 @@ define(['cell'], function (Cell) {
         };
         request.open('get', '/ai_first/', true);
         request.send();
+    };
+
+    Game.prototype.showMessage = function(message) {
+        this.messages.innerHTML = message;
+        this.messages.style.display = '';
+    };
+
+    Game.prototype.hideMessage = function() {
+        this.messages.style.display = 'none';
+    };
+
+    Game.prototype.hideRestart = function() {
+        this.restart.style.display = 'none';
+    };
+
+    Game.prototype.showRestart = function() {
+        this.restart.style.display = '';
     };
 
     return {

@@ -15,8 +15,12 @@ define(function() {
             var request = new XMLHttpRequest();
             request.onload = function() {
                 if (this.status === 200) {
-                    self.mark(self.playerToken);
-                    self.board.aiResponse(this.response);
+                    var data = JSON.parse(this.response);
+                    if (data.mark_cell !== undefined) {
+                        // if 'mark_cell' isn't present the player is trying to force a draw, so don't mark
+                        self.mark(self.playerToken);
+                    }
+                    self.board.aiResponse(data);
                     return;
                 }
                 // swallow errors
@@ -40,6 +44,12 @@ define(function() {
 
     Cell.prototype.winner = function() {
         this.element.className = 'cell winner';
+    };
+
+    Cell.prototype.angry = function() {
+        this.disable();
+        this.element.innerHTML = '(>_<)';
+        this.element.className = 'cell angry';
     };
 
     return Cell;

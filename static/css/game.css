@@ -24,6 +24,10 @@
     text-align: center;
 }
 
+#gameboard .cell.angry {
+    color: red;
+}
+
 #gameboard .winner {
     background-color: black;
 }

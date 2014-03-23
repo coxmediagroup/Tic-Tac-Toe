@@ -44,20 +44,26 @@ def player_turn(cell):
         return jsonify(), 410
 
     session['game_state']['player_turn'] = False
-    session['game_state']['player_cells'].append(cell)
     ai_move = game.calc_ai_move(
-        session['game_state']['player_cells'],
+        session['game_state']['player_cells'] + [cell],
         session['game_state']['ai_cells'],
     )
-    data = dict(
-        mark_cell=ai_move['cell'],
-    )
+    if 'draw_cell' in ai_move:
+        data = dict(
+            draw_cell=ai_move['draw_cell'],
+            message=ai_move['message'],
+        )
+    else:
+        data = dict(
+            mark_cell=ai_move['cell'],
+        )
+        session['game_state']['ai_cells'].append(ai_move['cell'])
+        session['game_state']['player_cells'].append(cell)
+
     session['game_state']['player_turn'] = True
-    session['game_state']['ai_cells'].append(ai_move['cell'])
 
     if 'winning_cells' in ai_move:
         session['game_state']['player_turn'] = False
-        data['victor'] = ai_move['victor']
         data['winning_cells'] = ai_move['winning_cells']
     return jsonify(data)
 

@@ -4,6 +4,16 @@ from random import choice
 from copy import deepcopy
 
 
+MESSAGES = dict(
+    draw=[
+        ("I'm pretty sure you just misclicked. I mean, it's almost as if you want the game "
+         "to end in a draw. I'm going to give you the benefit of the doubt and just assume "
+         "you totally did not intend for this match to be a tie. Lucky you! You get to pick "
+         "again!"),
+    ],
+)
+
+
 CLEAN_BOARD = [
     ['', '', ''],
     ['', '', ''],
@@ -224,7 +234,7 @@ class Board(object):
 
 
 def ai_move_one():
-    choices = ['cell-0:0', 'cell-0:2', 'cell-1:1', 'cell-2:0', 'cell-2:2']
+    choices = ['cell-0:0', 'cell-0:2', 'cell-2:0', 'cell-2:2']
     return choice(choices)
 
 
@@ -263,7 +273,6 @@ def calc_ai_move(player_cells, ai_cells):
                 winning_cells = board.winning_cells()
                 return dict(
                     cell=chosen_cell,
-                    victor='ai',
                     winning_cells=winning_cells,
                 )
         elif board.is_corner(ai_cells[0]):
@@ -276,13 +285,18 @@ def calc_ai_move(player_cells, ai_cells):
     elif board.turn == 7:
         if board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
-            # TODO: catch NoWinningMove and handle tie game
-            chosen_cell = board.determine_win_move()
-            winning_cells = board.winning_cells()
-            return dict(
-                cell=chosen_cell,
-                victor='ai',
-                winning_cells=winning_cells,
-            )
+            try:
+                chosen_cell = board.determine_win_move()
+                winning_cells = board.winning_cells()
+                return dict(
+                    cell=chosen_cell,
+                    winning_cells=winning_cells,
+                )
+            except NoWinningMove:
+                logging.debug('player attempting to force a draw')
+                return dict(
+                    draw_cell=player_cells[-1],
+                    message=choice(MESSAGES['draw']),
+                )
 
     raise NotImplementedError
