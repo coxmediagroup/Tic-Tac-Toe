@@ -30,7 +30,23 @@ class TicTacToe(Game):
         return '{}'.format(self.board)
 
     def move(self, position=None, player=None):
+        """
+        Object method to initiate a move in the Tic-Tac-Toe game.
 
+        First runs a few sanity checks to make sure it's not a completed game
+        and that the method was initialized correctly.
+
+        If position and player are given then the turn must be for the player, if
+        neither are given then the turn must be for the computer.
+
+        After each player turn, the computer automatically gets a turn. The computer
+        determines it's next move based on the following logic:
+
+        1) Check if player has more than 1 mark, if not, place at center.
+        2) If the player has more than one mark, block any attemp at win.
+        3) If no attempt at win, place mark in one of the corners.
+
+        """
         # Check if the game is still active.
         if self.is_complete:
             print "GAME ALREADY FINISHED"
@@ -40,37 +56,34 @@ class TicTacToe(Game):
         # the players mark. Initiate the computer's turn once completed.
         if player:
             if int(position) <= len(self.board) and self._is_valid_move(position):
-                self.board = list(self.board)
-                self.board.pop(position)
-                self.board.insert(position, PLAYER_MARK)
-                self.board = ''.join(self.board)
-                self.save()
+                self._place_mark(position, PLAYER_MARK)
 
                 # Check if the game is complete, if not then computers turn.
-                if self._is_complete():
+                if self._is_complete:
                     print "GAME OVER"
                 else:
                     self.move()
             else:
                 print 'OH NOEZ NOT VALID MOVE'
         else:
-            # Add logic here so that computer always wins
-            # 1) Check if player has more than 1 mark, if not, move to center
-            # 2) If player has more than 1 mark, block any attempt at winning
-            print "COMPUTER TURN"
+            # Check if player has more than 1 mark, if not, move to center
             marks = self.board.count(PLAYER_MARK)
-            print marks
+            
             if marks < 2 and self._center_empty:
-                self.board = list(self.board)
-                self.board.pop(self._center_position)
-                self.board.insert(self._center_position, COMPUTER_MARK)
-                self.board = ''.join(self.board)
-                self.save()
+                self._place_mark(self._center_position, COMPUTER_MARK)
+
 
         return
 
-    def _is_complete(self):
-        """Collect all the winning paths and check if game is won or stalemate."""
+    def _place_mark(self, position, mark):
+        self.board = list(self.board)
+        self.board.pop(position)
+        self.board.insert(position, mark)
+        self.board = ''.join(self.board)
+        return self.save()
+
+    @property
+    def _winning_paths(self):
         winners = []
         board = [list(self.board[x:x+SIZE]) for x in range(0, len(self.board), SIZE)]
        
@@ -89,8 +102,12 @@ class TicTacToe(Game):
         winners.append([x[i] for i, x in enumerate(board)])
         winners.append([x[-i-1] for i, x in enumerate(board)])
 
+        return winners
+
+    @property
+    def _is_complete(self):
         # Iterate through winning paths to check if game is won.
-        for item in winners:
+        for item in self._winning_paths:
             if all(item[0] == x and x != EMPTY_MARK for x in item):
                 print "WINNER"
                 self.is_complete = True
