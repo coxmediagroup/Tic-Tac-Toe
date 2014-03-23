@@ -84,13 +84,16 @@ def calc_ai_move(player_cells, ai_cells):
                 logging.debug('no block attempt made')
 
             if block_attempt is True:
+                # it's a tarp!
                 for row in range(3):
                     for col in range(3):
                         work_board = deepcopy(board)
                         chosen_cell = 'cell-{}:{}'.format(row, col)
                         if work_board[row][col] != '':
+                            logging.debug('%s is occupied, moving on', chosen_cell)
                             continue
-                        elif not _is_corner(chosen_cell):
+                        elif _is_edge(chosen_cell):
+                            logging.debug('%s is an edge cell, moving on', chosen_cell)
                             continue
 
                         work_board[row][col] = AI
@@ -102,6 +105,32 @@ def calc_ai_move(player_cells, ai_cells):
                                 or col_row1.count(AI) == 2 and P not in col_row1
                                 or col_row2.count(AI) == 2 and P not in col_row2):
                             logging.debug('next ai move: %s', chosen_cell)
+                            return chosen_cell
+            else:
+                # go for the win
+                for row in range(3):
+                    for col in range(3):
+                        work_board = deepcopy(board)
+                        chosen_cell = 'cell-{}:{}'.format(row, col)
+                        if work_board[row][col] != '':
+                            logging.debug('%s is occupied, moving on', chosen_cell)
+                            continue
+
+                        work_board[row][col] = AI
+
+                        col_row1 = (work_board[0][0], work_board[1][0], work_board[2][0])
+                        col_row2 = (work_board[0][2], work_board[1][2], work_board[2][2])
+                        diag_row1 = (work_board[0][0], work_board[1][1], work_board[2][2])
+                        diag_row2 = (work_board[0][2], work_board[1][1], work_board[2][0])
+                        if (work_board[0].count(AI) == 3
+                                or work_board[1].count(AI) == 3
+                                or work_board[2].count(AI) == 3
+                                or col_row1.count(AI) == 3
+                                or col_row2.count(AI) == 3
+                                or diag_row1.count(AI) == 3
+                                or diag_row2.count(AI) == 3):
+                            logging.debug('next ai move: %s', chosen_cell)
+                            logging.debug('ai wins')
                             return chosen_cell
 
     raise NotImplementedError
