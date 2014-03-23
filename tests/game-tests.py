@@ -1,5 +1,7 @@
 import unittest
 
+import mock
+
 import game
 
 
@@ -94,7 +96,9 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
         actual = game.calc_ai_move(['cell-2:1', 'cell-1:2'], ['cell-2:2', 'cell-0:2'])
         self.assertEqual(dict(cell='cell-0:0'), actual)
 
-    def test_player_no_block(self):
+    @mock.patch('game.choice')
+    def test_player_no_block(self, _choice):
+        _choice.return_value = 'I win!'
         #P| |P
         #-----
         # | |
@@ -104,6 +108,7 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
         expected = dict(
             cell='cell-2:1',
             winning_cells=('cell-2:0', 'cell-2:1', 'cell-2:2'),
+            message='I win!',
         )
         self.assertEqual(expected, actual)
         #A| |P
@@ -115,6 +120,7 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
         expected = dict(
             cell='cell-1:0',
             winning_cells=('cell-0:0', 'cell-1:0', 'cell-2:0'),
+            message='I win!',
         )
         self.assertEqual(expected, actual)
 
@@ -130,7 +136,9 @@ class TestAIFirstCornerTurn5(unittest.TestCase):
 
 class TestAIFirstCornerTurn7(unittest.TestCase):
 
-    def test_player_block(self):
+    @mock.patch('game.choice')
+    def test_player_block(self, _choice):
+        _choice.return_value = 'I win!'
         # At this point there's a trap setup, so it's a meager block attempt
 
         #A|P|A
@@ -142,6 +150,7 @@ class TestAIFirstCornerTurn7(unittest.TestCase):
         expected = dict(
             cell='cell-1:2',
             winning_cells=('cell-0:2', 'cell-1:2', 'cell-2:2'),
+            message='I win!',
         )
         self.assertEqual(expected, actual)
 

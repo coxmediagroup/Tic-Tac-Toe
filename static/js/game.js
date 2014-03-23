@@ -47,7 +47,8 @@ define(['cell'], function (Cell) {
         }
 
         // prompt for restart
-        this.restart.style.display = 'block';
+        this.showMessage(responseData.message);
+        this.showRestart();
     };
 
     Game.prototype.aiFirst = function() {

@@ -11,6 +11,13 @@ MESSAGES = dict(
          "you totally did not intend for this match to be a tie. Lucky you! You get to pick "
          "again!"),
     ],
+    win=[
+        'I win!',
+        'Did you honestly think you could beat me?',
+        'The Crucible is not for the faint of heart!',
+        "You couldn't beat a computer playing 90% fair while also having an opening strategic advantage?",
+        "It's alright, Human, you're only... human.",
+    ],
 )
 
 
@@ -274,6 +281,7 @@ def calc_ai_move(player_cells, ai_cells):
                 return dict(
                     cell=chosen_cell,
                     winning_cells=winning_cells,
+                    message=choice(MESSAGES['win']),
                 )
         elif board.is_corner(ai_cells[0]):
             logging.debug('ai started in corner cell')
@@ -291,6 +299,7 @@ def calc_ai_move(player_cells, ai_cells):
                 return dict(
                     cell=chosen_cell,
                     winning_cells=winning_cells,
+                    message=choice(MESSAGES['win']),
                 )
             except NoWinningMove:
                 logging.debug('player attempting to force a draw')

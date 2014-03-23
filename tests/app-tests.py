@@ -123,6 +123,7 @@ class TestComputerFirst(unittest.TestCase):
         _calc_ai_move.return_value = dict(
             cell='cell-1:0',
             winning_cells=('cell-0:0', 'cell-1:0', 'cell-2:0'),
+            message='I win!',
         )
         with self.client as c:
             with c.session_transaction() as sess:
@@ -140,6 +141,7 @@ class TestComputerFirst(unittest.TestCase):
             expected_response = dict(
                 mark_cell='cell-1:0',
                 winning_cells=['cell-0:0', 'cell-1:0', 'cell-2:0'],
+                message='I win!',
             )
             actual_session = session['game_state']
             self.assertEqual(expected_session, actual_session)

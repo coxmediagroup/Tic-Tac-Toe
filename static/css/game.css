@@ -53,6 +53,10 @@
     margin-right: auto;
 }
 
+#messages {
+    margin-bottom: 10px;
+}
+
 .choices {
     margin-top: 10px;
 }

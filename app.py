@@ -65,6 +65,7 @@ def player_turn(cell):
     if 'winning_cells' in ai_move:
         session['game_state']['player_turn'] = False
         data['winning_cells'] = ai_move['winning_cells']
+        data['message'] = ai_move['message']
     return jsonify(data)
 
 if __name__ == '__main__':
