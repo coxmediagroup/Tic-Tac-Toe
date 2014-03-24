@@ -1,13 +1,16 @@
 import json
 
+from django.core.urlresolvers import reverse
 from django.db import models
+
 from . import GameError
 
 EMPTY_MARK = '-'
 COMPUTER_MARK = 'O'
 PLAYER_MARK = 'X'
 SIZE = 3
-DEFAULT_BOARD = EMPTY_MARK * SIZE**2
+CELLS = SIZE**2
+DEFAULT_BOARD = EMPTY_MARK * CELLS
 
 
 class Game(models.Model):
@@ -40,6 +43,9 @@ class TicTacToe(Game):
 
     def __unicode__(self):
         return '{}'.format(self.board)
+
+    def get_absolute_url(self):
+        return reverse('tictactoe-detail', args=[self.pk])
 
     def move(self, position=None, player=None):
         """
@@ -175,6 +181,14 @@ class TicTacToe(Game):
     @property
     def _center_position(self):
         return self._center(SIZE)
+
+    @property
+    def board_list(self):
+        return list(self.board)
+
+    @property
+    def size(self):
+        return SIZE
 
     @staticmethod
     def _center(size):

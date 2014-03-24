@@ -1,0 +1,11 @@
+<table>
+    <tr>
+    {% for item in object.board_list %}
+        <td>{{ item }}<td>
+    {% if forloop.counter|divisibleby:3 %}
+    </tr>
+    <tr>
+    {% endif %}
+    {% endfor %}
+    </tr>
+</table>

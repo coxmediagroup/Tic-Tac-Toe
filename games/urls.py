@@ -4,6 +4,6 @@ from . import views
 
 
 urlpatterns = patterns('',
-    url(r'^tic-tac-toe/$', views.TicTacToe.as_view(), name='tic_tac_toe'), 
-    url(r'^tic-tac-toe/(?P<id>\d)/$', views.TicTacToeStart.as_view(), name='game_page'), 
+    url(r'^tic-tac-toe/$', views.TicTacToeList.as_view(), name='tictactoe-list'), 
+    url(r'^tic-tac-toe/(?P<pk>\d)/$', views.TicTacToeDetail.as_view(), name='tictactoe-detail'), 
 )

@@ -1,17 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+
+from .models import TicTacToe
 
 
-class TicTacToe(View):
-    template = 'games/base.html'
-    
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template)
+class TicTacToeList(ListView):
+    model = TicTacToe
 
 
-class TicTacToeStart(View):
-    template = 'games/game.html'
-    
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template)
+class TicTacToeDetail(DetailView):
+    model = TicTacToe
 
