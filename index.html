@@ -12,7 +12,25 @@
 	<h1>
 	Welcome human.
 	</h1>
-	<button onClick="setBoard()">Play</button>
+	<div id="instructions">
+		<p>
+		Select the game options 
+		<select class="control">
+			<option value ='' selected>Select Game Piece</option>
+			<option value="X">X</option>
+			<option value="O">O</option>
+		</select>		
+
+		<select class="control">
+			<option value='' selected>Who goes first?</option>
+			<option value="Human">Human</option>
+			<option value="Machine">Machine</option>
+		</select>		
+		
+		</p>
+		<button onClick="setBoard()">Play</button>
+	</div>
+	
 </div>
 
 <div id="game-well">
