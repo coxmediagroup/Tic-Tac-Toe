@@ -9,7 +9,7 @@ def main():
     root = Tk()
     root.wm_title("Tic-Tac-Toe")
 
-    game = TicTacToe(master=root)
+    TicTacToe(master=root)
 
     root.mainloop()
 
