@@ -15,6 +15,7 @@ function setBoard(){
   			}
   			if($(value).parent().prop('id') == 'first-player'){
   				window.firstPlayer = $(value).val();
+	  			window.whoseTurn = $(value).val();
   			}
   		};
 	});
@@ -28,15 +29,26 @@ function setBoard(){
 	$('#game-board td').css('cursor','pointer');
 	$('#game-board td').css('background-color','#fff');
 	$('#game-board td').css('border-color','#e7e7e7');
+
+	//Disable options to prevent confusion if they are changed mid game
+	$('.control').attr('disabled',true);
+	$('#set-board').text('Game in Progress').attr('disabled',true);
+	
+	playGame();
 }
 
 /*
 	Close the board for play
 */
 function closeBoard(){
+	//Set visual cues that the gameboard is not available
 	$('#game-board td').css('cursor','not-allowed');
 	$('#game-board td').css('background-color','#e7e7e7');
 	$('#game-board td').css('border-color','#999');
+
+	//Allow new options to be set for a new game
+	$('.control').attr('disabled',false);
+	$('#set-board').text('Play Again').attr('disabled',false);
 }
 
 
@@ -49,4 +61,20 @@ function devDebug(piece , player ){
 		$('#human-piece').val(piece);
 		$('#first-player').val(player);
 		setBoard();
+}
+
+
+function playGame(){
+	gameMessage();
+	
+	
+}
+
+function gameMessage(){
+	if(whoseTurn == 'Machine'){
+		$('#message-cell').text('Machine is thinking');		
+	} else{
+		$('#message-cell').text('Human - it is your turn');
+	}
+
 }
