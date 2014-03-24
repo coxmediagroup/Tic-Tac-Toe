@@ -16,5 +16,5 @@ Setup
 1. Install the necessary packages with `pip install -r requirements.txt`
 2. Run the app with `./app.py` (default host and port are 127.0.0.1:5000)
   * There are some cli args if you wish to change the default behavior
-
+3. You can run all the tests with `make unit`
 
