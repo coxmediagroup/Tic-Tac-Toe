@@ -1,4 +1,5 @@
 #Class file for the tic-tac-toe board
+import random
 
 class GameBoard(object):
 	
@@ -8,6 +9,10 @@ class GameBoard(object):
 	##board_data contains all the data that goes into the gameboard, it will contain numbers for spaces player can move to,
 	##or spaces that contain a move (X or O).
 	board_data = []	
+	
+	##The following data is used to help the computer know whats open and make the right decision
+	corners = [0 , 2 , 6 , 8]
+	sides = [1 , 3 , 5 , 7]
 	
 	##This dictionary contains all 8 possible way to win the game
 	##1 and 2 are the horizontal wins
@@ -79,12 +84,46 @@ class GameBoard(object):
 			##Keeping track of the empty spaces on a winning row
 			##when the inner loop finishes if the length of this array is 1 we have a winnable spot
 			##if both loops finish with no winnable spot we return false
-			winnableSpace = []
+			winnable_space = []
+			##taken_spaces keeps track of what is taken, if 2 of these are taken we could have a win
+			taken_spaces = []
 			##nested loop for the board rows that result in a win
 			for board_positions in value:
 				if (self.board_data[board_positions] == token):
-					winnableSpace.append(board_positions)
-			if len(winnableSpace) == 1:
-				return winnableSpace
+					taken_spaces.append(board_positions)
+				elif (self.board_data[board_positions] != "X" or self.board_data[board_positions] != "O"):
+					winnable_space.append(board_positions)
+			if len(winnable_space) == 1 and len(taken_spaces) == 2:
+				print winnable_space
+				return winnable_space[0]
 		return False
+	def get_open_corners(self):
+		open_corners = []
+		for corner in self.corners:
+			if corner != "X" or corner != "O":
+				open_corners.append(corner)
+		return open_corners
+	##helper method checks opposite corners to see if we moved their already, if so we want to make that move so there is a
+	##bigger chance at winning
+	##def check_opposite_corners(self, corner):
+	##	if corner == 0
+	##		##look at opposite corners
+	##		if self.board_data[2] == "3" or self.board_data[6] == "7" or 
+	
+	##returns available the best corner to move to
+	def get_corner_move(self):
+		##first lets check and see what corners are open
+		open_corners = self.get_open_corners()
+		open_corners_size = len(open_corners)
+		print open_corners_size
+		##if its empty return false
+		if open_corners_size == 0:
+			return false
+		elif open_corners_size == 1:
+			##return the number since that is the only open corner
+			return open_corner[0]
+		else:
+			##randomly chose what corner we want
+			return random.choice(open_corners)
+			
 		
