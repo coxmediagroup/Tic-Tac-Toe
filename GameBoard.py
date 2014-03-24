@@ -9,8 +9,19 @@ class GameBoard(object):
 	##board_data contains all the data that goes into the gameboard, it will contain numbers for spaces player can move to,
 	##or spaces that contain a move (X or O).
 	board_data = []	
+	
 	##moves_left contains the board numbers that are left to play
 	board_moves_left = []
+	
+	##This dictionary contains all 8 possible way to win the game
+	##1 and 2 are the horizontal wins
+	##3-6 are vertical wins
+	##6-8 are horizontal wins
+	board_winning_paths = {
+		1:[0 , 4 , 8] , 2:[2 , 4 , 6] , 3:[0 , 3 , 6] , 4:[1 , 4 , 7] ,
+		5:[2 , 5 , 8] , 6:[0 , 1 , 2] , 7:[3 , 4 , 5] , 8:[6 , 7 , 8]
+	}
+		
 	def draw_board(self):
 
 		print "  |   | "
@@ -29,8 +40,36 @@ class GameBoard(object):
 		self.board_data[correctedIndex] = player_token
 		self.board_moves_left.pop(correctedIndex)
 	
-	
 	def get_board_data(self):
 		return self.board_data
 	def get_board_moves_left(self):
 		return self.board_moves_left
+		
+	def count_board_moves_left(self):
+		return len(self.board_moves_left)
+		
+	##check all paths to see if the game has a winner
+	def check_for_winner(self):
+	
+		##loop through the dictionary
+		for key, value in self.board_winning_paths.iteritems():
+			##player_token_count keeps track of how many player tokens we have in a row
+			player_token_count = 0
+			##cpu_token_count keeps track of how many computer tokens we have in a row
+			cpu_token_count = 0
+			##nested loop for the board positions that result in a win
+			for board_positions in value:
+					##if the value is not an X or O stop the loop since its not possible to win
+					if (board_positions != "X" or board_positions != "O"):
+						break
+					elif (board_positions == "X"):
+						player_token_count += 1
+					else:
+						cpu_token_count += 1
+			if(player_token_count == 3):
+				return "player wins"
+			elif(cpu_token_count == 3):
+				return "computer wins"
+		##if no winner return false after we check every possible way to win
+		return False
+		
