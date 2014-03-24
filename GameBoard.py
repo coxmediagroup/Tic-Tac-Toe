@@ -70,3 +70,21 @@ class GameBoard(object):
 		##if no winner return false after we check every possible way to win
 		return False
 		
+	##Check and see if someone can win, the X or O given as the second parameter determines who we are looking for
+	##if so return the index that would win the game so we know where to place our O
+	def is_game_winnable(self, token):
+	##This starts off a lot like checking for winners, but the logic is a little different
+		##loop through the dictionary of winnable paths
+		for key, value in self.board_winning_paths.iteritems():
+			##Keeping track of the empty spaces on a winning row
+			##when the inner loop finishes if the length of this array is 1 we have a winnable spot
+			##if both loops finish with no winnable spot we return false
+			winnableSpace = []
+			##nested loop for the board rows that result in a win
+			for board_positions in value:
+				if (self.board_data[board_positions] == token):
+					winnableSpace.append(board_positions)
+			if len(winnableSpace) == 1:
+				return winnableSpace
+		return False
+		

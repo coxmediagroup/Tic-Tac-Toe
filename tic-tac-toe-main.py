@@ -34,14 +34,19 @@ def checkPlayerInput(playersMove, validMoves):
 	return valid
 
 ##This method handles the computer's move
-##def cpuMove(gameBoard):	
+def cpuMove(gameBoard):	
 ##Overview of cpu move logic
 ##Check if the computer can win, if so move to spot needed
+	canComputerWin = gameBoard.is_game_winnable("O")
 ##Check if player can win, if so block players winning move
+	canPlayerWin = gameBoard.is_game_winnable("X")
 ##If nothing else select a spot based on value
 ##The center (5) is the highest valued spot
+	if gameBoard.board_data[4] != "X" or "O":
+		gameBoard.update_board_data("4", "O")
+		gameBoard.draw_board()
 ##The corners (1, 3, 7, 9) are the next highest valued spot
-##If all of these are taken, move to an empty space on one of the sides (2, 4, 6,8)
+##If all of these are taken, move to an empty space on one of the sides (2, 4, 6, 8)
 
 
 gameBoard= GameBoard()
