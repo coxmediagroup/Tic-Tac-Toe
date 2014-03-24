@@ -1,3 +1,4 @@
 ipython
 django==1.6
 south==0.8.4
+django-braces==1.4.0

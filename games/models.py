@@ -5,7 +5,7 @@ from django.db import models
 
 from . import GameError
 
-EMPTY_MARK = '-'
+EMPTY_MARK = ' '
 COMPUTER_MARK = 'O'
 PLAYER_MARK = 'X'
 SIZE = 3
@@ -33,6 +33,7 @@ class TicTacToe(Game):
 
     """
     board = models.CharField(max_length=SIZE, default=DEFAULT_BOARD)
+    last_computer_move = models.CharField(max_length=9, blank=True)
     winner = models.NullBooleanField(null=True, blank=True,
         help_text=u'0 means computer won, 1 means player won.')
 
@@ -85,22 +86,23 @@ class TicTacToe(Game):
             
             if marks < 2 and self._center_empty:
                 self._place_mark(self._center_position, COMPUTER_MARK)
-
             else:
                 # Make winning move or block the player from his winning move, then check
                 # to see if the game was won and if so set is_complete = True.
-                if not self.winning_move(COMPUTER_MARK) or not self.winning_move(PLAYER_MARK):
+                if self.winning_move(COMPUTER_MARK) or self.winning_move(PLAYER_MARK):
+                    pass
+                else:
                     # Otherwise just pick an empty space and move there.
                     # TODO: Choose corners or random space.
                     position = self.board.find(EMPTY_MARK)
                     self._place_mark(position, COMPUTER_MARK)
-
+            
             if self._game_won:
                 self.is_complete = True
                 self.winner = 0
                 self.save()
 
-        return self.board
+        return (self.last_computer_move, COMPUTER_MARK)
 
     def winning_move(self, player_mark):
         next_move = []
@@ -114,13 +116,15 @@ class TicTacToe(Game):
                 self.board = old
         
         if len(next_move) > 0:
-            print next_move
             self._place_mark(next_move[0], COMPUTER_MARK)
             return True
 
         return False
 
     def _place_mark(self, position, mark):
+        if mark == COMPUTER_MARK:
+            self.last_computer_move = [position, mark]
+
         self.board = list(self.board)
         self.board.pop(position)
         self.board.insert(position, mark)
@@ -183,7 +187,7 @@ class TicTacToe(Game):
         return self._center(SIZE)
 
     @property
-    def board_list(self):
+    def get_board(self):
         return list(self.board)
 
     @property

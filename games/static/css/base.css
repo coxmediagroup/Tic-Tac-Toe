@@ -4,12 +4,17 @@ body {
   padding-bottom: 20px;
 }
 
+.game-mark {
+    transition: opacity 3s ease-in-out;
+}
+
 .main .table {
     margin-bottom: 0;
 }
 
 .main .table td {
     width: 33.3%;
+    height: 1.8em;
     text-align: center;
     border-top: 0;
     transition-duration: 0.4s;

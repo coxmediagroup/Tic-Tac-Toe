@@ -12,10 +12,10 @@
 
 <div class="jumbotron">
     <div class="table-responsive">
-        <table class="table">
+        <table class="table game" data-obj="{{ object.pk }}">
             <tr>
-            {% for item in object.board_list %}
-                <td id="JS_position-{{ forloop.counter0 }}" data-id="{{ forloop.counter0 }}">{{ item }}</td>
+            {% for item in object.get_board %}
+                <td id="JS_position-{{ forloop.counter0 }}" class="game-mark" data-mark="{{ forloop.counter0 }}">{{ item }}</td>
             {% if forloop.counter|divisibleby:3 %}
             </tr>
             <tr class="table-row-borders">
@@ -25,5 +25,5 @@
         </table>
     </div>
 </div>
-    <h2>Your turn</h2>
+    <h2 class="status">{% if object.is_complete %}Game Over{% else %}Your turn{% endif %}</h2>
 {% endblock content %}
