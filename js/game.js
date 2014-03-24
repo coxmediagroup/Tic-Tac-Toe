@@ -39,3 +39,14 @@ function closeBoard(){
 	$('#game-board td').css('border-color','#999');
 }
 
+
+/*
+	Speed up development with debug feaures
+*/
+function devDebug(piece , player ){
+		piece = piece || 'X';
+		player = player || 'Human';
+		$('#human-piece').val(piece);
+		$('#first-player').val(player);
+		setBoard();
+}
