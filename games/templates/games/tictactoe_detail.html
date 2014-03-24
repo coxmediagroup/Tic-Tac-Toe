@@ -1,11 +1,29 @@
-<table>
-    <tr>
-    {% for item in object.board_list %}
-        <td>{{ item }}<td>
-    {% if forloop.counter|divisibleby:3 %}
-    </tr>
-    <tr>
-    {% endif %}
-    {% endfor %}
-    </tr>
-</table>
+{% extends "games/base.html" %}
+
+{% block content %}
+<div class="header">
+    <ul class="nav nav-pills pull-right">
+        <li class="active"><a href="#">Game</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+    <h3 class="text-muted">Tic-Tac-Toe</h3>
+</div>
+
+<div class="jumbotron">
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+            {% for item in object.board_list %}
+                <td id="JS_position-{{ forloop.counter0 }}" data-id="{{ forloop.counter0 }}">{{ item }}</td>
+            {% if forloop.counter|divisibleby:3 %}
+            </tr>
+            <tr class="table-row-borders">
+            {% endif %}
+            {% endfor %}
+            </tr>
+        </table>
+    </div>
+</div>
+    <h2>Your turn</h2>
+{% endblock content %}
