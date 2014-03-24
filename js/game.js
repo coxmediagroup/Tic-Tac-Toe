@@ -34,6 +34,10 @@ function setBoard(){
 	$('.control').attr('disabled',true);
 	$('#set-board').text('Game in Progress').attr('disabled',true);
 	
+
+	$('#game-board td').bind('click', function(event){
+		playGame(event);
+	});
 	playGame();
 }
 
@@ -63,11 +67,20 @@ function devDebug(piece , player ){
 		setBoard();
 }
 
+/*
+	Show numbers in matrix box to help visualize winning moves
+*/
+function devShowMatrix(){
+	$.each($('#game-board td'), function (index, value) {$(value).text($(value).prop('id'))});
+}
 
 function playGame(){
 	gameMessage();
-	
-	
+	if(event && !$(event.target).data('playedBy')){
+		$(event.target).text(window.humanPiece).addClass('played').data('playedBy', 'Human');
+	console.log('clicked')
+	}
+
 }
 
 function gameMessage(){
