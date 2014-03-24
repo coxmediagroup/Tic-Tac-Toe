@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -11,6 +11,9 @@ from .models import TicTacToe
 class TicTacToeList(ListView):
     model = TicTacToe
 
+    def post(self, request, *args, **kwargs):
+        game = TicTacToe.objects.create()
+        return redirect(game)
 
 class TicTacToeDetail(DetailView):
     model = TicTacToe

@@ -20,6 +20,16 @@
     </head>
     <body class="main">
         <div class="container">
+            <div class="header">
+                {% comment %}
+                <ul class="nav nav-pills pull-right">
+                    <li class="active"><a href="#">Game</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                {% endcomment %}
+                <h3 class="text-muted header-link"><a href="{% url 'tictactoe-list' %}">{% block header-link %}Tic-Tac-Toe{% endblock %}</a></h3>
+            </div>
             {% block content %}{% endblock %}
         </div>
 

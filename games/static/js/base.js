@@ -24,11 +24,13 @@
                     $("#JS_position-"+cMark[0]).html(cMark[1]);
                     
                     if(message != undefined){            
-                        $status.html(message);
+                        $status.html(message).addClass("inflated");
+                        $(".jumbotron").fadeOut();
+                        $(".header-link a").text("Play Again");
                     } else {
                         $status.html("Your turn");
-i                   }
-                }, 2500);
+                    }
+                }, 1500);
         }
 
         function markClickHandler(){

@@ -1,15 +1,9 @@
 {% extends "games/base.html" %}
 
-{% block content %}
-<div class="header">
-    <ul class="nav nav-pills pull-right">
-        <li class="active"><a href="#">Game</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
-    <h3 class="text-muted">Tic-Tac-Toe</h3>
-</div>
+{% block header-link %}{% if object.is_complete %}Play Again{% else %}{{ block.super }}{% endif %}{% endblock %}
 
+{% block content %}
+{% if not object.is_complete %}
 <div class="jumbotron">
     <div class="table-responsive">
         <table class="table game" data-obj="{{ object.pk }}">
@@ -25,5 +19,6 @@
         </table>
     </div>
 </div>
-    <h2 class="status">{% if object.is_complete %}Game Over{% else %}Your turn{% endif %}</h2>
+{% endif %}
+<h2 class="status {% if object.is_complete %}inflated{% endif %}">{% if object.is_complete %}Game Over{% else %}Your turn{% endif %}</h2>
 {% endblock content %}

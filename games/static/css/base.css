@@ -4,6 +4,23 @@ body {
   padding-bottom: 20px;
 }
 
+.header h3 a {
+    color:#aaa;
+}
+
+.status {
+    text-align:center;
+}
+
+.inflated {
+    font-size: 9em;
+}
+
+.header h3 a:hover {
+    text-decoration:none;
+    color:#999;
+}
+
 .game-mark {
     transition: opacity 3s ease-in-out;
 }
