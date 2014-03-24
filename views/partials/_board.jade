@@ -1,0 +1,19 @@
+div.container
+    div.row
+        span
+            h1 Tic Tac Toe
+        span.btn.btn-success.pull-left(ng-click='startGame()') Reset
+    p
+    div.row
+        div.col-sm-3
+            span
+                table(border="1")
+                    tr(ng-repeat='row in rows')
+                        td#cell-0-0.tttCell(ng-repeat='col in row track by $index')
+                            div.alert(ng-click='userPlay($event, $index, $parent.$index)', ng-class="col == 0 ? '' : (col == 1 ? 'alert-success' : 'alert-info')")
+                                i(class='fa fa-circle-o fa-4x', ng-show='col == 1')
+                                i(class='fa fa-times fa-4x', ng-show='col == 2')
+                                div(ng-show='col == 0') open
+
+        div.col-sm-3
+            .alert.alert-info.pull-left(ng-show='displayMessage') {{message}}

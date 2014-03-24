@@ -1,0 +1,6 @@
+extends layout
+block body
+    //- Load our game controller
+    div(ng-controller='AppCtrl')
+        div(ng-view, ng-animate="{enter: 'view-enter'}")
+
