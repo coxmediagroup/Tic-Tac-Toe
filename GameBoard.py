@@ -20,6 +20,7 @@ class GameBoard(object):
 		
 	def draw_board(self):
 
+		print "\n"
 		print "  |   | "
 		print "%c | %c | %c " % (self.board_data[0] , self.board_data[1] , self.board_data[2])
 		print "----------"
@@ -27,6 +28,7 @@ class GameBoard(object):
 		print "----------"
 		print "%c | %c | %c " % (self.board_data[6] , self.board_data[7] , self.board_data[8])
 		print "  |   | "
+		print " \n "
 		
 	##this function updates the board's data space is the selected space and player_token is either an X or O depending if 
 	##the player or the computer made the move
@@ -38,10 +40,11 @@ class GameBoard(object):
 	def get_board_moves_left(self):
 		moves_left = []
 		for items in self.board_data:
-			if items != "X" or items != "O":
+			if items != 'X' or items != 'O':
 				moves_left.append(items)
 		return moves_left
-	def count_board_moves_left(self):
+	def check_for_ties(self):
+		##a tie occurs if no moves are left and we have no winner
 		return len(self.get_board_moves_left())
 		
 	##check all paths to see if the game has a winner
@@ -53,15 +56,13 @@ class GameBoard(object):
 			player_token_count = 0
 			##cpu_token_count keeps track of how many computer tokens we have in a row
 			cpu_token_count = 0
-			##nested loop for the board positions that result in a win
+			##nested loop for the board rows that result in a win
 			for board_positions in value:
-					##if the value is not an X or O stop the loop since its not possible to win
-					if (board_positions != "X" or board_positions != "O"):
-						break
-					elif (board_positions == "X"):
-						player_token_count += 1
-					else:
-						cpu_token_count += 1
+				
+				if (self.board_data[board_positions] == "X"):
+					player_token_count += 1
+				elif (self.board_data[board_positions] == "O"):
+					cpu_token_count += 1
 			if(player_token_count == 3):
 				return "player wins"
 			elif(cpu_token_count == 3):

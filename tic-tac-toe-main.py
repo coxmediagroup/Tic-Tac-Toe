@@ -11,7 +11,6 @@ def getFirstMove():
 ##gets the players input and handles validation of the input
 def getPlayersMove(gameBoard):
 	validMoves = gameBoard.get_board_moves_left()
-	gameBoard.draw_board()
 	playersMove = raw_input("Player, please enter your move:")
 	validMove = checkPlayerInput(playersMove , validMoves)
 	while validMove == False:
@@ -22,6 +21,8 @@ def getPlayersMove(gameBoard):
 	##if we make it to here, the move is valid, update the gameboard.
 	gameBoard.update_board_data(playersMove , "X" )
 	gameBoard.draw_board()
+	
+
 	
 
 	
@@ -48,21 +49,42 @@ gameBoard= GameBoard()
 print "Let's play a game of tic-tac-toe"
 firstMove = getFirstMove()
 print "We randomly chose who gets to go first, and %s goes first" % firstMove
+gameBoard.draw_board()
 
 
 ##if the first move is the player get their move then we can start regular play
 ##if the first move is the computer determine the best move then start regular play
 if firstMove == "you":
 	winner = False
-	while gameBoard.count_board_moves_left() > 0 and (winner != "player wins" or winner != "computer wins"):
+	while winner == False:
 		##check for a winner
 		winner = gameBoard.check_for_winner()
-		getPlayersMove(gameBoard)
+		##TODO check for a tie
+		if winner == "player wins":
+			print "Congratulations, you win!"
+			winner = True
+		elif winner == "computer wins":
+			print "Sorry, you lost, better luck next time."
+			winner = True
+		else:
+			getPlayersMove(gameBoard)
 else:
 	winner = False
-	while gameBoard.count_board_moves_left() > 0 and (winner != "player wins" or winner != "computer wins"):
+	while winner == False:
+		##check for a winner
 		winner = gameBoard.check_for_winner()
-		getPlayersMove(gameBoard)
+		##TODO check for a tie
+		if winner == "player wins":
+			print "Congratulations, you win!"
+			winner = True
+		elif winner == "computer wins":
+			print "Sorry, you lost, better luck next time."
+			winner = True
+		elif gameBoard.check_for_ties() == 0:
+			print "Looks like we have a tie, great game!"
+			winner = True
+		else:
+			getPlayersMove(gameBoard)
 	
 
 
