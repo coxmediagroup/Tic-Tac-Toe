@@ -20,4 +20,7 @@ class GameBoard(object):
 	##this function updates the board's data space is the selected space and player_token is either an X or O depening if 
 	##the player or the computer made the move
 	def update_board_data(self, space, player_token):
-		self.board_data[space - 1 ] = player_token
+		self.board_data[int(space) - 1 ] = player_token
+	
+	def get_board_data(self):
+		return self.board_data
