@@ -14,6 +14,6 @@ function setBoard(){
 */
 function closeBoard(){
 	$('#game-board td').css('cursor','not-allowed');
-	$('#game-board td').css('background-color','#fff');
-	$('#game-board td').css('border-color','#e7e7e7');
+	$('#game-board td').css('background-color','#e7e7e7');
+	$('#game-board td').css('border-color','#999');
 }
