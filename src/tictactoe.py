@@ -2,13 +2,18 @@
 @author: Corey Hutton
 '''
 from math import sqrt
-from random import random
+from random import random, randrange
 from Tkinter import Button, Canvas
 
 class TicTacToe(object):
     '''
     A simple Tic-Tac-Toe game in which the computer cannot lose.
     '''
+    # Range of values in milliseconds used to generate a random length of time
+    # to delay computer play to simulate "thinking".
+    CP_WAIT_MIN = 250
+    CP_WAIT_MAX = 850
+
     # UI default settings. Set width to equal height to ensure a square board.
     BOARD_DEFAULTS = {'bd': 2,
                       'bg': 'white',
@@ -16,6 +21,7 @@ class TicTacToe(object):
                       'height': 515,
                       'highlightcolor': 'yellow'}
     BOARD_DEFAULTS['width'] = BOARD_DEFAULTS['height']
+    LINE_DEFAULTS = {'width': 4}
     O_DEFAULTS = {'fill': 'blue',
                   'tags': 'O'}
     X_DEFAULTS = {'fill': 'red',
@@ -227,7 +233,7 @@ class TicTacToe(object):
         '''
         padding = 10
 
-        side = (self.BOARD_DEFAULTS['width'] / 3)
+        side = self.BOARD_DEFAULTS['width'] / 3
         startX = column * side + padding
         startY = row * side + padding
 
@@ -235,7 +241,7 @@ class TicTacToe(object):
             self.drawO(startX, startY, (column + 1) * side - padding,
                                        (row + 1) * side - padding)
         elif symbol == 'X':
-            self.drawX(side - (2 * padding), startX, startY)
+            self.drawX(side - 2 * padding, startX, startY)
 
     def drawWin(self, row):
         '''
@@ -244,12 +250,25 @@ class TicTacToe(object):
         @param row: A string specifying over which row ('r'), column ('c'), or
                     diagonal ('d') to draw a line.
         '''
-        if row[0] == 'r':
-            pass
-        elif row[0] == 'c':
-            pass
-        elif row[0] == 'd':
-            pass
+        length = self.BOARD_DEFAULTS['width']
+        sixth = length / 6
+
+        for x in xrange(3):
+            strx = str(x)
+            if row[1] == strx:
+                if row[0] == 'r':
+                    r = (sixth, 0, sixth, (2 * x + 1) * length)
+                    tags = self.state[x][0]
+                elif row[0] == 'c':
+                    r = (0, sixth, (2 * x + 1) * length, sixth)
+                    tags = self.state[0][x]
+                elif row[0] == 'd':
+                    d = {'1': (0, 0, length, length),
+                         '2': (length, length, 0, 0)}
+                    r = d[strx]
+                    tags = self.state[1][1]
+
+                self.board.create_line(r, self.LINE_DEFAULTS, tags=tags)
 
     def drawX(self, side, x, y):
         '''
@@ -299,7 +318,9 @@ class TicTacToe(object):
                 self.playerTurn = False
                 self.drawWin(checkWin)
             elif symbol == self.player:
-                    self.computerTurn()
+                # The computer playing instantly is disconcerting.
+                self.board.after(randrange(self.CP_WAIT_MIN, self.CP_WAIT_MAX),
+                                 self.computerTurn)
 
     def reset(self):
         '''
