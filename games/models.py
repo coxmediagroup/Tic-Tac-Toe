@@ -1,13 +1,14 @@
 import json
 
 from django.db import models
-
+from . import GameError
 
 EMPTY_MARK = '-'
 COMPUTER_MARK = 'O'
 PLAYER_MARK = 'X'
 SIZE = 3
 DEFAULT_BOARD = EMPTY_MARK * SIZE**2
+
 
 class Game(models.Model):
     start_date = models.DateTimeField(null=True, blank=True)
@@ -20,8 +21,19 @@ class Game(models.Model):
 
 
 class TicTacToe(Game):
+    """
+    Tic-Tac-Toe model that includes the logic for running the game.
+
+    To initialize create a new object and then call the move() method
+    to advance. You must pass in a valid User Object and position or 
+    neither.
+
+    """
     board = models.CharField(max_length=SIZE, default=DEFAULT_BOARD)
-    move_count = models.PositiveIntegerField(null=True, blank=True)
+    winner = models.NullBooleanField(null=True, blank=True,
+        help_text=u'0 means computer won, 1 means player won.')
+
+    GameError = GameError
 
     class Meta(Game.Meta):
         verbose_name = 'Tic Tac Toe'
@@ -49,8 +61,7 @@ class TicTacToe(Game):
         """
         # Check if the game is still active.
         if self.is_complete:
-            print "GAME ALREADY FINISHED"
-            return False
+            return self.GameError('This game is already completed.')
 
         # Check if player var was passed, if so then it must be time to move
         # the players mark. Initiate the computer's turn once completed.
@@ -61,7 +72,7 @@ class TicTacToe(Game):
                 # Now it is the computers turn.    
                 self.move()
             else:
-                print 'OH NOEZ NOT VALID MOVE'
+                return self.GameError('Please select a valid move.')
         else:
             # Check if player has more than 1 mark, if not, move to center.
             marks = self.board.count(PLAYER_MARK)
@@ -80,8 +91,8 @@ class TicTacToe(Game):
 
             if self._game_won:
                 self.is_complete = True
+                self.winner = 0
                 self.save()
-                print "GAME OVER - COMPUTER WINS!"
 
         return self.board
 
