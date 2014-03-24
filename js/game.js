@@ -9,8 +9,14 @@ function setBoard(){
 	$('.control > option:selected').each(function( index, value ) {
   		if($(value).val()===''){
   			optionsAreEmpty=true;
+  		} else{
+  			if($(value).parent().prop('id') == 'human-piece'){
+  				window.humanPiece = $(value).val();
+  			}
+  			if($(value).parent().prop('id') == 'first-player'){
+  				window.firstPlayer = $(value).val();
+  			}
   		};
-
 	});
 
 	if(optionsAreEmpty){
