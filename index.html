@@ -2,9 +2,38 @@
 <head>
 	<title>Tic Tac Toe</title>
 	<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/game.css" media="screen" />
 </head>
 <body>
+<div id="container">
+
+<div id="control-well">
+	<h1>
+	Welcome human.
+	</h1>
+	<button onClick="setBoard()">Play</button>
+</div>
+
+<div id="game-well">
+	<table id="game-board">
+		<tr>
+			<td id="1"></td>
+			<td id="2"></td>
+			<td id="3"></td>
+		</tr>
+			<tr>
+			<td id="4"></td>
+			<td id="5"></td>
+			<td id="6"></td>
+		</tr>
+			<tr>
+			<td id="7"></td>
+			<td id="8"></td>
+			<td id="9"></td>
+		</tr>
+	</table>
+</div>
 
 </body>
 </html>
