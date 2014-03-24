@@ -76,7 +76,7 @@ function devShowMatrix(){
 
 function playGame(){
 	gameMessage();
-	if(event && !$(event.target).data('playedBy')){
+	if(event && !$(event.target).prop('id') == 'set-board'  && !$(event.target).data('playedBy')){
 		$(event.target).text(window.humanPiece).addClass('played').data('playedBy', 'Human');
 	console.log('clicked')
 	}
