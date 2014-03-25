@@ -3,8 +3,18 @@
 # is protected by United States and international intellectual property law, including copyright laws, patent laws,
 # and treaty provisions.
 
-from django.shortcuts import render
+PLAYERS = dict(
+    machine='x',
+    human='0'
+)
 
-def standard(request):
-    msg = None
-    return render(request, 'grid.html', {'msg': msg})
+WIN_VECTORS = [
+    (0, 1, 2),
+    (3, 4, 5),
+    (6, 7, 8),
+    (0, 3, 6),
+    (1, 4, 7),
+    (2, 5, 8),
+    (0, 4, 8),
+    (2, 4, 6)
+]
