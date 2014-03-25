@@ -1,4 +1,4 @@
-__author__ = 'ali'
+__author__ = 'Ali Nabavi'
 
 
 def start_game():
@@ -8,11 +8,16 @@ def start_game():
         print 'Great!  You go first.'
     elif player_symbol == 'O':
         print 'No problem.  I\'ll go first.'
-    draw_board()
-    pass
+    board = initialize_board()
 
 
-def draw_board():
+
+def initialize_board():
+    board = {x:x for x in(range(1,10))}
+    return board
+
+
+def draw_board(board):
     """Function for drawing the game board"""
     print "----------------"
     print "|    |    |    |"
