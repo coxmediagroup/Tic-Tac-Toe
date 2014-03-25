@@ -29,6 +29,8 @@ def cpuMove(gameBoard):
 	canComputerWin = gameBoard.is_game_winnable("O")
 ##Check if player can win, if so block players winning move
 	canPlayerWin = gameBoard.is_game_winnable("X")
+	print "Can cpu win ", canComputerWin
+	print "Can Player Win: ", canPlayerWin
 	if canComputerWin != False:
 		print "Winning  ", canComputerWin
 		gameBoard.update_board_data(canComputerWin, "O")
@@ -39,7 +41,6 @@ def cpuMove(gameBoard):
 		gameBoard.draw_board()
 	elif gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O": ##If nothing else select a spot based on value
 		##The center (5) is the highest valued spot
-		print "Why am I here"
 		gameBoard.update_board_data("5", "O")
 		gameBoard.draw_board()
 ##The corners (1, 3, 7, 9) are the next highest valued spot

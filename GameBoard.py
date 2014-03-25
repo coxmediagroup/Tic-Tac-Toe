@@ -89,13 +89,10 @@ class GameBoard(object):
 			winnable_space = "-1"
 			##taken_spaces keeps track of what is taken, if 2 of these are taken we could have a win
 			taken_spaces = []
-			print "Testing value: " , value
 			for board_positions in value:
-			
 				if (self.board_data[board_positions - 1] == token):
-					print "Taken: ", board_positions
 					taken_spaces.append(board_positions)
-				elif (self.board_data[board_positions - 1] != "X" or self.board_data[board_positions - 1] != "O"):
+				elif (self.board_data[board_positions - 1] != "X" and self.board_data[board_positions - 1] != "O"):
 					winnable_space = board_positions
 			if winnable_space != "-1" and len(taken_spaces) == 2:
 				return winnable_space
@@ -103,7 +100,7 @@ class GameBoard(object):
 	def get_open_corners(self):
 		open_corners = []
 		for corner in self.corners:
-			if corner != "X" or corner != "O":
+			if self.board_data[corner - 1] != "X" and self.board_data[corner - 1] != "O":
 				open_corners.append(corner)
 		return open_corners
 	##helper method checks opposite corners to see if we moved their already, if so we want to make that move so there is a
@@ -125,6 +122,7 @@ class GameBoard(object):
 			##return the number since that is the only open corner
 			return open_corner[0]
 		else:
+			print "Random choices: ", open_corners
 			##randomly chose what corner we want
 			return random.choice(open_corners)
 			
