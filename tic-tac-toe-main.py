@@ -30,7 +30,7 @@ def cpuMove(gameBoard):
 ##Check if player can win, if so block players winning move
 	canPlayerWin = gameBoard.is_game_winnable("X")
 	if canComputerWin != False:
-		print "winning"
+		print "Winning  ", canComputerWin
 		gameBoard.update_board_data(canComputerWin, "O")
 		gameBoard.draw_board()
 	elif canPlayerWin != False:

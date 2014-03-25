@@ -11,16 +11,16 @@ class GameBoard(object):
 	board_data = []	
 	
 	##The following data is used to help the computer know whats open and make the right decision
-	corners = [0 , 2 , 6 , 8]
-	sides = [1 , 3 , 5 , 7]
+	corners = [1 , 3 , 7 , 9]
+	sides = [2 , 3 , 5 , 7]
 	
 	##This dictionary contains all 8 possible way to win the game
 	##1 and 2 are the horizontal wins
 	##3-6 are vertical wins
 	##6-8 are horizontal wins
 	board_winning_paths = {
-		1:[0 , 4 , 8] , 2:[2 , 4 , 6] , 3:[0 , 3 , 6] , 4:[1 , 4 , 7] ,
-		5:[2 , 5 , 8] , 6:[0 , 1 , 2] , 7:[3 , 4 , 5] , 8:[6 , 7 , 8]
+		1:[1 , 5 , 9] , 2:[3 , 5 , 7] , 3:[1 , 4 , 7] , 4:[2 , 5 , 8] ,
+		5:[3 , 6 , 9] , 6:[1 , 2 , 3] , 7:[4 , 5 , 6] , 8:[7 , 8 , 9]
 	}
 		
 	def draw_board(self):
@@ -38,6 +38,7 @@ class GameBoard(object):
 	##this function updates the board's data space is the selected space and player_token is either an X or O depending if 
 	##the player or the computer made the move
 	def update_board_data(self , space , player_token):
+		print player_token + "Chose: " , space
 		self.board_data[int(space) - 1] = player_token
 	
 	def get_board_data(self):
@@ -64,9 +65,9 @@ class GameBoard(object):
 			##nested loop for the board rows that result in a win
 			for board_positions in value:
 				
-				if (self.board_data[board_positions] == "X"):
+				if (self.board_data[board_positions - 1] == "X"):
 					player_token_count += 1
-				elif (self.board_data[board_positions] == "O"):
+				elif (self.board_data[board_positions - 1] == "O"):
 					cpu_token_count += 1
 			if(player_token_count == 3):
 				return "player wins"
@@ -81,21 +82,23 @@ class GameBoard(object):
 	##This starts off a lot like checking for winners, but the logic is a little different
 		##loop through the dictionary of winnable paths
 		for key, value in self.board_winning_paths.iteritems():
+			##nested loop for the board rows that result in a win
 			##Keeping track of the empty spaces on a winning row
-			##when the inner loop finishes if the length of this array is 1 we have a winnable spot
+			##when this loop finishes if the length of this array is 1 we have a winnable spot
 			##if both loops finish with no winnable spot we return false
-			winnable_space = []
+			winnable_space = "-1"
 			##taken_spaces keeps track of what is taken, if 2 of these are taken we could have a win
 			taken_spaces = []
-			##nested loop for the board rows that result in a win
+			print "Testing value: " , value
 			for board_positions in value:
-				if (self.board_data[board_positions] == token):
+			
+				if (self.board_data[board_positions - 1] == token):
+					print "Taken: ", board_positions
 					taken_spaces.append(board_positions)
-				elif (self.board_data[board_positions] != "X" or self.board_data[board_positions] != "O"):
-					winnable_space.append(board_positions)
-			if len(winnable_space) == 1 and len(taken_spaces) == 2:
-				print winnable_space
-				return winnable_space[0]
+				elif (self.board_data[board_positions - 1] != "X" or self.board_data[board_positions - 1] != "O"):
+					winnable_space = board_positions
+			if winnable_space != "-1" and len(taken_spaces) == 2:
+				return winnable_space
 		return False
 	def get_open_corners(self):
 		open_corners = []
@@ -115,7 +118,6 @@ class GameBoard(object):
 		##first lets check and see what corners are open
 		open_corners = self.get_open_corners()
 		open_corners_size = len(open_corners)
-		print open_corners_size
 		##if its empty return false
 		if open_corners_size == 0:
 			return false
