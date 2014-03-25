@@ -27,7 +27,7 @@ class TicTacToe(object):
     X_DEFAULTS = {'fill': 'red',
                   'tags': 'X'}
 
-    # An empty array representation of the state of the board.
+    # An empty list representation of the state of the board.
     DEFAULT_STATE = [[None, None, None], [None, None, None], [None, None, None]]
     state = [x[:] for x in DEFAULT_STATE]
 
@@ -45,54 +45,67 @@ class TicTacToe(object):
         self.drawBoard(kwargs['master'])
         self.reset()
 
-    def canWin(self, value):
+    def canWin(self, value, state=None):
         '''
-        Searches the game board for two in a row of a given symbol (e.g.: 'X',
-        'X', None) and returns the coordinates of the empty space.
+        Searches the game board for two in a row of a given symbol and returns
+        the coordinates of all empty spaces that will provide a third in any
+        column, row, or diagonal.
+
+        E.g., for a game state [['X', None, 'X'],
+                                ['O', None, None],
+                                [None, None, None]], canwin('X') will return
+        the value [(1, 2)].
 
         @param value: A string containing the player symbol to search for.
-        @return: A tuple pair of indices for the empty space if the search
-                 succeeds; False if it does not.
+        @return: A list of one or more tuple pairs of integer indices for the
+                 empty space if the search succeeds; a list containing None if
+                 it does not.
         '''
+        if state is None:
+            state = self.state
+
+        spaces = []
+
         for x in xrange(3):
             # Check rows.
-            if self.state[x][0] == value:
-                if self.state[x][1] == value and self.state[x][2] is None:
-                    return (x, 2)
-                elif self.state[x][2] == value and self.state[x][1] is None:
-                    return (x, 1)
-            elif self.state[x][0] is None and self.state[x][1] == value \
-                                          and self.state[x][2] == value:
-                return (x, 0)
+            if state[x][0] == value:
+                if state[x][1] == value and state[x][2] is None:
+                    spaces.append((x, 2))
+                elif state[x][2] == value and state[x][1] is None:
+                    spaces.append((x, 1))
+            elif state[x][0] is None and state[x][1] == value \
+                                     and state[x][2] == value:
+                spaces.append((x, 0))
+
             # Check columns.
-            if self.state[0][x] == value:
-                if self.state[1][x] == value and self.state[2][x] is None:
-                    return (2, x)
-                elif self.state[2][x] == value and self.state[1][x] is None:
-                    return (1, x)
-            elif self.state[0][x] is None and self.state[1][x] == value \
-                                          and self.state[2][x] == value:
-                return (0, x)
+            if state[0][x] == value:
+                if state[1][x] == value and state[2][x] is None:
+                    spaces.append((2, x))
+                elif state[2][x] == value and state[1][x] is None:
+                    spaces.append((1, x))
+            elif state[0][x] is None and state[1][x] == value \
+                                     and state[2][x] == value:
+                spaces.append((0, x))
 
         # Check diagonals.
-        if self.state[0][0] == value:
-            if self.state[1][1] == value and self.state[2][2] is None:
-                return (2, 2)
-            elif self.state[2][2] == value and self.state[1][1] is None:
-                return (1, 1)
-        elif self.state[0][0] is None and self.state[1][1] == value \
-                                      and self.state[2][2] == value:
-            return (0, 0)
-        elif self.state[2][0] == value:
-            if self.state[1][1] == value and self.state[0][2] is None:
-                return (0, 2)
-            elif self.state[0][2] == value and self.state[1][1] is None:
-                return (1, 1)
-        elif self.state[2][0] is None and self.state[1][1] == value \
-                                      and self.state[0][2] == value:
-            return (2, 0)
+        if state[0][0] == value:
+            if state[1][1] == value and state[2][2] is None:
+                spaces.append((2, 2))
+            elif state[2][2] == value and state[1][1] is None:
+                spaces.append((1, 1))
+        elif state[0][0] is None and state[1][1] == value \
+                                 and state[2][2] == value:
+            spaces.append((0, 0))
+        elif state[2][0] == value:
+            if state[1][1] == value and state[0][2] is None:
+                spaces.append((0, 2))
+            elif state[0][2] == value and state[1][1] is None:
+                spaces.append((1, 1))
+        elif state[2][0] is None and state[1][1] == value \
+                                 and state[0][2] == value:
+            spaces.append((2, 0))
 
-        return False
+        return spaces if spaces else [None]
 
     def checkWin(self, value):
         '''
@@ -100,66 +113,75 @@ class TicTacToe(object):
         the identifier of the row (e.g., 'r1' for the middle row).
 
         @param value: A string containing the player symbol to search for.
-        @return: A string specifying in which row ('r'), column ('c'), or
-                 diagonal ('d') three matching symbols are found.
+        @return: An array of one or more strings specifying in which row ('r'),
+                 column ('c'), or diagonal ('d') three matching symbols are
+                 found; a list containing None if no match is found.
         '''
+        wins = []
+
         for x in xrange(3):
             if self.state[x][0] == value and self.state[x][1] == value \
                                          and self.state[x][2]  == value:
-                return 'r%d' % x
+                wins.append('c%d' % x)
             elif self.state[0][x] == value and self.state[1][x] == value \
                                            and self.state[2][x]  == value:
-                return 'c%d' % x
+                wins.append('r%d' % x)
 
-        if self.state[0][0] == value and self.state[1][1] == value and \
-                                         self.state[2][2] == value:
-                return 'd1'
-        elif self.state[2][0] == value and self.state[1][1] == value and \
-                                           self.state[0][2] == value:
-                return 'd2'
+        if self.state[1][1] == value:
+            if self.state[0][0] == value and self.state[2][2] == value:
+                wins.append('d1')
+            elif self.state[2][0] == value and self.state[0][2] == value:
+                wins.append('d2')
 
-        return False
+        return wins if len(wins) > 0 else [None]
 
     def computerTurn(self):
         '''
         Performs a turn for the computer player.
         '''
-        # Win
-        canWin = self.canWin(self.computer)
-        if canWin:
-            self.makeMove(self.computer, canWin[0], canWin[1])
-            return
+        # (1) Win or...
+        space = self.canWin(self.computer)[0]
+        if not space:
+            # ...(2) block a win or...
+            space = self.canWin(self.player)[0]
+            if not space:
+                # ... (3) make a fork or...
+                forks = self.findForks()
+                canFork = forks[self.computer]
+                if canFork:
+                    space = canFork[0]
+                else:
+                    # ...(4) block a fork or...
+                    canBlockFork = forks[self.player]
+                    if canBlockFork:
+                        space = canBlockFork[0]
+                    elif self.state[1][1] is None:
+                        # ...(5) play in the center or...
+                        space = (1, 1)
+                    else:
+                        # ...(6) play in a corner, preferring a corner opposite
+                        # an opponent's square, or....
+                        CORNER_SPACES = ((0, 0), (0, 2), (2, 0), (2, 2))
+                        fallback = None
+                        for corner in CORNER_SPACES:
+                            if self.state[corner[0]][corner[1]] is None:
+                                oppositeX = 0 if corner[0] is 2 else 2
+                                oppositeY = 0 if corner[1] is 2 else 2
+                                if self.state[oppositeX][oppositeY] is None:
+                                    space = corner
+                                fallback = corner
+                        if not space:
+                            if fallback:
+                                space = fallback
+                            else:
+                                # ...(7) play a side.
+                                SIDE_SPACES = ((0, 1), (1, 0), (1, 2), (2, 1))
+                                for x, y in SIDE_SPACES:
+                                    if self.state[x][y] is None:
+                                        space = (x, y)
 
-        # Block Win
-        canBlock = self.canWin(self.player)
-        if canBlock:
-            self.makeMove(self.computer, canBlock[0], canBlock[1])
-            return
-
-        # Make Fork
-
-        # Block Fork
-
-        # Play Center
-        if self.state[1][1] is None:
-            self.makeMove(self.computer, 1, 1)
-            return
-
-        # Play Opposite Corner
-
-        # Play Corner
-        CORNER_SPACES = ((0, 0), (0, 2), (2, 0), (2, 2))
-        for x, y in CORNER_SPACES:
-            if self.state[0][0] is None:
-                self.makeMove(self.computer, 0, 0)
-                return
-
-        # Play Side
-        SIDE_SPACES = ((0, 1), (1, 0), (1, 2), (2, 1))
-        for x, y in SIDE_SPACES:
-            if self.state[x][y] is None:
-                self.makeMove(self.computer, x, y)
-                return
+        if space:
+            self.makeMove(self.computer, space[0], space[1])
 
     def doClick(self, event):
         '''
@@ -256,15 +278,16 @@ class TicTacToe(object):
         for x in xrange(3):
             strx = str(x)
             if row[1] == strx:
-                if row[0] == 'r':
-                    r = (sixth, 0, sixth, (2 * x + 1) * length)
+                midline = (2 * x + 1) * sixth
+                if row[0] == 'c':
+                    r = (midline, 0, midline, length)
                     tags = self.state[x][0]
-                elif row[0] == 'c':
-                    r = (0, sixth, (2 * x + 1) * length, sixth)
+                elif row[0] == 'r':
+                    r = (0, midline, length, midline)
                     tags = self.state[0][x]
                 elif row[0] == 'd':
                     d = {'1': (0, 0, length, length),
-                         '2': (length, length, 0, 0)}
+                         '2': (0, length, length, 0)}
                     r = d[strx]
                     tags = self.state[1][1]
 
@@ -297,6 +320,40 @@ class TicTacToe(object):
 
         self.board.create_polygon(points, self.X_DEFAULTS)
 
+    def findForks(self):
+        '''
+        Finds all of the empty spaces that would allow either play to make a
+        fork on the game board (i.e., the player would end their next turn with
+        two unblocked lines of two).
+
+        @return A dict with two keys, 'X' & 'O', each containing a list of
+                zero or more tuple pairs of integer coordinates.
+        '''
+        forks = {'O': [],
+                 'X': []}
+
+        for x in xrange(3):
+            for y in xrange(3):
+                if self.state[x][y] is None:
+                    nextState = [column[:] for column in self.state]
+                    nextState[x][y] = self.computer
+
+                    canWin = self.canWin(self.computer, nextState)
+                    if len(canWin) > 1:
+                        forks[self.computer].extend(canWin)
+
+                    for w in xrange(3):
+                        for z in xrange(3):
+                            if nextState[w][z] is None:
+                                nextState1 = [column[:] for column in nextState]
+                                nextState1[w][z] = self.player
+
+                                canWin = self.canWin(self.player, nextState1)
+                                if len(canWin) > 1:
+                                    forks[self.player].extend(canWin)
+
+        return forks
+
     def makeMove(self, symbol, column, row):
         '''
         Validates (i.e., checks if the desired space is empty) and executes a
@@ -313,10 +370,11 @@ class TicTacToe(object):
             self.playerTurn = not self.playerTurn
 
             checkWin = self.checkWin(symbol)
-            if checkWin:
+            if checkWin[0] is not None:
                 self.player = None
                 self.playerTurn = False
-                self.drawWin(checkWin)
+                for win in checkWin:
+                    self.drawWin(win)
             elif symbol == self.player:
                 # The computer playing instantly is disconcerting.
                 self.board.after(randrange(self.CP_WAIT_MIN, self.CP_WAIT_MAX),
