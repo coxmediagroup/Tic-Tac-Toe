@@ -7,3 +7,38 @@ Intructions:
 If you don't want to broadcast your intentions by forking this, feel free to clone it and work locally. Then, send us a tar.gz of your solution, including your .git folder so we can see your commit history.
 
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
+
+-----------------------------
+
+3-24-14
+
+The program (gtnw.py) is designed to run from the command line using a simple text display and interface.  
+
+Included files are as follows:
+
+1. gtnw.py - Main program, used to play the game.
+
+2. gtnwfunctions.py - functions for the tic-tac-toe game
+
+3. testResults.txt - test log showing that the game mechanics function properly
+
+4. woprtest.py - tests the game functions and prints out results
+
+----------
+
+Since the goal is to never lose rather than maximize winning, it seems simplest to set up a few rules that will ensure this.  They are, in order: 
+
+1. When possible, win.
+
+2. When neccessary, block an opponent win.
+
+3. Take the center.
+
+4. Block double moves before they happen.
+
+5. More double move exceptions.
+
+6. Take the corners.
+
+7. Go anywhere.
+

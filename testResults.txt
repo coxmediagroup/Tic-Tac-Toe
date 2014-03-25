@@ -1,0 +1,151 @@
+whitehorse:wopr matthaley$ python woprtest.py 
+
+
+
+
+
+
+Begin testing... 2014-03-23 19:16:24.150057
+======Testing winCheck function======
+Testing blank gameboard...
+Result for X (should be [False, 'none']) = [False, 'none']
+Result for O (should be [False, 'none']) = [False, 'none']
+Blank board test passed...
+Testing winning rows (X)...
+Result (should be [True, (0, 1, 2)]) = [True, (0, 1, 2)]
+Result (should be [True, (3, 4, 5)]) = [True, (3, 4, 5)]
+Result (should be [True, (6, 7, 8)]) = [True, (6, 7, 8)]
+Result (should be [True, (0, 3, 6)]) = [True, (0, 3, 6)]
+Result (should be [True, (1, 4, 7)]) = [True, (1, 4, 7)]
+Result (should be [True, (2, 5, 8)]) = [True, (2, 5, 8)]
+Result (should be [True, (0, 4, 8)]) = [True, (0, 4, 8)]
+Result (should be [True, (6, 4, 2)]) = [True, (6, 4, 2)]
+Winning rows for X passed...
+Testing winning rows (O)...
+Result (should be [True, (0, 1, 2)]) = [True, (0, 1, 2)]
+Result (should be [True, (3, 4, 5)]) = [True, (3, 4, 5)]
+Result (should be [True, (6, 7, 8)]) = [True, (6, 7, 8)]
+Result (should be [True, (0, 3, 6)]) = [True, (0, 3, 6)]
+Result (should be [True, (1, 4, 7)]) = [True, (1, 4, 7)]
+Result (should be [True, (2, 5, 8)]) = [True, (2, 5, 8)]
+Result (should be [True, (0, 4, 8)]) = [True, (0, 4, 8)]
+Result (should be [True, (6, 4, 2)]) = [True, (6, 4, 2)]
+Winning rows for O passed...
+Winning rows test passed
+Testing non-winning rows (X)...
+Checking targeted cases first...
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Targeted non-winning rows for X passed...
+Testing non-winning rows (O)...
+Checking targeted cases first...
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Targeted non-winning rows for O passed...
+Checking secondary targeted cases for X...
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Secondary targeted non-winning rows for X passed...
+Checking secondary targeted cases for O...
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Result (should be [False, 'none']) = [False, 'none']
+Secondary targeted non-winning rows for O passed...
+======Testing AI function======
+Checking AI moving to win or block...
+Checking AI as X...
+...Horizontal Rows...
+[True, (0, 1, 2)]
+[True, (0, 1, 2)]
+[True, (3, 4, 5)]
+[True, (3, 4, 5)]
+[True, (6, 7, 8)]
+[True, (6, 7, 8)]
+AI_Horizontal_Win: passed
+... as vertical rows...
+[True, (0, 3, 6)]
+[True, (0, 3, 6)]
+[True, (1, 4, 7)]
+[True, (1, 4, 7)]
+[True, (2, 5, 8)]
+[True, (2, 5, 8)]
+AI_Vertical_Win: passed
+... as diagonal rows...
+[True, (0, 4, 8)]
+[True, (0, 4, 8)]
+[True, (6, 4, 2)]
+[True, (6, 4, 2)]
+AI_Diagonal_Win: passed
+AIMove to win as X: passed
+Checking AI as O...
+...Horizontal Rows...
+[True, (0, 1, 2)]
+[True, (0, 1, 2)]
+[True, (3, 4, 5)]
+[True, (3, 4, 5)]
+[True, (6, 7, 8)]
+[True, (6, 7, 8)]
+AI_Horizontal_Win: passed
+... as vertical rows...
+[True, (0, 3, 6)]
+[True, (0, 3, 6)]
+[True, (1, 4, 7)]
+[True, (1, 4, 7)]
+[True, (2, 5, 8)]
+[True, (2, 5, 8)]
+AI_Vertical_Win: passed
+... as diagonal rows...
+[True, (0, 4, 8)]
+[True, (0, 4, 8)]
+[True, (6, 4, 2)]
+[True, (6, 4, 2)]
+AI_Diagonal_Win: passed
+AIMove to win or block as X: passed
+AIMove to win or block as O: passed
+AIMove to win or block, both X and O: passed
+Diagonal Double move: passed (should be 2, 4, or 6): 2
+Diagonal Double move: passed (should be 2, 4, or 6): 2
+Diagonal Double move: passed (should be 1): 1
+Diagonal Double move: passed (should be 1): 1
+AI Diagonal Double Move: passed
+Checking t double move...
+T test (+ or -3): passed
+T test (+ or -3): passed
+T test (+ or -1): passed
+T test (+ or -1): passed
+AI_Double_Move: passed
+AI_Test: passed
+******************************
+FINAL RESULTS for 2014-03-23 19:16:24.150057
+--------------------------------
+winCheck function test results...
+Winning rows test: passed
+Non-winning rows test: passed
+winCheck function: passed
+--------------------------------
+AIMove function test results...
+AIMove to win or block: passed
+AIMove to block double move: passed
+AIMove function: passed
+================================================
+Entire Function Test: passed
+
+
+
+
+
+
+whitehorse:wopr matthaley$
