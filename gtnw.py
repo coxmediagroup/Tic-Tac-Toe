@@ -1,3 +1,8 @@
+# Matthew Haley, tic-tac-toe game submission
+# email: matthew.d.haley@gmail.com
+# github: https://github.com/uncertainsound
+# Purpose: Make a tic-tac-toe game with an AI that will never lose
+
 from gtnwfunctions import *
 
 # ************** Pre-game business *************************
