@@ -13,11 +13,12 @@ def start_game():
 
 
 def we_move():
-    pass
+    board = draw_board(board_values)
+    print board
+
 
 
 def prompt_player():
-    board_values = initialize_board()
     board = draw_board(board_values)
     print board
     player_moves(board_values)
@@ -70,6 +71,10 @@ def who_goes_first():
         else:
             print "Sorry.  I didn't catch that."
     return player_symbol
+
+
+board_values = initialize_board()
+
 
 if __name__ == "__main__":
     start_game()
