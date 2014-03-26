@@ -80,7 +80,6 @@ def playGame():
 	print "\n" + "\n"
 	print "Let's play a game of tic-tac-toe"
 	print "We randomly chose who gets to go first, and %s goes first" % firstMove
-	gameBoard.draw_board()
 	##if the first move is the player get their move then we can start regular play
 	##if the first move is the computer determine the best move then start regular play
 	
@@ -98,6 +97,7 @@ def playGame():
 			else:
 				##We need to make sure the game isnt over before any more is made
 				if ( gameBoard.check_for_winner() == False ):
+					gameBoard.draw_board()
 					getPlayersMove(gameBoard)
 				if ( gameBoard.check_for_winner() == False ):
 					cpuMove(gameBoard)
