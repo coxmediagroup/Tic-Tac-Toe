@@ -9,16 +9,15 @@ class TicTacToe:
         self.our_symbol = ''
         self.board_values = self.initialize_board()
 
-
     def start_game(self):
         player_symbol = self.who_goes_first()
         print 'The player is ' + player_symbol + '.'
         if player_symbol == 'X':
-            our_symbol = 'O'
+            self.our_symbol = 'O'
             print 'Great!  You go first.'
             self.prompt_player()
         elif player_symbol == 'O':
-            our_symbol = 'X'
+            self.our_symbol = 'X'
             print 'No problem.  I\'ll go first.'
             self.we_move()
 
@@ -29,7 +28,16 @@ class TicTacToe:
             self.our_squares.append(5)
             self.board_values[5] = self.our_symbol
         board = self.draw_board(self.board_values)
-        print board
+        self.check_for_winner(self.our_symbol)
+
+    def check_for_winner(self, last_player):
+        """Check to see if someone won"""
+        for win in self.wins:
+            """Check winning combination for matches"""
+            for square in win:
+                """See if our squares comprise a winning combination"""
+                if square in self.our_squares:
+                    print "%s is in one of our squares." % square
 
     def prompt_player(self):
         """Prompt the player for a move"""
