@@ -2,8 +2,9 @@ import random
 import GameBoard
 from GameBoard import *
 
+##Randomly determines who goes first
 def getFirstMove():
-	if (random.randint(1 , 2) == 1):
+	if ( random.randint(1 , 2) == 1 ):
 		return "you"
 	else:
 		return "the computer"
@@ -30,20 +31,20 @@ def cpuMove(gameBoard):
 ##Check if player can win, if so block players winning move
 	canPlayerWin = gameBoard.is_game_winnable("X")
 
-	if canComputerWin != False:
+	if ( canComputerWin != False ):
 		print "Winning  ", canComputerWin
 		gameBoard.update_board_data(canComputerWin, "O")
 		gameBoard.draw_board()
-	elif canPlayerWin != False:
+	elif ( canPlayerWin != False ):
 		print "about to lose"
 		gameBoard.update_board_data(canPlayerWin, "O")
 		gameBoard.draw_board()
-	elif len(gameBoard.get_open_corners()) != 0:
+	elif ( len(gameBoard.get_open_corners()) != 0 ):
 		##The corners (1, 3, 7, 9) are the highest valued spot
 		print "Corner Check"
 		gameBoard.update_board_data(gameBoard.get_move("corner"), "O")
 		gameBoard.draw_board()
-	elif gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O": 
+	elif ( gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O" ): 
 		##The center (5) is the highest valued spot
 		gameBoard.update_board_data("5", "O")
 		gameBoard.draw_board()
@@ -57,62 +58,70 @@ def cpuMove(gameBoard):
 		
 
 
-	
+##Validates player input
+##validMoves contains a list of moves that are open	
 def checkPlayerInput(playersMove, validMoves):
 	valid = False
 	for entry in validMoves:
-		if playersMove == entry:
+		if ( playersMove == entry ):
 			valid = True
 	return valid
 
-
-
-
-gameBoard= GameBoard()
-print "Let's play a game of tic-tac-toe"
-firstMove = getFirstMove()
-print "We randomly chose who gets to go first, and %s goes first" % firstMove
-gameBoard.draw_board()
-
-
-##if the first move is the player get their move then we can start regular play
-##if the first move is the computer determine the best move then start regular play
-if firstMove == "you":
-	winner = False
-	while winner == False:
-		##check for a winner
-		winner = gameBoard.check_for_winner()
-		##TODO check for a tie
-		if winner == "player wins":
-			print "Congratulations, you win!"
-			winner = True
-		elif winner == "computer wins":
-			print "Sorry, you lost, better luck next time."
-			winner = True
-		else:
-			getPlayersMove(gameBoard)
-			cpuMove(gameBoard)
-else:
-	winner = False
-	while winner == False:
-		##check for a winner
-		winner = gameBoard.check_for_winner()
-		##TODO check for a tie
-		if winner == "player wins":
-			print "Congratulations, you win!"
-			winner = True
-		elif winner == "computer wins":
-			print "Sorry, you lost, better luck next time."
-			winner = True
-		elif gameBoard.check_for_ties() == 0:
-			print "Looks like we have a tie, great game!"
-			winner = True
-		else:
-			cpuMove(gameBoard)
-			getPlayersMove(gameBoard)
+##Prints the winner of the game or a tie
+##The player should never win, either the computer will win or the game will end in a tie.
+def printWinner(winner):
+	if ( winner == "player wins" ):
+		print "Congratulations, you win!"
+	elif ( winner == "computer wins" ):
+		print "Sorry, you lost, better luck next time."
+	else:
+		print "Looks like we have a tie, great game!"
 	
+##Handles the start of the game
+##firstPlayer is randomly determined	
+def playGame():
 
-
-
-
-
+	gameBoard= GameBoard()
+	firstMove = getFirstMove()
+	print "\n" + "\n"
+	print "Let's play a game of tic-tac-toe"
+	print "We randomly chose who gets to go first, and %s goes first" % firstMove
+	gameBoard.draw_board()
+	##if the first move is the player get their move then we can start regular play
+	##if the first move is the computer determine the best move then start regular play
+	
+	##Winner is used to keep track of win/lose/tie
+	winner = False
+	if firstMove == "you":
+		while winner == False:
+			##check for a winner
+			game_over = gameBoard.check_for_winner()
+			
+			if ( game_over != False ):
+				##Print the winner out
+				printWinner(game_over)
+				winner = True
+			else:
+				##We need to make sure the game isnt over before any more is made
+				if ( gameBoard.check_for_winner() == False ):
+					getPlayersMove(gameBoard)
+				if ( gameBoard.check_for_winner() == False ):
+					cpuMove(gameBoard)
+	else:
+		while winner == False:
+			##check for a winner
+			game_over = gameBoard.check_for_winner()
+			##TODO check for a tie
+			if game_over == "player wins":
+				##Print the winner out
+				printWinner(game_over)
+				winner = True
+			else:
+				##We need to make sure the game isnt over before any more is made
+				if ( gameBoard.check_for_winner() == False ):
+					cpuMove(gameBoard)
+				if ( gameBoard.check_for_winner() == False ):
+					getPlayersMove(gameBoard)
+	
+##Call playGame to start the game
+playGame()

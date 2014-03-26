@@ -49,13 +49,13 @@ class GameBoard(object):
 			if items != 'X' or items != 'O':
 				moves_left.append(items)
 		return moves_left
-	def check_for_ties(self):
-		##a tie occurs if no moves are left and we have no winner
-		return len(self.get_board_moves_left())
-		
+
 	##check all paths to see if the game has a winner
 	def check_for_winner(self):
-	
+		##first lets make sure there isnt a tie
+		if ( len( self.get_board_moves_left() ) == 0):
+			return "tie"
+			
 		##loop through the dictionary
 		for key, value in self.board_winning_paths.iteritems():
 			##player_token_count keeps track of how many player tokens we have in a row
@@ -69,10 +69,12 @@ class GameBoard(object):
 					player_token_count += 1
 				elif (self.board_data[board_positions - 1] == "O"):
 					cpu_token_count += 1
+					
 			if(player_token_count == 3):
 				return "player wins"
 			elif(cpu_token_count == 3):
 				return "computer wins"
+				
 		##if no winner return false after we check every possible way to win
 		return False
 		
