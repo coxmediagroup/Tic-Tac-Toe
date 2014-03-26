@@ -1,4 +1,5 @@
-#Class file for the tic-tac-toe board
+##Class file for the tic-tac-toe board
+##Contains board state data and logic for winning/finding empty spots for the computer to use
 import random
 
 class GameBoard(object):
@@ -24,7 +25,6 @@ class GameBoard(object):
 	}
 		
 	def draw_board(self):
-
 		print "\n"
 		print "  |   | "
 		print "%c | %c | %c " % (self.board_data[0] , self.board_data[1] , self.board_data[2])
@@ -38,7 +38,6 @@ class GameBoard(object):
 	##this function updates the board's data space is the selected space and player_token is either an X or O depending if 
 	##the player or the computer made the move
 	def update_board_data(self , space , player_token):
-		print player_token + "Chose: " , space
 		self.board_data[int(space) - 1] = player_token
 	
 	def get_board_data(self):
@@ -135,7 +134,6 @@ class GameBoard(object):
 			##return the number since that is the only open corner
 			return open_spaces[0]
 		else:
-			print "Random choices: ", open_spaces
 			##randomly chose what corner we want
 			return random.choice(open_spaces)
 			

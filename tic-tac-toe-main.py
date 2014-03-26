@@ -32,16 +32,13 @@ def cpuMove(gameBoard):
 	canPlayerWin = gameBoard.is_game_winnable("X")
 
 	if ( canComputerWin != False ):
-		print "Winning  ", canComputerWin
 		gameBoard.update_board_data(canComputerWin, "O")
 		gameBoard.draw_board()
 	elif ( canPlayerWin != False ):
-		print "about to lose"
 		gameBoard.update_board_data(canPlayerWin, "O")
 		gameBoard.draw_board()
 	elif ( len(gameBoard.get_open_corners()) != 0 ):
 		##The corners (1, 3, 7, 9) are the highest valued spot
-		print "Corner Check"
 		gameBoard.update_board_data(gameBoard.get_move("corner"), "O")
 		gameBoard.draw_board()
 	elif ( gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O" ): 
@@ -53,10 +50,6 @@ def cpuMove(gameBoard):
 		##This wont happen very often, but is needed when only a side is left and noone can win ---> leads to a tie
 		gameBoard.update_board_data(gameBoard.get_move("side"), "O")
 		gameBoard.draw_board()
-		print "Something is wrong"
-		return 0
-		
-
 
 ##Validates player input
 ##validMoves contains a list of moves that are open	
@@ -74,13 +67,14 @@ def printWinner(winner):
 		print "Congratulations, you win!"
 	elif ( winner == "computer wins" ):
 		print "Sorry, you lost, better luck next time."
+		print "\n" + "\n"
 	else:
 		print "Looks like we have a tie, great game!"
+		print "\n" + "\n"
 	
 ##Handles the start of the game
 ##firstPlayer is randomly determined	
 def playGame():
-
 	gameBoard= GameBoard()
 	firstMove = getFirstMove()
 	print "\n" + "\n"
@@ -111,6 +105,7 @@ def playGame():
 		while winner == False:
 			##check for a winner
 			game_over = gameBoard.check_for_winner()
+			
 			##TODO check for a tie
 			if game_over == "player wins":
 				##Print the winner out
