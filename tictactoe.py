@@ -22,8 +22,8 @@ class TicTacToe:
             print 'No problem.  I\'ll go first.'
             self.we_move()
 
-
     def we_move(self):
+        """The program makes a move"""
         if self.player_squares.__len__() == 0:
             print "This is the first move!"
             self.our_squares.append(5)
@@ -31,14 +31,11 @@ class TicTacToe:
         board = self.draw_board(self.board_values)
         print board
 
-
-
     def prompt_player(self):
+        """Prompt the player for a move"""
         board = self.draw_board(self.board_values)
         print board
         self.player_moves(self.board_values)
-
-
 
     def is_player_symbol(self, symbol):
         valid_player_symbols = ['X', 'O']
@@ -49,19 +46,17 @@ class TicTacToe:
         else:
             print "Oops."
 
-
     def player_moves(self, board_values):
         open_squares = []
         for key, value in board_values.iteritems():
-            if self.is_player_symbol(value) == False:
+            if not self.is_player_symbol(value):
                 open_squares.append(key)
         move = raw_input('Which square do you want to move to? %s' % open_squares)
 
-
     def initialize_board(self):
+        """Create the board_values dictionary with no X's and O's"""
         board_values = {x:x for x in(range(1,10))}
         return board_values
-
 
     def draw_board(self, board_values):
         """Function for drawing the game board"""
@@ -73,7 +68,6 @@ class TicTacToe:
         board += "|  %s  |  %s  |  %s  |\n" % (board_values[7], board_values[8], board_values[9])
         board += "-------------------\n"
         return board
-
 
     def who_goes_first(self):
         player_symbol = ''
