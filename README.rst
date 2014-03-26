@@ -27,6 +27,5 @@ Navigate to http://localhost:8000/games/tic-tac-toe/
 TODO
 ----
 
-- Refactor and enhance game logic
 - Add admin support
 - Add unit tests
