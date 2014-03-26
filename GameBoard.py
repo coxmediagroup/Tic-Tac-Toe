@@ -42,10 +42,11 @@ class GameBoard(object):
 	
 	def get_board_data(self):
 		return self.board_data
+		
 	def get_board_moves_left(self):
 		moves_left = []
 		for items in self.board_data:
-			if items != 'X' or items != 'O':
+			if items != 'X' and items != 'O':
 				moves_left.append(items)
 		return moves_left
 
@@ -63,10 +64,12 @@ class GameBoard(object):
 			cpu_token_count = 0
 			##nested loop for the board rows that result in a win
 			for board_positions in value:
-				
-				if (self.board_data[board_positions - 1] == "X"):
+				print board_positions
+				print self.board_data
+				if ( self.board_data[board_positions - 1] == "X" ):
+					print self.board_data[board_positions -1 ]
 					player_token_count += 1
-				elif (self.board_data[board_positions - 1] == "O"):
+				elif ( self.board_data[board_positions - 1] == "O" ):
 					cpu_token_count += 1
 					
 			if(player_token_count == 3):

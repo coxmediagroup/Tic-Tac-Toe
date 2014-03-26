@@ -78,7 +78,7 @@ def playGame():
 	gameBoard= GameBoard()
 	firstMove = getFirstMove()
 	print "\n" + "\n"
-	print "Let's play a game of tic-tac-toe"
+	print "Let's play a game of tic-tac-toe!"
 	print "We randomly chose who gets to go first, and %s goes first" % firstMove
 	##if the first move is the player get their move then we can start regular play
 	##if the first move is the computer determine the best move then start regular play
@@ -107,7 +107,7 @@ def playGame():
 			game_over = gameBoard.check_for_winner()
 			
 			##TODO check for a tie
-			if game_over == "player wins":
+			if ( game_over != False ):
 				##Print the winner out
 				printWinner(game_over)
 				winner = True
