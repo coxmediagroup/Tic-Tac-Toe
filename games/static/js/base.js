@@ -27,12 +27,12 @@
                     
                     if(message != undefined){            
                         $status.html(message).addClass("inflated");
-                        $(".jumbotron").fadeOut();
+                        $(".jumbotron").addClass("locked");
                         $(".header-link a").text("Play Again");
                     } else {
                         $status.html("Your turn");
                     }
-                }, 1500);
+                }, 1000);
         }
 
         function markClickHandler(){

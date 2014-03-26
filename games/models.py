@@ -92,7 +92,7 @@ class TicTacToe(Game):
         else:
             # Make winning move or block the player from his winning move, then check
             # to see if the game was won and if so set is_complete = True.
-            if not self._can_win_or_block:
+            if not self._can_win_or_block():
                 # Try to capture the center first.
                 if self._center_empty:
                     self._place_mark(self._center(), save=True)
@@ -112,7 +112,7 @@ class TicTacToe(Game):
         self.save()
         return 
             
-    def _place_mark(self, position, player=None, save=False):
+    def _place_mark(self, position, player=False, save=False):
         """Places a mark down for either a player or computer."""
         if player:
             self.board[position][position] = PLAYER
@@ -123,17 +123,32 @@ class TicTacToe(Game):
             self.save()
         return
 
-    @property
     def _can_win_or_block(self):
         """Determine if the computer can either win or block in next move."""
         cached = copy.deepcopy(self.board)
+        move = []
+
         for index, mark in enumerate(self.board):
             if mark[index] == EMPTY:
+
+                # Change the next empty space to a computer mark and check for win.
                 self._place_mark(index)
                 if self._game_over():
                     return True
-            self.board = copy.deepcopy(cached)
+                
+                # Change the next empty space to a player mark and check for win.
+                self._place_mark(index, player=True)
+                if self._game_over():
+                    move.append(index)
 
+                # Reset the board to the original state.
+                self.board = copy.deepcopy(cached)
+
+        # If a winning move was present, move the computer there.
+        if len(move) > 0:
+            self._place_mark(move[0], save=True)
+            return True
+            
         return False
 
     def _game_over(self, player=False):
@@ -145,24 +160,19 @@ class TicTacToe(Game):
         won = False
 
         if not player:
-            for path in self._winning_paths:
+            for path in self._winning_paths():
                 if all([path[0].values() == item.values() and item.values()[0] == COMPUTER for item in path]):
                     won = True
-                    break
-
-            # Run this function again with player to check player moves.
-            if not won:
-                self._game_over(player=True)
-
-        elif player:
-            for path in self._winning_paths:
+                    return won
+            else:
+                won = self._game_over(player=True)
+        else:
+            for path in self._winning_paths():
                 if all([path[0].values() == item.values() and item.values()[0] == PLAYER for item in path]):
                     won = True
-                    break
-
+                    return won
         return won
 
-    @property
     def _winning_paths(self):
         winners = []
         board = [self.board[x:x+3] for x in range(0, len(self.board), 3)]

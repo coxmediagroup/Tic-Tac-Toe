@@ -13,7 +13,7 @@ body {
 }
 
 .inflated {
-    font-size: 9em;
+    font-size: 7em;
 }
 
 .header h3 a:hover {
@@ -93,6 +93,14 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron.locked {
+    opacity: 0.6;
+    pointer-events: none;
+}
+.jumbotron.locked:after {
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
 }
 .jumbotron .btn {
   padding: 14px 24px;

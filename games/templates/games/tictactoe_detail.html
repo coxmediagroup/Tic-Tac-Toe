@@ -3,7 +3,6 @@
 {% block header-link %}{% if object.is_complete %}Play Again{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block content %}
-{% if not object.is_complete %}
 <div class="jumbotron">
     <div class="table-responsive">
         <table class="table game" data-obj="{{ object.pk }}">
@@ -21,6 +20,5 @@
         </table>
     </div>
 </div>
-{% endif %}
 <h2 class="status {% if object.is_complete %}inflated{% endif %}">{% if object.is_complete %}Game Over{% else %}Your turn{% endif %}</h2>
 {% endblock content %}

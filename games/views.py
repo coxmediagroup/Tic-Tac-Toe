@@ -39,6 +39,7 @@ class TicTacToeNextMove(JSONResponseMixin, View):
                 # Initiate a move with the given mark.
                 move = obj.move(int(mark), request.user)
 
+                # Create json data to send back for page update.
                 context = {
                     'pMark': [
                         int(mark), obj.board[int(mark)]],
