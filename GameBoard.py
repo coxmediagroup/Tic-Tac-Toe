@@ -103,27 +103,38 @@ class GameBoard(object):
 			if self.board_data[corner - 1] != "X" and self.board_data[corner - 1] != "O":
 				open_corners.append(corner)
 		return open_corners
-	##helper method checks opposite corners to see if we moved their already, if so we want to make that move so there is a
-	##bigger chance at winning
-	##def check_opposite_corners(self, corner):
-	##	if corner == 0
-	##		##look at opposite corners
-	##		if self.board_data[2] == "3" or self.board_data[6] == "7" or 
+		
+	def get_open_sides(self):
+		open_sides = []
+		for side in self.sides:
+			if self.board_data[side - 1] != "X" and self.board_data[corner - 1] != "O":
+				open_sides.append(side)
+		return open_corners
 	
-	##returns available the best corner to move to
-	def get_corner_move(self):
-		##first lets check and see what corners are open
-		open_corners = self.get_open_corners()
-		open_corners_size = len(open_corners)
-		##if its empty return false
-		if open_corners_size == 0:
-			return false
-		elif open_corners_size == 1:
-			##return the number since that is the only open corner
-			return open_corner[0]
+	##returns available the best place to move to
+	## spaceToCheck is either corner or side, which tells us how to proceed
+	def get_move(self, space_to_check):
+		open_spaces = []
+		open_spaces_size = []
+		
+		if(space_to_check == "corner"):
+			##first lets check and see what corners are open
+			open_spaces = self.get_open_corners()
+			open_spaces_size = len(open_spaces)
 		else:
-			print "Random choices: ", open_corners
+			##Check and see what sides are open
+			open_spaces = self.get_open_sides()
+			open_spaces_size = len(open_spaces)
+		
+		##if its empty return false
+		if open_spaces_size == 0:
+			return false
+		elif open_spaces_size == 1:
+			##return the number since that is the only open corner
+			return open_spaces[0]
+		else:
+			print "Random choices: ", open_spaces
 			##randomly chose what corner we want
-			return random.choice(open_corners)
+			return random.choice(open_spaces)
 			
 		

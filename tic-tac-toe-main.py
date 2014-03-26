@@ -29,8 +29,7 @@ def cpuMove(gameBoard):
 	canComputerWin = gameBoard.is_game_winnable("O")
 ##Check if player can win, if so block players winning move
 	canPlayerWin = gameBoard.is_game_winnable("X")
-	print "Can cpu win ", canComputerWin
-	print "Can Player Win: ", canPlayerWin
+
 	if canComputerWin != False:
 		print "Winning  ", canComputerWin
 		gameBoard.update_board_data(canComputerWin, "O")
@@ -39,20 +38,24 @@ def cpuMove(gameBoard):
 		print "about to lose"
 		gameBoard.update_board_data(canPlayerWin, "O")
 		gameBoard.draw_board()
-	elif gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O": ##If nothing else select a spot based on value
+	elif len(gameBoard.get_open_corners()) != 0:
+		##The corners (1, 3, 7, 9) are the highest valued spot
+		print "Corner Check"
+		gameBoard.update_board_data(gameBoard.get_move("corner"), "O")
+		gameBoard.draw_board()
+	elif gameBoard.board_data[4] != "X" and gameBoard.board_data[4] != "O": 
 		##The center (5) is the highest valued spot
 		gameBoard.update_board_data("5", "O")
 		gameBoard.draw_board()
-##The corners (1, 3, 7, 9) are the next highest valued spot
-	elif len(gameBoard.get_open_corners()) != 0:
-		print "Corner Check"
-		gameBoard.update_board_data(gameBoard.get_corner_move(), "O")
-		gameBoard.draw_board()
 	else:
+		##If all of these are taken, move to an empty space on one of the sides (2, 4, 6, 8)	
+		##This wont happen very often, but is needed when only a side is left and noone can win ---> leads to a tie
+		gameBoard.update_board_data(gameBoard.get_move("side"), "O")
+		gameBoard.draw_board()
 		print "Something is wrong"
 		return 0
 		
-##If all of these are taken, move to an empty space on one of the sides (2, 4, 6, 8)	
+
 
 	
 def checkPlayerInput(playersMove, validMoves):
