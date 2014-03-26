@@ -10,13 +10,13 @@ class TicTacToe:
         self.board_values = self.initialize_board()
 
     def start_game(self):
-        player_symbol = self.who_goes_first()
-        print 'The player is ' + player_symbol + '.'
-        if player_symbol == 'X':
+        self.player_symbol = self.who_goes_first()
+        print 'The player is ' + self.player_symbol + '.'
+        if self.player_symbol == 'X':
             self.our_symbol = 'O'
             print 'Great!  You go first.'
             self.prompt_player()
-        elif player_symbol == 'O':
+        elif self.player_symbol == 'O':
             self.our_symbol = 'X'
             print 'No problem.  I\'ll go first.'
             self.we_move()
@@ -27,17 +27,49 @@ class TicTacToe:
             print "This is the first move!"
             self.our_squares.append(5)
             self.board_values[5] = self.our_symbol
-        board = self.draw_board(self.board_values)
-        self.check_for_winner(self.our_symbol)
+        else:
+            print "This is not the first move."
+            """See where we should move next"""
+            """Take square 5 if it's open"""
+            if 5 not in self.our_squares:
+                print "Taking square 5."
+                self.our_squares.append(5)
+                self.board_values[5] = self.our_symbol
+            else:
+                """See if the player is about to win"""
+                print "Square 5 is gone.  Picking another."
+                for win in TicTacToe.wins:
+                    print "win is %s" % win
+                    print "Testing winning combos for player."
+                    win_count = 0
+                    for square in self.player_squares:
+                        print "square is %s" % square
+                        if square in win:
+                            win_count += win_count
+                    if win_count == 2:
+                        print "Uh-oh!  Looks like the player might win soon."
+                        print win
 
-    def check_for_winner(self, last_player):
+
+        self.draw_board(self.board_values)
+        self.check_for_winner(self.our_symbol, self.our_squares)
+
+    def check_for_winner(self, symbol, squares):
         """Check to see if someone won"""
         for win in self.wins:
             """Check winning combination for matches"""
-            for square in win:
-                """See if our squares comprise a winning combination"""
-                if square in self.our_squares:
-                    print "%s is in one of our squares." % square
+            if all(x in squares for x in win):
+                print "%s wins!!!" % symbol
+                print self.draw_board(self.board_values)
+                exit()
+            else:
+                print "%s didn't win." % symbol
+                if symbol == self.our_symbol:
+                    self.prompt_player()
+                elif symbol == self.player_symbol:
+                    self.we_move()
+                else:
+                    "Oops."
 
     def prompt_player(self):
         """Prompt the player for a move"""
@@ -59,7 +91,13 @@ class TicTacToe:
         for key, value in board_values.iteritems():
             if not self.is_player_symbol(value):
                 open_squares.append(key)
-        move = raw_input('Which square do you want to move to? %s' % open_squares)
+        move = int(raw_input('Which square do you want to move to? %s' % open_squares))
+        self.player_squares.append(move)
+        print self.player_squares
+
+        self.board_values[move] = self.player_symbol
+        print self.board_values
+        self.check_for_winner(self.player_symbol, self.player_squares)
 
     def initialize_board(self):
         """Create the board_values dictionary with no X's and O's"""
