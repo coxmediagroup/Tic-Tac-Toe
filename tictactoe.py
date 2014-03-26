@@ -31,14 +31,14 @@ class TicTacToe:
             self.finish_move(self.our_symbol, self.our_squares)
         else:
             print "This is not the first move."
-            """See where we should move next"""
-            """Take square 5 if it's open"""
+            # See where we should move next
+            # Take square 5 if it's open
             if self.is_square_free(5):
                 print "Taking square 5."
                 self.record_move(self.our_squares, self.our_symbol, 5)
                 self.finish_move(self.our_symbol, self.our_squares)
             else:
-                """See if the player is about to win"""
+                # See if the player is about to win
                 print "Square 5 is gone.  Picking another."
                 for win in TicTacToe.wins:
                     print "Testing winning combos for player."
@@ -102,7 +102,7 @@ class TicTacToe:
         """Check to see if someone won"""
         print 'Checking for winner: %s, %s' % (symbol, squares)
         for win in self.wins:
-            """Check winning combination for matches"""
+            # Check winning combination for matches
             if all(x in squares for x in win):
                 print "%s wins!!!" % symbol
                 print self.draw_board()
@@ -118,7 +118,7 @@ class TicTacToe:
             elif symbol == self.player_symbol:
                 self.we_move()
             else:
-                "Oops."
+                print "Oops."
 
     def any_moves_left(self):
         squares_free = 0
