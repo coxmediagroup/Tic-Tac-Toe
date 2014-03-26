@@ -10,6 +10,7 @@ class TicTacToe:
         self.our_symbol = ''
         self.board_values = {}
         self.initialize_board()
+        self.players_last_move = ''
 
     def start_game(self):
         self.who_goes_first()
@@ -61,7 +62,61 @@ class TicTacToe:
                         self.record_move(self.our_squares, self.our_symbol, win_misses[0])
                         self.finish_move(self.our_symbol, self.our_squares)
                         return
-                if self.is_square_free(1):
+                # Try to block based on the player's last move
+                if self.players_last_move == 1:
+                    if self.is_square_free(2):
+                        self.record_move(self.our_squares, self.our_symbol, 2)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(4):
+                        self.record_move(self.our_squares, self.our_symbol, 4)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(3):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(7):
+                        self.record_move(self.our_squares, self.our_symbol, 7)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                elif self.players_last_move == 3:
+                    if self.is_square_free(2):
+                        self.record_move(self.our_squares, self.our_symbol, 2)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(6):
+                        self.record_move(self.our_squares, self.our_symbol, 6)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(9):
+                        self.record_move(self.our_squares, self.our_symbol, 9)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(1):
+                        self.record_move(self.our_squares, self.our_symbol, 1)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                elif self.players_last_move == 9:
+                    if self.is_square_free(6):
+                        self.record_move(self.our_squares, self.our_symbol, 6)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(8):
+                        self.record_move(self.our_squares, self.our_symbol, 8)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(3):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(7):
+                        self.record_move(self.our_squares, self.our_symbol, 7)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                elif self.players_last_move == 7:
+                    if self.is_square_free(8):
+                        self.record_move(self.our_squares, self.our_symbol, 8)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(4):
+                        self.record_move(self.our_squares, self.our_symbol, 4)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(9):
+                        self.record_move(self.our_squares, self.our_symbol, 9)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(1):
+                        self.record_move(self.our_squares, self.our_symbol, 1)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                # No fancy logic here!
+                elif self.is_square_free(1):
                     self.record_move(self.our_squares, self.our_symbol, 1)
                     self.finish_move(self.our_symbol, self.our_squares)
                 elif self.is_square_free(3):
@@ -148,6 +203,7 @@ class TicTacToe:
             if not self.is_player_symbol(value):
                 open_squares.append(key)
         move = int(raw_input('Which square do you want to move to? %s' % open_squares))
+        self.players_last_move = move
         self.player_squares.append(move)
         print self.player_squares
 
