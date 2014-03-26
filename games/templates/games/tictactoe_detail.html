@@ -9,11 +9,13 @@
         <table class="table game" data-obj="{{ object.pk }}">
             <tr>
             {% for item in object.get_board %}
-                <td id="JS_position-{{ forloop.counter0 }}" class="game-mark" data-mark="{{ forloop.counter0 }}">{{ item }}</td>
-            {% if forloop.counter|divisibleby:3 %}
+            {% for k, v in item.items %}
+            <td id="JS_position-{{ forloop.parentloop.counter0 }}" class="game-mark" data-mark="{{ forloop.parentloop.counter0 }}">{% if not v.0 == 'E' %}{{ v.1 }}{% endif %}</td>
+            {% if forloop.parentloop.counter|divisibleby:3 %}
             </tr>
             <tr class="table-row-borders">
             {% endif %}
+            {% endfor %}
             {% endfor %}
             </tr>
         </table>

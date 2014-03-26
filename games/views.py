@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.list import ListView
@@ -12,8 +13,10 @@ class TicTacToeList(ListView):
     model = TicTacToe
 
     def post(self, request, *args, **kwargs):
+        """If this page was posted to, create a new game and go to it."""
         game = TicTacToe.objects.create()
         return redirect(game)
+
 
 class TicTacToeDetail(DetailView):
     model = TicTacToe
@@ -22,7 +25,7 @@ class TicTacToeDetail(DetailView):
 class TicTacToeNextMove(JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
-        # Check if the request is async and if so process it.        
+        """Check if the request was made using ajax and if so process it."""
         if request.is_ajax():
             mark = request.GET.get('mark', None)
             obj = request.GET.get('obj', None)
@@ -31,23 +34,21 @@ class TicTacToeNextMove(JSONResponseMixin, View):
                 try:
                     obj = TicTacToe.objects.get(pk=obj)
                 except DoesNotExist:
-                    return
-
+                    raise Http404
+                
+                # Initiate a move with the given mark.
                 move = obj.move(int(mark), request.user)
-                obj.save()
 
-            context = {
-                'player_mark': [
-                    int(mark), obj.get_board[int(mark)]
-                ],
-            }
+                context = {
+                    'pMark': [
+                        int(mark), obj.board[int(mark)]],
+                    'cMark': [
+                        obj.last_move, obj.board[obj.last_move]]
+                }
 
-            try:
-                context.update({'computer_mark': [move[0], move[1]]})
-            except IndexError:
-                pass
-
-            if obj.is_complete:
-                context.update({'message': 'Game Over'})
+                if obj.is_complete:
+                    context.update({'message': 'Game Over'})
             
             return self.render_json_response(context, *args, **kwargs)
+
+        return Http404

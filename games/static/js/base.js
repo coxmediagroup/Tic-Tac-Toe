@@ -12,16 +12,18 @@
         }
 
         function updateGame(data){
+
             var $status = $(".status"),
-                pMark = data.player_mark,
-                cMark = data.computer_mark,
+                pMark = data.pMark,
+                cMark = data.cMark,
                 message = data.message;
 
-                $("#JS_position-"+pMark[0]).html(pMark[1]);
+                $("#JS_position-"+pMark[0]).html(pMark[1][pMark[0]][1]);
                 
                 $status.html("Computer's turn...");
+
                 setTimeout(function(){
-                    $("#JS_position-"+cMark[0]).html(cMark[1]);
+                    $("#JS_position-"+cMark[0]).html(cMark[1][cMark[0]][1]);
                     
                     if(message != undefined){            
                         $status.html(message).addClass("inflated");

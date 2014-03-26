@@ -1,16 +1,20 @@
+import pdb
+import ast
+import copy
 import json
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 
 from . import GameError
 
-EMPTY_MARK = ' '
-COMPUTER_MARK = 'O'
-PLAYER_MARK = 'X'
-SIZE = 3
-CELLS = SIZE**2
-DEFAULT_BOARD = EMPTY_MARK * CELLS
+
+SIZE = 9
+EMPTY = ('E', '-')
+PLAYER = ('P', 'X')
+COMPUTER = ('C', 'O')
+DEFAULT_BOARD = [{x: EMPTY} for x in range(0, SIZE)]
 
 
 class Game(models.Model):
@@ -32,10 +36,9 @@ class TicTacToe(Game):
     neither.
 
     """
-    board = models.CharField(max_length=SIZE, default=DEFAULT_BOARD)
-    last_computer_move = models.CharField(max_length=9, blank=True)
-    winner = models.NullBooleanField(null=True, blank=True,
-        help_text=u'0 means computer won, 1 means player won.')
+    board = models.TextField(max_length=SIZE, default=DEFAULT_BOARD, blank=True)
+    player = models.ForeignKey(User, null=True, blank=True)
+    last_move = models.IntegerField(null=True, blank=True)
 
     GameError = GameError
 
@@ -66,82 +69,110 @@ class TicTacToe(Game):
         3) If no attempt at win, place mark in one of the corners.
 
         """
+        # Be sure that the board has been converted to actual list.
+        if not isinstance(self.board, list):
+            self.board = ast.literal_eval(self.board)
+
         # Check if the game is still active.
         if self.is_complete:
             return self.GameError('This game is already completed.')
 
-        # Check if player var was passed, if so then it must be time to move
-        # the players mark. Initiate the computer's turn once completed.
-        if player:
-            if int(position) <= len(self.board) and self._is_valid_move(position):
-                self._place_mark(position, PLAYER_MARK)
-
-                # Now it is the computers turn.    
+        # Check if player and position were passed signifying player's turn.
+        if player and position is not None:
+            if position <= len(self.board) and self._is_valid_move(position):
+                # The move is valid so go ahead and place the players mark.
+                self._place_mark(position, player, save=True)
+                
+                # Next we initiate a move for the computer by calling move() with no player. 
                 self.move()
             else:
-                return self.GameError('Please select a valid move.')
+                return self.GameError('That move is invalid, please try again.')
+        
+        # Since no player or position were passed, it's the computers turn.
         else:
-            # Check if player has more than 1 mark, if not, move to center.
-            marks = self.board.count(PLAYER_MARK)
-            
-            if marks < 2 and self._center_empty:
-                self._place_mark(self._center_position, COMPUTER_MARK)
-            else:
-                # Make winning move or block the player from his winning move, then check
-                # to see if the game was won and if so set is_complete = True.
-                if self.winning_move(COMPUTER_MARK) or self.winning_move(PLAYER_MARK):
-                    pass
+            # Make winning move or block the player from his winning move, then check
+            # to see if the game was won and if so set is_complete = True.
+            if not self._can_win_or_block:
+                # Try to capture the center first.
+                if self._center_empty:
+                    self._place_mark(self._center(), save=True)
                 else:
                     # Otherwise just pick an empty space and move there.
                     # TODO: Choose corners or random space.
-                    position = self.board.find(EMPTY_MARK)
-                    self._place_mark(position, COMPUTER_MARK)
+                    for index, mark in enumerate(self.board):
+                        if mark[index] == EMPTY:
+                            self._place_mark(index, save=True)
+                            break
             
-            if self._game_won:
+            # Check if the game has been won, if so set the state to complete.
+            if self._game_over():
                 self.is_complete = True
-                self.winner = 0
-                self.save()
 
-        return (self.last_computer_move, COMPUTER_MARK)
+        # Save the game now that the move is complete.
+        self.save()
+        return 
+            
+    def _place_mark(self, position, player=None, save=False):
+        """Places a mark down for either a player or computer."""
+        if player:
+            self.board[position][position] = PLAYER
+        else:
+            self.board[position][position] = COMPUTER
+            self.last_move = position
+        if save:
+            self.save()
+        return
 
-    def winning_move(self, player_mark):
-        next_move = []
-        for position, mark in enumerate(self.board):
-            if mark == EMPTY_MARK:
-                old = self.board
-                self._place_mark(position, player_mark)
-                if self._game_won:
-                    next_move.append(position)
-                    break
-                self.board = old
-        
-        if len(next_move) > 0:
-            self._place_mark(next_move[0], COMPUTER_MARK)
-            return True
+    @property
+    def _can_win_or_block(self):
+        """Determine if the computer can either win or block in next move."""
+        cached = copy.deepcopy(self.board)
+        for index, mark in enumerate(self.board):
+            if mark[index] == EMPTY:
+                self._place_mark(index)
+                if self._game_over():
+                    return True
+            self.board = copy.deepcopy(cached)
 
         return False
 
-    def _place_mark(self, position, mark):
-        if mark == COMPUTER_MARK:
-            self.last_computer_move = [position, mark]
+    def _game_over(self, player=False):
+        """
+        Determine if the game is over or not. First run the function against
+        the computer's moves by calling it without player set. The function then
+        checks the players moves automatically by calling itself with player.
+        """
+        won = False
 
-        self.board = list(self.board)
-        self.board.pop(position)
-        self.board.insert(position, mark)
-        self.board = ''.join(self.board)
-        return self.save()
+        if not player:
+            for path in self._winning_paths:
+                if all([path[0].values() == item.values() and item.values()[0] == COMPUTER for item in path]):
+                    won = True
+                    break
+
+            # Run this function again with player to check player moves.
+            if not won:
+                self._game_over(player=True)
+
+        elif player:
+            for path in self._winning_paths:
+                if all([path[0].values() == item.values() and item.values()[0] == PLAYER for item in path]):
+                    won = True
+                    break
+
+        return won
 
     @property
     def _winning_paths(self):
         winners = []
-        board = [list(self.board[x:x+SIZE]) for x in range(0, len(self.board), SIZE)]
+        board = [self.board[x:x+3] for x in range(0, len(self.board), 3)]
        
         # Find all horizontal winning paths.
         for row in board:
             winners.append(row)
        
         # Find all vertical winning paths.
-        for x in range(0, SIZE):
+        for x in range(0, 3):
             cols = []
             for row in board:
                 cols.append(row[x])
@@ -153,48 +184,31 @@ class TicTacToe(Game):
 
         return winners
 
-    @property
-    def _game_won(self):
-        # Iterate through winning paths to check if game is won.
-        won = False
-
-        for path in self._winning_paths:
-            if all(path[0] == x and x != EMPTY_MARK for x in path):
-                won = True
-                break
-
-        # Check if there is a stalemate.
-        if not EMPTY_MARK in self.board and not won:
-            won = True
-
-        # Game not over, return False.
-        return won
-
     def _is_valid_move(self, position):
-        return list(self.board).pop(position) == EMPTY_MARK
+        return self.board[position][position] == EMPTY
+    
+    @property
+    def get_board(self):
+        """Template helper function to return the board pieces."""
+        if not isinstance(self.board, list):
+            self.board = ast.literal_eval(self.board)
+        return self.board
 
     @property
-    def _get_corners(self):
+    def _corners(self):
         # Could get this programatically but simple enough to just return them.
         return [self.board[i] for i in (0, 2, 6, 8)]
 
     @property
     def _center_empty(self):
-        return self.board[self._center_position] == EMPTY_MARK
+        center = self._center()
+        return self.board[center][center] == EMPTY
 
     @property
-    def _center_position(self):
-        return self._center(SIZE)
-
-    @property
-    def get_board(self):
-        return list(self.board)
-
-    @property
-    def size(self):
+    def _size(self):
         return SIZE
 
     @staticmethod
-    def _center(size):
-        return ((SIZE**2) - 1) / 2
+    def _center():
+        return int(((SIZE) - 1) / 2)
 
