@@ -204,12 +204,8 @@ class TicTacToe:
                 open_squares.append(key)
         move = int(raw_input('Which square do you want to move to? %s' % open_squares))
         self.players_last_move = move
-        self.player_squares.append(move)
-        print self.player_squares
-
-        self.board_values[move] = self.player_symbol
-        print self.board_values
-        self.check_for_winner(self.player_symbol, self.player_squares)
+        self.record_move(self.player_squares, self.player_symbol, move)
+        self.finish_move(self.player_symbol, self.player_squares)
 
     def initialize_board(self):
         """Create the board_values dictionary with no X's and O's"""
