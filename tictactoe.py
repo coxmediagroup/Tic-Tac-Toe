@@ -25,34 +25,62 @@ class TicTacToe:
         """The program makes a move"""
         if self.player_squares.__len__() == 0:
             print "This is the first move!"
-            self.our_squares.append(5)
-            self.board_values[5] = self.our_symbol
+            self.record_move(self.our_squares, self.our_symbol, 5)
+            self.finish_move(self.our_symbol, self.our_squares)
         else:
             print "This is not the first move."
             """See where we should move next"""
             """Take square 5 if it's open"""
             if 5 not in self.our_squares:
                 print "Taking square 5."
-                self.our_squares.append(5)
-                self.board_values[5] = self.our_symbol
+                self.record_move(self.our_squares, self.our_symbol, 5)
             else:
                 """See if the player is about to win"""
                 print "Square 5 is gone.  Picking another."
                 for win in TicTacToe.wins:
-                    print "win is %s" % win
                     print "Testing winning combos for player."
                     win_count = 0
-                    for square in self.player_squares:
-                        print "square is %s" % square
-                        if square in win:
-                            win_count += win_count
+                    win_matches = []
+                    win_misses = []
+                    for i in win:
+                        if i in self.player_squares:
+                            print "square is in win"
+                            win_count += 1
+                            win_matches.append(i)
+                        else:
+                            win_misses.append(i)
+                    print "win_count is %s" % win_count
                     if win_count == 2:
                         print "Uh-oh!  Looks like the player might win soon."
-                        print win
+                        print "win is %s" % win
+                        print "win_matches is %s" % win_matches
+                        print "win_misses is %s" % win_misses[0]
+                        self.record_move(self.our_squares, self.our_symbol, win_misses[0])
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(1):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(3):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(9):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
+                    elif self.is_square_free(7):
+                        self.record_move(self.our_squares, self.our_symbol, 3)
+                        self.finish_move(self.our_symbol, self.our_squares)
 
+    def is_square_free(self, square):
+        if self.board_values[square] in range(9):
+            return True
 
-        self.draw_board(self.board_values)
-        self.check_for_winner(self.our_symbol, self.our_squares)
+    def record_move(self, squares, symbol, square):
+        squares.append(square)
+        self.board_values[square] = symbol
+
+    def finish_move(self, symbol, squares):
+        self.draw_board()
+        self.check_for_winner(symbol, squares)
 
     def check_for_winner(self, symbol, squares):
         """Check to see if someone won"""
@@ -60,7 +88,7 @@ class TicTacToe:
             """Check winning combination for matches"""
             if all(x in squares for x in win):
                 print "%s wins!!!" % symbol
-                print self.draw_board(self.board_values)
+                print self.draw_board()
                 exit()
             else:
                 print "%s didn't win." % symbol
@@ -73,7 +101,7 @@ class TicTacToe:
 
     def prompt_player(self):
         """Prompt the player for a move"""
-        board = self.draw_board(self.board_values)
+        board = self.draw_board()
         print board
         self.player_moves(self.board_values)
 
@@ -104,14 +132,14 @@ class TicTacToe:
         board_values = {x:x for x in(range(1,10))}
         return board_values
 
-    def draw_board(self, board_values):
+    def draw_board(self):
         """Function for drawing the game board"""
         board = "-------------------\n"
-        board += "|  %s  |  %s  |  %s  |\n" % (board_values[1], board_values[2], board_values[3])
+        board += "|  %s  |  %s  |  %s  |\n" % (self.board_values[1], self.board_values[2], self.board_values[3])
         board += "-------------------\n"
-        board += "|  %s  |  %s  |  %s  |\n" % (board_values[4], board_values[5], board_values[6])
+        board += "|  %s  |  %s  |  %s  |\n" % (self.board_values[4], self.board_values[5], self.board_values[6])
         board += "-------------------\n"
-        board += "|  %s  |  %s  |  %s  |\n" % (board_values[7], board_values[8], board_values[9])
+        board += "|  %s  |  %s  |  %s  |\n" % (self.board_values[7], self.board_values[8], self.board_values[9])
         board += "-------------------\n"
         return board
 
