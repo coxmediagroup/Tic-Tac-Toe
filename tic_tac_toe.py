@@ -60,17 +60,6 @@ class tic_tac_toe_board(Tkinter.Tk):
     def startgame(self):
         pass
 
-class Player:
-
-    def __init__(self):
-        self.marker = "abc"
-        self.player_turn = True
-    def turn(self):
-        pass
-
-    def winning_conditions():
-        pass
-
 #Create a computer_player object that will never lose
 class Computer_player:
 
