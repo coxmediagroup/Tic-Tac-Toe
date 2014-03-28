@@ -4,17 +4,17 @@ import time
 #Do stuff down here
 
 #Class to handle the actual board display
-class tic_tac_toe_board(Tkinter.Tk):
+class tic_tac_toe_board(object, Tkinter.Tk):
   
     def __init__(self, parent):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
         self.player_turn = True
-        self.game_won = False
         self.board_grid =[[None] *3 for x in range(3)]
         self.board_selections=[[None] *3 for x in range(3)]
-        self.comp = Computer_player()
+        self.comp = ComputerPlayer()
         self.initialize()
+        
 
     #Layout of the actual tic-tac-toe board in grid format
     def initialize(self):
@@ -28,40 +28,56 @@ class tic_tac_toe_board(Tkinter.Tk):
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
         self.update()
 
-#Create a player object to handle the human player
-
     def OnButtonClick(self, board_grid, x, y):
-        print(self.board_selections)
-        allowed = self.check_board(x, y)
-        if allowed:
-            if self.player_turn == True:
+        if self.player_turn == True:
+            print(self.board_selections)
+            allowed = self.check_board(x, y)
+            if allowed:
                 board_grid.config(text="O")
                 self.board_selections[x][y] = "o"
-               # self.player_turn = False
-                board = self.comp.computer_turn(self.board_selections)               
-                print(board)
-                print("abc")
+                #self.player_turn = False
+                #Check if game was won
+                won = self.gamewon(self.board_selections, 'o', x, y)
+                if won == True:
+                    print("won")
+                    return
+                else:
+                    
+                    board = self.comp.computer_turn(self.board_selections)
+                    print(board)
+                    won = self.gamewon(self.board_selections, 'x', x, y)
+                    if won == True:
+                        print("comp won")
                 return
-            else:
-                pass
-        else:
-            pass
 
     def update_board(self):
-        pass
+        print("123")
 
+    #When a user selects a grid, make sure that it hasn't already been selected
     def check_board(self, x, y):
         if self.board_selections[x][y] == " ":
-            #update title to show that button has already been used
             return True
         else:
             return False
 
-    def startgame(self):
-        pass
+    def gamewon(self, board, mark, x, y):
+        if board[x][0] == (mark) and board[x][1] == (mark) and board [x][2] == (mark):
+            return True
+
+        if board[0][y] == (mark) and board[1][y] == (mark) and board [2][y] == (mark):
+            return True    
+
+        #Check diagonals
+        if board[0][0] == (mark) and board[1][1] == (mark) and board [2][2] == (mark):
+            return True
+
+        if board[0][2] == (mark) and board[1][1] == (mark) and board [2][0] == (mark):
+            return True 
+
+        return False
 
 #Create a computer_player object that will never lose
-class Computer_player:
+class ComputerPlayer(object):
 
     def __init__(self):
         pass
@@ -110,7 +126,7 @@ class Computer_player:
                 opengrid = column
             else: break
         if opengrid != None and comp_pieces == 2:
-            board[path[opengrid][0]][path[openSlot][1]] = 'x'
+            board[path[opengrid][0]][path[opengrid][1]] = 'x'
             return board
 
         #upper right to lower left
@@ -124,7 +140,7 @@ class Computer_player:
                 opengrid = column
             else: break
         if opengrid != None and comp_pieces == 2:
-            board[path[opengrid][0]][path[openSlot][1]] = 'x'
+            board[path[opengrid][0]][path[opengrid][1]] = 'x'
             return board
 
 
@@ -168,7 +184,7 @@ class Computer_player:
                 opengrid = column
             else: break
         if opengrid != None and player_pieces == 2:
-            board[path[opengrid][0]][path[openSlot][1]] = 'x'
+            board[path[opengrid][0]][path[opengrid][1]] = 'x'
             return board
 
         #upper right to lower left
@@ -182,7 +198,7 @@ class Computer_player:
                 opengrid = column
             else: break
         if opengrid != None and player_pieces == 2:
-            board[path[opengrid][0]][path[openSlot][1]] = 'x'
+            board[path[opengrid][0]][path[opengrid][1]] = 'x'
             return board
 
         #ideal starting move
@@ -204,20 +220,25 @@ class Computer_player:
                     board[row][column] = 'x'
                     return board
 
-class gameplay:
+
+class gameplay(object):
 
     def __init__(self):
-        pass   
+        self.gameboard = tic_tac_toe_board(None)
+        self.gameboard.title("TicTacToe")
+        self.comp = ComputerPlayer()
+        self.player_turn = False
+        self.game_won = False
  #Pass in the board, player, and computer objects to start the actual game.
     def play(self):
-        gameboard = tic_tac_toe_board(None)
-        gameboard.title('Tic Tac Toe')
-        gameboard.mainloop()
+        board = self.comp.computer_turn(self.gameboard.board_selections)
+        # Pass computer player the gameboard, and let them choose
+        # Update gameboard
+        # Have player make selection
+        # Check for win
+        self.gameboard.mainloop()
 
 #Start the game session
 if __name__ == "__main__":
-   # gameboard = tic_tac_toe_board(None)
-   # gameboard.title('Tic Tac Toe')
-   # gameboard.mainloop()
-    start = gameplay()
-    start.play()
+    gameboard = tic_tac_toe_board(None)
+    gameboard.mainloop()
