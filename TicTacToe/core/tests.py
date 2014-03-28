@@ -23,6 +23,7 @@ class TicTacToeTest(unittest.TestCase):
         Test the available move checker
         """
         moves = self.board.available()
+        # Make sure all moves are available
         self.assertTrue(len(moves) == 9, 'Not all moves are available')
         self.assertTrue(moves == [0, 1, 2, 3, 4, 5, 6, 7, 8], 'Available moves do not match')
 
@@ -62,7 +63,7 @@ class TicTacToeTest(unittest.TestCase):
         self.board.take('human', 0)
         self.board.take('human', 3)
         move = self.board.eval_game('machine')
-        self.assertTrue(move == 1, 'Exptected to choose position 1 for the win')
+        self.assertTrue(move == 1, 'Expected to choose position 1 for the win')
 
     def test_006(self):
         """
@@ -74,4 +75,4 @@ class TicTacToeTest(unittest.TestCase):
         self.board.take('machine', 0)
         self.board.take('machine', 1)
         move = self.board.eval_game('machine')
-        self.assertTrue(move == 6, 'Exptected to choose position 6 for the block')
+        self.assertTrue(move == 6, 'Expected to choose position 6 for the block')
