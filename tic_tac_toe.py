@@ -31,6 +31,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
     def OnButtonClick(self, board_grid, x, y):
         if self.player_turn == True:
             print(self.board_selections)
+            print(self.board_grid[x][y])
             allowed = self.check_board(x, y)
             if allowed:
                 board_grid.config(text="O")
@@ -42,13 +43,16 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                     print("won")
                     return
                 else:
-                    
-                    board = self.comp.computer_turn(self.board_selections)
-                    print(board)
+                    self.board_selections = self.comp.computer_turn(self.board_selections)
+                    print(self.board_selections)
                     won = self.gamewon(self.board_selections, 'x', x, y)
+                    for x in range(3):
+                        for y in range(3):
+                            if self.board_selections[x][y] == "x":
+                                board_grid = self.board_grid[x][y]
+                                board_grid.config(text="X")
                     if won == True:
                         print("comp won")
-                return
 
     def update_board(self):
         print("123")
@@ -72,9 +76,10 @@ class tic_tac_toe_board(object, Tkinter.Tk):
             return True
 
         if board[0][2] == (mark) and board[1][1] == (mark) and board [2][0] == (mark):
-            return True 
-
-        return False
+            return True
+ 
+        else:
+            return False
 
 #Create a computer_player object that will never lose
 class ComputerPlayer(object):
@@ -98,7 +103,7 @@ class ComputerPlayer(object):
             if opengrid != None and comp_pieces == 2:
             #there is an empty slot which would win the game
                 board[row][opengrid] = 'x'
-                return board
+                return board, 
 
         #complete vertical sets of 3
         for colNum in range(3):
