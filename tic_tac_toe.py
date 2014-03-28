@@ -24,38 +24,41 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         for x in range(3):
             for y in range(3):
                 self.board_selections[x][y] = " "
-                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=str(x) + str(y), command=lambda x=x, y=y: self.OnButtonClick(self.board_grid[x][y], x, y))
+                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=str(x) + str(y), command=lambda x=x, y=y: self.OnButtonClick(x, y))
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
         self.update()
 
-    def OnButtonClick(self, board_grid, x, y):
-        if self.player_turn == True:
-            print(self.board_selections)
-            print(self.board_grid[x][y])
-            allowed = self.check_board(x, y)
-            if allowed:
-                board_grid.config(text="O")
-                self.board_selections[x][y] = "o"
-                #self.player_turn = False
+    def OnButtonClick(self, x, y):
+       # if self.player_turn == True:
+       #     allowed = self.check_board(x, y)
+       #     if allowed:
+        self.update_board(x, y, 'o')
+        print self.board_selections
                 #Check if game was won
+        """
                 won = self.gamewon(self.board_selections, 'o', x, y)
                 if won == True:
                     print("won")
                     return
                 else:
-                    self.board_selections = self.comp.computer_turn(self.board_selections)
+                    board  = self.comp.computer_turn(self.board_selections)
+                    self.update_board(x, y, 'x')
                     print(self.board_selections)
                     won = self.gamewon(self.board_selections, 'x', x, y)
-                    for x in range(3):
-                        for y in range(3):
-                            if self.board_selections[x][y] == "x":
-                                board_grid = self.board_grid[x][y]
-                                board_grid.config(text="X")
                     if won == True:
                         print("comp won")
+        """
+    def update_board(self, x, y, mark):
 
-    def update_board(self):
-        print("123")
+        self.board_selections[x][y] = mark
+        print self.board_selections[x][y]
+
+        for x in range(3):
+            for y in range(3):
+                if self.board_selections[x][y] == "o":
+                    self.board_grid[x][y].config(text="O")
+                if self.board_selections[x][y] == "x":
+                    self.board_grid[x][y].config(text="X")
 
     #When a user selects a grid, make sure that it hasn't already been selected
     def check_board(self, x, y):
