@@ -16,7 +16,7 @@ class TicTacToeTest(unittest.TestCase):
         self.board = Game()
 
     def tearDown(self):
-        pass
+        self.board.reset()
 
     def test_001(self):
         """
@@ -41,16 +41,37 @@ class TicTacToeTest(unittest.TestCase):
         """
         self.board.take('machine', 1)
         # At this point we shoulnd't have a winner yet
-        self.assertFalse(self.board.win('machine'), 'We have a winner')
+        self.assertFalse(self.board.winner('machine'), 'We have a winner')
         self.board.take('machine', 7)
         # Now the machine player should have won
-        self.assertTrue(self.board.win('machine'), '{0} is not the winner'.format(PLAYERS['machine']))
-        self.assertTrue(self.board.win('machine') == (1, 4, 7), 'Unexpected winning vector')
+        self.assertTrue(self.board.winner('machine'), '{0} is not the winner'.format(PLAYERS['machine']))
+        self.assertTrue(self.board.winner('machine') == (1, 4, 7), 'Unexpected winning vector')
 
     def test_004(self):
         """
         Test win detection
         """
-        self.board._clear('machine', 1)
+        self.board.clear('machine', 1)
         # Now the machine player should have a winning move available
         self.assertTrue(self.board.winnable('machine') == 1, 'Exptected to be able to win')
+
+    def test_005(self):
+        """
+        Test game evaulation -- Winning move
+        """
+        self.board.take('human', 0)
+        self.board.take('human', 3)
+        move = self.board.eval_game('machine')
+        self.assertTrue(move == 1, 'Exptected to choose position 1 for the win')
+
+    def test_006(self):
+        """
+        Test game evaluation -- Blocking move
+        """
+        self.board.reset()
+        self.board.take('human', 4)
+        self.board.take('human', 2)
+        self.board.take('machine', 0)
+        self.board.take('machine', 1)
+        move = self.board.eval_game('machine')
+        self.assertTrue(move == 6, 'Exptected to choose position 6 for the block')
