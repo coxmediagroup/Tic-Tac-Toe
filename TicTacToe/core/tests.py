@@ -40,6 +40,17 @@ class TicTacToeTest(unittest.TestCase):
         Test win detection
         """
         self.board.take('machine', 1)
+        # At this point we shoulnd't have a winner yet
         self.assertFalse(self.board.win('machine'), 'We have a winner')
         self.board.take('machine', 7)
+        # Now the machine player should have won
         self.assertTrue(self.board.win('machine'), '{0} is not the winner'.format(PLAYERS['machine']))
+        self.assertTrue(self.board.win('machine') == (1, 4, 7), 'Unexpected winning vector')
+
+    def test_004(self):
+        """
+        Test win detection
+        """
+        self.board._clear('machine', 1)
+        # Now the machine player should have a winning move available
+        self.assertTrue(self.board.winnable('machine') == 1, 'Exptected to be able to win')

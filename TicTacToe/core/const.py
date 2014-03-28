@@ -5,7 +5,7 @@
 
 PLAYERS = dict(
     machine='x',
-    human='0'
+    human='o'
 )
 
 WIN_VECTORS = [
