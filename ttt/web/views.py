@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
@@ -30,9 +31,9 @@ def start(request):
         request.session['ttt'] = ttt
 
     if 'ttt' not in request.session:
-        return HttpResponseRedirect('/') 
+        return HttpResponseRedirect(reverse('get_params')) 
     else:
-        return HttpResponseRedirect('/play/') 
+        return HttpResponseRedirect(reverse('play'))
 
 def play(request):
     """
