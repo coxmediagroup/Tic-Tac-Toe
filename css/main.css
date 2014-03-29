@@ -4,9 +4,10 @@
 
 .square {
     width: 15%;
-    margin:5px;
+    margin:10px;
     border: solid 1px black;
     display: inline-block;
+    vertical-align: text-bottom;
 }
 
 .square span {

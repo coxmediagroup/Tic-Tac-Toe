@@ -1,16 +1,41 @@
 var Square = Backbone.Model.extend({
     defaults: {
-        isX: true
+        isX: undefined,
+        warning: undefined
+    },
+
+    playerMove: function() {
+        switch (this.attributes.isX) {
+            case undefined:
+                this.set({isX: true});
+                break;
+            case true:
+                this.set({warning: "you've already selected this square"});
+                break;
+            default:
+                this.set({warning: "this square has already been chosen"});
+                break;
+        }
     }
 });
 
 var SquareView = Backbone.View.extend({
-    tag: "div",
+    tagName: "div",
     className: "square",
-    template: _.template("<span><% if (isX) { %>X<% } else { %>O<% } %></span>"),
+    events: {
+        "click": "squareClick"
+    },
+    template: _.template("<% if (warning) { %><%= warning %><% } else { %><span><% if (isX === undefined) { %><% } else if (isX) { %>X<% } else { %>O<% } %></span><% } %>"),
 
-    init: function() {
-        this.model.on('change', this.render);
+    initialize: function() {
+        var that = this;
+        this.model.on('change', function() {
+            that.render.call(that);
+        });
+    },
+
+    squareClick: function() {
+        this.model.playerMove();
     },
 
     render: function() {

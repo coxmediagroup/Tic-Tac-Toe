@@ -4,8 +4,7 @@ var Row = Backbone.Collection.extend({
 });
 
 (function() {
-    var NUM_ROWS = 3,
-        LETTER_SIZE = 60;
+    var NUM_ROWS = 3;
     var $board = $('.board');
 
     for (var i = 0 ; i < NUM_ROWS ; i++) {
@@ -20,8 +19,6 @@ var Row = Backbone.Collection.extend({
             $board.append(v.$el);
             /* make the square a square by setting its height to its width*/
             v.$el.height(v.$el.width());
-            /* position the letter in middle of square */
-            v.$el.find('span').css('top', (v.$el.height() / 2) - (LETTER_SIZE / 2));
 
             r.add(s);
         }
