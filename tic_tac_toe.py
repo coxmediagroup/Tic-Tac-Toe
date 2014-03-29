@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import Tkinter
+from Tkinter import *
+import tkFont
 import time
 
 #Class to handle the actual board display
@@ -8,7 +10,6 @@ class tic_tac_toe_board(object, Tkinter.Tk):
     def __init__(self, parent):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
-        root = Tkinter.Tk
         self.player_turn = False
         self.draw_counter = 0
         self.board_grid =[[None] *3 for x in range(3)]
@@ -22,14 +23,16 @@ class tic_tac_toe_board(object, Tkinter.Tk):
     def initialize(self):
         self.grid()
         self.labelVariable = Tkinter.StringVar()
-        
+        helv = tkFont.Font(family='Helvetica', size=16, weight='bold')
+
         for x in range(3):
             for y in range(3):
                 self.board_selections[x][y] = " "
-                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, padx = 500, pady = 10, text=" ", command=lambda x=x, y=y: self.OnButtonClick(x, y))
-                self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
+                self.board_grid[x][y] = Tkinter.Button(self, text=" ", font=helv, command=lambda x=x, y=y: self.OnButtonClick(x, y))
+                
+                self.board_grid[x][y].grid(column=x, row=y, sticky='nsew')
 
-        reset_button = Tkinter.Button(self, text=u"RESET GAME", command=self.reset_game)
+        reset_button = Tkinter.Button(self, text="RESET GAME", command=self.reset_game)
         reset_button.grid(column=0, row=4, columnspan=3, stick='EW')
 
         self.labelVariable = Tkinter.StringVar()
@@ -42,6 +45,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         for y in range(5):
             self.grid_rowconfigure(y, weight=1)
 
+    #Callback for when a user clicks on a tic-tac-toe button
     def OnButtonClick(self, x, y):
         if self.player_turn == True:
             allowed = self.check_board(x, y)
@@ -57,6 +61,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                     self.player_turn = False
                     self.labelVariable.set(u"Computer's turn")
 
+    #Callback for when reset-button is pressed
     def reset_game(self):
         for x in range(3):
             for y in range(3):
