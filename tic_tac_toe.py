@@ -42,25 +42,28 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                     return
             
             self.player_turn = False
-            
+    
+    #Check to make sure it's not the users turn, and if not, the computer will read in the gameboard and make the appropriate move        
     def call_ai_player(self):
-        print("abc")
         if self.player_turn == False:
-            time.sleep(2)
+            time.sleep(1)
             self.board_selections = self.comp.computer_turn(self.board_selections)
             self.update_board("x")
             self.player_turn = True   
         self.after(1000, self.call_ai_player)
 
+    #This method takes the appropriate mark and updates both the gameboard as well as the on-screen GUI representation
     def update_board(self, mark):
-
         for x in range(3):
             for y in range(3):
                 if self.board_selections[x][y] == "o":
                     self.board_grid[x][y].config(text="O")
                 if self.board_selections[x][y] == "x":
                     self.board_grid[x][y].config(text="X")
-
+                    #Iterate through the board and see if the computer has a winning combo
+                    won = self.gamewon(self.board_selections, 'x', x, y)
+                    if won == True:
+                        print("comp wins")
     #When a user selects a grid, make sure that it hasn't already been selected
     def check_board(self, x, y):
         if self.board_selections[x][y] == " ":
@@ -68,6 +71,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         else:
             return False
 
+    # Read in the board, as well as the appropriate marks and position, and determine if a game-winning move was made
     def gamewon(self, board, mark, x, y):
         if board[x][0] == (mark) and board[x][1] == (mark) and board [x][2] == (mark):
             return True
@@ -91,10 +95,6 @@ class ComputerPlayer(object):
     def __init__(self):
         pass
 
-    def comp_move(self, board):
-        board = self.computer_turn(board)             
-        return board
-
     #Pass in a 3x3 array of the gameboard, and the computer will make the most intelligent decision based off the following logic.
     def computer_turn(self, board):
     
@@ -111,7 +111,7 @@ class ComputerPlayer(object):
             if opengrid != None and comp_pieces == 2:
             #there is an empty grid here which would win the game
                 board[row][opengrid] = 'x'
-                return board, 
+                return board
 
         #complete vertical
         for colNum in range(3):
