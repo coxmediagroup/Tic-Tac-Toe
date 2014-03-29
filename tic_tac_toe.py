@@ -9,7 +9,8 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
         root = Tkinter.Tk
-        self.player_turn = True
+        self.player_turn = False
+        self.draw_counter = 0
         self.board_grid =[[None] *3 for x in range(3)]
         self.board_selections=[[None] *3 for x in range(3)]
         self.comp = ComputerPlayer()
@@ -28,28 +29,61 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
         #self.update()
 
+        self.labelVariable = Tkinter.StringVar()
+        label = Tkinter.Label(self, textvariable=self.labelVariable,     anchor="w", fg="white", bg="blue")
+        self.labelVariable.set(u"Computer Starts!")
+        label.grid(column=0, row=3, columnspan=3, sticky='EW')
+
+
     def OnButtonClick(self, x, y):
         if self.player_turn == True:
             allowed = self.check_board(x, y)
             if allowed:
                 self.board_selections[x][y] = "o"
                 self.update_board('o')
-                print self.board_selections
 
                 won = self.gamewon(self.board_selections, 'o', x, y)
                 if won == True:
-                    print "won"
+                    self.labelVariable.set(u"You win!")
+                    self.board_disable()
                     return
-            
-            self.player_turn = False
+                else:            
+                    self.player_turn = False
+                    self.labelVariable.set(u"Computer's turn")
+
     
     #Check to make sure it's not the users turn, and if not, the computer will read in the gameboard and make the appropriate move        
     def call_ai_player(self):
         if self.player_turn == False:
+            x = 0
+            y = 0
             time.sleep(1)
-            self.board_selections = self.comp.computer_turn(self.board_selections)
+            try:
+                board = self.comp.computer_turn(self.board_selections)
+            
+                for a in range(3):
+                    for b in range(3):
+                        if board[a][b] == "x" and self.board_selections[a][b] == " ":
+                            x = a
+                            y = b
+            except:
+                return
+
+            self.board_selections = board
             self.update_board("x")
-            self.player_turn = True   
+            self.draw_counter += 1
+            won = self.gamewon(self.board_selections, "x", x, y)
+            if won == True:
+                self.labelVariable.set(u"The Computer wins!")
+                self.board_disable()
+            elif won == False and self.draw_counter == 5:
+                self.labelVariable.set(u"The game is a draw!")
+                self.board_disable()
+            else:
+                self.labelVariable.set(u"Player's turn")
+
+            self.player_turn = True
+   
         self.after(1000, self.call_ai_player)
 
     #This method takes the appropriate mark and updates both the gameboard as well as the on-screen GUI representation
@@ -60,10 +94,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                     self.board_grid[x][y].config(text="O")
                 if self.board_selections[x][y] == "x":
                     self.board_grid[x][y].config(text="X")
-                    #Iterate through the board and see if the computer has a winning combo
-                    won = self.gamewon(self.board_selections, 'x', x, y)
-                    if won == True:
-                        print("comp wins")
+    
     #When a user selects a grid, make sure that it hasn't already been selected
     def check_board(self, x, y):
         if self.board_selections[x][y] == " ":
@@ -85,9 +116,16 @@ class tic_tac_toe_board(object, Tkinter.Tk):
 
         if board[0][2] == (mark) and board[1][1] == (mark) and board [2][0] == (mark):
             return True
- 
+        
         else:
             return False
+
+
+    #If somebody wins the game, disable the board
+    def board_disable(self):
+        for x in range(3):
+            for y in range(3):
+                self.board_grid[x][y].config(state ="disabled")
 
 #Create a computer_player object that will never lose
 class ComputerPlayer(object):
@@ -234,4 +272,5 @@ class ComputerPlayer(object):
 #Start the game session
 if __name__ == "__main__":
     gameboard = tic_tac_toe_board(None)
+    gameboard.title('Tic Tac Toe')
     gameboard.mainloop()
