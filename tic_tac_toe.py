@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import Tkinter
 import time
-#Do stuff down here
 
 #Class to handle the actual board display
 class tic_tac_toe_board(object, Tkinter.Tk):
@@ -9,12 +8,13 @@ class tic_tac_toe_board(object, Tkinter.Tk):
     def __init__(self, parent):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
+        root = Tkinter.Tk
         self.player_turn = True
         self.board_grid =[[None] *3 for x in range(3)]
         self.board_selections=[[None] *3 for x in range(3)]
         self.comp = ComputerPlayer()
         self.initialize()
-        
+        self.after(1000, self.call_ai_player)
 
     #Layout of the actual tic-tac-toe board in grid format
     def initialize(self):
@@ -26,15 +26,22 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                 self.board_selections[x][y] = " "
                 self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=str(x) + str(y), command=lambda x=x, y=y: self.OnButtonClick(x, y))
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
-        self.update()
+        #self.update()
 
     def OnButtonClick(self, x, y):
        # if self.player_turn == True:
-       #     allowed = self.check_board(x, y)
-       #     if allowed:
-        self.update_board(x, y, 'o')
-        print self.board_selections
-                #Check if game was won
+        allowed = self.check_board(x, y)
+        if allowed:
+            self.board_selections[x][y] = "o"
+            self.update_board(x, y, 'o')
+            print self.board_selections
+
+            won = self.gamewon(self.board_selections, 'o', x, y)
+            if won == True:
+                print "won"
+                return
+            
+            
         """
                 won = self.gamewon(self.board_selections, 'o', x, y)
                 if won == True:
@@ -48,6 +55,10 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                     if won == True:
                         print("comp won")
         """
+    def call_ai_player(self):
+        print("abc")
+        self.after(1000, self.call_ai_player)
+
     def update_board(self, x, y, mark):
 
         self.board_selections[x][y] = mark
@@ -89,6 +100,10 @@ class ComputerPlayer(object):
 
     def __init__(self):
         pass
+
+    def comp_move(self, board):
+        board = self.computer_turn(board)             
+        return board
 
     #Pass in a 3x3 array of the gameboard, and the computer will make the most intelligent decision based off the following logic.
     def computer_turn(self, board):
