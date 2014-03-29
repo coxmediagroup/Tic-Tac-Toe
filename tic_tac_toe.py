@@ -29,17 +29,19 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         #self.update()
 
     def OnButtonClick(self, x, y):
-       # if self.player_turn == True:
-        allowed = self.check_board(x, y)
-        if allowed:
-            self.board_selections[x][y] = "o"
-            self.update_board(x, y, 'o')
-            print self.board_selections
+        if self.player_turn == True:
+            allowed = self.check_board(x, y)
+            if allowed:
+                self.board_selections[x][y] = "o"
+                self.update_board('o')
+                print self.board_selections
 
-            won = self.gamewon(self.board_selections, 'o', x, y)
-            if won == True:
-                print "won"
-                return
+                won = self.gamewon(self.board_selections, 'o', x, y)
+                if won == True:
+                    print "won"
+                    return
+            
+            self.player_turn = False
             
             
         """
@@ -57,12 +59,17 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         """
     def call_ai_player(self):
         print("abc")
+        if self.player_turn == False:
+            time.sleep(2)
+            self.board_selections = self.comp.computer_turn(self.board_selections)
+            self.update_board("x")
+            self.player_turn = True   
         self.after(1000, self.call_ai_player)
 
-    def update_board(self, x, y, mark):
+    def update_board(self, mark):
 
-        self.board_selections[x][y] = mark
-        print self.board_selections[x][y]
+        #self.board_selections[x][y] = mark
+        #print self.board_selections[x][y]
 
         for x in range(3):
             for y in range(3):
