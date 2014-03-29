@@ -32,19 +32,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="game.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="game.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="42" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+            <state line="55" column="30" selection-start="1808" selection-end="1808" vertical-scroll-proportion="0.6543779" vertical-offset="399" max-vertical-offset="1380">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="square.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="square.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/square.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="20" selection-start="433" selection-end="433" vertical-scroll-proportion="0.34169278" vertical-offset="7" max-vertical-offset="750">
+            <state line="18" column="5" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
               <folding />
             </state>
           </provider>
@@ -71,9 +71,9 @@
       <list>
         <option value="$PROJECT_DIR$/js/Square.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/js/game.js" />
         <option value="$PROJECT_DIR$/css/main.css" />
         <option value="$PROJECT_DIR$/js/square.js" />
+        <option value="$PROJECT_DIR$/js/game.js" />
       </list>
     </option>
   </component>
@@ -409,16 +409,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/game.js">
+    <entry file="file://$PROJECT_DIR$/js/square.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="42" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+        <state line="18" column="5" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/square.js">
+    <entry file="file://$PROJECT_DIR$/js/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="20" selection-start="433" selection-end="433" vertical-scroll-proportion="0.34169278" vertical-offset="7" max-vertical-offset="750">
+        <state line="55" column="30" selection-start="1808" selection-end="1808" vertical-scroll-proportion="0.6543779" vertical-offset="399" max-vertical-offset="1380">
           <folding />
         </state>
       </provider>
