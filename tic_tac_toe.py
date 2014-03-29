@@ -43,20 +43,6 @@ class tic_tac_toe_board(object, Tkinter.Tk):
             
             self.player_turn = False
             
-            
-        """
-                won = self.gamewon(self.board_selections, 'o', x, y)
-                if won == True:
-                    print("won")
-                    return
-                else:
-                    board  = self.comp.computer_turn(self.board_selections)
-                    self.update_board(x, y, 'x')
-                    print(self.board_selections)
-                    won = self.gamewon(self.board_selections, 'x', x, y)
-                    if won == True:
-                        print("comp won")
-        """
     def call_ai_player(self):
         print("abc")
         if self.player_turn == False:
@@ -67,9 +53,6 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         self.after(1000, self.call_ai_player)
 
     def update_board(self, mark):
-
-        #self.board_selections[x][y] = mark
-        #print self.board_selections[x][y]
 
         for x in range(3):
             for y in range(3):
@@ -115,7 +98,7 @@ class ComputerPlayer(object):
     #Pass in a 3x3 array of the gameboard, and the computer will make the most intelligent decision based off the following logic.
     def computer_turn(self, board):
     
-        #complete horizontal sets of 3
+        #complete horizontal
         for row in range(3):
             comp_pieces = 0
             opengrid = None
@@ -126,11 +109,11 @@ class ComputerPlayer(object):
                     opengrid = column
                 else: break
             if opengrid != None and comp_pieces == 2:
-            #there is an empty slot which would win the game
+            #there is an empty grid here which would win the game
                 board[row][opengrid] = 'x'
                 return board, 
 
-        #complete vertical sets of 3
+        #complete vertical
         for colNum in range(3):
             comp_pieces = 0
             opengrid = None
@@ -144,7 +127,6 @@ class ComputerPlayer(object):
                 board[opengrid][colNum] = 'x'
                 return board
 
-        #complete diagonal sets of 3
         #upper left to lower right
         path = [[0, 0], [1, 1], [2, 2]]
         comp_pieces = 0
@@ -173,9 +155,7 @@ class ComputerPlayer(object):
             board[path[opengrid][0]][path[opengrid][1]] = 'x'
             return board
 
-
-        #Always prevent the player from being able to win.    
-        #complete horizontal sets of 3
+        #complete horizontal
         for row in range(3):
             player_pieces = 0
             opengrid = None
@@ -189,7 +169,7 @@ class ComputerPlayer(object):
                 board[row][opengrid] = 'x'
                 return board
 
-        #complete vertical sets of 3
+        #complete vertical
         for colNum in range(3):
             player_pieces = 0
             opengrid = None
@@ -243,30 +223,13 @@ class ComputerPlayer(object):
                 board[path[column][0]][path[column][1]] = 'x'
                 return board
 
-        #If no corners are available, pick the first move you see
+        #If no corners are available, pick the first move available
         for row in range(3):
             for column in range(3):
                 if board[row][column] == ' ':
                     board[row][column] = 'x'
                     return board
 
-
-class gameplay(object):
-
-    def __init__(self):
-        self.gameboard = tic_tac_toe_board(None)
-        self.gameboard.title("TicTacToe")
-        self.comp = ComputerPlayer()
-        self.player_turn = False
-        self.game_won = False
- #Pass in the board, player, and computer objects to start the actual game.
-    def play(self):
-        board = self.comp.computer_turn(self.gameboard.board_selections)
-        # Pass computer player the gameboard, and let them choose
-        # Update gameboard
-        # Have player make selection
-        # Check for win
-        self.gameboard.mainloop()
 
 #Start the game session
 if __name__ == "__main__":
