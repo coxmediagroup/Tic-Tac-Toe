@@ -41,20 +41,29 @@ body {
     width: 60%;
 }
 
+.icon {
+    text-align: left;
+}
+
+.label {
+    font-size: 10pt;
+    text-align: right;
+    width: 120px;
+}
+
 .left {
     border-right-color: #000;
     float: left;
 }
 
 .legend_container {
-    margin-left: -65px;
+    margin-left: -125px;
 }
 
 .legend {
     display: inline-block;
     margin-right: 5px;
     vertical-align: middle;
-    width: 40px;
 }
 
 .middle {

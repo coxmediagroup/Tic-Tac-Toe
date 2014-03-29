@@ -9,11 +9,18 @@
 <body>
 <div class="header">
     <div class="hblock legend_container">
-        <div class="legend">You:</div>
-        <div class="legend"><img src="{% static "img/blue_o.png" %}" height="20" width="20"/></div>
+        <div class="legend label">Human (that's you):</div>
+        <div class="legend icon"><img src="{% static "img/blue_o.png" %}" height="20" width="20"/></div>
         <div></div>
-        <div class="legend">Me:</div>
-        <div class="legend"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
+        <div class="legend label">
+            <select id="opponent">
+                <option name="jerk" value="jerk">Jerk Computer</option>
+                <option name="irs" value="irs">IRS</option>
+                <option name="nsa" value="nsa">NSA</option>
+                <option name="computer" value="standard">Computer</option>
+            </select>
+        </div>
+        <div class="legend icon"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
     </div>
     <div class="hblock title">
         <h1>Tic-Tac-Tyranny</h1>
@@ -65,6 +72,14 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+       $("#opponent").change(function(e){
+           var url = '/' + e.target.value + '/';
+           $(location).attr('href', url);
+       });
+    });
+</script>
 <script type="text/javascript" src="{% static "js/tic-tac-toe.js" %}"></script>
 </body>
 </html>
