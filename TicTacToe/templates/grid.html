@@ -7,31 +7,62 @@
     <script type="text/javascript" src="{% static "js/jquery-2.1.0.min.js" %}"></script>
 </head>
 <body>
-
-<div class="legend_container">
-    <div class="legend">You:</div>
-    <div class="legend"><img src="{% static "img/blue_o.png" %}" height="20" width="20"/></div>
-    <div></div>
-    <div class="legend">Me:</div>
-    <div class="legend"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
+<div class="header">
+    <div class="hblock legend_container">
+        <div class="legend">You:</div>
+        <div class="legend"><img src="{% static "img/blue_o.png" %}" height="20" width="20"/></div>
+        <div></div>
+        <div class="legend">Me:</div>
+        <div class="legend"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
+    </div>
+    <div class="hblock title">
+        <h1>Tic-Tac-Tyranny</h1>
+        <h2 id="starter">I'll even let you go first</h2>
+        <div id="msg">&nbsp;</div>
+    </div>
 </div>
-<h2 id="starter">I'll even let you go first</h2>
-<div id="msg">&nbsp;</div>
 <div class="grid">
     <div>
-        <div id="c0" class="cell left with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c1" class="cell middle with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c2" class="cell right with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
+        <div id="c0" class="cell left with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c1" class="cell middle with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c2" class="cell right with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
     </div>
     <div>
-        <div id="c3" class="cell left with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c4" class="cell middle with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c5" class="cell right with_bottom"><img src="{% static "img/blank.png" %}" name="blank"/></div>
+        <div id="c3" class="cell left with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c4" class="cell middle with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c5" class="cell right with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
     </div>
     <div>
-        <div id="c6" class="cell left"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c7" class="cell middle"><img src="{% static "img/blank.png" %}" name="blank"/></div>
-        <div id="c8" class="cell right"><img src="{% static "img/blank.png" %}" name="blank"/></div>
+        <div id="c6" class="cell left">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c7" class="cell middle">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c8" class="cell right">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="{% static "js/tic-tac-toe.js" %}"></script>

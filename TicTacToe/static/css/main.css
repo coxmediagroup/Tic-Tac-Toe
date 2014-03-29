@@ -2,18 +2,11 @@ body {
     font-family: Helvetica;
 }
 
-.grid {
-    height: 600px;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%;
-}
-
 .cell {
     border: 2px solid #ffffff;
     display: block;
     height: 195px;
+    position: relative;
     width: 195px;
 }
 
@@ -21,23 +14,40 @@ body {
     cursor: pointer;
 }
 
+.game_piece {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.grid {
+    height: 600px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+}
+
+.hblock {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    text-align: center;
+    width: 60%;
+}
+
 .left {
     border-right-color: #000;
     float: left;
 }
 
-.legend {
-    vertical-align: middle;
-}
-
-.middle {
-    border-right-color: #000;
-    float: left;
-}
-
 .legend_container {
-    margin-top: 30px;
-    margin-left: 30px;
+    margin-left: -65px;
 }
 
 .legend {
@@ -47,8 +57,26 @@ body {
     width: 40px;
 }
 
+.middle {
+    border-right-color: #000;
+    float: left;
+}
+
 .right {
     float: left;
+}
+
+.title {
+    margin-left: -45px;
+}
+
+.winner {
+    background-color: #CDCDCD;
+    display: block;
+    height: 99%;
+    opacity: 0.5;
+    width: 99%;
+    visibility: hidden;
 }
 
 .with_bottom {

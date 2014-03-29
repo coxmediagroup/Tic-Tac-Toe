@@ -18,33 +18,42 @@ def standard(request, **kwargs):
     if move:
         try:
             g = Game()
-            print g.o
-            print g.x
+            over = False
+            result = {'result': ''}
             g.take('human', int(move))
-            if len(g.available()) == 0:
-                return HttpResponse(json.dumps(dict(over=True)), content_type="application/json")
-            sleep(2)
-            # x = request.GET.get('x', None)
-            # if x:
-            #     g.x = [int(i) for i in x.strip(',').split(',')]
-            # o = request.GET.get('o', None)
-            # if o:
-            #     g.o = [int(i) for i in o.strip(',').split(',')]
-            if 4 not in g.o and 4 not in g.x:
-                take = 4
-            elif g.o[0] == 4 and len(g.x) == 0:
-                take = 0
-            else:
-                win = g.winnable('machine')
-                block = g.winnable('human')
-                if win:
-                    take = win
-                elif block:
-                    take = block
+            if len(g.available()) != 0:
+                sleep(2)
+                # x = request.GET.get('x', None)
+                # if x:
+                #     g.x = [int(i) for i in x.strip(',').split(',')]
+                # o = request.GET.get('o', None)
+                # if o:
+                #     g.o = [int(i) for i in o.strip(',').split(',')]
+                if 4 not in g.o and 4 not in g.x:
+                    take = 4
+                elif g.o[0] == 4 and len(g.x) == 0:
+                    take = 0
                 else:
-                    take = g.eval_game('machine')
-            g.take('machine', take)
-            return HttpResponse(json.dumps(dict(move=take, over=False)), content_type="application/json")
+                    win = g.winnable('machine')
+                    block = g.winnable('human')
+                    if win:
+                        take = win
+                    elif block:
+                        take = block
+                    else:
+                        take = g.eval_game('machine')
+                g.take('machine', take)
+                winner = g.winner('machine')
+                if winner:
+                    over = True
+                    result = {'result': list(winner)}
+            else:
+                take = 9999
+                over = True
+                result = {'result': 'draw'}
+            if over:
+                g.reset()
+            return HttpResponse(json.dumps(dict(move=take, over=over, result=result)), content_type="application/json")
         except:
             raise Http404
     return render(request, 'grid.html')

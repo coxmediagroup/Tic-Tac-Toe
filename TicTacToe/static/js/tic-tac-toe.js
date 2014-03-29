@@ -11,11 +11,17 @@ $(document).ready(function(){
             $.getJSON(url, occupied, function(data) {
                 if (data.over == true) {
                     game_over = true;
-                    $("#msg").html("It's a draw!");
                 } else {
-                    var take_cell = "c" + data.move;
-                    $("div[id=" + take_cell + "]").children().attr('src', '/static/img/red_x.png');
                     turn = 'human';
+                }
+                if (data.result.result != 'draw') {
+                    $("div[id=c" + data.move + "] > img").attr('src', '/static/img/red_x.png');
+                    $.each(data.result.result, function(key, val) {
+                        $("#c" + val + "> .winner").css('visibility', 'visible');
+                        $("#msg").html('I WIN!');
+                    });
+                } else {
+                    $("#msg").html("It's a draw!");
                 }
             });
         } else {
@@ -26,7 +32,6 @@ $(document).ready(function(){
             }
         }
     });
-
 });
 
 function getOccupied() {
