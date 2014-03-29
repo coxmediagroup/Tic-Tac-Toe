@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import Tkinter
-from Tkinter import *
 import tkFont
 import time
 
