@@ -20,7 +20,7 @@
 <body>
 <div id="tictactoe"></div>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <!-- start with http://jsfiddle.net/rtoal/ThPEH/ -->
+    <!-- derived from excellent fiddle http://jsfiddle.net/rtoal/ThPEH/ -->
     <script type="text/javascript">
         /*
          * A complete tic-tac-toe widget, using JQuery.  Just include this 
@@ -28,6 +28,7 @@
          * included as a child element of the element with id "tictactoe".  
          * If the page has no such element, it will just be added at the end 
          * of the body.
+         * Pits human opponent that never loses against the server.
          */
         $(function () {
         
@@ -88,24 +89,48 @@
              * then checks for a win or cats game.  Also changes the
              * current player.
              */
+            move = function (square) {
+                square.html(turn);
+                console.log(square);
+                moves += 1;
+                // only allow "X" (the human) to win
+                if ( turn === "X" ) {
+                    score[turn] += square[0].indicator;
+                }
+                console.log(score[turn]);
+            },
             set = function () {
-                
+
                 if ($(this).html() !== EMPTY) {
                     return;
                 }
-                $(this).html(turn);
-                console.log($(this));
-                moves += 1;
-                score[turn] += $(this)[0].indicator;
-                console.log(score[turn]);
+                // human move
+                move($(this));
                 if (win(score[turn])) {
                     alert(turn + " wins!");
                     startNewGame();
                 } else if (moves === SIZE * SIZE) {
                     alert("Cat\u2019s game!");
                     startNewGame();
+                // server move
                 } else {
-                    turn = turn === "X" ? "O" : "X";
+                    // get indices of empty squares
+                    var emptySquares = [];
+                    $.each(squares, function(i,v) {
+                        if (squares[i].html() === EMPTY) {
+                            emptySquares.push(i);
+                        }
+                    });
+                    // post back to move server
+                    $.post(
+                        "tictactoe/move",
+                        {'empty_squares': JSON.stringify(emptySquares)},
+                        function(data) {
+                            turn = turn === "X" ? "O" : "X";
+                            move(squares[data]);
+                            turn = turn === "X" ? "O" : "X";
+                        }
+                    );
                 }
             },
         
@@ -116,6 +141,8 @@
              */
             play = function () {
                 var board = $("<table border=1 cellspacing=0>"), indicator = 1;
+                var caption = $("<caption>Tic Tac Toe</caption>")
+                board.append(caption)
                 for (var i = 0; i < SIZE; i += 1) {
                     var row = $("<tr>");
                     board.append(row);
