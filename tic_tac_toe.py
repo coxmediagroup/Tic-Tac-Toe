@@ -14,6 +14,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         self.board_grid =[[None] *3 for x in range(3)]
         self.board_selections=[[None] *3 for x in range(3)]
         self.comp = ComputerPlayer()
+        self.geometry("500x500")
         self.initialize()
         self.after(1000, self.call_ai_player)
 
@@ -25,17 +26,21 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         for x in range(3):
             for y in range(3):
                 self.board_selections[x][y] = " "
-                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=" ", command=lambda x=x, y=y: self.OnButtonClick(x, y))
+                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, padx = 500, pady = 10, text=" ", command=lambda x=x, y=y: self.OnButtonClick(x, y))
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
 
         reset_button = Tkinter.Button(self, text=u"RESET GAME", command=self.reset_game)
         reset_button.grid(column=0, row=4, columnspan=3, stick='EW')
 
         self.labelVariable = Tkinter.StringVar()
-        label = Tkinter.Label(self, textvariable=self.labelVariable,     anchor="w", fg="white", bg="blue")
+        label = Tkinter.Label(self, textvariable=self.labelVariable,     anchor="n", fg="white", bg="blue")
         self.labelVariable.set(u"Computer Starts!")
         label.grid(column=0, row=3, columnspan=3, sticky='EW')
 
+        for x in range(3):
+            self.grid_columnconfigure(x, weight=1)
+        for y in range(5):
+            self.grid_rowconfigure(y, weight=1)
 
     def OnButtonClick(self, x, y):
         if self.player_turn == True:
@@ -56,7 +61,7 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         for x in range(3):
             for y in range(3):
                 self.board_selections[x][y] = " "
-                self.board_grid[x][y].config(text=" ", state="active")
+                self.board_grid[x][y].config(text=" ", state="normal")
         self.draw_counter = 0
         self.labelVariable.set(u"Computer's turn")
         self.player_turn = False
