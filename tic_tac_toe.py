@@ -25,9 +25,11 @@ class tic_tac_toe_board(object, Tkinter.Tk):
         for x in range(3):
             for y in range(3):
                 self.board_selections[x][y] = " "
-                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=str(x) + str(y), command=lambda x=x, y=y: self.OnButtonClick(x, y))
+                self.board_grid[x][y] = Tkinter.Button(self, height=5, width=5, text=" ", command=lambda x=x, y=y: self.OnButtonClick(x, y))
                 self.board_grid[x][y].grid(column=x, row=y, sticky='NSEW')
-        #self.update()
+
+        reset_button = Tkinter.Button(self, text=u"RESET GAME", command=self.reset_game)
+        reset_button.grid(column=0, row=4, columnspan=3, stick='EW')
 
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self, textvariable=self.labelVariable,     anchor="w", fg="white", bg="blue")
@@ -46,11 +48,18 @@ class tic_tac_toe_board(object, Tkinter.Tk):
                 if won == True:
                     self.labelVariable.set(u"You win!")
                     self.board_disable()
-                    return
                 else:            
                     self.player_turn = False
                     self.labelVariable.set(u"Computer's turn")
 
+    def reset_game(self):
+        for x in range(3):
+            for y in range(3):
+                self.board_selections[x][y] = " "
+                self.board_grid[x][y].config(text=" ", state="active")
+        self.draw_counter = 0
+        self.labelVariable.set(u"Computer's turn")
+        self.player_turn = False
     
     #Check to make sure it's not the users turn, and if not, the computer will read in the gameboard and make the appropriate move        
     def call_ai_player(self):
