@@ -115,16 +115,21 @@
                 // server move
                 } else {
                     // get indices of empty squares
-                    var emptySquares = [];
+                    var emptySquares = {};
                     $.each(squares, function(i,v) {
                         if (squares[i].html() === EMPTY) {
-                            emptySquares.push(i);
+                            emptySquares[i] = squares[i][0].indicator;
                         }
                     });
+                    var parms = {
+                        'empty_squares': emptySquares,
+                        'winning_scores': wins,
+                        'human_score': score[turn],
+                    };
                     // post back to move server
                     $.post(
                         "tictactoe/move",
-                        {'empty_squares': JSON.stringify(emptySquares)},
+                        {'parms': JSON.stringify(parms)},
                         function(data) {
                             turn = turn === "X" ? "O" : "X";
                             move(squares[data]);
