@@ -1,3 +1,10 @@
+/*
+# Copyright (C) 2014 Ryan Hansen.  All rights reserved.
+# This source code (including its associated software) is owned by Ryan Hansen and
+# is protected by United States and international intellectual property law, including copyright laws, patent laws,
+# and treaty provisions.
+*/
+
 $(document).ready(function(){
     var turn = 'human';
     var game_over = false;
@@ -18,17 +25,17 @@ $(document).ready(function(){
                     $("div[id=c" + data.move + "] > img").attr('src', '/static/img/red_x.png');
                     $.each(data.result.result, function(key, val) {
                         $("#c" + val + "> .winner").css('visibility', 'visible');
-                        $("#msg").html('I WIN!');
+                        $("#hdr_msg").html('I WIN!');
                     });
                 } else {
-                    $("#msg").html("It's a draw!");
+                    $("#hdr_msg").html("It's a draw!");
                 }
             });
         } else {
             if (game_over) {
-                $("#msg").html('Uh...do you not know how to play this game?');
+                $("#hdr_msg").html('Uh...do you not know how to play this game?');
             } else {
-                $("#msg").html('Hey, wait your turn!');
+                $("#hdr_msg").html('Hey, wait your turn!');
             }
         }
     });

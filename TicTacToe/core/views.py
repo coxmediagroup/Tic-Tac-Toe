@@ -1,7 +1,9 @@
-# Copyright (C) 2014 Ryan Hansen.  All rights reserved.
-# This source code (including its associated software) is owned by Ryan Hansen and
-# is protected by United States and international intellectual property law, including copyright laws, patent laws,
-# and treaty provisions.
+"""
+Copyright (C) 2014 Ryan Hansen.  All rights reserved.
+This source code (including its associated software) is owned by Ryan Hansen and
+is protected by United States and international intellectual property law, including copyright laws, patent laws,
+and treaty provisions.
+"""
 
 from django.shortcuts import render, Http404, HttpResponse
 
@@ -10,6 +12,7 @@ import random
 
 from time import sleep
 
+from core.const import WIN_VECTORS
 from core.game import Game
 
 
@@ -20,6 +23,7 @@ def standard(request, **kwargs):
             g = Game()
             over = False
             result = {'result': ''}
+            context = dict()
             g.take('human', int(move))
             if len(g.available()) != 0:
                 sleep(2)
@@ -53,7 +57,26 @@ def standard(request, **kwargs):
                 result = {'result': 'draw'}
             if over:
                 g.reset()
-            return HttpResponse(json.dumps(dict(move=take, over=over, result=result)), content_type="application/json")
-        except:
+            context['move'] = take
+            context['over'] = over
+            context['result'] = result
+            return HttpResponse(json.dumps(context), content_type="application/json")
+        except Exception, ex:
             raise Http404
-    return render(request, 'grid.html')
+    return render(request, 'standard.html')
+
+
+def jerk(request, **kwargs):
+    move = kwargs.get('move', None)
+    if move:
+        winners = []
+        sleep(1)
+        for v in WIN_VECTORS:
+            if int(move) not in v:
+                winners.append(list(v))
+        winner = winners[random.randint(0, len(winners) - 1)]
+        context = dict(
+            winner=winner
+        )
+        return HttpResponse(json.dumps(context), content_type="application/json")
+    return render(request, 'jerk.html')

@@ -1,4 +1,9 @@
 """
+Copyright (C) 2014 Ryan Hansen.  All rights reserved.
+This source code (including its associated software) is owned by Ryan Hansen and
+is protected by United States and international intellectual property law, including copyright laws, patent laws,
+and treaty provisions.
+
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".
 

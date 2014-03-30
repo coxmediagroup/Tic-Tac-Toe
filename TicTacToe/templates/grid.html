@@ -1,3 +1,9 @@
+<!--
+# Copyright (C) 2014 Ryan Hansen.  All rights reserved.
+# This source code (including its associated software) is owned by Ryan Hansen and
+# is protected by United States and international intellectual property law, including copyright laws, patent laws,
+# and treaty provisions.
+-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,18 +20,19 @@
         <div></div>
         <div class="legend label">
             <select id="opponent">
+                <option name="computer" value="standard">Computer</option>
                 <option name="jerk" value="jerk">Jerk Computer</option>
                 <option name="irs" value="irs">IRS</option>
                 <option name="nsa" value="nsa">NSA</option>
-                <option name="computer" value="standard">Computer</option>
             </select>
         </div>
         <div class="legend icon"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
     </div>
     <div class="hblock title">
         <h1>Tic-Tac-Tyranny</h1>
+        <h4>{% block edition %}{% endblock %} Edition</h4>
         <h2 id="starter">I'll even let you go first</h2>
-        <div id="msg">&nbsp;</div>
+        <div id="hdr_msg" class="msg">&nbsp;</div>
     </div>
 </div>
 <div class="grid">
@@ -72,6 +79,7 @@
         </div>
     </div>
 </div>
+<div id="ftr_msg" class="msg footer"></div>
 <script type="text/javascript">
     $(document).ready(function(){
        $("#opponent").change(function(e){
@@ -79,7 +87,10 @@
            $(location).attr('href', url);
        });
     });
+    var opp = window.location.pathname.replace(/\//g, '')
+    $("#opponent").val(opp);
 </script>
-<script type="text/javascript" src="{% static "js/tic-tac-toe.js" %}"></script>
+{% block js %}
+{% endblock %}
 </body>
 </html>
