@@ -16,6 +16,10 @@ var Square = Backbone.Model.extend({
                 this.set({warning: "this square has already been chosen"});
                 break;
         }
+    },
+
+    isOpen: function() {
+        return this.attributes.isX === undefined;
     }
 });
 
