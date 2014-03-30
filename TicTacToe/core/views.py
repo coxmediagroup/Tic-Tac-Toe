@@ -16,6 +16,9 @@ from core.const import WIN_VECTORS
 from core.game import Game
 
 
+def index(request):
+    return render(request, 'index.html')
+
 def standard(request, **kwargs):
     move = kwargs.get('move', None)
     if move:

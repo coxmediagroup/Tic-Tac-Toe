@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'TicTacToe.views.home', name='home'),
     # url(r'^TicTacToe/', include('TicTacToe.foo.urls')),
+    url(r'^$', 'core.views.index', name='index'),
     url(r'standard/$', 'core.views.standard', name='standard'),
     url(r'standard/move/(?P<move>[0-8])/$', 'core.views.standard', name='standard_move'),
     url(r'jerk/$', 'core.views.jerk', name='jerk'),
