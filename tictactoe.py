@@ -27,25 +27,20 @@ def checkWin(board):
 	return False
 
 #	find the best move for the AI to ensure no lose situation
-def AIMove(board):
-	# set possible win to 0
+def generateMoves(board):
 	# check all possible open moves
-	# -create a game state for each possible move
-	# -create scores list
-	#
 	possMoves = []
 	for x in range(3):
 		for y in range(3):
 			if possibleMove(board, (x,y)):
 				possMoves.append((x,y))
 	
-	print possMoves
+	return possMoves
 
-def miniMax(board):
+def miniMax(board, player):
 	# pseudo code for minimax
-	# miniMax(node) {
+	# miniMax(node)
 	# 	max = -inf, min = +inf
-	#	if node.depth >= n return node.eval() // n is arbitrary depth
 	#	if node.isBlack
 	#		foreach(child of node)
 	#			max = max(max, minimax(child))
@@ -54,7 +49,43 @@ def miniMax(board):
 	#		foreach(child of node)
 	#			min = min(min, minimax(child))
 	#		return min
-	
+	moves = generateMoves(board)
+	if checkWin(board):
+		#print board
+		if (player == 1):
+			return (1, None)
+		else:
+			return (2, None)
+	elif (player == 1):
+		best = (-100, None);
+		for move in moves:
+			x = move[0]
+			y = move[1]
+			board[x][y] = player
+			# value keeps track of whether the move would be more benificial or harmful to the player
+			value = miniMax(board, player)[0]
+			if value > best[0]:
+				best = (value,(x,y))
+			board[x][y] = 0
+		return best
+	#if (player == 2):
+	else:
+		best = (+100, None);
+		for move in moves:
+			x = move[0]
+			y = move[1]
+			board[x][y] = player
+			value = miniMax(board, player)[0]
+			if value < best[0]:
+				best = (value,(x,y))
+			board[x][y] = 0
+		return best
+
+def markMove(board, position, player):
+	x = position[0]
+	y = position[1]
+	board[x][y] = player
+
 #	check if move is possible
 def possibleMove(board, possible):
 	x = possible[0]
@@ -64,19 +95,23 @@ def possibleMove(board, possible):
 	return False
 
 #	draw board
-board = [ [1,0,0],[0,1,0],[0,0,0] ]
+board = [ [1,0,0],[1,2,0],[0,0,0] ]
+def printBoard(board):
+	print "%s | %s | %s" % (board[0][0], board[0][1], board[0][2])
+	print "--+---+--"
+	print "%s | %s | %s" % (board[1][0], board[1][1], board[1][2])
+	print "--+---+--"
+	print "%s | %s | %s" % (board[2][0], board[2][1], board[2][2])
 
-print "%s | %s | %s" % (board[0][0], board[0][1], board[0][2])
-print "--+---+--"
-print "%s | %s | %s" % (board[1][0], board[1][1], board[1][2])
-print "--+---+--"
-print "%s | %s | %s" % (board[2][0], board[2][1], board[2][2])
 
 #print possibleMove(board, (0,0))
-AIMove(board)
-print checkWin(board)
-print miniMax(board, 1, 0)
-
+#AIMove(board)
+#print checkWin(board)
+printBoard(board)
+bestMove = miniMax(board, 2)
+print bestMove
+markMove(board, bestMove[1], 2)
+printBoard(board)
 #	get user move
 #	-test valid user move
 #	-mark move
