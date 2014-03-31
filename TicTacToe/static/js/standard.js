@@ -40,23 +40,3 @@ $(document).ready(function(){
         }
     });
 });
-
-function getOccupied() {
-    var occupied = {};
-    var o = '';
-    var x = '';
-    $(".cell").each(function() {
-        var cell = $(this).attr('id').substr(1,1);
-        var src = $(this).children().attr('src');
-        if (src != '/static/img/blank.png') {
-            if (src == '/static/img/blue_o.png') {
-                o += cell + ',';
-            } else {
-                x += cell + ',';
-            }
-        }
-    });
-    occupied['x'] = x;
-    occupied['o'] = o;
-    return occupied;
-}

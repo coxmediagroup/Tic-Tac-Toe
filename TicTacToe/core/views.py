@@ -86,4 +86,22 @@ def jerk(request, **kwargs):
 
 
 def nsa(request, **kwargs):
+    move = kwargs.get('move', None)
+    if move:
+        try:
+            g = Game()
+            over = False
+            result = {'result': ''}
+            context = dict()
+            g.take('machine', int(move))
+            winner = g.winner('machine')
+            if winner:
+                over = True
+                result = {'result': list(winner)}
+            context['move'] = 999
+            context['over'] = over
+            context['result'] = result
+            return HttpResponse(json.dumps(context), content_type="application/json")
+        except:
+            raise Http404
     return render(request, 'nsa.html')
