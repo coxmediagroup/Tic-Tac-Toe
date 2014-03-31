@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'standard/move/(?P<move>[0-8])/$', 'core.views.standard', name='standard_move'),
     url(r'jerk/$', 'core.views.jerk', name='jerk'),
     url(r'jerk/move/(?P<move>[0-8])/$', 'core.views.jerk', name='jerk_move'),
+    url(r'nsa/$', 'core.views.nsa', name='nsa'),
+    url(r'nsa/move/(?P<move>[0-8])/$', 'core.views.nsa', name='nsa_move'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

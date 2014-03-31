@@ -83,3 +83,7 @@ def jerk(request, **kwargs):
         )
         return HttpResponse(json.dumps(context), content_type="application/json")
     return render(request, 'jerk.html')
+
+
+def nsa(request, **kwargs):
+    return render(request, 'nsa.html')
