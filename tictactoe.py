@@ -10,21 +10,29 @@ import copy
 #	z, z+1, z+2 | z = (x, y)
 #	z, z-1, z-2 | z = (x, y) from x=2,y=0
 
+#
 def checkWin(board):
 	# check wins on board	
 	for i in range(3):
 		# check rows
 		if (board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][0] != 0):
-			return True
+			return board[i][0]
 		# check columns
 		elif (board[0][i] == board[1][i] and board[1][i] == board[2][i] and board[0][i] != 0):
-			return True
+			return board[0][i]
 		# check both cross conditions
 		elif (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[0][0] != 0):
-			return True
+			return board[0][0]
 		elif (board[2][0] == board[1][1] and board[1][1] == board[0][2] and board[2][0] != 0):
-			return True
+			return board[2][0]
 	return False
+
+def checkTie(board):
+	for x in board:
+		for y in x:
+			if not y:
+				return False
+	return True
 
 #	find the best move for the AI to ensure no lose situation
 def generateMoves(board):
@@ -49,36 +57,36 @@ def miniMax(board, player):
 	#		foreach(child of node)
 	#			min = min(min, minimax(child))
 	#		return min
+	#printBoard(board)
+	#print "\n"
 	moves = generateMoves(board)
-	if checkWin(board):
-		#print board
-		if (player == 1):
-			return (1, None)
-		else:
-			return (2, None)
-	elif (player == 1):
+	if (checkWin(board) == 1):
+		return (1, None)
+	elif (checkWin(board) == 2):
+		return (2, None)
+	elif (checkTie(board)):
+		return (0, None)
+
+	if player == 1:
+		nextPlayer = 2
+	elif player == 2:
+		nextPlayer = 1
+	
+	if (player == 1):
 		best = (-100, None);
 		for move in moves:
-			x = move[0]
-			y = move[1]
-			board[x][y] = player
-			# value keeps track of whether the move would be more benificial or harmful to the player
-			value = miniMax(board, player)[0]
+			markMove(board, move, player)
+			value = miniMax(board, nextPlayer)[0]
 			if value > best[0]:
-				best = (value,(x,y))
-			board[x][y] = 0
+				best = (value,move)
 		return best
-	#if (player == 2):
-	else:
+	elif (player == 2):
 		best = (+100, None);
 		for move in moves:
-			x = move[0]
-			y = move[1]
-			board[x][y] = player
-			value = miniMax(board, player)[0]
+			markMove(board, move, player)
+			value = miniMax(board, nextPlayer)[0]
 			if value < best[0]:
-				best = (value,(x,y))
-			board[x][y] = 0
+				best = (value,move)
 		return best
 
 def markMove(board, position, player):
@@ -106,17 +114,27 @@ def printBoard(board):
 def runTests(board):
 	board = [ [1,0,0],[1,2,0],[0,0,0] ]
 	testCase(board, (0,2))
+
 	board = [ [1,1,0],[2,2,0],[0,0,0] ]
 	testCase(board, (1,2))
+
+	board = [ [1,2,1],[2,1,2],[2,1,2] ]
+	testCase(board, None)
+
 	board = [ [0,0,1],[0,2,1],[0,0,0] ]
 	testCase(board, (2,2))
+
+	board = [ [2,2,0],[0,1,1],[0,1,0] ]
+	testCase(board, (0,2))
+	
 	board = [ [1,0,2],[0,1,0],[0,0,0] ]
 	testCase(board, (2,2))
+
 	board = [ [0,0,0],[0,2,0],[1,0,1] ]
 	testCase(board, (2,1))
-
 #	run test, determine outcome
 def testCase(board, expected):
+	#printBoard(board)
 	bestMove = miniMax(board, 2)
 	if (bestMove[1] != expected):
 		print "FAILED \t Expected " + str(expected) + " Calculated " + str(bestMove[1])
