@@ -39,8 +39,6 @@ plies = "123456789"
 #  Game-related variables:
 turn = 1
 gameOver = False
-C = "X"
-H = "O"
 
 #  Check to see if a player has won the game.
 #  The board string $plies is labeled 1 ~ 9, but the string itself is 0-indexed.
@@ -99,13 +97,49 @@ def makeBestMove(board):
 			best = ifBetter(best, [focus, 0])
 	return makeMove(board, best[0], C)
 
+#  Set up a new game.
+#  Originally, it defaulted to Player 1 (X) as Computer and Player 2 (O) as human.
+#  This makes it interactive.
+try:	os.system(cls)
+except OSError:	pass
+print "WELCOME TO TIC-TAC-TOE!\n"
+
+#  Check for valid data.  This is used to ameliorate user error.
+valid = False
+while (not valid):
+	try:
+		first = raw_input("Would you like to be first (Y/N)?  ")
+		valid = first in ["y", "Y", "n", "N"]
+		if (not valid):	print "\tPlease enter either 'y' or 'n'.\n"
+	except ValueError:	pass
+valid = False
+while (not valid):
+	try:
+		xo = raw_input("X or O?  ")
+		valid = xo in ["X", "x", "O", "o"]
+		if (not valid):	print "\tPlease enter either 'X' or 'O'.\n"
+	except ValueError:	pass
+
+#  Assign the computer its turn parity (odds or evens):
+if (first in ["n", "N"]):	cturn = 1
+else:	cturn = 0
+
+#  Assign X's and O's:
+if (xo in ["X", "x"]):
+	C = "O"
+	H = "X"
+else:
+	C = "X"
+	H = "O"
+
 #  MAIN PROGRAM LOOP
 #  Make plays until the winner has been determined, or the game ends in a tie.
 while (not gameOver):
 	gameOver = hasWon(plies)
 
 	#  Platform-dependant screen clear:
-	os.system(cls)
+	try:	os.system(cls)
+	except OSError:	pass
 	print "\n"
 	print "TIC-TAC-TOE".center(80)
 	print "by Josh Johnson".center(80)
@@ -118,7 +152,8 @@ while (not gameOver):
 		if (x < 2):	print tab + cross
 	print " " * 80
 	
-	#  Depending on whether the game has been won, print a message or prompt the player for his/her next move.
+	#  Depending on whether the game has been won, print a message or prompt the player for his/her
+	#    next move.
 	if (gameOver == C):
 		print "I'm sorry, but the computer was the victor.  Better luck next time."
 	elif (gameOver == H):
@@ -128,7 +163,7 @@ while (not gameOver):
 		gameOver = True		#  Set this to True, so that the outer WHILE loop is exited.
 	else:
 		#  The computer plays on odd-numbered, the human, even-numbered, plays.
-		if (turn % 2 == 1):
+		if (turn % 2 == cturn):
 			plies = makeBestMove(plies)
 		else:
 			valid = False
