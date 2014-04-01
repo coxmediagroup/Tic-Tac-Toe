@@ -1,0 +1,96 @@
+<!--
+# Copyright (C) 2014 Ryan Hansen.  All rights reserved.
+# This source code (including its associated software) is owned by Ryan Hansen and
+# is protected by United States and international intellectual property law, including copyright laws, patent laws,
+# and treaty provisions.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <title>Tic-Tac-Tyranny</title>
+    <link rel="stylesheet" href="{% static "css/main.css" %}"/>
+    <script type="text/javascript" src="{% static "js/jquery-2.1.0.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/utils.js" %}"></script>
+</head>
+<body>
+<div class="header">
+    <div class="hblock legend_container">
+        <div class="legend label">Human (that's you):</div>
+        <div class="legend icon"><img src="{% static "img/blue_o.png" %}" height="20" width="20"/></div>
+        <div></div>
+        <div class="legend label">
+            <select id="opponent">
+                <option name="computer" value="standard">Computer</option>
+                <option name="jerk" value="jerk">Jerk Computer</option>
+                <option name="nsa" value="nsa">NSA</option>
+            </select>
+        </div>
+        <div class="legend icon"><img src="{% static "img/red_x.png" %}" height="20" width="20"/></div>
+    </div>
+    <div class="hblock title">
+        <h1>Tic-Tac-Tyranny</h1>
+        <h4>{% block edition %}{% endblock %} Edition</h4>
+        <h2 id="starter">I'll even let you go first</h2>
+        <div id="hdr_msg" class="msg">&nbsp;</div>
+    </div>
+</div>
+<div class="grid">
+    <div>
+        <div id="c0" class="cell left with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c1" class="cell middle with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c2" class="cell right with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+    </div>
+    <div>
+        <div id="c3" class="cell left with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c4" class="cell middle with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c5" class="cell right with_bottom">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+    </div>
+    <div>
+        <div id="c6" class="cell left">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c7" class="cell middle">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+        <div id="c8" class="cell right">
+            <img class="game_piece" src="{% static "img/blank.png" %}" name="blank"/>
+            <div class="winner"></div>
+        </div>
+    </div>
+</div>
+<div id="ftr_msg" class="msg footer"></div>
+<script type="text/javascript">
+    $(document).ready(function(){
+       $("#opponent").change(function(e){
+           var url = '/' + e.target.value + '/';
+           $(location).attr('href', url);
+       });
+    });
+    var opp = window.location.pathname.replace(/\//g, '')
+    $("#opponent").val(opp);
+</script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

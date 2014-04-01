@@ -1,0 +1,113 @@
+body {
+    font-family: Helvetica;
+}
+
+.cell {
+    border: 2px solid #ffffff;
+    display: block;
+    height: 195px;
+    position: relative;
+    width: 195px;
+}
+
+.cell:hover {
+    cursor: pointer;
+}
+
+.footer {
+    margin-top: 25px;
+}
+
+.game_piece {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.grid {
+    height: 600px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+}
+
+.hblock {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    text-align: center;
+    width: 60%;
+}
+
+.icon {
+    text-align: left;
+}
+
+.label {
+    font-size: 10pt;
+    text-align: right;
+    width: 120px;
+}
+
+.left {
+    border-right-color: #000;
+    float: left;
+}
+
+.legend_container {
+    margin-left: -125px;
+}
+
+.legend {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.msg {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.middle {
+    border-right-color: #000;
+    float: left;
+}
+
+.right {
+    float: left;
+}
+
+.title {
+    margin-left: -45px;
+}
+
+.winner {
+    background-color: #CDCDCD;
+    display: block;
+    height: 99%;
+    opacity: 0.5;
+    width: 99%;
+    visibility: hidden;
+}
+
+.with_bottom {
+    border-bottom-color: #000;
+}
+
+#starter {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    width: 400px;
+}
