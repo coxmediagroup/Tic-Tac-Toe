@@ -5,11 +5,13 @@ is protected by United States and international intellectual property law, inclu
 and treaty provisions.
 """
 
+# Might be overkill to store these as constants, but it may prove useful.
 PLAYERS = dict(
     machine='x',
     human='o'
 )
 
+# All possible wins
 WIN_VECTORS = [
     (0, 1, 2),
     (3, 4, 5),

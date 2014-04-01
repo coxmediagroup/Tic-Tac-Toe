@@ -6,6 +6,7 @@
 */
 
 function getOccupied() {
+    /** Return all the occupied positions on the board for both players **/
     var occupied = {};
     var o = '';
     var x = '';

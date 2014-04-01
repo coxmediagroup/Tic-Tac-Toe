@@ -115,11 +115,8 @@ class Game(object):
         moves.remove(pos)
 
     def reset(self):
+        """
+        Reset the game
+        """
         self.x = []
         self.o = []
-
-
-if __name__ == '__main__':
-    g = Game()
-    move = g.eval_game('machine')
-    print move
