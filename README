@@ -1,1 +1,14 @@
 Just check out the code somewhere and run the Django runserver.  The index page will tell you what to do next.
+
+I implemented the whole game as a Djando app, with the game engine effectively being an API.  I may have gone a bit
+overboard with it--what with all the CSS, JQuery, images, unit tests, etc., not to mention the three play options--but I
+had several ideas of how to fulfill the requirements in my own special way and I ultimately couldn't decide on only one.
+Besides, I wanted to give you something more fun to do than just review the code and play a game you can't win.
+
+You'll get the idea.
+
+Finally, lest you think I'm just trying to impress, fear not: I'm just that goofy.  I don't do much of anything without
+a sense of humor and I do tend to be rather verbose, even in code comments.  So I think this is actually a better
+representation of who I am and how I approach any project than you might initially believe.
+
+-RH
