@@ -64,38 +64,35 @@ def makeMove(board, play, piece):
 def isLegal(board, move):
 	return (board[move - 1] not in [C, H])
 
-#  Compare the weighted play with the best weighted play so far.
-#  If the play (first part of each duet) is the same, add one to the weight.
-#  This will favor plays with multiplie next-move-wins possibilities.
-def ifBetter(move1, move2):
-	if ((move2 == move1) and (move1[1] == 1)):
-		return (move1[0], move1[1] + 1)
-	if (move2[1] > move1[1]):	return move2
-	else:	return move1
-
 #  Make the best move for the computer player.
 #  Different weights are given to the types of best moves:
-#    Ten (10) points for a winning move;
-#    Five (5) for a block, preventing the human player from winning;
-#    One (1) for a "next-move-wins" move, putting two X's in the same line (row, column, diagonal).;
+#    Twenty-seven(27) points for a winning move;
+#    Nine (9) for a block, preventing the human player from winning;
+#    Three (3) for a "next-move-wins" move, putting two marker in the same {row, column, diagonal};
+#    One (1) for a "move-after-next-wins", where only one marker is in a {row, column, diagonal};
 #    Zero (0) for any other move.
+#  The above weights are ternary, since no more than three (3) of any non-zero weight could be
+#    accumulated.
+#
+#  best:  Keeps track of best moves by square, according to the above weights.
 def makeBestMove(board):
-	best = [5, 0]
+	best = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 	for focus in range(1, 10):
 		for check in toCheck[focus]:
 			# Test for win
 			if ((board[check[0] - 1] == board[check[1] - 1] == C) and isLegal(board, focus)):
-				best = ifBetter(best, [focus, 10])
-			# Test for block
-			if ((board[check[0] - 1] == board[check[1] - 1] == H) and isLegal(board, focus)):
-				best = ifBetter(best, [focus, 5])
-			# Test for next-move wins
-			if ((isLegal(board, check[0]) and board[check[1] - 1] == C) or
-				(isLegal(board, check[1]) and board[check[0] - 1] == C) and isLegal(board, focus)):
-				best = ifBetter(best, [focus, 1])
-			# Fallback
-			best = ifBetter(best, [focus, 0])
-	return makeMove(board, best[0], C)
+				best[focus - 1] = 27
+			# Test for block:
+			elif ((board[check[0] - 1] == board[check[1] - 1] == H) and isLegal(board, focus)):
+				best[focus - 1] += 9
+			# Test for next-move-wins:
+			elif (((isLegal(board, check[0]) and board[check[1] - 1] == C) or
+				(isLegal(board, check[1]) and board[check[0] - 1] == C)) and isLegal(board, focus)):
+				best[focus - 1] += 3
+			# Test for move-after-next-wins:
+			elif (isLegal(board, check[0]) and isLegal(board, check[1]) and isLegal(board, focus)):
+				best[focus - 1] += 1
+	return makeMove(board, best.index(max(best)) + 1, C)
 
 #  Set up a new game.
 #  Originally, it defaulted to Player 1 (X) as Computer and Player 2 (O) as human.
