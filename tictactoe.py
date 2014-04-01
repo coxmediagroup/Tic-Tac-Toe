@@ -1,9 +1,13 @@
 #!/opt/python-2.7/bin/python2.7
 
-#	Original game by....who knows.
-#	Python implementation on 3/28/14 by Josh "Nodoka" Johnson.
-#	"WarGames" (c) Warner Bros. Pictures
+#  Change the #! line above as needed.  I used Python 2.7 for this code sample.
 
+#  Original game by....who knows.
+#  Python implementation on 3/28/14 by Josh "Nodoka" Johnson.
+#  "WarGames" (c) Warner Bros. Pictures
+
+#  Check other squares in a line for matching symbols.
+#  Rather than create a formula for deciding what other squares, I found it easier to verbosely list them.
 toCheck = {1: [[2, 3], [4, 7], [5, 9]],
 	2: [[1, 3], [5, 8]],
 	3: [[1, 2], [6, 9], [5, 7]],
@@ -13,33 +17,53 @@ toCheck = {1: [[2, 3], [4, 7], [5, 9]],
 	7: [[1, 4], [8, 9], [3, 5]],
 	8: [[2, 5], [7, 9]],
 	9: [[7, 8], [3, 6], [1, 5]]}
+
+#  Formatting variables:
 tab = " " * 34
 blank = "   |   |"
 cross = "---+---+---"
+
+#  Empty board, equivalent to:
+#  
+#   1 | 2 | 3
+#  ---+---+---
+#   4 | 5 | 6
+#  ---+---+---
+#   7 | 8 | 9
+#
 plies = "123456789"
+
+#  Game-related variables:
 turn = 1
 gameOver = False
 
+#  Check to see if a player has won the game.
+#  The board string $plies is labeled 1 ~ 9, but the string itself is 0-indexed.
 def hasWon(data):
-	if ((data[0] == data[1] == data[2]) or
-		(data[0] == data[3] == data[6])):
+	if ((data[0] == data[1] == data[2]) or			# Top row
+		(data[0] == data[3] == data[6])):			# First column
 		return (data[0])
-	elif ((data[6] == data[7] == data[8]) or
-		(data[2] == data[5] == data[8])):
+	elif ((data[6] == data[7] == data[8]) or 		# Bottom row
+		(data[2] == data[5] == data[8])):			# Third column
 		return (data[8])
-	elif ((data[0] == data[4] == data[8]) or
-		(data[1] == data[4] == data[7]) or
-		(data[3] == data[4] == data[5]) or
-		(data[2] == data[4] == data[6])):
+	elif ((data[0] == data[4] == data[8]) or		# \ Diagonal
+		(data[1] == data[4] == data[7]) or			# Middle column
+		(data[3] == data[4] == data[5]) or			# Middle row
+		(data[2] == data[4] == data[6])):			# / Diagonal
 		return (data[4])
 	else:	return False
 
+#  Adjust the board with the move made by the player.
 def makeMove(board, play, piece):
 	return board.replace(str(play), piece)
 
+#  Check the legality of a play, making sure that no X or O is already occupying the desired space.
 def isLegal(board, move):
 	return (board[move - 1] not in ["X", "O"])
 
+#  Compare the weighted play with the best weighted play so far.
+#  If the play (first part of each duet) is the same, add one to the weight.
+#  This will favor plays with multiplie next-move-wins possibilities.
 def ifBetter(move1, move2):
 	print "Testing %s vs. %s." % (move1, move2)
 	if ((move2 == move1) and (move1[1] == 1)):
@@ -47,6 +71,12 @@ def ifBetter(move1, move2):
 	if (move2[1] > move1[1]):	return move2
 	else:	return move1
 
+#  Make the best move for the computer player.
+#  Different weights are given to the types of best moves:
+#    Ten (10) points for a winning move;
+#    Five (5) for a block, preventing the human player from winning;
+#    One (1) for a "next-move-wins" move, putting two X's in the same line (row, column, diagonal).;
+#    Zero (0) for any other move.
 def makeBestMove(board):
 	best = [5, 0]
 	for focus in range(1, 10):
@@ -57,7 +87,7 @@ def makeBestMove(board):
 			# Test for block
 			if ((board[check[0] - 1] == board[check[1] - 1] == "O") and isLegal(board, focus)):
 				best = ifBetter(best, [focus, 5])
-			# Test for next-move wins (accumulate scores)
+			# Test for next-move wins
 			if ((isLegal(board, check[0]) and board[check[1] - 1] == "X") or
 				(isLegal(board, check[1]) and board[check[0] - 1] == "X") and isLegal(board, focus)):
 				best = ifBetter(best, [focus, 1])
@@ -65,8 +95,12 @@ def makeBestMove(board):
 			best = ifBetter(best, [focus, 0])
 	return makeMove(board, best[0], "X")
 
+#  MAIN PROGRAM LOOP
+#  Make plays until the winner has been determined, or the game ends in a tie.
 while (not gameOver):
 	gameOver = hasWon(plies)
+	
+	#  Display the board:
 	print "\n"
 	print "TIC-TAC-TOE".center(80)
 	print "by Josh Johnson".center(80)
@@ -77,25 +111,34 @@ while (not gameOver):
 		print tab + blank
 		if (x < 2):	print tab + cross
 	print " " * 80
+	
+	#  Depending on whether the game has been won, print a message or prompt the player for his/her next move.
 	if (gameOver == "X"):
 		print "I'm sorry, but the computer was the victor.  Better luck next time."
 	elif (gameOver == "O"):
 		print "Congratulations, you bested the computer!  You would make Dr. Falken proud."
-	elif (turn == 10):
+	elif (turn == 10):		#  After 9 moves, the game is a tie.
 		print "It was a tie.  The only way to win is not to play."
-		gameOver = True
+		gameOver = True		#  Set this to True, so that the outer WHILE loop is exited.
 	else:
+		#  The computer plays on odd-numbered, the human, even-numbered, plays.
 		if (turn % 2 == 1):
 			plies = makeBestMove(plies)
 		else:
 			valid = False
 			while (not valid):
 				print "PLAY #" + str(turn)
+				
+				#  Allow only legal and valid plays:
 				try:	play = int(raw_input("Your move?  "))
 				except ValueError:	pass
 				if (play in range(1, 10)):
 					if (isLegal(plies, play)):	valid = True
 				if (not valid):	print "Please choose an empty square from 1 through 9."
+			
+			#  Change the board for either the computer or human play, whichever was made this turn.
 			plies = makeMove(plies, play, "O")
 		turn += 1
+
+#  Salutation:
 print "\nThank you for playing Tic-Tac-Toe with me!"
