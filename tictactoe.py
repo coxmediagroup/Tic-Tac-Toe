@@ -1,10 +1,13 @@
 #!/opt/python-2.7/bin/python2.7
+#  (Change the #! line above as needed.  I used Python 2.7 for this code sample.)
 
-#  Change the #! line above as needed.  I used Python 2.7 for this code sample.
-
-#  Original game by....who knows.
-#  Python implementation on 3/28/14 by Josh "Nodoka" Johnson.
+#  Python implementation on 3/31/14 by Josh "Nodoka" Johnson.
 #  "WarGames" (c) Warner Bros. Pictures
+
+#  For screen-clearing functionality:
+import os 
+if (os.name == "nt"):	cls = "cls"
+else:	cls = "clear"
 
 #  Check other squares in a line for matching symbols.
 #  Rather than create a formula for deciding what other squares, I found it easier to verbosely list them.
@@ -36,6 +39,8 @@ plies = "123456789"
 #  Game-related variables:
 turn = 1
 gameOver = False
+C = "X"
+H = "O"
 
 #  Check to see if a player has won the game.
 #  The board string $plies is labeled 1 ~ 9, but the string itself is 0-indexed.
@@ -59,13 +64,12 @@ def makeMove(board, play, piece):
 
 #  Check the legality of a play, making sure that no X or O is already occupying the desired space.
 def isLegal(board, move):
-	return (board[move - 1] not in ["X", "O"])
+	return (board[move - 1] not in [C, H])
 
 #  Compare the weighted play with the best weighted play so far.
 #  If the play (first part of each duet) is the same, add one to the weight.
 #  This will favor plays with multiplie next-move-wins possibilities.
 def ifBetter(move1, move2):
-	print "Testing %s vs. %s." % (move1, move2)
 	if ((move2 == move1) and (move1[1] == 1)):
 		return (move1[0], move1[1] + 1)
 	if (move2[1] > move1[1]):	return move2
@@ -82,29 +86,31 @@ def makeBestMove(board):
 	for focus in range(1, 10):
 		for check in toCheck[focus]:
 			# Test for win
-			if ((board[check[0] - 1] == board[check[1] - 1] == "X") and isLegal(board, focus)):
+			if ((board[check[0] - 1] == board[check[1] - 1] == C) and isLegal(board, focus)):
 				best = ifBetter(best, [focus, 10])
 			# Test for block
-			if ((board[check[0] - 1] == board[check[1] - 1] == "O") and isLegal(board, focus)):
+			if ((board[check[0] - 1] == board[check[1] - 1] == H) and isLegal(board, focus)):
 				best = ifBetter(best, [focus, 5])
 			# Test for next-move wins
-			if ((isLegal(board, check[0]) and board[check[1] - 1] == "X") or
-				(isLegal(board, check[1]) and board[check[0] - 1] == "X") and isLegal(board, focus)):
+			if ((isLegal(board, check[0]) and board[check[1] - 1] == C) or
+				(isLegal(board, check[1]) and board[check[0] - 1] == C) and isLegal(board, focus)):
 				best = ifBetter(best, [focus, 1])
 			# Fallback
 			best = ifBetter(best, [focus, 0])
-	return makeMove(board, best[0], "X")
+	return makeMove(board, best[0], C)
 
 #  MAIN PROGRAM LOOP
 #  Make plays until the winner has been determined, or the game ends in a tie.
 while (not gameOver):
 	gameOver = hasWon(plies)
-	
-	#  Display the board:
+
+	#  Platform-dependant screen clear:
+	os.system(cls)
 	print "\n"
 	print "TIC-TAC-TOE".center(80)
 	print "by Josh Johnson".center(80)
 	print "-" * 80
+	#  Display the board:
 	for x in range(3):
 		print tab + blank
 		print tab + " %s | %s | %s" % (plies[3 * x], plies[3 * x + 1], plies[3 * x + 2])
@@ -113,9 +119,9 @@ while (not gameOver):
 	print " " * 80
 	
 	#  Depending on whether the game has been won, print a message or prompt the player for his/her next move.
-	if (gameOver == "X"):
+	if (gameOver == C):
 		print "I'm sorry, but the computer was the victor.  Better luck next time."
-	elif (gameOver == "O"):
+	elif (gameOver == H):
 		print "Congratulations, you bested the computer!  You would make Dr. Falken proud."
 	elif (turn == 10):		#  After 9 moves, the game is a tie.
 		print "It was a tie.  The only way to win is not to play."
@@ -137,7 +143,7 @@ while (not gameOver):
 				if (not valid):	print "Please choose an empty square from 1 through 9."
 			
 			#  Change the board for either the computer or human play, whichever was made this turn.
-			plies = makeMove(plies, play, "O")
+			plies = makeMove(plies, play, H)
 		turn += 1
 
 #  Salutation:
