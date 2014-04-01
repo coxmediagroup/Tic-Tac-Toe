@@ -95,7 +95,6 @@ def possibleMove(board, possible):
 	return False
 
 #	draw board
-board = [ [1,0,0],[1,2,0],[0,0,0] ]
 def printBoard(board):
 	print "%s | %s | %s" % (board[0][0], board[0][1], board[0][2])
 	print "--+---+--"
@@ -103,15 +102,34 @@ def printBoard(board):
 	print "--+---+--"
 	print "%s | %s | %s" % (board[2][0], board[2][1], board[2][2])
 
+#	some simple test cases
+def runTests(board):
+	board = [ [1,0,0],[1,2,0],[0,0,0] ]
+	testCase(board, (0,2))
+	board = [ [1,1,0],[2,2,0],[0,0,0] ]
+	testCase(board, (1,2))
+	board = [ [0,0,1],[0,2,1],[0,0,0] ]
+	testCase(board, (2,2))
+	board = [ [1,0,2],[0,1,0],[0,0,0] ]
+	testCase(board, (2,2))
+	board = [ [0,0,0],[0,2,0],[1,0,1] ]
+	testCase(board, (2,1))
 
-#print possibleMove(board, (0,0))
-#AIMove(board)
-#print checkWin(board)
-printBoard(board)
-bestMove = miniMax(board, 2)
-print bestMove
-markMove(board, bestMove[1], 2)
-printBoard(board)
+#	run test, determine outcome
+def testCase(board, expected):
+	bestMove = miniMax(board, 2)
+	if (bestMove[1] != expected):
+		print "FAILED \t Expected " + str(expected) + " Calculated " + str(bestMove[1])
+	else:
+		print "PASSED \t Expected " + str(expected)
+
+board = [ [1,0,0],[1,2,0],[0,0,0] ]
+
+runTests(board)
+#bestMove = miniMax(board, 2)
+#print bestMove
+#markMove(board, bestMove[1], 2)
+
 #	get user move
 #	-test valid user move
 #	-mark move
