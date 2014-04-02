@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 
     # pip installed apps
     'south',
+    'annoying',
 
     # Local apps
     'core',
