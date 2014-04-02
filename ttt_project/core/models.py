@@ -1,20 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class Game(models.Model):
     completed = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.id
+        return "%s" % self.id
 
 
 class Move(models.Model):
     game = models.ForeignKey(Game)
-    player = models.ForeignKey(User)
-    computer = models.BooleanField(default=False)
+    player_move = models.BooleanField(default=True)
     space = models.IntegerField()
 
     def __unicode__(self):
-        return "Move for game %s" % self.game
+        return "Move for game %s in space %s" % (self.game, self.space)
 
