@@ -111,7 +111,7 @@ def printBoard(board):
 	print "%s | %s | %s" % (board[2][0], board[2][1], board[2][2])
 
 #	some simple test cases
-def runTests(board):
+def runTests():
 	board = [ [1,0,0],[1,2,0],[0,0,0] ]
 	testCase(board, (0,2))
 
@@ -141,9 +141,31 @@ def testCase(board, expected):
 	else:
 		print "PASSED \t Expected " + str(expected)
 
-board = [ [1,0,0],[1,2,0],[0,0,0] ]
+# game class
+# need the following
+# -actual board array
+# -list of open moves
+# -is game over
+# -who's turn
+# -winner
+class gameInstance:
+	def __init__(self):
+		self.board = [0 for x in range(9)]
 
-runTests(board)
+	def printBoard(self):
+		print self.board
+
+	def availMoves(self):
+		moves = []
+		for x in self.board:
+			if not x:
+				moves.append(x)
+		return moves
+
+game = gameInstance()
+game.printBoard()
+print game.availMoves()
+#runTests()
 #bestMove = miniMax(board, 2)
 #print bestMove
 #markMove(board, bestMove[1], 2)
