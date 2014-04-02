@@ -14,6 +14,7 @@ $(function() {
                 if (data == "True") {
                     // alert("Move Saved for space: " + space_id);
                 }
+                $("#game_board").replaceWith(data);
             }
         });
     });

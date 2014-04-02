@@ -21,7 +21,14 @@ def player_move(request, game_id, space_id):
 
     calculate_computer_move(request, current_game)
 
-    return HttpResponse("True")
+    # Get all moves for this game
+    all_moves = Move.objects.filter(game=current_game)
+    vals = {}
+    for move in all_moves:
+        vals["space%s" % move.space] = move.player_move
+
+    # return HttpResponse("True")
+    return vals
 
 
 def calculate_computer_move(request, current_game):
