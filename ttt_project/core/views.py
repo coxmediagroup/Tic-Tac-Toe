@@ -1,3 +1,4 @@
+import random
 from django.http import HttpResponse
 from annoying.decorators import render_to
 from core.models import Game, Move
@@ -24,8 +25,29 @@ def player_move(request, game_id, space_id):
 
 
 def calculate_computer_move(request, current_game):
-    # this is where we'll store the rules for the game
-    pass
+    all_spaces = [0,1,2,3,4,5,6,7,8]
+
+    # get all moves for this game
+    moves_for_current_game = Move.objects.filter(game=current_game)
+
+    # If it's the first move of the game, just pick a random space
+    if moves_for_current_game.count() == 1:
+        player_space = moves_for_current_game[0].space
+        all_spaces.remove(player_space)
+
+        # pick one of the remaining spaces
+        space_for_computer_move = random.choice(all_spaces)
+        new_computer_move = Move.objects.create(game=current_game, player_move=False, space=space_for_computer_move)
+
+        return
+
+    else:
+        # need to figure out if player has 2 moves that could equal a win
+            # if so, computer move blocks it
+            # if not, check if computer has 2 moves that could equal a win
+                # if so, play to win
+                # if not, play to add a second move that could equal a win
+        pass
 
 
 def computer_move(request):
