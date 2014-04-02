@@ -179,10 +179,11 @@ class GUI(Frame):
 		self.initUI()
 
 	def initUI(self):
-		self.parent.title("Buttons")
+		self.parent.title("TicTacToe")
 		buttons = []
-		Style().configure("TButton", font="serif 128")
+		Style().configure("TButton")
 
+		# layout for buttons
 		self.columnconfigure(0, pad=3)
 		self.columnconfigure(1, pad=3)
 		self.columnconfigure(2, pad=3)
@@ -192,21 +193,34 @@ class GUI(Frame):
 		self.rowconfigure(2, pad=3)
 
 		for x in range(9):
-			handler = lambda x=x:self.updateBoard()
+			handler = lambda x=x: self.mark(x)
 			self.buttons.append(Button(self,command=handler,text='-',height=4,width=4))
 			self.buttons[-1].grid(row=(x / 3), column=(x % 3))
 
 		self.pack()
 	
-	def makeMove(self, input):
-		self.buttons[input]['text']=input
+	def mark(self, input):
+		# onclick, verify the move is valid and update it with the players marker
+		if self.game.makeMove(input, self.player.marker):
+			self.updateBoard()
+			if self.game.gameOver():
+				print self.game.winner
+			self.bot.miniMax(self.game)
+			self.updateBoard()
+		if self.game.gameOver():
+			print self.game.winner
 	
 	def updateBoard(self):
+		# update the buttons and disable the buttons that have been selected
 		for i,x in enumerate(self.game.boardState()):
 			if x == 1:
 				self.buttons[i]['text'] = "X"
+				self.buttons[i]['state'] = 'disabled'
+				self.buttons[i]['disabledforeground'] = 'black'
 			elif x == 2:
 				self.buttons[i]['text'] = "O"
+				self.buttons[i]['state'] = 'disabled'
+				self.buttons[i]['disabledforeground'] = 'black'
 
 def main():
 	root = Tk()
