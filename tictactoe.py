@@ -4,6 +4,9 @@
 #
 #	Implement a version of tic-tac-toe where a player plays against an AI bot where the AI never loses.
 
+from Tkinter import Tk, Frame, Button
+from ttk import Style, Label, Entry
+
 # game class
 # need the following
 # -actual board array
@@ -59,6 +62,9 @@ class gameState:
 
 	def clearMove(self, move):
 		self.board[move] = 0
+
+	def boardState(self):
+		return self.board
 
 	def setBoard(self, array):
 		self.board = self.__boardArray(array)
@@ -162,6 +168,55 @@ class botAI:
 				return -10
 		return 0 # default case
 
+class GUI(Frame):
+	def __init__(self, parent):
+		Frame.__init__(self, parent, background="white")
+		self.parent = parent
+		self.bot = botAI()
+		self.player = human()
+		self.game = gameState()
+		self.buttons = []
+		self.initUI()
+
+	def initUI(self):
+		self.parent.title("Buttons")
+		buttons = []
+		Style().configure("TButton", font="serif 128")
+
+		self.columnconfigure(0, pad=3)
+		self.columnconfigure(1, pad=3)
+		self.columnconfigure(2, pad=3)
+
+		self.rowconfigure(0, pad=3)
+		self.rowconfigure(1, pad=3)
+		self.rowconfigure(2, pad=3)
+
+		for x in range(9):
+			handler = lambda x=x:self.updateBoard()
+			self.buttons.append(Button(self,command=handler,text='-',height=4,width=4))
+			self.buttons[-1].grid(row=(x / 3), column=(x % 3))
+
+		self.pack()
+	
+	def makeMove(self, input):
+		self.buttons[input]['text']=input
+	
+	def updateBoard(self):
+		for i,x in enumerate(self.game.boardState()):
+			if x == 1:
+				self.buttons[i]['text'] = "X"
+			elif x == 2:
+				self.buttons[i]['text'] = "O"
+
+def main():
+	root = Tk()
+	root.geometry("250x250+300+300")
+	app = GUI(root)
+	root.mainloop()
+
+if __name__ == '__main__':
+	main()
+
 def testCase(gameState, expectedMove):
 	bot = botAI()
 	nextMove = bot.miniMax(gameState)
@@ -208,7 +263,3 @@ def play():
 		if game.gameOver():
 			print game.winner
 			exit()
-
-if __name__ == "__main__":
-	#runTests()
-	play()
