@@ -1,5 +1,4 @@
 import random
-from django.http import HttpResponse
 from annoying.decorators import render_to
 from core.models import Game, Move
 
@@ -12,7 +11,7 @@ def main(request):
 @render_to('core/board.html')
 def player_move(request, game_id, space_id):
     current_game = Game.objects.get(id=game_id)
-    new_player_move = Move.objects.create(game=current_game, space=space_id)
+    Move.objects.create(game=current_game, space=space_id)
 
     calculate_computer_move(request, current_game)
 
@@ -114,6 +113,6 @@ def calculate_computer_move(request, current_game):
         if not space_for_computer_move:
             space_for_computer_move = random.choice(all_spaces)
 
-    new_computer_move = Move.objects.create(game=current_game, player_move=False, space=space_for_computer_move)
+    Move.objects.create(game=current_game, player_move=False, space=space_for_computer_move)
 
     return

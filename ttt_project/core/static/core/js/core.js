@@ -16,6 +16,6 @@ $(function() {
                     $("#game_board").replaceWith(data);
                 }
             });
-        };
+        }
     });
 });
