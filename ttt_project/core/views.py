@@ -11,28 +11,23 @@ def main(request):
 
 @render_to('core/board.html')
 def player_move(request, game_id, space_id):
-    # take space_id and create a move object
-    # then call calculate_computer_move
-    # then make the move by calling computer_move
-    # then return the new board
-
     current_game = Game.objects.get(id=game_id)
     new_player_move = Move.objects.create(game=current_game, space=space_id)
 
     calculate_computer_move(request, current_game)
 
-    # Get all moves for this game
+    # Gather all moves to re-populate board
     all_moves = Move.objects.filter(game=current_game)
     vals = {}
     for move in all_moves:
         vals["space%s" % move.space] = move.player_move
 
-    # return HttpResponse("True")
     return vals
 
 
 def calculate_computer_move(request, current_game):
-    all_spaces = [0,1,2,3,4,5,6,7,8]
+    all_spaces = [1,2,3,4,5,6,7,8,9]
+    space_for_computer_move = None
 
     # get all moves for this game
     moves_for_current_game = Move.objects.filter(game=current_game)
@@ -42,22 +37,77 @@ def calculate_computer_move(request, current_game):
         player_space = moves_for_current_game[0].space
         all_spaces.remove(player_space)
 
-        # pick one of the remaining spaces
-        space_for_computer_move = random.choice(all_spaces)
-        new_computer_move = Move.objects.create(game=current_game, player_move=False, space=space_for_computer_move)
+        if player_space != 5:
+            space_for_computer_move = 5
+        else:
+            all_spaces.remove(2)
+            all_spaces.remove(4)
+            all_spaces.remove(6)
+            all_spaces.remove(8)
 
-        return
+            # pick one of the remaining spaces
+            space_for_computer_move = random.choice(all_spaces)
 
     else:
-        # need to figure out if player has 2 moves that could equal a win
-            # if so, computer move blocks it
-            # if not, check if computer has 2 moves that could equal a win
-                # if so, play to win
-                # if not, play to add a second move that could equal a win
-        pass
+        player_moves = []
+        for move in moves_for_current_game:
+            if move.player_move:
+                player_moves.append(move.space)
+                all_spaces.remove(move.space)
+            else:
+                all_spaces.remove(move.space)
 
+        for space in all_spaces:
+            row1 = [1,2,3]
+            row2 = [4,5,6]
+            row3 = [7,8,9]
+            column1 = [1,4,7]
+            column2 = [2,5,8]
+            column3 = [3,6,9]
+            diag1 = [1,5,9]
+            diag2 = [3,5,7]
 
-def computer_move(request):
-    # create a move object with space_id from calculate_computer_move
-    # return all the info needed to redraw the board
-    pass
+            # Check rows
+            if space in row1:
+                row1.remove(space)
+                if set(row1).issubset(set(player_moves)):
+                    space_for_computer_move = space
+            elif space in row2:
+                row2.remove(space)
+                if set(row2).issubset(set(player_moves)):
+                    space_for_computer_move = space
+            elif space in row3:
+                row3.remove(space)
+                if set(row3).issubset(set(player_moves)):
+                    space_for_computer_move = space
+
+            # Check columns
+            if space in column1:
+                column1.remove(space)
+                if set(column1).issubset(set(player_moves)):
+                    space_for_computer_move = space
+            elif space in column2:
+                column2.remove(space)
+                if set(column2).issubset(set(player_moves)):
+                    space_for_computer_move = space
+            elif space in column3:
+                column3.remove(space)
+                if set(column3).issubset(set(player_moves)):
+                    space_for_computer_move = space
+
+            # Check diagonals
+            if space in diag1:
+                diag1.remove(space)
+                if set(diag1).issubset(set(player_moves)):
+                    space_for_computer_move = space
+            elif space in diag2:
+                diag2.remove(space)
+                if set(diag2).issubset(set(player_moves)):
+                    space_for_computer_move = space
+
+        if not space_for_computer_move:
+            space_for_computer_move = random.choice(all_spaces)
+
+    new_computer_move = Move.objects.create(game=current_game, player_move=False, space=space_for_computer_move)
+
+    return
