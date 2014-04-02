@@ -6,28 +6,14 @@
 
 from Tkinter import Tk, Frame, Button
 from ttk import Style, Label, Entry
+import tkMessageBox as box
 
 # game class
-# need the following
-# -actual board array
-# -list of open moves
-# -is game over
-# -who's turn
-# -winner
-# -mark a board slot
-# -remove a mark
 class gameState:
 	def __init__(self):
 		self.board = [0 for x in range(9)]
 		self.winner = None
-
-	def printBoard(self):
-		print "%s | %s | %s" % (self.board[0], self.board[1], self.board[2])
-		print "--+---+--"
-		print "%s | %s | %s" % (self.board[3], self.board[4], self.board[5])
-		print "--+---+--"
-		print "%s | %s | %s" % (self.board[6], self.board[7], self.board[8])
-		#print self.board
+		self.startPlayer = 1
 
 	def availMoves(self):
 		moves = []
@@ -37,9 +23,6 @@ class gameState:
 		return moves
 
 	def gameOver(self):
-		# 0 1 2
-		# 3 4 5
-		# 6 7 8
 		wins = [ (0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6) ]
 		for i,j,k in wins:
 			if self.board[i] == self.board[j] == self.board[k] and self.board[i] != 0:
@@ -72,17 +55,19 @@ class gameState:
 	def __boardArray(self, input):
 		return (map(int,input.split()))
 
+	def newGame(self):
+		self.setBoard("0 0 0 0 0 0 0 0 0")
+
 # class container for human player
-# needs:
-# -marker
-# -get the move as an input
-# --test move
-# 
 class human:
 	def __init__(self, marker = 1, opponent = 2):
 		self.marker = marker
 		self.opponent = opponent
 	
+	def makeMove(self, move, gameInstance):
+		if gameInstance.makeMove(move, self.marker):
+			return True
+"""
 	def getMove(self, gameInstance):
 		while True:
 			nextMove = raw_input("What move? ")
@@ -90,13 +75,8 @@ class human:
 				break
 			else:
 				print "Invalid move, please try again"
-
+"""
 # class for AI moves
-# need:
-# miniMax function
-# -implement via game trees, attempt to maximize AI moves to win, minimize players to lose
-# -max and min functions, that work recursively on the current ply
-# -evaluation of currently tested ply
 class botAI:
 	def __init__(self, marker = 2, opponent = 1):
 		self.marker = marker
@@ -177,6 +157,8 @@ class GUI(Frame):
 		self.game = gameState()
 		self.buttons = []
 		self.initUI()
+		self.whoBegins()
+		self.gameStart()
 
 	def initUI(self):
 		self.parent.title("TicTacToe")
@@ -198,17 +180,24 @@ class GUI(Frame):
 			self.buttons[-1].grid(row=(x / 3), column=(x % 3))
 
 		self.pack()
-	
+
+	def whoBegins(self):
+		result = box.askquestion("Who starts?", "Would you like to begin?")
+		if result == "yes":
+			self.game.startPlayer = 1
+		else:
+			self.game.startPlayer = 2
+
 	def mark(self, input):
 		# onclick, verify the move is valid and update it with the players marker
-		if self.game.makeMove(input, self.player.marker):
+		if self.player.makeMove(input, self.game):
 			self.updateBoard()
 			if self.game.gameOver():
-				print self.game.winner
+				self.gameOver()
 			self.bot.miniMax(self.game)
 			self.updateBoard()
 		if self.game.gameOver():
-			print self.game.winner
+			self.gameOver()
 	
 	def updateBoard(self):
 		# update the buttons and disable the buttons that have been selected
@@ -222,6 +211,34 @@ class GUI(Frame):
 				self.buttons[i]['state'] = 'disabled'
 				self.buttons[i]['disabledforeground'] = 'black'
 
+	def resetBoard(self):
+		self.game.setBoard("0 0 0 0 0 0 0 0 0")
+		for x in self.buttons:
+			x['text'] = '-'
+			x['state'] = 'active'
+	
+	def gameOver(self):
+		if self.game.winner == 1:
+			title = "You have won!"
+		elif self.game.winner == 2:
+			title = "The computer has bested you!"
+		else:
+			title = "The cat wins!"
+		result = box.askquestion("Game Over", title + "\nWould you like to play again?")
+		if result == "yes":
+			self.resetBoard()
+			self.whoBegins()
+			self.gameStart()
+		else:
+			exit()
+	
+	def gameStart(self):
+		if self.game.startPlayer == 2:
+			self.bot.miniMax(self.game)
+			self.updateBoard()
+			if self.game.gameOver():
+				self.gameOver()
+
 def main():
 	root = Tk()
 	root.geometry("250x250+300+300")
@@ -230,50 +247,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-def testCase(gameState, expectedMove):
-	bot = botAI()
-	nextMove = bot.miniMax(gameState)
-	#print nextMove
-	if nextMove == expectedMove:
-		print 'PASSED'
-	else:
-		print 'FAILED Expected ' + str(expectedMove) + ' Calculated ' + str(nextMove)
-	
-
-def runTests():
-	# 0 1 2
-	# 3 4 5
-	# 6 7 8
-	game = gameState()
-	game.setBoard("0 0 1 0 2 1 0 0 0")
-	testCase(game, 8)
-	game.setBoard("0 0 0 0 0 0 0 0 0")
-	testCase(game, 5)
-	game.setBoard("1 1 2 2 2 1 0 0 0")
-	testCase(game, 6)
-	game.setBoard("1 0 0 1 2 0 0 0 0")
-	testCase(game, 6)
-	game.setBoard("2 1 1 0 2 0 0 0 0")
-	testCase(game, 8)
-
-def play():
-	game = gameState()
-	player = human()
-	bot = botAI()
-	game.printBoard()
-	while True:
-		
-		player.getMove(game)
-		print "\n"
-		game.printBoard()
-		if game.gameOver():
-			print game.winner
-			exit()
-		
-		bot.miniMax(game)
-		print "\n"
-		game.printBoard()
-		if game.gameOver():
-			print game.winner
-			exit()
