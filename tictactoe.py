@@ -151,18 +151,39 @@ def testCase(board, expected):
 class gameInstance:
 	def __init__(self):
 		self.board = [0 for x in range(9)]
+		self.winner = None
 
 	def printBoard(self):
 		print self.board
 
 	def availMoves(self):
 		moves = []
-		for x in self.board:
-			if not x:
-				moves.append(x)
+		for i,x in enumerate(self.board):
+			if x == 0:
+				moves.append(i)
 		return moves
 
+	def gameOver(self):
+		# 0 1 2
+		# 3 4 5
+		# 6 7 8
+		wins = [ (0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6) ]
+		for i,j,k in wins:
+			if self.board[i] == self.board[j] == self.board[k] and self.board[i] != 0:
+				self.winner = self.board[i]
+				return True
+
+		return False
+
+	def setBoard(self, array):
+		self.board = array
+
+def boardArray(input):
+	return (map(int,input.split()))
+
 game = gameInstance()
+game.printBoard()
+game.setBoard(boardArray("1 1 1 2 2 0 0 0 0"))
 game.printBoard()
 print game.availMoves()
 #runTests()
