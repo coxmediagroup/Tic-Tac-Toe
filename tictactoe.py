@@ -148,7 +148,9 @@ def testCase(board, expected):
 # -is game over
 # -who's turn
 # -winner
-class gameInstance:
+# -mark a board slot
+# -remove a mark
+class gameState:
 	def __init__(self):
 		self.board = [0 for x in range(9)]
 		self.winner = None
@@ -175,15 +177,103 @@ class gameInstance:
 
 		return False
 
+	def makeMove(self, move, player):
+		if not self.board[move]:
+			self.board[move] = player
+			return True
+		return False
+
+	def clearMove(self, move):
+		self.board[move] = 0
+
 	def setBoard(self, array):
-		self.board = array
+		self.board = self.__boardArray(array)
 
-def boardArray(input):
-	return (map(int,input.split()))
+	def __boardArray(self, input):
+		return (map(int,input.split()))
 
-game = gameInstance()
+# class for AI moves
+# need:
+# miniMax function
+# -implement via game trees, attempt to maximize AI moves to win, minimize players to lose
+# -max and min functions, that work recursively on the current ply
+# -evaluation of currently tested ply
+class botAI:
+	def __init__(self, marker = 2, opponent = 1):
+		self.marker = marker
+		self.opponent = opponent
+
+	def miniMax(self, gameInstance):
+		return maxMove(gameInstance)
+	# bestMove location and bestMove value
+	# value will be used to determine if the move is a good one or not, from eval game
+	def maxMove(self, ply):
+		bestMove = None
+		bestValue = -10
+		# foreach childnode, find min
+		# track both the move and the value, will need on upwards travesal
+		for move in ply.availMoves():
+			# for each move, make the move and test the result
+			# if the move is not the best move, based on evaluation of each ply, then undo move
+			ply.makeMove(move, self.marker)
+			# base case
+			if ply.gameOver():
+				value = evalGame(ply)
+			# recusive case
+			else:
+				value,move = minMove(ply)
+			
+			ply.clearMove(move)
+
+			if value > bestValue:
+				bestValue = value
+				bestMove = move
+
+		return bestValue, bestMove
+
+	# from psuedo, essentially the same, but swaping the logic checks
+	def minMove(self, ply):
+		bestMove = None
+		bestValue = 10
+		# foreach childnode, find min
+		# track both the move and the value, will need on upwards travesal
+		for move in ply.availMoves():
+			# for each move, make the move and test the result
+			# if the move is not the best move, based on evaluation of each ply, then undo move
+			ply.makeMove(move, self.marker)
+			# base case
+			if ply.gameOver():
+				value = evalGame(ply)
+			# recusive case
+			else:
+				value,move = minMove(ply)
+			
+			ply.clearMove(move)
+
+			if value < bestValue:
+				bestValue = value
+				bestMove = move
+
+		return bestValue, bestMove
+
+	def evalGame(self, ply):
+		# check this ply has reached conclusion
+		if ply.gameOver():
+			# ai has won
+			if ply.winner == self.marker:
+				return 10
+			# player has won
+			elif ply.winner == self.opponent:
+				return -10
+		return 0 # default case
+
+game = gameState()
 game.printBoard()
-game.setBoard(boardArray("1 1 1 2 2 0 0 0 0"))
+game.setBoard("1 1 0 2 2 2 0 0 0")
+game.printBoard()
+print game.makeMove(2, 1)
+game.printBoard()
+print game.makeMove(1,2)
 game.printBoard()
 print game.availMoves()
 #runTests()
