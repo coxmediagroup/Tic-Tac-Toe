@@ -22,6 +22,9 @@ def player_move(request, game_id, space_id):
     for move in all_moves:
         vals["space%s" % move.space] = move.player_move
 
+    if all_moves.count() == 9:
+        vals["end_game"] = True
+
     return vals
 
 
@@ -47,6 +50,9 @@ def calculate_computer_move(request, current_game):
 
             # pick one of the remaining spaces
             space_for_computer_move = random.choice(all_spaces)
+
+    elif moves_for_current_game.count() == 9:
+        return
 
     else:
         player_moves = []

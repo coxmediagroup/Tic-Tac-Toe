@@ -1,9 +1,9 @@
 body {
 	margin: 25px auto;
+	text-align: center;
 }
 
-#header {
-	text-align: center;
+#header, #main a {
     font-size: 2em;
 }
 
