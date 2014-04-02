@@ -111,6 +111,7 @@ def printBoard(board):
 	print "%s | %s | %s" % (board[2][0], board[2][1], board[2][2])
 
 #	some simple test cases
+"""
 def runTests():
 	board = [ [1,0,0],[1,2,0],[0,0,0] ]
 	testCase(board, (0,2))
@@ -133,6 +134,7 @@ def runTests():
 	board = [ [0,0,0],[0,2,0],[1,0,1] ]
 	testCase(board, (2,1))
 #	run test, determine outcome
+
 def testCase(board, expected):
 	#printBoard(board)
 	bestMove = miniMax(board, 2)
@@ -140,7 +142,7 @@ def testCase(board, expected):
 		print "FAILED \t Expected " + str(expected) + " Calculated " + str(bestMove[1])
 	else:
 		print "PASSED \t Expected " + str(expected)
-
+"""
 # game class
 # need the following
 # -actual board array
@@ -204,12 +206,13 @@ class botAI:
 		self.opponent = opponent
 
 	def miniMax(self, gameInstance):
-		return maxMove(gameInstance)
+		return self.maxMove(gameInstance)
+
 	# bestMove location and bestMove value
 	# value will be used to determine if the move is a good one or not, from eval game
 	def maxMove(self, ply):
 		bestMove = None
-		bestValue = -10
+		bestValue = None
 		# foreach childnode, find min
 		# track both the move and the value, will need on upwards travesal
 		for move in ply.availMoves():
@@ -218,14 +221,14 @@ class botAI:
 			ply.makeMove(move, self.marker)
 			# base case
 			if ply.gameOver():
-				value = evalGame(ply)
+				value = self.evalGame(ply)
 			# recusive case
 			else:
-				value,move = minMove(ply)
+				value,move = self.minMove(ply)
 			
 			ply.clearMove(move)
 
-			if value > bestValue:
+			if value > bestValue or bestValue == None:
 				bestValue = value
 				bestMove = move
 
@@ -234,7 +237,7 @@ class botAI:
 	# from psuedo, essentially the same, but swaping the logic checks
 	def minMove(self, ply):
 		bestMove = None
-		bestValue = 10
+		bestValue = None
 		# foreach childnode, find min
 		# track both the move and the value, will need on upwards travesal
 		for move in ply.availMoves():
@@ -243,14 +246,14 @@ class botAI:
 			ply.makeMove(move, self.marker)
 			# base case
 			if ply.gameOver():
-				value = evalGame(ply)
+				value = self.evalGame(ply)
 			# recusive case
 			else:
-				value,move = minMove(ply)
+				value,move = self.minMove(ply)
 			
 			ply.clearMove(move)
 
-			if value < bestValue:
+			if value < bestValue or bestValue == None:
 				bestValue = value
 				bestMove = move
 
@@ -267,26 +270,22 @@ class botAI:
 				return -10
 		return 0 # default case
 
-game = gameState()
-game.printBoard()
-game.setBoard("1 1 0 2 2 2 0 0 0")
-game.printBoard()
-print game.makeMove(2, 1)
-game.printBoard()
-print game.makeMove(1,2)
-game.printBoard()
-print game.availMoves()
-#runTests()
-#bestMove = miniMax(board, 2)
-#print bestMove
-#markMove(board, bestMove[1], 2)
+def testCase(gameState, expectedMove):
+	bot = botAI()
+	nextMove = bot.miniMax(gameState)[1]
+	if nextMove == expectedMove:
+		print 'PASSED'
+	else:
+		print 'FAILED Expected ' + str(expectedMove) + ' Calculated ' + str(nextMove)
 
-#	get user move
-#	-test valid user move
-#	-mark move
+def runTests():
+	game = gameState()
+	game.setBoard("0 0 1 0 2 1 0 0 0")
+	testCase(game, 8)
+	game.setBoard("0 0 0 0 0 0 0 0 0")
+	testCase(game, 5)
+	game.setBoard("1 1 2 2 2 1 0 0 0")
+	testCase(game, 6)
 
-#	computer move
-#	-find best move
-#	-mark move
-
-#	again?
+if __name__ == "__main__":
+	runTests()
