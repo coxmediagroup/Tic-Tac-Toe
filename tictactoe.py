@@ -50,6 +50,8 @@ class gameState:
 		return False
 
 	def makeMove(self, move, player):
+		if move < 0 or move > 8:
+			return False
 		if not self.board[move]:
 			self.board[move] = player
 			return True
@@ -63,6 +65,25 @@ class gameState:
 
 	def __boardArray(self, input):
 		return (map(int,input.split()))
+
+# class container for human player
+# needs:
+# -marker
+# -get the move as an input
+# --test move
+# 
+class human:
+	def __init__(self, marker = 1, opponent = 2):
+		self.marker = marker
+		self.opponent = opponent
+	
+	def getMove(self, gameInstance):
+		while True:
+			nextMove = raw_input("What move? ")
+			if gameInstance.makeMove(int(nextMove), self.marker):
+				break
+			else:
+				print "Invalid move, please try again"
 
 # class for AI moves
 # need:
@@ -167,14 +188,14 @@ def runTests():
 	game.setBoard("2 1 1 0 2 0 0 0 0")
 	testCase(game, 8)
 
-def main():
+def play():
 	game = gameState()
+	player = human()
 	bot = botAI()
 	game.printBoard()
 	while True:
 		
-		playermove = raw_input("Move ? ")
-		game.makeMove(int(playermove), 1)
+		player.getMove(game)
 		print "\n"
 		game.printBoard()
 		if game.gameOver():
@@ -190,4 +211,4 @@ def main():
 
 if __name__ == "__main__":
 	#runTests()
-	main()
+	play()
