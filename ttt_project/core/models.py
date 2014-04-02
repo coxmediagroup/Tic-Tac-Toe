@@ -1,3 +1,20 @@
 from django.db import models
 
-# Create your models here.
+
+class Board(models.Model):
+
+    def __unicode__(self):
+        pass
+
+
+class Game(models.Model):
+
+    def __unicode__(self):
+        pass
+
+
+class Move(models.Model):
+
+    def __unicode__(self):
+        pass
+
