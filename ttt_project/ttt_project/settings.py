@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     # pip installed apps
     'south',
     'annoying',
+    'django_extensions',
 
     # Local apps
     'core',
