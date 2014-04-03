@@ -194,10 +194,11 @@ class GUI(Frame):
 			self.updateBoard()
 			if self.game.gameOver():
 				self.gameOver()
-			self.bot.miniMax(self.game)
-			self.updateBoard()
-		if self.game.gameOver():
-			self.gameOver()
+			else:
+				self.bot.miniMax(self.game)
+				self.updateBoard()
+				if self.game.gameOver():
+					self.gameOver()
 	
 	def updateBoard(self):
 		# update the buttons and disable the buttons that have been selected
@@ -236,8 +237,6 @@ class GUI(Frame):
 		if self.game.startPlayer == 2:
 			self.bot.miniMax(self.game)
 			self.updateBoard()
-			if self.game.gameOver():
-				self.gameOver()
 
 def main():
 	root = Tk()
