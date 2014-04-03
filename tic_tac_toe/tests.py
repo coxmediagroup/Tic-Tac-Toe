@@ -48,7 +48,7 @@ class TestBoard(unittest.TestCase):
     def test_board_positions(self):
         """
         smallest board:
-         
+             
              1 | 2 | 3
             --- --- ---
              4 | 5 | 6
@@ -56,7 +56,7 @@ class TestBoard(unittest.TestCase):
              7 | 8 | 9
         
         biggest board:
-         
+             
              1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16
             --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
              17| 18| 19| 20| 21| 22| 23| 24| 25| 26| 27| 28| 29| 30| 31| 32
@@ -131,7 +131,7 @@ class TestBoardMoves(unittest.TestCase):
         board.board[1][1].player = board.player1
         board.board[2][2].player = board.player1
         self.assertTrue(board.player_win_round(board.player1))
-        
+    
     def test_win_by_diagonal_right_to_left(self):
         """diagonal win check (counter-rotated)"""
         board = Board()
@@ -139,7 +139,7 @@ class TestBoardMoves(unittest.TestCase):
         board.board[1][1].player = board.player1
         board.board[2][0].player = board.player1
         self.assertTrue(board.player_win_round(board.player1))
-        
+    
     def test_remainging_spaces(self):
         """
         As the board spaces get occupied the board should accurately report
@@ -179,7 +179,7 @@ class TestBoardMoves(unittest.TestCase):
         
         board.board[2][2].player = board.player1
         self.assertEqual(len(board.remaining_spaces()), 0)
-        
+
 class TestScoreBoard(unittest.TestCase):
     """
     Testing basic score keeping
@@ -203,11 +203,11 @@ class TestScoreBoard(unittest.TestCase):
     def test_player_1_score(self):
         """player 1 represents the initial player"""
         self._player_score(self.board.player1)
-        
+    
     def test_player_2_score(self):
         """player 2 represents the player whose turn is after player 1"""
         self._player_score(self.board.player2)
-        
+
 class TestGameBoardAI(unittest.TestCase):
     """
     Testing basic ai moves
@@ -236,13 +236,13 @@ class TestGameBoardAI(unittest.TestCase):
     def test_ai_place_winning_move(self):
         """
         Given the current board has an obvious winning win for player 1 ("X")
-        
+            
             O O -
             X X -
             O - X
         
         Then the AI should place a winning move for player 1:
-        
+            
             O O -
             X X X
             O - X
@@ -268,13 +268,13 @@ class TestGameBoardAI(unittest.TestCase):
     def test_ai_place_blocking_move(self):
         """
         Given that player 1 has a potential winning move for the next round:
-
+            
             X X -
             - - O
             O - -
         
         Then the AI should place a blocking move for player 2:
-        
+            
             X X O
             - - O
             O - -
@@ -298,7 +298,7 @@ class TestGameBoardAI(unittest.TestCase):
     def test_ai_places_remaining_moves_unwinnable(self):
         """
         Given the board state is not winnable
-        
+            
             X O X
             - X -
             O X O
@@ -306,20 +306,20 @@ class TestGameBoardAI(unittest.TestCase):
         Let the AI play the next two rounds and confirm is not winnable
         
         (player 2)
-
+            
             X O X
             O X -
             O X O
         
         (player 1)
-
+            
             X O X
             O X X
             O X O
         
         """
         self.board.clear_board()
-
+        
         self.board.board[0][0].player = self.board.player1 #1
         self.board.board[0][1].player = self.board.player2 #2
         self.board.board[0][2].player = self.board.player1 #3
@@ -336,7 +336,7 @@ class TestGameBoardAI(unittest.TestCase):
         # assert board.player_win_round(board.player2) == True
         msg = 'Board should be not be winnable: "{}"'
         self.assertFalse(self.board.winning_space(), msg.format(self.board))
-
+    
     def test_ai_place_obvious_win(self):
         """
         Testing ai_move for preference of obvious winning move
@@ -346,28 +346,28 @@ class TestGameBoardAI(unittest.TestCase):
         intelligent than we would like.
         
         Given this board state:
-        
+            
             X X O
             - - -
             - - O
         
         With the minimax and AB pruning algorithm, the AI would place the
-        the next move at:
-        
+        the next move at position #4:
+            
             X X O
             O - -
             - - O
         
-        But the obvious winning move should be postion #4
-        
+        But the obvious winning move should be postion #6
+            
             X X O
             - - O
             - - O
-
+        
         """
         # AI should place winning move
         self.board.clear_board()
-    
+        
         self.board.board[0][0].player = self.board.player1 #1
         self.board.board[0][1].player = self.board.player1 #2
         self.board.board[0][2].player = self.board.player2 #3
@@ -377,7 +377,7 @@ class TestGameBoardAI(unittest.TestCase):
         self.board.this_player = self.board.player2
         self.board.next_player = self.board.player1
         self.board.ai_move()
-    
+        
         self._check_board_state('XXO--O--O')
 
 if __name__ == '__main__':
