@@ -151,7 +151,14 @@ class Board(object):
 
         # Or use minimax
         elif remaining_spaces:
-            this_space = self._minimax()[-1]
+            
+            # Scan for an obvious winning move before actually using minimax
+            this_space = self._scan_board_for_winning_space()
+            
+            # okay, nothing obvious let's resort to minimax
+            if not this_space:
+                this_space = self._minimax()[-1]
+                
             # logging.debug('best move is: {}'.format(this_space.board_index))
 
         # if this_space is None then there is no valid move and
@@ -161,6 +168,34 @@ class Board(object):
         else:
             # AI can't place a move if no spaces are left!
             raise BoardException("No available spaces for ai to place!")
+
+    def _scan_board_for_winning_space(self):
+        """
+        Scan board for possible winning space.
+        
+        This is necessary because AB pruning will sometimes brune a branch
+        with a more obvious winning move!
+        
+        Will return the space instance or None if not found
+        
+        """
+        remaining_spaces = self.remaining_spaces()
+        winning_space = False
+        if remaining_spaces:
+            for space in remaining_spaces:
+                # place move
+                self._place_player(self.this_player, space.board_index)
+            
+                # move win?
+                if self.winning_space():
+                    winning_space = True
+
+                # always unplay a test move
+                self._un_place_player(space.board_index)
+            
+                # return winning space
+                if winning_space:
+                    return space
 
     def _max_turn_player(self, max_turn):
         """
