@@ -1,0 +1,22 @@
+A simple Tic-Tac-Toe application.  I'd like to start with the list of features:
+
+FEATURES
+- Ajax-driven for good UX
+- Saves a running record of your losses and draws
+- You can leave the page and return at a later time and the progress of your game will be saved
+- Neato hand-drawn graphics!
+
+
+What could've been done better:
+If I had more time, I'd flesh out the documentation, clean up the code a bit and build-out unit tests.
+
+The most notable thing that could've been done better is that this entire app (including state persistence) could've been done entirely in Javascript.  I didn't think that would be a very good showcase of my ability to work with Django, so I went the overkill route and made a DB-driven Python app.
+
+You can contact me at:
+
+Max E. Katz
+max.katz.work@gmail.com
+LinkedIn: http://www.linkedin.com/pub/max-katz/3/1bb/a03
+
+
+

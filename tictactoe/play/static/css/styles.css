@@ -1,0 +1,67 @@
+body {
+    background-color: #fff;
+}
+
+#board {
+    width: 500px;
+    height: 500px;
+    background-image: url('../img/board.png');
+}
+
+#board .cell {
+    width: 150px;
+    height: 150px;
+    float: left;
+}
+
+#board .cell:hover {
+    background-color: #eef;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+#board .cell.x, #board .cell.o {
+    background-color: transparent;
+    cursor: default;
+    opacity: 1;
+}
+
+#board .cell.x {
+    background-image: url('../img/x.png');
+}
+
+#board .cell.o {
+    background-image: url('../img/o.png');
+}
+
+
+/* Scoring */
+#score {
+    font-size: 20pt;
+    font-weight: bold;
+    float: right;
+    font-family: Verdana, sans-serif;
+}
+
+#score div {
+    float: left;
+    margin: 0 1em 1em 0;
+}
+
+#new-game {
+    float: none;
+    clear: both;
+    display: block;
+    margin: auto;
+}
+
+#score div span {
+}
+
+#losses {
+    color: #f88;
+}
+
+#draws {
+    color: #88f;
+}

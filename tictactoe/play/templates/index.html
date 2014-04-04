@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Tic Tac Toe!</title>
+        <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
+        <script type="text/javascript" src="{% static "js/jquery-1.11.0.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/app.js" %}"></script>
+    </head>
+    <body>
+        <h1>Tic Tac Toe</h1>
+        <div id="score">
+            <div id="losses-display">Losses: <span id="losses">0</span></div>
+            <div id="draws-display">Draws: <span id="draws">0</span></div>
+            <button id="new-game">New Game</button>
+        </div>
+        <div id="board">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+    </body>
+</html>
