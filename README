@@ -1,1 +1,5 @@
-This is a ready-to-go Django app originally created for a coding test that includes an AJAX-powered unbeatable computer opponent.  It's a toy app for the sake of demonstrating familiarity with Django and basic coding logic.  No database is required: just a server.  Clone it and go!
+This is a ready-to-go Django app originally created for a coding test that
+includes an AJAX-powered unbeatable computer opponent.  It's a toy app for
+the sake of demonstrating familiarity with Django and basic coding logic.
+
+No database is required: just a server:  Clone it and go!
