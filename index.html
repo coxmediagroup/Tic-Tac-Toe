@@ -1,8 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head><title>Tic-Tac-Toe</title></head>
+    <style>
+        html, body {
+            background-color:black;
+            color:white;
+            text-align: center;
+        }
+
+        #board {
+            margin: 0 auto;
+            background-color:white;
+        }
+    </style>
     <body>
+        <h1>Tic-Tac-Toe</h1>
+        <div id="nextTurn"></div>
     	<div id="board"></div>
+        <div id="scores"></div>
     	<script src="build/PositionPrettyName.js"></script>
     	<script src="build/IObserver.js"></script>
     	<script src="build/Observable.js"></script>
