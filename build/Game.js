@@ -1,9 +1,18 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+/// <reference path="Observable.ts" />
 /// <reference path="IObserver.ts" />
 /// <reference path="PositionPrettyName.ts" />
 var TicTacToe;
 (function (TicTacToe) {
-    var Game = (function () {
+    var Game = (function (_super) {
+        __extends(Game, _super);
         function Game() {
+            _super.call(this);
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
             this._winner = false;
@@ -61,6 +70,7 @@ var TicTacToe;
             console.log('Human Score: ' + this._humanScore);
             console.log('Computer Score: ' + this._computerScore);
             console.log('');
+            this.notifyObservers({ humanScore: this._humanScore, computerScore: this._computerScore });
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
             this._nextPlayer = nextPlayer;
@@ -84,6 +94,6 @@ var TicTacToe;
             this._checkForWinner();
         };
         return Game;
-    })();
+    })(TicTacToe.Observable);
     TicTacToe.Game = Game;
 })(TicTacToe || (TicTacToe = {}));

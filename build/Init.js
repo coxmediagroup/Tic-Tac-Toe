@@ -13,7 +13,7 @@ var TicTacToe;
         humanPlayer.registerObserver(game);
         humanPlayer.registerObserver(computerPlayer);
         computerPlayer.registerObserver(game);
-        // game.registerObserver(board);
+        game.registerObserver(board);
     }
     TicTacToe.init = init;
 })(TicTacToe || (TicTacToe = {}));

@@ -1,7 +1,8 @@
+/// <reference path="Observable.ts" /> 
 /// <reference path="IObserver.ts" /> 
 /// <reference path="PositionPrettyName.ts" /> 
 module TicTacToe {
-	export class Game implements IObserver {
+	export class Game extends Observable implements IObserver {
 
 		private _computerPlayerPlayedMoves:number[] = [];
 		private _humanPlayerPlayedMoves:number[] = [];
@@ -19,6 +20,10 @@ module TicTacToe {
 			[0,5,8],
 			[2,5,6]
 		];
+
+		constructor() { 
+			super();
+		}
 
 		private _checkForWinner() {
 
@@ -64,6 +69,7 @@ module TicTacToe {
 			console.log('Human Score: ' + this._humanScore);
 			console.log('Computer Score: ' + this._computerScore);
 			console.log('');
+			this.notifyObservers({humanScore:this._humanScore,computerScore:this._computerScore});
 			this._computerPlayerPlayedMoves = [];
 			this._humanPlayerPlayedMoves = [];
 			this._nextPlayer = nextPlayer;
