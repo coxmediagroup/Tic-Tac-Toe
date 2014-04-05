@@ -1,4 +1,5 @@
-/// <reference path="TicTacToe.ts" />
+/// <reference path="Game.ts" />
+/// <reference path="Player.ts" />
 /// <reference path="ComputerPlayer.ts" />
 /// <reference path="HumanPlayer.ts" />
 var TicTacToeTests;
@@ -70,8 +71,38 @@ var TicTacToeTests;
         displayResults(results, success);
     }
     TicTacToeTests.testThree = testThree;
+
+    // Test #4: If computer player has two in a row, expect computer player to play the third to get three in a row and win the game.
+    function testFour() {
+        var success;
+        var results = 'Test #4: If computer player has two in a row, expect computer player to play the third to get three in a row and win the game';
+
+        var game = new TicTacToe.Game();
+        var humanPlayer = new TicTacToe.HumanPlayer();
+        var computerPlayer = new TicTacToe.ComputerPlayer();
+
+        humanPlayer.registerObserver(game);
+        humanPlayer.registerObserver(computerPlayer);
+        computerPlayer.registerObserver(game);
+
+        computerPlayer.makeMove(0);
+        humanPlayer.makeMove(1);
+        computerPlayer.makeMove(3);
+        humanPlayer.makeMove(7);
+        computerPlayer.makeMove();
+        // 	if(moveIndex === 6 && game.getWinner === computerPlayer) {
+        // 		success = true;
+        // 	results += ' succeeded.';
+        // } else {
+        // 	success = false;
+        // 	results += ' failed.';
+        // }
+        // displayResults(results, success);
+    }
+    TicTacToeTests.testFour = testFour;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
 TicTacToeTests.testOne();
 TicTacToeTests.testTwo();
 TicTacToeTests.testThree();
+TicTacToeTests.testFour();

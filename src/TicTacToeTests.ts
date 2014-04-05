@@ -1,4 +1,5 @@
-/// <reference path="TicTacToe.ts" />
+/// <reference path="Game.ts" />
+/// <reference path="Player.ts" />
 /// <reference path="ComputerPlayer.ts" />
 /// <reference path="HumanPlayer.ts" />
 
@@ -70,8 +71,56 @@ module TicTacToeTests {
 		
 		displayResults(results, success);
 	}
+
+	// Test #4: If computer player has two in a row, expect computer player to play the third to get three in a row and win the game.
+	export function testFour() {
+		var success:boolean;
+		var results:string = 'Test #4: If computer player has two in a row, expect computer player to play the third to get three in a row and win the game';
+
+		var game = new TicTacToe.Game();
+		var humanPlayer = new TicTacToe.HumanPlayer();
+		var computerPlayer = new TicTacToe.ComputerPlayer();
+		
+		humanPlayer.registerObserver(game);
+		humanPlayer.registerObserver(computerPlayer);
+		computerPlayer.registerObserver(game);
+ 		
+
+ 		computerPlayer.makeMove(0);
+ 		humanPlayer.makeMove(1);
+ 		computerPlayer.makeMove(3);
+ 		humanPlayer.makeMove(7);
+ 		computerPlayer.makeMove();
+ 		
+
+ 	// 	if(moveIndex === 6 && game.getWinner === computerPlayer) {
+ 	// 		success = true;
+		// 	results += ' succeeded.';
+		// } else {
+		// 	success = false;
+		// 	results += ' failed.';
+		// }
+
+		// displayResults(results, success);
+
+	}
+
+	// Test #5: If human player has two in a row, expect computer player to play the third to block human player and win the game.
+
+	// Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game.
+
+	// Test #7: If human player has a fork or can fork, expect computer player to block human player's fork and win the game.
+
+	// Test #8: Expect computer player to play the center and win the game.
+
+	// Test #9: If human player is in the corner, expect computer player to play the opposite corner and win the game.
+
+	// Test #10: Expect computer player to play an empty corner and win the game.
+
+	// Test #11: Expect computer player to play an empty side and win the game.
 }
 
 TicTacToeTests.testOne();
 TicTacToeTests.testTwo();
 TicTacToeTests.testThree();
+TicTacToeTests.testFour();

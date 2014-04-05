@@ -4,7 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/// <reference path="TicTacToe.ts" />
+/// <reference path="Player.ts" />
 var TicTacToe;
 (function (TicTacToe) {
     var HumanPlayer = (function (_super) {
@@ -12,6 +12,9 @@ var TicTacToe;
         function HumanPlayer() {
             _super.call(this, "Human Player");
         }
+        HumanPlayer.prototype.makeMove = function (boardIndex) {
+            _super.prototype.makeMove.call(this, boardIndex);
+        };
         return HumanPlayer;
     })(TicTacToe.Player);
     TicTacToe.HumanPlayer = HumanPlayer;

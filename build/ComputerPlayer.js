@@ -4,7 +4,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/// <reference path="TicTacToe.ts" />
+/// <reference path="Player.ts" />
+/// <reference path="IObserver.ts" />
 var TicTacToe;
 (function (TicTacToe) {
     var ComputerPlayer = (function (_super) {
@@ -12,6 +13,20 @@ var TicTacToe;
         function ComputerPlayer() {
             _super.call(this, "Computer Player");
         }
+        ComputerPlayer.prototype.makeMove = function (boardIndex) {
+            if (typeof boardIndex == "number") {
+                _super.prototype.makeMove.call(this, boardIndex);
+            } else {
+                console.log(this.getLabel() + ' is using their wits...');
+                var calculatedMove = 999;
+                _super.prototype.makeMove.call(this, calculatedMove);
+                return calculatedMove;
+            }
+        };
+
+        ComputerPlayer.prototype.update = function (arg) {
+            console.log('Computer player has been notified and ' + arg.player + ' made move at position #' + arg.madeMove);
+        };
         return ComputerPlayer;
     })(TicTacToe.Player);
     TicTacToe.ComputerPlayer = ComputerPlayer;

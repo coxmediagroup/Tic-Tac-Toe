@@ -1,4 +1,4 @@
-Micah's TypeScript Tic-Tac-Toe with Tests
+TypeScript Tic-Tac-Toe + Tests
 =========================================
 -  (Demo)[]
 -  (Tests)[]
