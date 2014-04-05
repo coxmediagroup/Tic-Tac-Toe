@@ -102,9 +102,46 @@ var TicTacToeTests;
         displayResults(results, success);
     }
     TicTacToeTests.testFour = testFour;
+
+    // Test #5: If human player has two in a row, expect computer player to play the third to block human player and win the game.
+    function testFive() {
+        var success;
+        var results = 'Test #5: If human player has two in a row, expect computer player to play the third to block human player and win the game';
+        var game = new TicTacToe.Game();
+        var humanPlayer = new TicTacToe.HumanPlayer();
+        var computerPlayer = new TicTacToe.ComputerPlayer();
+
+        humanPlayer.registerObserver(game);
+        humanPlayer.registerObserver(computerPlayer);
+        computerPlayer.registerObserver(game);
+
+        humanPlayer.makeMove(0);
+        computerPlayer.makeMove(1);
+        humanPlayer.makeMove(3);
+
+        var moveIndex = computerPlayer.makeMove();
+        humanPlayer.makeMove(2);
+        computerPlayer.makeMove(7);
+        humanPlayer.makeMove(5);
+        var moveIndex2 = computerPlayer.makeMove();
+
+        var winner = game.getWinner();
+
+        if (moveIndex === 6 && moveIndex2 === 8 && winner && winner === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        displayResults(results, success);
+    }
+    TicTacToeTests.testFive = testFive;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
 TicTacToeTests.testOne();
 TicTacToeTests.testTwo();
 TicTacToeTests.testThree();
 TicTacToeTests.testFour();
+TicTacToeTests.testFive();

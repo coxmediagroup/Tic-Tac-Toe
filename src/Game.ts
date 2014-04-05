@@ -22,27 +22,27 @@ module TicTacToe {
 			// check if human player has played at least three moves
 			if(this._humanPlayerPlayedMoves.length >= 3) {
 				// check if human won (should never happen)
-				for(var i=0,j=1,k=2; k<this._humanPlayerPlayedMoves.length; i++,j++,k++) {
-					for(var l=0; l<this._winningSequences.length; l++) {
-						var match1 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[i]);
-						var match2 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[j]);
-						var match3 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[k]);
-						if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
-							return this._winner = 'Human Player';
-						}
+				for(var i=0; i<this._winningSequences.length; i++) {
+					var match1 = this._humanPlayerPlayedMoves.indexOf(this._winningSequences[i][0]);
+					var match2 = this._humanPlayerPlayedMoves.indexOf(this._winningSequences[i][1]);
+					var match3 = this._humanPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
+					if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
+						console.log('Winner is Human Player.');
+						return this._winner = 'Human Player';
 					}
 				}
+			}
+			
 			// check if computer player has played at least three moves
-			} else if(this._computerPlayerPlayedMoves.length >= 3) {
+			if(this._computerPlayerPlayedMoves.length >= 3) {
 				// check if computer won (should always happen)
-				for(var i=0,j=1,k=2; k<this._computerPlayerPlayedMoves.length; i++,j++,k++) {
-					for(var l=0; l<this._winningSequences.length; l++) {
-						var match1 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[i]);
-						var match2 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[j]);
-						var match3 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[k]);
-						if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
-							return this._winner = 'Computer Player';
-						}
+				for(var i=0; i<this._winningSequences.length; i++) {
+					var match1 = this._computerPlayerPlayedMoves.indexOf(this._winningSequences[i][0]);
+					var match2 = this._computerPlayerPlayedMoves.indexOf(this._winningSequences[i][1]);
+					var match3 = this._computerPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
+					if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
+						console.log('Winner is Computer Player.');
+						return this._winner = 'Computer Player';
 					}
 				}
 			}

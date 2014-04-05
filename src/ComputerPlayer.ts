@@ -23,27 +23,30 @@ module TicTacToe {
 		private _calculate():number {
 			var nextMove:number;
 			this._aggregatePlayedMoves = this._computerPlayerPlayedMoves.concat(this._humanPlayerPlayedMoves);
-			if(typeof this._checkTwoInARow() === 'number') {
-				nextMove = this._checkTwoInARow();
+			if(typeof this._checkTwoInARow(this._computerPlayerPlayedMoves) === 'number') {
+				nextMove = this._checkTwoInARow(this._computerPlayerPlayedMoves);
+			} else if (typeof this._checkTwoInARow(this._humanPlayerPlayedMoves) === 'number') {
+				nextMove = this._checkTwoInARow(this._humanPlayerPlayedMoves);
 			}
 			return nextMove;
 		}
 
-		// returns next move or false
-		private _checkTwoInARow():any {
+		// Returns the next optimal move if argument supplied for @playerMoves has played at least 2/3 moves in any of the winning sequences.
+		// Otherwise, returns false.
+		private _checkTwoInARow(playerMoves):any {
 			var nextMove:any;
 
-			if(this._computerPlayerPlayedMoves.length < 2) {
+			if(playerMoves.length < 2) {
 				nextMove = false;
 			} else {
-				for(var i=0,j=1; j<this._computerPlayerPlayedMoves.length; i++,j++) {
+				for(var i=0,j=1; j<playerMoves.length; i++,j++) {
 					for(var k=0; k<this._winningSequences.length; k++) {
-						var match1 = this._winningSequences[k].indexOf(this._computerPlayerPlayedMoves[i]);
-						var match2 = this._winningSequences[k].indexOf(this._computerPlayerPlayedMoves[j]);
+						var match1 = this._winningSequences[k].indexOf(playerMoves[i]);
+						var match2 = this._winningSequences[k].indexOf(playerMoves[j]);
 						var thirdMatchIndex = 3 - (match1 + match2);
 						var aggregateIndex = this._aggregatePlayedMoves.indexOf(this._winningSequences[k][thirdMatchIndex]);
 						if( match1 !== -1 && match2 !== -1 &&  aggregateIndex === -1) {
-							nextMove = this._winningSequences[k][thirdMatchIndex];
+							return nextMove = this._winningSequences[k][thirdMatchIndex];
 						}
 					}
 				}
