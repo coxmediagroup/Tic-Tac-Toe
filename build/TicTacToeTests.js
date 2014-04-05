@@ -90,14 +90,16 @@ var TicTacToeTests;
         computerPlayer.makeMove(3);
         humanPlayer.makeMove(7);
         var moveIndex = computerPlayer.makeMove();
-        // 	if(moveIndex === 6 && game.getWinner() === computerPlayer.getLabel()) {
-        // 		success = true;
-        // 	results += ' succeeded.';
-        // } else {
-        // 	success = false;
-        // 	results += ' failed.';
-        // }
-        // displayResults(results, success);
+
+        if (moveIndex === 6 && game.getWinner() && game.getWinner() === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        displayResults(results, success);
     }
     TicTacToeTests.testFour = testFour;
 })(TicTacToeTests || (TicTacToeTests = {}));

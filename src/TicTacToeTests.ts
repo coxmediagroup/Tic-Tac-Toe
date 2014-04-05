@@ -93,15 +93,15 @@ module TicTacToeTests {
  		var moveIndex = computerPlayer.makeMove();
  		
 
- 	// 	if(moveIndex === 6 && game.getWinner() === computerPlayer.getLabel()) {
- 	// 		success = true;
-		// 	results += ' succeeded.';
-		// } else {
-		// 	success = false;
-		// 	results += ' failed.';
-		// }
+ 		if(moveIndex === 6 && game.getWinner() && game.getWinner() === computerPlayer.getLabel()) { 
+ 			success = true;
+			results += ' succeeded.';
+		} else {
+			success = false;
+			results += ' failed.';
+		}
 
-		// displayResults(results, success);
+		displayResults(results, success);
 
 	}
 
