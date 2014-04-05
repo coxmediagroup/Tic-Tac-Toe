@@ -5,7 +5,10 @@ module TicTacToe {
 
 		private _computerPlayerPlayedMoves:number[] = [];
 		private _humanPlayerPlayedMoves:number[] = [];
+		private _nextPlayer:string;
 		private _winner:any = false;
+		private _humanScore = 0;
+		private _computerScore = 0;
 		private _winningSequences = [
 			[0,1,2],
 			[3,4,5],
@@ -28,11 +31,14 @@ module TicTacToe {
 					var match3 = this._humanPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
 					if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
 						console.log('Winner is Human Player.');
-						return this._winner = 'Human Player';
+						this._humanScore++;
+						this._winner = 'Human Player';
+						this._reset('Human Player'); // winner goes first
+						return;
 					}
 				}
 			}
-			
+
 			// check if computer player has played at least three moves
 			if(this._computerPlayerPlayedMoves.length >= 3) {
 				// check if computer won (should always happen)
@@ -42,10 +48,25 @@ module TicTacToe {
 					var match3 = this._computerPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
 					if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
 						console.log('Winner is Computer Player.');
-						return this._winner = 'Computer Player';
+						this._computerScore++;
+						this._winner = 'Computer Player';
+						this._reset('Computer Player'); // winner goes first
+						return;
 					}
 				}
 			}
+
+			return this._winner = false;
+		}
+
+		private _reset(nextPlayer) {
+			console.log('Game over.');
+			console.log('Human Score: ' + this._humanScore);
+			console.log('Computer Score: ' + this._computerScore);
+			console.log('');
+			this._computerPlayerPlayedMoves = [];
+			this._humanPlayerPlayedMoves = [];
+			this._nextPlayer = nextPlayer;
 		}
 
 		getWinner() {
@@ -64,8 +85,10 @@ module TicTacToe {
 
         	if(arg.player === 'Computer Player') {
         		this._computerPlayerPlayedMoves.push(arg.madeMove);
+        		this._nextPlayer = 'Human Player';
         	} else {
         		this._humanPlayerPlayedMoves.push(arg.madeMove);
+        		this._nextPlayer = 'Computer Player';
         	}
 
         	this._checkForWinner();

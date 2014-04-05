@@ -7,6 +7,8 @@ var TicTacToe;
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
             this._winner = false;
+            this._humanScore = 0;
+            this._computerScore = 0;
             this._winningSequences = [
                 [0, 1, 2],
                 [3, 4, 5],
@@ -27,7 +29,10 @@ var TicTacToe;
                     var match3 = this._humanPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
                     if (match1 !== -1 && match2 !== -1 && match3 !== -1) {
                         console.log('Winner is Human Player.');
-                        return this._winner = 'Human Player';
+                        this._humanScore++;
+                        this._winner = 'Human Player';
+                        this._reset('Human Player'); // winner goes first
+                        return;
                     }
                 }
             }
@@ -40,10 +45,25 @@ var TicTacToe;
                     var match3 = this._computerPlayerPlayedMoves.indexOf(this._winningSequences[i][2]);
                     if (match1 !== -1 && match2 !== -1 && match3 !== -1) {
                         console.log('Winner is Computer Player.');
-                        return this._winner = 'Computer Player';
+                        this._computerScore++;
+                        this._winner = 'Computer Player';
+                        this._reset('Computer Player'); // winner goes first
+                        return;
                     }
                 }
             }
+
+            return this._winner = false;
+        };
+
+        Game.prototype._reset = function (nextPlayer) {
+            console.log('Game over.');
+            console.log('Human Score: ' + this._humanScore);
+            console.log('Computer Score: ' + this._computerScore);
+            console.log('');
+            this._computerPlayerPlayedMoves = [];
+            this._humanPlayerPlayedMoves = [];
+            this._nextPlayer = nextPlayer;
         };
 
         Game.prototype.getWinner = function () {
@@ -55,8 +75,10 @@ var TicTacToe;
 
             if (arg.player === 'Computer Player') {
                 this._computerPlayerPlayedMoves.push(arg.madeMove);
+                this._nextPlayer = 'Human Player';
             } else {
                 this._humanPlayerPlayedMoves.push(arg.madeMove);
+                this._nextPlayer = 'Computer Player';
             }
 
             this._checkForWinner();

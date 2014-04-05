@@ -132,6 +132,12 @@ var TicTacToe;
         ComputerPlayer.prototype.update = function (arg) {
             this._humanPlayerPlayedMoves.push(arg.madeMove);
         };
+
+        ComputerPlayer.prototype.reset = function () {
+            this._humanPlayerPlayedMoves = [];
+            this._computerPlayerPlayedMoves = [];
+            this._aggregatePlayedMoves = [];
+        };
         return ComputerPlayer;
     })(TicTacToe.Player);
     TicTacToe.ComputerPlayer = ComputerPlayer;

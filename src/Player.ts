@@ -10,7 +10,7 @@ module TicTacToe {
 		}
 
 		makeMove(boardIndex:number): void {
-			this._playedMoves.push(boardIndex);
+			this._playedMoves.push(boardIndex); 
 			this.notifyObservers({player:this._label,madeMove:boardIndex});
 		}
 

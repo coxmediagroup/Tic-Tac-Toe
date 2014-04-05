@@ -129,5 +129,11 @@ module TicTacToe {
 		update(arg:any) {
 			this._humanPlayerPlayedMoves.push(arg.madeMove);        	
 	    }
+
+	    reset() {
+	    	this._humanPlayerPlayedMoves = [];
+	    	this._computerPlayerPlayedMoves = [];
+	    	this._aggregatePlayedMoves = [];
+	    }
 	}
 }

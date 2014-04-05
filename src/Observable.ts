@@ -1,7 +1,7 @@
 /// <reference path="IObserver.ts" /> 
 module TicTacToe {
 
-	export class Observable { // or Interface 
+	export class Observable { 
 	    private observers : IObserver [];
 
 	    constructor() {
