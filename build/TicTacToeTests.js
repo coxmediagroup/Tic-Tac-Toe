@@ -174,9 +174,9 @@ var TicTacToeTests;
     TicTacToeTests.testSix = testSix;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
-// TicTacToeTests.testOne();
-// TicTacToeTests.testTwo();
-// TicTacToeTests.testThree();
-// TicTacToeTests.testFour();
-// TicTacToeTests.testFive();
+TicTacToeTests.testOne();
+TicTacToeTests.testTwo();
+TicTacToeTests.testThree();
+TicTacToeTests.testFour();
+TicTacToeTests.testFive();
 TicTacToeTests.testSix();

@@ -189,10 +189,10 @@ module TicTacToeTests {
 	// Test #11: Expect computer player to play an empty side and win the game.
 }
 
-// TicTacToeTests.testOne();
-// TicTacToeTests.testTwo();
-// TicTacToeTests.testThree();
-// TicTacToeTests.testFour();
-// TicTacToeTests.testFive();
+TicTacToeTests.testOne();
+TicTacToeTests.testTwo();
+TicTacToeTests.testThree();
+TicTacToeTests.testFour();
+TicTacToeTests.testFive();
 TicTacToeTests.testSix();
 

@@ -58,17 +58,37 @@ var TicTacToe;
 
             for (var i = 0; i < matchedWinningSequences.length; i++) {
                 for (var j = 0; j < matchedWinningSequences.length; j++) {
-                    var possibleNextMoveIndex = matchedWinningSequences[i].indexOf(matchedWinningSequences[j]);
-                    if (j !== i && possibleNextMoveIndex !== -1) {
-                        var possibleNextMove = matchedWinningSequences[possibleNextMoveIndex];
-                        if (this._aggregatePlayedMoves.indexOf(possibleNextMove) === -1) {
-                            return nextMove = possibleNextMove;
+                    if (j !== i) {
+                        var possibleNextMoves = this._intersect(matchedWinningSequences[i], matchedWinningSequences[j]);
+                        for (var k = 0; k < possibleNextMoves.length; k++) {
+                            if (this._aggregatePlayedMoves.indexOf(possibleNextMoves[k]) === -1) {
+                                return nextMove = possibleNextMoves[k];
+                            }
                         }
                     }
                 }
             }
 
             return nextMove = false;
+        };
+
+        ComputerPlayer.prototype._intersect = function (a, b) {
+            var ai = 0, bi = 0;
+            var result = new Array();
+
+            while (ai < a.length && bi < b.length) {
+                if (a[ai] < b[bi]) {
+                    ai++;
+                } else if (a[ai] > b[bi]) {
+                    bi++;
+                } else {
+                    result.push(a[ai]);
+                    ai++;
+                    bi++;
+                }
+            }
+
+            return result;
         };
 
         // Returns the next optimal move if argument supplied for @playerMoves has played at least 2/3 moves in any of the winning sequences.
