@@ -90,10 +90,10 @@ module TicTacToeTests {
  		humanPlayer.makeMove(1);
  		computerPlayer.makeMove(3);
  		humanPlayer.makeMove(7);
- 		computerPlayer.makeMove();
+ 		var moveIndex = computerPlayer.makeMove();
  		
 
- 	// 	if(moveIndex === 6 && game.getWinner === computerPlayer) {
+ 	// 	if(moveIndex === 6 && game.getWinner() === computerPlayer.getLabel()) {
  	// 		success = true;
 		// 	results += ' succeeded.';
 		// } else {
