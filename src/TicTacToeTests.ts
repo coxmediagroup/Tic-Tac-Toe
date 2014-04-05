@@ -143,6 +143,40 @@ module TicTacToeTests {
 	}
 
 	// Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game.
+	export function testSix() {
+		var success:boolean;
+		var results:string = 'Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game';
+		var game = new TicTacToe.Game();
+		var humanPlayer = new TicTacToe.HumanPlayer();
+		var computerPlayer = new TicTacToe.ComputerPlayer();
+		
+		humanPlayer.registerObserver(game);
+		humanPlayer.registerObserver(computerPlayer);
+		computerPlayer.registerObserver(game);
+
+		computerPlayer.makeMove(4);
+		humanPlayer.makeMove(7);
+		computerPlayer.makeMove(8);
+		humanPlayer.makeMove(0); // blocks computer's first chance at winning
+		var moveIndex = computerPlayer.makeMove(); // should be 5 to create a fork
+		humanPlayer.makeMove(3);
+		var moveIndex2 = computerPlayer.makeMove();  // should be 2 to win the game
+
+
+ 		var winner = game.getWinner();
+ 		
+
+ 		if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) { 
+ 			success = true;
+			results += ' succeeded.';
+		} else {
+			success = false;
+			results += ' failed.';
+		}
+
+		displayResults(results, success);
+
+	}
 
 	// Test #7: If human player has a fork or can fork, expect computer player to block human player's fork and win the game.
 
@@ -155,9 +189,10 @@ module TicTacToeTests {
 	// Test #11: Expect computer player to play an empty side and win the game.
 }
 
-TicTacToeTests.testOne();
-TicTacToeTests.testTwo();
-TicTacToeTests.testThree();
-TicTacToeTests.testFour();
-TicTacToeTests.testFive();
+// TicTacToeTests.testOne();
+// TicTacToeTests.testTwo();
+// TicTacToeTests.testThree();
+// TicTacToeTests.testFour();
+// TicTacToeTests.testFive();
+TicTacToeTests.testSix();
 

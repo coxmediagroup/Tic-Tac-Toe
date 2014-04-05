@@ -138,10 +138,45 @@ var TicTacToeTests;
         displayResults(results, success);
     }
     TicTacToeTests.testFive = testFive;
+
+    // Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game.
+    function testSix() {
+        var success;
+        var results = 'Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game';
+        var game = new TicTacToe.Game();
+        var humanPlayer = new TicTacToe.HumanPlayer();
+        var computerPlayer = new TicTacToe.ComputerPlayer();
+
+        humanPlayer.registerObserver(game);
+        humanPlayer.registerObserver(computerPlayer);
+        computerPlayer.registerObserver(game);
+
+        computerPlayer.makeMove(4);
+        humanPlayer.makeMove(7);
+        computerPlayer.makeMove(8);
+        humanPlayer.makeMove(0); // blocks computer's first chance at winning
+        var moveIndex = computerPlayer.makeMove();
+        humanPlayer.makeMove(3);
+        var moveIndex2 = computerPlayer.makeMove();
+
+        var winner = game.getWinner();
+
+        if (moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        displayResults(results, success);
+    }
+    TicTacToeTests.testSix = testSix;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
-TicTacToeTests.testOne();
-TicTacToeTests.testTwo();
-TicTacToeTests.testThree();
-TicTacToeTests.testFour();
-TicTacToeTests.testFive();
+// TicTacToeTests.testOne();
+// TicTacToeTests.testTwo();
+// TicTacToeTests.testThree();
+// TicTacToeTests.testFour();
+// TicTacToeTests.testFive();
+TicTacToeTests.testSix();

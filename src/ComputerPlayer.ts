@@ -27,8 +27,44 @@ module TicTacToe {
 				nextMove = this._checkTwoInARow(this._computerPlayerPlayedMoves);
 			} else if (typeof this._checkTwoInARow(this._humanPlayerPlayedMoves) === 'number') {
 				nextMove = this._checkTwoInARow(this._humanPlayerPlayedMoves);
+			} else if (typeof this._createFork() === 'number') {
+				nextMove = this._createFork();
 			}
 			return nextMove;
+		}
+
+		// Returns the next optimal move if a forking opportunity exists.
+		// Otherwise, returns false.
+		private _createFork() {
+			var nextMove:any;
+			var matchedWinningSequences:any[] = [];
+
+			// find all winning sequences that contain at least one played move
+			for(var i=0; i<this._winningSequences.length; i++) {
+				var sequence = this._winningSequences[i];
+				for(var j=0; j<3; j++) {
+					if(this._computerPlayerPlayedMoves.indexOf(sequence[j]) !== -1) {
+						matchedWinningSequences.push(sequence);
+						break;
+					}
+				}
+			}
+
+			// Find the first pair of matched winning sequences that shares an unplayed position and return that position.
+			// Otherwise, return false.
+			for(var i = 0; i<matchedWinningSequences.length; i++) {
+				for (var j=0; j<matchedWinningSequences.length; j++) {
+					var possibleNextMoveIndex = matchedWinningSequences[i].indexOf(matchedWinningSequences[j]);
+					if(j !== i && possibleNextMoveIndex !== -1) {
+						var possibleNextMove = matchedWinningSequences[possibleNextMoveIndex];
+						if(this._aggregatePlayedMoves.indexOf(possibleNextMove) === -1) {
+							return nextMove = possibleNextMove;
+						}
+					}
+				}
+			}
+
+			return nextMove = false;
 		}
 
 		// Returns the next optimal move if argument supplied for @playerMoves has played at least 2/3 moves in any of the winning sequences.
