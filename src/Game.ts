@@ -19,6 +19,33 @@ module TicTacToe {
 
 		private _checkForWinner() {
 
+			// check if human player has played at least three moves
+			if(this._humanPlayerPlayedMoves.length >= 3) {
+				// check if human won (should never happen)
+				for(var i=0,j=1,k=2; k<this._humanPlayerPlayedMoves.length; i++,j++,k++) {
+					for(var l=0; l<this._winningSequences.length; l++) {
+						var match1 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[i]);
+						var match2 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[j]);
+						var match3 = this._winningSequences[l].indexOf(this._humanPlayerPlayedMoves[k]);
+						if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
+							return this._winner = 'Human Player';
+						}
+					}
+				}
+			// check if computer player has played at least three moves
+			} else if(this._computerPlayerPlayedMoves.length >= 3) {
+				// check if computer won (should always happen)
+				for(var i=0,j=1,k=2; k<this._computerPlayerPlayedMoves.length; i++,j++,k++) {
+					for(var l=0; l<this._winningSequences.length; l++) {
+						var match1 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[i]);
+						var match2 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[j]);
+						var match3 = this._winningSequences[l].indexOf(this._computerPlayerPlayedMoves[k]);
+						if(match1 !== -1 && match2 !== -1 && match3 !== -1) {
+							return this._winner = 'Computer Player';
+						}
+					}
+				}
+			}
 		}
 
 		getWinner() {
