@@ -11,15 +11,14 @@ var TicTacToeTests;
         p.innerHTML = results;
         document.getElementById("testResults").appendChild(p);
     }
-    TicTacToeTests.displayResults = displayResults;
 
-    // Test #1: Expect ComputerPlayer label to be 'Computer Player'
+    // Test #1: Expect ComputerPlayer label to be 'Computer Player'.
     function testOne() {
         var success;
         var results = 'Test #1: Expect ComputerPlayer label to be \'Computer Player\'';
 
         var computerPlayer = new TicTacToe.ComputerPlayer();
-        if (computerPlayer.label === 'Computer Player') {
+        if (computerPlayer.getLabel() === 'Computer Player') {
             success = true;
             results += ' succeeded.';
         } else {
@@ -31,13 +30,13 @@ var TicTacToeTests;
     }
     TicTacToeTests.testOne = testOne;
 
-    // Test #2: Expect HumanPlayer label to be 'Human Player'
+    // Test #2: Expect HumanPlayer label to be 'Human Player'.
     function testTwo() {
         var success;
         var results = 'Test #2: Expect HumanPlayer label to be \'Human Player\'';
 
         var humanPlayer = new TicTacToe.HumanPlayer();
-        if (humanPlayer.label === 'Human Player') {
+        if (humanPlayer.getLabel() === 'Human Player') {
             success = true;
             results += ' succeeded.';
         } else {
@@ -48,7 +47,31 @@ var TicTacToeTests;
         displayResults(results, success);
     }
     TicTacToeTests.testTwo = testTwo;
+
+    // Test #3: Expect both players' initial score to be 0.
+    function testThree() {
+        var success;
+        var results = 'Test #3: Expect both players\' initial score to be 0';
+
+        var humanPlayer = new TicTacToe.HumanPlayer();
+        var computerPlayer = new TicTacToe.ComputerPlayer();
+
+        console.log('Human Player Score: ' + humanPlayer.getScore());
+        console.log('Computer Player Score: ' + computerPlayer.getScore());
+
+        if (humanPlayer.getScore() === 0 && computerPlayer.getScore() === 0) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        displayResults(results, success);
+    }
+    TicTacToeTests.testThree = testThree;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
 TicTacToeTests.testOne();
 TicTacToeTests.testTwo();
+TicTacToeTests.testThree();

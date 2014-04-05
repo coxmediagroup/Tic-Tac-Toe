@@ -1,6 +1,6 @@
 /// <reference path="TicTacToe.ts" />
 module TicTacToe {
-	export class HumanPlayer implements PlayerInterface {
-		label = 'Human Player'; 
+	export class HumanPlayer extends Player {
+		constructor() { super("Human Player"); }
 	}     
 }  
