@@ -86,15 +86,11 @@ module TicTacToeTests {
 		var success:boolean;
 		var results:string = 'Test #4: If computer player has two in a row, expect computer player to play the third to get three in a row and win the game';
 
-		
- 		
-
  		computerPlayer.makeMove(0);
  		humanPlayer.makeMove(1);
  		computerPlayer.makeMove(3); // computer player now has two in a row
  		humanPlayer.makeMove(7);
  		var moveIndex = computerPlayer.makeMove(); // should be 6 to complete the row and win the game
- 		
 
  		if(moveIndex === 6 && game.getWinner() && game.getWinner() === computerPlayer.getLabel()) { 
  			success = true;
@@ -114,7 +110,6 @@ module TicTacToeTests {
 	export function testFive() {
 		var success:boolean;
 		var results:string = 'Test #5: If human player has two in a row, expect computer player to play the third to block human player and win the game';
-		
 
 		humanPlayer.makeMove(0);
  		computerPlayer.makeMove(1);
@@ -127,7 +122,6 @@ module TicTacToeTests {
  		var moveIndex2 = computerPlayer.makeMove(); // should be 8 to win the game
 
  		var winner = game.getWinner();
- 		
 
  		if(moveIndex === 6 && moveIndex2 === 8 && winner && winner === computerPlayer.getLabel()) { 
  			success = true;
@@ -147,7 +141,6 @@ module TicTacToeTests {
 	export function testSix() {
 		var success:boolean;
 		var results:string = 'Test #6: Expect computer player to create a forking opportunity where computer player can win in two ways and win the game';
-		
 
 		computerPlayer.makeMove(4);
 		humanPlayer.makeMove(7);
@@ -157,9 +150,7 @@ module TicTacToeTests {
 		humanPlayer.makeMove(3);
 		var moveIndex2 = computerPlayer.makeMove();  // should be 2 to win the game
 
-
- 		var winner = game.getWinner();
- 		
+ 		var winner = game.getWinner(); 		
 
  		if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) { 
  			success = true;
@@ -179,8 +170,8 @@ module TicTacToeTests {
 	export function testSeven() {
 		var success:boolean;
 		var results:string = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
-		
 
+		
 
  		var winner = game.getWinner();
  		
