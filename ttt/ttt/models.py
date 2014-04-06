@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import numpy
 
 class TicTacToeGame(models.Model):
     player = models.ForeignKey(User)
@@ -29,7 +30,6 @@ class TicTacToeGame(models.Model):
         self.set_board(board)
 
     def print_board(self):
-        print ' '
-        
-
+        bn = numpy.array(self.get_board())
+        print bn
 
