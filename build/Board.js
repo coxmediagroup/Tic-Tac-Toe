@@ -18,9 +18,42 @@ var TicTacToe;
                 cell.width = 200;
                 cell.height = 200;
                 var ctx = cell.getContext('2d');
-                var alpha = i * .1;
-                ctx.fillStyle = "rgba(0, 0, 200, " + alpha + ")";
-                ctx.fillRect(0, 0, 200, 200);
+
+                // cell border
+                ctx.strokeStyle = "rgb(0, 0, 0)";
+                ctx.fillStyle = "rgb(0, 0, 0)";
+                ctx.strokeRect(0, 0, 200, 200);
+
+                //X
+                ctx.fillStyle = "red";
+                ctx.font = "200pt Helvetica";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("X", cell.width / 2, cell.height / 2);
+
+                //O
+                ctx.fillStyle = "black";
+                ctx.font = "200pt Helvetica";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("O", cell.width / 2, cell.height / 2);
+
+                ctx.lineWidth = 20;
+
+                // Stroked line vertical
+                ctx.beginPath();
+                ctx.moveTo(100, 0);
+                ctx.lineTo(100, 200);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Stroked line horizontal
+                ctx.beginPath();
+                ctx.moveTo(0, 100);
+                ctx.lineTo(200, 100);
+                ctx.closePath();
+                ctx.stroke();
+
                 this._cells.push(cell);
                 this._boardDiv.appendChild(cell);
             }
