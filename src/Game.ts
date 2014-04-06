@@ -6,11 +6,11 @@ module TicTacToe {
 
 		private _computerPlayerPlayedMoves:number[] = [];
 		private _humanPlayerPlayedMoves:number[] = [];
-		private _nextPlayer:string;
+		private _nextPlayer:string = 'Human Player'; // Let human go first as a courtesy and to give false hope.  ;-)
 		private _winner:any = false;
-		private _humanScore = 0;
-		private _computerScore = 0;
-		private _winningSequences = [
+		private _humanScore:number = 0;
+		private _computerScore:number = 0;
+		private _winningSequences:any[] = [
 			[0,1,2],
 			[3,4,5],
 			[6,7,8],
@@ -73,6 +73,7 @@ module TicTacToe {
 			this._computerPlayerPlayedMoves = [];
 			this._humanPlayerPlayedMoves = [];
 			this._nextPlayer = nextPlayer;
+			this.notifyObservers({nextPlayer:nextPlayer});
 		}
 
 		getWinner() {

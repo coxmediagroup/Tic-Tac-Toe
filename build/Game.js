@@ -15,6 +15,7 @@ var TicTacToe;
             _super.call(this);
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
+            this._nextPlayer = 'Human Player';
             this._winner = false;
             this._humanScore = 0;
             this._computerScore = 0;
@@ -74,6 +75,7 @@ var TicTacToe;
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
             this._nextPlayer = nextPlayer;
+            this.notifyObservers({ nextPlayer: nextPlayer });
         };
 
         Game.prototype.getWinner = function () {
