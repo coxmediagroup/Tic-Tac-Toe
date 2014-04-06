@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import numpy
+from datetime import datetime
 
 class TicTacToeGame(models.Model):
     player = models.ForeignKey(User)
@@ -10,6 +11,12 @@ class TicTacToeGame(models.Model):
     def __unicode__(self):
         self.print_board()
         return ''
+
+    def __init__(self, player):
+        self.player = int(player)
+        self.game_time = datetime.utcnow()
+        self.save()
+        return self
 
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]
