@@ -8,7 +8,7 @@ class TicTacToeGame(models.Model):
     board = models.CharField(max_length=17, default="0,0,0,0,0,0,0,0,0")
     
     def __unicode__(self):
-        print self.print_board()
+        self.print_board()
         return ''
 
     def get_board(self):
@@ -29,7 +29,7 @@ class TicTacToeGame(models.Model):
         """
         board = self.get_board()
         r, c = position
-        board[r][c] = player
+        board[r-1][c-1] = player
         self.set_board(board)
 
     def print_board(self):
