@@ -35,6 +35,27 @@ body {
   display: none;
 }
 
+.board {
+  border: 1px solid #ccc;
+}
+
+.board td {
+  height: 150px;
+  width: 150px;
+  padding: 15px;
+  text-align: center;
+  vertical-align: center;
+  font-size: 60px;
+}
+
+.bottom-border {
+  border-bottom: 1px solid #ccc;
+}
+
+.right-border {
+  border-right: 1px solid #ccc;
+}
+
 /* Customize container */
 @media (min-width: 768px) {
   .container {

@@ -18,8 +18,23 @@ var TicTacToeCtrl = (function($, undefined) {
                 }
             });
 
+            $('.board td').click(function(evt) {
+                var square = $(evt.target);
+                var x = square.data('x');
+                var y = square.data('y');
+
+                if(square.text() === "") {
+                    square.html('X');
+                    make_move(x, y);
+                }
+            });
+
             name_button.click(start_game);
         });
+    }
+
+    function make_move(x,y) {
+        console.log("Make move " + x + "," + y);
     }
 
     // Start the game by fetching the new game id from the server.
@@ -30,6 +45,7 @@ var TicTacToeCtrl = (function($, undefined) {
             $('.jumbotron').fadeOut("fast", function() {
                 $(".player-name > span").text(game_name);
                 $(".player-name").removeClass('hidden');
+                $(".board").removeClass('hidden');
             });
         });
     }
