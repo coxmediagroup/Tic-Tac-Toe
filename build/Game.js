@@ -93,6 +93,8 @@ var TicTacToe;
                 this._nextPlayer = 'Computer Player';
             }
 
+            this.notifyObservers({ player: arg.player, move: arg.madeMove });
+
             this._checkForWinner();
         };
         return Game;

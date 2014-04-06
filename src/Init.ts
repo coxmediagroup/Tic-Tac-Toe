@@ -13,6 +13,8 @@ module TicTacToe {
 		humanPlayer.registerObserver(computerPlayer);
 		computerPlayer.registerObserver(game);
 		game.registerObserver(board); 
+
+		humanPlayer.makeMove(0);
 	}
 }
 
