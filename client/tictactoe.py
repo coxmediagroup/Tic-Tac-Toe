@@ -57,14 +57,12 @@ class TicTacToe:
             return best_move
 
     def _tied(self):
-        #print self.board
         for x,y in self.board:
             if self.board[x,y] == None:
                 return False
         return True
 
     def _won(self):
-
         # Horizontal wins
         for y in range(3):
             win = []
@@ -101,26 +99,3 @@ class TicTacToe:
             return win
 
         return None
-
-# tt = TicTacToe()
-# print tt
-# tt.move((0,1))
-# print tt
-# tt.move(tt.minmax(False)['coordinates'])
-# print tt
-# tt.move(tt.minmax(True)['coordinates'])
-# print tt
-# tt.move(tt.minmax(False)['coordinates'])
-# print tt
-# tt.move(tt.minmax(True)['coordinates'])
-# print tt
-# tt.move(tt.minmax(False)['coordinates'])
-# print tt
-# tt.move(tt.minmax(True)['coordinates'])
-# print tt
-# tt.move(tt.minmax(False)['coordinates'])
-# print tt
-# tt.move(tt.minmax(True)['coordinates'])
-# print tt
-# tt.move(tt.minmax(False)['coordinates'])
-# print tt
