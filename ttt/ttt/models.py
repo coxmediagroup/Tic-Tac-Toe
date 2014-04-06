@@ -18,7 +18,7 @@ class TicTacToeGame(models.Model):
 
     
     def set_board(self, board):
-        flat_board = sum(board, [])
+        flat_board = [str(i) for i in sum(board, [])]
         self.board = ','.join(flat_board)
         self.save()
 
