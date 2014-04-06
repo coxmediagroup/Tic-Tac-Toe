@@ -9,7 +9,7 @@ class TicTacToeGame(models.Model):
     
     def __unicode__(self):
         print self.print_board()
-        return None
+        return ''
 
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]
