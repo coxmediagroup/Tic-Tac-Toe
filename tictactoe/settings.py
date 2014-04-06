@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'south',
 
     # Authored
-    # 'client',
+    'client',
 
 )
 
