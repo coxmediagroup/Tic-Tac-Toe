@@ -12,7 +12,7 @@ def next_move(ttt):
     
     # IF COMPUTER HAS FIRST TURN
     # if 1st move
-    if sum(sum(b,[]) == 0:
+    if sum(sum(b,[])) == 0:
         return (2,2) # take the center
         # this is not best strategy for winning, but
         # it the human messes up, the computer can win.
@@ -21,7 +21,7 @@ def next_move(ttt):
         # has one correct move to make: to take the center
     
     # if 3rd move, and not a winning one
-    if sum(sum(b,[]) == 3:
+    if sum(sum(b,[])) == 3:
         if b[0][1]==2 or b[1][0]==2 or b[0][0]==2:
             return (3,3)
         elif b[0][2]==2:
