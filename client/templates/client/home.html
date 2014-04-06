@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tick Tac Toe by Jack Slingerland</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'client/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'client/css/client.css' %}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">Tic Tac Toe by Jack Slingerland</h3>
+      </div>
+
+      <div class="jumbotron">
+        <p class="lead">To get started, please enter your name.</p>
+        <div class="form-group">
+          <input type="text" class="form-control" id="name" placeholder="Enter your name">
+        </div>
+        <button id='name-button' class="btn btn-primary" disabled=disabled>Get Started</button>
+      </div>
+
+      <h2 class='player-name hidden'>Ok <span></span>, you go first.
+
+    </div> <!-- /container -->
+
+
+    <script type='text/javascript' src="{% static 'client/js/jquery-2.1.0.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'client/js/bootstrap.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'client/js/TicTacToeCtrl.js' %}"></script>
+  </body>
+</html>

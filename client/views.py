@@ -1,7 +1,11 @@
-from annoying.decorators import ajax_request
+from annoying.decorators import ajax_request, render_to
 from django.views.decorators.csrf import csrf_exempt
 from .models import Game
 
+
+@render_to('client/home.html')
+def home(request):
+    return {}
 
 @csrf_exempt
 @ajax_request
