@@ -13,10 +13,13 @@ class TicTacToeGame(models.Model):
         return ''
 
     def __init__(self, player):
-        self.player = int(player)
-        self.game_time = datetime.utcnow()
+        super(TicTacToeGame, self).__init__()
+        if type(player) == int:
+            player = User.objects.get(id=player)
+        self.player = player
+        self.game_time = datetime.now()
         self.save()
-        return self
+        return None
 
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]

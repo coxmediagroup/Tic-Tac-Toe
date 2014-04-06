@@ -119,46 +119,52 @@ def check_for_win_lose(b):
     for ri in range(3):
         row = b[ri]
         if single_move(row):
-            if row == [1,1,0]:
+            if row==[1,1,0] or row==[2,2,0]:
                 return (ri+1,3)
-            elif row == [1,0,1]:
+            elif row==[1,0,1] or row==[2,0,2]:
                 return (ri+1,2)
-            elif row == [0,1,1]:
+            elif row==[0,1,1] or row==[0,2,2]:
                 return (ri+1,1)
             else:
-                print 'ERROR!'
+                print '129 ERROR!'
+                print single_move(row)
+                print row
+                print ' '
 
     # check for win based on column
     for ci in range(3):
         col = get_col(b,ci)
         if single_move(col):
-            if col == [1,1,0]:
+            if col==[1,1,0] or col==[2,2,0]:
                 return (3,ci+1)
-            elif col == [1,0,1]:
+            elif col==[1,0,1] or col==[2,0,2]:
                 return (2,ci+1)
-            elif col == [0,1,1]:
+            elif col==[0,1,1] or col==[0,2,2]:
                 return (1,ci+1)
             else:
-                print 'ERROR!'
+                print '145 ERROR!'
+                print single_move(col)
+                print col
+                print ' '
 
     # check for win on backward diagonal
     diag = get_bw_diag(b)
     if single_move(diag):
-        if diag == [1,1,0]:
+        if diag==[1,1,0] or diag==[2,2,0]:
             return (3,3)
-        elif diag == [1,0,1]:
+        elif diag == [1,0,1] or diag==[2,0,2]:
             return (2,2)
-        elif diag == [0,1,1]:
+        elif diag == [0,1,1] or diag==[0,2,2]:
             return (1,1)
     
     # check for win on forward diagonal
     diag = get_fwd_diag(b)
     if single_move(diag):
-        if diag == [1,1,0]:
+        if diag == [1,1,0] or diag==[2,2,0]:
             return (3,1)
-        elif diag == [1,0,1]:
+        elif diag == [1,0,1] or diag==[2,0,2]:
             return (2,2)
-        elif diag == [0,1,1]:
+        elif diag == [0,1,1] or diag==[0,2,2]:
             return (1,3)
 
     # if nothing above caught the return, then there is
