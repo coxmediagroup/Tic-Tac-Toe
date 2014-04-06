@@ -8,7 +8,8 @@ class TicTacToeGame(models.Model):
     board = models.CharField(max_length=17, default="0,0,0,0,0,0,0,0,0")
     
     def __unicode__(self):
-        return self.print_board()
+        print self.print_board()
+        return None
 
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]
