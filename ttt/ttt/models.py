@@ -6,8 +6,10 @@ class TicTacToeGame(models.Model):
     player = models.ForeignKey(User)
     game_time = models.DateTimeField()
     board = models.CharField(max_length=17, default="0,0,0,0,0,0,0,0,0")
-
     
+    def __unicode__(self):
+        return self.print_board()
+
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]
         board = [vals[0:3], vals[3:6], vals[6:]]
