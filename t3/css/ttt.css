@@ -1,0 +1,17 @@
+body{ } 
+
+a {color:white;}
+
+div,input {font-size:2.5em;text-align:center;text-shadow:3px 2px 2px gray;font-family: 'Sans';}
+
+#wrap {width:900px;border:2px dashed blue;margin-left:auto; margin-right:auto;}
+
+.tictac, .hulk,.foozie {background:gray;float:left;border:2px solid white; }
+div.toprow{ border: 3px black solid; width:auto;height:auto ;}
+		 
+.hulk { background-image:url(../img/x.jpg);background-repeat:no-repeat;background-size:0%;background-position:left;}
+
+.win{border-color: lime;}
+					
+.foozie { background-image:url(../img/o.jpg);background-repeat:no-repeat;background-size:0%;}
+
