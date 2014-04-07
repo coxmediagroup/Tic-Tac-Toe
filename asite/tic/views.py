@@ -1,25 +1,39 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from tic.forms import TicBoardForm
-
-def play(request):
-
-	if request.method == 'POST':
-		rp=request.POST.copy()
-		f = TicBoardForm(request.POST)
-		pick,winners=f.mkPick(rp)
-		if f.is_valid():
-			pass	
-				
-		return render(request,'tic/ticboard_form.html',{'form':f,'pick':pick,'wingroup':winners})	
-
-	else:
-		f=TicBoardForm()
-		freshboard=1
-		
-		if f.is_valid():
-			pass	
-				
-		
-		return render(request,'tic/ticboard_form.html',{'form':f,'freshboard':1})	
+from tic.models import TicBoard
+from django.forms.models import model_to_dict
 
 
+
+
+def index(request):
+	return render(request,'tic/index.html',{})	
+
+def processBoard(request,opick,ticboard):
+	mtd=model_to_dict(ticboard)		
+	mtd[opick]='o'
+	form=TicBoardForm()
+	xpick,winners=form.mkPick(mtd)
+	mtd[xpick]='x'
+	form =TicBoardForm(mtd, instance=ticboard)			
+	if form.is_valid():
+		board=form.save()	
+		board.save()		
+	myargs={'pk':board.pk,'wingroup':winners,'xpick':xpick,'form':form}	
+	return myargs
+	
+
+
+
+def createBoard(request,opick):
+	ticboard=TicBoard()
+	ticboard.save()
+	myargs=processBoard(request,opick,ticboard)
+	return render(request,'tic/tic.js',myargs)	
+
+
+
+def updateBoard(request,pk,opick):
+	ticboard=get_object_or_404(TicBoard, pk=pk)
+	myargs=processBoard(request,opick,ticboard)
+	return render(request,'tic/tic.js',myargs)	

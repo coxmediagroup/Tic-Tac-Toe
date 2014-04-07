@@ -15,7 +15,8 @@ class TicBoardForm(ModelForm):
 	# If No win is possible and no block is needed,
 	#This is the order in which the computer will pick 
 	def xmoves(self):	
-		return ["e","a","b","d","f","c","h","g","i"]
+		
+		return ["e","b","a","i","d","f","c","h","g","i"]
 	
 	# grabs values from request.Post for a wingroup
 	def mkGrp(self,rp,grp):
@@ -41,9 +42,17 @@ class TicBoardForm(ModelForm):
 
 	#if no winning move and no block move find first open space in xmoves 
 	def findOpen(self,rp,n):
-		for xm in self.xmoves():
-			if rp[xm]== n:
-				return xm
+		xgrp=rp.values()
+		if xgrp.count('x') < 2 and rp['e']=='o':
+			if rp['c'] ==n:
+				return 'c'
+			else:
+				return 'i'
+
+		else: 
+			for xm in self.xmoves():
+				if rp[xm]== n:
+					return xm
 	
 	# takes request.POST data, 
 	# returns a winning move, and winning group list 
