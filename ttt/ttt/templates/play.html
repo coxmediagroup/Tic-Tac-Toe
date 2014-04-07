@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="{{ STATIC_URL }}css/play.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="starter-template">
+    <h1>Unbeatable Tic-Tac-Toe</h1>
+    <div id="challenger_div">
+      <h2 class="form-inline">
+        Challenger:
+        <span id="player_name">Anonymous</span>
+        <input id="player_name_input" class="form-control" type="text" style="display: none;"></input>
+      </h2>
+    </div>
+    <div>
+      <table>
+        <tr>
+          <td class="bb br"></td>
+          <td class="bl bb br"></td>
+          <td class="bl bb"></td>
+        </tr>
+        <tr>
+          <td class="bt bb br"></td>
+          <td class="bl bt bb br"></td>
+          <td class="bl bt bb"></td>
+        </tr>
+        <tr>
+          <td class="bt br"></td>
+          <td class="bl bt br"></td>
+          <td class="bl bt"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(
+    function(){
+      // set current page
+      $('li[name="play_link"]').addClass('active');
+
+      // handle hover on setting challenger name
+      $('#challenger_div').mouseover(
+        function () {
+          if ($('#player_name').text() == 'Anonymous') {
+            $('#player_name').css('display', 'none');
+            $('#player_name_input').css('display', 'inline');
+          }
+        }
+      );
+      $('#challenger_div').mouseout(
+        function () {
+          if ($(document.activeElement).attr('id') == 'player_name_input'){
+            // do nothing
+          } else {
+            $('#player_name').css('display', 'inline');
+            $('#player_name_input').css('display', 'none');
+          }
+        }
+      );
+      $('#player_name_input').blur(
+        function () {
+          $('#player_name').text( $('#player_name_input').val() );
+          $('#player_name').css('display', 'inline');
+          $('#player_name_input').css('display', 'none');
+        }
+      );
+
+    }
+  );
+</script>
+{% endblock %}

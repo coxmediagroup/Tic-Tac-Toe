@@ -4,18 +4,16 @@ import numpy
 from datetime import datetime
 
 class TicTacToeGame(models.Model):
-    player = models.ForeignKey(User)
+    player = models.CharField(max_length=32, default="anonymous")
     game_time = models.DateTimeField()
     board = models.CharField(max_length=17, default="0,0,0,0,0,0,0,0,0")
     
     def __unicode__(self):
         self.print_board()
-        return ''
+        return self.player
 
     def __init__(self, player):
         super(TicTacToeGame, self).__init__()
-        if type(player) == int:
-            player = User.objects.get(id=player)
         self.player = player
         self.game_time = datetime.now()
         self.save()
