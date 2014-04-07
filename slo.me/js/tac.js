@@ -127,7 +127,8 @@
 				el.style.backgroundSize=o+"%"
 				if (o<100){
 					setTimeout(slidein,cascade.swing(1-o))
-				}
+				} else{
+					el.style.backgroundSize="100% 100%"
 			}
 
 		}
