@@ -14,8 +14,8 @@ tic.pk={{pk}};
 {% endif %}
 	nNodes=document.getElementsByClassName('n');
 	if (nNodes.length==0){
-		cascade.reset();
 		tic.pk=false;
+		cascade.reset();
 	}	;
 
 {% if wingroup|length == 3 %}
@@ -23,7 +23,7 @@ tic.pk={{pk}};
 		tic.setsquare("{{wg}}"," win ");
 	{% endfor %}
 	tic.rmclicks()
+		tic.pk=false;
 	cascade.reset()
-	tic.pk=false
 {% endif %}
 	
