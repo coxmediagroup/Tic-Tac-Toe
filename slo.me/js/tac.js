@@ -26,8 +26,10 @@
 			if (el.className===tic.klass){
 				el.onclick=function(e){
 					e.preventDefault() 
+					tic.rmclicks()
 					tic.setsquare(this.id,tic.oplayer)
 					setTimeout(function(){fetch(el.id,tic.pk);},400)
+					setTimeout(tic.addclicks,500)
 					return false
 				}
 			}	
@@ -45,7 +47,7 @@
 			var el=document.getElementById(square)	
 			el.className=xo
 			el.onclick=null
-			cascade.frontslide(el)			
+			cascade.frontslide(el)
 		}, 
 	
 		reset:function(){
@@ -195,6 +197,7 @@
                                 tic.squares.map(function(el){el.style.opacity="1"}                        )
                         }
                         setTimeout(force,5000)
+			    setTimeout(function(){fetch(false,false)},5500)
 
 
 		}
@@ -209,9 +212,9 @@ function fetch(opick,pk){
 		}
 		var i=document.createElement("script")
 		i.id="fu"
-		i.src="http://slo.me/play/tic/js/"
-		if (!pk){	
-		i.src+=opick+"/tic.js"
+		i.src=""
+		if (!opick){	
+		i.src+="tic.js"
 		}else {
 		i.src+=opick+"/"+pk+"/tic.js"
 		}
@@ -223,5 +226,8 @@ function fetch(opick,pk){
 
 
 
-
 tic.init()
+tic.rmclicks()
+setTimeout(function(){fetch(false,false)},1500)
+setTimeout(tic.addclicks,1650)
+
