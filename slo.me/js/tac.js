@@ -1,9 +1,12 @@
 	//adds and removes clicks for the tic tac toe board
 	var tic={
 
+		pk:		false,
+
 		xplayer:	'x',
 
 		oplayer:	'o',
+
 		 		
 		klass:		'n',
 
@@ -11,8 +14,8 @@
 	
 	
 		mksquares: function(){
-			var ticnodes=document.querySelectorAll('#wrap div')
-			tic.squares=Array.prototype.slice.call(ticnodes)
+			var wr=document.getElementById('wrap')
+			tic.squares=Array.prototype.slice.call(wr.children)
 		},	
 		
 		addclicks: function(){
@@ -24,7 +27,7 @@
 				el.onclick=function(e){
 					e.preventDefault() 
 					tic.setsquare(this.id,tic.oplayer)
-					document.forms[0].submit()
+					setTimeout(function(){fetch(el.id,tic.pk);},400)
 					return false
 				}
 			}	
@@ -41,14 +44,11 @@
 		setsquare: function(square,xo){
 			var el=document.getElementById(square)	
 			el.className=xo
-			var elcid=document.forms[0][el.id]
-			elcid.value=xo
 			el.onclick=null
-						
+			cascade.frontslide(el)			
 		}, 
 	
 		reset:function(){
-			//cascade.all(tic.squares,'out')
 			tl=tic.squares.length
 			while (tl--){
 				var t=tic.squares[tl]
@@ -61,6 +61,7 @@
 			tic.mksquares()		
 			scaler.all()
 			tic.addclicks()
+			cascade.showtics()
 		}	
 	}// end tic 
 
@@ -71,19 +72,20 @@
 
 		full:1,
 
-		down: 0.33,	
+		down: 0.325,	
 	
 		mk: function(){
-			var sw=document.querySelector('body').offsetWidth
-			sh=document.querySelector('body').offsetHeight
+			var sw=document.body.offsetWidth
+			sh=document.body.offsetHeight
 			scaler.full=sw
 			if (sh < sw) {
 				scaler.full=sh
 			}
+			scaler.full6
 		},
 
 		wrap: function(){
-			var wr=document.querySelector('#wrap')
+			var wr=document.getElementById('wrap')
 			wr.style.width=scaler.full +'px'
 			wr.style.height=wr.style.width
 
@@ -114,6 +116,19 @@
 			return 0.57 - Math.cos( p*Math.PI ) / 1.7;
 		},
 	
+		frontslide: function(el){
+			var chunk=3.75
+			o="0"
+			slidein()
+			function slidein(){
+				o=parseFloat(o)+chunk
+				el.style.backgroundSize=o+"%"
+				if (o<100){
+					setTimeout(slidein,cascade.swing(1-o))
+				}
+			}
+		},
+
 		cycle: function(el){
 			 
 			        var o=1.0
@@ -143,7 +158,7 @@
 				if (o < 1 ){
 					setTimeout(fadein,cascade.swing(1-o))
 				}else {
-					el.style.opacity=1
+					el.style.opacity="1"
 					return 0
 				}	
 			}
@@ -160,9 +175,9 @@
 		all: function(nodes,inout){
 			
 			if (inout=='out'){	
-				nodes.map(function(el){el.style.opacity="1"})
+				nodes.map(function(el){el.style.opacity=1})
 			}else{
-				nodes.map(function(el){el.style.opacity="0"})
+				nodes.map(function(el){el.style.opacity=0})
 			}		
 			var nl=nodes.length
 			var step=cascade.step
@@ -174,9 +189,39 @@
 		},
 
 		reset: function(){
-				setTimeout(cascade.hidetics,1100)
-				setTimeout(cascade.showtics,3000)
-				setTimeout(tic.reset,2500)
+				setTimeout(cascade.hidetics,2100)
+				setTimeout(tic.reset,3500)
+		                        function force(){
+                                tic.squares.map(function(el){el.style.opacity="1"}                        )
+                        }
+                        setTimeout(force,5000)
+
+
 		}
 	}
+
+
+
+function fetch(opick,pk){
+		f=document.getElementById("fu")
+		if(f){
+			f.parentNode.removeChild(f)
+		}
+		var i=document.createElement("script")
+		i.id="fu"
+		i.src="http://slo.me/play/tic/js/"
+		if (!pk){	
+		i.src+=opick+"/tic.js"
+		}else {
+		i.src+=opick+"/"+pk+"/tic.js"
+		}
+		document.body.appendChild(i)
+
+}
+
+
+
+
+
+
 tic.init()
