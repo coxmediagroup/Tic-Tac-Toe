@@ -52,9 +52,11 @@
 	
 		reset:function(){
 			tl=tic.squares.length
+			var step=200
 			while (tl--){
+
 				var t=tic.squares[tl]
-				tic.setsquare(t.id,'n')
+					tic.setsquare(t.id,'n');
 			}
 			tic.init()
 
@@ -63,7 +65,6 @@
 			tic.mksquares()		
 			scaler.all()
 			tic.addclicks()
-			cascade.showtics()
 		}	
 	}// end tic 
 
@@ -77,13 +78,12 @@
 		down: 0.325,	
 	
 		mk: function(){
-			var sw=document.body.offsetWidth
-			sh=document.body.offsetHeight
+			var sw=window.innerWidth
+			sh=window.innerHeight
 			scaler.full=sw
 			if (sh < sw) {
 				scaler.full=sh
 			}
-			scaler.full6
 		},
 
 		wrap: function(){
@@ -129,81 +129,12 @@
 					setTimeout(slidein,cascade.swing(1-o))
 				}
 			}
-		},
-
-		cycle: function(el){
-			 
-			        var o=1.0
-
-       				 if (el.style.opacity>0.99 ){
-               				 fadeout()
-       				 }else{
-               				 o=0.0
-               				 fadein()
-       				 }
-
-	       		 function fadeout(){
-	
-        	        	o=parseFloat(o)-cascade.chunk
-               			el.style.opacity=o
-                		if (o > 0 ){
-                        		setTimeout(fadeout,cascade.swing(1-o))
-               			 }else {
-                        		el.style.opacity=0.0
-                        		return 0
-                		}
-       		 	}
-
-			function fadein(){
-				o=parseFloat(o)+cascade.chunk
-				el.style.opacity=o	
-				if (o < 1 ){
-					setTimeout(fadein,cascade.swing(1-o))
-				}else {
-					el.style.opacity="1"
-					return 0
-				}	
-			}
-		},	
-
-		hidetics: function(){
-				
-				cascade.all(tic.squares.reverse(),'out')
-		},
-
-		showtics: function(){
-				cascade.all(tic.squares,'in')
-		},	
-		all: function(nodes,inout){
-			
-			if (inout=='out'){	
-				nodes.map(function(el){el.style.opacity=1})
-			}else{
-				nodes.map(function(el){el.style.opacity=0})
-			}		
-			var nl=nodes.length
-			var step=cascade.step
-			while (nl--){
-				var el=nodes[nl]	
-				setTimeout(cascade.cycle,step,el)
-				step+=100	
-			}	
-		},
-
-		reset: function(){
-				setTimeout(cascade.hidetics,2100)
-				setTimeout(tic.reset,3500)
-		                        function force(){
-                                tic.squares.map(function(el){el.style.opacity="1"}                        )
-                        }
-                        setTimeout(force,5000)
-			    setTimeout(function(){fetch(false,false)},5500)
-
 
 		}
+
+
+
 	}
-
-
 
 function fetch(opick,pk){
 		f=document.getElementById("fu")
@@ -212,8 +143,8 @@ function fetch(opick,pk){
 		}
 		var i=document.createElement("script")
 		i.id="fu"
-		i.src=""
-		if (!opick){	
+		i.src="/tic/js/"
+		if (opick==false){	
 		i.src+="tic.js"
 		}else {
 		i.src+=opick+"/"+pk+"/tic.js"
@@ -229,5 +160,5 @@ function fetch(opick,pk){
 tic.init()
 tic.rmclicks()
 setTimeout(function(){fetch(false,false)},1500)
-setTimeout(tic.addclicks,1650)
+setTimeout(tic.addclicks,1750)
 
