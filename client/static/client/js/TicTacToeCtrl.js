@@ -35,6 +35,32 @@ var TicTacToeCtrl = (function($, undefined) {
 
     function make_move(x,y) {
         console.log("Make move " + x + "," + y);
+        var board = serialize_board();
+        $.post("/api/make-move/", {
+            board: board,
+            game: game_id,
+            x: x,
+            y: y
+        }, function(data) {
+            console.log(data);
+        });
+    }
+
+    function serialize_board() {
+        var board = [
+            [null,null,null],
+            [null,null,null],
+            [null,null,null]
+        ];
+
+        $(".board td").each(function() {
+            var element = $(this);
+            var x = parseInt(element.data('x'), 10);
+            var y = parseInt(element.data('y'), 10);
+            board[x][y] = element.text();
+        });
+
+        return board.toString();
     }
 
     // Start the game by fetching the new game id from the server.
@@ -53,4 +79,4 @@ var TicTacToeCtrl = (function($, undefined) {
     init();
 
     return self;
-})($);
+})(jQuery);
