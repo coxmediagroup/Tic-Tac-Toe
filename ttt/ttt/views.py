@@ -1,7 +1,8 @@
 # from ttt.models import TicTacToe
 # import simplejson
 
-# from django.middleware.csrf import get_token
+from django.middleware.csrf import get_token
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -18,6 +19,11 @@ def home(request):
 def play(request):
     return render_to_response('play.html', {},
         context_instance = RequestContext(request))
+
+def update_challenger(request, game, name):
+    print 'game', game
+    print 'name', name
+    return HttpResponse(200)
 
 # def mark_square(request, game, player, row, col):
     # ttt = TicTacToe.objects.get(id=game)

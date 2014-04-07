@@ -13,4 +13,5 @@ urlpatterns = patterns('',
 	url(r'^$', 'ttt.views.home', name='home'),
 	url(r'^signin', 'ttt.views.signin', name='signin'),
 	url(r'^play', 'ttt.views.play', name='play'),
+	url(r'^update/(?P<game>\d)/challenger/(?P<name>\w)', 'ttt.views.update_challenger', name='play'),
 )

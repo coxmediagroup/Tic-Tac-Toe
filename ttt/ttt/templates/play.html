@@ -64,9 +64,15 @@
       );
       $('#player_name_input').blur(
         function () {
-          $('#player_name').text( $('#player_name_input').val() );
-          $('#player_name').css('display', 'inline');
-          $('#player_name_input').css('display', 'none');
+          if( $('#player_name_input').val().length ){
+            // set label
+            $('#player_name').text( $('#player_name_input').val() );
+            $('#player_name').css('display', 'inline');
+            $('#player_name_input').css('display', 'none');
+
+            // save to database
+            $.post('/update/2/challenger/' + $('#player_name_input').val());
+          }
         }
       );
 
