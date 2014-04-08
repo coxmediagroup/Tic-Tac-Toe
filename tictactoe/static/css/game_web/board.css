@@ -8,17 +8,19 @@
 	Table is to be 300px x 300px plus width of cell
 	borders
 */
+table {
+	border-collapse: collapse;
+}
+
 td {
-	display: inline-block;
-	height: inherit;
+	height: 100px;
 	width: 100px;
 	max-width: 100px;
 }
 
 tr {
+	border-collapse: collapse;
 	height: 100px;
-	min-height: 100px;
-	max-height: 100px;
 }
 
 /*
