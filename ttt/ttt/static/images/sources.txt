@@ -1,0 +1,5 @@
+wget http://static.progressivemediagroup.com/uploads/imagelibrary/500px-Blue_circle_for_diabetes%20300%20Wikipedia.png
+
+wget http://img2.wikia.nocookie.net/__cb20130610184919/okami/images/6/60/X_mark.png
+
+
