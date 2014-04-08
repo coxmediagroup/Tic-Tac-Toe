@@ -51,27 +51,9 @@ module TicTacToe {
 			}
 
 
-			// var cellClassName = document.getElementsByClassName("cell");
-
-			// var that = this;
-
-		 //   var cellClickHandler = function() {
-		 //       var played = this.getAttribute("played");
-		 //       if(played === 'true') {
-		 //       	alert('Position has already been played.');
-		 //       } else {
-		 //       	that._makeMove('Human Player', this.getAttribute("cellIndex"));
-		 //       }
-		 //    };
-
-		 //    for(var i=0;i<cellClassName.length;i++){
-		 //      cellClassName[i].addEventListener('click', cellClickHandler, false);
-		 //    }
-
-
 		}
 
-		private _makeMove(player, cell) {
+		makeMove(player, cell) {
 
 			var ctx = this._cells[cell].getContext('2d');	
 			var color:string;
@@ -87,7 +69,7 @@ module TicTacToe {
 				nextPlayer = 'Human Player';
 			}		 
 		    ctx.fillStyle = color;
-            ctx.font = "190pt Helvetica";
+            ctx.font = "180pt Helvetica";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(text, this._cells[cell].width / 2 , this._cells[cell].height / 2);
@@ -121,7 +103,7 @@ module TicTacToe {
 			   		this._reset(arg);
 
 			   	} else if (arg.player && typeof arg.move === 'number') {
-			   		this._makeMove(arg.player, arg.move);
+			   		this.makeMove(arg.player, arg.move);
 			   	} else if (typeof arg.humanScore === 'number' && typeof arg.computerScore === 'number') {
 			   		alert('Winner: ' + arg.winner);
 			   		this._reset(arg);
