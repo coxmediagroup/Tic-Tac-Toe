@@ -1,7 +1,6 @@
-var TicTacToeCtrl = (function($, undefined) {
+(function($, undefined) {
     var self = {},
         game_name = null,
-        game_number = 1,
         game_id = null,
         name_button = $("#name-button");
 
