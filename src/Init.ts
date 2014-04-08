@@ -14,8 +14,30 @@ module TicTacToe {
 		computerPlayer.registerObserver(game);
 		game.registerObserver(board); 
 
-		humanPlayer.makeMove(0);
+		return {
+			game: game,
+			human: humanPlayer,
+			computer: computerPlayer,
+			board: board
+		};
 	}
 }
 
-TicTacToe.init();
+var gameInstance = TicTacToe.init();
+
+var cellClassName = document.getElementsByClassName("cell");
+
+var cellClickHandler = function() {
+   var played = this.getAttribute("played");
+   if(played === 'true') {
+   	alert('Position has already been played.');
+   } else {
+   	gameInstance.human.makeMove(parseInt(this.getAttribute("cellIndex"),10));
+   	
+   	gameInstance.computer.makeMove();
+   }
+};
+
+for(var i=0;i<cellClassName.length;i++){
+  cellClassName[i].addEventListener('click', cellClickHandler, false);
+}

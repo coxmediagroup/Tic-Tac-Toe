@@ -16,6 +16,8 @@ var TicTacToe;
                 var cell = document.createElement('canvas');
                 cell.setAttribute('style', 'display:inline-block;float:left;margin:0;padding:0;width:200px;height:200px');
                 cell.setAttribute('class', 'cell');
+                cell.setAttribute('played', 'false');
+                cell.setAttribute('cellIndex', i.toString());
                 cell.width = 200;
                 cell.height = 200;
                 var ctx = cell.getContext('2d');
@@ -41,29 +43,66 @@ var TicTacToe;
                 this._cells.push(cell);
                 this._boardDiv.appendChild(cell);
             }
+            // var cellClassName = document.getElementsByClassName("cell");
+            // var that = this;
+            //   var cellClickHandler = function() {
+            //       var played = this.getAttribute("played");
+            //       if(played === 'true') {
+            //       	alert('Position has already been played.');
+            //       } else {
+            //       	that._makeMove('Human Player', this.getAttribute("cellIndex"));
+            //       }
+            //    };
+            //    for(var i=0;i<cellClassName.length;i++){
+            //      cellClassName[i].addEventListener('click', cellClickHandler, false);
+            //    }
         }
         Board.prototype._makeMove = function (player, cell) {
             var ctx = this._cells[cell].getContext('2d');
             var color;
             var text;
+            var nextPlayer;
             if (player === 'Human Player') {
                 color = 'red';
                 text = 'X';
+                nextPlayer = 'Computer Player';
             } else {
                 color = 'black';
                 text = 'O';
+                nextPlayer = 'Human Player';
             }
             ctx.fillStyle = color;
             ctx.font = "200pt Helvetica";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(text, this._cells[cell].width / 2, this._cells[cell].height / 2);
+            document.getElementById("nextPlayer").innerHTML = nextPlayer;
+            this._cells[cell].setAttribute('played', 'true');
+        };
+
+        Board.prototype._reset = function (arg) {
+            document.getElementById("humanScore").innerHTML = arg.humanScore;
+            document.getElementById("computerScore").innerHTML = arg.computerScore;
+            document.getElementById("nextPlayer").innerHTML = 'Human Player';
+
+            for (var i = 0; i < this._cells.length; i++) {
+                var ctx = this._cells[i].getContext('2d');
+
+                // cell border
+                ctx.strokeStyle = "rgb(0, 0, 0)";
+                ctx.fillStyle = "rgb(0, 0, 0)";
+                ctx.fillRect(0, 0, 200, 200);
+                ctx.strokeRect(0, 0, 200, 200);
+                this._cells[i].setAttribute('played', 'false');
+            }
         };
 
         Board.prototype.update = function (arg) {
             console.log(arg);
             if (arg.player && typeof arg.move === 'number') {
                 this._makeMove(arg.player, arg.move);
+            } else if (arg.humanScore && arg.computerScore) {
+                this._reset(arg);
             }
         };
         return Board;

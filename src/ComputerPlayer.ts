@@ -265,7 +265,8 @@ module TicTacToe {
 		}
 
 		update(arg:any) {
-			this._humanPlayerPlayedMoves.push(arg.madeMove);        	
+			this._humanPlayerPlayedMoves.push(arg.madeMove); 
+			   	
 	    }
 
 	    reset() {
