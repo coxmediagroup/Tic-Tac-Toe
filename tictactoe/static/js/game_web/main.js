@@ -285,7 +285,7 @@ $(document).ready(function() {
 	        }
 	    }
 	});	
-	$("#tbl-board").on("click", "td", function() {
+	$("#tbl-board").on("click", "td", function(event) {
 		if(gameRunning){
 			if(ttt_game.playersTurn){
 				ttt_game.addUserChoice(event.target.id);
