@@ -1,0 +1,53 @@
+/* game_web main page css */
+
+/* Organization:
+1. HTML Tags
+2. Classes
+3. IDs
+*/
+
+/* Set globals with html tag */
+html {
+	background-color: #F1F1F1;
+	font-family: "Helvetica";
+	font-weight: bold;
+}
+
+.hcenter {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */   
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
+}
+
+#game-web-main-body {
+	background-color: white;
+	border-radius: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	height: 650px;
+	min-height: 650px;
+	width: 650px;
+	min-width: 650px;
+	margin-top: 100px;
+}
+
+#status{
+	clear: both;
+	width: 90%;
+	text-align: center;
+	background-color: #85ADFF;
+	border-radius: 5px;
+	margin-top: 50px;
+	display: none;
+}
+
+
+

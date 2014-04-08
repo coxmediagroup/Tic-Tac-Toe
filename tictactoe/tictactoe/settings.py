@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-# Get the path of this file
+# Get the path of this file (settings.py)
 SETTINGS_PATH = str(os.path.realpath(os.path.dirname(__file__)))
 # Move up one directory from here for the project root
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir))
@@ -29,6 +29,36 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.6/howto/static-files/
+STATIC_URL = '/static/'
+# Static file directory for production environment
+STATIC_ROOT = '/var/www/tictactoe/static'
+
+# Locations Django will search for static files
+STATICFILES_DIRS = (
+    [PROJECT_PATH + STATIC_URL]
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+
+# Directories in which Django will search for template files
+TEMPLATE_DIRS = (
+    PROJECT_PATH + STATIC_URL + '/templates/'
+)
 
 # Application definition
 
@@ -61,7 +91,7 @@ WSGI_APPLICATION = 'tictactoe.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',l
+        'ENGINE': 'django.db.backends.mysql',
     }
 }
 
@@ -79,7 +109,4 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_ROOT = PROJECT_PATH + STATIC_URL
+

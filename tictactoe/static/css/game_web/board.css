@@ -1,0 +1,68 @@
+/* board page css */
+
+/*  
+	There's only one table in this project, so use
+	HTML tag to set CSS of table rows and table 
+	data elements
+
+	Table is to be 300px x 300px plus width of cell
+	borders
+*/
+td {
+	display: inline-block;
+	height: inherit;
+	width: 100px;
+	max-width: 100px;
+}
+
+tr {
+	height: 100px;
+	min-height: 100px;
+	max-height: 100px;
+}
+
+/*
+	The center cells are named according to horizontal
+	position, so left and right boarders can be applied
+	for drawing the board
+*/
+.centerCell {
+	border-left: 10px solid black;
+	border-right: 10px solid black;
+}
+
+.oTaken {
+	background-image:url('/static/img/o.png');
+	background-size: 95px 95px;
+	background-repeat:no-repeat;
+}
+
+.xTaken {
+	background-image:url('/static/img/x.png');
+	background-size: 95px 95px;
+	background-repeat:no-repeat;
+}
+
+/*
+	Board width is 300px + 2*(left/right border width=10px)
+	Board height is 300px + 2*(up/down boarder width=10px)
+*/
+#board-container {
+	margin-top: 50px;
+	height: 320px;
+	width: 320px;
+}
+
+/*
+	gamerow1 is the center row, so it needs top and bottom
+	borders to finish drawing the board
+*/
+#gamerow1 {
+	border-top: 10px solid black;
+	border-bottom: 10px solid black;
+}
+
+#tbl-board {
+	height: 100%;
+	width: 100%;
+}
