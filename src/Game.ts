@@ -6,6 +6,7 @@ module TicTacToe {
 
 		private _computerPlayerPlayedMoves:number[] = [];
 		private _humanPlayerPlayedMoves:number[] = [];
+		private _aggregatePlayedMoves:number[] = [];
 		private _nextPlayer:string = 'Human Player'; // Let human go first as a courtesy and to give false hope.  ;-)
 		private _winner:any = false;
 		private _humanScore:number = 0;
@@ -61,18 +62,28 @@ module TicTacToe {
 				}
 			}
 
+			// check if draw
+			if(this._aggregatePlayedMoves.length >= 9) {
+				console.log('Draw.');
+				this._reset('Draw');
+			}
+
 			return this._winner = false;
 		}
 
 		private _reset(nextPlayer) {
-			console.log('Game over.');
-			console.log('Human Score: ' + this._humanScore);
-			console.log('Computer Score: ' + this._computerScore);
-			console.log('');
-			this.notifyObservers({humanScore:this._humanScore,computerScore:this._computerScore,winner:nextPlayer});
-			this._computerPlayerPlayedMoves = [];
-			this._humanPlayerPlayedMoves = [];
-			this._nextPlayer = nextPlayer;
+			if(nextPlayer === 'Draw') {
+				this.notifyObservers({draw:'true'});
+			} else {
+				console.log('Game over.');
+				console.log('Human Score: ' + this._humanScore);
+				console.log('Computer Score: ' + this._computerScore);
+				console.log('');
+				this.notifyObservers({humanScore:this._humanScore,computerScore:this._computerScore,winner:nextPlayer});
+				this._computerPlayerPlayedMoves = [];
+				this._humanPlayerPlayedMoves = [];
+				this._nextPlayer = nextPlayer;
+			}
 			
 		}
 
@@ -97,7 +108,7 @@ module TicTacToe {
         		this._humanPlayerPlayedMoves.push(arg.madeMove);
         		this._nextPlayer = 'Computer Player';
         	}
-
+        	this._aggregatePlayedMoves.push(arg.madeMove);
         	this.notifyObservers({player:arg.player,move:arg.madeMove});
 
         	this._checkForWinner();

@@ -26,7 +26,7 @@ module TicTacToe {
 			 this._aggregatePlayedMoves.sort();
 			 this._computerPlayerPlayedMoves.sort();
 			 this._humanPlayerPlayedMoves.sort();
-			 
+			
 			if(typeof this._checkTwoInARow(this._computerPlayerPlayedMoves) === 'number') {
 				console.log('Computer Player is using _checkTwoInARow(computer) strategy.');
 				nextMove = this._checkTwoInARow(this._computerPlayerPlayedMoves);
@@ -249,6 +249,12 @@ module TicTacToe {
 		  return diff;
 		}
 
+		private _reset() {
+			this._humanPlayerPlayedMoves = [];
+	    	this._computerPlayerPlayedMoves = [];
+	    	this._aggregatePlayedMoves = [];
+		}
+
 		// passing in a boardIndex bypasses the AI
 		makeMove(boardIndex?:number) {
 
@@ -265,14 +271,13 @@ module TicTacToe {
 		}
 
 		update(arg:any) {
+			console.log(arg);
 			this._humanPlayerPlayedMoves.push(arg.madeMove); 
-			   	
+
 	    }
 
 	    reset() {
-	    	this._humanPlayerPlayedMoves = [];
-	    	this._computerPlayerPlayedMoves = [];
-	    	this._aggregatePlayedMoves = [];
+	    	this._reset();
 	    }
 	}
 }

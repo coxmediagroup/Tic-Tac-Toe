@@ -241,6 +241,12 @@ var TicTacToe;
             return diff;
         };
 
+        ComputerPlayer.prototype._reset = function () {
+            this._humanPlayerPlayedMoves = [];
+            this._computerPlayerPlayedMoves = [];
+            this._aggregatePlayedMoves = [];
+        };
+
         // passing in a boardIndex bypasses the AI
         ComputerPlayer.prototype.makeMove = function (boardIndex) {
             if (typeof boardIndex == "number") {
@@ -256,13 +262,12 @@ var TicTacToe;
         };
 
         ComputerPlayer.prototype.update = function (arg) {
+            console.log(arg);
             this._humanPlayerPlayedMoves.push(arg.madeMove);
         };
 
         ComputerPlayer.prototype.reset = function () {
-            this._humanPlayerPlayedMoves = [];
-            this._computerPlayerPlayedMoves = [];
-            this._aggregatePlayedMoves = [];
+            this._reset();
         };
         return ComputerPlayer;
     })(TicTacToe.Player);

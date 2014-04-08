@@ -15,6 +15,7 @@ var TicTacToe;
             _super.call(this);
             this._computerPlayerPlayedMoves = [];
             this._humanPlayerPlayedMoves = [];
+            this._aggregatePlayedMoves = [];
             this._nextPlayer = 'Human Player';
             this._winner = false;
             this._humanScore = 0;
@@ -63,18 +64,28 @@ var TicTacToe;
                 }
             }
 
+            // check if draw
+            if (this._aggregatePlayedMoves.length >= 9) {
+                console.log('Draw.');
+                this._reset('Draw');
+            }
+
             return this._winner = false;
         };
 
         Game.prototype._reset = function (nextPlayer) {
-            console.log('Game over.');
-            console.log('Human Score: ' + this._humanScore);
-            console.log('Computer Score: ' + this._computerScore);
-            console.log('');
-            this.notifyObservers({ humanScore: this._humanScore, computerScore: this._computerScore, winner: nextPlayer });
-            this._computerPlayerPlayedMoves = [];
-            this._humanPlayerPlayedMoves = [];
-            this._nextPlayer = nextPlayer;
+            if (nextPlayer === 'Draw') {
+                this.notifyObservers({ draw: 'true' });
+            } else {
+                console.log('Game over.');
+                console.log('Human Score: ' + this._humanScore);
+                console.log('Computer Score: ' + this._computerScore);
+                console.log('');
+                this.notifyObservers({ humanScore: this._humanScore, computerScore: this._computerScore, winner: nextPlayer });
+                this._computerPlayerPlayedMoves = [];
+                this._humanPlayerPlayedMoves = [];
+                this._nextPlayer = nextPlayer;
+            }
         };
 
         Game.prototype.getWinner = function () {
@@ -91,7 +102,7 @@ var TicTacToe;
                 this._humanPlayerPlayedMoves.push(arg.madeMove);
                 this._nextPlayer = 'Computer Player';
             }
-
+            this._aggregatePlayedMoves.push(arg.madeMove);
             this.notifyObservers({ player: arg.player, move: arg.madeMove });
 
             this._checkForWinner();

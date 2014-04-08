@@ -96,8 +96,10 @@ module TicTacToe {
 		}
 
 		private _reset(arg) {
-			document.getElementById("humanScore").innerHTML = arg.humanScore;
-			document.getElementById("computerScore").innerHTML = arg.computerScore;
+			if(arg.draw !== 'true') {
+				document.getElementById("humanScore").innerHTML = arg.humanScore;
+				document.getElementById("computerScore").innerHTML = arg.computerScore;
+			}
 			document.getElementById("nextPlayer").innerHTML = 'Human Player';
 
 			for(var i = 0; i<this._cells.length; i++) {
@@ -113,9 +115,12 @@ module TicTacToe {
 		}
 
 		update(arg:any) {
-			   	
+			   	if(arg.draw === 'true') {
 
-			   	if(arg.player && typeof arg.move === 'number') {
+			   		alert('Draw!');
+			   		this._reset(arg);
+
+			   	} else if (arg.player && typeof arg.move === 'number') {
 			   		this._makeMove(arg.player, arg.move);
 			   	} else if (typeof arg.humanScore === 'number' && typeof arg.computerScore === 'number') {
 			   		alert('Winner: ' + arg.winner);
