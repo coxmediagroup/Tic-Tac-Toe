@@ -45,11 +45,33 @@ module TicTacToe {
 			} else if (typeof this._playCorner() === 'number') {
 				console.log('Computer Player is using _playCorner() strategy.');
 				nextMove = this._playCorner();
+			} else if (typeof this._playSide() === 'number') {
+				console.log('Computer Player is using _playSide() strategy.');
+				nextMove = this._playSide();
 			}
 			return nextMove;
 		}
 
+		// Returns the next optimal move if Computer Player can play a side
+		private _playSide() {
+			var nextMove:any;
+			if(this._aggregatePlayedMoves.indexOf(1) === -1) {
+				nextMove = 1;
+			} else if (this._aggregatePlayedMoves.indexOf(3) === -1) {
+				nextMove = 3;
+			} else if (this._aggregatePlayedMoves.indexOf(5) === -1) {
+				nextMove = 5;
+			} else if (this._aggregatePlayedMoves.indexOf(7) === -1) {
+				nextMove = 7;
+			} else {
+				nextMove = false;
+			}
+
+			return nextMove;
+		}
+
 		// Returns the next optimal move if Computer Player can play a corner
+		// Otherwise, returns false.
 		private _playCorner() {
 			var nextMove:any;
 			if(this._aggregatePlayedMoves.indexOf(0) === -1) {
