@@ -7,19 +7,29 @@ from django.forms.models import model_to_dict
 
 def index(request):
 	
-	return render(request,'tic/index.html',{})	
+	return render(request,'tic/index.html',{})
+	
+def dict_to_board(mtd,board):
+	board=Board(**mtd) 
+	board.save()
+	return board	
+	
+def setPick(pick,val,mtd,board):
+	mtd[pick]=val
+	board=dict_to_board(mtd,board)
+	return board			
 
 def processBoard(request,opick,board):
+
 	mtd=model_to_dict(board)
-	if opick:	
-		board.opick='o'
-		board.save()	
-		mtd[opick]='o'
-		
+	
+	if opick:
+		board=set_pick(opick,'o',mtd,board)		
+	
 	xpick,winners=board.mkPick(mtd)
-	mtd[xpick]='x'
-	board.xpick='x'
-	board.save()		
+	
+	board=set_pick(xpick,'x',mtd,board)
+	
 	myargs={'pk':board.pk,'wingroup':winners,'xpick':xpick}	
 	return myargs
 	
@@ -27,7 +37,6 @@ def processBoard(request,opick,board):
 
 
 def createBoard(request):
-	
 	board=Board()
 	board.save()
 	myargs=processBoard(request,False,board)

@@ -2,6 +2,11 @@ var xpick="{{xpick}}";
 
 tic.pk={{pk}};
 
+var all={
+	{% for key, value in mtd.items %}
+    {{ key }}: {{ value }},
+	{% endfor %}
+	};
 {% if xpick %}
 	tic.setsquare("{{xpick}}","x");
 	tic.addclicks();
