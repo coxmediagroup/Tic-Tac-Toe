@@ -147,6 +147,7 @@ var TicTacToeTests;
         computerPlayer.makeMove(8);
         humanPlayer.makeMove(0); // blocks computer's first chance at winning
         var moveIndex = computerPlayer.makeMove();
+
         humanPlayer.makeMove(3);
         var moveIndex2 = computerPlayer.makeMove();
 

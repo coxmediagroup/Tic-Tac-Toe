@@ -23,7 +23,7 @@ var TicTacToe;
                 [1, 4, 7],
                 [2, 5, 8],
                 [0, 4, 8],
-                [2, 5, 6]
+                [2, 4, 6]
             ];
         }
         // returns the next calculated move
@@ -121,7 +121,13 @@ var TicTacToe;
 
                         for (var j = 0; j < nextMoveArray.length; j++) {
                             if (this._aggregatePlayedMoves.indexOf(nextMoveArray[j]) === -1) {
-                                return nextMove = parseInt(nextMoveArray[j], 10);
+                                nextMove = parseInt(nextMoveArray[j], 10);
+
+                                if (this._aggregatePlayedMoves.indexOf(nextMove) === -1) {
+                                    return nextMove;
+                                } else {
+                                    nextMove = false;
+                                }
                             }
                         }
                     }

@@ -148,9 +148,10 @@ module TicTacToeTests {
 		computerPlayer.makeMove(8);
 		humanPlayer.makeMove(0); // blocks computer's first chance at winning
 		var moveIndex = computerPlayer.makeMove(); // should be 5 to create a fork
+
 		humanPlayer.makeMove(3);
 		var moveIndex2 = computerPlayer.makeMove();  // should be 2 to win the game
-
+		
  		var winner = game.getWinner(); 		
 
  		if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) { 
