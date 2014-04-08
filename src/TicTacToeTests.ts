@@ -116,14 +116,15 @@ module TicTacToeTests {
  		humanPlayer.makeMove(3); // human player has two in a row
  
  		var moveIndex = computerPlayer.makeMove();  // should be 6 to block human player
+ 		
  		humanPlayer.makeMove(2);
  		computerPlayer.makeMove(7);
  		humanPlayer.makeMove(5);
- 		var moveIndex2 = computerPlayer.makeMove(); // should be 8 to win the game
-
+ 		var moveIndex2 = computerPlayer.makeMove(); // should be 4 to win the game
+ 		
  		var winner = game.getWinner();
-
- 		if(moveIndex === 6 && moveIndex2 === 8 && winner && winner === computerPlayer.getLabel()) { 
+ 		
+ 		if(moveIndex === 6 && moveIndex2 === 4 && winner && winner === computerPlayer.getLabel()) { 
  			success = true;
 			results += ' succeeded.';
 		} else {
@@ -171,9 +172,13 @@ module TicTacToeTests {
 		var success:boolean;
 		var results:string = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
 
-		
+		computerPlayer.makeMove(8);
+		humanPlayer.makeMove(7);
+		computerPlayer.makeMove(4);
+		humanPlayer.makeMove(2);
+		computerPlayer.makeMove();
 
- 		var winner = game.getWinner();
+ 		// var winner = game.getWinner();
  		
 
  	// 	if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) { 
@@ -184,9 +189,9 @@ module TicTacToeTests {
 		// 	results += ' failed.';
 		// }
 
-		computerPlayer.reset();
+		// computerPlayer.reset();
 
-		displayResults(results, success);
+		// displayResults(results, success);
 	}
 
 	// Test #8: Expect computer player to play the center and win the game.
@@ -204,13 +209,13 @@ module TicTacToeTests {
 	// Test #14: Expect score to be updated after each round.
 }
 
-TicTacToeTests.testOne();
+TicTacToeTests.testOne(); 
 TicTacToeTests.testTwo();
 TicTacToeTests.testThree();
 TicTacToeTests.testFour();
 TicTacToeTests.testFive();
 TicTacToeTests.testSix();
-TicTacToeTests.testSeven();
+// TicTacToeTests.testSeven();
 // TicTacToeTests.testEight();
 // TicTacToeTests.testNine();
 // TicTacToeTests.testTen();

@@ -15,7 +15,7 @@ module TicTacToe {
 			[0,3,6],
 			[1,4,7],
 			[2,5,8],
-			[0,5,8],
+			[0,4,8],
 			[2,5,6]
 		];
 
@@ -23,11 +23,18 @@ module TicTacToe {
 		private _calculate():number {
 			var nextMove:number;
 			this._aggregatePlayedMoves = this._computerPlayerPlayedMoves.concat(this._humanPlayerPlayedMoves);
+			 this._aggregatePlayedMoves.sort();
+			 this._computerPlayerPlayedMoves.sort();
+			 this._humanPlayerPlayedMoves.sort();
+			 
 			if(typeof this._checkTwoInARow(this._computerPlayerPlayedMoves) === 'number') {
+				console.log('Computer Player is using _checkTwoInARow(computer) strategy.');
 				nextMove = this._checkTwoInARow(this._computerPlayerPlayedMoves);
 			} else if (typeof this._checkTwoInARow(this._humanPlayerPlayedMoves) === 'number') {
+				console.log('Computer Player is using _checkTwoInARow(human) strategy.');
 				nextMove = this._checkTwoInARow(this._humanPlayerPlayedMoves);
 			} else if (typeof this._createFork() === 'number') {
+				console.log('Computer Player is using _createFork() strategy.');
 				nextMove = this._createFork();
 			}
 			return nextMove;
@@ -95,20 +102,46 @@ module TicTacToe {
 			if(playerMoves.length < 2) {
 				nextMove = false;
 			} else {
-				for(var i=0,j=1; j<playerMoves.length; i++,j++) {
-					for(var k=0; k<this._winningSequences.length; k++) {
-						var match1 = this._winningSequences[k].indexOf(playerMoves[i]);
-						var match2 = this._winningSequences[k].indexOf(playerMoves[j]);
-						var thirdMatchIndex = 3 - (match1 + match2);
-						var aggregateIndex = this._aggregatePlayedMoves.indexOf(this._winningSequences[k][thirdMatchIndex]);
-						if( match1 !== -1 && match2 !== -1 &&  aggregateIndex === -1) {
-							return nextMove = this._winningSequences[k][thirdMatchIndex];
+				var matchedWinningSequences = [];
+				for(var i = 0; i<playerMoves.length; i++) {
+					for(var j = 0; j<this._winningSequences.length; j++) {
+						if(this._winningSequences[j].indexOf(playerMoves[i]) !== -1) {
+							matchedWinningSequences.push(this._winningSequences[j]);
 						}
 					}
 				}
-			}
 
+				for(var i=0; i<matchedWinningSequences.length; i++) {
+				
+					if(this._intersect(matchedWinningSequences[i], playerMoves).length === 2) {
+
+						var nextMoveArray = this._diff(matchedWinningSequences[i], playerMoves);
+
+						for(var j = 0; j<nextMoveArray.length; j++) {
+							if(this._aggregatePlayedMoves.indexOf(nextMoveArray[j]) === -1) {
+								return nextMove = parseInt(nextMoveArray[j], 10); 
+							}
+						}
+
+					}
+				}
+
+			}
+			
+			
 			return nextMove;
+		}
+
+		private _diff(a1, a2) {
+			var a=[], diff=[];
+		  for(var i=0;i<a1.length;i++)
+		    a[a1[i]]=true;
+		  for(var i=0;i<a2.length;i++)
+		    if(a[a2[i]]) delete a[a2[i]];
+		    else a[a2[i]]=true;
+		  for(var k in a)
+		    diff.push(k);
+		  return diff;
 		}
 
 		// passing in a boardIndex bypasses the AI
