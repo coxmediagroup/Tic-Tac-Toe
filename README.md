@@ -3,6 +3,8 @@ TypeScript Tic-Tac-Toe + Tests
 -  [Demo](http://micahbolen.github.io/Tic-Tac-Toe/)
 -  [Tests](http://micahbolen.github.io/Tic-Tac-Toe/tests.html)
 
+Protip: Watch the console for a complete play-by-play.
+
 Tested Platforms
 ----------------
 -  Google Chrome 33 on Mac OS X Mavericks
