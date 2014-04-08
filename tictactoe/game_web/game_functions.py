@@ -108,7 +108,6 @@ def AI_turn(request):
 		
 		# If the AI already owns the center
 		if board[1][1] == 'x':
-			print "Checking wins using center"
 			for pair in centerWins:
 				x1 = pair.x1
 				y1 = pair.y1
@@ -124,7 +123,6 @@ def AI_turn(request):
 						chosenCoords = [x1, y1]
 						break		
 		if not chosenCoords:	
-			print "Checking rows for wins"	
 			# If the AI cannot win using the center, check each row				
 			for i in range(0, 3):					
 				# If there is more than 1 x in a row, the AI has a winning move					
@@ -139,7 +137,6 @@ def AI_turn(request):
 						pass
 
 			if not chosenCoords:
-				print "Checking columns for wins"
 				for j in range(0, 3):
 					columnList = []
 					for k in range(0, 3):
@@ -161,7 +158,6 @@ def AI_turn(request):
 				""" First, the AI must do the opposite of what it did earlier in checking
 					if it could win using the center
 					Now check if o can win using the center and block accordingly """
-				print "Checking center for blocks"
 				if board[1][1] == 'o':
 					for pair in centerWins:
 						x1 = pair.x1
@@ -177,8 +173,7 @@ def AI_turn(request):
 							elif not board[x1][y1]:
 								chosenCoords = [x1, y1]
 								break		
-				if not chosenCoords:
-					print "Checking rows for blocks"						
+				if not chosenCoords:						
 					""" If the AI still hasn't found a solution, check if the human has two in a row in 
 						relation to the last chosen spot """
 					""" Make our conditional statements in the loop shorter
@@ -197,10 +192,8 @@ def AI_turn(request):
 						the last spot was taken """
 					columnList = []
 					if not chosenCoords: 
-						print "Checking columns for blocks"
 						for l in range(0, 3):
 							columnList.append(board[l][lstY])
-						print columnList
 						# If o can win if there's a blank spot, take the blank spot
 						if columnList.count('o') > 1 and columnList.count('x') == 0:
 							try:
@@ -208,43 +201,106 @@ def AI_turn(request):
 							except ValueError:
 								pass
 
-					""" If the AI STILL hasn't done anything, take a random corner """
+					""" If the AI could not win or block, the user can still use one
+						or more solutions that provide him or her multiple winning 
+						moves
+						These next statements are for preventing those solutions """
 					if not chosenCoords:
+						""" Coordinates for corner spaces and corresponding coordinates
+							for opposite corners by list index
+							e.g. corners[0] is opposite corner of cornerOpposites[0] """
 						corners = [
 							[0,0],
 							[0,2],
 							[2,0],
 							[2,2]
 						]
-						# Loop until a corner that hasn't been taken is chosen
-						# Stop at to prevent infinite loop at last move
+						cornerOpposites = [
+							[2,2],
+							[2,0],
+							[0,2],
+							[0,0],
+						]
+						# Horizontal sides
+						horizSides = [
+							[1,0],
+							[1,2]
+						]
+						# Vertical sides
+						verticalSides = [
+							[0,1],
+							[2,1]
+						]
+
 						MAX_LOOPS = 20
-						numLoops = 0
-						while not chosenCoords and numLoops < MAX_LOOPS:
-							numLoops += 1
-							print "Choosing rand"
-							randCornerIndex = random.randint(0, len(corners)-1)
-							chosenCorner = corners[randCornerIndex]
-							if not board[chosenCorner[0]][chosenCorner[1]]: 
-								chosenCoords = corners[randCornerIndex]
+						if lastSpaceTaken in corners:
+							""" If the user chooses two opposite corners and the user cannot be 
+							blocked from a winning move, or the AI cannot make a winning move,
+							then the AI can choose any side and prevent defeat """
+							oppositeCorner = cornerOpposites[corners.index(lastSpaceTaken)]
+							if board[oppositeCorner[0]][oppositeCorner[1]] == 'o':
+								""" Two opposite corners are filled
+									Choose any side to occupy to prevent defeat by this soultion 
+									Choose it randomly to help prevent predictability """
+								numLoops = 0
+								while not chosenCoords and numLoops < MAX_LOOPS:
+									numLoops += 1
+									sides = horizSides+verticalSides
+									randSideIndex = random.randint(0, len(sides)-1)
+									chosenSide = sides[randSideIndex]
+									if not board[chosenSide[0]][chosenSide[1]]: 
+										chosenCoords = sides[randSideIndex]
+							elif not board[oppositeCorner[0]][oppositeCorner[1]]:
+								chosenCoords = oppositeCorner
+						elif lastSpaceTaken in (horizSides+verticalSides):
+							""" If the last space taken is a side, check if the two
+							adjacent corners for occupation. If they're both unoccupied,
+							occupy one of them. 
+							This is the solution to when the user takes a middle side and
+							a corner opposite to that side """
+							
+							""" Need to know if it is a vertical or horizontal side
+								Get adjacent corners to a horizontal side with x+-1
+								Get adjacent corners to vertical side with y+-1 								Get a random index to make the AI less predictable
+								Choosing either adjacent corner will prevent defeat"""
+							cornerToChooseSwitch = random.randint(0, len(horizSides)-1)
+							if lastSpaceTaken in horizSides:
+								if((board[lstX+1][lstY] is None) and (board[lstX-1][lstY] is None)):
+									if cornerToChooseSwitch > 0:
+										chosenCoords = [lstX+1,lstY]
+									else:
+										chosenCoords = [lstX-1, lstY]
+							elif lastSpaceTaken in verticalSides:
+								if((board[lstX][lstY+1] is None) and (board[lstX][lstY-1] is None)):
+									if cornerToChooseSwitch > 0:
+										chosenCoords = [lstX,lstY+1]
+									else:
+										chosenCoords = [lstX, lstY-1]
+						elif not chosenCoords:							
+							# Loop until a corner that hasn't been taken is chosen
+							# Stop at to prevent infinite loop at last move
+							numLoops = 0
+							while not chosenCoords and numLoops < MAX_LOOPS:
+								numLoops += 1
+								randCornerIndex = random.randint(0, len(corners)-1)
+								chosenCorner = corners[randCornerIndex]
+								if not board[chosenCorner[0]][chosenCorner[1]]: 
+									chosenCoords = corners[randCornerIndex]
 
 					""" If every other condition has passed and there's still no
 						solution, find a free spot and take it.
 						This should only happen during a stalemate scenario
 						when the AI has the last move"""
 					if not chosenCoords:
-						print "Desperate measures"
 						for idx, lst in enumerate(board):
-							#print lst
+
 							try:
 								if board[idx].index(None) >= 0:
-									print "Index of None: " + str(board[idx].index(None))
 									chosenCoords = [idx, board[idx].index(None)]
-									print chosenCoords
 									break;
 							# list.index throws a value error if the item is not found
 							except ValueError:
-								print "Couldn't find None"
+								pass
 
 
 

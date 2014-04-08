@@ -59,8 +59,6 @@ tictactoe.prototype.checkWin = function() {
 				lastSpaceTaken: JSON.stringify(this.lastSpaceTaken),
 			},
 			success: function(results){
-				//resultsJSON = $.parseJSON(results);
-				//alert(results['win']);
 				var win = results['win'];
 				if(win == true){
 					stopGame();
@@ -220,7 +218,6 @@ function displayStatus(message, type, noFadeOut) {
 var ttt_game;
 
 function initGame(countDown){
-	ttt_game = new tictactoe();
 	if(countDown===undefined)
 		countDown = 3;
 
@@ -232,8 +229,9 @@ function initGame(countDown){
 			initGame(countDown-1);
 		}, 1000);
 	}
-	else
+	else if(countDown == 0)
 	{
+		ttt_game = new tictactoe();
 		runGame();
 	}
 		
@@ -288,16 +286,20 @@ $(document).ready(function() {
 	$("#tbl-board").on("click", "td", function(event) {
 		if(gameRunning){
 			if(ttt_game.playersTurn){
-				ttt_game.addUserChoice(event.target.id);
-	    		$("#"+event.target.id).addClass("oTaken");
+				var elem = $('#'+event.target.id);
+				if(!elem.hasClass("oTaken") && !elem.hasClass("xTaken")){
+					ttt_game.addUserChoice(event.target.id);
+	    			$("#"+event.target.id).addClass("oTaken");
+	    		}
+	    		else
+	    			displayStatus("That space is occupied!", "error");
 	    	}
 	    	else
 	    		displayStatus("It's not your turn!", "bad");
 		}
 	});
-	ttt_game = new tictactoe();
+	//initGame();
 	intro();	
-	//intro();
 });
 
 //CSRF Token authentication below this line
