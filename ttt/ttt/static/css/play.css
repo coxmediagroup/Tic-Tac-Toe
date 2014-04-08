@@ -6,6 +6,7 @@ table {
 td {
   min-width: 120px;
   height: 120px;
+  text-align: center;
 }
 
 td:hover {
@@ -27,3 +28,8 @@ td:hover {
 .br {
   border-right: 5px solid #ccc;
 }
+
+img {
+  width: 110px;
+}
+
