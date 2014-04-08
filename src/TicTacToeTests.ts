@@ -23,13 +23,13 @@ module TicTacToeTests {
 	humanPlayer.registerObserver(game);
 	humanPlayer.registerObserver(computerPlayer);
 	computerPlayer.registerObserver(game);
+	game.registerObserver(computerPlayer); 
 
 	// Test #1: Expect ComputerPlayer label to be 'Computer Player'.
 	export function testOne() {
 		var success:boolean;
 		var results:string = 'Test #1: Expect ComputerPlayer label to be \'Computer Player\'';
 
-		
 		if (computerPlayer.getLabel() === 'Computer Player') {
 			success = true;
 			results += ' succeeded.';
@@ -37,8 +37,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
 		
 		displayResults(results, success);
 	}
@@ -75,8 +73,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
 		
 		displayResults(results, success);
 	}
@@ -99,8 +95,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
 
 		displayResults(results, success);
 
@@ -132,8 +126,6 @@ module TicTacToeTests {
 			results += ' failed.';
 		}
 
-		computerPlayer.reset();
-
 		displayResults(results, success);
 
 	}
@@ -162,8 +154,6 @@ module TicTacToeTests {
 			results += ' failed.';
 		}
 
-		computerPlayer.reset();
-
 		displayResults(results, success);
 
 	}
@@ -188,8 +178,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
  
 		displayResults(results, success);
 	}
@@ -215,8 +203,6 @@ module TicTacToeTests {
 			results += ' failed.';
 		}
 
-		computerPlayer.reset();
- 
 		displayResults(results, success);
 	}
 
@@ -231,7 +217,6 @@ module TicTacToeTests {
 		var moveIndex2 = computerPlayer.makeMove(); // should be 2 to block human player
 		humanPlayer.makeMove(8);
 		var moveIndex3 = computerPlayer.makeMove(); // should be 1 to win the game
-		
 
 		var winner = game.getWinner();
 			if(moveIndex === 0 && moveIndex2 === 2 && moveIndex3 === 1 && winner && winner === computerPlayer.getLabel()) { 
@@ -241,8 +226,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
  
 		displayResults(results, success);
 	}
@@ -258,7 +241,6 @@ module TicTacToeTests {
 		var moveIndex2 = computerPlayer.makeMove(); // should be 2 to block human player
 		humanPlayer.makeMove(8);
 		var moveIndex3 = computerPlayer.makeMove(); // should be 1 to win the game
-		
 
 		var winner = game.getWinner();
 			if(moveIndex === 0 && moveIndex2 === 2 && moveIndex3 === 1 && winner && winner === computerPlayer.getLabel()) { 
@@ -268,8 +250,6 @@ module TicTacToeTests {
 			success = false;
 			results += ' failed.';
 		}
-
-		computerPlayer.reset();
  
 		displayResults(results, success);
 	}
@@ -296,7 +276,7 @@ module TicTacToeTests {
 		// 	results += ' failed.';
 		// }
 
-		// computerPlayer.reset();
+		
  
 		// displayResults(results, success);
 	}
@@ -306,7 +286,7 @@ module TicTacToeTests {
 		var success:boolean;
 		var results:string = 'Test #12: Expect nextPlayer to be human player after computer player has made a move';
 
-		computerPlayer.makeMove();
+		// computerPlayer.makeMove();
 
  		// var winner = game.getWinner();
  		
@@ -319,7 +299,7 @@ module TicTacToeTests {
 		// 	results += ' failed.';
 		// }
 
-		// computerPlayer.reset();
+		
 
 		// displayResults(results, success);
 	}
@@ -330,10 +310,31 @@ module TicTacToeTests {
 		var results:string = 'Test #13: Expect nextPlayer to be computer player after human player has made a move';
 	}
 
-	// Test #14: Expect score to be updated after each round.
+	// Test #14: Expect draw to automatically reset the game and leave both scores unchanged.
 	export function testFourteen() {
 		var success:boolean;
-		var results:string = 'Test #14: Expect score to be updated after each round';
+		var results:string = 'Test #14: Expect draw to automatically reset the game and leave both scores unchanged';
+
+		humanPlayer.makeMove(0);
+		computerPlayer.makeMove();
+		humanPlayer.makeMove(8);
+		computerPlayer.makeMove();
+		humanPlayer.makeMove(6);
+		computerPlayer.makeMove();
+		humanPlayer.makeMove(5);
+		computerPlayer.makeMove();
+		humanPlayer.makeMove(1); // should be a draw
+
+		if(!game.getWinner()) {
+			success = true;
+			results += ' succeeded.';
+		} else {
+			success = false;
+			results += ' failed.';
+		}
+ 
+		displayResults(results, success);
+
 	}
 }
 

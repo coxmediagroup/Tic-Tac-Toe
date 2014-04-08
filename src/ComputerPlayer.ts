@@ -22,11 +22,12 @@ module TicTacToe {
 		// returns the next calculated move
 		private _calculate():number {
 			var nextMove:number;
+			this._computerPlayerPlayedMoves = super.getPlayedMoves();
 			this._aggregatePlayedMoves = this._computerPlayerPlayedMoves.concat(this._humanPlayerPlayedMoves);
 			 this._aggregatePlayedMoves.sort();
 			 this._computerPlayerPlayedMoves.sort();
 			 this._humanPlayerPlayedMoves.sort();
-			
+			 
 			if(typeof this._checkTwoInARow(this._computerPlayerPlayedMoves) === 'number') {
 				console.log('Computer Player is using _checkTwoInARow(computer) strategy.');
 				nextMove = this._checkTwoInARow(this._computerPlayerPlayedMoves);
@@ -250,9 +251,12 @@ module TicTacToe {
 		}
 
 		private _reset() {
+			console.log('Computer Player is resetting...');
+			console.log('');
 			this._humanPlayerPlayedMoves = [];
 	    	this._computerPlayerPlayedMoves = [];
 	    	this._aggregatePlayedMoves = [];
+	    	super.reset();
 		}
 
 		// passing in a boardIndex bypasses the AI
@@ -260,20 +264,22 @@ module TicTacToe {
 
 			if(typeof boardIndex == "number") {
 				super.makeMove(boardIndex); 
-				this._computerPlayerPlayedMoves.push(boardIndex);
 			} else {
 				console.log(this.getLabel() + ' is using their wits...');
 				var calculatedMove:number = this._calculate();
 				super.makeMove(calculatedMove);
-				this._computerPlayerPlayedMoves.push(calculatedMove);
 				return calculatedMove;
 			}
 		}
 
 		update(arg:any) {
-			console.log(arg);
-			this._humanPlayerPlayedMoves.push(arg.madeMove); 
-
+			
+			if(arg.draw === 'true' || typeof arg.winner === 'string') { 
+				this._reset();
+			} else if(arg.player === 'Human Player' && typeof arg.madeMove === 'number') { 
+				this._humanPlayerPlayedMoves.push(arg.madeMove); 
+			} 
+			
 	    }
 
 	    reset() {

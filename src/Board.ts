@@ -87,7 +87,7 @@ module TicTacToe {
 				nextPlayer = 'Human Player';
 			}		 
 		    ctx.fillStyle = color;
-            ctx.font = "200pt Helvetica";
+            ctx.font = "190pt Helvetica";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(text, this._cells[cell].width / 2 , this._cells[cell].height / 2);

@@ -74,18 +74,21 @@ var TicTacToe;
         };
 
         Game.prototype._reset = function (nextPlayer) {
+            console.log('Game over.');
+            console.log('Human Score: ' + this._humanScore);
+            console.log('Computer Score: ' + this._computerScore);
+            console.log('');
+
             if (nextPlayer === 'Draw') {
                 this.notifyObservers({ draw: 'true' });
             } else {
-                console.log('Game over.');
-                console.log('Human Score: ' + this._humanScore);
-                console.log('Computer Score: ' + this._computerScore);
-                console.log('');
                 this.notifyObservers({ humanScore: this._humanScore, computerScore: this._computerScore, winner: nextPlayer });
-                this._computerPlayerPlayedMoves = [];
-                this._humanPlayerPlayedMoves = [];
                 this._nextPlayer = nextPlayer;
             }
+
+            this._computerPlayerPlayedMoves = [];
+            this._humanPlayerPlayedMoves = [];
+            this._aggregatePlayedMoves = [];
         };
 
         Game.prototype.getWinner = function () {

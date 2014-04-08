@@ -29,6 +29,7 @@ var TicTacToe;
         // returns the next calculated move
         ComputerPlayer.prototype._calculate = function () {
             var nextMove;
+            this._computerPlayerPlayedMoves = _super.prototype.getPlayedMoves.call(this);
             this._aggregatePlayedMoves = this._computerPlayerPlayedMoves.concat(this._humanPlayerPlayedMoves);
             this._aggregatePlayedMoves.sort();
             this._computerPlayerPlayedMoves.sort();
@@ -242,28 +243,32 @@ var TicTacToe;
         };
 
         ComputerPlayer.prototype._reset = function () {
+            console.log('Computer Player is resetting...');
+            console.log('');
             this._humanPlayerPlayedMoves = [];
             this._computerPlayerPlayedMoves = [];
             this._aggregatePlayedMoves = [];
+            _super.prototype.reset.call(this);
         };
 
         // passing in a boardIndex bypasses the AI
         ComputerPlayer.prototype.makeMove = function (boardIndex) {
             if (typeof boardIndex == "number") {
                 _super.prototype.makeMove.call(this, boardIndex);
-                this._computerPlayerPlayedMoves.push(boardIndex);
             } else {
                 console.log(this.getLabel() + ' is using their wits...');
                 var calculatedMove = this._calculate();
                 _super.prototype.makeMove.call(this, calculatedMove);
-                this._computerPlayerPlayedMoves.push(calculatedMove);
                 return calculatedMove;
             }
         };
 
         ComputerPlayer.prototype.update = function (arg) {
-            console.log(arg);
-            this._humanPlayerPlayedMoves.push(arg.madeMove);
+            if (arg.draw === 'true' || typeof arg.winner === 'string') {
+                this._reset();
+            } else if (arg.player === 'Human Player' && typeof arg.madeMove === 'number') {
+                this._humanPlayerPlayedMoves.push(arg.madeMove);
+            }
         };
 
         ComputerPlayer.prototype.reset = function () {

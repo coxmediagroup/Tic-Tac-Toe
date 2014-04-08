@@ -28,5 +28,13 @@ module TicTacToe {
 
 		} 
 
+		getPlayedMoves(): any {
+			return this._playedMoves;
+		}
+
+		reset(): void {
+			this._playedMoves = [];
+		}
+
 	} 
 }

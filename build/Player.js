@@ -32,6 +32,14 @@ var TicTacToe;
         Player.prototype.setScore = function (score) {
             this._score = score;
         };
+
+        Player.prototype.getPlayedMoves = function () {
+            return this._playedMoves;
+        };
+
+        Player.prototype.reset = function () {
+            this._playedMoves = [];
+        };
         return Player;
     })(TicTacToe.Observable);
     TicTacToe.Player = Player;
