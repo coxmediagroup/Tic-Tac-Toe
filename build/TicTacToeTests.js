@@ -222,6 +222,32 @@ var TicTacToeTests;
     TicTacToeTests.testEight = testEight;
 
     // Test #9: If human player is in the corner, expect computer player to play the opposite corner and win the game.
+    function testNine() {
+        var success;
+        var results = 'Test #9: If human player is in the corner, expect computer player to play the opposite corner and win the game';
+
+        humanPlayer.makeMove(4);
+        var moveIndex = computerPlayer.makeMove();
+        humanPlayer.makeMove(6);
+        var moveIndex2 = computerPlayer.makeMove();
+        humanPlayer.makeMove(8);
+        var moveIndex3 = computerPlayer.makeMove();
+
+        var winner = game.getWinner();
+        if (moveIndex === 0 && moveIndex2 === 2 && moveIndex3 === 1 && winner && winner === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        computerPlayer.reset();
+
+        displayResults(results, success);
+    }
+    TicTacToeTests.testNine = testNine;
+
     // Test #10: Expect computer player to play an empty corner and win the game.
     // Test #11: Expect computer player to play an empty side and win the game.
     // Test #12: Expect nextPlayer to be human player after computer player has made a move.
@@ -252,7 +278,7 @@ TicTacToeTests.testFive();
 TicTacToeTests.testSix();
 TicTacToeTests.testSeven();
 TicTacToeTests.testEight();
-// TicTacToeTests.testNine();
+TicTacToeTests.testNine();
 // TicTacToeTests.testTen();
 // TicTacToeTests.testEleven();
 // TicTacToeTests.testTwelve();

@@ -42,11 +42,28 @@ module TicTacToe {
 			} else if (this._aggregatePlayedMoves.indexOf(4) === -1) {
 				console.log('Computer Player is using playCenter strategy.');
 				nextMove = 4;
+			} else if (typeof this._playCorner() === 'number') {
+				console.log('Computer Player is using _playCorner() strategy.');
+				nextMove = this._playCorner();
 			}
-			// } else if (typeof this._playCorner() === 'number') {
-			// 	console.log('Computer Player is using _playCorner() strategy.');
-			// 	nextMove = this._playOppositeCorner();
-			// }
+			return nextMove;
+		}
+
+		// Returns the next optimal move if Computer Player can play a corner
+		private _playCorner() {
+			var nextMove:any;
+			if(this._aggregatePlayedMoves.indexOf(0) === -1) {
+				nextMove = 0;
+			} else if (this._aggregatePlayedMoves.indexOf(2) === -1) {
+				nextMove = 2;
+			} else if (this._aggregatePlayedMoves.indexOf(6) === -1) {
+				nextMove = 6;
+			} else if (this._aggregatePlayedMoves.indexOf(8) === -1) {
+				nextMove = 8;
+			} else {
+				nextMove = false;
+			}
+
 			return nextMove;
 		}
 
