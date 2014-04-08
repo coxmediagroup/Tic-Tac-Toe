@@ -30,7 +30,7 @@ def processBoard(request,opick,board):
 	
 	board=set_pick(xpick,'x',mtd,board)
 	
-	myargs={'pk':board.pk,'wingroup':winners,'xpick':xpick}	
+	myargs={'pk':board.pk,'wingroup':winners,'xpick':xpick,'mtd':mtd}	
 	return myargs
 	
 

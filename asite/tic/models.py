@@ -28,21 +28,15 @@ class Board(models.Model):
 	
 
 	
-	def wingroups(self):
-	
-		return [	["zero","four","eight"],["two","four","six"],
-				["three","four","five"],["one","four","seven"],
-				["zero","one","two"],["six","seven","eight"],
-				["zero","three","six"],["two","five","eight"]
-			 ]
+	wingroups= [	["zero","four","eight"],["two","four","six"],["three","four","five"],
+		["one","four","seven"],["zero","one","two"],["six","seven","eight"],
+		["zero","three","six"],["two","five","eight"]	]
 
 			  
 	# If No win is possible and no block is needed,
 		#This is the order in which the computer will pick 
 
-	def xmoves(self):	
-		
-		return ["four","six","zero","eight","three","five","two","seven","six","eight"]
+	xmoves=["four","six","zero","eight","three","five","two","seven","six","eight"]
 		
 		
 
@@ -65,7 +59,7 @@ class Board(models.Model):
 
 	def chkGrps(self,mtd,xo):
 		N='n'
-		for grp in self.wingroups():
+		for grp in self.wingroups:
 			gvals=self.mkGrp(mtd,grp)
 			if self.chkCount(gvals,N,xo):
 				pick =grp[gvals.index(N)]
@@ -79,7 +73,7 @@ class Board(models.Model):
 		# find first open space in xmoves 
 
 	def findOpen(self,mtd,n):
-		for xm in self.xmoves():
+		for xm in self.xmoves:
 			if mtd[xm]== n:
 				return xm
 
