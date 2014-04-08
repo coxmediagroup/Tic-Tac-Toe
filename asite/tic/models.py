@@ -1,6 +1,6 @@
 from django.db import models
 
-class TicBoard(models.Model):
+class Board(models.Model):
 
 	nxo=(
                 ('n', 'N'),
@@ -10,22 +10,30 @@ class TicBoard(models.Model):
 	# I realize this violates the relational model and DRY 
 	# however, clarity and simplicity sometimes trump normalization. 
 
-	a=models.CharField(max_length=1, choices=nxo,default="n")
-	b=models.CharField(max_length=1, choices=nxo,default="n")
-	c=models.CharField(max_length=1, choices=nxo,default="n")
-	d=models.CharField(max_length=1, choices=nxo,default="n")
-	e=models.CharField(max_length=1, choices=nxo,default="n")
-	f=models.CharField(max_length=1, choices=nxo,default="n")
-	g=models.CharField(max_length=1, choices=nxo,default="n")
-	h=models.CharField(max_length=1, choices=nxo,default="n")
-	i=models.CharField(max_length=1, choices=nxo,default="n")
+	zero=models.CharField(max_length=1, choices=nxo,default="n")
+	one=models.CharField(max_length=1, choices=nxo,default="n")
+	two=models.CharField(max_length=1, choices=nxo,default="n")
+	three=models.CharField(max_length=1, choices=nxo,default="n")
+	four=models.CharField(max_length=1, choices=nxo,default="n")
+	five=models.CharField(max_length=1, choices=nxo,default="n")
+	six=models.CharField(max_length=1, choices=nxo,default="n")
+	seven=models.CharField(max_length=1, choices=nxo,default="n")
+	eight=models.CharField(max_length=1, choices=nxo,default="n")
+	
+	
+	def __str__(self):
+
+		return '%d'%self.id
+        
+	
 
 	
 	def wingroups(self):
-		return [	["a","e","i"],["c","e","g"],
-				["d","e","f"],["b","e","h"],
-				["a","b","c"],["g","h","i"],
-				["a","d","g"],["c","f","i"]
+	
+		return [	["zero","four","eight"],["two","four","six"],
+				["three","four","five"],["one","four","seven"],
+				["zero","one","two"],["six","seven","eight"],
+				["zero","three","six"],["two","five","eight"]
 			 ]
 
 			  
@@ -34,14 +42,14 @@ class TicBoard(models.Model):
 
 	def xmoves(self):	
 		
-		return ["e","g","a","i","d","f","c","h","g","i"]
+		return ["four","six","zero","eight","three","five","two","seven","six","eight"]
 		
 		
 
 		# grabs values from request.Post for a wingroup
 
-	def mkGrp(self,rp,grp):
-		return [rp[k] for k in grp]	
+	def mkGrp(self,mtd,grp):
+		return [mtd[k] for k in grp]	
 
 
 		# looks for two 'x' or two 'o' values and one 'n' in a wingroup
@@ -55,10 +63,10 @@ class TicBoard(models.Model):
 		# and returns the 'pick' for x and the group
 		#the group is used to mark winning moves.
 
-	def chkGrps(self,rp,xo):
+	def chkGrps(self,mtd,xo):
 		N='n'
 		for grp in self.wingroups():
-			gvals=self.mkGrp(rp,grp)
+			gvals=self.mkGrp(mtd,grp)
 			if self.chkCount(gvals,N,xo):
 				pick =grp[gvals.index(N)]
 				return pick,grp		
@@ -70,9 +78,9 @@ class TicBoard(models.Model):
 		#if no winning move and no block move
 		# find first open space in xmoves 
 
-	def findOpen(self,rp,n):
+	def findOpen(self,mtd,n):
 		for xm in self.xmoves():
-			if rp[xm]== n:
+			if mtd[xm]== n:
 				return xm
 
 	
@@ -80,15 +88,15 @@ class TicBoard(models.Model):
 		# or returns a block move and an empty list 
 		# or returns next open move from xmoves	and a empty list
 
-	def mkPick(self,rp):
+	def mkPick(self,mtd):
 		w=[]
-		if self.chkGrps(rp,'x',):
-			p,w=self.chkGrps(rp,'x')
+		if self.chkGrps(mtd,'x',):
+			p,w=self.chkGrps(mtd,'x')
 			return p,w
 	
-		if self.chkGrps(rp,'o'):
-			p,blah=self.chkGrps(rp,'o')	
+		if self.chkGrps(mtd,'o'):
+			p,blah=self.chkGrps(mtd,'o')	
 			return p,w		
 		else:
-			p=self.findOpen(rp,'n')			
+			p=self.findOpen(mtd,'n')			
 			return p,w

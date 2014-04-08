@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tic.models import TicBoard
+from tic.models import Board
 
 
-admin.site.register(TicBoard)
+admin.site.register(Board)
