@@ -169,23 +169,28 @@ var TicTacToeTests;
 
     // Test #7: If human player has a fork or can fork, expect computer player to block human player's fork and win the game.
     function testSeven() {
-        // var success:boolean;
-        // var results:string = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
-        // humanPlayer.makeMove(0);
-        // computerPlayer.makeMove(8);
-        // humanPlayer.makeMove(1);
-        // var moveIndex = computerPlayer.makeMove(); // should be 3 to block human player's potential fork
-        // console.log(moveIndex);
-        // var winner = game.getWinner();
-        // 	if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) {
-        // 		success = true;
-        // 	results += ' succeeded.';
-        // } else {
-        // 	success = false;
-        // 	results += ' failed.';
-        // }
-        // computerPlayer.reset();
-        // displayResults(results, success);
+        var success;
+        var results = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
+
+        humanPlayer.makeMove(1);
+        var moveIndex = computerPlayer.makeMove();
+        humanPlayer.makeMove(2);
+        var moveIndex2 = computerPlayer.makeMove();
+        humanPlayer.makeMove(7);
+        var moveIndex3 = computerPlayer.makeMove();
+
+        var winner = game.getWinner();
+        if (moveIndex === 4 && moveIndex2 === 0 && moveIndex3 === 8 && winner && winner === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        computerPlayer.reset();
+
+        displayResults(results, success);
     }
     TicTacToeTests.testSeven = testSeven;
 
@@ -245,8 +250,7 @@ TicTacToeTests.testThree();
 TicTacToeTests.testFour();
 TicTacToeTests.testFive();
 TicTacToeTests.testSix();
-
-// TicTacToeTests.testSeven();
+TicTacToeTests.testSeven();
 TicTacToeTests.testEight();
 // TicTacToeTests.testNine();
 // TicTacToeTests.testTen();
