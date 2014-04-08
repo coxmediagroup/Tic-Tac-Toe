@@ -169,14 +169,13 @@ var TicTacToeTests;
 
     // Test #7: If human player has a fork or can fork, expect computer player to block human player's fork and win the game.
     function testSeven() {
-        var success;
-        var results = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
-
-        computerPlayer.makeMove(8);
-        humanPlayer.makeMove(7);
-        computerPlayer.makeMove(4);
-        humanPlayer.makeMove(2);
-        computerPlayer.makeMove();
+        // var success:boolean;
+        // var results:string = 'Test #7: If human player has a fork or can fork, expect computer player to block human player\'s fork and win the game';
+        // humanPlayer.makeMove(0);
+        // computerPlayer.makeMove(8);
+        // humanPlayer.makeMove(1);
+        // var moveIndex = computerPlayer.makeMove(); // should be 3 to block human player's potential fork
+        // console.log(moveIndex);
         // var winner = game.getWinner();
         // 	if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) {
         // 		success = true;
@@ -189,6 +188,55 @@ var TicTacToeTests;
         // displayResults(results, success);
     }
     TicTacToeTests.testSeven = testSeven;
+
+    // Test #8: Expect computer player to play the center and win the game.
+    function testEight() {
+        var success;
+        var results = 'Test #8: Expect computer player to play the center and win the game';
+
+        humanPlayer.makeMove(1);
+        var moveIndex = computerPlayer.makeMove();
+        humanPlayer.makeMove(2);
+        var moveIndex2 = computerPlayer.makeMove();
+        humanPlayer.makeMove(7);
+        var moveIndex3 = computerPlayer.makeMove();
+
+        var winner = game.getWinner();
+        if (moveIndex === 4 && moveIndex2 === 0 && moveIndex3 === 8 && winner && winner === computerPlayer.getLabel()) {
+            success = true;
+            results += ' succeeded.';
+        } else {
+            success = false;
+            results += ' failed.';
+        }
+
+        computerPlayer.reset();
+
+        displayResults(results, success);
+    }
+    TicTacToeTests.testEight = testEight;
+
+    // Test #9: If human player is in the corner, expect computer player to play the opposite corner and win the game.
+    // Test #10: Expect computer player to play an empty corner and win the game.
+    // Test #11: Expect computer player to play an empty side and win the game.
+    // Test #12: Expect nextPlayer to be human player after computer player has made a move.
+    function testTwelve() {
+        var success;
+        var results = 'Test #12: Expect nextPlayer to be human player after computer player has made a move';
+
+        computerPlayer.makeMove();
+        // var winner = game.getWinner();
+        // 	if(moveIndex === 5 && moveIndex2 === 2 && winner && winner === computerPlayer.getLabel()) {
+        // 		success = true;
+        // 	results += ' succeeded.';
+        // } else {
+        // 	success = false;
+        // 	results += ' failed.';
+        // }
+        // computerPlayer.reset();
+        // displayResults(results, success);
+    }
+    TicTacToeTests.testTwelve = testTwelve;
 })(TicTacToeTests || (TicTacToeTests = {}));
 
 TicTacToeTests.testOne();
@@ -197,8 +245,9 @@ TicTacToeTests.testThree();
 TicTacToeTests.testFour();
 TicTacToeTests.testFive();
 TicTacToeTests.testSix();
+
 // TicTacToeTests.testSeven();
-// TicTacToeTests.testEight();
+TicTacToeTests.testEight();
 // TicTacToeTests.testNine();
 // TicTacToeTests.testTen();
 // TicTacToeTests.testEleven();

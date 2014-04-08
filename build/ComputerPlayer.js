@@ -43,8 +43,53 @@ var TicTacToe;
             } else if (typeof this._createFork() === 'number') {
                 console.log('Computer Player is using _createFork() strategy.');
                 nextMove = this._createFork();
+            } else if (typeof this._blockFork() === 'number') {
+                console.log('Computer Player is using _blockFork() strategy.');
+                nextMove = this._blockFork();
+            } else if (this._aggregatePlayedMoves.indexOf(4) === -1) {
+                console.log('Computer Player is using playCenter strategy.');
+                nextMove = 4;
             }
+
+            // } else if (typeof this._playCorner() === 'number') {
+            // 	console.log('Computer Player is using _playCorner() strategy.');
+            // 	nextMove = this._playOppositeCorner();
+            // }
             return nextMove;
+        };
+
+        // Returns the next optimal move if opponent can fork on their next turn.
+        // Otherwise, returns false.
+        ComputerPlayer.prototype._blockFork = function () {
+            var nextMove;
+            var matchedWinningSequences = [];
+
+            for (var i = 0; i < this._winningSequences.length; i++) {
+                var sequence = this._winningSequences[i];
+                for (var j = 0; j < 3; j++) {
+                    if (this._humanPlayerPlayedMoves.indexOf(sequence[j]) !== -1) {
+                        matchedWinningSequences.push(sequence);
+                        break;
+                    }
+                }
+            }
+
+            for (var i = 0; i < matchedWinningSequences.length; i++) {
+                for (var j = 0; j < matchedWinningSequences.length; j++) {
+                    if (j !== i) {
+                        var possibleNextMoves = this._intersect(matchedWinningSequences[i], matchedWinningSequences[j]);
+                        for (var k = 0; k < possibleNextMoves.length; k++) {
+                            if (this._aggregatePlayedMoves.indexOf(possibleNextMoves[k]) === -1) {
+                                var nextPossibleMove = possibleNextMoves[k];
+                                nextMove = parseInt(nextPossibleMove, 10);
+                                return nextMove;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return nextMove = false;
         };
 
         // Returns the next optimal move if a forking opportunity exists.
@@ -69,7 +114,14 @@ var TicTacToe;
                         var possibleNextMoves = this._intersect(matchedWinningSequences[i], matchedWinningSequences[j]);
                         for (var k = 0; k < possibleNextMoves.length; k++) {
                             if (this._aggregatePlayedMoves.indexOf(possibleNextMoves[k]) === -1) {
-                                return nextMove = possibleNextMoves[k];
+                                var nextPossibleMove = possibleNextMoves[k];
+                                nextMove = parseInt(nextPossibleMove, 10);
+
+                                if (this._aggregatePlayedMoves.indexOf(nextMove) === -1) {
+                                    return nextMove;
+                                } else {
+                                    nextMove = false;
+                                }
                             }
                         }
                     }
