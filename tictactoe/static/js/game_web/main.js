@@ -11,6 +11,7 @@ function tictactoe() {
 	this.playersTurn = this.firstTurn();
 	// Used for checking for stalemates
 	this.spacesTaken = 0;
+	this.clearBoard();
 
 }
 
@@ -29,9 +30,13 @@ tictactoe.prototype.addUserChoice = function(elementID) {
 	this.lastSpaceTaken = new Array(2);
 	this.lastSpaceTaken[0] = xCoord;
 	this.lastSpaceTaken[1] = yCoord;
-	// Update the number of spaces taken
-	this.spacesTaken++;
+	// Increment the number of spaces that are taken
+	this.incrementSpacesTaken();
 	this.checkWin();
+}
+
+tictactoe.prototype.checkStalemate = function() {
+	return (this.MAX_SPACES === this.spacesTaken);
 }
 
 // Check if the game has been won yet
@@ -44,6 +49,7 @@ tictactoe.prototype.checkWin = function() {
 	if(this.spaceTaken < 0)
 		return false;
 	else{
+		var game = this;
 		$.ajax({
 			type: "POST", 
 			url: "checkWin", 
@@ -54,7 +60,38 @@ tictactoe.prototype.checkWin = function() {
 			},
 			success: function(results){
 				//resultsJSON = $.parseJSON(results);
-				alert(results['win']);
+				//alert(results['win']);
+				var win = results['win'];
+				if(win == true){
+					stopGame();
+					if(game.playersTurn){
+						displayStatus("You won!", "good");
+					}
+					else{
+						displayStatus("Sorry...maybe next time...", "bad");
+					}
+					setTimeout(function(){
+							initGame();
+						}, 3000);
+				}
+				else{
+					if(game.checkStalemate() == true){
+						stopGame();
+						displayStatus("Stalemate!", "normal");
+						setTimeout(function(){
+							initGame();
+						}, 3000);
+						win = true;
+				}
+				if(win == false){
+					game.nextTurn();
+					if(game.playersTurn == true)
+						displayStatus("Your turn...", "good");
+					else{
+						game.takeAITurn();
+					}
+				}
+			}
 			},
 			error: function(){
 				displayStatus("Something went wrong...", "error");
@@ -65,7 +102,7 @@ tictactoe.prototype.checkWin = function() {
 
 // Clear the board and start a new game
 tictactoe.prototype.clearBoard = function() {
-
+	$('td').removeClass("xTaken oTaken");
 }
 
 // Determine who goes first 
@@ -112,6 +149,41 @@ tictactoe.prototype.setLastSpaceTaken = function(spaceTaken) {
 // Run funtion for Tic-Tac-Toe game
 tictactoe.prototype.run = function(){
 
+}
+
+// Have the AI take its turn
+tictactoe.prototype.takeAITurn = function() {
+	displayStatus("Opponent's turn...", "bad");
+	// Cant use 'this' in ajax call
+	var game = this;
+	$.ajax({
+			type: "POST", 
+			url: "AI_turn", 
+			dataType: "json",
+			data: {
+				board: JSON.stringify(this.board),
+				lastSpaceTaken: JSON.stringify(this.lastSpaceTaken),
+			},
+			success: function(results){
+				// Slow down the game a little
+				setTimeout(function(){
+					var coords = results['chosenCoords'];
+					// Update the board with the AI decision
+					game.board[coords[0]][coords[1]] = "x";
+					// Reflect that decision on the UI
+					var elemID = "#cell-" + coords[0] + coords[1];
+					$(elemID).addClass("xTaken");
+					// Increment the number of spaces that are taken
+					game.incrementSpacesTaken();
+					// Update lastSpotTaken
+					game.setLastSpaceTaken(coords);
+					game.checkWin();
+				}, 1000);
+			},
+			error: function(){
+				displayStatus("Something went wrong...", "error");
+			}
+		});
 }
 
 // Display a message to the user
@@ -182,18 +254,21 @@ function intro() {
 
 function runGame() {
 	gameRunning = true;
-	ttt_game.playersTurn = true;
 	if(ttt_game.playersTurn){
 		displayStatus("Your turn...", "good");
 	}
 	else{
-		displayStatus("Opponent's turn...", "bad")
+		ttt_game.takeAITurn();
 	}
+}
+
+function stopGame(){
+	gameRunning = false;
 }
 
 
 
-
+// Enables or disables click events
 var gameRunning = false;
 
 // JQuery click events
@@ -221,11 +296,11 @@ $(document).ready(function() {
 		}
 	});
 	ttt_game = new tictactoe();
-	runGame();	
+	intro();	
 	//intro();
 });
 
-//CSRF Token authentication
+//CSRF Token authentication below this line
 // Source: https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 function getCookie(name) {
     var cookieValue = null;
