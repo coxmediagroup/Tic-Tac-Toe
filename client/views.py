@@ -24,7 +24,7 @@ def make_move(request):
         move.y_position = int(y)
         move.save()
 
-        # Popoulate board that can be used with TicTacToe class
+        # Populate board that can be used with TicTacToe class
         board_values = board.split(',')
         board_dict = {}
         i = 0
@@ -37,7 +37,12 @@ def make_move(request):
         next_move = ttt.minmax(False)
         if next_move['coordinates'] == None:
             coordinates = None
-            state = "win" if next_move['value'] == -1 else "tie"
+            if next_move['value'] == -1:
+                state = "lose"
+            elif next_move['value'] == 0:
+                state = "tie"
+            else:
+                state = "Win"
         else:
             state = None
             coordinates = {
