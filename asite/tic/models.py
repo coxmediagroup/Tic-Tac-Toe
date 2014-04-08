@@ -30,10 +30,10 @@ class Board(models.Model):
 	
 	def wingroups(self):
 	
-		return [	[zero,four,eight],[two,four,six],
-				[three,four,five],[one,four,seven],
-				[zero,one,two],[six,seven,eight],
-				[zero,three,six],[two,five,eight]
+		return [	["zero","four","eight"],["two","four","six"],
+				["three","four","five"],["one","four","seven"],
+				["zero","one","two"],["six","seven","eight"],
+				["zero","three","six"],["two","five","eight"]
 			 ]
 
 			  
@@ -42,7 +42,7 @@ class Board(models.Model):
 
 	def xmoves(self):	
 		
-		return [four,six,zero,eight,three,five,two,seven,six,eight]
+		return ["four","six","zero","eight","three","five","two","seven","six","eight"]
 		
 		
 
