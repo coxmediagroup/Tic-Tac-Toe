@@ -69,11 +69,11 @@ module TicTacToe {
 			console.log('Human Score: ' + this._humanScore);
 			console.log('Computer Score: ' + this._computerScore);
 			console.log('');
-			this.notifyObservers({humanScore:this._humanScore,computerScore:this._computerScore});
+			this.notifyObservers({humanScore:this._humanScore,computerScore:this._computerScore,winner:nextPlayer});
 			this._computerPlayerPlayedMoves = [];
 			this._humanPlayerPlayedMoves = [];
 			this._nextPlayer = nextPlayer;
-			this.notifyObservers({nextPlayer:nextPlayer});
+			
 		}
 
 		getWinner() {

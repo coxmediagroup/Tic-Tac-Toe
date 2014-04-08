@@ -104,7 +104,7 @@ module TicTacToe {
 				var ctx = this._cells[i].getContext('2d');	
 				// cell border
 				ctx.strokeStyle = "rgb(0, 0, 0)";
-				ctx.fillStyle = "rgb(0, 0, 0)";
+				ctx.fillStyle = "rgb(255, 255, 255)";
 				ctx.fillRect(0,0,200,200);
   				ctx.strokeRect (0, 0, 200, 200);
   				this._cells[i].setAttribute('played', 'false');
@@ -113,12 +113,14 @@ module TicTacToe {
 		}
 
 		update(arg:any) {
-			   	console.log(arg);
+			   	
+
 			   	if(arg.player && typeof arg.move === 'number') {
 			   		this._makeMove(arg.player, arg.move);
-			   	} else if (arg.humanScore && arg.computerScore) {
+			   	} else if (typeof arg.humanScore === 'number' && typeof arg.computerScore === 'number') {
+			   		alert('Winner: ' + arg.winner);
 			   		this._reset(arg);
-			   	}
+			   	} 
 	    }
 	}
 }
