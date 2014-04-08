@@ -5,6 +5,17 @@ var TicTacToeCtrl = (function($, undefined) {
         game_id = null,
         name_button = $("#name-button");
 
+    function computer_move(x,y) {
+        $('.board td').each(function() {
+            var square = $(this);
+            var square_x = parseInt(square.data('x'),10);
+            var square_y = parseInt(square.data('y'),10);
+            if(x === square_x && y == square_y) {
+                square.html("O");
+            }
+        });
+    }
+
     // Register event handlers once the page is ready.
     function init() {
         $(document).ready(function() {
@@ -34,7 +45,6 @@ var TicTacToeCtrl = (function($, undefined) {
     }
 
     function make_move(x,y) {
-        console.log("Make move " + x + "," + y);
         var board = serialize_board();
         $.post("/api/make-move/", {
             board: board,
@@ -42,7 +52,11 @@ var TicTacToeCtrl = (function($, undefined) {
             x: x,
             y: y
         }, function(data) {
-            console.log(data);
+            if(data.state) {
+                show_state(data.state);
+            } else {
+                computer_move(data.coordinates.x, data.coordinates.y);
+            }
         });
     }
 
@@ -61,6 +75,10 @@ var TicTacToeCtrl = (function($, undefined) {
         });
 
         return board.toString();
+    }
+
+    function show_state(state) {
+        $("#state").html(state + "!");
     }
 
     // Start the game by fetching the new game id from the server.
