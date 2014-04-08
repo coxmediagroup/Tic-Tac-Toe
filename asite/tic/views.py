@@ -14,7 +14,7 @@ def dict_to_board(mtd,board):
 	board.save()
 	return board	
 	
-def setPick(pick,val,mtd,board):
+def set_pick(pick,val,mtd,board):
 	mtd[pick]=val
 	board=dict_to_board(mtd,board)
 	return board			

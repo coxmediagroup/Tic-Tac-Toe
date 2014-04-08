@@ -73,7 +73,7 @@ class Board(models.Model):
 		# find first open space in xmoves 
 
 	def findOpen(self,mtd,n):
-		for xm in self.xmoves:
+		for xm in xmoves:
 			if mtd[xm]== n:
 				return xm
 
