@@ -39,6 +39,8 @@
                 }
             });
 
+            $("#newGame").click(reset_board);
+
             name_button.click(start_game);
         });
     }
@@ -57,6 +59,13 @@
                 computer_move(data.coordinates.x, data.coordinates.y);
             }
         });
+    }
+
+    function reset_board(evt) {
+        $('.board td').each(function(){
+            $(this).html('');
+        });
+        $("#state").html('');
     }
 
     function serialize_board() {
@@ -89,6 +98,7 @@
                 $(".player-name > span").text(game_name);
                 $(".player-name").removeClass('hidden');
                 $(".board").removeClass('hidden');
+                $("#newGame").removeClass('hidden');
             });
         });
     }
