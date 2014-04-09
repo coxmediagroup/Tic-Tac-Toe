@@ -12,7 +12,7 @@ class TicTacToeGame(models.Model):
         self.print_board()
         return self.player
 
-    def __init__(self, player):
+    def __init__(self, player='Anonymous'):
         super(TicTacToeGame, self).__init__()
         self.player = player
         self.game_time = datetime.now()
