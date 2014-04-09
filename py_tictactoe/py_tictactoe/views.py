@@ -9,7 +9,7 @@ def home(request):
 
 	ttt = request.session.get("ttt")
 	if not ttt:
-		ttt = TicTacToe()
+		ttt = TicTacToe("")
 	else:
 		ttt = TicTacToe.from_json(ttt)
 

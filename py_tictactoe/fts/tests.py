@@ -33,7 +33,7 @@ class TicTacToeTest(LiveServerTestCase):
         # She sees the response
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Mary, Good Luck', body.text)
-        self.assertIn('Player 1 (X): Mary', body.text)
+        self.assertIn('Player 2 (O): Mary', body.text)
 
         self.browser.find_element_by_id('cell_1').click()
 
