@@ -87,8 +87,9 @@
         }
       );
 
-      $('.cell').on('click', 'td',
+      $('.cell').on('click',
         function () {
+          console.log('click', $(this));
           TTT.mark_square($(this));
         }
       );
