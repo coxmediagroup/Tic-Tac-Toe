@@ -9,104 +9,6 @@
   <div class="player2">Player 2 (O): {% if first %}Computer{% else %}{{ name }}{% endif %}</div>
 </div>
 
-<style>
-.intro {
-	text-align: center;
-	font-size: 2em;
-	font-weight: bold;
-	padding-bottom: 20px;
-	width: 50%;
-	margin: auto;
-}
-.intro .player1 {
-	font-size: 0.5em;
-	float: left;
-}
-.intro .player2 {
-	font-size: 0.5em;
-	float: right;
-}
-#game {
-	margin: 20px auto;
-	width: 75%;
-}
-#game table {
-	margin:auto;
-}
-#game table td {
-	width: 75px;
-	height: 75px;
-	min-width: 32px;
-	max-width: 100px;
-	min-height: 32px;
-	max-height: 100px;
-}
-.cell {
-	border: 2px solid #bbb;
-}
-.cell_corner_tl {
-	border-top-color: #eee;
-	border-left-color: #eee;
-	border-top-left-radius: 7px;
-}
-.cell_corner_tr {
-	border-top-color: #eee;
-	border-right-color: #eee;
-	border-top-right-radius: 7px;
-}
-.cell_corner_bl {
-	border-bottom-color: #eee;
-	border-left-color: #eee;
-	border-bottom-left-radius: 7px;
-}
-.cell_corner_br {
-	border-bottom-color: #eee;
-	border-right-color: #eee;
-	border-bottom-right-radius: 7px;
-}
-.cell_edge_l {
-	border-left-color: #eee;
-}
-.cell_edge_r {
-	border-right-color: #eee;
-}
-.cell_edge_t {
-	border-top-color: #eee;
-}
-.cell_edge_b {
-	border-bottom-color: #eee;
-}
-.cell img {
-	width: 92%;
-	height: 92%;
-}
-#status a {
-	text-align: center;
-	font-size: 3em;
-	font-weight: bold;
-	width:50%;
-	position: relative;
-	left: 25%;
-	border: 3px solid black;
-	border-radius: 10px;
-}
-#reset {
-	display: inline-block;
-}
-#status_win {
-	background: green;
-	display: none;
-}
-#status_lose {
-	background: red;
-	display: none;
-}
-#status_tie {
-	background: yellow;
-	display: none;
-}
-</style>
-
 <div id="game">
   <table>
     <tr><td id="cell_1" class="cell cell_corner_tl"></td><td id="cell_2" class="cell cell_edge_t"></td><td id="cell_3" class="cell cell_corner_tr"></td></tr>
@@ -123,63 +25,10 @@
 </div>
 
 <script>
-var TicTacToe = {
-	img_map: {
-		1: "cell_X.png",
-		2: "cell_O.png"
-	},
-	human_data: "{{ human_data }}",
-	computer_data: "{{ computer_data }}",
-
-	move_human: function(cell) {
-		if (cell.attr('data')) {
-			alert('This cell has been taken already!');
-		} else {
-			this._show_move(cell, this.human_data);
-			this._post_move(cell);
-		}
-	},
-	move_computer: function(cell) {
-		if (cell.attr('data')) {
-			alert('This cell has been taken already!');
-		} else {
-			this._show_move(cell, this.computer_data);
-		}
-	},
-	_show_move: function(cell, data) {
-		cell.append("<img src='{% static "img/" %}"+this.img_map[data]+"'/>");
-		cell.attr("data",data);
-	},
-	_post_move: function(cell) {
-		$.get('move',{cell: cell.attr("id").substring(5), _dc: Math.random()})
-			.done(function(data){
-				if (data.error) {
-					alert(data.error.message);
-					if (data.error.critical)
-						window.location = "/";
-				} else {
-					if (data.move) {
-						TicTacToe.move_computer($("#cell_"+data.move.cell));
-					}
-					if (data.status == "human win") {
-						$('#reset').hide();
-						$('#status_win').css('display','inline-block');
-					} else if (data.status == "computer win") {
-						$('#reset').hide();
-						$('#status_lose').css('display','inline-block');
-					} else if (data.status == "cat win") {
-						$('#reset').hide();
-						$('#status_tie').css('display','inline-block');
-					} else if (data.status) {
-						alert(data.status);
-					}
-
-				}
-			});
-	}
-};
-
 $(document).ready(function(){
+	TicTacToe.human_data= "{{ human_data }}";
+	TicTacToe.computer_data= "{{ computer_data }}";
+
 	$('.cell').each(function(){
 		var cell = $(this);
 		cell.height(cell.width());
@@ -187,6 +36,7 @@ $(document).ready(function(){
 		var cell = $(this);
 		TicTacToe.move_human(cell);
 	});
+
 	{% if move %}
 	TicTacToe.move_computer($('#cell_'+{{ move }}));
 	{% endif %}
