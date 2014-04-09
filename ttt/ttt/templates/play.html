@@ -16,7 +16,7 @@
       </tr>
       <tr>
         <div id="challenger_div">
-          <td><img class="legend-img" src="{{ STATIC_URL }}images/x.png" /></td>
+          <td><img class="legend" src="{{ STATIC_URL }}images/x.png" /></td>
           <td><h2 class="form-inline">
             Challenger:
             <span id="player_name">Anonymous</span>
@@ -87,9 +87,9 @@
         }
       );
 
-      $('.cell').on('click',
-        function (this) {
-          TTT.mark_square(this);
+      $('.cell').on('click', 'td',
+        function () {
+          TTT.mark_square($(this));
         }
       );
     }
