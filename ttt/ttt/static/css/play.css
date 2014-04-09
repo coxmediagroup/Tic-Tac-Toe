@@ -3,13 +3,13 @@ table {
     margin-right:auto;
   }
 
-td {
+td.cell {
   min-width: 120px;
   height: 120px;
   text-align: center;
 }
 
-td:hover {
+td.cell:hover {
   background-color: #eee;
 }
 
