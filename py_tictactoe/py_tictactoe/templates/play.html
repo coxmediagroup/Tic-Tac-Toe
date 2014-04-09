@@ -80,44 +80,30 @@
 	width: 92%;
 	height: 92%;
 }
-#status_win {
+#status a {
 	text-align: center;
 	font-size: 3em;
 	font-weight: bold;
 	width:50%;
 	position: relative;
 	left: 25%;
-	background: green;
-	/*display: inline-block;*/
-	display: none;
 	border: 3px solid black;
 	border-radius: 10px;
+}
+#reset {
+	display: inline-block;
+}
+#status_win {
+	background: green;
+	display: none;
 }
 #status_lose {
-	text-align: center;
-	font-size: 3em;
-	font-weight: bold;
-	width:50%;
-	position: relative;
-	left: 25%;
 	background: red;
-	/*display: inline-block;*/
 	display: none;
-	border: 3px solid black;
-	border-radius: 10px;
 }
 #status_tie {
-	text-align: center;
-	font-size: 3em;
-	font-weight: bold;
-	width:50%;
-	position: relative;
-	left: 25%;
 	background: yellow;
-	/*display: inline-block;*/
 	display: none;
-	border: 3px solid black;
-	border-radius: 10px;
 }
 </style>
 
@@ -130,16 +116,17 @@
 </div>
 
 <div id="status">
-  <a href="home" id="status_win" >You WIN!</a>
-  <a href="home" id="status_lose">You LOSE!</a>
-  <a href="home" id="status_tie" >TIE!!</a>
+  <a href="home" id="reset">Reset</a>
+  <a href="play" id="status_win" >You WIN!</a>
+  <a href="play" id="status_lose">You LOSE!</a>
+  <a href="play" id="status_tie" >TIE!!</a>
 </div>
 
 <script>
 var TicTacToe = {
 	img_map: {
-		"X": "cell_X.png",
-		"O": "cell_O.png"
+		1: "cell_X.png",
+		2: "cell_O.png"
 	},
 	human_data: "{{ human_data }}",
 	computer_data: "{{ computer_data }}",
@@ -175,10 +162,13 @@ var TicTacToe = {
 						TicTacToe.move_computer($("#cell_"+data.move.cell));
 					}
 					if (data.status == "human win") {
+						$('#reset').hide();
 						$('#status_win').css('display','inline-block');
 					} else if (data.status == "computer win") {
+						$('#reset').hide();
 						$('#status_lose').css('display','inline-block');
 					} else if (data.status == "cat win") {
+						$('#reset').hide();
 						$('#status_tie').css('display','inline-block');
 					} else if (data.status) {
 						alert(data.status);
