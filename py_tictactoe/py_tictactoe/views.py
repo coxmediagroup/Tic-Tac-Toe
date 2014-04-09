@@ -9,20 +9,22 @@ PLAYER2_CELL = 2
 
 def home(request):
 	'The site home page'
-	context = {'name':request.session.get("playerName"), 'first':("on" if request.session.get("playerFirst") else "") }
+	context = {'name':request.session.get("playerName", ""), 'first':("on" if request.session.get("playerFirst") else "") }
 	request.session['start'] = True
 	return render(request, 'home.html', context)
 
 def reset(request):
 	'Kill the session and start over'
 	request.session.flush()
-	return request.redirect(home)
+	request.session.clear()
+	request.session.delete()
+	return redirect("home")
 
 def play(request):
 	'Play the game'
 
-	request.session['playerName'] = request.GET.get('player-name', request.session['playerName'])
-	first = request.session['playerFirst'] = request.GET.get('player-first', request.session['playerFirst'])
+	request.session['playerName'] = request.GET.get('player-name', request.session.get('playerName', ""))
+	first = request.session['playerFirst'] = request.GET.get('player-first', request.session.get('playerFirst', "on"))
 
 	human_data    = PLAYER1_CELL if first else PLAYER2_CELL
 	computer_data = PLAYER2_CELL if first else PLAYER1_CELL
@@ -80,7 +82,7 @@ def move(request):
 				if not first:
 					move = _computer_first_move(data, computer_data)
 				else:
-					move = _human_first(data, computer_data)
+					move = _human_first_move(data, human_data)
 
 				print "got move "+str(move)
 
@@ -259,14 +261,50 @@ def _computer_first_move(data, computer_data):
 
 	return None
 
-def _human_first_move(data):
-	pass
+def _human_first_move(data, player_data):
+	moveName = ""
 
-def _get_move_block(data, computer_data):
+	for move in data['moves']:
+		moveName += str(move)
+
+	if moveName is "":
+		moveName = "-"
+
+	# cells already taken in play
+	taken = []
+	for i in range(0, 9):
+		if data['data'][i] is not 0:
+			taken.append(i+1)
+
+	# TODO : Look for blocks
+	move = _get_move_win(data, player_data)
+	if move:
+		return move
+
+	# TODO : Look for wins
+	move = _get_move_block(data, player_data)
+	if move:
+		return move
+
+	# With no blocks or immediate wins, try a good move toward a win
+
+	print moveName
+	print taken
+
+	bestMoves = {
+		# start
+		"-": [],
+		"5": [1,3,7,9]
+	}
+
+	# TODO : FINISH
+	return None
+
+def _get_move_block(data, player_data):
 	for cell in [1,2,3,4,7]:
 		player = _get_cell_data(data['data'][cell-1])
 		print "check block cell %d player %s" % (cell, (player))
-		if player is not computer_data:
+		if player is not player_data:
 			if cell in [1,2,3]: #vertical
 				print "vert"
 				row = [ 
@@ -279,7 +317,7 @@ def _get_move_block(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = cell + (i*3) # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -298,7 +336,7 @@ def _get_move_block(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = cell + (i) # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -317,7 +355,7 @@ def _get_move_block(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = {0:1,1:5,2:9}[i] # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -336,7 +374,7 @@ def _get_move_block(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = {0:3,1:5,2:7}[i] # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -345,7 +383,7 @@ def _get_move_block(data, computer_data):
 					return tally[0]
 	return None
 
-def _get_move_win(data, computer_data):
+def _get_move_win(data, player_data):
 	for cell in [1,2,3,4,7]:
 		player = _get_cell_data(data['data'][cell-1])
 		print "check to win cell %d player %s" % (cell, (player))
@@ -362,7 +400,7 @@ def _get_move_win(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = cell + (i*3) # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -381,7 +419,7 @@ def _get_move_win(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = cell + (i) # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -400,7 +438,7 @@ def _get_move_win(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = {0:1,1:5,2:9}[i] # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1
@@ -419,7 +457,7 @@ def _get_move_win(data, computer_data):
 				for i in [0,1,2]:
 					if row[i] == 0: 
 						tally[0] = {0:3,1:5,2:7}[i] # ok, ok, empty is not a count but last found empty cell
-					elif row[i] == computer_data:
+					elif row[i] == player_data:
 						tally[1] += 1
 					else:
 						tally[2] += 1

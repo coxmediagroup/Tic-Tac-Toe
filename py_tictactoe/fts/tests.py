@@ -18,13 +18,22 @@ class TicTacToeTest(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Play TIC - TAC - TOE', body.text)
 
-        self.browser.find_element_by_id('player-name').value("David")
-        self.browser.find_element_by_id('player-first').click().submit()
+        self.browser.find_element_by_class_name('toggle-button').click()
+        self.browser.find_element_by_id('player-name').send_keys("Mary")
 
     def test_play(self):
         # Mary starts a game
-        self.browser.get(self.live_server_url + '/play?player-name=Mary&player-first=on')
+        self.browser.get(self.live_server_url + '')
+
+        self.browser.find_element_by_class_name('toggle-button').click()
+        self.browser.find_element_by_id('player-name').send_keys("Mary")
+
+        self.browser.find_element_by_tag_name('button').click()
 
         # She sees the response
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Mary, it is your turn', body.text)
+        self.assertIn('Mary, Good Luck', body.text)
+        self.assertIn('Player 1 (X): Mary', body.text)
+
+        self.browser.find_element_by_id('cell_1').click()
+
