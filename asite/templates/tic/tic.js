@@ -3,9 +3,10 @@ var xpick="{{xpick}}";
 tic.pk={{pk}};
 
 {% if xpick %}
-	tic.setsquare("{{xpick}}","x");
-	tic.addclicks();
-	
+	setTimeout(function(){  
+		tic.setsquare("{{xpick}}","x");
+		tic.addclicks();
+	},2000);
 {% endif %}
 	nNodes=document.getElementsByClassName('n');
 	if (nNodes.length==0){
@@ -13,7 +14,7 @@ tic.pk={{pk}};
 		tic.reset();
 	setTimeout(function(){  tic.pk=false;
                 		tic.reset();
-				fetch(false,false);},2000)
+				fetch(false,false);},2500)
 	}	;
 
 {% if wingroup|length == 3 %}
