@@ -82,7 +82,7 @@ def move(request):
 				if not first:
 					move = _computer_first_move(data, computer_data)
 				else:
-					move = _human_first_move(data, human_data)
+					move = _human_first_move(data, computer_data)
 
 				print "got move "+str(move)
 
@@ -93,18 +93,18 @@ def move(request):
 					data['moves'].append(move)
 					resp_data['move'] = {'cell': move}
 
-					player = _get_move_won(data)
-					if player is not None:
-						resp_data['status'] = "human win" if player == human_data else "computer win"
-					else:
-						found = False
-						for j in range(0, 9):
-							if data['data'][j] == 0:
-								found = True
+				player = _get_move_won(data)
+				if player is not None:
+					resp_data['status'] = "human win" if player == human_data else "computer win"
+				else:
+					found = False
+					for j in range(0, 9):
+						if data['data'][j] == 0:
+							found = True
 
-						if not found:
-							resp_data['status'] = "cat win"
-							print data
+					if not found:
+						resp_data['status'] = "cat win"
+						print data
 
 	request.session['tictactoe'] = data
 
@@ -261,7 +261,7 @@ def _computer_first_move(data, computer_data):
 
 	return None
 
-def _human_first_move(data, player_data):
+def _human_first_move(data, computer_data):
 	moveName = ""
 
 	for move in data['moves']:
@@ -277,12 +277,12 @@ def _human_first_move(data, player_data):
 			taken.append(i+1)
 
 	# TODO : Look for blocks
-	move = _get_move_win(data, player_data)
+	move = _get_move_win(data, computer_data)
 	if move:
 		return move
 
 	# TODO : Look for wins
-	move = _get_move_block(data, player_data)
+	move = _get_move_block(data, computer_data)
 	if move:
 		return move
 
@@ -294,10 +294,67 @@ def _human_first_move(data, player_data):
 	bestMoves = {
 		# start
 		"-": [],
-		"5": [1,3,7,9]
+		"5": [1,3,7,9],
+
+		"1": [5],
+		"3": [5],
+		"7": [5],
+		"9": [5],
+
+		"159": [2,4,6,8],
+		"357": [2,4,6,8],
+		"753": [2,4,6,8],
+		"951": [2,4,6,8],
+
+		"15": [3,7,9],
+		"35": [1,7,9],
+		"75": [1,3,9],
+		"95": [1,3,7]
 	}
 
-	# TODO : FINISH
+	possibleMoves = bestMoves.get(moveName)
+
+	if possibleMoves is None and len(moveName) > 1:
+		# try partial
+		possibleMoves = bestMoves.get(moveName[:-1])
+
+	if possibleMoves is None and len(moveName) > 2:
+		# try partial
+		possibleMoves = bestMoves.get(moveName[:-2])
+
+	if possibleMoves is None:
+		# was it a late center move?
+		if len(moveName) >= 4 and moveName[3] == '5':
+			moveName = moveName[0] + "xx5"
+			possibleMoves = bestMoves.get(moveName)
+
+	if possibleMoves is not None:
+		print "best = "
+		print possibleMoves
+
+		possibleMoves = list( set(possibleMoves) - set(taken) )
+
+		print "possible not taken = "
+		print possibleMoves
+
+		if len(possibleMoves) == 1:
+			return possibleMoves[ 0 ];
+		if len(possibleMoves) > 1:
+			return possibleMoves[ random.randint(0, len(possibleMoves)-1) ];
+		# else fall down to brute force
+
+	print "try to brute force"
+
+	# brute force into TIE
+	for j in range(0, 9):
+		if data['data'][j] == 0:
+			return j+1
+			# data[i] = computer_data
+			# resp_data['move'] = {'cell': i+1}
+			# break
+
+	print "no moves left"
+
 	return None
 
 def _get_move_block(data, player_data):
@@ -395,7 +452,7 @@ def _get_move_win(data, player_data):
 				  _get_cell_data(data['data'][cell-1 + 3]) , 
 				  _get_cell_data(data['data'][cell-1 + 6]) ]
 
-				tally = [0,0,0] # empty, computer, human
+				tally = [0,0,0] # empty, player, other
 
 				for i in [0,1,2]:
 					if row[i] == 0: 
@@ -407,6 +464,7 @@ def _get_move_win(data, player_data):
 
 				if tally[1] == 2 and tally[2] == 0:
 					return tally[0]
+				print tally
 			if cell in [1,4,7]: #horizontal
 				print "horz"
 				row = [ 
@@ -426,6 +484,7 @@ def _get_move_win(data, player_data):
 
 				if tally[1] == 2 and tally[2] == 0:
 					return tally[0]
+				print tally
 			if cell is 1: # diagonal
 				print "diag 1"
 				row = [ 
