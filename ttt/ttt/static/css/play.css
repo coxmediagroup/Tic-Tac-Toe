@@ -33,3 +33,6 @@ img {
   width: 110px;
 }
 
+img.legend {
+  width: 40px;
+}
