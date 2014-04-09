@@ -34,6 +34,8 @@ form div#field_name label {
 
   display: none; x:inline-block;
   position: relative; top:7px;
+
+  color: #fafafa;
   
   width: 70px;
   height: 26px;
