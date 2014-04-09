@@ -1,4 +1,4 @@
-from ttt.models import TicTacToe
+from models import TicTacToeGame
 import simplejson
 
 from django.middleware.csrf import get_token

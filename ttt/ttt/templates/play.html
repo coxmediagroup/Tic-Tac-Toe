@@ -58,7 +58,7 @@
           GAME_ID: {{ game_id }},
 
           // randomly select first player
-          current_player: Math.random() >= 0.5 ? 1:2; //1=computer, 2=human
+          current_player: Math.random() >= 0.5 ? 1:2, //1=computer, 2=human
 
           computer_play: function() {
             $.getJSON('update/{{ game_id }}/computer',
