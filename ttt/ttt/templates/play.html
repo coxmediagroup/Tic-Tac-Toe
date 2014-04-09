@@ -25,33 +25,79 @@
         </div>
       </tr>
     </table></div>
-    <div>
+    <div id="board">
       <table>
         <tr>
-          <td class="cell bb br"></td>
-          <td class="cell bl bb br"></td>
-          <td class="cell bl bb"></td>
+          <td id="cell_1_1" class="cell bb br"></td>
+          <td id="cell_1_2" class="cell bl bb br"></td>
+          <td id="cell_1_3" class="cell bl bb"></td>
         </tr>
         <tr>
-          <td class="cell bt bb br"></td>
-          <td class="cell bl bt bb br"></td>
-          <td class="cell bl bt bb"></td>
+          <td id="cell_2_1" class="cell bt bb br"></td>
+          <td id="cell_2_2" class="cell bl bt bb br"></td>
+          <td id="cell_2_3" class="cell bl bt bb"></td>
         </tr>
         <tr>
-          <td class="cell bt br"></td>
-          <td class="cell bl bt br"></td>
-          <td class="cell bl bt"></td>
+          <td id="cell_3_1" class="cell bt br"></td>
+          <td id="cell_3_2" class="cell bl bt br"></td>
+          <td id="cell_3_3" class="cell bl bt"></td>
         </tr>
       </table>
+    </div>
+    <div id="end_of_game_labels" >
+      <div id="lose_lbl" class="hide"><h2>You lose!</h2></div>
+      <div id="tie_lbl" class="hide"><h2>Well done! Tie.</h2></div>
+      <a href="play">
+      <button type="button" class="btn btn-success btn-lg hide" href="play">
+        <span class="glyphicon glyphicon-play"></span> Play Again
+      </button>
+    </a>
     </div>
   </div>
 {% endblock %}
 
 {% block js %}
 <script>
+  var TTT = {
+    GAME_ID: {{ game_id }},
+
+    // randomly select first player
+    current_player: Math.random() >= 0.5 ? 1:2, //1=computer, 2=human
+
+    // request computer to make a move
+    computer_play: function() {
+      if (TTT.current_player == 1) {
+        $.getJSON('update/{{ game_id }}/play/computer',
+          function (data) {
+            console.log('computer play', data);
+            TTT.current_player = 2;
+          }
+        );
+      }
+    },
+
+
+    // mark a human square
+    mark_square: function(td) {
+        if (TTT.current_player === 2) {
+          // post to server and ensure success
+          $.post('update/{{ game_id }}/play/challenger/' + $(td).attr('id'),
+            function (data) {
+              console.log('challenger play', data);
+              // on successful post, update front-end and
+              $(td).append('<img src="/static/images/x.png" />');
+              // have the computer play
+              TTT.current_player = 1;
+              TTT.computer_play();
+            }
+          );
+        }
+    },
+};
+
   $(document).ready(
     function(){
-      // set current page
+      // set current page link
       $('li[name="play_link"]').addClass('active');
 
       // handle hover on setting challenger name
@@ -82,11 +128,17 @@
             $('#player_name_input').css('display', 'none');
 
             // save to database
-            $.post('/update/2/challenger/' + $('#player_name_input').val());
+            $.post('/update/2/challenger/' + $('#player_name_input').val(),
+              function (data) {
+                // if no error, do nothing
+                // if error, rename to anonymous
+              }
+            );
           }
         }
       );
       
+      // assign click event to tic-tac-toe cells
       $('.cell').on('click',
         function () {
           console.log('click', $(this));
@@ -94,33 +146,7 @@
         }
       );
 
-      var TTT = {
-          GAME_ID: {{ game_id }},
-
-          // randomly select first player
-          current_player: Math.random() >= 0.5 ? 1:2, //1=computer, 2=human
-
-          computer_play: function() {
-            $.getJSON('update/{{ game_id }}/computer',
-              function (data) {
-                console.log('data', data);
-                TTT.current_player = 2;
-              }
-            );
-          },
-
-
-          // mark a human square
-          mark_square: function(td) {
-              if (TTT.current_player === 2) {
-                $(td).append('<img src="/static/images/x.png" />');
-                TTT.current_player = 1;
-                TTT.computer_play();
-              }
-          },
-      };
-
-      console.log('got to this part');
+      console.log('got to this part', TTT.current_player);
 
     }
   );

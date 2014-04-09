@@ -36,3 +36,7 @@ img {
 img.legend {
   width: 40px;
 }
+
+.hide {
+  display: none;
+}
