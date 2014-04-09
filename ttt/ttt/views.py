@@ -22,6 +22,8 @@ def play(request):
         context_instance = RequestContext(request))
 
 def computer_play(request, game):
+    print 'got to computer play'
+    print 'game', game
     ttt = TicTacToeGame.objects.get(id=int(game))
     next_pos = cl.next_move(ttt)
     ttt.update_board(2, next_pos)
