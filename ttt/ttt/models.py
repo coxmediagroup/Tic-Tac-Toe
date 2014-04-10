@@ -4,8 +4,8 @@ import numpy
 from datetime import datetime
 
 class TicTacToeGame(models.Model):
-    player = models.CharField(max_length=32, default="anonymous")
-    game_time = models.DateTimeField(auto_add_now=True)
+    player = models.CharField(max_length=32, default="Anonymous")
+    game_time = models.DateTimeField(auto_now_add=True)
     board = models.CharField(max_length=17, default="0,0,0,0,0,0,0,0,0")
     
     def __unicode__(self):
@@ -19,15 +19,6 @@ class TicTacToeGame(models.Model):
                                                      gt.hour,
                                                      gt.minute,
                                                      gt.second)
-
-    def __init__(self, player='Anonymous'):
-        """Sets player name, game time (automatically) and saves the
-        game immediately.
-        """
-        super(TicTacToeGame, self).__init__()
-        self.player = player
-        self.save()
-        return None
 
     def get_board(self):
         vals = [int(v) for v in self.board.split(',')]
