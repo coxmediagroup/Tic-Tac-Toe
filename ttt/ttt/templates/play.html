@@ -83,13 +83,13 @@
 
     // mark a human square
     mark_square: function(td) {
-        if (TTT.current_player === 2) {
+        if (TTT.current_player === 2 && !$(td)[0].children.length) {
           // post to server and ensure success
           $.getJSON('update/{{ game_id }}/play/challenger/' + $(td).attr('id'),
             function (data) {
               // on successful post, update front-end and
               $(td).append(TTT.X);
-              console.log('human', data, data.end_of_game);
+              
               // check for end of game
               if (data.end_of_game) {
                 $('#tie_lbl').removeClass('hide');
@@ -154,7 +154,6 @@
       // assign click event to tic-tac-toe cells
       $('.cell').on('click',
         function () {
-          console.log('click', $(this));
           TTT.mark_square($(this));
         }
       );
