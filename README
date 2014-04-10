@@ -1,4 +1,4 @@
-Intructions:
+#Intructions#
 1. Fork this repo on GitHub
 2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
 3. Commit early and often, with good messages.
@@ -9,6 +9,17 @@ If you don't want to broadcast your intentions by forking this, feel free to clo
 We are a Django shop, but it is not a requirement that you implement your program as a Django app.
 
 ====
+#Additions by Danny Browne#
+##Live Hosted Site##
+You can play the game, without setting up your own Django environment, [here](http://dcbrowne.webfactional.com/).
 
 Dependencies:
-* numpy
+* numpy==1.5.0
+* django==1.6.2
+
+Installation:
+1. Clone repo.
+2. Setup django (1.6.2) environment.
+3. pip install numpy==1.5.0
+4. Don't forget to syncdb and collectstatic.
+5. Should be good to go.
