@@ -13,21 +13,24 @@ from django.template import RequestContext
 
 
 def home(request):
+    """Render home page."""
     return render_to_response('home.html', {},
         context_instance = RequestContext(request))
 
 def play(request):
+    """Create new TicTacToeGame and render play page."""
     ttt = TicTacToeGame()
     ttt.save()
     return render_to_response('play.html', {'game_id':ttt.id},
         context_instance = RequestContext(request))
 
 def about(request):
+    """Render about page."""
     return render_to_response('about.html', {},
         context_instance = RequestContext(request))
 
 def human_play(request, game, cell):
-    print 'human play', game, cell
+    """Handle human playing on board."""
     r, c = cell.split('_')[1:]
     next_pos = ( int(r), int(c) )
     ttt = TicTacToeGame.objects.get(id=int(game))
@@ -40,8 +43,8 @@ def human_play(request, game, cell):
                                           'board': ttt.get_board()}))
 
 def computer_play(request, game):
-    print 'got to computer play'
-    print 'game', game
+    """Handle computer play, including executing logic to
+    determine the next best move."""
     ttt = TicTacToeGame.objects.get(id=int(game))
     next_pos, win_move = cl.next_move(ttt)
     ttt.update_board(1, next_pos)
@@ -55,16 +58,12 @@ def computer_play(request, game):
                                           'board': ttt.get_board()}))
 
 def update_challenger(request, game, name):
-    print 'game', game
-    print 'name', name
+    """CURRENTLY UNUSED.
+    Update the challenger name field in the database.
+    Future work could let a user change his/her name
+    allowing for a "leader board" to show who lost vs
+    who tied the computer."""
     ttt = TicTacToeGame.objects.get(id=int(game))
     ttt.player = name
     ttt.save()
     return HttpResponse(200)
-
-def mark_square(request, game, player, row, col):
-    ttt = TicTacToeGame.objects.get(id=game)
-    ttt.update_board(player, (row, col))
-    return HttpResponse(simplejson.dumps({'board':ttt.get_board()}), 
-                        mimetype="application/json")
-
