@@ -34,9 +34,16 @@ img {
 }
 
 img.legend {
-  width: 40px;
+  width: 35px;
 }
 
 .hide {
   display: none;
+}
+
+.fix-container-margin {
+  margin-top: -20px;
+}
+div #board{
+  padding: 10px;
 }

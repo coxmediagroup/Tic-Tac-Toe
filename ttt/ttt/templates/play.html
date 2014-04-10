@@ -5,24 +5,15 @@
 {% endblock %}
 
 {% block content %}
-  <div class="starter-template">
-    <h1>Unbeatable Tic-Tac-Toe</h1>
+  <div class="starter-template fix-container-margin">
+    <!--h1>Unbeatable Tic-Tac-Toe</h1-->
     <div><table>
       <tr>
-        <div id="computer_div">
           <td><img class="legend" src="{{ STATIC_URL }}images/o.png" /></td>
           <td><h2>Computer</h2></td>
-        </div>
-      </tr>
-      <tr>
-        <div id="challenger_div">
+          <td width="10"> </td>
           <td><img class="legend" src="{{ STATIC_URL }}images/x.png" /></td>
-          <td><h2 class="form-inline">
-            Challenger:
-            <span id="player_name">Anonymous</span>
-            <input id="player_name_input" class="form-control" type="text" style="display: none;"></input>
-          </h2></td>
-        </div>
+          <td><h2>Challenger</h2></td>
       </tr>
     </table></div>
     <div id="board">
@@ -48,7 +39,7 @@
       <div id="lose_lbl" class="hide"><h2>You lose!</h2></div>
       <div id="tie_lbl" class="hide"><h2>Well done! Tie.</h2></div>
       <a href="play">
-      <button type="button" class="btn btn-success btn-lg hide" href="play">
+      <button id="play_again" type="button" class="btn btn-success btn-lg hide" href="play">
         <span class="glyphicon glyphicon-play"></span> Play Again
       </button>
     </a>
@@ -60,6 +51,8 @@
 <script>
   var TTT = {
     GAME_ID: {{ game_id }},
+    X: '<img src="/static/images/x.png" />',
+    O: '<img src="/static/images/o.png" />',
 
     // randomly select first player
     current_player: Math.random() >= 0.5 ? 1:2, //1=computer, 2=human
@@ -69,8 +62,18 @@
       if (TTT.current_player == 1) {
         $.getJSON('update/{{ game_id }}/play/computer',
           function (data) {
-            console.log('computer play', data);
-            TTT.current_player = 2;
+            var r = data.next_pos[0];
+            var c = data.next_pos[1];
+            $('#cell_' + r + '_' + c).append(TTT.O);
+            if (data.win_move) {
+              $('#lose_lbl').removeClass('hide');
+              $('#play_again').removeClass('hide');
+            } else if (data.end_of_game) {
+              $('#tie_lbl').removeClass('hide');
+              $('#play_again').removeClass('hide');
+            } else {
+              TTT.current_player = 2;
+            }
           }
         );
       }
@@ -81,14 +84,22 @@
     mark_square: function(td) {
         if (TTT.current_player === 2) {
           // post to server and ensure success
-          $.post('update/{{ game_id }}/play/challenger/' + $(td).attr('id'),
+          $.getJSON('update/{{ game_id }}/play/challenger/' + $(td).attr('id'),
             function (data) {
-              console.log('challenger play', data);
               // on successful post, update front-end and
-              $(td).append('<img src="/static/images/x.png" />');
-              // have the computer play
-              TTT.current_player = 1;
-              TTT.computer_play();
+              $(td).append(TTT.X);
+              console.log('human', data, data.end_of_game);
+              // check for end of game
+              if (data.end_of_game) {
+                $('#tie_lbl').removeClass('hide');
+                $('#play_again').removeClass('hide');
+                // set current_player to computer but do not play
+                TTT.current_player = 1;
+              } else {
+                // have the computer play
+                TTT.current_player = 1;
+                TTT.computer_play();
+              }
             }
           );
         }
@@ -147,6 +158,10 @@
       );
 
       console.log('got to this part', TTT.current_player);
+
+      if (TTT.current_player == 1){
+        TTT.computer_play();
+      }
 
     }
   );

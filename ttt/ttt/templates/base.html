@@ -45,7 +45,7 @@
           <ul class="nav navbar-nav">
             <li name="home_link"><a href="/">Home</a></li>
             <li name="play_link"><a href="/play">Play</a></li>
-            <li name="lb_link"><a href="/leaderboard">Leader Board</a></li>
+            <!--li name="lb_link"><a href="/leaderboard">Leader Board</a></li-->
             <li name="about_link"><a href="/about">About</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -64,7 +64,12 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="{{ STATIC_URL}}js/bootstrap.min.js"></script>    
+    <script src="{{ STATIC_URL}}js/jquery.cookie.js"></script>
+    <script src="{{ STATIC_URL}}js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL}}js/csrf_setup.js"></script>
+    <script>
+      $(document).ready( ajax_setup($.cookie('csrftoken')) );
+    </script>
     {% block js %}
     {% endblock %}
   </body>
