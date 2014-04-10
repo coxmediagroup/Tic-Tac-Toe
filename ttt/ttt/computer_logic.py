@@ -130,18 +130,24 @@ def check_for_win_lose(b):
         if single_move(row):
             if row==[1,1,0]:
                 win_move = (ri+1,3)
+                print 'win move 1'
             elif row==[2,2,0]:
                 block_win = (ri+1,3)
+                print 'win move 2'
             elif row==[1,0,1]:
                 win_move = (ri+1,2)
+                print 'win move 3'
             elif row==[2,0,2]:
                 block_win = (ri+1,2)
-            elif row==[0,2,2]:
+                print 'win move 4'
+            elif row==[0,1,1]:
                 win_move = (ri+1,1)
+                print 'win move 5'
             elif row==[0,2,2]:
                 block_win = (ri+1,1)
+                print 'win move 6'
             else:
-                print '129 ERROR!'
+                print '144 ERROR!'
                 print single_move(row)
                 print row
                 print ' '
@@ -152,18 +158,24 @@ def check_for_win_lose(b):
         if single_move(col):
             if col==[1,1,0]:
                 win_move = (3,ci+1)
+                print 'win move 7'
             elif col==[2,2,0]:
                 block_win = (3,ci+1)
+                print 'win move 8'
             elif col==[1,0,1]:
                 win_move = (2,ci+1)
+                print 'win move 9'
             elif col==[2,0,2]:
                 block_win = (2,ci+1)
+                print 'win move 10'
             elif col==[0,1,1]:
                 win_move = (1,ci+1)
+                print 'win move 11'
             elif col==[0,2,2]:
                 block_win = (1,ci+1)
+                print 'win move 12'
             else:
-                print '145 ERROR!'
+                print '166 ERROR!'
                 print single_move(col)
                 print col
                 print ' '
@@ -173,32 +185,44 @@ def check_for_win_lose(b):
     if single_move(diag):
         if diag==[1,1,0]:
             win_move = (3,3)
+            print 'win move 13'
         elif diag==[2,2,0]:
             block_win (3,3)
+            print 'win move 14'
         elif diag == [1,0,1]:
             win_move = (2,2)
+            print 'win move 15'
         elif diag==[2,0,2]:
             block_win = (2,2)
+            print 'win move 16'
         elif diag == [0,1,1]:
             win_move = (1,1)
+            print 'win move 17'
         elif diag==[0,2,2]:
             block_win = (1,1)
+            print 'win move 18'
     
     # check for win on forward diagonal
     diag = get_fwd_diag(b)
     if single_move(diag):
         if diag == [1,1,0]:
             win_move = (3,1)
+            print 'win move 19'
         elif diag==[2,2,0]:
             block_win = (3,1)
+            print 'win move 20'
         elif diag == [1,0,1]:
             win_move = (2,2)
+            print 'win move 21'
         elif diag==[2,0,2]:
             block_win = (2,2)
+            print 'win move 22'
         elif diag == [0,1,1]:
             win_move = (1,3)
+            print 'win move 23'
         elif diag==[0,2,2]:
             block_win = (1,3)
+            print 'win move 24'
 
     if win_move is not None:
         return (win_move, True)
