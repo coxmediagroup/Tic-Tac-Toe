@@ -13,11 +13,11 @@ We are a Django shop, but it is not a requirement that you implement your progra
 ##Live Hosted Site##
 You can play the game, without setting up your own Django environment, [here](http://dcbrowne.webfactional.com/).
 
-Dependencies:
+##Dependencies##
 * numpy==1.5.0
 * django==1.6.2
 
-Installation:
+##Installation##
 1. Clone repo.
 2. Setup django (1.6.2) environment.
 3. pip install numpy==1.5.0
