@@ -49,6 +49,7 @@
 
 {% block js %}
 <script>
+  // TODO: move all of this code to a JS file as it should be
   var TTT = {
     GAME_ID: {{ game_id }},
     X: '<img src="/static/images/x.png" />',
@@ -104,8 +105,9 @@
           );
         }
     },
-};
+  };
 
+  // prepare the page after load
   $(document).ready(
     function(){
       // set current page link
@@ -157,8 +159,6 @@
         }
       );
 
-      console.log('got to this part', TTT.current_player);
-
       if (TTT.current_player == 1){
         TTT.computer_play();
       }
@@ -166,5 +166,4 @@
     }
   );
 </script>
-<script href="{{ STATIC_URL }}js/playttt.js"></script> 
 {% endblock %}
