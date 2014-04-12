@@ -9,28 +9,29 @@
 {% endblock %}
 
 {% block content %}
-    {{form}}
-    <table id="ticTable" class="table table-bordered">
-        <tbody>
-            <tr>
-                <td>{{form.get_box_0_display}}{{form.box_0}}</td>
-                <td>{{form.get_box_1_display}}</td>
-                <td>{{form.get_box_2_display}}</td>
-            </tr>
+    <form id="ticForm" method='POST' action="">{% csrf_token %}
+        <table id="ticTable" class="table table-bordered">
+            <tbody>
+                <tr>
+                    {% for field in form %}
+                        
+                        {% if forloop.counter0 == 3 or forloop.counter0 == 6 %}
+                        </tr><tr>
+                        {% endif %}
 
-            <tr>
-                <td>{{form.get_box_3_display}}</td>
-                <td>{{form.get_box_4_display}}</td>
-                <td>{{form.get_box_5_display}}</td>
-            </tr>
-
-            <tr>
-                <td>{{form.get_box_6_display}}</td>
-                <td>{{form.get_box_7_display}}</td>
-                <td>{{form.get_box_8_display}}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <td {% if field.value == 0 %}class="active_cell"{% endif %}>
+                            {% if field.value == 1 %}
+                                X
+                            {% elif field.value == 2 %}
+                                O
+                            {% endif %}
+                            {{field}}
+                        </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </form>
 
 <!--     <div class="row">
         <div class="col-md-10 col-md-offset-1">

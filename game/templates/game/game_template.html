@@ -1,0 +1,17 @@
+<tr>
+    {% for field in form %}
+        
+        {% if forloop.counter0 == 3 or forloop.counter0 == 6 %}
+        </tr><tr>
+        {% endif %}
+
+        <td {% if field.value == '0' %}class="active_cell"{% endif %}>
+            {% if field.value == '1' %}
+                X
+            {% elif field.value == '2' %}
+                O
+            {% endif %}
+            {{field}}
+        </td>
+    {% endfor %}
+</tr>
