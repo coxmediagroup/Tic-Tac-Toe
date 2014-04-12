@@ -1,0 +1,42 @@
+{% extends "localcore/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Home{% endblock %}
+
+{% block head_static %}
+    <script src="{% static 'game/js/game.js' %}"></script>
+    <link href="{% static 'game/css/game.css' %}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block content %}
+    {{form}}
+    <table id="ticTable" class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>{{form.get_box_0_display}}{{form.box_0}}</td>
+                <td>{{form.get_box_1_display}}</td>
+                <td>{{form.get_box_2_display}}</td>
+            </tr>
+
+            <tr>
+                <td>{{form.get_box_3_display}}</td>
+                <td>{{form.get_box_4_display}}</td>
+                <td>{{form.get_box_5_display}}</td>
+            </tr>
+
+            <tr>
+                <td>{{form.get_box_6_display}}</td>
+                <td>{{form.get_box_7_display}}</td>
+                <td>{{form.get_box_8_display}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<!--     <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="page-header jumbotron">
+                <h1>This is a header<small>Small Header</small></h1>
+            </div>
+        </div>
+    </div> -->
+{% endblock %}

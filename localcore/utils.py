@@ -6,11 +6,27 @@ class MoveGenerator(object):
     1: your square
     2: opponents square
     '''
+
+    your_moves = 0
+    opp_moves = 0
+
     def __init__(self,moves,*args,**kwargs):
         if not isinstance(moves,dict):
             raise ValueError(u"Pass a dictionary of moves.")
 
         for x in xrange(0,9):
-            setAttr(self,"box_%s" % x,moves.get("box_%s" % x,0))
+            box = 'box_%s' % x
+            setAttr(self,box,moves.get(box,0))
+            if moves.get(box,0) == 1:
+                self.your_moves += 1
+            elif moves.get(box,0) == 2:
+                self.opp_moves += 1
 
-        
+        self.total_moves = your_moves + opp_moves
+        self.first = self.is_even(self.total_moves)
+
+    
+
+    @staticmethod
+    def is_even(num):
+        return num % 2 == 0
