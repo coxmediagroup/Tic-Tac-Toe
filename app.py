@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from flask import Flask, render_template, request, jsonify, session
 
-from funcy import all
+from game import Game
 
 
 COOKIE_GAME_ID = 'tictactoe_game_id'
@@ -11,10 +11,6 @@ COOKIE_GAME_ID = 'tictactoe_game_id'
 
 app = Flask(__name__)
 app.secret_key = 'Fdln30_#& H#(#H @_!$*FN#* #_@M'
-
-
-class Game():
-    BOARD_SIZE = 3
 
 
 current_games = {}
@@ -55,6 +51,10 @@ def move():
     except KeyError:
         return json_error('not_initiated', 'The game is not initiated')
 
+    move_success = game.move(x, y)
+    if not move_success:
+        return json_error('cell_taken', 'Cell already taken')
+        
     return json_success()
 
 
@@ -71,7 +71,6 @@ def json_error(code, message=None):
 
 def json_success():
     return jsonify({'success': True})
-
 
 
 if __name__ == "__main__":

@@ -40,13 +40,26 @@ class ApiTestCase(unittest.TestCase):
             data = json.loads(resp.data)
             assert data['success'] == True
 
+    def test_twice_cell_choice(self):
+        with game() as client:
+            query = '/move?x=0&y=2'
+
+            resp = client.get(query)
+            data = json.loads(resp.data)
+            assert data['success'] == True
+            
+            resp = client.get(query)
+            data = json.loads(resp.data)
+            assert data['success'] == False
+            assert data['error'] == 'cell_taken'
+
+
     def test_game_not_started(self):
         with app.test_client() as client:
             resp = client.get('/move?x=0&y=2')
             data = json.loads(resp.data)
             assert data['success'] == False
             assert data['error'] == 'not_initiated'
-
 
 
 if __name__ == '__main__':
