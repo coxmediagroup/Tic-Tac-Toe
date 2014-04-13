@@ -5,8 +5,15 @@ $(function () {
             $.ajax({
                 url: '/move',
                 data: {x: x, y: y},
-                success: function () {
+                success: function (data) {
                     addMark(x, y, userMark);
+                    if (data.ai_move) {
+                        addMark(data.ai_move.x, data.ai_move.y, aiMark);
+                    }
+                    if (data.game_over) {
+                        alert(data.message);
+                        $('.grid').removeClass('grid_enabled');
+                    }
                 }
             })
         },

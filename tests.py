@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from flask import json
 
 from app import app, COOKIE_GAME_ID, session
+from game import Game
 
 
 @contextmanager
@@ -53,7 +54,6 @@ class ApiTestCase(unittest.TestCase):
             assert data['success'] == False
             assert data['error'] == 'cell_taken'
 
-
     def test_game_not_started(self):
         with app.test_client() as client:
             resp = client.get('/move?x=0&y=2')
@@ -61,6 +61,17 @@ class ApiTestCase(unittest.TestCase):
             assert data['success'] == False
             assert data['error'] == 'not_initiated'
 
+    def test_ia_turn(self):
+        with game() as client:
+            resp = client.get('/move?x=1&y=2')
+            data = json.loads(resp.data)
+            assert 'game_over' in data
+            assert data['game_over'] == False
+            assert 'ai_move' in data
+            assert isinstance(data['ai_move'], dict) 
+            assert data['ai_move']['x'] in range(Game.BOARD_SIZE) 
+            assert data['ai_move']['y'] in range(Game.BOARD_SIZE) 
+            
 
 if __name__ == '__main__':
     unittest.main()

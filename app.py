@@ -54,8 +54,18 @@ def move():
     move_success = game.move(x, y)
     if not move_success:
         return json_error('cell_taken', 'Cell already taken')
-        
-    return json_success()
+
+    resp_data = {
+        'ai_move': None if game.is_over else dict(zip(('x', 'y'), game.ai_move())),
+        'game_over': False
+    } 
+    if game.is_over:
+        resp_data.update({
+            'game_over': True,
+            'message': game.message,
+        })
+
+    return json_success(resp_data)
 
 
 def clear_game_session():
@@ -63,14 +73,14 @@ def clear_game_session():
     if old_game_id and current_games.get(old_game_id):
         del current_games[old_game_id]
 
-
 def json_error(code, message=None):
     if not message:
         message = code.capitalize().replace('_', ' ')
     return jsonify({'success': False, 'error': code, 'message': message})
 
-def json_success():
-    return jsonify({'success': True})
+def json_success(data={}):
+    resp_data.update({'success': True})
+    return jsonify(data)
 
 
 if __name__ == "__main__":
