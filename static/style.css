@@ -4,7 +4,7 @@
 
 .grid {
     border: 1px solid black;
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
 .grid .cell {
@@ -17,17 +17,16 @@
     height: 50px;
     float: left;
     background-color: #c8c8c8;
-    cursor: pointer;
 }
 
-.grid .cell:hover {
+.grid.grid_enabled .cell:hover {
     background-color: #4ec253;
+    cursor: pointer;
 }
 
 .grid .cell.filled {
     background-color: #37993b;
     cursor: default;
-    
 }
 
 .grid .row {

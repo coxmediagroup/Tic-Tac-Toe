@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <title>Tic Tac Toe</title>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='jquery-1.11.0.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='app.js') }}"></script>
     </head>
     <body>
         <div class="content">
@@ -10,13 +12,13 @@
             <table class="grid" cellspacing="0">
                 <tr class="row">
                     <td class="cell"></td>
-                    <td class="cell filled">o</td>
-                    <td class="cell filled">x</td>
+                    <td class="cell"></td>
+                    <td class="cell"></td>
                 </tr>
                 <tr class="row">
                     <td class="cell"></td>
-                    <td class="cell filled">x</td>
-                    <td class="cell filled">o</td>
+                    <td class="cell"></td>
+                    <td class="cell"></td>
                 </tr>
                 <tr class="row">
                     <td class="cell"></td>
@@ -24,6 +26,7 @@
                     <td class="cell"></td>
                 </tr>
             </table>
+            <button id="newGame">New game</button>
         </div>
     </body>
 </html>
