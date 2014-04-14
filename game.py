@@ -63,13 +63,21 @@ class Game():
                 if self.is_line_winning(line):
                     return x, y
 
+    def ai_try_block(self, free_cells):
+        for x, y in free_cells:
+            for line in self.board.get_crossed_lines(x, y):
+                line[x, y] = self.CELL_STATES['user']
+                if self.is_line_winning(line):
+                    return x, y
+
     def ai_stupid_move(self, free_cells):
         return free_cells[0]
 
     def ai_move(self):
         free_cells = self.board.get_cells_containing(self.CELL_STATES['free'])
         print(free_cells)
-        x, y = some(map(lambda f: f(free_cells), [self.ai_try_win, self.ai_stupid_move]))
+        x, y = some(map(lambda f: f(free_cells), [self.ai_try_win, self.ai_try_block, 
+                                                  self.ai_stupid_move]))
         self.board.set(x, y, self.CELL_STATES['ai'])
         self.update_status(x, y)
         return x, y
