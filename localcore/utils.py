@@ -14,8 +14,6 @@ class MoveGenerator(object):
         if not isinstance(moves,dict):
             raise ValueError(u"Pass a dictionary of moves.")
 
-        self.my_moves_list = []
-        self.opp_moves_list = []
         self.possible_moves = []
         self.winner = None
 
@@ -24,12 +22,13 @@ class MoveGenerator(object):
             setattr(self,box,moves.get(box,'0'))
             if moves.get(box,'0') == '1':
                 self.my_moves += 1
-                self.my_moves_list.append(box)
             elif moves.get(box,'0') == '2':
                 self.opp_moves += 1
-                self.opp_moves_list.append(box)
             else:
                 self.possible_moves.append(box)
+
+        self.total_moves = self.my_moves + self.opp_moves
+        self.set_first()
 
         self.win_cont = [['box_0','box_1','box_2'],
                          ['box_3','box_4','box_5'],
@@ -51,7 +50,9 @@ class MoveGenerator(object):
 
     def make_move(self):
         move, score = self.max_move()
-        setattr(self,move,'1')
+        if move:
+            setattr(self,move,'1')
+        self.is_gameover()
 
     def max_move(self):
         best_score = None
@@ -65,6 +66,7 @@ class MoveGenerator(object):
                 min_move, score = self.min_move()
 
             setattr(self,move,'0')
+            self.winner = None
 
             if best_score == None or score > best_score:
                 best_score = score
@@ -85,8 +87,9 @@ class MoveGenerator(object):
                 min_move, score = self.max_move()
 
             setattr(self,move,'0')
+            self.winner = None
 
-            if best_score == None or score > best_score:
+            if best_score == None or score < best_score:
                 best_score = score
                 best_move = move
 
@@ -95,15 +98,18 @@ class MoveGenerator(object):
 
     def is_gameover(self):
         for x,y,z in self.win_cont:
-            if getattr(self,x) == getattr(self,y) == getattr(self,z):
+            if getattr(self,x) == getattr(self,y) == getattr(self,z) and not getattr(self,x) == '0':
+                self.winning_three = [int(x.split('_')[1]),int(y.split('_')[1]),int(z.split('_')[1])]
                 if getattr(self,x) == '1':
                     self.winner = '1'
                     return True
                 elif getattr(self,x) == '2':
                     self.winner = '2'
+                    self.winning_three = [x,y,x]
                     return True
         
         if not self.get_possible_moves():
+            self.winning_three = ['','','']
             self.winner = '0'
             return True
 
@@ -118,11 +124,13 @@ class MoveGenerator(object):
             return -1
 
 
-
-
-    @staticmethod
-    def is_even(num):
-        return num % 2 == 0
+    def set_first(self):
+        if self.total_moves % 2 == 0:
+            self.first = '1'
+            self.second = '2'
+        else:
+            self.first = '2'
+            self.second = '1'
 
     def box_dict(self):
         d = {}

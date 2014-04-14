@@ -11,17 +11,21 @@
 {% block content %}
     <form id="ticForm" method='POST' action="">{% csrf_token %}
     {% if not board %}
-        <h2 id="play_header">Would you like to:</h2>
+        <div id="play_header">
+            <h2>Would you like to:</h2>
 
-        <button id="goFirst" name="goFirst" class="button">Go First</button>
-        <button id="goSecond" name="goSecond" class="button">Go Second</button>
+            <button id="goFirst" name="goFirst" class="button">Go First</button>
+            <button id="goSecond" name="goSecond" class="button">Go Second</button>
+        </div>
     {% endif %}
         
-        <table id="ticTable" class="table table-bordered">
-            <tbody>
-                {{board}}
-            </tbody>
-        </table>
+        <div id="table_div">
+            <table id="ticTable" class="table table-bordered">
+                <tbody>
+                    {{board}}
+                </tbody>
+            </table>
+        </div>
     </form>
 
 <!--     <div class="row">
