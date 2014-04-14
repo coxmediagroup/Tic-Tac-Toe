@@ -63,7 +63,7 @@ def move():
         resp_data.update({
             'game_over': True,
             'message': game.message,
-            'win_lines': game.win_lines
+            'win_lines': [[{'x': x, 'y': y} for x, y in line] for line in game.win_lines]
         })
 
     return json_success(resp_data)
