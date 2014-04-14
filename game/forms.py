@@ -9,7 +9,7 @@ class GameForm(forms.Form):
     def __init__(self,*args,**kwargs):
         first = kwargs.pop('first',False)
         super(GameForm, self).__init__(*args, **kwargs)
-        game_choices = [(0, ''),(1, 'X' if first else 'O'),(2, 'O' if first else 'X')]
+        game_choices = [('0', ''),('1', 'X' if first else 'O'),('2', 'O' if first else 'X')]
 
         for x in xrange(0,9):
-            self.fields["box_%s" % x] = forms.ChoiceField(choices=game_choices, initial=0, widget=forms.HiddenInput())
+            self.fields["box_%s" % x] = forms.ChoiceField(choices=game_choices, initial='0', widget=forms.HiddenInput())

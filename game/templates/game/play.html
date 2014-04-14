@@ -10,25 +10,16 @@
 
 {% block content %}
     <form id="ticForm" method='POST' action="">{% csrf_token %}
+    {% if not board %}
+        <h2 id="play_header">Would you like to:</h2>
+
+        <button id="goFirst" name="goFirst" class="button">Go First</button>
+        <button id="goSecond" name="goSecond" class="button">Go Second</button>
+    {% endif %}
+        
         <table id="ticTable" class="table table-bordered">
             <tbody>
-                <tr>
-                    {% for field in form %}
-                        
-                        {% if forloop.counter0 == 3 or forloop.counter0 == 6 %}
-                        </tr><tr>
-                        {% endif %}
-
-                        <td {% if field.value == 0 %}class="active_cell"{% endif %}>
-                            {% if field.value == 1 %}
-                                X
-                            {% elif field.value == 2 %}
-                                O
-                            {% endif %}
-                            {{field}}
-                        </td>
-                    {% endfor %}
-                </tr>
+                {{board}}
             </tbody>
         </table>
     </form>

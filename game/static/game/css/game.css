@@ -3,3 +3,13 @@
     height: 200px;
     text-align: center;
 }
+
+#ticTable td{
+    width:33%;
+    font-size: 250%;
+    height:65px;
+}
+
+#ticTable tr{
+    height:65px;
+}

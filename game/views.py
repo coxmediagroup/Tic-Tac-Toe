@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.template import RequestContext
 
@@ -11,19 +12,25 @@ def play(request):
 
     form = GameForm(request.POST or None)
 
-    if request.POST:
-        if form.is_valid():
+    if request.POST or request.GET.get('goSecond') or request.GET.get('goFirst'):
+        d = {}
+        if request.POST and form.is_valid():
             mgen = MoveGenerator(form.cleaned_data)
+            mgen.make_move()
+            d = mgen.box_dict()
+        elif request.GET.get('goSecond'):
+            mgen = MoveGenerator({})
+            mgen.make_move()
+            d = mgen.box_dict()
 
-            if request.is_ajax():
-                context['form'] = form
-                return render_to_response('game/game_template.html',
-                                          context,
-                                          context_instance=RequestContext(request))
+        form = GameForm(d or None)
+        if request.is_ajax():
+            context['form'] = form
+            return render_to_response('game/game_template.html',
+                                      context,
+                                      context_instance=RequestContext(request))
         else:
-            f = forms.errors
-            raise Exception
-            form = GameForm()
+            context['board'] = render_to_string('game/game_template.html',{'form':form})
 
     context['form'] = form
     return render_to_response('game/play.html',
