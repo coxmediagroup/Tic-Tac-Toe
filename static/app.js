@@ -1,6 +1,7 @@
 $(function () {
     var userMark = 'x',
         aiMark = 'o',
+
         userMove = function (x, y) {
             $.ajax({
                 url: '/move',
@@ -12,17 +13,24 @@ $(function () {
                     }
                     if (data.game_over) {
                         alert(data.message);
-                        $('.grid').removeClass('grid_enabled');
+                        $.each(data.win_lines, function (idx, line) {
+                            $.each(line, function (idx, cell) {
+                                $($($('.grid .row')[cell.y]).find('.cell')[cell.x]).addClass('win');
+                            });
+                        });
+                        $('.grid').removeClass('enabled');
                     }
                 }
             })
         },
+
         gridReset = function () {
-            $('.grid').addClass('grid_enabled');
-            $('.grid .cell').text('');
+            $('.grid').addClass('enabled');
+            $('.grid .cell').removeClass('filled win').text('');
         },
+        
         addMark = function (x, y, mark) {
-            $($($('.grid .row')[y]).find('.cell')[x]).text(mark);
+            $($($('.grid .row')[y]).find('.cell')[x]).addClass('filled').text(mark);
         };
 
     $('#newGame').click(function () {
@@ -34,7 +42,7 @@ $(function () {
         });
     });
 
-    $('.content').on('click', '.grid_enabled .cell:not(.filled)', function () {
+    $('.content').on('click', '.grid.enabled .cell:not(.filled)', function () {
         var x = $(this).index(),
             y = $(this).parent('.row').index();
         userMove(x, y);

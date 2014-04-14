@@ -13,6 +13,15 @@ class Board():
     def is_full(self):
         return all(map(lambda x: x != self.filler, self.flattened))
 
+    def get_crossed_lines(self, x, y):
+        yield {(x, y): self.get(x, y) for x in range(self.size)}
+        yield {(x, y): self.get(x, y) for y in range(self.size)}
+        if x == y:
+            yield {(x, y): self.get(x, y) for x, y in zip(range(self.size), range(self.size))}
+        if x + y == self.size - 1:
+            yield {(x, y): self.get(x, y) for x, y in zip(range(self.size), 
+                                                          reversed(range(self.size)))}
+
 
 class Game():
     CELL_STATES = {
@@ -26,12 +35,13 @@ class Game():
     def __init__(self):
         self.board = Board(self.BOARD_SIZE, self.CELL_STATES['free'])
         self.is_over = False
+        self.win_lines = []
 
     def move(self, x, y):
         if self.board.get(x, y) != self.CELL_STATES['free']:
             return False
         self.board.set(x, y, self.CELL_STATES['user'])
-        self.update_status()
+        self.update_status(x, y)
         return True
 
     def ai_move(self):
@@ -39,12 +49,25 @@ class Game():
             for x in range(self.BOARD_SIZE):
                 if self.board.get(x, y) == self.CELL_STATES['free']:
                     self.board.set(x, y, self.CELL_STATES['ai'])
+                    self.update_status(x, y)
                     return x, y
 
-    def update_status(self):
-        if self.board.is_full():
-            self.is_over = True
-            self.find_winner()
+    def update_status(self, x, y):
+        self.check_win(x, y)
+        self.check_fullness()
 
-    def find_winner(self):
-        self.message = 'Draw!'
+    def check_win(self, x, y):
+        for line in self.board.get_crossed_lines(x, y):
+            if (len(set(line.values())) == 1):
+                self.is_over = True
+                if self.board.get(x, y) == self.CELL_STATES['ai']:
+                    self.message = 'You lose!'
+                else: 
+                    self.message = 'You win!'
+                cells = [{'x': x, 'y': y} for x, y in line.keys()]
+                self.win_lines.append(cells)
+
+    def check_fullness(self):
+        if not self.is_over and self.board.is_full():
+            self.is_over = True
+            self.message = 'Draw!'

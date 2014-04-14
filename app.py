@@ -63,6 +63,7 @@ def move():
         resp_data.update({
             'game_over': True,
             'message': game.message,
+            'win_lines': game.win_lines
         })
 
     return json_success(resp_data)
@@ -79,7 +80,7 @@ def json_error(code, message=None):
     return jsonify({'success': False, 'error': code, 'message': message})
 
 def json_success(data={}):
-    resp_data.update({'success': True})
+    data.update({'success': True})
     return jsonify(data)
 
 

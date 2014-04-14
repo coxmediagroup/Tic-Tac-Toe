@@ -19,14 +19,17 @@
     background-color: #c8c8c8;
 }
 
-.grid.grid_enabled .cell:hover {
+.grid.enabled .cell:hover {
     background-color: #4ec253;
     cursor: pointer;
 }
 
-.grid .cell.filled {
-    background-color: #37993b;
+.grid.enabled .cell.filled {
     cursor: default;
+}
+
+.grid .cell.filled.win {
+    background-color: #37993b;
 }
 
 .grid .row {
