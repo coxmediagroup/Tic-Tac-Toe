@@ -39,6 +39,9 @@ class Board():
     def get_center_cell(self):
         return self.size // 2, self.size // 2
 
+    def get_oposite_cell(self, x, y):
+        return self.size - x - 1, self.size - y - 1
+
 
 class Game():
     CELL_STATES = {
@@ -79,21 +82,27 @@ class Game():
                 if self.is_line_winning(line):
                     return x, y
 
-    def ai_try_center(self, free_cells):
+    def ai_play_center(self, free_cells):
         center_cell = self.board.get_center_cell()
         if center_cell in free_cells:
             return center_cell
 
-    def ai_try_corner(self, free_cells):
-        return some(lambda c: c in free_cells, self.board.get_corner_cells())
+    def ai_play_corner(self, free_cells):
+        free_corners = [c for c in self.board.get_corner_cells() if c in free_cells]
+        if free_corners:
+            for corner in free_corners:
+                if self.board.get(*self.board.get_oposite_cell(*corner)) == self.CELL_STATES['user']:
+                    return corner
+            return free_corners[0]
+
 
     def ai_stupid_move(self, free_cells):
         return free_cells[0]
 
     def ai_move(self):
         free_cells = self.board.get_cells_containing(self.CELL_STATES['free'])
-        ai_moves = [self.ai_try_win, self.ai_try_block, self.ai_try_center, 
-                    self.ai_try_corner, self.ai_stupid_move]
+        ai_moves = [self.ai_try_win, self.ai_try_block, self.ai_play_center, 
+                    self.ai_play_corner, self.ai_stupid_move]
         x, y = some(map(lambda f: f(free_cells), ai_moves))
         self.board.set(x, y, self.CELL_STATES['ai'])
         self.update_status(x, y)
