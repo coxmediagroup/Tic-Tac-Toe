@@ -12,10 +12,10 @@ def play(request):
 
     form = GameForm(request.POST or None)
 
-    if request.POST or request.GET.get('goSecond') or request.GET.get('goFirst'):
+    if request.method == 'POST' or request.GET.get('goSecond') or request.GET.get('goFirst'):
         d = {}
         mgen = None
-        if request.POST and form.is_valid():
+        if request.method == 'POST' and form.is_valid():
             mgen = MoveGenerator(form.cleaned_data)
         elif request.GET.get('goSecond'):
             mgen = MoveGenerator({})
