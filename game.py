@@ -1,6 +1,6 @@
 from itertools import product
 
-from funcy import some, all
+from funcy import some, all, first
 
 
 class Board():
@@ -30,16 +30,22 @@ class Board():
     def from_flattened(self, idx):
         return idx % self.size, idx // self.size
 
-    def get_cells_containing(self, mark):
+    def cells_containing(self, mark):
         return [self.from_flattened(idx) for idx, m in enumerate(self.flattened) if m == mark]
 
-    def get_corner_cells(self):
+    def all_cells(self):
+        return map(self.from_flattened, self.flattened)
+
+    def corner_cells(self):
         return product((0, self.size - 1), repeat=2)
 
-    def get_center_cell(self):
+    def edge_cells(self):
+        return list(set(self.all_cells()) - set(self.corner_cells()) - set(self.center_cell()))
+
+    def center_cell(self):
         return self.size // 2, self.size // 2
 
-    def get_oposite_cell(self, x, y):
+    def oposite_cell(self, x, y):
         return self.size - x - 1, self.size - y - 1
 
 
@@ -83,26 +89,38 @@ class Game():
                     return x, y
 
     def ai_play_center(self, free_cells):
-        center_cell = self.board.get_center_cell()
+        center_cell = self.board.center_cell()
         if center_cell in free_cells:
             return center_cell
 
+
     def ai_play_corner(self, free_cells):
-        free_corners = [c for c in self.board.get_corner_cells() if c in free_cells]
+        free_corners = [c for c in self.board.corner_cells() if c in free_cells]
         if free_corners:
-            for corner in free_corners:
-                if self.board.get(*self.board.get_oposite_cell(*corner)) == self.CELL_STATES['user']:
-                    return corner
+            for x, y in free_corners:   
+                next_egde_1_mark = self.board.get(x + 1 if x == 0 else x - 1, y)
+                next_egde_2_mark = self.board.get(x, y + 1 if y == 0 else y - 1)
+                oposite_corner_mark = self.board.get(*self.board.oposite_cell(x, y))
+                if next_egde_1_mark == next_egde_2_mark == self.CELL_STATES['user'] or \
+                   oposite_corner_mark == self.CELL_STATES['user']:
+                    return x, y
+
             return free_corners[0]
+
+    def ai_play_edge(self, free_cells):
+        for corner in self.board.corner_cells():
+            oposite_corner_mark = self.board.get(*self.board.oposite_cell(*corner))
+            if self.board.get(*corner) == oposite_corner_mark == self.CELL_STATES['user']:
+                return first(c for c in self.board.edge_cells() if c in free_cells)
 
 
     def ai_stupid_move(self, free_cells):
         return free_cells[0]
 
     def ai_move(self):
-        free_cells = self.board.get_cells_containing(self.CELL_STATES['free'])
+        free_cells = self.board.cells_containing(self.CELL_STATES['free'])
         ai_moves = [self.ai_try_win, self.ai_try_block, self.ai_play_center, 
-                    self.ai_play_corner, self.ai_stupid_move]
+                    self.ai_play_edge, self.ai_play_corner, self.ai_stupid_move]
         x, y = some(map(lambda f: f(free_cells), ai_moves))
         self.board.set(x, y, self.CELL_STATES['ai'])
         self.update_status(x, y)
