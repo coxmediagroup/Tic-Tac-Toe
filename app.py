@@ -51,7 +51,7 @@ def move():
     except KeyError:
         return json_error('not_initiated', 'The game is not initiated')
 
-    move_success = game.move(x, y)
+    move_success = game.user_move(x, y)
     if not move_success:
         return json_error('cell_taken', 'Cell already taken')
 

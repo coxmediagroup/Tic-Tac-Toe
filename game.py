@@ -24,11 +24,8 @@ class Board():
         if x == y:
             yield {(x, y): self.get(x, y) for x, y in zip(range(self.size), range(self.size))}
         if x + y == self.size - 1:
-            yield {(x, y): self.get(x, y) for x, y in zip(range(self.size), 
+            yield {(x, y): self.get(x, y) for x, y in zip(range(self.size),
                                                           reversed(range(self.size)))}
-
-    def from_flattened(self, idx):
-        return idx % self.size, idx // self.size
 
     def cells_containing(self, mark):
         return [self.from_flattened(idx) for idx, m in enumerate(self.flattened) if m == mark]
@@ -48,6 +45,9 @@ class Board():
     def oposite_cell(self, x, y):
         return self.size - x - 1, self.size - y - 1
 
+    def from_flattened(self, idx):
+        return idx % self.size, idx // self.size
+
 
 class Game():
     CELL_STATES = {
@@ -63,25 +63,51 @@ class Game():
         self.is_over = False
         self.win_lines = []
 
-    def move(self, x, y):
+    def update_status(self, x, y):
+        self.check_win_state(x, y)
+        self.check_fullness()
+
+    def check_win_state(self, x, y):
+        for line in self.board.get_crossed_lines(x, y):
+            if self.is_line_winning(line):
+                self.is_over = True
+                if self.board.get(x, y) == self.CELL_STATES['ai']:
+                    self.message = 'You lose!'
+                else:
+                    self.message = 'You win!'
+                self.win_lines.append(line.keys())
+
+    def check_fullness(self):
+        if not self.is_over and self.board.is_full():
+            self.is_over = True
+            self.message = 'Draw!'
+
+    def user_move(self, x, y):
         if self.board.get(x, y) != self.CELL_STATES['free']:
             return False
         self.board.set(x, y, self.CELL_STATES['user'])
         self.update_status(x, y)
         return True
 
-    def is_line_winning(self, line):
-        marks_set = set(line.values())
-        return len(marks_set) == 1 and marks_set.pop() != self.CELL_STATES['free']
+    def ai_move(self):
+        free_cells = self.board.cells_containing(self.CELL_STATES['free'])
+        ai_moves = [self.ai_play_win, self.ai_play_block, self.ai_play_center,
+                    self.ai_play_edge, self.ai_play_corner, self.ai_play_simple]
+        x, y = some(map(lambda f: f(free_cells), ai_moves))
+        self.board.set(x, y, self.CELL_STATES['ai'])
+        self.update_status(x, y)
+        return x, y
 
-    def ai_try_win(self, free_cells):
+    def ai_play_win(self, free_cells):
+        """Completes winning line if possible"""
         for x, y in free_cells:
             for line in self.board.get_crossed_lines(x, y):
                 line[x, y] = self.CELL_STATES['ai']
                 if self.is_line_winning(line):
                     return x, y
 
-    def ai_try_block(self, free_cells):
+    def ai_play_block(self, free_cells):
+        """Blocks threatened win"""
         for x, y in free_cells:
             for line in self.board.get_crossed_lines(x, y):
                 line[x, y] = self.CELL_STATES['user']
@@ -93,11 +119,23 @@ class Game():
         if center_cell in free_cells:
             return center_cell
 
+    def ai_play_edge(self, free_cells):
+        """Makes move to an edge if user marked two opposite corners"""
+        for corner in self.board.corner_cells():
+            corner_mark = self.board.get(*corner)
+            oposite_corner_mark = self.board.get(*self.board.oposite_cell(*corner))
+            if corner_mark == oposite_corner_mark == self.CELL_STATES['user']:
+                return first(c for c in self.board.edge_cells() if c in free_cells)
 
     def ai_play_corner(self, free_cells):
+        """
+        Make move to a corner when:
+            - user marked a corner and an edge
+            - user marked two edges around a corner
+        """
         free_corners = [c for c in self.board.corner_cells() if c in free_cells]
         if free_corners:
-            for x, y in free_corners:   
+            for x, y in free_corners:
                 next_egde_1_mark = self.board.get(x + 1 if x == 0 else x - 1, y)
                 next_egde_2_mark = self.board.get(x, y + 1 if y == 0 else y - 1)
                 oposite_corner_mark = self.board.get(*self.board.oposite_cell(x, y))
@@ -107,40 +145,9 @@ class Game():
 
             return free_corners[0]
 
-    def ai_play_edge(self, free_cells):
-        for corner in self.board.corner_cells():
-            oposite_corner_mark = self.board.get(*self.board.oposite_cell(*corner))
-            if self.board.get(*corner) == oposite_corner_mark == self.CELL_STATES['user']:
-                return first(c for c in self.board.edge_cells() if c in free_cells)
-
-
-    def ai_stupid_move(self, free_cells):
+    def ai_play_simple(self, free_cells):
         return free_cells[0]
 
-    def ai_move(self):
-        free_cells = self.board.cells_containing(self.CELL_STATES['free'])
-        ai_moves = [self.ai_try_win, self.ai_try_block, self.ai_play_center, 
-                    self.ai_play_edge, self.ai_play_corner, self.ai_stupid_move]
-        x, y = some(map(lambda f: f(free_cells), ai_moves))
-        self.board.set(x, y, self.CELL_STATES['ai'])
-        self.update_status(x, y)
-        return x, y
-
-    def update_status(self, x, y):
-        self.check_win_state(x, y)
-        self.check_fullness()
-
-    def check_win_state(self, x, y):
-        for line in self.board.get_crossed_lines(x, y):
-            if self.is_line_winning(line):
-                self.is_over = True
-                if self.board.get(x, y) == self.CELL_STATES['ai']:
-                    self.message = 'You lose!'
-                else: 
-                    self.message = 'You win!'
-                self.win_lines.append(line.keys())
-
-    def check_fullness(self):
-        if not self.is_over and self.board.is_full():
-            self.is_over = True
-            self.message = 'Draw!'
+    def is_line_winning(self, line):
+        marks_set = set(line.values())
+        return len(marks_set) == 1 and marks_set.pop() != self.CELL_STATES['free']

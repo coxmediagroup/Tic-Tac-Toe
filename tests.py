@@ -16,7 +16,6 @@ def game():
         client.get('/end')
 
 
-
 class ApiTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -34,8 +33,8 @@ class ApiTestCase(unittest.TestCase):
             for query in bad_queries:
                 resp = client.get(query)
                 data = json.loads(resp.data)
-                assert data['success'] == False 
-                assert data['error'] == 'wrong_arguments' 
+                assert data['success'] == False
+                assert data['error'] == 'wrong_arguments'
 
             resp = client.get('/move?x=0&y=2')
             data = json.loads(resp.data)
@@ -48,7 +47,7 @@ class ApiTestCase(unittest.TestCase):
             resp = client.get(query)
             data = json.loads(resp.data)
             assert data['success'] == True
-            
+
             resp = client.get(query)
             data = json.loads(resp.data)
             assert data['success'] == False
@@ -68,10 +67,10 @@ class ApiTestCase(unittest.TestCase):
             assert 'game_over' in data
             assert data['game_over'] == False
             assert 'ai_move' in data
-            assert isinstance(data['ai_move'], dict) 
-            assert data['ai_move']['x'] in range(Game.BOARD_SIZE) 
-            assert data['ai_move']['y'] in range(Game.BOARD_SIZE) 
-            
+            assert isinstance(data['ai_move'], dict)
+            assert data['ai_move']['x'] in range(Game.BOARD_SIZE)
+            assert data['ai_move']['y'] in range(Game.BOARD_SIZE)
+
 
 if __name__ == '__main__':
     unittest.main()
