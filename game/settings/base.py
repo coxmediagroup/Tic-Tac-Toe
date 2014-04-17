@@ -56,13 +56,18 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'game.urls'
 SECRET_KEY = 'ltvg@0@qg=1elq^@m_r)!z0-bi#qmer@jr1$q+mj5q@&$t-u6&'
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.request',
-    'django.core.context_processors.static',
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.request',
+    'django.core.context_processors.static',
+)
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (os.path.join(PROJECT_PATH, 'game', 'templates'),)
 TIME_ZONE = 'UTC'
