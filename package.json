@@ -1,0 +1,12 @@
+{
+    "name": "TicTacToe",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "grunt": "*",
+        "grunt-contrib-cssmin": "*",
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-uglify": "*"
+    },
+    "engine": "node >= 0.10.3"
+}
