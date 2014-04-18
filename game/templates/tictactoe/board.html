@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="rows=[0, 1 ,2]">
+        <table border="1">
+            <tbody>
+                <tr ng-repeat="row in rows">
+                    <td ng-repeat="col in rows"><input type="checkbox" ng-click="makeMove(row, col)"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
