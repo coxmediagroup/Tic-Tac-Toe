@@ -6,3 +6,6 @@ __pycache__
 
 # Installer logs
 pip-log.txt
+
+# Node
+node_modules
