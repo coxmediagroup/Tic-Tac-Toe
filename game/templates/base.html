@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html class>
 <head>
@@ -6,7 +7,12 @@
 <body>
     <a href='#'>Tic-Tac-Toe</a>
     {% block content %}
-        <p>Show Board</p>
     {% endblock %}
+
+    {% if debug %}
+        <script src="{% static '/static/js/tictactoe.dev.js' %}"></script>
+    {% else %}
+        <script src="{% static '/static/js/tictactoe.min.js' %}"></script>
+    {% endif %}
 </body>
 </html>
