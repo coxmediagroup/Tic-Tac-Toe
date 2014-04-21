@@ -1,12 +1,11 @@
 /*jslint node:true */
 "use strict";
 
-var child_process = require('child_process');
-
 var env = (process.env.NODE_ENV === 'production') ? 'production' : 'development';
 
 // List of client side javascript libraries
 var lib_js_list = [
+    'static/js/libs/jquery/jquery-1.10.2.min.js',
     'static/js/libs/angular/angular.min.js'
 ];
 
@@ -28,7 +27,7 @@ var gruntConfig = {
             jquery: true
         },
         tictactoe_js: {
-            files: [tictactoe_js_list]
+            src: ['static/js/controllers/*.js'] // files: [tictactoe_js_list]
         }
     },
 
@@ -56,6 +55,17 @@ var gruntConfig = {
                 'static/js/tictactoe.min.js': [lib_js_list, tictactoe_js_list]
             }
         }
+    },
+
+    watch: {
+        tictactoe_js: {
+            files: [tictactoe_js_list],
+            tasks: ['jshint:tictactoe_js']
+        },
+        compress_js: {
+            files: [tictactoe_js_list],
+            tasks: ['uglify']
+        }
     }
 };
 
@@ -66,10 +76,14 @@ module.exports = function(grunt) {
     // Project configuration
     grunt.initConfig(gruntConfig);
 
+    // Default task(s)
+    grunt.registerTask('default', ['watch']);
+
     // Load the plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s)
-    grunt.registerTask('build', ['uglify']);
+    grunt.registerTask('build', ['jshint:tictactoe_js', 'uglify']);
 };

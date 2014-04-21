@@ -2,11 +2,16 @@
     "name": "TicTacToe",
     "version": "0.0.1",
     "private": true,
+    "scripts": {
+        "start": "NODE_ENV=development grunt"
+    },
     "dependencies": {
+        "express": "4.0.0",
         "grunt": "*",
         "grunt-contrib-cssmin": "*",
         "grunt-contrib-jshint": "*",
-        "grunt-contrib-uglify": "*"
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "0.6.1"
     },
     "engine": "node >= 0.10.3"
 }
