@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="rows=[0, 1 ,2]">
-        <table border="1">
-            <tbody>
-                <tr ng-repeat="row in rows">
-                    <td ng-repeat="col in rows"><input type="checkbox" ng-click="makeMove(row, col)"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="rows=[0, 1 ,2]">
+        <div class="col-md-4">&nbsp;</div>
+
+        <div class="col-md-4">
+            <table class="table-condensed table-bordered">
+                <tbody>
+                    <tr ng-repeat="row in rows">
+                        <td ng-repeat="col in rows">
+                            <button type="button" id="move_[[ row ]][[ col ]]" class="btn btn-default btn-sm" ng-click="makeMove(row, col)">&nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">&nbsp;</div>
+    </section><!-- ./ collections-table -->
 {% endblock %}
