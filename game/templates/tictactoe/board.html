@@ -1,16 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="rows=[0, 1 ,2]">
+    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl">
         <div class="col-md-4">&nbsp;</div>
 
         <div class="col-md-4">
             <table class="table-condensed table-bordered">
                 <tbody>
-                    <tr ng-repeat="row in rows">
-                        <td ng-repeat="col in rows">
-                            <button type="button" id="move_[[ row ]][[ col ]]" class="btn btn-default btn-sm" ng-click="makeMove(row, col)">&nbsp;
-                            </button>
+                    <tr>
+                        <td ng-repeat="mv in [0, 1, 2]">
+                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="mv in [3, 4, 5]">
+                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="mv in [6, 7, 8]">
+                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
                         </td>
                     </tr>
                 </tbody>

@@ -18,23 +18,32 @@ tictactoe.config([
 
 tictactoe.controller('TicTacToeCtrl', ['$scope', '$http', '$element', function($scope, $http, $element) {
 
-    $scope.makeMove = function(row, col) {
-        var data = {
-                'row': row,
-                'col': col
-            },
-            el = '#move_' + row + col;
+    $scope.makeMove = function(mv) {
+        var move = {'move': mv};
 
-        $http.post('/makemove/', data)
+        // Player move
+        markMove(mv, 'O');
+        $http.post('/makemove/', move)
             .success(function(data, status, headers, config) {
-                $element.find(el).prop('disabled', true).html('X');
-                console.log('success');
-                // TODO: Check the following in data:
-                // if player won
-                // else if ai won
+                if (data.success) {
+                    setTimeout(function() {
+                        // AI move
+                        markMove(data.move, 'X');
+                    }, 4000);
+                    console.log(data);
+                    // TODO: Check the following in data:
+                    // if player won
+                    // else if ai won
+                }
+                // else Something went wrong
             })
             .error(function(data, status, headers, config) {
                 console.log('error');
             });
     };
+
+    function markMove(move, letter) {
+        var el = '#move_' + move;
+        $element.find(el).prop('disabled', true).html(letter);
+    }
 }]);
