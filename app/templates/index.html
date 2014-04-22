@@ -237,5 +237,78 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
 	
+     <script>
+    /***
+        1. get click.
+         //2. determine board state. *** skipping this.
+        3. send state to server + attempted move
+        4. get server response.
+        5. change board state to
+            a) reflect user move
+            b) reflect computer counter move.
+        
+        Board state Key:
+        -1 = computer
+        0 = empty
+        1 = user
+        Front end (data):
+        "empty"
+        "computer"
+        "user"
+    ***/
+    var TickTackToe = {};
+    TickTackToe.dataMap = [
+        "ttt-0",
+        "ttt-1",
+        "ttt-2", 
+        "ttt-3", 
+        "ttt-4", 
+        "ttt-5", 
+        "ttt-6", 
+        "ttt-7", 
+        "ttt-8"
+    ];
+    TickTackToe.message = function( msg, color ){
+        if( color == undefined ){
+            color = "black";
+        }
+        $("#messages").text( msg );
+        $("#messages").css("color",color);
+    };
+    
+    $(document).ready(function(){
+        
+        $("#restart").click( function( e ){
+            $.each( $('.game-piece'), function( i ){
+                $(this).data("state", "empty");
+                $(this).empty();
+                $(this).append( "<i class='icon-circle icon-4x white'></i>" );
+            });
+            
+            $("#ttt-0").empty().append( "<i class='icon-remove icon-4x'></i>" );
+
+        });
+    
+        $('.game-piece').click( function( e ){
+        
+            var id = $(this).attr('id');
+            if( $(this).data("state") == "empty"){
+                
+                $(this).empty();
+                $(this).append( "<i class='icon-circle-blank icon-4x'></i>" );
+                $(this).data("state", "user");
+                
+                var moveindex = 0;
+                for( var i = 0; i < TickTackToe.dataMap.length; i++){
+                    if( TickTackToe.dataMap[i] == id ){
+                        moveindex = i;
+                        break;
+                    }
+                }
+            }
+            
+        });
+    });
+    </script>
 </body>
 </html>
