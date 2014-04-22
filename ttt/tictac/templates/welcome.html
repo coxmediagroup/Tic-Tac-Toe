@@ -1,0 +1,30 @@
+{% load admin_static %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="$1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Tic-Tac-Toe</title>
+        <link rel="stylesheet" href="{% static "tictac/css/bootstrap.min.css" %}">
+        <link href="http://fonts.googleapis.com/css?family=Carter+One" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static "tictac/css/tictac.css" %}">
+
+        <link rel="author" href="{% static "tictac/humans.txt" %}">
+    </head>
+
+    <body>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <h1>Tic Tac Toe</h1>
+
+            <h3>
+                <div id="ok" style="display: none;"><span class="glyphicon glyphicon-ok"></span> Everything loaded a-ok!</div>
+                <div id="fail"><span class="glyphicon glyphicon-remove"></span> Initializing; if this doesn't go away, then check the console, something borked.</div>
+            </h3>
+
+            <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
+        </div>
+        <div class="col-xs-2"></div>
+    </body>
+</html>

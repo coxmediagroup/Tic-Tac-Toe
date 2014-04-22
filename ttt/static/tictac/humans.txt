@@ -1,0 +1,12 @@
+/* TEAM */
+Programmer: Baron Chandler
+Site: baron@baronchandler.com
+Twitter: @msthebaron
+Location: Athens, GA, USA
+
+/* SITE */
+
+Last update: 2014/04/22
+Standards: HTML5, CSS3
+Components: python, django, backbone, knockout, bootstrap
+Software: Sublime Text 2, Chrome, IE, Safari
