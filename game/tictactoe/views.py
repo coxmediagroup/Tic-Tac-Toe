@@ -8,16 +8,12 @@ from .tictactoe import take_corner, move, move_ai
 
 
 def play(request):
-    board = [['' for x in range(3)] for i in range(3)]
+    board = ['' for m in range(9)]
     """
-    >>> board = [['' for x in range(3)] for i in range(3)]
+    >>> board = ['' for m in range(9)]
     >>> board
-    [['', '', ''], ['', '', ''], ['', '', '']]
-    >>> board[0][0]= 'X'
-    >>> board
-    [['X', '', ''], ['', '', ''], ['', '', '']]
+    ['', '', '', '', '', '', '', '', '']
     """
-
     request.session['board'] = board
     start = request.GET.get('start', 'computer')
     if start != 'player':
@@ -41,13 +37,13 @@ def make_move(request):
 
     form = MoveForm(request.POST or None)
     if form.is_valid():
-        move(request, **form.cleaned_data)
+        move(request, form.cleaned_data['move'])
         # TODO:
         # check if player can win
         # if not, then move_ai
 
-        data['success'] = True,
-        data['row'], data['col'] = move_ai(request)
+        data['success'] = True
+        data['move'] = move_ai(request)
 
         # TODO: check if ai can win
 
