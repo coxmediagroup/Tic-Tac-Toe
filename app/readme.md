@@ -13,8 +13,8 @@ Notes
 
 To Develop this project I used:
 
-python 2.7.2
-flask 0.10.1
+* python 2.7.2
+* flask 0.10.1
 
 Contact
 =======

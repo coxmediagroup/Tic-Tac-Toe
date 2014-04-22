@@ -257,6 +257,7 @@
         "user"
     ***/
     var TickTackToe = {};
+    TickTackToe.moveAllowed = true;
     TickTackToe.dataMap = [
         "ttt-0",
         "ttt-1",
@@ -275,6 +276,11 @@
         $("#messages").text( msg );
         $("#messages").css("color",color);
     };
+    TickTackToe.doComputerMove = function( moveint ){
+        $( "#" +  TickTackToe.dataMap[moveint] ).empty();
+        $( "#" +  TickTackToe.dataMap[moveint] ).append( "<i class='icon-remove icon-4x'></i>" );
+        $( "#" +  TickTackToe.dataMap[moveint]).data("state", "computer");
+    };
     
     $(document).ready(function(){
         
@@ -286,7 +292,24 @@
             });
             
             $("#ttt-0").empty().append( "<i class='icon-remove icon-4x'></i>" );
-
+    
+            NProgress.start();
+            TickTackToe.moveAllowed = false;
+            $.ajax({
+                url: "/clear",
+                type: "POST"
+            }).done( function(e) {
+                //alert(e);
+                NProgress.done();
+                TickTackToe.moveAllowed = true;
+                TickTackToe.winner = false;
+                TickTackToe.message("Click an empty tile to begin");
+            }).fail( function(e) {
+                NProgress.done();
+                TickTackToe.moveAllowed = true;
+                TickTackToe.winner = false;
+                TickTackToe.message("Error: " + e, "red");
+            });
         });
     
         $('.game-piece').click( function( e ){
@@ -305,6 +328,39 @@
                         break;
                     }
                 }
+                
+                var datas = {
+                    position: moveindex
+                }
+                
+                NProgress.start();
+                TickTackToe.moveAllowed = false;
+                $.ajax( {
+                    url: "/move",
+                    type: "POST",
+                    data: datas
+                }).done( function(data){
+                    //alert(e);
+                    var move = parseInt(data);
+                    
+                    if( data.computer != null ){
+                        TickTackToe.message("Computer wins :(", "red");
+                        TickTackToe.doComputerMove( move );
+                    } else if(  data.user != null ){
+                        TickTackToe.message("You win :)", "green");
+                    } else  {
+                       
+                        TickTackToe.doComputerMove( move );
+                    }
+                    
+                    NProgress.done();
+                    TickTackToe.moveAllowed = true;
+                    
+                }).fail( function(e){
+                    TickTackToe.message("Error: " + e, "red");
+                    NProgress.done();
+                    TickTackToe.moveAllowed = true;
+                });
             }
             
         });

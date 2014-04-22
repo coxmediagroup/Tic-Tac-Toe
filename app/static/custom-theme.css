@@ -21,18 +21,3 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-
-ul.socialNetwork {
-	padding: 0;
-	display: block;
-}
-
-ul.socialNetwork li {
-	display: inline-block;
-	list-style-type: none;
-}
-
-#map-canvas { 
-	width: 100%;
-	height: 200px;
-}

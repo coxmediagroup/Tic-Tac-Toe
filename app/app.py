@@ -5,6 +5,8 @@ from flask import Response
 from flask import session
 from flask import jsonify
 
+from ticktacktoeai import AI
+
 app = Flask(__name__)
 
 #note: computer always starts off in top right corner. 
@@ -28,9 +30,22 @@ def move():
     move = request.form['position']
     print "move: ", move
     
-    # do some session stuff here
-    
-    return str(move)
+    try:
+        move_data = session["state"][int(move)]
+        if move_data != 0:
+            raise Exception("invalid move")
+            
+        # mark players move if it is valid:
+        session["state"][int(move)] = 1
+        ai = AI.TickTackToeAI()
+
+        cpmove = ai.getComputerMove( session["state"] )
+        session["state"][ cpmove ] = -1
+        
+        return str(cpmove)
+    except Exception, e:
+        print "server error, ", e
+        return "server error, ", e
     
 
 @app.route("/clear", methods=['POST'])
