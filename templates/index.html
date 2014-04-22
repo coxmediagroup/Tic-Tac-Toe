@@ -11,10 +11,14 @@
     
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom-theme.css') }}" />
 	
-	<script type="text/javascript" src="{{ url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
 	
+    <style>
+        
+        .white {
+            color: white;
+        }
+    
+    </style>
 </head>
 <body>
 	<div class="container">
@@ -56,7 +60,147 @@
 			</div>
 		</div>
         
+        <div class="row">
+			<div class="span12">
+
+				<h3 class="center">
+					Computer always goes first :)
+				</h3>
+
+			</div>
+		</div>
+        
+        <div class="row">
+			<div class="span4">
+
+				<div class="well">
+                    You: <i class="icon-circle-blank"></i>
+                    
+                </div>
+
+			</div>
+            <div class="span4">
+
+				<div class="well">
+                    Computer: <i class="icon-remove" ></i>
+                    
+                </div>
+
+			</div>
+            <div class="span4">
+
+				<div class="well">
+                    Empty: <i class="icon-circle"></i>
+                    
+                </div>
+
+			</div>
+		</div>
+
+        <div class="row">
+			<div class="span12">
+                
+                <!-- instructions and messages will appear here -->
+				<h4 class="center" id="messages">
+					Click an empty tile to start.
+				</h4>
+
+			</div>
+		</div>
+        
+		
+		<div class="row">
+			<div class="span4">
+				<div class="well center game-piece" id="ttt-0" data-state="computer">
+				
+                        <i class="icon-remove icon-4x"></i>
+                
+                </div>
+			</div>        
+                    
+            <div class="span4">
+				<div class="well center game-piece" id="ttt-1" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                    
+                </div>
+			</div>
+            <div class="span4">
+				<div class="well center game-piece" id="ttt-2" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                  
+				</div>
+			</div>
+		</div>
+        
+        <div class="row">
+			<div class="span4">
+				<div class="well center game-piece" id="ttt-3" data-state="empty">
+					
+                        <i class="icon-circle icon-4x white"></i>
+                
+                </div>
+			</div>        
+                    
+            <div class="span4">
+				<div class="well center game-piece" id="ttt-4" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                  
+                </div>
+			</div>
+            <div class="span4">
+				<div class="well center game-piece" id="ttt-5" data-state="empty">
+               
+                        <i class="icon-circle icon-4x white"></i>
+              
+				</div>
+			</div>
+		</div>
+        
+        <div class="row">
+			<div class="span4">
+				<div class="well center game-piece" id="ttt-6" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+                </div>
+			</div>        
+                    
+            <div class="span4">
+				<div class="well center game-piece" id="ttt-7" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+                </div>
+			</div>
+            <div class="span4">
+				<div class="well center  game-piece" id="ttt-8" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+				</div>
+			</div>
+		</div>
+        
+        <div class="row">
+			<div class="span12">
+
+				<div class="well">
+                    <button class="btn btn-danger" id="restart">Restart</button>
+                    <!--button class="btn">Run Test</button>
+                    <button class="btn">Auto-Move</button-->
+                </div>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="span12">
+				&nbsp;
+			</div>
+		</div>
         
     </div>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
+	
 </body>
 </html>
