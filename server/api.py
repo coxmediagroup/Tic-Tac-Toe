@@ -1,11 +1,28 @@
+import functools
+
 import endpoints
+from google.appengine.api import namespace_manager
 from protorpc import message_types, messages, remote
 
 from messages import GameMessage, MoveMessage
 from models import Game, Squares
 
 
-CLIENT_IDS = [endpoints.API_EXPLORER_CLIENT_ID]
+CLIENT_IDS = ['74921937461.apps.googleusercontent.com',
+              endpoints.API_EXPLORER_CLIENT_ID]
+
+
+def require_user(endpoints_method):
+
+    @functools.wraps(endpoints_method)
+    def wrapped(*args, **kw):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('Invalid token.')
+        namespace_manager.set_namespace(user.user_id())
+        return endpoints_method(*args, **kw)
+
+    return wrapped
 
 
 @endpoints.api(allowed_client_ids=CLIENT_IDS,
@@ -23,6 +40,7 @@ class TicTacToeApi(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, GameMessage,
                       path='start', http_method='POST')
+    @require_user
     def start(self, unused_request):
         game = Game.query().get()
         if not game:
@@ -32,6 +50,7 @@ class TicTacToeApi(remote.Service):
 
     @endpoints.method(_move_resource, GameMessage,
                       path='move/{id}', http_method='PUT')
+    @require_user
     def move(self, request):
         game = Game.get_by_id(request.id)
         square = request.square
@@ -60,6 +79,7 @@ class TicTacToeApi(remote.Service):
 
     @endpoints.method(_id_resource, GameMessage,
                       path='replay/{id}', http_method='PUT')
+    @require_user
     def replay(self, request):
         game = Game.get_by_id(request.id)
         if not game:
