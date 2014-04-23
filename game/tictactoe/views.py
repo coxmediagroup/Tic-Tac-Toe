@@ -15,6 +15,7 @@ def play(request):
     >>> board
     ['', '', '', '', '', '', '', '', '']
     """
+    corner = None
     request.session['board'] = board
     start = request.GET.get('start', 'computer')
     if start != 'player':
@@ -25,9 +26,10 @@ def play(request):
         however, playing the corner gives the opponent the smallest choice of
         squares which must be played to avoid losing.
         """
-        take_corner(request)
+        corner = take_corner(request)
 
-    return render(request, 'tictactoe/board.html', {})
+    context = {'corner': corner}
+    return render(request, 'tictactoe/board.html', context)
 
 
 @csrf_exempt

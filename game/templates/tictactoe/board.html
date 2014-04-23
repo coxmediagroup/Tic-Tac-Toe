@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl">
+    <h2>Corner: {{ corner }}</h2>
+    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="corner={{ corner }}">
         <div class="col-md-4">&nbsp;</div>
 
         <div class="col-md-4">
@@ -9,17 +10,17 @@
                 <tbody>
                     <tr>
                         <td ng-repeat="mv in [0, 1, 2]">
-                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
+                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
                         </td>
                     </tr>
                     <tr>
                         <td ng-repeat="mv in [3, 4, 5]">
-                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
+                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
                         </td>
                     </tr>
                     <tr>
                         <td ng-repeat="mv in [6, 7, 8]">
-                            <button type="button" id="move_[[ mv ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">&nbsp;</button>
+                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
                         </td>
                     </tr>
                 </tbody>
