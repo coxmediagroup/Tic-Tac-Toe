@@ -5,8 +5,6 @@ from flask import Response
 from flask import session
 from flask import jsonify
 
-import random
-
 from ticktacktoeai import AI
 
 
@@ -41,11 +39,24 @@ def move():
         # mark players move if it is valid:
         session["state"][int(move)] = 1
         ai = AI.TickTackToeAI()
-
-        cpmove = ai.getComputerMove( session["state"] )
-        session["state"][ cpmove ] = -1
+        userresult = ai.didPlayerWin( session["state"], True )
         
-        return str(cpmove)
+        if userresult == None:
+            cpmove = ai.getComputerMove( session["state"] )
+            session["state"][ cpmove ] = -1
+            cpresult = ai.didPlayerWin( session["state"], False )
+        else:
+            cpmove = -1
+            cpresult = None
+            
+        print "Session: ", session["state"]
+        resultdict = {}
+        resultdict["move"] = str(cpmove)
+        resultdict["user"] = userresult
+        resultdict["computer"] = cpresult
+        resultdict["state"] = session["state"]
+        
+        return jsonify( resultdict )
     except Exception, e:
         print "server error, ", e
         return "server error, ", e
@@ -59,49 +70,23 @@ def clear():
 
 @app.route("/testai")
 def testai():
-    session["state"] = list(DEFAULT_GAME_STATE)
     # do something here to test the AI to make sure it always wins.
     cp_wins = 0
     user_wins = 0
     ties = 0
     ai = AI.TickTackToeAI()
-    for game in range(1000):
-        game_on = True
+    for game in range(10000):
         session["state"] = list(DEFAULT_GAME_STATE)
-        while game_on:
-            if 0 not in session["state"]:
-                game_on = False
-                ties += 1
-                break
-                
-            picking_user_move = True
-            user_move = -1
-            while picking_user_move and 0 in session["state"]:
-                test = random.randrange(0,9)
-                if session["state"][ test ] == 0:
-                    user_move = test
-                    picking_user_move = False
-            
-            session["state"][ user_move ] = 1
-            user_win = ai.didPlayerWin( session["state"], True )
-            if user_win != None:
-                game_on = False
-                user_wins += 1
-                break
-            
-            cp_move = ai.getComputerMove( session["state"] )
-            session["state"][ cp_move ] = -1        
-            cp_win = ai.didPlayerWin( session["state"], False )
-            if cp_win != None:
-                game_on = False
-                cp_wins += 1
-                break
+        rundict = ai.gameTest(session["state"])
+        cp_wins += rundict["cp_wins"]
+        user_wins += rundict["user_wins"]
+        ties += rundict["ties"]
             
     winsdict = {}
-    winsdict["computer_wins"] = cp_wins
+    winsdict["cp_wins"] = cp_wins
     winsdict["user_wins"] = user_wins
     winsdict["ties"] = ties
-    winsdict["total_runs"] = 1000
+    winsdict["total_runs"] = 10000
     return jsonify( winsdict )
 
     

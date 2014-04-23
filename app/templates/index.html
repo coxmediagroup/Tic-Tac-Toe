@@ -333,7 +333,7 @@
                     position: moveindex
                 }
                 
-                NProgress.start();
+               NProgress.start();
                 TickTackToe.moveAllowed = false;
                 $.ajax( {
                     url: "/move",
@@ -341,15 +341,27 @@
                     data: datas
                 }).done( function(data){
                     //alert(e);
-                    var move = parseInt(data);
+                    var move = parseInt(data.move);
                     
                     if( data.computer != null ){
                         TickTackToe.message("Computer wins :(", "red");
+                        TickTackToe.winner = true;
                         TickTackToe.doComputerMove( move );
                     } else if(  data.user != null ){
                         TickTackToe.message("You win :)", "green");
+                        TickTackToe.winner = true;
                     } else  {
-                       
+                        var count = 0;
+                        for( var i =0; i <= data.state.length; i++){
+                            if( data.state[i] != 0){
+                                count++;
+                            }
+                        }
+                        
+                        if( count == 10){
+                            TickTackToe.message("Game was a draw ^__^", "blue");
+                            TickTackToe.winner = true;
+                        } 
                         TickTackToe.doComputerMove( move );
                     }
                     

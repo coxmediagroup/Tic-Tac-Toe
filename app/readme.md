@@ -16,8 +16,26 @@ To Develop this project I used:
 * python 2.7.2
 * flask 0.10.1
 
+Flask and the flask dependencies are the only non-standard modules used.
+
 Contact
 =======
 
 If you like it drop me a line!
 Aaron Decker, me@a-r-d.me
+
+
+Test Notes:
+==========
+
+Visit http://localhost:5000/testai to test the ai. 
+You should get something like this:
+
+    {
+      "cp_wins": 9591, 
+      "ties": 409, 
+      "total_runs": 10000, 
+      "user_wins": 0
+    }
+    
+With the computer going first it should always win.
