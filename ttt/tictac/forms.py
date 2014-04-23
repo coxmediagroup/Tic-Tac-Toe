@@ -15,3 +15,6 @@ class NewGameForm(forms.Form):
     player2_auto = forms.ChoiceField(label=_('Player 2 is a '),
         choices=( ('person', 'real person'), ('computer', 'the computer') ),
         widget=forms.radioSelect, )
+    game_type = forms.ChoiceField(label=('Game type'),
+        choices=( ('classic', 'classic tic-tac-toe'), ), )
+

@@ -9,7 +9,7 @@ default:
 
 .PHONY: test
 test:
-	. var/bin/activate && ttt/manage.py test
+	. var/bin/activate && ttt/manage.py test tictac
 
 .PHONY: shell
 shell:
