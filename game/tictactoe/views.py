@@ -4,8 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from game.http import JsonResponse
 
 from .forms import MoveForm
-from .tictactoe import (take_corner, move, move_ai, find_winner_move,
-                        AI_LETTER, HUMAN_LETTER)
+from .tictactoe import (take_corner, move, move_ai, winner, AI_LETTER,
+                        HUMAN_LETTER)
 
 
 def play(request):
@@ -15,7 +15,7 @@ def play(request):
     >>> board
     ['', '', '', '', '', '', '', '', '']
     """
-    corner = None
+    corner = -1
     request.session['board'] = board
     start = request.GET.get('start', 'computer')
     if start != 'player':
@@ -44,7 +44,8 @@ def make_move(request):
         board = request.session['board']
 
         # Check if human move can win
-        winner_move = find_winner_move(board, HUMAN_LETTER)
+        winner_move = winner(board)
+        # TODO: If human starts, check here if it is a tie
         if winner_move:
             data['winner'] = 'human'
         else:
