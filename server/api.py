@@ -67,7 +67,7 @@ class TicTacToeApi(remote.Service):
         setattr(game, square, 'X')
         if game.is_won('X'):
             game.outcome = Game.WON
-        elif game.is_full():
+        elif game.is_tied():
             game.outcome = Game.TIED
         else:
             setattr(game, game.get_best_square(), 'O')

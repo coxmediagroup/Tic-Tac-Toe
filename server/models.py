@@ -100,7 +100,7 @@ class Game(ndb.Model):
                 return True
         return False
 
-    def is_full(self):
+    def is_tied(self):
         return all(self.values())
 
     def to_message(self):
