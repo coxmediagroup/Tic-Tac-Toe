@@ -4,7 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from game.http import JsonResponse
 
 from .forms import MoveForm
-from .tictactoe import take_corner, move, move_ai
+from .tictactoe import (take_corner, move, move_ai, find_winner_move,
+                        AI_LETTER, HUMAN_LETTER)
 
 
 def play(request):
@@ -37,14 +38,22 @@ def make_move(request):
 
     form = MoveForm(request.POST or None)
     if form.is_valid():
-        move(request, form.cleaned_data['move'])
-        # TODO:
-        # check if player can win
-        # if not, then move_ai
+        move(request, form.cleaned_data['move'], HUMAN_LETTER)
+        board = request.session['board']
 
+        # Check if human move can win
+        winner_move = find_winner_move(board, HUMAN_LETTER)
+        if winner_move:
+            data['winner'] = 'human'
+        else:
+            # Check if AI can win
+            mv, is_winner = move_ai(board)
+            if is_winner:
+                data['winner'] = 'ai'
+
+            board[mv] = AI_LETTER
+            request.session['board'] = board
+            data['move'] = mv
         data['success'] = True
-        data['move'] = move_ai(request)
-
-        # TODO: check if ai can win
 
     return JsonResponse(data)
