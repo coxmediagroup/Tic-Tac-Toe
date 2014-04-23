@@ -5,7 +5,10 @@ from flask import Response
 from flask import session
 from flask import jsonify
 
+import random
+
 from ticktacktoeai import AI
+
 
 app = Flask(__name__)
 
@@ -57,10 +60,49 @@ def clear():
 @app.route("/testai")
 def testai():
     session["state"] = list(DEFAULT_GAME_STATE)
-    
     # do something here to test the AI to make sure it always wins.
-    
-    return "ok"
+    cp_wins = 0
+    user_wins = 0
+    ties = 0
+    ai = AI.TickTackToeAI()
+    for game in range(1000):
+        game_on = True
+        session["state"] = list(DEFAULT_GAME_STATE)
+        while game_on:
+            if 0 not in session["state"]:
+                game_on = False
+                ties += 1
+                break
+                
+            picking_user_move = True
+            user_move = -1
+            while picking_user_move and 0 in session["state"]:
+                test = random.randrange(0,9)
+                if session["state"][ test ] == 0:
+                    user_move = test
+                    picking_user_move = False
+            
+            session["state"][ user_move ] = 1
+            user_win = ai.didPlayerWin( session["state"], True )
+            if user_win != None:
+                game_on = False
+                user_wins += 1
+                break
+            
+            cp_move = ai.getComputerMove( session["state"] )
+            session["state"][ cp_move ] = -1        
+            cp_win = ai.didPlayerWin( session["state"], False )
+            if cp_win != None:
+                game_on = False
+                cp_wins += 1
+                break
+            
+    winsdict = {}
+    winsdict["computer_wins"] = cp_wins
+    winsdict["user_wins"] = user_wins
+    winsdict["ties"] = ties
+    winsdict["total_runs"] = 1000
+    return jsonify( winsdict )
 
     
 if __name__ == "__main__":

@@ -31,7 +31,20 @@ class TickTackToeAI():
             
             This function should be called after every move.
         """
-        return False
+        for win in self.wins_list:
+            match = 0
+            for w in win:
+                i = 0
+                for position in game_state:
+                    if i == w and position == 1 and isuser == True:
+                        match += 1
+                    elif i == w and position == -1 and isuser == False:
+                        match += 1
+                    i += 1
+            if match >= 3:
+                #print "Winner: ", win
+                return win
+        return None
         
         
     def getComputerMove( self, game_state ):
