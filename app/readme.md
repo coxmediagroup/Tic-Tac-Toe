@@ -25,11 +25,20 @@ To Develop this project I used:
 * python 2.7.2
 * flask 0.10.1
 
-Flask and the flask dependencies are the only non-standard modules used. 
+Flask and the flask dependencies are the only non-standard modules used.
+I used Python 2.7 because I think more people are still using this and 
+have this version installed on their computers.  
 Optionally you can also run "server.py" which is the production version.
-This uses the tornado library to serve the application. You will need to 
-"pip install tornado" for this. I.E. seems hang on the built-in debug server,
-this is a known bug in one of the dependency libraries.
+This uses the tornado library to serve the application. You will need to do:
+
+    pip install tornado
+
+I.E. seems hang on the built-in debug server, this is a known bug 
+in one of the dependency libraries. To run the production mode simply:
+
+    python2.7 server.py
+    
+Once again, this will also run at localhost, port 5000.
 
 Contact
 =======
