@@ -2,7 +2,7 @@ import endpoints
 from protorpc import message_types, messages, remote
 
 from messages import GameMessage, MoveMessage
-from models import Game
+from models import Game, Squares
 
 
 CLIENT_IDS = [endpoints.API_EXPLORER_CLIENT_ID]
@@ -35,6 +35,15 @@ class TicTacToeApi(remote.Service):
     def move(self, request):
         game = Game.get_by_id(request.id)
         square = request.square
+
+        if not game:
+            raise endpoints.NotFoundException
+        if game.outcome is not None:
+            raise endpoints.BadRequestException
+        if square not in Squares.ALL:
+            raise endpoints.BadRequestException
+        if not game.is_empty_square(square):
+            raise endpoints.BadRequestException
 
         setattr(game, square, 'X')
         if game.is_won('X'):
