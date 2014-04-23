@@ -1,3 +1,5 @@
+import random
+
 from google.appengine.ext import ndb
 
 from messages import GameMessage
@@ -41,8 +43,15 @@ class Game(ndb.Model):
     def is_empty_square(self, square):
         return getattr(self, square) is None
 
+    def get_random_square(self, squares=Squares.ALL):
+        squares = list(squares)
+        random.shuffle(squares)
+        for square in squares:
+            if self.is_empty_square(square):
+                return square
+
     def get_best_square(self):
-        pass
+        return self.get_random_square()
 
     def is_won(self, char):
         for triplet in Squares.TRIPLETS:
