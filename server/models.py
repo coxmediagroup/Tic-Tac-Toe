@@ -1,5 +1,18 @@
 from google.appengine.ext import ndb
 
+from messages import GameMessage
+
+
+class Squares(object):
+    ALL = ('a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3')
+    NW, N, NE, W, C, E, SW, S, SE = ALL
+    CARDINAL = (N, W, E, S)
+    ORDINAL = (NW, NE, SW, SE)
+    HORIZONTAL = ((NW, N, NE), (W, C, E), (SW, S, SE))
+    VERTICAL = ((NW, W, SW), (N, C, S), (NE, E, SE))
+    DIAGONAL = ((NW, C, SE), (NE, C, SW))
+    TRIPLETS = HORIZONTAL + VERTICAL + DIAGONAL
+
 
 class Game(ndb.Model):
 
@@ -17,20 +30,28 @@ class Game(ndb.Model):
     c3 = ndb.StringProperty(choices=CHARS)
     outcome = ndb.StringProperty(choices=(WON, LOST, TIED))
 
+    def values(self, squares=Squares.ALL):
+        return [getattr(self, square) for square in squares]
+
     def reset(self):
-        pass
+        for square in Squares.ALL:
+            setattr(self, square, None)
+        self.outcome = None
 
     def is_empty_square(self, square):
-        pass
+        return getattr(self, square) is None
 
     def get_best_square(self):
         pass
 
     def is_won(self, char):
-        pass
+        for triplet in Squares.TRIPLETS:
+            if self.values(triplet) == [char] * 3:
+                return True
+        return False
 
     def is_full(self):
-        pass
+        return all(self.values())
 
     def to_message(self):
-        pass
+        return GameMessage(id=self.key.id(), **self.to_dict())
