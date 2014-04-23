@@ -43,6 +43,22 @@ class Game(ndb.Model):
     def is_empty_square(self, square):
         return getattr(self, square) is None
 
+    def get_winning_square(self):
+        for triplet in Squares.TRIPLETS:
+            values = self.values(triplet)
+            if values.count('O') == 2 and None in values:
+                return triplet[values.index(None)]
+
+    def get_blocking_square(self):
+        for triplet in Squares.TRIPLETS:
+            values = self.values(triplet)
+            if values.count('X') == 2 and None in values:
+                return triplet[values.index(None)]
+
+    def get_center_square(self):
+        if self.is_empty_square(Squares.C):
+            return Squares.C
+
     def get_random_square(self, squares=Squares.ALL):
         squares = list(squares)
         random.shuffle(squares)
@@ -51,7 +67,10 @@ class Game(ndb.Model):
                 return square
 
     def get_best_square(self):
-        return self.get_random_square()
+        return (self.get_winning_square() or
+                self.get_blocking_square() or
+                self.get_center_square() or
+                self.get_random_square())
 
     def is_won(self, char):
         for triplet in Squares.TRIPLETS:
