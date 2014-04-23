@@ -23,6 +23,7 @@ class GameTestCase(TestCase):
         self.game = Game.objects.new_game(game_type='classic', players=[
             { 'name':'Baron' },
             { 'name':'Joshua', 'auto': True, }, ])
+        self.game.save()
 
     def testGameType(self):
         self.assertEqual(self.game.game_type, 'classic')
@@ -57,4 +58,25 @@ class GameTestCase(TestCase):
                     { 'name':'Baron' }, ])
         self.assertEqual(ok.players.count(), 1, 'Expected one player, but got %d' % (
             ok.players.count()))
+
+    def testWinner(self):
+        self.game.board.state = '123456789'
+
+        result = self.game.has_winning_board(debug=True)
+        self.assertEqual(result[0], ('123', False))
+        self.assertEqual(result[1], ('456', False))
+        self.assertEqual(result[2], ('789', False))
+        self.assertEqual(result[3], ('147', False))
+        self.assertEqual(result[4], ('258', False))
+        self.assertEqual(result[5], ('369', False))
+        self.assertEqual(result[6], ('159', False))
+        self.assertEqual(result[7], ('357', False))
+        self.assertFalse(self.game.has_winning_board(), 'Board %s should have no winner: \n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '122122211'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+
 

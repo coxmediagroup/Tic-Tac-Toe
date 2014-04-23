@@ -29,9 +29,10 @@ class Board(models.Model):
     columns = models.IntegerField(default=3)
     state = models.CharField(max_length=256)
 
-    def __init__(self, rows=3, columns=3, **kwargs):
-        super(Board, self).__init__(rows, columns, **kwargs)
-        self.state = '0'*(rows*columns)
+    def __init__(self, *args, **kwargs):
+        super(Board, self).__init__(*args, **kwargs)
+        if not self.state:
+            self.state = ' '*(self.rows*self.columns)
         self.save()
 
     def __repr__(self):
@@ -86,6 +87,40 @@ class Game(models.Model):
         blank=True, null=True, )
 
     objects = GameManager()
+
+    def has_winning_board(self, *args, **kwargs):
+        if self.game_type == 'classic':
+            return self._classic_has_winning_board(*args, **kwargs)
+
+        return False
+
+    def _classic_has_winning_board(self, debug=False):
+
+        # we assume classic boards are 3x3
+        if self.board.columns != 3 or self.board.rows != 3:
+            raise ValueError('Cannot determine classic winner for a non-3x3 game.')
+
+        strs = [''] * 8
+
+        for idx in range(0, 3):
+            strs[idx] = self.board.state[3*idx:3*idx+3]
+            strs[3] = strs[3] + self.board.state[3*idx]
+            strs[4] = strs[4] + self.board.state[3*idx+1]
+            strs[5] = strs[5] + self.board.state[3*idx+2]
+            strs[6] = strs[6] + self.board.state[3*idx+idx]
+            strs[7] = strs[7] + self.board.state[3*idx+2-idx]
+
+        # if we're debugging, we can return the strs to check and
+        # whether it is a win
+        #
+        if debug:
+            return [(check, check[0] != ' ' and check.count(check[0]) == 3) for check in strs]
+
+        for check in strs:
+            if check[0] != ' ' and check.count(check[0]) == 3:
+                return True
+
+        return False
 
 
 

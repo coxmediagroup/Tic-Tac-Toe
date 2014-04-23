@@ -23,3 +23,57 @@ body {
     font-family: 'museo_slab500';
 }
 
+.board-square {
+    width: 80px;
+    height: 80px;
+    border-right: 3px solid black;
+    display: table-cell;
+    overflow: hidden;
+}
+
+.board-square:last-child {
+    border-right: none;
+}
+
+.board-row {
+    border-bottom: 3px solid black;
+    display:block;
+    width: 246px;
+    height: 83px;
+}
+
+.board-row:last-child {
+    border-bottom: none;
+}
+
+.square-content {
+    padding: 10px;
+    font-size: 32px;
+    margin-top: 14px;
+    text-align: center;
+    display: block;
+}
+
+.game-over {
+    font-family: 'Carter One';
+    font-size: 36pt;
+    color: #621;
+    margin-top: -188px;
+    position: absolute;
+}
+
+.play {
+    font-family: Arial, Helvetica;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.play1:after {
+    content: 'X';
+    color: #126;
+}
+
+.play2:after {
+    content: 'O';
+    color: #612;
+}

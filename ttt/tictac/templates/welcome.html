@@ -23,8 +23,31 @@
                 <div id="fail"><span class="glyphicon glyphicon-remove"></span> Initializing; if this doesn't go away, then check the console, something borked.</div>
             </h3>
 
+
+            <div class='board-holder'>
+                board will go here.
+            </div>
+
             <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
         </div>
         <div class="col-xs-2"></div>
+
+        <!-- BEGIN: template for # -->
+        <script type="text/template" class="template">
+        <div class='board'>
+        <% _.each( attributes['state'], function( c, i ) { %>
+            <% if ((i % 3) == 0) { %><div class='board-row row-<%- i / 3 %>'><% } %>
+            <div class='board-square'><div class='square-content'><div class='play play<%- c %>'></div></div></div>
+            <% if (((i+1) % 3) == 0) { %></div><% } %>
+            <% }); %>
+        </div>
+
+        <% if (attributes['game_over'] == true) { %>
+            <div class='game-over'>Game Over</div>
+        <% } %>
+        </script>
+        <!-- END: # template definition -->
+
+
     </body>
 </html>

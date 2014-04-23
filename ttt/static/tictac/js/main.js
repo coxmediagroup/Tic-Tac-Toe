@@ -1,7 +1,7 @@
 
 // contents of main.js:
 require.config({
-    'paths': {
+    paths: {
         'backbone': 'backbone/1.0.0/backbone-min',
         'bootstrap': 'bootstrap/3.1.1/bootstrap.min',
         'jquery': 'jquery/1.11.0/jquery-1.11.0.min',
@@ -9,8 +9,16 @@ require.config({
         'knockout': 'knockout/2.2.0/knockout-2.2.0',
         'underscore': 'underscore/1.5.0/underscore-min'
     },
-    'shim': {
+    shim: {
         'bootstrap' : ['jquery'],
+        'underscore': {
+            deps: [],
+            exports: '_'
+        },
+        'backbone': {
+            deps: ['jquery', 'underscore'],
+            exports: 'Backbone'
+        },
     }
 });
 
