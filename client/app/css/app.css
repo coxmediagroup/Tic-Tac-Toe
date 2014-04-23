@@ -1,0 +1,107 @@
+[ng\:cloak], [ng-cloak], .ng-cloak { display: none; }
+
+body {
+  font-family: sans-serif;
+}
+
+button {
+  display: none;
+  font-size: 20px;
+  margin: 0 auto;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+table, tr, td {
+  background: transparent;
+  border: 0;
+  font-size: 100%;
+  outline: 0;
+  padding: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+caption {
+  cursor: default;
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 40px;
+  margin-top: -20px;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  top: 50%;
+  width: 100%;
+  z-index: 1;
+}
+
+caption img, caption span {
+  vertical-align: middle;
+}
+
+caption img {
+  cursor: pointer;
+}
+
+td {
+  border: 30px solid #ddd;
+  height: 100px;
+  padding: 4px;
+  width: 100px;
+}
+
+.won td, .lost td, .tied td {
+  opacity: 0.5;
+}
+
+.X {
+  background: url(/img/x.svg) no-repeat center center;
+}
+
+.O {
+  background: url(/img/o.svg) no-repeat center center;
+}
+
+#a1 {
+  border-left: none;
+  border-top: none;
+}
+
+#a2 {
+  border-top: none;
+}
+
+#a3 {
+  border-right: none;
+  border-top: none;
+}
+
+#b1 {
+  border-left: none;
+}
+
+#b2 {
+
+}
+
+#b3 {
+  border-right: none;
+}
+
+#c1 {
+  border-bottom: none;
+  border-left: none;
+}
+
+#c2 {
+  border-bottom: none;
+}
+
+#c3 {
+  border-bottom: none;
+  border-right: none;
+}
