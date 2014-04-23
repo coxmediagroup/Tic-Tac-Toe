@@ -43,6 +43,13 @@ class Game(ndb.Model):
     def is_empty_square(self, square):
         return getattr(self, square) is None
 
+    def has_opposite_corners(self):
+        for squares in Squares.DIAGONAL:
+            values = self.values(squares)
+            if values[0] == 'X' and values[2] == 'X':
+                return True
+        return False
+
     def get_winning_square(self):
         for triplet in Squares.TRIPLETS:
             values = self.values(triplet)
@@ -59,6 +66,20 @@ class Game(ndb.Model):
         if self.is_empty_square(Squares.C):
             return Squares.C
 
+    def get_most_disruptive_square(self):
+        if self.has_opposite_corners():
+            squares = Squares.CARDINAL
+        else:
+            squares = Squares.ORDINAL
+        for square in squares:
+            for horizontal in Squares.HORIZONTAL:
+                for vertical in Squares.VERTICAL:
+                    if square in horizontal and square in vertical:
+                        if self.values(horizontal + vertical).count('X') == 2:
+                            if self.is_empty_square(square):
+                                return square
+        return self.get_random_square(squares)
+
     def get_random_square(self, squares=Squares.ALL):
         squares = list(squares)
         random.shuffle(squares)
@@ -70,6 +91,7 @@ class Game(ndb.Model):
         return (self.get_winning_square() or
                 self.get_blocking_square() or
                 self.get_center_square() or
+                self.get_most_disruptive_square() or
                 self.get_random_square())
 
     def is_won(self, char):
