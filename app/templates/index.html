@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Tick Tack Toe - Flask Edition</title>
-		
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome-ie7.min.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='nprogress/nprogress.css') }}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tick Tack Toe - Flask Edition</title>
+        
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome-ie7.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='nprogress/nprogress.css') }}" />
 
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom-theme.css') }}" />
-	
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom-theme.css') }}" />
+    
     <style  type="text/css">
         .white {
             color: white;
@@ -24,183 +25,183 @@
     </style>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="span12">
-				
-				<div class="navbar">
-				  <div class="navbar-inner">
-					<div class="container">
-					  <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					  </a>
-					  <a class="brand" href="#">Tic-Tac-Toe</a>
-					  <div class="nav-collapse collapse navbar-responsive-collapse">
-						<ul class="nav pull-right">
-						  <li><a href="#">Home</a></li>
-						  <li><a href="#about">About/Contact</a></li>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                
+                <div class="navbar">
+                  <div class="navbar-inner">
+                    <div class="container">
+                      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </a>
+                      <a class="brand" href="#">Tic-Tac-Toe</a>
+                      <div class="nav-collapse collapse navbar-responsive-collapse">
+                        <ul class="nav pull-right">
+                          <li><a href="#">Home</a></li>
+                          <li><a href="#about">About/Contact</a></li>
                         </ul>
-						
-						
-					  </div><!-- /.nav-collapse -->
-					</div>
-				  </div><!-- /navbar-inner -->
-				</div>
-			</div>
-		</div>
+                        
+                        
+                      </div><!-- /.nav-collapse -->
+                    </div>
+                  </div><!-- /navbar-inner -->
+                </div>
+            </div>
+        </div>
 
 
-		<div class="row">
-			<div class="span12">
+        <div class="row">
+            <div class="span12">
 
-				<h1 class="center">
-					Tic Tac Toe
-				</h1>
+                <h1 class="center">
+                    Tic Tac Toe
+                </h1>
 
-			</div>
-		</div>
+            </div>
+        </div>
         
         <div class="row">
-			<div class="span12">
+            <div class="span12">
 
-				<h3 class="center">
-					Computer always goes first :)
-				</h3>
+                <h3 class="center">
+                    Computer always goes first :)
+                </h3>
 
-			</div>
-		</div>
+            </div>
+        </div>
         
         <div class="row">
-			<div class="span4">
+            <div class="span4">
 
-				<div class="well">
+                <div class="well">
                     You: <i class="icon-circle-blank"></i>
                     
                 </div>
 
-			</div>
+            </div>
             <div class="span4">
 
-				<div class="well">
+                <div class="well">
                     Computer: <i class="icon-remove" ></i>
                     
                 </div>
 
-			</div>
+            </div>
             <div class="span4">
 
-				<div class="well">
-                    Empty: <i class="icon-circle"></i>
+                <div class="well">
+                    Empty: <i class="icon-circle white"></i>
                     
                 </div>
 
-			</div>
-		</div>
+            </div>
+        </div>
 
         <div class="row">
-			<div class="span12">
+            <div class="span12">
                 
                 <!-- instructions and messages will appear here -->
-				<h4 class="center" id="messages">
-					Click an empty tile to start.
-				</h4>
+                <h4 class="center" id="messages">
+                    Click an empty tile to start.
+                </h4>
 
-			</div>
-		</div>
+            </div>
+        </div>
         
-		
-		<div class="row">
-			<div class="span4">
-				<div class="well center game-piece" id="ttt-0" data-state="computer">
-				
+        
+        <div class="row">
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-0" data-state="computer">
+                
                         <i class="icon-remove icon-4x"></i>
                 
                 </div>
-			</div>        
+            </div>        
                     
             <div class="span4">
-				<div class="well center game-piece" id="ttt-1" data-state="empty">
+                <div class="well center game-piece" id="ttt-1" data-state="empty">
                    
                         <i class="icon-circle icon-4x white"></i>
                     
                 </div>
-			</div>
+            </div>
             <div class="span4">
-				<div class="well center game-piece" id="ttt-2" data-state="empty">
+                <div class="well center game-piece" id="ttt-2" data-state="empty">
                    
                         <i class="icon-circle icon-4x white"></i>
                   
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
         
         <div class="row">
-			<div class="span4">
-				<div class="well center game-piece" id="ttt-3" data-state="empty">
-					
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-3" data-state="empty">
+                    
                         <i class="icon-circle icon-4x white"></i>
                 
                 </div>
-			</div>        
+            </div>        
                     
             <div class="span4">
-				<div class="well center game-piece" id="ttt-4" data-state="empty">
+                <div class="well center game-piece" id="ttt-4" data-state="empty">
                    
                         <i class="icon-circle icon-4x white"></i>
                   
                 </div>
-			</div>
+            </div>
             <div class="span4">
-				<div class="well center game-piece" id="ttt-5" data-state="empty">
+                <div class="well center game-piece" id="ttt-5" data-state="empty">
                
                         <i class="icon-circle icon-4x white"></i>
               
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
         
         <div class="row">
-			<div class="span4">
-				<div class="well center game-piece" id="ttt-6" data-state="empty">
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-6" data-state="empty">
                         <i class="icon-circle icon-4x white"></i>
                 </div>
-			</div>        
+            </div>        
                     
             <div class="span4">
-				<div class="well center game-piece" id="ttt-7" data-state="empty">
+                <div class="well center game-piece" id="ttt-7" data-state="empty">
                         <i class="icon-circle icon-4x white"></i>
                 </div>
-			</div>
+            </div>
             <div class="span4">
-				<div class="well center  game-piece" id="ttt-8" data-state="empty">
+                <div class="well center  game-piece" id="ttt-8" data-state="empty">
                         <i class="icon-circle icon-4x white"></i>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
         
         <div class="row">
-			<div class="span12">
+            <div class="span12">
 
-				<div class="well">
+                <div class="well">
                     <button class="btn btn-danger" id="restart">Restart</button>
                 </div>
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<div class="row" id="about">
-			<div class="span12">
-				<hr />
-			</div>
-		</div>
+        <div class="row" id="about">
+            <div class="span12">
+                <hr />
+            </div>
+        </div>
         
         
         <div class="row">
-			<div class="span12">
+            <div class="span12">
 
-				<h3>
+                <h3>
                     About
                 </h3>
                 
@@ -225,21 +226,21 @@
                         to make things as easy as possible for you :)
                     </p>
                 </div>
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<div class="row">
-			<div class="span12">
-				<hr />
-			</div>
-		</div>
+        <div class="row">
+            <div class="span12">
+                <hr />
+            </div>
+        </div>
         
     </div>
     
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
-	
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
+    
      <script  type="text/javascript">
     /***
         1. get click.

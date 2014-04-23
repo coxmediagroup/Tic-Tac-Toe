@@ -17,6 +17,7 @@ Then inside of the "app" folder run the "app.py" file on the command line.
 
 Go to http://localhost:5000 and have fun!
 
+
 Notes
 =====
 
@@ -68,5 +69,5 @@ Browser Testing:
 
 * Chrome Latest: Working
 * Firefox Latest: Working
-* I.E. 11: Working if you run from server.py
+* I.E. 11 and 8: Working if you run from server.py
 
