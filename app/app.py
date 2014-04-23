@@ -9,6 +9,8 @@ from ticktacktoeai import AI
 
 
 app = Flask(__name__)
+app.secret_key = "dfndsfunr4r8743q98rsrkq0llaqmsrajf"
+
 
 #note: computer always starts off in top right corner. 
 # should this be random? Not sure. 
@@ -29,7 +31,7 @@ def home():
 @app.route("/move", methods=['POST'])
 def move():
     move = request.form['position']
-    print "move: ", move
+    #print "move: ", move
     
     try:
         move_data = session["state"][int(move)]
@@ -49,7 +51,7 @@ def move():
             cpmove = -1
             cpresult = None
             
-        print "Session: ", session["state"]
+        #print "Session: ", session["state"]
         resultdict = {}
         resultdict["move"] = str(cpmove)
         resultdict["user"] = userresult
@@ -91,8 +93,8 @@ def testai():
 
     
 if __name__ == "__main__":
-    app.debug = True
-    app.secret_key = "dfndsfunr4r8743q98rsrkq0llaqmsrajf"
+    #app.debug = True
+    app.threaded = True
     app.run()
     
     

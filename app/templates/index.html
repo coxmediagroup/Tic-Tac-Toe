@@ -16,6 +16,12 @@
         .white {
             color: white;
         }
+        .green {
+            color: #23BD15;
+        }
+        .red {
+            color: #ED2626;
+        }
     </style>
 </head>
 <body>
@@ -34,7 +40,7 @@
 					  <a class="brand" href="#">Tic-Tac-Toe</a>
 					  <div class="nav-collapse collapse navbar-responsive-collapse">
 						<ul class="nav pull-right">
-						  <li class="active"><a href="#">Home</a></li>
+						  <li><a href="#">Home</a></li>
 						  <li><a href="#about">About/Contact</a></li>
                         </ul>
 						
@@ -258,6 +264,7 @@
     ***/
     var TickTackToe = {};
     TickTackToe.moveAllowed = true;
+    TickTackToe.winner = false;
     TickTackToe.dataMap = [
         "ttt-0",
         "ttt-1",
@@ -287,6 +294,8 @@
         $("#restart").click( function( e ){
             $.each( $('.game-piece'), function( i ){
                 $(this).data("state", "empty");
+                $(this).removeClass("red");
+                $(this).removeClass("green");
                 $(this).empty();
                 $(this).append( "<i class='icon-circle icon-4x white'></i>" );
             });
@@ -316,6 +325,11 @@
         
             var id = $(this).attr('id');
             if( $(this).data("state") == "empty"){
+            
+                if( TickTackToe.winner ){
+                    TickTackToe.message("Game is over, please restart", "red");
+                    return;
+                }
                 
                 $(this).empty();
                 $(this).append( "<i class='icon-circle-blank icon-4x'></i>" );
@@ -347,9 +361,20 @@
                         TickTackToe.message("Computer wins :(", "red");
                         TickTackToe.winner = true;
                         TickTackToe.doComputerMove( move );
+                        
+                        for( var i =0; i <= data.computer.length; i++){
+                            var id_target = TickTackToe.dataMap[ data.computer[i] ];
+                            $("#" + id_target).addClass("red");
+                        }
+                        
                     } else if(  data.user != null ){
                         TickTackToe.message("You win :)", "green");
                         TickTackToe.winner = true;
+                        
+                        for( var i =0; i <= data.user.length; i++){
+                            var id_target = TickTackToe.dataMap[ data.user[i] ];
+                            $("#" + id_target).addClass("green");
+                        }
                     } else  {
                         var count = 0;
                         for( var i =0; i <= data.state.length; i++){
@@ -357,7 +382,6 @@
                                 count++;
                             }
                         }
-                        
                         if( count == 10){
                             TickTackToe.message("Game was a draw ^__^", "blue");
                             TickTackToe.winner = true;
