@@ -14,7 +14,7 @@ NAMESPACE = '1'
 
 
 def create_game_from_ascii(ascii):
-    pattern = r'(?<=\| )(.)(?= \|)'
+    pattern = r'(?<=\| ).(?= \|)'
     chars = [None if c.isspace() else c for c in re.findall(pattern, ascii)]
     assert len(chars) == 9, 'Expected 9 chars, got %s' % len(chars)
     props = [c + i for c in 'abc' for i in '123']
