@@ -43,9 +43,6 @@ class ApiTest(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def new_game(self, **kw):
-        return models.Game(id=1, namespace=NAMESPACE, **kw)
-
     def testStart(self):
         message = {}
         response = self.testapp.post_json(
