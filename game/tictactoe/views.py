@@ -18,7 +18,7 @@ def play(request):
     corner = -1
     request.session['board'] = board
     start = request.GET.get('start', 'computer')
-    if start != 'player':
+    if start != 'human':
         """
         According to: http://en.wikipedia.org/wiki/Tic-tac-toe
 
