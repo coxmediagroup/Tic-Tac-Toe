@@ -35,10 +35,11 @@
         <!-- BEGIN: template for # -->
         <script type="text/template" class="template">
         <div class='board'>
-        <% _.each( attributes['state'], function( c, i ) { %>
-            <% if ((i % 3) == 0) { %><div class='board-row row-<%- i / 3 %>'><% } %>
+        <% _.each( attributes['state'], function( c, i ) {
+            var cols = attributes['columns']; %>
+            <% if ((i % cols) == 0) { %><div class='board-row row-<%- i / cols %>'><% } %>
             <div class='board-square'><div class='square-content'><div class='play play<%- c %>'></div></div></div>
-            <% if (((i+1) % 3) == 0) { %></div><% } %>
+            <% if (((i+1) % cols ) == 0) { %></div><% } %>
             <% }); %>
         </div>
 

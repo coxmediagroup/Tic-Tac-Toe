@@ -24,6 +24,16 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'tictac', ['Board'])
 
+        # Adding model 'GamePlayers'
+        db.create_table(u'tictac_gameplayers', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tictac.Player'])),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tictac.Game'])),
+            ('number', self.gf('django.db.models.fields.IntegerField')()),
+            ('symbol', self.gf('django.db.models.fields.CharField')(max_length=8)),
+        ))
+        db.send_create_signal(u'tictac', ['GamePlayers'])
+
         # Adding model 'Game'
         db.create_table(u'tictac_game', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -37,15 +47,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'tictac', ['Game'])
 
-        # Adding M2M table for field players on 'Game'
-        m2m_table_name = db.shorten_name(u'tictac_game_players')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('game', models.ForeignKey(orm[u'tictac.game'], null=False)),
-            ('player', models.ForeignKey(orm[u'tictac.player'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['game_id', 'player_id'])
-
 
     def backwards(self, orm):
         # Deleting model 'Player'
@@ -54,11 +55,11 @@ class Migration(SchemaMigration):
         # Deleting model 'Board'
         db.delete_table(u'tictac_board')
 
+        # Deleting model 'GamePlayers'
+        db.delete_table(u'tictac_gameplayers')
+
         # Deleting model 'Game'
         db.delete_table(u'tictac_game')
-
-        # Removing M2M table for field players on 'Game'
-        db.delete_table(db.shorten_name(u'tictac_game_players'))
 
 
     models = {
@@ -113,9 +114,17 @@ class Migration(SchemaMigration):
             'game_type': ('django.db.models.fields.CharField', [], {'default': "'classic'", 'max_length': '32'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_play': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'players': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'players'", 'symmetrical': 'False', 'to': u"orm['tictac.Player']"}),
+            'players': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'players'", 'symmetrical': 'False', 'through': u"orm['tictac.GamePlayers']", 'to': u"orm['tictac.Player']"}),
             'turn_counter': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'winner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'games_won'", 'null': 'True', 'to': u"orm['tictac.Player']"})
+        },
+        u'tictac.gameplayers': {
+            'Meta': {'object_name': 'GamePlayers'},
+            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tictac.Game']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'number': ('django.db.models.fields.IntegerField', [], {}),
+            'player': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tictac.Player']"}),
+            'symbol': ('django.db.models.fields.CharField', [], {'max_length': '8'})
         },
         u'tictac.player': {
             'Meta': {'object_name': 'Player', '_ormbases': [u'auth.User']},

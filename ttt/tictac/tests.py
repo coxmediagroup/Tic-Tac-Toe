@@ -15,6 +15,16 @@ class BoardTestCase(TestCase):
             "Expected 3x3 board to have state 9 chars long, got %d." % (
                 len(self.tictac1.state, )))
 
+    def testBoardValidMove(self):
+        pass
+
+
+    def testBoardCanPlay(self):
+        pass
+
+    def testBoardMarkPlay(self):
+        pass
+
 
 class GameTestCase(TestCase):
 
@@ -78,5 +88,9 @@ class GameTestCase(TestCase):
         self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
             self.game.board.state, self.game.board.__repr__()))
 
+    def testNextPlayer(self):
+        pass
 
+    def testMakePlay(self):
+        pass
 

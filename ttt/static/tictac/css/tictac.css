@@ -29,6 +29,8 @@ body {
     border-right: 3px solid black;
     display: table-cell;
     overflow: hidden;
+    float: left;
+    line-height: 40px;
 }
 
 .board-square:last-child {
