@@ -73,10 +73,12 @@ $(document).ready(function() {
     $("#tictactoe-board td").click(function() {
         var isLegalMove = tryTakeCell(this);
         if(isLegalMove) {
+            var boardData = JSON.stringify(getBoard());
             $.ajax({
                 url: window.AI_URL,
                 type: "POST",
-                data: getBoard(),
+                data: boardData,
+                contentType: 'application/json; charset=utf-8',
                 headers: {
                     "X-CSRFToken": window.CSRF_TOKEN
                 }
