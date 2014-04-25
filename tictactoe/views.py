@@ -26,13 +26,13 @@ def handle_move(request):
 
 
 
-def say_hello(request):
+def show_game(request):
     """A hello-world test view."""
 
     game_board = [
-        [None, None, None],
-        [None, None, None],
-        [None, None, None],
+        '   ',
+        '   ',
+        '   ',
     ]
 
     ai_service = django.core.urlresolvers.reverse(handle_move)
@@ -42,4 +42,4 @@ def say_hello(request):
         'ai_url': ai_service,
     }
 
-    return render(request, "tictactoe/hello.html.djt", context)
+    return render(request, "tictactoe/game.html.djt", context)

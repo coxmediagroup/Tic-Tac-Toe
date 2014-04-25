@@ -13,7 +13,7 @@ class TicTacToeViewTest(django.test.TestCase):
         """Nine cells with appropriate IDs are rendered."""
         request = self.request_factory.get('')
 
-        response = views.say_hello(request)
+        response = views.show_game(request)
         response_body = response.content.decode()
 
         for row_num in range(3):
