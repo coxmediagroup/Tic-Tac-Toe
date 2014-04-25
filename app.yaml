@@ -27,12 +27,3 @@ libraries:
   version: latest
 - name: endpoints
   version: 1.0
-
-skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^client/bower_components
-- ^client/node_modules
