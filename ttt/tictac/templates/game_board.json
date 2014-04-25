@@ -1,7 +1,0 @@
-{
-    "state": "{{game.board.state}}",
-    "rows": {{game.board.rows}},
-    "columns": {{game.board.columns}},
-    "has_winner": {{game.has_winning_board|lower}},
-    "game_over": {{game.game_over|lower}}
-}

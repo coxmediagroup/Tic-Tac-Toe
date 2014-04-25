@@ -59,19 +59,22 @@ class Board(models.Model):
         except:
             return False
 
-    def mark_play(self, row, column, symbol):
+    def mark_play(self, row, column, number=None):
         if not self.is_valid_move(row, column):
             raise Exception('Space %d, %d is not on this %sx%x board.' % (
                 row, column, self.rows, self.columns, ))
 
-        if not symbol:
+        if number is None:
             raise Exception('Who is playing this?')
 
-        spot = row*self.columns + column
+        if self.can_play(row, column):
+            spot = row*self.columns + column
 
-        self.state = self.state[0:spot] + symbol[0] + self.state[spot+1:]
-        self.save()
-        return self.state
+            self.state = "%s%1d%s" % (self.state[0:spot], number, self.state[spot+1:], )
+            self.save()
+            return self.state
+
+        raise Exception('Can\'t play that spot.')
 
 
 class GamePlayers(models.Model):
@@ -86,20 +89,19 @@ class GamePlayers(models.Model):
     symbol = models.CharField(max_length=8)
 
     def __init__(self, *args, **kwargs):
-        player = kwargs.get('player')
-        game = kwargs.get('game')
-        number = int(kwargs.get('number', -1))
 
-        if not player or not game or number < 0:
+        super(GamePlayers, self).__init__(*args, **kwargs)
+
+        if not self.player or not self.game or self.number < 0:
             raise ValueError('Not enough info to add player to game.')
 
-        try:
-            symbol = kwargs.get('symbol', 'XO+IS'[number])
-        except IndexError:
-            raise ValueError('Must specify symbol for player %d.' % (number, ))
+        if not self.symbol:
+            try:
+                self.symbol = kwargs.get('symbol', 'XO+IS'[self.number])
+            except IndexError:
+                raise ValueError('Must specify symbol for player %d.' % (self.number, ))
 
-        return super(GamePlayers, self).__init__(player=player, game=game,
-            number=number, symbol=symbol)
+        return None
 
 
 class GameManager(models.Manager):
@@ -151,6 +153,9 @@ class Game(models.Model):
 
     objects = GameManager()
 
+    def has_full_board(self):
+        return self.board.state.find(' ') < 0
+
     def has_winning_board(self, *args, **kwargs):
         if self.game_type == 'classic':
             return self._classic_has_winning_board(*args, **kwargs)
@@ -185,22 +190,40 @@ class Game(models.Model):
 
         return False
 
-    def next_player(self):
+    def next_gameplayer(self):
         player_number = self.turn_counter % self.players.count()
         player = GamePlayers.objects.get(game=self, number=player_number)
         return player
 
-    def play_turn(self, player, row, column):
+    def play_turn(self, player, position=None, row=None, column=None):
 
-        game_player = self.next_player()
-        if game_player.player != player:
-            raise Exception('Not your turn, %s.' % (player.first_name))
+        if type(player) == int:
+            player = GamePlayers.objects.get(game=self, number=player)
+
+        if position is not None:
+            row = position / self.board.columns
+            column = position % self.board.columns
+
+        game_player = self.next_gameplayer()
+        if game_player != player:
+            raise Exception('Not your turn, %s.' % (player.player.first_name))
 
         if not self.board.can_play(row, column):
             raise Exception('That space is already taken.')
 
-        new_state = self.board.mark_play(row, column, game_player.symbol)
-        self.turn_counter = self.turn_counter + 1
+        new_state = self.board.mark_play(row, column, game_player.number)
+
+        # Winner?
+
+        winning = self.has_winning_board() #winning
+        if winning or self.has_full_board():
+            self.game_over = True
+            if winning:
+                self.winner = game_player.player
+        else:
+            self.turn_counter = self.turn_counter + 1
+
+        self.save()
 
         return new_state
 

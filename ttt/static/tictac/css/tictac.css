@@ -19,8 +19,39 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'tictac';
+    src: url('../fonts/tictac.eot');
+    src: url('../fonts/tictac.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/tictac.woff') format('woff'),
+         url('../fonts/tictac.ttf') format('truetype'),
+         url('../fonts/tictac.svg#tictac') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.tictac {
+    font-family: "tictac";
+}
+
 body {
     font-family: 'museo_slab500';
+}
+
+.player {
+
+}
+
+.next_player:before {
+    content: "\e072";
+    font-family: 'Glyphicons Halflings';
+    margin-left: -20px;
+    display: block;
+    float: left;
+}
+
+.winner {
+    background: yellow;
 }
 
 .board-square {
@@ -65,17 +96,11 @@ body {
 }
 
 .play {
-    font-family: Arial, Helvetica;
+    font-family: "tictac";
     font-weight: bold;
     font-size: 36px;
 }
 
-.play1:after {
-    content: 'X';
-    color: #126;
-}
-
-.play2:after {
-    content: 'O';
-    color: #612;
+.playable:hover {
+    background: #ffc;
 }

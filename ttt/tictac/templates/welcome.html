@@ -1,4 +1,6 @@
 {% load admin_static %}
+{% load bootstrap %}
+
 <!doctype html>
 <html>
     <head>
@@ -14,41 +16,94 @@
     </head>
 
     <body>
+      <form name="newGameForm" action="{% url 'tictac_new_game' %}" method="POST">
+        {% csrf_token %}
+        <div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="beginNewGame" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="beginNewGame">Begin a New Game</h4>
+              </div>
+
+              <div class="modal-body">
+                <div class="col-md-12 col-xs-12">
+                    {{ form.game_type|bootstrap_horizontal}}
+                </div>
+
+                <div class="col-md-6 col-xs-6">
+                    {{ form.player1|bootstrap }}
+                    {{ form.player1_auto|bootstrap }}
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    {{ form.player2|bootstrap }}
+                    {{ form.player2_auto|bootstrap }}
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Play!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
         <div class="col-xs-2"></div>
         <div class="col-xs-8">
             <h1>Tic Tac Toe</h1>
 
-            <h3>
-                <div id="ok" style="display: none;"><span class="glyphicon glyphicon-ok"></span> Everything loaded a-ok!</div>
-                <div id="fail"><span class="glyphicon glyphicon-remove"></span> Initializing; if this doesn't go away, then check the console, something borked.</div>
-            </h3>
-
-
-            <div class='board-holder'>
-                board will go here.
+            <div class="board-holder">
             </div>
 
-            <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
         </div>
         <div class="col-xs-2"></div>
 
         <!-- BEGIN: template for # -->
         <script type="text/template" class="template">
-        <div class='board'>
-        <% _.each( attributes['state'], function( c, i ) {
-            var cols = attributes['columns']; %>
-            <% if ((i % cols) == 0) { %><div class='board-row row-<%- i / cols %>'><% } %>
-            <div class='board-square'><div class='square-content'><div class='play play<%- c %>'></div></div></div>
-            <% if (((i+1) % cols ) == 0) { %></div><% } %>
-            <% }); %>
+
+        <form name="play" action="{% url 'tictac_game_board' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="position">
+        </form>
+
+        <div class="col-xs-12 col-md-12">
+            <div class="board col-xs-6 col-md-6">
+                <% _.each(attributes["state"], function( c, i ) {
+                    var cols = attributes["columns"];
+
+                    var symbol = c == " " ? c : attributes["players"][c]["symbol"];
+                    var playable = c == " " ? "playable" : "notplayable"; %>
+                    <% if ((i % cols) == 0) { %><div class="board-row row-<%- i / cols %>"><% } %>
+                    <div data-position="<%- i %>" class="board-square <%- playable %>"><div class="square-content"><div class="play"><%- symbol %></div></div></div>
+                    <% if (((i+1) % cols ) == 0) { %></div><% } %>
+                    <% }); %>
+
+                <% if (attributes["game_over"] == true) { %>
+                    <div class="game-over col-xs-3 col-md-3">Game Over</div>
+                <% } %>
+
+                <% if (attributes["playing"] == false) { %>
+                    <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-3 col-md-3 btn-primary">Start New Game</button>
+                <% } %>
+            </div>
+
+            <div class="board col-xs-6 col-md-6">
+                <% if (attributes["players"]) { %>
+                    <% _.each(attributes["players"], function( player, i ) { %>
+                        <div class="player <% if (i == attributes["next_player"]) {
+                            if (attributes["has_winner"]) { %>winner<% } else { %>next_player<% }} %>">
+                            Player <%- i+1 %>:<br>
+                            <h4><%- player.name %> (<span class="tictac"><%- player.symbol %></span>)</h4>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
         </div>
 
-        <% if (attributes['game_over'] == true) { %>
-            <div class='game-over'>Game Over</div>
-        <% } %>
         </script>
         <!-- END: # template definition -->
 
+        <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
 
     </body>
 </html>
