@@ -38,7 +38,7 @@ def handle_move(request):
 
 
 def show_game(request):
-    """A hello-world test view."""
+    """Show an empty game board so a user can start playing."""
 
     game_board = [
         '   ',
