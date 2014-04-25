@@ -1,3 +1,6 @@
+import json
+
+import django.core.urlresolvers
 import django.test
 
 from . import views
@@ -20,3 +23,26 @@ class TicTacToeViewTest(django.test.TestCase):
             for col_num in range(3):
                 self.assertIn("board-cell-{}-{}".format(row_num, col_num),
                               response_body)
+
+
+class HandleMoveTest(django.test.TestCase):
+    """Tests for the handle_move AJAX view."""
+
+    def test_new_board_contains_old_board(self):
+        """All taken cells are maintained when the AI responds."""
+        ai_url = django.core.urlresolvers.reverse(views.handle_move)
+        board = json.dumps([
+            'X  ',
+            '   ',
+            '   ',
+        ])
+
+        resp = self.client.post(ai_url, data=board, content_type="application/json")
+        response = json.loads(resp.content.decode())
+        response_board = response['board']
+
+        self.assertEqual([
+            'X  ',
+            ' O ',
+            '   ',
+        ], response_board)
