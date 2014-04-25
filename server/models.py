@@ -1,3 +1,5 @@
+"""NDB model definition and Tic Tac Toe game logic."""
+
 import random
 
 from google.appengine.ext import ndb
@@ -17,6 +19,7 @@ class Squares(object):
 
 
 class Game(ndb.Model):
+    """Game play logic with state saved in Datastore."""
 
     CHARS = ('X', 'O', None)
     WON, LOST, TIED = 'won', 'lost', 'tied'
@@ -44,6 +47,7 @@ class Game(ndb.Model):
         return getattr(self, square) is None
 
     def has_opposite_corners(self):
+        """True iff X (user) occupies both corners in a diagonal."""
         for squares in Squares.DIAGONAL:
             values = self.values(squares)
             if values[0] == 'X' and values[2] == 'X':
@@ -51,12 +55,14 @@ class Game(ndb.Model):
         return False
 
     def get_winning_square(self):
+        """Gets winning square for O (computer), or None if not available."""
         for triplet in Squares.TRIPLETS:
             values = self.values(triplet)
             if values.count('O') == 2 and None in values:
                 return triplet[values.index(None)]
 
     def get_blocking_square(self):
+        """Gets square for O that blocks X from winning."""
         for triplet in Squares.TRIPLETS:
             values = self.values(triplet)
             if values.count('X') == 2 and None in values:
@@ -67,6 +73,23 @@ class Game(ndb.Model):
             return Squares.C
 
     def get_most_disruptive_square(self):
+        """Gets the square that will affect two X-influenced rows/columns.
+
+        A square is considered "disruptive" if the occupies the same row or
+        column as an X. The "most disruptive" square is the one that occupies
+        a row and column, each with an X.
+
+        For example:
+
+            +---+---+---+
+            |   |   | X |
+            +---+---+---+
+            |   | O |   |
+            +---+---+---+
+            |   | X |   | <--- most disruptive square
+            +---+---+---+
+
+        """
         if self.has_opposite_corners():
             squares = Squares.CARDINAL
         else:
@@ -88,6 +111,7 @@ class Game(ndb.Model):
                 return square
 
     def get_best_square(self):
+        """Gets the most effective square for O."""
         return (self.get_winning_square() or
                 self.get_blocking_square() or
                 self.get_center_square() or
@@ -104,4 +128,5 @@ class Game(ndb.Model):
         return all(self.values())
 
     def to_message(self):
+        """Game instance to ProtoRPC message."""
         return GameMessage(id=self.key.id(), **self.to_dict())

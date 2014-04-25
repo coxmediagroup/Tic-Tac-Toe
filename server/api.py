@@ -1,3 +1,5 @@
+"""Google Cloud Endpoints definition for Tic Tac Toe API."""
+
 import functools
 
 import endpoints
@@ -13,6 +15,7 @@ CLIENT_IDS = ['74921937461.apps.googleusercontent.com',
 
 
 def require_user(endpoints_method):
+    """Method decorator enforcing authenticated user to enable multitenancy."""
 
     @functools.wraps(endpoints_method)
     def wrapped(*args, **kw):
@@ -30,7 +33,7 @@ def require_user(endpoints_method):
                name='tictactoe',
                version='v1')
 class TicTacToeApi(remote.Service):
-    """TicTacToe API."""
+    """Tic Tac Toe API."""
 
     _id_resource = endpoints.ResourceContainer(
         message_types.VoidMessage, id=messages.IntegerField(1))

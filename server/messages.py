@@ -1,3 +1,5 @@
+"""ProtoRPC message definitions."""
+
 from protorpc import messages
 
 
