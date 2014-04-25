@@ -51,16 +51,18 @@ function getBoard() {
 
 
 /**
- * Mark the cell at row, col for the player.
+ * Mark the cell at row, col for the player, if possible.
  *
  * Returns true if it succeeded, and false if it failed (i.e. the cell
  * has already been taken).
  */
-function takeCell(cellElem) {
+function tryTakeCell(cellElem) {
     var cell = getCellStrForElem(cellElem);
     if(cell != ' ') {
         return false;
     } else {
+
+        // TODO: allow the player to go second/be 'O'
         $(cellElem).text('X');
         return true;
     }
@@ -69,6 +71,16 @@ function takeCell(cellElem) {
 
 $(document).ready(function() {
     $("#tictactoe-board td").click(function() {
-        takeCell(this);
+        var isLegalMove = tryTakeCell(this);
+        if(isLegalMove) {
+            $.ajax({
+                url: window.AI_URL,
+                type: "POST",
+                data: getBoard(),
+                headers: {
+                    "X-CSRFToken": window.CSRF_TOKEN
+                }
+            });
+        }
     });
 });

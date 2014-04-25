@@ -41,12 +41,15 @@
             {% endfor %}
         </table>
 
-        <p>{{ msg }}</p>
-
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+        <script>
+            window.AI_URL = "{{ ai_url }}";
+            window.CSRF_TOKEN = "{{ csrf_token }}";
+        </script>
 
         <!-- tic-tac-toe js -->
         <script src="{% static 'tictactoe/tictactoe.js' %}"></script>
