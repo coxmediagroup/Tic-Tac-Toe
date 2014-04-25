@@ -7,6 +7,7 @@ strings, all three characters long, where any character is either
 - 'O' for a cell taken by O
 
 """
+
 from .logic import get_ai_move
 
 __all__ = ['get_ai_move']

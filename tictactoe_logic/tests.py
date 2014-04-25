@@ -47,3 +47,38 @@ class AITest(unittest.TestCase):
 
         ai_piece, _ = logic.get_ai_move(board)
         self.assertEqual('O', ai_piece)
+
+    def test_o_responds_to_diagonal_trap(self):
+        """The AI playing as O blocks a diagonal trap."""
+        board = [
+            '  X',
+            ' X ',
+            '0  ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        took_corner = ai_response == (0, 0) or ai_response == (2, 2)
+        self.assertTrue(took_corner, ai_response)
+
+        board = [
+            'X  ',
+            ' X ',
+            '  0',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        took_corner = ai_response == (0, 2) or ai_response == (2, 0)
+        self.assertTrue(took_corner, ai_response)
+
+        board = [
+            '0  ',
+            ' X ',
+            '  X',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        took_corner = ai_response == (0, 2) or ai_response == (2, 0)
+        self.assertTrue(took_corner, ai_response)
