@@ -38,6 +38,7 @@ If human does not take the center, then AI takes the center. If center is taken
 then playing the corner gives the opponent the smallest choice of squares
 """
 BEST_MOVES = (4, 0, 2, 6, 8, 1, 3, 5, 7)
+SIDE_MOVES = [1, 3, 5, 7]
 
 
 def take_corner(request):
@@ -68,11 +69,18 @@ def move_ai(board):
     """
     Checks to win or block the openent depending on the board
     """
-
     # Check first if AI can win the game
     move = find_winner_move(board, AI_LETTER)
     if move:
         return move, True
+
+    # Check for special case if human has two corners in a diagonal on the
+    # 4th move
+    if len(filter(None, board)) == 3:
+        for m1, m2 in [(2, 6), (0, 8)]:
+            if board[m1] == board[m2] == HUMAN_LETTER:
+                move = random.choice(SIDE_MOVES)
+                return move, False
 
     # Check if human can win, if so block that move
     move = find_winner_move(board, HUMAN_LETTER)
@@ -92,6 +100,7 @@ def find_winner_move(board, letter):
     Returns the winner move. Otherwise None
     """
     empty_positions = get_empty_positions(board)
+    board = board[:]
 
     for move in empty_positions:
         board[move] = letter
@@ -115,7 +124,7 @@ def get_empty_positions(board):
 def winner(board):
     for row in ways_to_win:
         letters = [board[r] for r in row]
-        if all(letter == letters[0] for letter in letters):
+        if all(letter == letters[0] and letter != '' for letter in letters):
             return letters[0]
 
     if all(board):
