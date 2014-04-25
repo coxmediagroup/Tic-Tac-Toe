@@ -17,4 +17,4 @@ def get_ai_move(board):
     else:
         pos = (0, 0)
 
-    return None, pos
+    return 'O', pos

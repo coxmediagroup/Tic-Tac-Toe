@@ -36,3 +36,14 @@ class AITest(unittest.TestCase):
 
         _, ai_response = logic.get_ai_move(board)
         self.assertEqual((1, 1), ai_response)
+
+    def test_board_with_first_move_gets_o_response(self):
+
+        board = [
+            'X  ',
+            '   ',
+            '   ',
+        ]
+
+        ai_piece, _ = logic.get_ai_move(board)
+        self.assertEqual('O', ai_piece)
