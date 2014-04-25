@@ -1,0 +1,14 @@
+#board-row-1 {
+    border: solid black;
+    border-width: 1px 0;
+}
+
+#board-cell-0-1, #board-cell-1-1, #board-cell-2-1 {
+    border: solid black;
+    border-width: 0 1px;
+}
+
+.board-cell {
+    height: 4em;
+    width: 4em;
+}

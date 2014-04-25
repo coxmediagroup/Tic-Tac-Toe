@@ -9,6 +9,8 @@
         <!-- Bootstrap -->
         <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
+        <link href="{% static 'tictactoe/style.css' %}" rel="stylesheet">
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -21,7 +23,23 @@
 
         <h1>Tic Tac Toe Game</h1>
 
-        <p>Hello, world!</p>
+        {# render the tic tac toe board #}
+        <table id="tictactoe-board">
+            {% for row in board %}
+
+                <tr id="board-row-{{ forloop.counter0 }}">
+
+                    {% for cell in row %}
+
+                        <td id="board-cell-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                            class="board-cell"></td>
+
+                    {% endfor %}
+
+                </tr>
+
+            {% endfor %}
+        </table>
 
         <p>{{ msg }}</p>
 
