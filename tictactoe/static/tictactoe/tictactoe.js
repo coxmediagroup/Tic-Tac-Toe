@@ -69,6 +69,25 @@ function tryTakeCell(cellElem) {
 }
 
 
+/**
+ * Set the DOM to reflect the given board.
+ *
+ * boardModel is a list of 3 strings, all themselves having length 3.
+ * Each string is a row of the game board. Each character is either ' ', if
+ * the cell at that position is empty, 'X' if the X player has taken the cell,
+ * or 'O' of the O player has taken the cell.
+ */
+function updateBoard(boardModel) {
+    for(var row = 0; row < 3; row++) {
+        for(var col = 0; col < 3; col++) {
+            var content = boardModel[row][col];
+            var cellElem = getCellElem(row, col);
+            cellElem.text(content);
+        }
+    }
+}
+
+
 $(document).ready(function() {
     $("#tictactoe-board td").click(function() {
         var isLegalMove = tryTakeCell(this);
@@ -79,6 +98,9 @@ $(document).ready(function() {
                 type: "POST",
                 data: boardData,
                 contentType: 'application/json; charset=utf-8',
+                success: function(response) {
+                    updateBoard(response.board);
+                },
                 headers: {
                     "X-CSRFToken": window.CSRF_TOKEN
                 }
