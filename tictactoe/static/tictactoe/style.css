@@ -11,4 +11,7 @@
 .board-cell {
     height: 4em;
     width: 4em;
+
+    text-align: center;
+    vertical-align: middle;
 }
