@@ -18,4 +18,5 @@ class TicTacToeViewTest(django.test.TestCase):
 
         for row_num in range(3):
             for col_num in range(3):
-                self.assertIn("board-cell-{}-{}".format(row_num, col_num), response_body)
+                self.assertIn("board-cell-{}-{}".format(row_num, col_num),
+                              response_body)

@@ -48,5 +48,8 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
+        <!-- tic-tac-toe js -->
+        <script src="{% static 'tictactoe/tictactoe.js' %}"></script>
+
     </body>
 </html>
