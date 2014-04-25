@@ -111,7 +111,7 @@ class Game(ndb.Model):
                 return square
 
     def get_best_square(self):
-        """Gets the most effective square for O."""
+        """Gets the most effective square for O (computer)."""
         return (self.get_winning_square() or
                 self.get_blocking_square() or
                 self.get_center_square() or
