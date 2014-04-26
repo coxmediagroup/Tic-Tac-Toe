@@ -50,6 +50,18 @@ define([
           var target = e.target;
           var pos = $(target).data('position');
 
+          while ((pos === undefined) && (target)) {
+            target = target.parentElement;
+            pos = $(target).data('position');
+          }
+
+          if (!target) {
+            // This shouldn't really happen;
+            debugger;
+            return;
+          }
+
+
           var model = this.model;
 
           // After we tell the server what to play, and it comes

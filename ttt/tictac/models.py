@@ -97,7 +97,7 @@ class GamePlayers(models.Model):
 
         if not self.symbol:
             try:
-                self.symbol = kwargs.get('symbol', 'XO+IS'[self.number])
+                self.symbol = kwargs.get('symbol', '0123456789:;'[self.number])
             except IndexError:
                 raise ValueError('Must specify symbol for player %d.' % (self.number, ))
 
@@ -119,8 +119,13 @@ class GameManager(models.Manager):
 
             index = 0
             for p in players:
+
+                symbol = p.get('symbol')
+                if symbol is not None:
+                    del(p['symbol'])
                 new_player, created = Player.objects.get_or_create(first_name=p.get('name'), defaults=p)
-                player = GamePlayers(player=new_player, game=game, number=index)
+                player = GamePlayers(player=new_player, game=game,
+                    number=index, symbol=symbol)
                 player.save()
                 index = index + 1
 

@@ -26,22 +26,20 @@
               </div>
 
               <div class="modal-body">
-                <div class="col-md-12 col-xs-12">
-                    {{ form.game_type|bootstrap_horizontal}}
-                </div>
-
-                <div class="col-md-6 col-xs-6">
-                    {{ form.player1|bootstrap }}
-                    {{ form.player1_auto|bootstrap }}
-                </div>
-                <div class="col-md-6 col-xs-6">
-                    {{ form.player2|bootstrap }}
-                    {{ form.player2_auto|bootstrap }}
+                <div class="row">
+                    <div class="col-md-6 col-xs-6">
+                        {{ form.player1|bootstrap }}
+                        {{ form.player1_auto|bootstrap }}
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        {{ form.player2|bootstrap }}
+                        {{ form.player2_auto|bootstrap }}
+                    </div>
                 </div>
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Play!</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Play!</button>
               </div>
             </div>
           </div>
@@ -61,29 +59,35 @@
         <!-- BEGIN: template for # -->
         <script type="text/template" class="template">
 
-        <form name="play" action="{% url 'tictac_game_board' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="position">
-        </form>
-
         <div class="col-xs-12 col-md-12">
             <div class="board col-xs-6 col-md-6">
+              <div class="col-xs-12 col-md-12">
+                <div class="col-xs-3 col-md-3"></div>
+                <div class="col-xs-6 col-md-6">
                 <% _.each(attributes["state"], function( c, i ) {
                     var cols = attributes["columns"];
 
                     var symbol = c == " " ? c : attributes["players"][c]["symbol"];
-                    var playable = c == " " ? "playable" : "notplayable"; %>
+                    var playable = (c == " ") && (attributes["playing"]) ? "playable" : "notplayable"; %>
                     <% if ((i % cols) == 0) { %><div class="board-row row-<%- i / cols %>"><% } %>
                     <div data-position="<%- i %>" class="board-square <%- playable %>"><div class="square-content"><div class="play"><%- symbol %></div></div></div>
                     <% if (((i+1) % cols ) == 0) { %></div><% } %>
                     <% }); %>
+                  </div>
+                </div>
 
                 <% if (attributes["game_over"] == true) { %>
-                    <div class="game-over col-xs-3 col-md-3">Game Over</div>
+                    <div class="game-over col-xs-12 col-md-12">
+                        <div class="col-xs-3 col-md-3"></div>
+                        <div class="col-xs-6 col-md-6">Game Over</div>
+                    </div>
                 <% } %>
 
-                <% if (attributes["playing"] == false) { %>
-                    <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-3 col-md-3 btn-primary">Start New Game</button>
+                <% if ((attributes["game_over"]) || (attributes["playing"] == false)) { %>
+                    <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-3 col-md-3"></div>
+                    <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-6 col-md-6 btn btn-primary">Start New Game</button>
+                    </div>
                 <% } %>
             </div>
 
