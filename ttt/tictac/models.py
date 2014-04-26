@@ -9,6 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 class Player(User):
     auto = models.BooleanField(_('is this a computer player?'),
         default=False)
+    ai = models.CharField(_('What is the AI model used?'),
+        default="boehner", max_length=64)
 
     def __init__(self, *args, **kwargs):
         if (kwargs.get('name')):
@@ -19,6 +21,25 @@ class Player(User):
             kwargs['username'] = uuid.uuid4().get_hex()
 
         super(Player, self).__init__(*args, **kwargs)
+
+    def auto_move(self, board):
+        if (self.ai == 'boehner'):
+            return self.ai_boehner(board)
+
+    def ai_boehner(self, board):
+        """
+        Attempts to result in a tie by obstructing any possibility
+        of a win.
+        """
+
+        # find first open slot and go there.
+        pos = board.state.find(' ')
+        if pos >= 0:
+            row = pos / 3
+            col = pos % 3
+            return row, col
+
+        return 0, 0
 
 
 class Board(models.Model):
@@ -123,11 +144,17 @@ class GameManager(models.Manager):
                 symbol = p.get('symbol')
                 if symbol is not None:
                     del(p['symbol'])
+
+
                 new_player, created = Player.objects.get_or_create(first_name=p.get('name'), defaults=p)
+                new_player.auto = p.get('auto', False)
+                new_player.save()
+
                 player = GamePlayers(player=new_player, game=game,
                     number=index, symbol=symbol)
                 player.save()
                 index = index + 1
+                print new_player.first_name + ' ----> ' + str(new_player.auto)
 
             return game
 
@@ -227,6 +254,27 @@ class Game(models.Model):
                 self.winner = game_player.player
         else:
             self.turn_counter = self.turn_counter + 1
+
+
+        # Take any automatic moves next
+        #
+        game_player = self.next_gameplayer()
+        while game_player.player.auto == True and not self.game_over:
+            print game_player.player.first_name
+            print game_player.player.auto
+
+            row, column = game_player.player.auto_move(self.board)
+            new_state = self.board.mark_play(row, column, game_player.number)
+
+            winning = self.has_winning_board() #winning
+            if winning or self.has_full_board():
+                self.game_over = True
+                if winning:
+                    self.winner = game_player.player
+            else:
+                self.turn_counter = self.turn_counter + 1
+
+            game_player = self.next_gameplayer()
 
         self.save()
 

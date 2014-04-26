@@ -14,8 +14,8 @@ from tictac.models import Game
 
 def welcome(request):
 
-    new_game_form = NewGameForm(initial={'player1_auto':'person',
-        'player2_auto':'computer', 'player2':'Joshua'})
+    new_game_form = NewGameForm(initial={'player1_auto':False,
+        'player2_auto':True, 'player2':'Joshua'})
 
     return render(request, 'welcome.html', {
         'form': new_game_form,
@@ -34,6 +34,7 @@ def new_game(request):
                     { 'name' : form.cleaned_data['player2'], 'auto': form.cleaned_data['player2_auto'],
                         'symbol' : form.cleaned_data['player2_symbol'] },
                 ])
+
             game.save()
 
             request.session['game_id'] = game.id
@@ -51,15 +52,16 @@ def game_board(request, game_id=None):
     if game_id is None:
         game_id = request.session.get('game_id')
 
-    game = Game.objects.filter(id=request.session['game_id']).first()
+    game = Game.objects.filter(id=game_id).first()
 
     if game:
         players = [
             {'name':p['first_name'], 'number':p['gameplayers__number'],
-                'avatar':p['avatar'], 'symbol':p['gameplayers__symbol'],}
+                'avatar':p['avatar'], 'symbol':p['gameplayers__symbol'],
+                'auto':p['auto'], }
 
             for p in game.players.values('first_name',
-                'gameplayers__number','avatar','gameplayers__symbol').order_by('gameplayers__number')]
+                'gameplayers__number','avatar','gameplayers__symbol','auto').order_by('gameplayers__number')]
 
         game_resp = {
             'playing' : True,
@@ -107,6 +109,5 @@ def make_play(request):
             response_json = json.dumps({'ok' : True})
             return HttpResponse(response_json, content_type='application/json')
 
-    import pdb; pdb.set_trace()
     return redirect(reverse('tictac_game_board'))
 

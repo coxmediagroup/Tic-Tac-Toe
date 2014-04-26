@@ -12,6 +12,7 @@ class Migration(SchemaMigration):
         db.create_table(u'tictac_player', (
             (u'user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
             ('auto', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('ai', self.gf('django.db.models.fields.CharField')(default='boehner', max_length=64)),
         ))
         db.send_create_signal(u'tictac', ['Player'])
 
@@ -128,6 +129,7 @@ class Migration(SchemaMigration):
         },
         u'tictac.player': {
             'Meta': {'object_name': 'Player', '_ormbases': [u'auth.User']},
+            'ai': ('django.db.models.fields.CharField', [], {'default': "'boehner'", 'max_length': '64'}),
             'auto': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         }
