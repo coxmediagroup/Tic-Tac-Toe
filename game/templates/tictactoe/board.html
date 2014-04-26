@@ -1,27 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="container-fluid" ng-app="tictactoe" ng-controller="TicTacToeCtrl" ng-init="corner={{ corner }}">
+    <section class="container-fluid" ng-app="tictactoe" ng-init="corner={{ corner }}">
         <div class="col-md-4">&nbsp;</div>
 
         <div class="col-md-4">
             <table class="table-condensed table-bordered">
                 <tbody>
-                    <tr>
-                        <td ng-repeat="mv in [0, 1, 2]">
-                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td ng-repeat="mv in [3, 4, 5]">
-                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td ng-repeat="mv in [6, 7, 8]">
-                            <button type="button" id="move_[[ mv ]]" ng-disabled="[[ mv ]]==[[ corner ]]" class="btn btn-default btn-sm" ng-click="makeMove(mv)">[[ mv === corner ? "X" : "&nbsp;"]]</button>
-                        </td>
-                    </tr>
+                    {% for mv in moves %}
+                        {% if mv  == 0 or mv == 3 or mv == 6 %}<tr>{% endif %}
+                            <td ng-controller="TicTacToeCtrl" ng-disabled="btn_state" ng-init="btn_state={% if corner == mv %}true{% else %}false{% endif %}">
+                                <button type="button" ng-init="move={{ mv }}" ng-model="move" id="move_{{ mv }}" ng-disabled="btn_state" class="btn btn-default btn-sm" ng-click="btn_state=true; makeMove()">
+                                    <span ng-init="letter={% if corner == mv %}'X'{% else %}'&nbsp;'{% endif %}">[[ letter ]]</span>
+                                </button>
+                            </td>
+                        {% if mv == 2 or mv == 5 or mv == 8 %}</tr>{% endif %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
