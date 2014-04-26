@@ -30,8 +30,45 @@ TOPRIGHT_BOTTOMLEFT = (0, 2), (1, 1), (2, 0)
 DIAGONALS = [TOPLEFT_BOTTOMRIGHT, TOPRIGHT_BOTTOMLEFT]
 
 
+# TODO: block properly when AI is playing as X
+def try_block_opponent(board, ai_piece):
+    """Look for imminent wins from the opponent and attempt to block them.
+
+    :param board: The board model
+    :param ai_piece: The symbol the AI is playing as; either 'X' or 'O'
+
+    :returns:
+        A ``(row, col)`` position the AI should move to block a victory, or
+        ``None`` if there are no ways to block a victory on this turn.
+
+    """
+    columns = [((0, n), (1, n), (2, n)) for n in range(0, 2)]
+    lines = DIAGONALS + columns
+
+    ai_move = None
+
+    for line in lines:
+        empty_cells = 0
+        empty_cell = None
+        x_cells = 0  # assume AI is 'O' for n ow
+
+        for row, col in line:
+            if board[row][col] == 'X':
+                x_cells += 1
+            elif board[row][col] == ' ':
+                empty_cell = row, col
+                empty_cells += 1
+
+        if x_cells == 2 and empty_cells == 1:
+            ai_move = empty_cell
+
+    return ai_move
+
+
+
+
 # TODO: add more turns
-# TODO: handle playing as X
+# TODO: handle AI playing as X
 def get_ai_move(board):
     """Get the best move for the given board state.
 
@@ -86,25 +123,9 @@ def get_ai_move(board):
                 ai_move = (0, 1)
 
     # if a special case rule above haven't picked a position...
-    if not ai_move:
-
-        # look for chances to block
-        columns = [((0, n), (1, n), (2, n)) for n in range(0, 2)]
-
-        lines = DIAGONALS + columns
-        for line in lines:
-            empty_cells = 0
-            empty_cell = None
-            x_cells = 0
-
-            for row, col in line:
-                if board[row][col] == 'X':
-                    x_cells += 1
-                elif board[row][col] == ' ':
-                    empty_cell = row, col
-                    empty_cells += 1
-
-            if x_cells == 2 and empty_cells == 1:
-                ai_move = empty_cell
+    if not ai_move: 
+        blocking_move = try_block_opponent(board, 'O')
+        if blocking_move:
+            ai_move = blocking_move
 
     return 'O', ai_move
