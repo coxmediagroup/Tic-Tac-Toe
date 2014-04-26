@@ -57,7 +57,6 @@ define([
 
           if (!target) {
             // This shouldn't really happen;
-            debugger;
             return;
           }
 
@@ -88,10 +87,24 @@ define([
 
         // If we start a new game, submit the new game form!
         $('#newGameModal').on('hidden.bs.modal', function (e) {
+          console.log(e);
           var form = $('form[name="newGameForm"]');
           form.submit();
         });
 
+        $('.symbol-choices span[class="tictac"]').click(function(e) {
+          var target = e.target;
+          while (target && (target.className != 'symbol-choices')) {
+            target = target.parentElement;
+          }
+          var inputtarget=$(target).data('input-target');
+          var displaytarget=$(target).data('display-target');
+          var value = $(e.target).data('value');
+
+          $('#' + inputtarget).val(value);
+          $('#' + displaytarget).html(value);
+
+        });
     };
 
     return {

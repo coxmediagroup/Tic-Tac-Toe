@@ -6,8 +6,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from tictac.models import Game
+from tictac.constants import SYMBOL_CHOICES
 from tictac.forms import NewGameForm, PlayForm
+from tictac.models import Game
 
 # Create your views here.
 
@@ -18,6 +19,7 @@ def welcome(request):
 
     return render(request, 'welcome.html', {
         'form': new_game_form,
+        'symbol_choices' : SYMBOL_CHOICES,
         })
 
 def new_game(request):
