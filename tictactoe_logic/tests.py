@@ -106,3 +106,37 @@ class AITest(unittest.TestCase):
 
         took_edge = ai_response in ((0, 1), (1, 0), (2, 1), (1, 2))
         self.assertTrue(took_edge, ai_response)
+
+    def test_tries_to_block_diagonal_victory(self):
+        """If opponent would win next turn on a diagonal, AI blocks it."""
+        board = [
+            'O  ',
+            ' X ',
+            'X  ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((0, 2), ai_response)
+
+        board = [
+            '  O',
+            ' X ',
+            '  X',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((0, 0), ai_response)
+
+    def test_tries_to_block_vertical_victory(self):
+        """If opponent would win next turn on a vertical, AI blocks it."""
+        board = [
+            'OXO',
+            ' X ',
+            'X  ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((2, 1), ai_response)
