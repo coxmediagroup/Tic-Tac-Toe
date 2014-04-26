@@ -48,8 +48,8 @@ class AITest(unittest.TestCase):
         ai_piece, _ = logic.get_ai_move(board)
         self.assertEqual('O', ai_piece)
 
-    def test_o_responds_to_diagonal_trap(self):
-        """The AI playing as O blocks a diagonal trap."""
+    def test_o_responds_to_diagonal_trap_with_x_centered(self):
+        """The AI playing O blocks a diagonal trap with X at the center."""
         board = [
             '  X',
             ' X ',
@@ -82,3 +82,27 @@ class AITest(unittest.TestCase):
 
         took_corner = ai_response == (0, 2) or ai_response == (2, 0)
         self.assertTrue(took_corner, ai_response)
+
+    def test_o_responds_to_diagonal_trap_with_o_centered(self):
+        """The AI playing O blocks a diagonal trap with O at the center."""
+        board = [
+            '  X',
+            ' O ',
+            'X  ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        took_edge = ai_response in ((0, 1), (1, 0), (2, 1), (1, 2))
+        self.assertTrue(took_edge, ai_response)
+
+        board = [
+            'X  ',
+            ' O ',
+            '  X',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        took_edge = ai_response in ((0, 1), (1, 0), (2, 1), (1, 2))
+        self.assertTrue(took_edge, ai_response)

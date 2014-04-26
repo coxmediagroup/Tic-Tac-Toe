@@ -49,17 +49,36 @@ def get_ai_move(board):
 
     else:  # turn 3
 
-        # avoid diagonal trap with X at center
-
-        # define diagonals
+        # detect and avoid diagonal traps
+        #
+        # define the diagonals
         topleft_bottomright = (0, 0), (1, 1), (2, 2)
         topright_bottomleft = (0, 2), (1, 1), (2, 0)
+        diagonals = [topleft_bottomright, topright_bottomleft]
 
         def diagonal_filled(diagonal):
             return all(board[r][c] != ' ' for r, c in diagonal)
 
-        if diagonal_filled(topleft_bottomright):
-            pos = (0, 2)
+        a_diagonal_is_filled = any(diagonal_filled(d) for d in diagonals)
+        if a_diagonal_is_filled:
+
+            # if X is at the center, O must take a corner
+            if board[1][1] == 'X':
+
+                # (0, 0) and (0, 2) are on opposite diagonals; since only one
+                # diagonal is taken, the other must be clear
+                if board[0][0] == ' ':
+                    pos = (0, 0)
+                else:
+                    pos = (0, 2)
+
+            # if O is at the center, O must take an 'edge' (non-corner,
+            # non-center)
+            else:
+
+                # all edges should be open (since only a diagonal is full
+                # right now), so just pick one
+                pos = (0, 1)
         else:
             pos = (0, 0)
 
