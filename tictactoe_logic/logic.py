@@ -24,10 +24,54 @@ def get_turn_num(board):
     return sum(taken_cells(row) for row in board)
 
 
-# define some board shortcuts
-TOPLEFT_BOTTOMRIGHT = (0, 0), (1, 1), (2, 2)
-TOPRIGHT_BOTTOMLEFT = (0, 2), (1, 1), (2, 0)
-DIAGONALS = [TOPLEFT_BOTTOMRIGHT, TOPRIGHT_BOTTOMLEFT]
+# define all lines that are checked for victory
+TOP_LEFT_TO_BOTTOM_RIGHT = (0, 0), (1, 1), (2, 2)
+TOP_RIGHT_TO_BOTTOM_LEFT = (0, 2), (1, 1), (2, 0)
+ROWS = [((n, 0), (n, 1), (n, 2)) for n in range(0, 2)]
+COLUMNS = [((0, n), (1, n), (2, n)) for n in range(0, 2)]
+DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
+LINES = ROWS + COLUMNS + DIAGONALS
+
+
+def organize_line(line, board):
+    """Get an (X_cells, O_cells, empty_cells) tuple for `line`.
+
+    :param line: A sequence of ``(row, col)`` pairs (e.g. from ``LINES``)
+    :param board: The board model.
+
+    :returns: A tuple, where each tuple is a sequence of positions.
+
+    E.g.::
+
+        >>> board = [
+        ...     'X  ',
+        ...     ' X ',
+        ...     '   ',
+        ... ]
+        >>> x_cells, o_cells, empty_cells = organize_line([(0, 0), (1, 1), (2, 2)], board)
+        >>> set(x_cells) == {(0, 0), (1, 1)}
+        True
+        >>> set(o_cells) == set()
+        True
+        >>> set(empty_cells) == {2, 2}
+        True
+
+    """
+    x_cells = []
+    o_cells = []
+    empty_cells = []
+
+    for cell in line:
+        row, col = cell
+        cell_value = board[row][col]
+        if cell_value == 'X':
+            x_cells.append(cell)
+        elif cell_value == 'O':
+            o_cells.append(cell)
+        else:
+            empty_cells.append(cell)
+
+    return x_cells, o_cells, empty_cells
 
 
 # TODO: block properly when AI is playing as X
@@ -42,30 +86,37 @@ def try_block_opponent(board, ai_piece):
         ``None`` if there are no ways to block a victory on this turn.
 
     """
-    rows = [((n, 0), (n, 1), (n, 2)) for n in range(0, 2)]
-    columns = [((0, n), (1, n), (2, n)) for n in range(0, 2)]
-    lines = DIAGONALS + rows + columns
-
     ai_move = None
 
-    for line in lines:
-        empty_cells = 0
-        last_empty_cell = None
-        x_cells = 0  # assume AI is 'O' for n ow
-
-        for row, col in line:
-            if board[row][col] == 'X':
-                x_cells += 1
-            elif board[row][col] == ' ':
-                last_empty_cell = row, col
-                empty_cells += 1
-
-        if x_cells == 2 and empty_cells == 1:
-            ai_move = last_empty_cell
+    for line in LINES:
+        x_cells, o_cells, empty_cells = organize_line(line, board)
+        if len(x_cells) == 2 and len(empty_cells) == 1:
+            ai_move = empty_cells[0]
+            break
 
     return ai_move
 
 
+def try_win(board, ai_piece):
+    """Look for the ability for the AI to win and take it if available.
+
+    :param board: The board model
+    :param ai_piece: The symbol the AI is playing as: either 'X' or 'O'
+
+    :returns:
+        A ``(row, col)`` position the AI should move to win, or ``None`` if
+        there are no winning moves this turn.
+
+    """
+    ai_move = None
+
+    for line in LINES:
+        x_cells, o_cells, empty_cells = organize_line(line, board)
+        if len(o_cells) == 2 and len(empty_cells) == 1:
+            ai_move = empty_cells[0]
+            break
+
+    return ai_move
 
 
 # TODO: add more turns
@@ -96,7 +147,7 @@ def get_ai_move(board):
         else:
             ai_move = (0, 0)
 
-    elif turn_num == 3:  # turn 3
+    elif turn_num == 3:
 
         # detect and avoid diagonal traps
         def diagonal_filled(diagonal):
@@ -128,5 +179,10 @@ def get_ai_move(board):
         blocking_move = try_block_opponent(board, 'O')
         if blocking_move:
             ai_move = blocking_move
+
+    if not ai_move:
+        winning_move = try_win(board, 'O')
+        if winning_move:
+            ai_move = winning_move
 
     return 'O', ai_move

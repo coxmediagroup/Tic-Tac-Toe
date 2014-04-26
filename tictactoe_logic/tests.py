@@ -152,3 +152,15 @@ class AITest(unittest.TestCase):
         _, ai_response = logic.get_ai_move(board)
 
         self.assertEqual((1, 0), ai_response)
+
+    def test_wins_diagonally(self):
+        """If the AI can win this turn on a diagonal, it does so."""
+        board = [
+            'XXO',
+            ' OX',
+            '   ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((2, 0), ai_response)
