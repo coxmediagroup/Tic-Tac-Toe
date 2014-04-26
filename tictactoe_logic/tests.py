@@ -129,7 +129,7 @@ class AITest(unittest.TestCase):
 
         self.assertEqual((0, 0), ai_response)
 
-    def test_tries_to_block_vertical_victory(self):
+    def test_blocks_vertical_victory(self):
         """If opponent would win next turn on a vertical, AI blocks it."""
         board = [
             'OXO',
@@ -140,3 +140,15 @@ class AITest(unittest.TestCase):
         _, ai_response = logic.get_ai_move(board)
 
         self.assertEqual((2, 1), ai_response)
+
+    def test_blocks_horizontal_victory(self):
+        """If opponent would win next turn horizontally, AI blocks it."""
+        board = [
+            'OXO',
+            ' XX',
+            'XO ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((1, 0), ai_response)

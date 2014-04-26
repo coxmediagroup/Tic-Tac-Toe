@@ -42,25 +42,26 @@ def try_block_opponent(board, ai_piece):
         ``None`` if there are no ways to block a victory on this turn.
 
     """
+    rows = [((n, 0), (n, 1), (n, 2)) for n in range(0, 2)]
     columns = [((0, n), (1, n), (2, n)) for n in range(0, 2)]
-    lines = DIAGONALS + columns
+    lines = DIAGONALS + rows + columns
 
     ai_move = None
 
     for line in lines:
         empty_cells = 0
-        empty_cell = None
+        last_empty_cell = None
         x_cells = 0  # assume AI is 'O' for n ow
 
         for row, col in line:
             if board[row][col] == 'X':
                 x_cells += 1
             elif board[row][col] == ' ':
-                empty_cell = row, col
+                last_empty_cell = row, col
                 empty_cells += 1
 
         if x_cells == 2 and empty_cells == 1:
-            ai_move = empty_cell
+            ai_move = last_empty_cell
 
     return ai_move
 
@@ -123,7 +124,7 @@ def get_ai_move(board):
                 ai_move = (0, 1)
 
     # if a special case rule above haven't picked a position...
-    if not ai_move: 
+    if not ai_move:
         blocking_move = try_block_opponent(board, 'O')
         if blocking_move:
             ai_move = blocking_move
