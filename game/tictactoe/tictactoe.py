@@ -71,7 +71,7 @@ def move_ai(board):
     """
     # Check first if AI can win the game
     move = find_winner_move(board, AI_LETTER)
-    if move:
+    if move is not None:
         return move, True
 
     # Check for special case if human has two corners in a diagonal on the
@@ -84,7 +84,7 @@ def move_ai(board):
 
     # Check if human can win, if so block that move
     move = find_winner_move(board, HUMAN_LETTER)
-    if move:
+    if move is not None:
         return move, False
 
     # Find the best move (empty position) for AI
@@ -127,10 +127,11 @@ def winner(board):
         if all(letter == letters[0] and letter != '' for letter in letters):
             return letters[0]
 
-    if all(board):
-        # The board is full. No more moves
-        # TODO: Handle a tie
-        print('It is a tie')
-        return 'Tie'
-
     return None
+
+
+def is_tie(request):
+    """
+    Return True if the board is full. Otherwise False
+    """
+    return all(request.session['board'])
