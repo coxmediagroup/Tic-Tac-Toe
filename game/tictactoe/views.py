@@ -5,7 +5,7 @@ from game.http import JsonResponse
 
 from .forms import MoveForm
 from .tictactoe import (take_corner, move, move_ai, winner, AI_LETTER,
-                        HUMAN_LETTER)
+                        HUMAN_LETTER, is_tie)
 
 
 def play(request):
@@ -28,7 +28,7 @@ def play(request):
         """
         corner = take_corner(request)
 
-    context = {'corner': corner}
+    context = {'corner': corner, 'moves': range(9)}
     return render(request, 'tictactoe/board.html', context)
 
 
@@ -42,21 +42,24 @@ def make_move(request):
     if form.is_valid():
         move(request, form.cleaned_data['move'], HUMAN_LETTER)
         board = request.session['board']
-
-        # Check if human move can win
-        winner_move = winner(board)
-        # TODO: If human starts, check here if it is a tie
-        if winner_move:
-            data['winner'] = 'human'
+        # Check if human move can tie/win
+        if winner(board):
+            # This should never happen
+            data['win_status'] = 'human'
+        elif is_tie(request):
+            data['win_status'] = 'tie'
         else:
-            # Check if AI can win
+            # Computer move and check if it can win
             mv, is_winner = move_ai(board)
-            if is_winner:
-                data['winner'] = 'ai'
-
             board[mv] = AI_LETTER
             request.session['board'] = board
             data['move'] = mv
+
+            if is_winner:
+                data['win_status'] = 'computer'
+                data['board'] = board
+            elif is_tie(request):
+                data['win_status'] = 'tie'
         data['success'] = True
 
     return JsonResponse(data)
