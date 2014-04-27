@@ -71,15 +71,28 @@
         </div>
       </form>
 
-        <div class="col-xs-2"></div>
-        <div class="col-xs-8">
-            <h1>Tic Tac Toe</h1>
 
-            <div class="board-holder">
-            </div>
 
+      <!-- main display -->
+
+
+
+      <!-- Static navbar -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="col-md-8 col-xs-8 col-md-offset-2 col-xs-offset-2">TIC-TAC-TOE</div>
         </div>
-        <div class="col-xs-2"></div>
+      </div>
+
+
+      <!-- Board -->
+        <div class="col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2 board-holder"></div>
 
         <!-- BEGIN: template for # -->
         <script type="text/template" class="template">
@@ -87,39 +100,21 @@
         <div class="col-xs-12 col-md-12">
             <div class="board col-xs-6 col-md-6">
               <div class="col-xs-12 col-md-12">
-                <div class="col-xs-3 col-md-3"></div>
-                <div class="col-xs-6 col-md-6">
+                <div class="col-xs-6 col-md-6 col-md-offset-3 col-xs-offset-3">
                 <% _.each(attributes["state"], function( c, i ) {
                     var cols = attributes["columns"];
 
                     var symbol = c == " " ? c : attributes["players"][c]["symbol"];
                     var playable = (c == " ") && (attributes["playing"]) ? "playable" : "notplayable"; %>
                     <% if ((i % cols) == 0) { %><div class="board-row row-<%- i / cols %>"><% } %>
-                    <div data-position="<%- i %>" class="board-square <%- playable %>"><div class="square-content"><div class="play"><%- symbol %></div></div></div>
+                    <div data-position="<%- i %>" class="board-square <%- playable %>"><div class="square-content player<%- c %>"><div class="play"><%- symbol %></div></div></div>
                     <% if (((i+1) % cols ) == 0) { %></div><% } %>
                     <% }); %>
                   </div>
                 </div>
 
-                <% if (attributes["game_over"] == true) { %>
-                    <div class="game-over col-xs-12 col-md-12">
-                        <div class="col-xs-3 col-md-3"></div>
-                        <div class="col-xs-6 col-md-6 popIn">
-                        <span style="position: absolute; margin-left: -2px; margin-top: -1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 0px; margin-top: -1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 2px; margin-top: -1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: -2px; margin-top: 1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 0px; margin-top: 1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 2px; margin-top: 1px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: -2px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 2px; color: yellow;">Game Over</span>
-                        <span style="position: absolute; margin-left: 1px; color: #842;">Game Over</span>
-                        </div>
-                    </div>
-                <% } %>
-
                 <% if ((attributes["game_over"]) || (attributes["playing"] == false)) { %>
-                    <div class="StartNewGame col-xs-12 col-md-12">
+                    <div class="start-new-game col-xs-12 col-md-12">
                     <div class="col-xs-3 col-md-3"></div>
                     <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-6 col-md-6 btn btn-primary fadeIn">Start New Game</button>
                     </div>
@@ -129,15 +124,50 @@
             <div class="board col-xs-6 col-md-6">
                 <% if (attributes["players"]) { %>
                     <% _.each(attributes["players"], function( player, i ) { %>
-                        <div class="player <% if (i == attributes["next_player"]) {
-                            if (attributes["has_winner"]) { %>winner<% } else { %>next_player<% }} %>">
-                            Player <%- i+1 %>:<br>
-                            <h4><%- player.name %> (<span class="tictac"><%- player.symbol %></span>)</h4>
+                        <div class="player">
+                            <span class="player-label">Player <%- i+1 %><br></label>
+                            <h3 class="player<%- i %> <% if (i == attributes["next_player"]) {
+                            if (attributes["has_winner"]) { %>winner<% } else { %>next_player<% }} %>"><%- player.name %> (<span class="tictac"><%- player.symbol %></span>)</h3>
                         </div>
                     <% }); %>
                 <% } %>
             </div>
         </div>
+
+        <% if (attributes["has_winner"] == true) { %>
+            <div class="col-xs-6 col-md-6 has-winner-overlay">
+                <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
+                    <% winner_name = attributes["players"][attributes["next_player"]]["name"]; %>
+
+                    <div class="has-winner-background" style="margin-left: -2px; margin-top: -1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: 0px; margin-top: -1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: 2px; margin-top: -1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: -2px; margin-top: 1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: 0px; margin-top: 1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: 2px; margin-top: 1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: -2px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: 2px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner" style="margin-left: 1px;"><%- winner_name %> Wins</div>
+              </div>
+            </div>
+        <% } %>
+
+        <% if (attributes["game_over"] == true) { %>
+            <div class="col-xs-6 col-md-6 game-over-overlay">
+                <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
+                    <div class="game-over-background" style="margin-left: -2px; margin-top: -1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: 0px; margin-top: -1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: 2px; margin-top: -1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: -2px; margin-top: 1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: 0px; margin-top: 1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: 2px; margin-top: 1px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: -2px;">Game Over</div>
+                    <div class="game-over-background" style="margin-left: 2px;">Game Over</div>
+                    <div class="game-over" style="margin-left: 1px;">Game Over</div>
+              </div>
+            </div>
+        <% } %>
+
 
         </script>
         <!-- END: # template definition -->

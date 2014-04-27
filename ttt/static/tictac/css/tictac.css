@@ -38,21 +38,52 @@ body {
     font-family: 'museo_slab500';
 }
 
+h3 {
+    padding: 8px;
+    line-height: 32px;
+    font-size: 32px;
+    margin-top: -10px;
+    margin-left: -12px;
+    margin-bottom: 0.75em;
+    border-top: 2px solid #666;
+    border:1px solid #888;
+    border-radius: 10px;
+}
+
+.player-label {
+    background: #fff;
+    padding: 2px;
+}
+
 .player {
 
 }
+.player0 {
+    color: #833;
+}
 
-.StartNewGame {
+.player1 {
+    color: #338;
+}
+
+.start-new-game {
     margin-top: 1em;
 }
 
 .next_player:before {
     content: "\e072";
     font-family: 'Glyphicons Halflings';
-    margin-left: -20px;
+    margin-left: -24px;
+    font-size: 24px;
+    line-height: 32px;
     display: block;
     float: left;
 }
+
+h3.next_player {
+    background-color: #ddd;
+}
+
 
 .winner {
     background: yellow;
@@ -91,11 +122,37 @@ body {
     display: block;
 }
 
-.game-over {
+.game-over-overlay {
+    position: absolute;
+    top: 150px;
     font-family: 'Carter One';
-    font-size: 36pt;
-    color: #621;
-    margin-top: 30px;
+    font-size: 72px;
+}
+
+.game-over {
+    color: #924;
+    position: absolute;
+}
+
+.game-over-background {
+    color: #eee;
+    position: absolute;
+}
+
+.has-winner-overlay {
+    font-family: 'Carter One';
+    font-size: 48px;
+    position: absolute;
+    top: 100px;
+}
+
+.has-winner {
+    color: #429;
+    position: absolute;
+}
+
+.has-winner-background {
+    color: #eee;
     position: absolute;
 }
 
@@ -109,107 +166,99 @@ body {
     background: #ffc;
 }
 
-
-
 .fadeIn {
     animation-name: fadeIn;
-    animation-duration: 1.3s;
+    animation-duration: 2.0s;
     animation-timing-function: ease-in-out;
     -webkit-animation-name: fadeIn;
-    -webkit-animation-duration: 1.3s;
+    -webkit-animation-duration: 2.0s;
     -webkit-animation-timing-function: ease-in-out;
-    visibility: visible !important;
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0.0;
-    }
-    100% {
-        opacity: 1;
-    }
+    -moz-animation-name: fadeIn;
+    -moz-animation-duration: 2.0s;
+    -moz-animation-timing-function: ease-in-out;
 }
 
 @-webkit-keyframes fadeIn {
     0% {
         opacity: 0.0;
     }
+    40% {
+        opacity: 0.0;
+    }
     100% {
-        -webkit-transform: scale(1);
         opacity: 1;
     }
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0.0;
+    }
+    40% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
 .popIn {
     animation-name: popIn;
-    animation-duration: 1.3s;
+    animation-duration: 1.0s;
     animation-timing-function: ease-out;
-
     -webkit-animation-name: popIn;
-    -webkit-animation-duration: 1.3s;
-    -webkit-animation-timing-function: ease -out;
-
-    visibility: visible !important;
+    -webkit-animation-duration: 1.0s;
+    -webkit-animation-timing-function: ease-out;
+    -moz-animation-name: popIn;
+    -moz-animation-duration: 1.0s;
+    -moz-animation-timing-function: ease-out;
 }
 
 @keyframes popIn {
     0% {
-        transform: translateY(100%) scaleX(0.5);
-    }
-    30%{
-        transform: translateY(-8%) scaleX(0.5);
-    }
-    40%{
-        transform: translateY(2%) scaleX(0.5);
+        transform: scaleX(0.5);
     }
     50%{
-        transform: translateY(0%) scaleX(1.1);
+        transform: scaleX(1.1);
     }
     60%{
-        transform: translateY(0%) scaleX(0.9);
+        transform: scaleX(0.9);
     }
     70% {
-        transform: translateY(0%) scaleX(1.05);
+        transform: scaleX(1.05);
     }
     80%{
-        transform: translateY(0%) scaleX(0.95);
+        transform: scaleX(0.95);
     }
     90% {
-        transform: translateY(0%) scaleX(1.02);
+        transform: scaleX(1.02);
     }
     100%{
-        transform: translateY(0%) scaleX(1);
+        transform: scaleX(1);
     }
 }
 
 @-webkit-keyframes popIn {
     0% {
-        -webkit-transform: translateY(100%) scaleX(0.5);
-    }
-    30%{
-        -webkit-transform: translateY(-8%) scaleX(0.5);
-    }
-    40%{
-        -webkit-transform: translateY(2%) scaleX(0.5);
+        -webkit-transform: scaleX(0.5);
     }
     50%{
-        -webkit-transform: translateY(0%) scaleX(1.1);
+        -webkit-transform: scaleX(1.1);
     }
     60%{
-        -webkit-transform: translateY(0%) scaleX(0.9);
+        -webkit-transform: scaleX(0.9);
     }
     70% {
-        -webkit-transform: translateY(0%) scaleX(1.05);
+        -webkit-transform: scaleX(1.05);
     }
     80%{
-        -webkit-transform: translateY(0%) scaleX(0.95);
+        -webkit-transform: scaleX(0.95);
     }
     90% {
-        -webkit-transform: translateY(0%) scaleX(1.02);
+        -webkit-transform: scaleX(1.02);
     }
     100%{
-        -webkit-transform: translateY(0%) scaleX(1);
+        -webkit-transform: scaleX(1);
     }
 }
 

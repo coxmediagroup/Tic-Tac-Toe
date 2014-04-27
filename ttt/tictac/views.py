@@ -104,7 +104,7 @@ def make_play(request):
             if form.is_valid():
                 player = form.cleaned_data['player']
                 position = form.cleaned_data['position']
-                game.play_turn(player, position)
+                game.play_turn(player, position=position)
 
             response_json = json.dumps({'ok' : True})
             return HttpResponse(response_json, content_type='application/json')

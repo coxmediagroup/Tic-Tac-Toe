@@ -22,24 +22,111 @@ class Player(User):
 
         super(Player, self).__init__(*args, **kwargs)
 
-    def auto_move(self, board):
+    def auto_move(self, board, number):
         if (self.ai == 'boehner'):
-            return self.ai_boehner(board)
+            return self.ai_boehner(board, number)
 
-    def ai_boehner(self, board):
+    def ai_boehner(self, board, number):
         """
         Attempts to result in a tie by obstructing any possibility
-        of a win.
+        of a win. Wikipedia is a good source for strategy, here:
+
+        http://en.wikipedia.org/wiki/Tic-tac-toe
         """
 
+        def test_str(str):
+            val = str.replace(' ', '')
+
+            # can we win?
+            if val == '%s' % (number, ) * 2:
+                ret = True
+            else:
+            # is it a block?
+                ret = len(val) == 2 and (val[0] == val[1])
+            return ret
+
+        state = board.state
+        is_opening_move = state.find(str(number)) == -1
+
+        if board.rows == board.columns and board.rows == 3:
+            # only valid for 3x3
+
+            # Make sure someone isn't about to win - either us or them
+            # (but prefer us!) and play the hole if so
+            #
+            for counter in range(3):
+                if test_str(state[counter*3:counter*3+3]):
+                    pos = state[counter*3:counter*3+3].find(' ')
+                    row = counter
+                    col = pos
+                    print "row"
+                    return row, col
+                col = state[counter:9:3]
+                if test_str(col):
+                    pos = col.find(' ')
+                    row = pos
+                    col = counter
+                    print "col"
+                    return row, col
+
+            # \
+            diag = state[0:9:4]
+            if test_str(diag):
+                pos = diag.find(' ')
+                row = pos
+                col = pos
+                print "diag 094"
+                return row, col
+
+            # /
+            diag = state[2:7:2]
+            if test_str(diag):
+                pos = diag.find(' ')
+                row = pos
+                col = 2-pos
+                print "diag 272"
+                return row, col
+
+
+
+            """Win: If the player has two in a row, they can place a third to get three in a row.
+            Block: If the opponent has two in a row, the player must play the third themself to block the opponent.
+            Fork: Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
+            Blocking an opponent's fork:
+            Option 1: The player should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
+            Option 2: If there is a configuration where the opponent can fork, the player should block that fork.
+            Center: A player marks the center. (If it is the first move of the game, playing on a corner gives "O" more opportunities to make a mistake and may therefore be the better choice; however, it makes no difference between perfect players.)
+            Opposite corner: If the opponent is in the corner, the player plays the opposite corner.
+            Empty corner: The player plays in a corner square.
+            Empty side: The player plays in a middle square on any of the 4 sides.
+            """
+
+            print "is opening move: %s" % (is_opening_move, )
+            if is_opening_move:
+                order = (4, 0)
+            else:
+                order = (0, 2, 6, 8, 3, 5, 1, 7)
+                if board.last_move and board.last_move in (0, 2, 6, 8):
+                    if state[board.last_move] == state[8-board.last_move]:
+                        order = (3, 5, 1, 7, ) + order
+                    else:
+                        order = (8-board.last_move, 0, 2, 6, 8, ) + order
+
+            for pos in order:
+                if state[pos] == ' ':
+                    row = pos / 3
+                    col = pos % 3
+                    return row, col
+
+
         # find first open slot and go there.
-        pos = board.state.find(' ')
+        pos = state.find(' ')
         if pos >= 0:
             row = pos / 3
             col = pos % 3
-            return row, col
 
-        return 0, 0
+        return row, col
+
 
 
 class Board(models.Model):
@@ -49,9 +136,11 @@ class Board(models.Model):
     rows = models.IntegerField(default=3)
     columns = models.IntegerField(default=3)
     state = models.CharField(max_length=256)
+    last_move = models.IntegerField(null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super(Board, self).__init__(*args, **kwargs)
+        self.last_move = None
         if not self.state:
             self.state = ' '*(self.rows*self.columns)
         self.save()
@@ -90,6 +179,7 @@ class Board(models.Model):
 
         if self.can_play(row, column):
             spot = row*self.columns + column
+            self.last_move = spot
 
             self.state = "%s%1d%s" % (self.state[0:spot], number, self.state[spot+1:], )
             self.save()
@@ -155,6 +245,9 @@ class GameManager(models.Manager):
                 player.save()
                 index = index + 1
                 print new_player.first_name + ' ----> ' + str(new_player.auto)
+
+            # first_player = GamePlayers(game=game, number=0)
+            game.play_auto_turns()
 
             return game
 
@@ -227,6 +320,30 @@ class Game(models.Model):
         player = GamePlayers.objects.get(game=self, number=player_number)
         return player
 
+    def play_auto_turns(self):
+        game_player = self.next_gameplayer()
+        new_state = self.board.state
+
+        while game_player.player.auto == True and not self.game_over:
+
+            row, column = game_player.player.auto_move(self.board, game_player.number)
+
+            new_state = self.board.mark_play(row, column, game_player.number)
+
+            winning = self.has_winning_board() #winning
+            if winning or self.has_full_board():
+                self.game_over = True
+                if winning:
+                    self.winner = game_player.player
+            else:
+                self.turn_counter = self.turn_counter + 1
+
+            game_player = self.next_gameplayer()
+
+        self.save()
+
+        return new_state
+
     def play_turn(self, player, position=None, row=None, column=None):
 
         if type(player) == int:
@@ -255,29 +372,10 @@ class Game(models.Model):
         else:
             self.turn_counter = self.turn_counter + 1
 
-
-        # Take any automatic moves next
-        #
-        game_player = self.next_gameplayer()
-        while game_player.player.auto == True and not self.game_over:
-            print game_player.player.first_name
-            print game_player.player.auto
-
-            row, column = game_player.player.auto_move(self.board)
-            new_state = self.board.mark_play(row, column, game_player.number)
-
-            winning = self.has_winning_board() #winning
-            if winning or self.has_full_board():
-                self.game_over = True
-                if winning:
-                    self.winner = game_player.player
-            else:
-                self.turn_counter = self.turn_counter + 1
-
-            game_player = self.next_gameplayer()
-
         self.save()
 
-        return new_state
+        return self.play_auto_turns()
+
+
 
 
