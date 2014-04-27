@@ -39,6 +39,12 @@ then playing the corner gives the opponent the smallest choice of squares
 """
 BEST_MOVES = (4, 0, 2, 6, 8, 1, 3, 5, 7)
 SIDE_MOVES = [1, 3, 5, 7]
+SPECIAL_CASE_MOVES = {
+    (0, 5): 2,
+    (5, 6): 7,
+    (2, 3): 0,
+    (3, 8): 1
+}
 
 
 def take_corner(request):
@@ -74,13 +80,12 @@ def move_ai(board):
     if move is not None:
         return move, True
 
-    # Check for special case if human has two corners in a diagonal on the
-    # 4th move
+    # Check for special cases if human has two corners in a diagonal or a side
+    # with a corner move on the 4th move
     if len(filter(None, board)) == 3:
-        for m1, m2 in [(2, 6), (0, 8)]:
-            if board[m1] == board[m2] == HUMAN_LETTER:
-                move = random.choice(SIDE_MOVES)
-                return move, False
+        move = check_special_moves(board)
+        if move is not None:
+            return move, False
 
     # Check if human can win, if so block that move
     move = find_winner_move(board, HUMAN_LETTER)
@@ -135,3 +140,20 @@ def is_tie(request):
     Return True if the board is full. Otherwise False
     """
     return all(request.session['board'])
+
+
+def check_special_moves(board):
+    """
+    If special case is present in the board, then return a pre-defined move to
+    force a draw. Otherwise return None
+    """
+    for m1, m2 in [(2, 6), (0, 8)]:
+        if board[m1] == board[m2] == HUMAN_LETTER:
+            move = random.choice(SIDE_MOVES)
+            return move
+
+    for moves, move in SPECIAL_CASE_MOVES.iteritems():
+        if board[moves[0]] == board[moves[1]] == HUMAN_LETTER:
+            return move
+
+    return None
