@@ -1,4 +1,4 @@
-"""Tests for the ``logic`` module."""
+"""Tests for the ``ai`` module."""
 import unittest
 
 from .. import ai
