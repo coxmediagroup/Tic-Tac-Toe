@@ -2,7 +2,7 @@
 .PHONY: default
 
 default:
-	. env.sh
+	. ./env.sh
 	. var/bin/activate && ttt/manage.py collectstatic --noinput
 	. var/bin/activate && ttt/manage.py syncdb --noinput
 	. var/bin/activate && ttt/manage.py migrate
