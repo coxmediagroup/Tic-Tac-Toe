@@ -164,3 +164,27 @@ class AITest(unittest.TestCase):
         _, ai_response = logic.get_ai_move(board)
 
         self.assertEqual((2, 0), ai_response)
+
+    # TODO: horizontal and vertical directional victory tests
+
+    def test_makes_diagonal_as_o_if_x_plays_strangely(self):
+        """Makes a diagonal if player X gives the center to O."""
+        board = [
+            ' X ',
+            ' OX',
+            '   ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((0, 2), ai_response)
+
+        board = [
+            '   ',
+            'XO ',
+            ' X ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertEqual((2, 0), ai_response)
