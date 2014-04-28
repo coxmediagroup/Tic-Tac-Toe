@@ -70,19 +70,35 @@ class Player(User):
 
         """
 
-        def test_str(str):
+        def test_str(string):
             """
-            Check to see if a board is winnish.
+            Check to see if a board will is winnish. Send back
+            if it is at least a block situation, whether or not we
+            would win if we played there, and where the hole is in the
+            string.
             """
-            val = str.replace(' ', '')
 
-            # can we win?
-            if val == '%s' % (number, ) * 2:
-                ret = True
-            else:
-            # is it a block?
-                ret = len(val) == 2 and (val[0] == val[1])
-            return ret
+            block = False
+            win = False
+            pos = string.find(' ')
+
+            # No move to be made here
+            if pos < 0:
+                return block, win, pos
+
+            # _XX  XX_
+            if string[1] != ' ' and (string[1] == string[2] or
+                string[1] == string[0]):
+                block = True
+                win = string[1] == str(number)
+
+            # X_X
+            if string[0] != ' ' and (string[0] == string[2]):
+                block = True
+                win = string[0] == str(number)
+
+            return block, win, pos
+
 
         state = board.state
         is_opening_move = state.find(str(number)) == -1
@@ -90,37 +106,49 @@ class Player(User):
         if board.rows == board.columns and board.rows == 3:
             # only valid for 3x3
 
+            col = None
+            row = None
+
             # Make sure someone isn't about to win - either us or them
             # (but prefer us!) and play the hole if so
             #
             for counter in range(3):
-                if test_str(state[counter*3:counter*3+3]):
-                    pos = state[counter*3:counter*3+3].find(' ')
+                block, win, pos = test_str(state[counter*3:counter*3+3])
+                if block:
                     row = counter
                     col = pos
-                    return row, col
-                col = state[counter:9:3]
-                if test_str(col):
-                    pos = col.find(' ')
+                    if win:
+                        return row, col
+                block, win, pos = test_str(state[counter:9:3])
+                if block:
                     row = pos
                     col = counter
-                    return row, col
+                    if win:
+                        return row, col
 
             # \
             diag = state[0:9:4]
-            if test_str(diag):
-                pos = diag.find(' ')
+            block, win, pos = test_str(diag)
+            if block:
                 row = pos
                 col = pos
-                return row, col
+                if win:
+                    return row, col
 
             # /
             diag = state[2:7:2]
-            if test_str(diag):
-                pos = diag.find(' ')
+            block, win, pos = test_str(diag)
+            if block:
                 row = pos
                 col = 2-pos
+                if win:
+                    return row, col
+
+            # We couldn't win, but if we can block we shou;d
+
+            if row is not None:
                 return row, col
+
 
             # OK, so we aren't #winning so let's do our next part
             # which is either make our first move (either center or
@@ -131,10 +159,14 @@ class Player(User):
                 order = (4, 0)
             else:
                 order = (0, 2, 6, 8, 3, 5, 1, 7)
-                if board.last_move and board.last_move in (0, 2, 6, 8):
+                # if their last move was into the corner, and they
+                # have the opposite corner, play a side to keep them
+                # from setting us up
+                if board.last_move is not None and board.last_move in (0, 2, 6, 8):
                     if state[board.last_move] == state[8-board.last_move]:
                         order = (3, 5, 1, 7, ) + order
                     else:
+                        # otherwise, play the opposite corner
                         order = (8-board.last_move, 0, 2, 6, 8, ) + order
 
             # Make the first one in the list that we can
@@ -241,7 +273,7 @@ class GamePlayers(models.Model):
 
 
 class GameManager(models.Manager):
-    def new_game(self, game_type='classic', players=[]):
+    def new_game(self, game_type='classic', players=[], auto_play=True):
         """
         Creates a new game.
 
@@ -272,7 +304,8 @@ class GameManager(models.Manager):
                 player.save()
                 index = index + 1
 
-            game.play_auto_turns()
+            if auto_play:
+                game.play_auto_turns()
 
             return game
 

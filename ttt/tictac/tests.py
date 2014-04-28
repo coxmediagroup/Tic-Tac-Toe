@@ -185,3 +185,25 @@ class GameTestCase(TestCase):
         self.assertTrue(self.game.has_winning_board(), 'Game now has a winner but we dont see it?')
         self.assertTrue(self.game.game_over, 'Game won, so it should be over.')
         self.assertEqual(self.game.winner, self.game.next_gameplayer().player, 'The next player should be the same as the winner when the game is over.')
+
+    def testAllStarts(self):
+
+        for pos in range(9):
+
+            # auto_play = False so we can choose the first position for X
+            game = Game.objects.new_game(game_type='classic', players=[
+                { 'name':'X', 'auto': True },
+                { 'name':'O', 'auto': True }, ], auto_play=False)
+
+            # play the position which should kick off a completely auto
+            # game
+            game.play_turn(0, position=pos)
+
+            self.assertTrue(game.game_over, "Game should be over.")
+            self.assertFalse(game.has_winning_board(), "Game should be a tie, not a win."
+                "Starting position was %d and board is %s" % (pos, game.board, ))
+
+
+
+
+
