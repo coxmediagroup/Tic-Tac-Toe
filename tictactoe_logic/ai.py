@@ -1,4 +1,4 @@
-"""Tic-tac-toe AI and win detection.
+"""Tic-tac-toe AI that plays as O.
 
 See __init__.py docstring for more info.
 
@@ -24,11 +24,10 @@ def get_turn_num(board):
     return sum(taken_cells(row) for row in board)
 
 
-def try_block_opponent(board, ai_piece):
+def try_block_opponent(board):
     """Look for imminent wins from the opponent and attempt to block them.
 
     :param board: The board model
-    :param ai_piece: The symbol the AI is playing as; either 'X' or 'O'
 
     :returns:
         A ``(row, col)`` position the AI should move to block a victory, or
@@ -47,11 +46,10 @@ def try_block_opponent(board, ai_piece):
     return ai_move
 
 
-def try_win(board, ai_piece):
+def try_win(board):
     """Look for the ability for the AI to win and take it if available.
 
     :param board: The board model
-    :param ai_piece: The symbol the AI is playing as: either 'X' or 'O'
 
     :returns:
         A ``(row, col)`` position the AI should move to win, or ``None`` if
@@ -197,12 +195,13 @@ def try_block_corner_trap(board):
     return ai_move
 
 
-# TODO: handle AI playing as X
 def get_ai_move(board):
     """Get the best move for the given board state.
 
-    Returns a two-item tuple of ``(mark, position)``, where ``mark`` is either
-    ``'O'`` or ``'X'`` and ``position`` is itself a ``(row, col)`` tuple.
+    The board state should be one where the next player to move is O. The board
+    given should not already be in a draw or victory state.
+
+    Returns a position tuple, which is a ``(row, col)`` tuple.
 
     """
 
@@ -234,12 +233,12 @@ def get_ai_move(board):
 
     # if a special case rule above haven't picked a position...
     if not ai_move:
-        winning_move = try_win(board, 'O')
+        winning_move = try_win(board)
         if winning_move:
             ai_move = winning_move
 
     if not ai_move:
-        blocking_move = try_block_opponent(board, 'O')
+        blocking_move = try_block_opponent(board)
         if blocking_move:
             ai_move = blocking_move
 
@@ -251,4 +250,4 @@ def get_ai_move(board):
 
         ai_move = empty_cells[0]
 
-    return 'O', ai_move
+    return ai_move

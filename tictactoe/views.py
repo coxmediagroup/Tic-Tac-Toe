@@ -53,7 +53,7 @@ def handle_move(request):
 
     info = tictactoe_logic.check_board(board)
     if info.state == tictactoe_logic.INCOMPLETE:
-        ai_piece, ai_move = tictactoe_logic.get_ai_move(board)
+        ai_move = tictactoe_logic.get_ai_move(board)
         __update_board(board, ai_move)
     info = tictactoe_logic.check_board(board)
 
