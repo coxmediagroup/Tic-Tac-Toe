@@ -27,7 +27,7 @@ def get_turn_num(board):
 # define all lines that are checked for victory
 TOP_LEFT_TO_BOTTOM_RIGHT = (0, 0), (1, 1), (2, 2)
 TOP_RIGHT_TO_BOTTOM_LEFT = (0, 2), (1, 1), (2, 0)
-ROWS = [((n, 0), (n, 1), (n, 2)) for n in range(0, 2)]
+ROWS = [((n, 0), (n, 1), (n, 2)) for n in range(3)]
 COLUMNS = [((0, n), (1, n), (2, n)) for n in range(3)]
 DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
 LINES = ROWS + COLUMNS + DIAGONALS
