@@ -6,6 +6,7 @@ Web-based tic tac toe game for Cox Media Group.
 
 The app uses:
 
+::
     Python
     django 1.6
 
@@ -17,6 +18,7 @@ The app uses:
 
 and the front-end has been tested in:
 
+::
     Chrome Mac 34.0.1847.116
     Safari Mac 7.0.3 (9537.75.14)
     Firefox Mac 27.0
@@ -31,26 +33,31 @@ To build:
 
 * Check out code from github
 * cd to root of checked-out code
-* make
+
+::
+    make
 
 
 If you don't have Make, the following commands will build the code, assuming
 python 2.7 is installed:
 
-* . env.sh
-* ttt/manage.py collectstatic --noinput
-* ttt/manage.py syncdb --noinput
-* ttt/manage.py migrate
+::
+    . ./env.sh
+    ttt/manage.py collectstatic --noinput
+    ttt/manage.py syncdb --noinput
+    ttt/manage.py migrate
 
 
 To run in development:
 
-* make develop
+::
+    make develop
 
 If you don't have Make installed, start the server with:
 
-* . env.sh
-* ttt/manage.py runserver 127.0.0.1:9999
+::
+    . ./env.sh
+    ttt/manage.py runserver 127.0.0.1:9999
 
 
 
@@ -59,15 +66,14 @@ To play, open the browser to http://localhost:9999/
 
 To rebuild or clean:
 
-* make clean
+::
+    make clean
 
 (or, non-Make folks):
 
-* rm -Rf var
-* rm ttt/db.sqlite3
-
-
-
+::
+    rm -Rf var
+    rm ttt/db.sqlite3
 
 
 MacOS X
