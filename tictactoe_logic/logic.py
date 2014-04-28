@@ -54,7 +54,7 @@ def organize_cells(cells, board):
         True
         >>> set(o_cells) == set()
         True
-        >>> set(empty_cells) == {2, 2}
+        >>> set(empty_cells) == {(2, 2)}
         True
 
     """
@@ -177,6 +177,40 @@ def try_block_diagonal_traps(board):
     return ai_move
 
 
+def get_corner_cell_between_edge_cells(edge_a, edge_b):
+    """Get the coordinates of the corner cell between the two edge cells.
+
+    An 'edge cell' is any non-corner cell, and not the center cell.
+
+    E.g.::
+
+        >>> get_corner_cell_between_edge_cells((0, 1), (1, 2))
+        (0, 2)
+        >>> get_corner_cell_between_edge_cells((1, 0), (2, 1))
+        (2, 0)
+
+    """
+    # the two edge cells together surround a corner. E.g.
+    # 'top center' and 'right center' implies 'top-right
+    # corner.' Since all the cells are center cells, the
+    # non-1 coordinate from both cells, when combined, will
+    # be the appropriate corner. E.g. (0, 1), (1, 2) is the top
+    # and right edge, and (0, 2) is the top-right corner
+    a_row, a_col = edge_a
+    b_row, b_col = edge_b
+    if a_row == 2 or b_row == 2:
+        corner_row = 2
+    else:
+        corner_row = 0
+
+    if a_col == 2 or b_col == 2:
+        corner_col = 2
+    else:
+        corner_col = 0
+
+    return corner_row, corner_col
+
+
 def try_block_corner_trap(board):
     """Return a move that blocks corner traps if one is in progress.
 
@@ -203,29 +237,10 @@ def try_block_corner_trap(board):
     edge_pairs = ((edges[n], edges[n+1]) for n
                   in range(-1, len(edges)-1))
 
-    for edge_a, edge_b in edge_pairs:
-        a_row, a_col = edge_a
-        b_row, b_col = edge_b
+    for (a_row, a_col), (b_row, b_col) in edge_pairs:
         if board[a_row][a_col] == board[b_row][b_col] == 'X':
-
-            # the two edge cells together surround a corner. E.g.
-            # 'top center' and 'right center' implies 'top-right
-            # corner.' Since all the cells are center cells, the
-            # non-1 coordinate from both cells, when combined, will
-            # be the appropriate corner. E.g. (0, 1), (1, 2) is the top
-            # and right edge, and (0, 2) is the top-right corner
-
-            if a_row == 2 or b_row == 2:
-                corner_row = 2
-            else:
-                corner_row = 0
-
-            if a_col == 2 or b_col == 2:
-                corner_col = 2
-            else:
-                corner_col = 0
-
-            ai_move = corner_row, corner_col
+            ai_move = get_corner_cell_between_edge_cells((a_row, a_col),
+                                                         (b_row, b_col))
 
     return ai_move
 
@@ -247,8 +262,7 @@ def get_ai_move(board):
 
     ai_move = None  # holds the cell that AI will decide to mark
 
-    # check for special situations and try to assign 'pos'
-
+    # check for special situations and try to assign 'ai_move'
     if turn_num == 1:
 
         # take the center if open, otherwise take any corner
