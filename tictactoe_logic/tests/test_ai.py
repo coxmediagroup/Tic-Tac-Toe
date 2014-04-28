@@ -230,3 +230,15 @@ class AITest(unittest.TestCase):
         _, ai_response = ai.get_ai_move(board)
 
         self.assertIn(ai_response, ((2, 1,), (2, 2)))
+
+    def test_ai_wins_over_blocking(self):
+        """If the AI could win *or* block, it wins."""
+        board = [
+            'XO ',
+            'XOX',
+            '   ',
+        ]
+
+        _, ai_response = ai.get_ai_move(board)
+
+        self.assertEqual((2, 1), ai_response)

@@ -234,14 +234,14 @@ def get_ai_move(board):
 
     # if a special case rule above haven't picked a position...
     if not ai_move:
-        blocking_move = try_block_opponent(board, 'O')
-        if blocking_move:
-            ai_move = blocking_move
-
-    if not ai_move:
         winning_move = try_win(board, 'O')
         if winning_move:
             ai_move = winning_move
+
+    if not ai_move:
+        blocking_move = try_block_opponent(board, 'O')
+        if blocking_move:
+            ai_move = blocking_move
 
     # nothing obvious to do so take any empty cell
     if not ai_move:

@@ -83,7 +83,7 @@ class HandleMoveTest(django.test.TestCase):
                                 content_type="application/json")
         response = json.loads(resp.content.decode())
         response_state = response['state']
-        win_cells = response["cells"]
+        win_cells = {tuple(cell) for cell in response["cells"]}
 
         self.assertEqual("VICTORY", response_state)
-        self.assertEqual({(0, 0), (1, 1), (2, 2)}, set(win_cells))
+        self.assertEqual({(0, 0), (1, 1), (2, 2)}, win_cells)
