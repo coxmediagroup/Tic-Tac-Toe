@@ -7,11 +7,23 @@ import django.http.response
 import tictactoe_logic
 
 
-def json_response(data):
+def __json_response(data):
     """Create an HttpResponse with data converted to JSON."""
     response_body = json.dumps(data)
     return django.http.response.HttpResponse(response_body,
                                              content_type="application/json")
+
+
+def __update_board(board, new_move):
+    """Add the AI's move to the board.
+
+    Returns None; changes board in-place.
+
+    """
+    ai_row, ai_col = new_move
+    row = list(board[ai_row])  # strings are immutable, so convert to a list
+    row[ai_col] = 'O'
+    board[ai_row] = ''.join(row)  # convert back to a string and update board
 
 
 def handle_move(request):
@@ -26,14 +38,9 @@ def handle_move(request):
     """
     board = json.loads(request.body.decode())
 
-    ai_piece, ai_pos = tictactoe_logic.get_ai_move(board)
-
-    # add the AI's move to the board and send it back
-    ai_row, ai_col = ai_pos
-    row = list(board[ai_row])  # strings are immutable, so convert to a list
-    row[ai_col] = ai_piece
-    board[ai_row] = ''.join(row)  # convert back to a string and update board
-
+    # update the board with the AI's move, then check the game state
+    ai_piece, ai_move = tictactoe_logic.get_ai_move(board)
+    __update_board(board, ai_move)
     info = tictactoe_logic.check_board(board)
 
     resp_data = {
@@ -41,7 +48,7 @@ def handle_move(request):
         'state': info.state.upper(),
     }
 
-    return json_response(resp_data)
+    return __json_response(resp_data)
 
 
 def show_game(request):

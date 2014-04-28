@@ -9,5 +9,6 @@ strings, all three characters long, where any character is either
 """
 
 from .ai import get_ai_move
+from .gamestate import check_board
 
-__all__ = ['get_ai_move']
+__all__ = ['get_ai_move', 'check_board']
