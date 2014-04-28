@@ -14,8 +14,27 @@ def welcome(request):
     """
     Main entry for our game.
     """
-    new_game_form = NewGameForm(initial={'player1_auto':False,
-        'player2_auto':True, 'player2':'Joshua'})
+
+    initial={'player1_auto':False, 'player2_auto':True,
+             'player2':'Joshua'}
+    game_id = request.session.get('game_id')
+    try:
+        if game_id:
+            game = Game.objects.get(id=game_id)
+            game_players = game.gameplayers_set.all()
+
+            initial = {
+                'player1':game_players[0].player.first_name,
+                'player1_auto':game_players[0].player.auto,
+                'player1_symbol':game_players[0].symbol,
+                'player2':game_players[1].player.first_name,
+                'player2_auto':game_players[1].player.auto,
+                'player2_symbol':game_players[1].symbol,
+            }
+    except:
+        pass
+
+    new_game_form = NewGameForm(initial=initial)
 
     return render(request, 'welcome.html', {
         'form': new_game_form,

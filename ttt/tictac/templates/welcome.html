@@ -32,8 +32,8 @@
                         <div class="input-group">
                             {{ form.player1|bootstrap }}
                           <div class="input-group-btn">
-                            <input name='player1_symbol' type='hidden' id='player1_symbol' value='0'>
-                            <button  style="position: absolute; bottom:0;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="tictac" id="player1_selection">0</span> <span class="caret"></span></button>
+                            <input name='player1_symbol' type='hidden' id='player1_symbol' value='{{form.player1_symbol.value}}'>
+                            <button  style="position: absolute; bottom:0;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="tictac" id="player1_selection">{{form.player1_symbol.value}}</span> <span class="caret"></span></button>
                             <ul class="dropdown-menu">
                               <li><span data-input-target='player1_symbol' data-display-target='player1_selection' class="symbol-choices">|{% for c in symbol_choices %}<span class="tictac" data-value="{{c}}"> {{c}} |</span>{% endfor %}</span></li>
                             </ul>
@@ -49,9 +49,9 @@
                         <div class="input-group">
                             {{ form.player2|bootstrap }}
                           <div class="input-group-btn">
-                            <input name='player2_symbol' type='hidden' id='player2_symbol' value='1'>
+                            <input name='player2_symbol' type='hidden' id='player2_symbol' value='{{form.player2_symbol.value}}'>
 
-                            <button  style="position: absolute; bottom:0;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="tictac" id="player2_selection">1</span> <span class="caret"></span></button>
+                            <button  style="position: absolute; bottom:0;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="tictac" id="player2_selection">{{form.player2_symbol.value}}</span> <span class="caret"></span></button>
                             <ul class="dropdown-menu">
                               <li><span data-input-target='player2_symbol' data-display-target='player2_selection' class="symbol-choices">|{% for c in symbol_choices %}<span class="tictac" data-value='{{c}}'> {{c}} |</span>{% endfor %}</span></li>
                             </ul>
