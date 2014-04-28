@@ -8,6 +8,6 @@ strings, all three characters long, where any character is either
 
 """
 
-from .logic import get_ai_move
+from .ai import get_ai_move
 
 __all__ = ['get_ai_move']

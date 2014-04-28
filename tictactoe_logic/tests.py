@@ -1,7 +1,7 @@
 """Tests for the ``logic`` module."""
 import unittest
 
-from . import logic
+from . import ai
 
 
 class AITest(unittest.TestCase):
@@ -14,7 +14,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
         self.assertEqual((0, 0), ai_response)
 
     def test_first_move_o_responds_edge_with_center(self):
@@ -25,7 +25,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
         self.assertEqual((1, 1), ai_response)
 
         board = [
@@ -34,7 +34,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
         self.assertEqual((1, 1), ai_response)
 
     def test_board_with_first_move_gets_o_response(self):
@@ -45,7 +45,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        ai_piece, _ = logic.get_ai_move(board)
+        ai_piece, _ = ai.get_ai_move(board)
         self.assertEqual('O', ai_piece)
 
     def test_o_responds_to_diagonal_trap_with_x_centered(self):
@@ -56,7 +56,7 @@ class AITest(unittest.TestCase):
             '0  ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         took_corner = ai_response == (0, 0) or ai_response == (2, 2)
         self.assertTrue(took_corner, ai_response)
@@ -67,7 +67,7 @@ class AITest(unittest.TestCase):
             '  0',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         took_corner = ai_response == (0, 2) or ai_response == (2, 0)
         self.assertTrue(took_corner, ai_response)
@@ -78,7 +78,7 @@ class AITest(unittest.TestCase):
             '  X',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         took_corner = ai_response == (0, 2) or ai_response == (2, 0)
         self.assertTrue(took_corner, ai_response)
@@ -91,7 +91,7 @@ class AITest(unittest.TestCase):
             'X  ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         took_edge = ai_response in ((0, 1), (1, 0), (2, 1), (1, 2))
         self.assertTrue(took_edge, ai_response)
@@ -102,7 +102,7 @@ class AITest(unittest.TestCase):
             '  X',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         took_edge = ai_response in ((0, 1), (1, 0), (2, 1), (1, 2))
         self.assertTrue(took_edge, ai_response)
@@ -115,7 +115,7 @@ class AITest(unittest.TestCase):
             'X  ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((0, 2), ai_response)
 
@@ -125,7 +125,7 @@ class AITest(unittest.TestCase):
             '  X',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((0, 0), ai_response)
 
@@ -137,7 +137,7 @@ class AITest(unittest.TestCase):
             'X  ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((2, 1), ai_response)
 
@@ -147,7 +147,7 @@ class AITest(unittest.TestCase):
             'XX ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((2, 2), ai_response)
 
@@ -159,7 +159,7 @@ class AITest(unittest.TestCase):
             'XO ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((1, 0), ai_response)
 
@@ -169,7 +169,7 @@ class AITest(unittest.TestCase):
             '  X',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((1, 2), ai_response)
 
@@ -181,7 +181,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((2, 0), ai_response)
 
@@ -195,7 +195,7 @@ class AITest(unittest.TestCase):
             '   ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((0, 2), ai_response)
 
@@ -205,7 +205,7 @@ class AITest(unittest.TestCase):
             ' X ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertEqual((2, 0), ai_response)
 
@@ -217,7 +217,7 @@ class AITest(unittest.TestCase):
             'XXO',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertIn(ai_response, ((0, 1), (0, 2)))
 
@@ -227,6 +227,6 @@ class AITest(unittest.TestCase):
             'X  ',
         ]
 
-        _, ai_response = logic.get_ai_move(board)
+        _, ai_response = ai.get_ai_move(board)
 
         self.assertIn(ai_response, ((2, 1,), (2, 2)))
