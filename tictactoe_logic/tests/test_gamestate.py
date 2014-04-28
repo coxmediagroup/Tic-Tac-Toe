@@ -18,3 +18,15 @@ class GameStateTest(unittest.TestCase):
         self.assertEqual(gamestate.VICTORY, info.state)
         self.assertEqual('X', info.winner)
         self.assertEqual({(0, 0), (0, 1), (0, 2)}, set(info.win_cells))
+
+        board = [
+            ' OO',
+            'XXX',
+            '   ',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.VICTORY, info.state)
+        self.assertEqual('X', info.winner)
+        self.assertEqual({(1, 0), (1, 1), (1, 2)}, set(info.win_cells))

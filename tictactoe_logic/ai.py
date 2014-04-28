@@ -4,7 +4,7 @@ See __init__.py docstring for more info.
 
 """
 
-# TODO: add win condition detection
+from . import board_model
 
 
 def get_turn_num(board):
@@ -27,52 +27,10 @@ def get_turn_num(board):
 # define all lines that are checked for victory
 TOP_LEFT_TO_BOTTOM_RIGHT = (0, 0), (1, 1), (2, 2)
 TOP_RIGHT_TO_BOTTOM_LEFT = (0, 2), (1, 1), (2, 0)
-ROWS = [((n, 0), (n, 1), (n, 2)) for n in range(3)]
 COLUMNS = [((0, n), (1, n), (2, n)) for n in range(3)]
 DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
-LINES = ROWS + COLUMNS + DIAGONALS
+LINES = board_model.ROWS + COLUMNS + DIAGONALS
 ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
-
-
-def organize_cells(cells, board):
-    """Get an (X_cells, O_cells, empty_cells) tuple for `line`.
-
-    :param cells: A sequence of ``(row, col)`` pairs (e.g. from ``LINES``)
-    :param board: The board model.
-
-    :returns: A tuple, where each tuple is a sequence of positions.
-
-    E.g.::
-
-        >>> board = [
-        ...     'X  ',
-        ...     ' X ',
-        ...     '   ',
-        ... ]
-        >>> x_cells, o_cells, empty_cells = organize_cells([(0, 0), (1, 1), (2, 2)], board)
-        >>> set(x_cells) == {(0, 0), (1, 1)}
-        True
-        >>> set(o_cells) == set()
-        True
-        >>> set(empty_cells) == {(2, 2)}
-        True
-
-    """
-    x_cells = []
-    o_cells = []
-    empty_cells = []
-
-    for cell in cells:
-        row, col = cell
-        cell_value = board[row][col]
-        if cell_value == 'X':
-            x_cells.append(cell)
-        elif cell_value == 'O':
-            o_cells.append(cell)
-        else:
-            empty_cells.append(cell)
-
-    return x_cells, o_cells, empty_cells
 
 
 # TODO: block properly when AI is playing as X
@@ -90,7 +48,8 @@ def try_block_opponent(board, ai_piece):
     ai_move = None
 
     for line in LINES:
-        x_cells, o_cells, empty_cells = organize_cells(line, board)
+        x_cells, o_cells, empty_cells = board_model.organize_cells(line,
+                                                                   board)
         if len(x_cells) == 2 and len(empty_cells) == 1:
             ai_move = empty_cells[0]
             break
@@ -112,7 +71,8 @@ def try_win(board, ai_piece):
     ai_move = None
 
     for line in LINES:
-        x_cells, o_cells, empty_cells = organize_cells(line, board)
+        x_cells, o_cells, empty_cells = board_model.organize_cells(line,
+                                                                   board)
         if len(o_cells) == 2 and len(empty_cells) == 1:
             ai_move = empty_cells[0]
             break
@@ -293,7 +253,7 @@ def get_ai_move(board):
 
     # nothing obvious to do so take any empty cell
     if not ai_move:
-        _, _, empty_cells = organize_cells(ENTIRE_BOARD, board)
+        _, _, empty_cells = board_model.organize_cells(ENTIRE_BOARD, board)
         ai_move = empty_cells[0]
 
     return 'O', ai_move
