@@ -1,6 +1,4 @@
 Django==1.6
-Pillow
-django-avatar
 South
 django-extensions
 django-bootstrap-form

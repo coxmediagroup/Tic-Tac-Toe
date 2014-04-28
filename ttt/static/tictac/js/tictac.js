@@ -65,8 +65,10 @@ define([
 
           // After we tell the server what to play, and it comes
           // back with (hopefully) good news, update our model to
-          // update our view.
-
+          // update our view. This routine just throws caution to
+          // the wind; if the server blows up, we have bigger problem
+          // than a silly TTT game.
+          //
           $.ajax({
               url: this.model.play_url,
               data: {
@@ -86,12 +88,16 @@ define([
         var boardView = new BoardView({ model: board });
 
         // If we start a new game, submit the new game form!
+        //
         $('#newGameModal').on('hidden.bs.modal', function (e) {
           console.log(e);
           var form = $('form[name="newGameForm"]');
           form.submit();
         });
 
+        // Set up event handler for choosing a symbol in the new game
+        // page.
+        //
         $('.symbol-choices span[class="tictac"]').click(function(e) {
           var target = e.target;
           while (target && (target.className != 'symbol-choices')) {

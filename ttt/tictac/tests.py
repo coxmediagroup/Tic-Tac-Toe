@@ -70,8 +70,8 @@ class GameTestCase(TestCase):
         self.player1_name = 'Baron'
         self.player2_name = 'Joshua'
         self.game = Game.objects.new_game(game_type='classic', players=[
-            { 'name':self.player1_name },
-            { 'name':self.player2_name, 'auto': True, }, ])
+            { 'name':self.player1_name, 'auto': False },
+            { 'name':self.player2_name, 'auto': False }, ])
         self.game.save()
 
     def testGameType(self):
@@ -111,19 +111,43 @@ class GameTestCase(TestCase):
     def testWinner(self):
         self.game.board.state = '123456789'
 
-        result = self.game.has_winning_board(debug=True)
-        self.assertEqual(result[0], ('123', False))
-        self.assertEqual(result[1], ('456', False))
-        self.assertEqual(result[2], ('789', False))
-        self.assertEqual(result[3], ('147', False))
-        self.assertEqual(result[4], ('258', False))
-        self.assertEqual(result[5], ('369', False))
-        self.assertEqual(result[6], ('159', False))
-        self.assertEqual(result[7], ('357', False))
+        result = self.game.has_winning_board()
         self.assertFalse(self.game.has_winning_board(), 'Board %s should have no winner: \n\n%s' % (
             self.game.board.state, self.game.board.__repr__()))
 
         self.game.board.state = '122122211'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '111122211'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '122111211'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '122211111'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '122111122'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '212111212'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '221111221'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '122111221'
+        self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
+            self.game.board.state, self.game.board.__repr__()))
+
+        self.game.board.state = '221112122'
         self.assertTrue(self.game.has_winning_board(), 'Board %s should have a winner:\n\n%s' % (
             self.game.board.state, self.game.board.__repr__()))
 
@@ -161,7 +185,3 @@ class GameTestCase(TestCase):
         self.assertTrue(self.game.has_winning_board(), 'Game now has a winner but we dont see it?')
         self.assertTrue(self.game.game_over, 'Game won, so it should be over.')
         self.assertEqual(self.game.winner, self.game.next_gameplayer().player, 'The next player should be the same as the winner when the game is over.')
-
-
-
-

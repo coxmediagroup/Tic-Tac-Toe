@@ -16,9 +16,9 @@
     </head>
 
     <body>
-      <form name="newGameForm" action="{% url 'tictac_new_game' %}" method="POST">
-        {% csrf_token %}
-        <div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="beginNewGame" aria-hidden="true">
+      <div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="beginNewGame" aria-hidden="true">
+        <form name="newGameForm" action="{% url 'tictac_new_game' %}" method="POST">
+          {% csrf_token %}
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -68,14 +68,10 @@
               </div>
             </div>
           </div>
-        </div>
-      </form>
-
-
+        </form>
+      </div>
 
       <!-- main display -->
-
-
 
       <!-- Static navbar -->
       <div class="navbar navbar-default" role="navigation">
@@ -86,13 +82,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <div class="col-md-8 col-xs-8 col-md-offset-2 col-xs-offset-2">TIC-TAC-TOE</div>
         </div>
+          <div class="col-md-8 col-xs-8 col-md-offset-1 col-xs-offset-1 title">TIC-TAC-TOE</div>
       </div>
-
 
       <!-- Board -->
         <div class="col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2 board-holder"></div>
+
+      <!-- Javascript -->
+        <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
+
 
         <!-- BEGIN: template for # -->
         <script type="text/template" class="template">
@@ -125,8 +124,8 @@
                 <% if (attributes["players"]) { %>
                     <% _.each(attributes["players"], function( player, i ) { %>
                         <div class="player">
-                            <span class="player-label">Player <%- i+1 %><br></label>
-                            <h3 class="player<%- i %> <% if (i == attributes["next_player"]) {
+                            <span class="player-label">Player <%- i+1 %></span>
+                            <h3 class="player player<%- i %> <% if (i == attributes["next_player"]) {
                             if (attributes["has_winner"]) { %>winner<% } else { %>next_player<% }} %>"><%- player.name %> (<span class="tictac"><%- player.symbol %></span>)</h3>
                         </div>
                     <% }); %>
@@ -134,25 +133,29 @@
             </div>
         </div>
 
-        <% if (attributes["has_winner"] == true) { %>
+        <% if (attributes["game_over"] == true) { %>
+
+            <% if (attributes["has_winner"] == true) {
+                winner_name = attributes["players"][attributes["next_player"]]["name"] + ' Wins';
+            } else {
+                winner_name = 'A Draw!';
+            } %>
+
             <div class="col-xs-6 col-md-6 has-winner-overlay">
                 <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
-                    <% winner_name = attributes["players"][attributes["next_player"]]["name"]; %>
 
-                    <div class="has-winner-background" style="margin-left: -2px; margin-top: -1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: 0px; margin-top: -1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: 2px; margin-top: -1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: -2px; margin-top: 1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: 0px; margin-top: 1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: 2px; margin-top: 1px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: -2px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner-background" style="margin-left: 2px;"><%- winner_name %> Wins</div>
-                    <div class="has-winner" style="margin-left: 1px;"><%- winner_name %> Wins</div>
+                    <div class="has-winner-background" style="margin-left: -2px; margin-top: -1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: 0px; margin-top: -1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: 2px; margin-top: -1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: -2px; margin-top: 1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: 0px; margin-top: 1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: 2px; margin-top: 1px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: -2px;"><%- winner_name %></div>
+                    <div class="has-winner-background" style="margin-left: 2px;"><%- winner_name %></div>
+                    <div class="has-winner" style="margin-left: 1px;"><%- winner_name %></div>
               </div>
             </div>
-        <% } %>
 
-        <% if (attributes["game_over"] == true) { %>
             <div class="col-xs-6 col-md-6 game-over-overlay">
                 <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
                     <div class="game-over-background" style="margin-left: -2px; margin-top: -1px;">Game Over</div>
@@ -168,11 +171,8 @@
             </div>
         <% } %>
 
-
         </script>
         <!-- END: # template definition -->
-
-        <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
 
     </body>
 </html>

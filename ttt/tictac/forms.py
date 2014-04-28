@@ -1,10 +1,7 @@
 
 from django import forms
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from tictac.models import Board, Game
-from tictac.constants import SYMBOL_CHOICES
 
 class NewGameForm(forms.Form):
     player1 = forms.CharField(label=_('Player 1 Name'), max_length=64,
@@ -57,11 +54,11 @@ class NewGameForm(forms.Form):
         self.cleaned_data['player1_auto'] = data == 'True'
         return self.cleaned_data['player1_auto']
 
-
     def clean_player2_auto(self):
         data = self.cleaned_data['player2_auto']
         self.cleaned_data['player2_auto'] = data == 'True'
         return self.cleaned_data['player2_auto']
+
 
 class PlayForm(forms.Form):
     position = forms.IntegerField(label=_('Which position'))

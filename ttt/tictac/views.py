@@ -10,10 +10,10 @@ from tictac.constants import SYMBOL_CHOICES
 from tictac.forms import NewGameForm, PlayForm
 from tictac.models import Game
 
-# Create your views here.
-
 def welcome(request):
-
+    """
+    Main entry for our game.
+    """
     new_game_form = NewGameForm(initial={'player1_auto':False,
         'player2_auto':True, 'player2':'Joshua'})
 
@@ -23,16 +23,21 @@ def welcome(request):
         })
 
 def new_game(request):
+    """
+    Create a new game or at least zap the existing one.
+    """
     if request.POST:
 
         form = NewGameForm(request.POST)
         if form.is_valid():
             game = Game.objects.new_game(game_type=form.cleaned_data['game_type'],
                 players=[
-                    { 'name' : form.cleaned_data['player1'], 'auto': form.cleaned_data['player1_auto'],
-                        'symbol' : form.cleaned_data['player1_symbol'] },
-                    { 'name' : form.cleaned_data['player2'], 'auto': form.cleaned_data['player2_auto'],
-                        'symbol' : form.cleaned_data['player2_symbol'] },
+                    { 'name' : form.cleaned_data['player1'],
+                      'auto': form.cleaned_data['player1_auto'],
+                      'symbol' : form.cleaned_data['player1_symbol'] },
+                    { 'name' : form.cleaned_data['player2'],
+                      'auto': form.cleaned_data['player2_auto'],
+                      'symbol' : form.cleaned_data['player2_symbol'] },
                 ])
 
             game.save()
@@ -61,7 +66,8 @@ def game_board(request, game_id=None):
                 'auto':p['auto'], }
 
             for p in game.players.values('first_name',
-                'gameplayers__number','avatar','gameplayers__symbol','auto').order_by('gameplayers__number')]
+                'gameplayers__number','avatar','gameplayers__symbol',
+                'auto').order_by('gameplayers__number')]
 
         game_resp = {
             'playing' : True,
@@ -75,6 +81,7 @@ def game_board(request, game_id=None):
             'turn_counter': game.turn_counter,
         }
     else:
+        # Bogus defaults for non-playing game.
         game_resp = {
             'playing' : False,
             'state' : ' '*9,
@@ -92,7 +99,9 @@ def game_board(request, game_id=None):
 
 @csrf_exempt
 def make_play(request):
-
+    """
+    Make our play.
+    """
     if request.POST:
         game_id = request.session.get('game_id')
         if game_id is not None:

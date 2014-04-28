@@ -1,10 +1,12 @@
 
 import uuid
+
 from django.contrib.auth.models import User
-
 from django.db import models
-
 from django.utils.translation import ugettext_lazy as _
+
+from tictac.constants import SYMBOL_CHOICES
+
 
 class Player(User):
     auto = models.BooleanField(_('is this a computer player?'),
@@ -13,6 +15,10 @@ class Player(User):
         default="boehner", max_length=64)
 
     def __init__(self, *args, **kwargs):
+        """
+        Rather than do a whole model for names, just tweak the one
+        coming in a bit. Make up a random username. We don't care.
+        """
         if (kwargs.get('name')):
             kwargs['first_name'] = kwargs['name']
             del kwargs['name']
@@ -23,6 +29,10 @@ class Player(User):
         super(Player, self).__init__(*args, **kwargs)
 
     def auto_move(self, board, number):
+        """
+        Perform ai-based moved using the various AIs that might be
+        installed.
+        """
         if (self.ai == 'boehner'):
             return self.ai_boehner(board, number)
 
@@ -32,9 +42,38 @@ class Player(User):
         of a win. Wikipedia is a good source for strategy, here:
 
         http://en.wikipedia.org/wiki/Tic-tac-toe
+
+            Win: If the player has two in a row, they can place a third
+                to get three in a row.
+            Block: If the opponent has two in a row, the player must play
+                the third themself to block the opponent.
+            Fork: Create an opportunity where the player has two threats
+                to win (two non-blocked lines of 2).
+            Blocking an opponent's fork:
+                Option 1: The player should create two in a row to force the
+                opponent into defending, as long as it doesn't result in them
+                creating a fork. For example, if "X" has a corner, "O" has the
+                center, and "X" has the opposite corner as well, "O" must not
+                play a corner in order to win. (Playing a corner in this
+                scenario creates a fork for "X" to win.)
+                Option 2: If there is a configuration where the opponent
+                can fork, the player should block that fork.
+            Center: A player marks the center. (If it is the first move
+                of the game, playing on a corner gives "O" more opportunities
+                to make a mistake and may therefore be the better choice;
+                however, it makes no difference between perfect players.)
+            Opposite corner: If the opponent is in the corner, the player
+                plays the opposite corner.
+            Empty corner: The player plays in a corner square.
+            Empty side: The player plays in a middle square on any of
+                the 4 sides.
+
         """
 
         def test_str(str):
+            """
+            Check to see if a board is winnish.
+            """
             val = str.replace(' ', '')
 
             # can we win?
@@ -59,14 +98,12 @@ class Player(User):
                     pos = state[counter*3:counter*3+3].find(' ')
                     row = counter
                     col = pos
-                    print "row"
                     return row, col
                 col = state[counter:9:3]
                 if test_str(col):
                     pos = col.find(' ')
                     row = pos
                     col = counter
-                    print "col"
                     return row, col
 
             # \
@@ -75,7 +112,6 @@ class Player(User):
                 pos = diag.find(' ')
                 row = pos
                 col = pos
-                print "diag 094"
                 return row, col
 
             # /
@@ -84,24 +120,13 @@ class Player(User):
                 pos = diag.find(' ')
                 row = pos
                 col = 2-pos
-                print "diag 272"
                 return row, col
 
-
-
-            """Win: If the player has two in a row, they can place a third to get three in a row.
-            Block: If the opponent has two in a row, the player must play the third themself to block the opponent.
-            Fork: Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
-            Blocking an opponent's fork:
-            Option 1: The player should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
-            Option 2: If there is a configuration where the opponent can fork, the player should block that fork.
-            Center: A player marks the center. (If it is the first move of the game, playing on a corner gives "O" more opportunities to make a mistake and may therefore be the better choice; however, it makes no difference between perfect players.)
-            Opposite corner: If the opponent is in the corner, the player plays the opposite corner.
-            Empty corner: The player plays in a corner square.
-            Empty side: The player plays in a middle square on any of the 4 sides.
-            """
-
-            print "is opening move: %s" % (is_opening_move, )
+            # OK, so we aren't #winning so let's do our next part
+            # which is either make our first move (either center or
+            # corner) or do our blocking, making sure we don't let
+            # them fork.
+            #
             if is_opening_move:
                 order = (4, 0)
             else:
@@ -112,13 +137,14 @@ class Player(User):
                     else:
                         order = (8-board.last_move, 0, 2, 6, 8, ) + order
 
+            # Make the first one in the list that we can
             for pos in order:
                 if state[pos] == ' ':
                     row = pos / 3
                     col = pos % 3
                     return row, col
 
-
+        # We likely never get here, but since it's nice to have a default,
         # find first open slot and go there.
         pos = state.find(' ')
         if pos >= 0:
@@ -126,7 +152,6 @@ class Player(User):
             col = pos % 3
 
         return row, col
-
 
 
 class Board(models.Model):
@@ -234,6 +259,8 @@ class GameManager(models.Manager):
                 symbol = p.get('symbol')
                 if symbol is not None:
                     del(p['symbol'])
+                else:
+                    symbol = SYMBOL_CHOICES[index]
 
 
                 new_player, created = Player.objects.get_or_create(first_name=p.get('name'), defaults=p)
@@ -244,9 +271,7 @@ class GameManager(models.Manager):
                     number=index, symbol=symbol)
                 player.save()
                 index = index + 1
-                print new_player.first_name + ' ----> ' + str(new_player.auto)
 
-            # first_player = GamePlayers(game=game, number=0)
             game.play_auto_turns()
 
             return game
@@ -289,38 +314,46 @@ class Game(models.Model):
 
     def _classic_has_winning_board(self, debug=False):
 
+        def _test_win(str):
+            return str[0] != ' ' and str.count(str[0]) == 3
+
         # we assume classic boards are 3x3
         if self.board.columns != 3 or self.board.rows != 3:
             raise ValueError('Cannot determine classic winner for a non-3x3 game.')
 
-        strs = [''] * 8
-
-        for idx in range(0, 3):
-            strs[idx] = self.board.state[3*idx:3*idx+3]
-            strs[3] = strs[3] + self.board.state[3*idx]
-            strs[4] = strs[4] + self.board.state[3*idx+1]
-            strs[5] = strs[5] + self.board.state[3*idx+2]
-            strs[6] = strs[6] + self.board.state[3*idx+idx]
-            strs[7] = strs[7] + self.board.state[3*idx+2-idx]
-
-        # if we're debugging, we can return the strs to check and
-        # whether it is a win
-        #
-        if debug:
-            return [(check, check[0] != ' ' and check.count(check[0]) == 3) for check in strs]
-
-        for check in strs:
-            if check[0] != ' ' and check.count(check[0]) == 3:
+        state = self.board.state
+        for counter in range(3):
+            # -
+            if _test_win(state[counter*3:counter*3+3]):
                 return True
+            # |
+            if _test_win(state[counter:9:3]):
+                return True
+
+        # \
+        if _test_win(state[0:9:4]):
+           return True
+
+        # /
+        if _test_win(state[2:7:2]):
+            return True
 
         return False
 
     def next_gameplayer(self):
+        """
+        The game player is determined by the turn modulo the number of
+        players.
+        """
         player_number = self.turn_counter % self.players.count()
         player = GamePlayers.objects.get(game=self, number=player_number)
         return player
 
     def play_auto_turns(self):
+        """
+        As long as we have an AI player, let it take its turn. When we
+        hit a carbon unit, relenquish.
+        """
         game_player = self.next_gameplayer()
         new_state = self.board.state
 
@@ -374,8 +407,7 @@ class Game(models.Model):
 
         self.save()
 
+        # play any automatic turns after the ugly bags of mostly water
+        # get to do their (inferior) thing.
         return self.play_auto_turns()
-
-
-
 

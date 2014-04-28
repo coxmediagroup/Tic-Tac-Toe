@@ -20,6 +20,8 @@
 }
 
 @font-face {
+
+    /* Custom font for our game play tokens. */
     font-family: 'tictac';
     src: url('../fonts/tictac.eot');
     src: url('../fonts/tictac.eot?#iefix') format('embedded-opentype'),
@@ -30,15 +32,34 @@
     font-style: normal;
 }
 
-.tictac {
-    font-family: "tictac";
-}
-
 body {
     font-family: 'museo_slab500';
 }
 
-h3 {
+.tictac {
+    font-family: "tictac";
+}
+
+.title {
+    font-family: 'Carter One';
+    font-size: 50px;
+
+}
+
+.navbar {
+    /* from http://www.colorzilla.com/gradient-editor/ */
+
+    background: #f7fbfc; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f7fbfc 0%, #d9edf2 40%, #add9e4 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7fbfc), color-stop(40%,#d9edf2), color-stop(100%,#add9e4)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fbfc', endColorstr='#add9e4',GradientType=0 ); /* IE6-9 */
+}
+
+h3.player  {
     padding: 8px;
     line-height: 32px;
     font-size: 32px;
@@ -50,20 +71,31 @@ h3 {
     border-radius: 10px;
 }
 
+h3.next_player {
+    background-color: #ddd;
+}
+
 .player-label {
     background: #fff;
-    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #888;
 }
 
 .player {
 
 }
+
 .player0 {
     color: #833;
 }
 
 .player1 {
     color: #338;
+}
+
+.player2 {
+    color: #838;
 }
 
 .start-new-game {
@@ -80,9 +112,6 @@ h3 {
     float: left;
 }
 
-h3.next_player {
-    background-color: #ddd;
-}
 
 
 .winner {
@@ -92,8 +121,8 @@ h3.next_player {
 .board-square {
     width: 80px;
     height: 80px;
-    border-right: 3px solid black;
-    display: table-cell;
+    border-right: 3px solid #000;
+    display: block;
     overflow: hidden;
     float: left;
     line-height: 40px;
@@ -104,8 +133,8 @@ h3.next_player {
 }
 
 .board-row {
-    border-bottom: 3px solid black;
-    display:block;
+    border-bottom: 3px solid #000;
+    display: block;
     width: 246px;
     height: 83px;
 }
