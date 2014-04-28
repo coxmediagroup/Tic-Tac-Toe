@@ -3,23 +3,38 @@ from . import board_model
 
 # constants used for the GameInfo.state property
 VICTORY = 'victory'
+INCOMPLETE = 'incomplete'
 
 
 class GameInfo:
     """Contains information about the state of the board."""
 
-    def __init__(self, winner, win_cells):
+    @classmethod
+    def victory(cls, winner, win_cells):
+        return cls(VICTORY, winner, win_cells)
+
+    @classmethod
+    def incomplete(cls):
+        return cls(INCOMPLETE, None, None)
+
+    def __init__(self, state, winner, win_cells):
         """Create a new GameInfo.
 
+        :param state:
+            The current game state. Either ``VICTORY`` or ``INCOMPLETE``
+
         :type  winner: str
-        :param winner: The player who won; either 'X' or 'O'
+        :param winner:
+            The player who won; either 'X' or 'O'; or ``None`` if the game
+            hasn't been won.
 
         :type  win_cells: sequence
         :param win_cells:
-            The cells that make up the line that the winning player completed
+            The cells that make up the line that the winning player completed;
+            or ``None`` if the game hasn't been won.
 
         """
-        self.state = VICTORY
+        self.state = state
         self.winner = winner
         self.win_cells = win_cells
 
@@ -42,4 +57,7 @@ def check_board(board):
             win_cells = line
             winner = 'O'
 
-    return GameInfo(winner, win_cells)
+    if win_cells:
+        return GameInfo.victory(winner, win_cells)
+    else:
+        return GameInfo.incomplete()

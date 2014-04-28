@@ -92,3 +92,14 @@ class GameStateTest(unittest.TestCase):
         self.assertEqual(gamestate.VICTORY, info.state)
         self.assertEqual('O', info.winner)
         self.assertEqual({(0, 2), (1, 2), (2, 2)}, set(info.win_cells))
+
+    def test_empty_board_is_incomplete(self):
+        board = [
+            '   ',
+            '   ',
+            '   ',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.INCOMPLETE, info.state)
