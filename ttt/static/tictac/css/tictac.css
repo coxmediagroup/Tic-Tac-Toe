@@ -182,6 +182,20 @@ h3.next_player {
     top: 100px;
     white-space: nowrap;
 }
+@media (max-width: 767px) {
+    .has-winner-overlay {
+        font-size: 32px;
+    }
+
+    .game-over-overlay {
+        font-size: 48px;
+    }
+}
+
+
+h5{
+    font-size: 1.4em;
+}
 
 .has-winner {
     color: #429;

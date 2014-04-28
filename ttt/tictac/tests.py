@@ -202,8 +202,3 @@ class GameTestCase(TestCase):
             self.assertTrue(game.game_over, "Game should be over.")
             self.assertFalse(game.has_winning_board(), "Game should be a tie, not a win."
                 "Starting position was %d and board is %s" % (pos, game.board, ))
-
-
-
-
-

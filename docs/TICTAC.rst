@@ -27,6 +27,7 @@ and the front-end has been tested in:
 * Safari Mac 7.0.3 (9537.75.14)
 * Firefox Mac 27.0
 * IE 11 Windows 11.0.9600.16384
+* iOS 7 iPad, iPhone
 
 and the backend on MacOS 10.9.2 and Amazon Linux AMI 2014.03
 

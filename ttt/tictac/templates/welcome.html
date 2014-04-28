@@ -27,7 +27,7 @@
 
               <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6 col-xs-6">
+                    <div class="col-md-6 col-xs-12">
 
                         <div class="input-group">
                             {{ form.player1|bootstrap }}
@@ -45,7 +45,7 @@
 
 
                     </div>
-                    <div class="col-md-6 col-xs-6">
+                    <div class="col-md-6 col-xs-12">
                         <div class="input-group">
                             {{ form.player2|bootstrap }}
                           <div class="input-group-btn">
@@ -75,14 +75,6 @@
 
       <!-- Static navbar -->
       <div class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
           <div class="col-md-8 col-xs-8 col-md-offset-1 col-xs-offset-1 title">TIC-TAC-TOE</div>
       </div>
 
@@ -99,7 +91,7 @@
         <div class="col-xs-12 col-md-12">
             <div class="board col-xs-12 col-md-6">
               <div class="col-xs-12 col-md-12">
-                <div class="col-xs-6 col-md-6 col-xs-offset-3 col-md-offset-0  <%- (attributes["game_over"]) ? "board-game-over":"" %>">
+                <div class="col-xs-6 col-md-6 <%- (attributes["game_over"]) ? "board-game-over":"" %>">
                 <% _.each(attributes["state"], function( c, i ) {
                     var cols = attributes["columns"];
 
@@ -142,7 +134,7 @@
             } %>
 
             <div class="col-xs-12 col-md-6 has-winner-overlay">
-                <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
+                <div class="popIn col-xs-8 col-md-8">
 
                     <div class="has-winner-background" style="margin-left: -2px; margin-top: -1px;"><%- winner_name %></div>
                     <div class="has-winner-background" style="margin-left: 0px; margin-top: -1px;"><%- winner_name %></div>
@@ -157,7 +149,7 @@
             </div>
 
             <div class="col-xs-12 col-md-6 game-over-overlay">
-                <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
+                <div class="popIn col-xs-8 col-md-8">
                     <div class="game-over-background" style="margin-left: -2px; margin-top: -1px;">Game Over</div>
                     <div class="game-over-background" style="margin-left: 0px; margin-top: -1px;">Game Over</div>
                     <div class="game-over-background" style="margin-left: 2px; margin-top: -1px;">Game Over</div>
