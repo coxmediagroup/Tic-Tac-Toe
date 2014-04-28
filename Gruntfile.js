@@ -27,7 +27,7 @@ var gruntConfig = {
             jquery: true
         },
         tictactoe_js: {
-            src: ['static/js/controllers/*.js'] // files: [tictactoe_js_list]
+            src: ['static/js/controllers/*.js']
         }
     },
 
@@ -84,6 +84,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    // Default task(s)
     grunt.registerTask('build', ['jshint:tictactoe_js', 'uglify']);
 };
