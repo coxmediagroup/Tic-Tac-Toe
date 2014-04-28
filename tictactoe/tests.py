@@ -28,21 +28,43 @@ class TicTacToeViewTest(django.test.TestCase):
 class HandleMoveTest(django.test.TestCase):
     """Tests for the handle_move AJAX view."""
 
+    def setUp(self):
+        self.ai_url = django.core.urlresolvers.reverse(views.handle_move)
+
     def test_new_board_contains_old_board(self):
         """All taken cells are maintained when the AI responds."""
-        ai_url = django.core.urlresolvers.reverse(views.handle_move)
         board = json.dumps([
             'X  ',
             '   ',
             '   ',
         ])
 
-        resp = self.client.post(ai_url, data=board, content_type="application/json")
+        resp = self.client.post(self.ai_url, data=board,
+                                content_type="application/json")
         response = json.loads(resp.content.decode())
         response_board = response['board']
+        response_state = response['state']
 
         self.assertEqual([
             'X  ',
             ' O ',
             '   ',
         ], response_board)
+        self.assertEqual("INCOMPLETE", response_state)
+
+    def test_tells_game_state(self):
+        """The server tells the client the new game state."""
+
+        # the AI should finish the draw game
+        board = json.dumps([
+            'XOO',
+            'OXX',
+            'XX ',
+        ])
+
+        resp = self.client.post(self.ai_url, data=board,
+                                content_type="application/json")
+        response = json.loads(resp.content.decode())
+        response_state = response['state']
+
+        self.assertEqual("DRAW", response_state)

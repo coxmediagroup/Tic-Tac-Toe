@@ -34,7 +34,14 @@ def handle_move(request):
     row[ai_col] = ai_piece
     board[ai_row] = ''.join(row)  # convert back to a string and update board
 
-    return json_response({'board': board})
+    info = tictactoe_logic.check_board(board)
+
+    resp_data = {
+        'board': board,
+        'state': info.state.upper(),
+    }
+
+    return json_response(resp_data)
 
 
 def show_game(request):
