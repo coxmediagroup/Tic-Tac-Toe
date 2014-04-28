@@ -35,6 +35,19 @@ def handle_move(request):
     The body is the game board model, as described in the ``tictactoe_logic``
     package docstring.
 
+    The response is a JSON object with the following properties:
+
+        "board": the new game board, including the AI's response move
+        "state"; the current state of the game. Possible states are:
+
+        - "VICTORY" when a player has won
+        - "DRAW" when the board is filled
+        - "INCOMPLETE" when the game is still ongoing
+
+    Additionally, when the "state" property is "VICTORY", there will be a
+    "cells" property which is a list of coordinates of the cells which
+    triggered the victory.
+
     """
     board = json.loads(request.body.decode())
 
@@ -48,6 +61,9 @@ def handle_move(request):
         'board': board,
         'state': info.state.upper(),
     }
+
+    if info.state == tictactoe_logic.VICTORY:
+        resp_data['cells'] = info.win_cells
 
     return __json_response(resp_data)
 

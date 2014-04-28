@@ -96,6 +96,13 @@ function handleResponse(response) {
     var state = response['state'];
     if(state == "DRAW") {
         $(".game-state-output").text("Draw!");
+    } else if(state == "VICTORY") {
+        $(".game-state-output").text("The computer wins!");
+        response.cells.forEach(function(cell) {
+            var row = cell[0];
+            var col = cell[1];
+            getCellElem(row, col).addClass("win-cell");
+        });
     }
 }
 

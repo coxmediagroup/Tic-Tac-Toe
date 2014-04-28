@@ -68,3 +68,22 @@ class HandleMoveTest(django.test.TestCase):
         response_state = response['state']
 
         self.assertEqual("DRAW", response_state)
+
+    def test_shows_win_cells(self):
+        """The server shows which cells caused a victory."""
+
+        # the AI should win in this situation
+        board = json.dumps([
+            'OX ',
+            'XO ',
+            'X  ',
+        ])
+
+        resp = self.client.post(self.ai_url, data=board,
+                                content_type="application/json")
+        response = json.loads(resp.content.decode())
+        response_state = response['state']
+        win_cells = response["cells"]
+
+        self.assertEqual("VICTORY", response_state)
+        self.assertEqual({(0, 0), (1, 1), (2, 2)}, set(win_cells))
