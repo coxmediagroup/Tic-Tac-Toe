@@ -31,15 +31,15 @@ def check_board(board):
     :returns: The current state of the game.
 
     """
-    win_row = None
+    win_cells = None
     winner = None
-    for row in board_model.ROWS:
-        x_cells, o_cells, empty_cells = board_model.organize_cells(row, board)
+    for line in (board_model.ROWS + board_model.DIAGONALS):
+        x_cells, o_cells, empty_cells = board_model.organize_cells(line, board)
         if len(x_cells) == 3:
-            win_row = row
+            win_cells = line
             winner = 'X'
         elif len(o_cells) == 3:
-            win_row = row
+            win_cells = line
             winner = 'O'
 
-    return GameInfo(winner, win_row)
+    return GameInfo(winner, win_cells)

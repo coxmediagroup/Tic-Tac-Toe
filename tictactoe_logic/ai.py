@@ -25,11 +25,8 @@ def get_turn_num(board):
 
 
 # define all lines that are checked for victory
-TOP_LEFT_TO_BOTTOM_RIGHT = (0, 0), (1, 1), (2, 2)
-TOP_RIGHT_TO_BOTTOM_LEFT = (0, 2), (1, 1), (2, 0)
 COLUMNS = [((0, n), (1, n), (2, n)) for n in range(3)]
-DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
-LINES = board_model.ROWS + COLUMNS + DIAGONALS
+LINES = board_model.ROWS + COLUMNS + board_model.DIAGONALS
 ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
 
 
@@ -113,7 +110,9 @@ def try_block_diagonal_traps(board):
     def diagonal_filled(diagonal):
         return all(board[r][c] != ' ' for r, c in diagonal)
 
-    a_diagonal_is_filled = any(diagonal_filled(d) for d in DIAGONALS)
+    a_diagonal_is_filled = any(diagonal_filled(d) for d in
+                               board_model.DIAGONALS)
+
     if a_diagonal_is_filled:
 
         # if X is at the center, O must take a corner

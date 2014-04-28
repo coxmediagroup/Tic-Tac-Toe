@@ -42,3 +42,28 @@ class GameStateTest(unittest.TestCase):
         self.assertEqual(gamestate.VICTORY, info.state)
         self.assertEqual('O', info.winner)
         self.assertEqual({(2, 0), (2, 1), (2, 2)}, set(info.win_cells))
+
+    def test_finds_victory_diagonally(self):
+        board = [
+            'XOX',
+            ' XO',
+            'X O',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.VICTORY, info.state)
+        self.assertEqual('X', info.winner)
+        self.assertEqual({(0, 2), (1, 1), (2, 0)}, set(info.win_cells))
+
+        board = [
+            'O X',
+            'XO ',
+            'X O',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.VICTORY, info.state)
+        self.assertEqual('O', info.winner)
+        self.assertEqual({(0, 0), (1, 1), (2, 2)}, set(info.win_cells))
