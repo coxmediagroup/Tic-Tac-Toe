@@ -28,7 +28,11 @@ def play(request):
         """
         corner = take_corner(request)
 
-    context = {'corner': corner, 'moves': range(9)}
+    context = {
+        'corner': corner,
+        'moves': range(9),
+        'active': start
+    }
     return render(request, 'tictactoe/board.html', context)
 
 

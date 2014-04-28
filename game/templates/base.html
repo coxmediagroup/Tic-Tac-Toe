@@ -11,17 +11,16 @@
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Home</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'tictactoe.play' %}?start=computer">Computer start</a></li>
-                    <li><a href="{% url 'tictactoe.play' %}?start=human">Player start</a></li>
+                    <li{% if not active %} class="active"{% endif %}><a href="/">Home</a></li>
+                    <li{% if active == "computer" %} class="active"{% endif %}><a href="{% url 'tictactoe.play' %}?start=computer">Computer start</a></li>
+                    <li{% if active == "human" %} class="active"{% endif %}><a href="{% url 'tictactoe.play' %}?start=human">Human start</a></li>
                 </ul>
             </div>
         </div>
@@ -32,8 +31,8 @@
 
         <div class="jumbotron">
             {% block content %}
-                <h3>Welcome</h3>
-                <p>Ready to Play</p>
+                <h3>Welcome to Tic-Tac-Toe</h3>
+                <p>During the game, refreshing your browser will reset the game. To start playing, click on the 'Computer start' or 'Human start' links</p>
             {% endblock %}
         </div>
     </div><!-- /container -->
