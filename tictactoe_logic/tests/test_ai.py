@@ -1,7 +1,7 @@
 """Tests for the ``logic`` module."""
 import unittest
 
-from . import ai
+from .. import ai
 
 
 class AITest(unittest.TestCase):
