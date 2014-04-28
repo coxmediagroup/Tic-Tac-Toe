@@ -22,6 +22,7 @@
     <body class="container">
 
         <h1>Tic Tac Toe Game</h1>
+        <p>You are X. Click any empty cell to make your move.</p>
 
         {# render the tic tac toe board #}
         <table id="tictactoe-board">

@@ -61,8 +61,6 @@ function tryTakeCell(cellElem) {
     if(cell != ' ') {
         return false;
     } else {
-
-        // TODO: allow the player to go second/be 'O'
         $(cellElem).text('X');
         return true;
     }
@@ -89,6 +87,7 @@ function updateBoard(boardModel) {
 
 
 $(document).ready(function() {
+
     $("#tictactoe-board td").click(function() {
         var isLegalMove = tryTakeCell(this);
         if(isLegalMove) {
