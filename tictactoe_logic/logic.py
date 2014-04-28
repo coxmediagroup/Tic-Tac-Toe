@@ -120,7 +120,63 @@ def try_win(board, ai_piece):
     return ai_move
 
 
-# TODO: add more turns
+def try_block_diagonal_traps(board):
+    """Return a move that blocks diagonal traps if one is in progress.
+
+    This function assumes it's turn #3 and the AI is playing as O.
+
+    There are two diagonal traps. The first:
+
+        '  0'
+        ' X '
+        'X  '
+
+    In this situation, O must take either open corner. Otherwise, when X takes
+    one of them, he will have two lines available to win.
+
+    The other:
+
+        '  X'
+        ' O '
+        'X  '
+
+    In this situation, O must **not** take a corner. Otherwise, X will take
+    the opposite corner, which will give him two lines available to win.
+
+    :returns:
+        A suitable blocking move, or ``None`` if there are no diagonal traps
+        to block.
+
+    """
+    ai_move = None
+
+    def diagonal_filled(diagonal):
+        return all(board[r][c] != ' ' for r, c in diagonal)
+
+    a_diagonal_is_filled = any(diagonal_filled(d) for d in DIAGONALS)
+    if a_diagonal_is_filled:
+
+        # if X is at the center, O must take a corner
+        if board[1][1] == 'X':
+
+            # (0, 0) and (0, 2) are on opposite diagonals; since only one
+            # diagonal is taken, the other must be clear
+            if board[0][0] == ' ':
+                ai_move = (0, 0)
+            else:
+                ai_move = (0, 2)
+
+        # if O is at the center, O must take an 'edge' (non-corner,
+        # non-center)
+        else:
+
+            # all edges should be open (since only a diagonal is full
+            # right now), so just pick one
+            ai_move = (0, 1)
+
+    return ai_move
+
+
 # TODO: handle AI playing as X
 def get_ai_move(board):
     """Get the best move for the given board state.
@@ -150,30 +206,7 @@ def get_ai_move(board):
 
     elif turn_num == 3:
 
-        # detect and avoid diagonal traps
-        def diagonal_filled(diagonal):
-            return all(board[r][c] != ' ' for r, c in diagonal)
-
-        a_diagonal_is_filled = any(diagonal_filled(d) for d in DIAGONALS)
-        if a_diagonal_is_filled:
-
-            # if X is at the center, O must take a corner
-            if board[1][1] == 'X':
-
-                # (0, 0) and (0, 2) are on opposite diagonals; since only one
-                # diagonal is taken, the other must be clear
-                if board[0][0] == ' ':
-                    ai_move = (0, 0)
-                else:
-                    ai_move = (0, 2)
-
-            # if O is at the center, O must take an 'edge' (non-corner,
-            # non-center)
-            else:
-
-                # all edges should be open (since only a diagonal is full
-                # right now), so just pick one
-                ai_move = (0, 1)
+        ai_move = try_block_diagonal_traps(board)
 
         # a strange condition; player X gave the center to O and didn't set up
         # a diagonal trap; this can still trap the AI. In this state:
@@ -184,7 +217,7 @@ def get_ai_move(board):
         #
         # the AI must mark (0, 0), (0, 2) or (2, 0); otherwise X can force a
         # win by marking (0, 2) on its next turn
-        elif board[1][1] == 'O':
+        if not ai_move and board[1][1] == 'O':
             edges = [(0, 1), (1, 2), (2, 1), (1, 0)]
 
             # range starts at -1 to capture the (edges[-1], edges[0]) pair
