@@ -177,6 +177,59 @@ def try_block_diagonal_traps(board):
     return ai_move
 
 
+def try_block_corner_trap(board):
+    """Return a move that blocks corner traps if one is in progress.
+
+    This function assumes it's turn #3 and the AI is playing as O.
+
+    A corner trap:
+
+        ' X '
+        ' OX'
+        '   '
+
+    In this situation, if O does not move on (0, 0), (0, 2) or (2, 2), X can
+    guarantee a win by marking (0, 2)
+
+    :returns:
+        A suitable blocking move, or ``None`` if there's no corner trap in
+        progress.
+
+    """
+    ai_move = None
+    edges = [(0, 1), (1, 2), (2, 1), (1, 0)]
+
+    # range starts at -1 to capture the (edges[-1], edges[0]) pair
+    edge_pairs = ((edges[n], edges[n+1]) for n
+                  in range(-1, len(edges)-1))
+
+    for edge_a, edge_b in edge_pairs:
+        a_row, a_col = edge_a
+        b_row, b_col = edge_b
+        if board[a_row][a_col] == board[b_row][b_col] == 'X':
+
+            # the two edge cells together surround a corner. E.g.
+            # 'top center' and 'right center' implies 'top-right
+            # corner.' Since all the cells are center cells, the
+            # non-1 coordinate from both cells, when combined, will
+            # be the appropriate corner. E.g. (0, 1), (1, 2) is the top
+            # and right edge, and (0, 2) is the top-right corner
+
+            if a_row == 2 or b_row == 2:
+                corner_row = 2
+            else:
+                corner_row = 0
+
+            if a_col == 2 or b_col == 2:
+                corner_col = 2
+            else:
+                corner_col = 0
+
+            ai_move = corner_row, corner_col
+
+    return ai_move
+
+
 # TODO: handle AI playing as X
 def get_ai_move(board):
     """Get the best move for the given board state.
@@ -209,44 +262,9 @@ def get_ai_move(board):
         ai_move = try_block_diagonal_traps(board)
 
         # a strange condition; player X gave the center to O and didn't set up
-        # a diagonal trap; this can still trap the AI. In this state:
-        #
-        #   ' X '
-        #   ' OX'
-        #   '   '
-        #
-        # the AI must mark (0, 0), (0, 2) or (2, 0); otherwise X can force a
-        # win by marking (0, 2) on its next turn
+        # a diagonal trap; this can still trap the AI.
         if not ai_move and board[1][1] == 'O':
-            edges = [(0, 1), (1, 2), (2, 1), (1, 0)]
-
-            # range starts at -1 to capture the (edges[-1], edges[0]) pair
-            edge_pairs = ((edges[n], edges[n+1]) for n
-                          in range(-1, len(edges)-1))
-
-            for edge_a, edge_b in edge_pairs:
-                a_row, a_col = edge_a
-                b_row, b_col = edge_b
-                if board[a_row][a_col] == board[b_row][b_col] == 'X':
-
-                    # the two edge cells together surround a corner. E.g.
-                    # 'top center' and 'right center' implies 'top-right
-                    # corner.' Since all the cells are center cells, the
-                    # non-1 coordinate from both cells, when combined, will
-                    # be the appropriate corner. E.g. (0, 1), (1, 2) is the top
-                    # and right edge, and (0, 2) is the top-right corner
-
-                    if a_row == 2 or b_row == 2:
-                        corner_row = 2
-                    else:
-                        corner_row = 0
-
-                    if a_col == 2 or b_col == 2:
-                        corner_col = 2
-                    else:
-                        corner_col = 0
-
-                    ai_move = corner_row, corner_col
+            ai_move = try_block_corner_trap(board)
 
     # if a special case rule above haven't picked a position...
     if not ai_move:
