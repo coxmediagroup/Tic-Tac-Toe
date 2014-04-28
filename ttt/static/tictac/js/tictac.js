@@ -46,6 +46,12 @@ define([
 
         space_clicked: function(e) {
 
+          // If the game is over, then it's _over_. Sorry.
+          //
+          if (this.model.attributes['game_over']) {
+            return;
+          }
+
           // If a space is clicked, play it.
           var target = e.target;
           var pos = $(target).data('position');

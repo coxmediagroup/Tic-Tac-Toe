@@ -62,11 +62,11 @@ def game_board(request, game_id=None):
     if game:
         players = [
             {'name':p['first_name'], 'number':p['gameplayers__number'],
-                'avatar':p['avatar'], 'symbol':p['gameplayers__symbol'],
+                'symbol':p['gameplayers__symbol'],
                 'auto':p['auto'], }
 
             for p in game.players.values('first_name',
-                'gameplayers__number','avatar','gameplayers__symbol',
+                'gameplayers__number','gameplayers__symbol',
                 'auto').order_by('gameplayers__number')]
 
         game_resp = {

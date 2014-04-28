@@ -57,6 +57,9 @@ body {
     background: -ms-linear-gradient(top,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fbfc', endColorstr='#add9e4',GradientType=0 ); /* IE6-9 */
+
+    white-space: nowrap;
+
 }
 
 h3.player  {
@@ -99,7 +102,8 @@ h3.next_player {
 }
 
 .start-new-game {
-    margin-top: 1em;
+    margin-top: 2em;
+    margin-bottom: 3em;
 }
 
 .next_player:before {
@@ -112,7 +116,9 @@ h3.next_player {
     float: left;
 }
 
-
+.board-game-over {
+    opacity: 0.4;
+}
 
 .winner {
     background: yellow;
@@ -156,6 +162,7 @@ h3.next_player {
     top: 150px;
     font-family: 'Carter One';
     font-size: 72px;
+    white-space: nowrap;
 }
 
 .game-over {
@@ -173,6 +180,7 @@ h3.next_player {
     font-size: 48px;
     position: absolute;
     top: 100px;
+    white-space: nowrap;
 }
 
 .has-winner {

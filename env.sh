@@ -5,7 +5,7 @@ echo Checking for virtualenv
 virtualenv --version > /dev/null|| pip install virtualenv
 
 
-mkdir -p var/bin
+mkdir -p var/bin var/tmp var/log var/etc
 if [ ! -e var/bin/activate ]; then
     echo Creating virtual environment...
     virtualenv var > /dev/null

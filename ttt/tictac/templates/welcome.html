@@ -87,7 +87,7 @@
       </div>
 
       <!-- Board -->
-        <div class="col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2 board-holder"></div>
+        <div class="col-xs-12 col-md-10 col-md-offset-1 board-holder"></div>
 
       <!-- Javascript -->
         <script data-main="{% static "tictac/js/main.js" %}" src="{% static "tictac/js/require.js" %}"></script>
@@ -97,14 +97,15 @@
         <script type="text/template" class="template">
 
         <div class="col-xs-12 col-md-12">
-            <div class="board col-xs-6 col-md-6">
+            <div class="board col-xs-12 col-md-6">
               <div class="col-xs-12 col-md-12">
-                <div class="col-xs-6 col-md-6 col-md-offset-3 col-xs-offset-3">
+                <div class="col-xs-6 col-md-6 col-xs-offset-3 col-md-offset-0  <%- (attributes["game_over"]) ? "board-game-over":"" %>">
                 <% _.each(attributes["state"], function( c, i ) {
                     var cols = attributes["columns"];
 
                     var symbol = c == " " ? c : attributes["players"][c]["symbol"];
-                    var playable = (c == " ") && (attributes["playing"]) ? "playable" : "notplayable"; %>
+                    var playable = (c == " ") && (attributes["playing"]) &&
+                            (!attributes["game_over"]) ? "playable" : "notplayable"; %>
                     <% if ((i % cols) == 0) { %><div class="board-row row-<%- i / cols %>"><% } %>
                     <div data-position="<%- i %>" class="board-square <%- playable %>"><div class="square-content player<%- c %>"><div class="play"><%- symbol %></div></div></div>
                     <% if (((i+1) % cols ) == 0) { %></div><% } %>
@@ -114,13 +115,12 @@
 
                 <% if ((attributes["game_over"]) || (attributes["playing"] == false)) { %>
                     <div class="start-new-game col-xs-12 col-md-12">
-                    <div class="col-xs-3 col-md-3"></div>
-                    <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-6 col-md-6 btn btn-primary fadeIn">Start New Game</button>
+                    <button data-toggle="modal" data-target="#newGameModal" name="newGame" class="col-xs-12 col-md-6 btn btn-primary fadeIn col-xs-offset-0 col-md-offset-3">Start New Game</button>
                     </div>
                 <% } %>
             </div>
 
-            <div class="board col-xs-6 col-md-6">
+            <div class="board col-xs-12 col-md-6">
                 <% if (attributes["players"]) { %>
                     <% _.each(attributes["players"], function( player, i ) { %>
                         <div class="player">
@@ -141,7 +141,7 @@
                 winner_name = 'A Draw!';
             } %>
 
-            <div class="col-xs-6 col-md-6 has-winner-overlay">
+            <div class="col-xs-12 col-md-6 has-winner-overlay">
                 <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
 
                     <div class="has-winner-background" style="margin-left: -2px; margin-top: -1px;"><%- winner_name %></div>
@@ -156,7 +156,7 @@
               </div>
             </div>
 
-            <div class="col-xs-6 col-md-6 game-over-overlay">
+            <div class="col-xs-12 col-md-6 game-over-overlay">
                 <div class="popIn col-xs-8 col-md-8 col-md-offset-2 col-xs-offset-2">
                     <div class="game-over-background" style="margin-left: -2px; margin-top: -1px;">Game Over</div>
                     <div class="game-over-background" style="margin-left: 0px; margin-top: -1px;">Game Over</div>
