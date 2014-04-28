@@ -31,12 +31,13 @@ ROWS = [((n, 0), (n, 1), (n, 2)) for n in range(3)]
 COLUMNS = [((0, n), (1, n), (2, n)) for n in range(3)]
 DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
 LINES = ROWS + COLUMNS + DIAGONALS
+ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
 
 
-def organize_line(line, board):
+def organize_cells(cells, board):
     """Get an (X_cells, O_cells, empty_cells) tuple for `line`.
 
-    :param line: A sequence of ``(row, col)`` pairs (e.g. from ``LINES``)
+    :param cells: A sequence of ``(row, col)`` pairs (e.g. from ``LINES``)
     :param board: The board model.
 
     :returns: A tuple, where each tuple is a sequence of positions.
@@ -48,7 +49,7 @@ def organize_line(line, board):
         ...     ' X ',
         ...     '   ',
         ... ]
-        >>> x_cells, o_cells, empty_cells = organize_line([(0, 0), (1, 1), (2, 2)], board)
+        >>> x_cells, o_cells, empty_cells = organize_cells([(0, 0), (1, 1), (2, 2)], board)
         >>> set(x_cells) == {(0, 0), (1, 1)}
         True
         >>> set(o_cells) == set()
@@ -61,7 +62,7 @@ def organize_line(line, board):
     o_cells = []
     empty_cells = []
 
-    for cell in line:
+    for cell in cells:
         row, col = cell
         cell_value = board[row][col]
         if cell_value == 'X':
@@ -89,7 +90,7 @@ def try_block_opponent(board, ai_piece):
     ai_move = None
 
     for line in LINES:
-        x_cells, o_cells, empty_cells = organize_line(line, board)
+        x_cells, o_cells, empty_cells = organize_cells(line, board)
         if len(x_cells) == 2 and len(empty_cells) == 1:
             ai_move = empty_cells[0]
             break
@@ -111,7 +112,7 @@ def try_win(board, ai_piece):
     ai_move = None
 
     for line in LINES:
-        x_cells, o_cells, empty_cells = organize_line(line, board)
+        x_cells, o_cells, empty_cells = organize_cells(line, board)
         if len(o_cells) == 2 and len(empty_cells) == 1:
             ai_move = empty_cells[0]
             break
@@ -224,5 +225,10 @@ def get_ai_move(board):
         winning_move = try_win(board, 'O')
         if winning_move:
             ai_move = winning_move
+
+    # nothing obvious to do so take any empty cell
+    if not ai_move:
+        _, _, empty_cells = organize_cells(ENTIRE_BOARD, board)
+        ai_move = empty_cells[0]
 
     return 'O', ai_move

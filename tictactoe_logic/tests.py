@@ -208,3 +208,25 @@ class AITest(unittest.TestCase):
         _, ai_response = logic.get_ai_move(board)
 
         self.assertEqual((2, 0), ai_response)
+
+    def test_marks_empty_cell_when_no_trap_or_block_or_win(self):
+        """Marks a cell when there are no traps or wins to move against,"""
+        board = [
+            'X  ',
+            'OOX',
+            'XXO',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertIn(ai_response, ((0, 1), (0, 2)))
+
+        board = [
+            'XXO',
+            'OOX',
+            'X  ',
+        ]
+
+        _, ai_response = logic.get_ai_move(board)
+
+        self.assertIn(ai_response, ((2, 1,), (2, 2)))
