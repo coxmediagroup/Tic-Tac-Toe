@@ -28,6 +28,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     });
     this._turn = 'X';
     this.moves = 0;
+    this.moveList = [];
   };
 
   this.winner = function() {
@@ -76,6 +77,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
 
     if (this[cell] === '') {
       this.moves++;
+      this.moveList.push(cell);
       this[cell] = this._turn;
       this._turn = (this._turn === 'X') ? 'O' : 'X';
     } else {
@@ -111,7 +113,7 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
         var cell = col + row;
         rowBuff.push(that[cell] || ' ');
       });
-      buff.push(rowBuff.join('|'));
+      buff.push(rowBuff.join('|') + ((row === 1) ? ' ' + that.moveList.join('-') : ''));
     });
 
     return buff.join('\n-+-+-\n');

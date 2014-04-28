@@ -1,5 +1,11 @@
 'use strict';
 
+// Strategy based on http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+// Newell and Simon's 1972 tic-tac-toe program
+// Kevin Crowley, Robert S. Siegler (1993). 
+// "Flexible Strategy Use in Young Children’s Tic-Tac-Toe".
+// Cognitive Science 17 (4): 531–561. doi:10.1016/0364-0213(93)90003-Q
+
 angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
       function Tictactoewinner(Gameboard) {
   
@@ -90,29 +96,30 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     return move;
   };
 
-  this.blockFork = function(player) {
+  this.blockFork = function(player, logit) {
     var that = this;
     var move = '';
     var forks = [];
+    var foundForks = {};
+
     Gameboard.eachEmptyCell(function(move1) {
       var after1 = Gameboard.hypothetical(move1);
       after1.eachEmptyCell(function(move2) {
         var after2 = after1.hypothetical(move2);
         var defend = that.defend(player, true, after2);
-        if (defend.length > 1) {
+        if (defend.length > 1 && !foundForks[move2]) {
           forks.push(move2);
+          foundForks[move2] = 1;
         }
       });
     });
 
+    if (logit) console.info('forks detected', forks, foundForks);
     if (forks.length === 1) {
       move = forks[0];
     } else if (forks.length > 1) {
-
-      // if there are is than one move that could cause a fork
+      // if there is than one move that could cause a fork
       // then try and divert the player by going on the offensive
-      var forks2 = {};
-      angular.forEach(forks, function(f) { forks2[f] = 1; });
 
 
       angular.forEach(Gameboard.WINNING_SEQUENCES, function(seq) {
@@ -121,6 +128,8 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
         }
         var emptyCount = 0;
         var playerCount = 0;
+
+
         angular.forEach(seq, function(cell) {
           if (Gameboard[cell] === player) {
             playerCount++;
@@ -132,15 +141,29 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
         // this might work, lets make sure the other player
         // has to play an unforkable cell to block this win
         if (playerCount === 1 && emptyCount === 2) {
-          angular.forEach(seq, function(cell) {
-            if (move) {
-              return; // we found a move, stop trying
-            }
+  
+          if (logit) console.info('trying counter offensive', seq.join('-'));
 
-            if (Gameboard[cell] === '' && forks2[cell] !== 1) {
-              move = cell;
+          // what cells could we take?
+          var possibilites = [];
+
+
+          // first get 2 empties
+          angular.forEach(seq, function(cell) {
+            if (Gameboard[cell] === '') {
+              possibilites.push(cell);
             }
           });
+
+          if (logit) console.log('possibilites', possibilites);
+
+          if (!foundForks[possibilites[0]] && !foundForks[possibilites[1]]) {
+            move = possibilites[0];
+          } else if (foundForks[possibilites[0]] && !foundForks[possibilites[1]]) {
+            move = possibilites[0];
+          } else if (!foundForks[possibilites[0]] && foundForks[possibilites[1]]) {
+            move = possibilites[1];
+          }
 
         }
 
@@ -192,11 +215,19 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     return move;
   };
 
+  this.openingMoveForO = function() {
+    // if X didn't take center, take it
+    if (Gameboard['B2'] !== 'X') {
+      return 'B2';
+    } else {
+      return 'A1';
+    }
 
+  };
 
   this.suggestMoveFor = function(player) {
 
-    if (player === 'X') {
+    if (player === 'X' || Gameboard.moves > 1) {
       return (this.winningMove(player) ||
         this.defend(player) ||
         this.forkOpponent(player) ||
@@ -207,25 +238,10 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
         this.takeAnySide(player) ||
         this.punt());
 
-    } else {
+    } else { // first move for O
 
-      var xStartCenterCounter = '';
-      if (Gameboard.moves === 1) {
-        if (Gameboard['B2'] === 'X') {
-          xStartCenterCounter = this.takeAnyCorner(player);
-        }
-      }
+      return this.openingMoveForO() || this.punt();
 
-      return (this.winningMove(player) ||
-        this.defend(player) ||
-        this.forkOpponent(player) ||
-        this.blockFork(player) ||
-        this.takeCenterIfWeCan() ||
-        xStartCenterCounter ||
-        this.takeAnySide(player) ||
-        this.takeAnOppositeCorner(player) ||
-        this.takeAnyCorner(player) ||
-        this.punt());
 
 
     }

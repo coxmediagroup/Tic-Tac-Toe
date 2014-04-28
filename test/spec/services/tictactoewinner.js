@@ -140,11 +140,69 @@ describe('Service: TicTacToeWinner', function () {
     expect(TicTacToeWinner.defend('X')).not.toBe('');
   });
 
+  // Added this test because internally blockFork was working incorrectly
+  // it thought there was more then one way to fork, so it tried to go 
+  // on the offensive, but it played right into X's hands
+  // this was because it logged 3 ways A1 could be a fork, and "thought"
+  // this was 3 possible forks
+  it('should detect a fork to block (A2-B2-B1', function() {
+    Gameboard.play('A2');
+    Gameboard.play('B2');
+    Gameboard.play('B1');
+    // Used to play C3
+
+    var forkBlock = TicTacToeWinner.blockFork('O');
+    var suggestedMove = TicTacToeWinner.suggestMoveFor('O');
+
+    expect(suggestedMove).not.toBe('C3'); // bad move, plays into X's hands
+    expect(forkBlock).not.toBe('');
+    expect(forkBlock).toBe(suggestedMove);
+  });
+
+  it('should detect a fork to block (B2-A1-C3)', function() {
+    Gameboard.play('B2');
+    Gameboard.play('A1');
+    Gameboard.play('C3');
+    // Used to play B1
+
+    var forkBlock = TicTacToeWinner.blockFork('O');
+    var suggestedMove = TicTacToeWinner.suggestMoveFor('O');
+
+
+    expect(suggestedMove).not.toBe('B1'); // bad move, plays into X's hands
+  });
+
+  it('should detect a fork to block (A1-B2-C3)', function() {
+    Gameboard.play('A1');
+    Gameboard.play('B2');
+    Gameboard.play('C3');
+    // Used to play A3
+
+    // When O was playing A3, it was in error
+    // internally, O should've tried a diversion
+    // with a non-diagonal win, but it was failing to do that
+    // because there was no check for when a sequence of 3 
+    // didn't have any potential for X to fork
+    //
+    // X| |  A1-B2-C3-A3-C1-B1-C2
+    // -+-+-
+    //  |O| 
+    // -+-+-
+    // O| |X
+
+
+    var forkBlock = TicTacToeWinner.blockFork('O');
+    var suggestedMove = TicTacToeWinner.suggestMoveFor('O');
+
+
+    expect(suggestedMove).not.toBe('A3'); // bad move, plays into X's hands
+  });
+
 
   it('should always win against randomized X opponent', function () {
     var wins = 0;
 
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 100; i++) {
       var humanMoves = ['A1', 'B3', 'C2', 'C1', 'B2', 'A3', 'C3', 'A2', 'B1'];
 
       for (var j = 0; j < humanMoves.length; j++) {
@@ -175,25 +233,25 @@ describe('Service: TicTacToeWinner', function () {
 
         var compMove = TicTacToeWinner.suggestMoveFor('O');
         Gameboard.play(compMove);
-        
+
 
         if (Gameboard.winner() !== '') break;
 
       }
-      if (Gameboard.winner() === 'O') {
+      if (Gameboard.winner() !== 'X') {
         wins++;
       }
 
       Gameboard.reset();
     }
 
-    expect(wins > 40).toBe(true);
+    expect(wins).toBe(100);
 
   });
 
   it('should always win against randomized O opponent', function () {
     var wins = 0;
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 100; i++) {
       var humanMoves = ['A1', 'B3', 'C2', 'C1', 'B2', 'A3', 'C3', 'A2', 'B1'];
 
       // shuffle moves
@@ -230,11 +288,12 @@ describe('Service: TicTacToeWinner', function () {
 
       }
 
-      if (Gameboard.winner() === 'X') wins++;
+      if (Gameboard.winner() !== 'O') wins++;
+
 
       Gameboard.reset();
     }
 
-    expect(wins > 40).toBe(true);
+    expect(wins).toBe(100);
   });
 });
