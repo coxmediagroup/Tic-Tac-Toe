@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('ticTacToeApp').controller('MainCtrl', function ($scope, Gameboard, TicTacToeWinner) {
+angular.module('ticTacToeApp')
+.controller('MainCtrl', 
+function ($scope, Gameboard, TicTacToeWinner, $timeout) {
+
   $scope.rows = [1, 2, 3];
   $scope.cols = ['A', 'B', 'C'];
   $scope.board = Gameboard;
@@ -15,6 +18,50 @@ angular.module('ticTacToeApp').controller('MainCtrl', function ($scope, Gameboar
   $scope.wins = 0;
   $scope.losses = 0;
   $scope.draws = 0;
+
+  $scope.wopr = function() {
+    Gameboard.reset();
+    $scope.winner = '';
+    $scope.neverStarted = false;
+
+    var turnTime = 750;
+    var maxTime = 20000;
+    var startTime = (new Date()).getTime();
+    var turn = 'X';
+
+    // disable normal turns
+    var normalPlayTurn = $scope.playTurn;
+    $scope.playTurn = angular.noop;
+
+    var playWopr = function () {
+      var t = (new Date()).getTime() - startTime;
+
+      if ($scope.winner) {
+        turn = 'X';
+        Gameboard.reset();
+        $scope.winner = '';
+
+        if (t >= maxTime) {
+          $scope.playTurn = normalPlayTurn;
+          return;
+        }
+
+      } else {
+        Gameboard.play(TicTacToeWinner.suggestMoveFor(turn));
+        turn = (turn === 'X') ? 'O' : 'X';
+      }
+
+      $scope.winner = Gameboard.winner();
+
+      if (turnTime > 25) {
+        turnTime -= 25;
+      }
+      $timeout(playWopr, turnTime);
+    };
+
+    playWopr();
+
+  };
 
 
   $scope.playTurn = function(cell) {
@@ -49,6 +96,8 @@ angular.module('ticTacToeApp').controller('MainCtrl', function ($scope, Gameboar
       Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
     }
   };
+
+
 
   $scope.$watch('winner', function(winner) {
     if (winner) {

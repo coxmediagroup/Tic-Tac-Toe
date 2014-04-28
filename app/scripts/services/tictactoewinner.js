@@ -220,9 +220,8 @@ angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
     if (Gameboard['B2'] !== 'X') {
       return 'B2';
     } else {
-      return 'A1';
+      return ['A1', 'A3', 'C1', 'C3'][Math.floor(Math.random() * 4)];
     }
-
   };
 
   this.suggestMoveFor = function(player) {

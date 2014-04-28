@@ -1,8 +1,6 @@
 'use strict';
 
 angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
-
-
   this.WINNING_SEQUENCES = [
     // row wins
     ['A1', 'B1', 'C1'],
@@ -117,7 +115,6 @@ angular.module('ticTacToeApp') .service('Gameboard', function Gameboard() {
     });
 
     return buff.join('\n-+-+-\n');
-
   };
 
   this.reset();
