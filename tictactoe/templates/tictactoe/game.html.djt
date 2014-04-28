@@ -42,6 +42,8 @@
             {% endfor %}
         </table>
 
+        <h2 class="game-state-output"></h2>
+
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

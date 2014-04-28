@@ -59,7 +59,7 @@ class HandleMoveTest(django.test.TestCase):
         board = json.dumps([
             'XOO',
             'OXX',
-            'XX ',
+            'XXO',
         ])
 
         resp = self.client.post(self.ai_url, data=board,

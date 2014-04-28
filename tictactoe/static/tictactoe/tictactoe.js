@@ -86,6 +86,20 @@ function updateBoard(boardModel) {
 }
 
 
+/**
+ * Update the page based on the server's response.
+ *
+ * The response includes the new game state as well as the AI's move.
+ */
+function handleResponse(response) {
+    updateBoard(response.board);
+    var state = response['state'];
+    if(state == "DRAW") {
+        $(".game-state-output").text("Draw!");
+    }
+}
+
+
 $(document).ready(function() {
 
     $("#tictactoe-board td").click(function() {
@@ -97,9 +111,7 @@ $(document).ready(function() {
                 type: "POST",
                 data: boardData,
                 contentType: 'application/json; charset=utf-8',
-                success: function(response) {
-                    updateBoard(response.board);
-                },
+                success: handleResponse,
                 headers: {
                     "X-CSRFToken": window.CSRF_TOKEN
                 }
