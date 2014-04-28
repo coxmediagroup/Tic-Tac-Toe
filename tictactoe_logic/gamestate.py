@@ -8,9 +8,19 @@ VICTORY = 'victory'
 class GameInfo:
     """Contains information about the state of the board."""
 
-    def __init__(self, win_cells):
+    def __init__(self, winner, win_cells):
+        """Create a new GameInfo.
+
+        :type  winner: str
+        :param winner: The player who won; either 'X' or 'O'
+
+        :type  win_cells: sequence
+        :param win_cells:
+            The cells that make up the line that the winning player completed
+
+        """
         self.state = VICTORY
-        self.winner = 'X'
+        self.winner = winner
         self.win_cells = win_cells
 
 
@@ -22,9 +32,14 @@ def check_board(board):
 
     """
     win_row = None
+    winner = None
     for row in board_model.ROWS:
         x_cells, o_cells, empty_cells = board_model.organize_cells(row, board)
         if len(x_cells) == 3:
             win_row = row
+            winner = 'X'
+        elif len(o_cells) == 3:
+            win_row = row
+            winner = 'O'
 
-    return GameInfo(win_row)
+    return GameInfo(winner, win_row)
