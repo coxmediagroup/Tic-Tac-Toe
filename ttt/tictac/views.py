@@ -15,8 +15,8 @@ def welcome(request):
     Main entry for our game.
     """
 
-    initial={'player1_auto':False, 'player2_auto':True,
-             'player2':'Joshua'}
+    initial={'player1_auto':False, 'player1_symbol': '0',
+             'player2_auto':True, 'player2':'Joshua', 'player2_symbol' : '1'}
     game_id = request.session.get('game_id')
     try:
         if game_id:
