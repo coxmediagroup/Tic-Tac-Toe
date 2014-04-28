@@ -4,14 +4,13 @@ Background
 
 Web-based tic tac toe game for Cox Media Group.
 
-The app uses:
+The app uses::
 
-=============  =============
 python         backbone
 django 1.6     underscore
                jquery
                bootstrap3
-=============  =============
+
 
 
 and the front-end has been tested in:
