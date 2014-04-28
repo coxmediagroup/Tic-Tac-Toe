@@ -29,6 +29,9 @@ DIAGONALS = [TOP_LEFT_TO_BOTTOM_RIGHT, TOP_RIGHT_TO_BOTTOM_LEFT]
 LINES = ROWS + COLUMNS + DIAGONALS
 
 
+ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
+
+
 def organize_cells(cells, board):
     """Get an (X_cells, O_cells, empty_cells) tuple for `cells`.
 

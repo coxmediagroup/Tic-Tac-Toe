@@ -103,3 +103,25 @@ class GameStateTest(unittest.TestCase):
         info = gamestate.check_board(board)
 
         self.assertEqual(gamestate.INCOMPLETE, info.state)
+
+    def test_incomplete_board_detected(self):
+        board = [
+            '   ',
+            ' X ',
+            '   ',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.INCOMPLETE, info.state)
+
+    def test_full_board_is_draw(self):
+        board = [
+            'XXO',
+            'OOX',
+            'XOX',
+        ]
+
+        info = gamestate.check_board(board)
+
+        self.assertEqual(gamestate.DRAW, info.state)

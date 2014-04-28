@@ -24,10 +24,6 @@ def get_turn_num(board):
     return sum(taken_cells(row) for row in board)
 
 
-# define all lines that are checked for victory
-ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
-
-
 def try_block_opponent(board, ai_piece):
     """Look for imminent wins from the opponent and attempt to block them.
 
@@ -249,7 +245,10 @@ def get_ai_move(board):
 
     # nothing obvious to do so take any empty cell
     if not ai_move:
-        _, _, empty_cells = board_model.organize_cells(ENTIRE_BOARD, board)
+
+        _, _, empty_cells = \
+            board_model.organize_cells(board_model.ENTIRE_BOARD, board)
+
         ai_move = empty_cells[0]
 
     return 'O', ai_move

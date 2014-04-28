@@ -1,27 +1,22 @@
 """Provide tools to check the Tic-Tac-Toe game state."""
 from . import board_model
 
+
 # constants used for the GameInfo.state property
 VICTORY = 'victory'
 INCOMPLETE = 'incomplete'
+DRAW = 'draw'
 
 
 class GameInfo:
     """Contains information about the state of the board."""
 
-    @classmethod
-    def victory(cls, winner, win_cells):
-        return cls(VICTORY, winner, win_cells)
-
-    @classmethod
-    def incomplete(cls):
-        return cls(INCOMPLETE, None, None)
-
-    def __init__(self, state, winner, win_cells):
+    def __init__(self, state, winner=None, win_cells=None):
         """Create a new GameInfo.
 
         :param state:
-            The current game state. Either ``VICTORY`` or ``INCOMPLETE``
+            The current game state. Either ``VICTORY``, ``INCOMPLETE`` or
+            ``DRAW``
 
         :type  winner: str
         :param winner:
@@ -57,7 +52,13 @@ def check_board(board):
             win_cells = line
             winner = 'O'
 
+    _, _, empty_cells = board_model.organize_cells(board_model.ENTIRE_BOARD,
+                                                   board)
+    board_is_full = not empty_cells
+
     if win_cells:
-        return GameInfo.victory(winner, win_cells)
+        return GameInfo(VICTORY, winner, win_cells)
+    elif board_is_full:
+        return GameInfo(DRAW)
     else:
-        return GameInfo.incomplete()
+        return GameInfo(INCOMPLETE)
