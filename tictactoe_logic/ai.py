@@ -25,12 +25,9 @@ def get_turn_num(board):
 
 
 # define all lines that are checked for victory
-COLUMNS = [((0, n), (1, n), (2, n)) for n in range(3)]
-LINES = board_model.ROWS + COLUMNS + board_model.DIAGONALS
 ENTIRE_BOARD = [(row, col) for row in range(3) for col in range(3)]
 
 
-# TODO: block properly when AI is playing as X
 def try_block_opponent(board, ai_piece):
     """Look for imminent wins from the opponent and attempt to block them.
 
@@ -44,7 +41,7 @@ def try_block_opponent(board, ai_piece):
     """
     ai_move = None
 
-    for line in LINES:
+    for line in board_model.LINES:
         x_cells, o_cells, empty_cells = board_model.organize_cells(line,
                                                                    board)
         if len(x_cells) == 2 and len(empty_cells) == 1:
@@ -67,7 +64,7 @@ def try_win(board, ai_piece):
     """
     ai_move = None
 
-    for line in LINES:
+    for line in board_model.LINES:
         x_cells, o_cells, empty_cells = board_model.organize_cells(line,
                                                                    board)
         if len(o_cells) == 2 and len(empty_cells) == 1:

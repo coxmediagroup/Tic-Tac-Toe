@@ -33,7 +33,7 @@ def check_board(board):
     """
     win_cells = None
     winner = None
-    for line in (board_model.ROWS + board_model.DIAGONALS):
+    for line in board_model.LINES:
         x_cells, o_cells, empty_cells = board_model.organize_cells(line, board)
         if len(x_cells) == 3:
             win_cells = line
