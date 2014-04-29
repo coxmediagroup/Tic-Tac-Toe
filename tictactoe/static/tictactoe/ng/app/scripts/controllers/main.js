@@ -20,6 +20,9 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
   $scope.draws = 0;
 
   var makePermalink = function() {
+    if (!currentSite.domain) {
+      return;
+    }
     var u = currentSite.domain;
     if (u.charAt(u.length-1) !== '/') {
       u += '/';
