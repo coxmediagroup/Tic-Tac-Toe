@@ -101,8 +101,3 @@ COMPRESS_CSS_FILTERS = [
 
 COMPRESS_ENABLED = True
 
-try:
-    from local_settings import *
-except:
-    pass
-
