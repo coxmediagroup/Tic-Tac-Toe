@@ -1,4 +1,4 @@
-= Challenge Complete! Again!
+# Challenge Complete! Again!
 
 The first iteration I had of this project I did as an Angular SPA app. The
 line in the README "it is not a requirement that you implement your 
@@ -18,7 +18,7 @@ Since the first interview I took the following steps:
 1. An admin backend allows you to browse game history (will email a username and password)
 1. To replace Yeoman/Grunt/uglify I implemented [django-compressor](http://django-compressor.readthedocs.org/en/latest/)
 
-= Installation
+# Installation
 
 I use virtualenv for everything. Here's how to setup if you want to try running locally:
     
