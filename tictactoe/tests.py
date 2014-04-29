@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+
 class FrontEndTestCase(TestCase):
     def test_everything_via_karma(self):
         import subprocess, os

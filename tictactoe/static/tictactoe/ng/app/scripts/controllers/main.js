@@ -2,7 +2,7 @@
 
 angular.module('ticTacToeApp')
 .controller('MainCtrl', 
-function ($scope, Gameboard, TicTacToeWinner, $timeout) {
+function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSite) {
 
   $scope.rows = [1, 2, 3];
   $scope.cols = ['A', 'B', 'C'];
@@ -18,6 +18,18 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout) {
   $scope.wins = 0;
   $scope.losses = 0;
   $scope.draws = 0;
+
+  var makePermalink = function() {
+    var u = currentSite.domain;
+    if (u.charAt(u.length-1) !== '/') {
+      u += '/';
+    }
+
+    u += '' + $scope.xy + '-' + Gameboard.moveList.join('-');
+
+    $scope.permalink = u;
+
+  };
 
   $scope.wopr = function() {
     Gameboard.reset();
@@ -71,6 +83,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout) {
 
     try {
       Gameboard.play(cell);
+      makePermalink();
     } catch (e) {
       // cell already played
       return;
@@ -95,6 +108,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout) {
     if ($scope.opponent === 'X') {
       Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
     }
+    makePermalink();
   };
 
 
@@ -118,6 +132,30 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout) {
 
     }
   });
+
+  if (continueGame.gameSoFar.length > 0) {
+    $scope.neverStarted = false;
+    Gameboard.reset();
+    $scope.xy = continueGame.player;
+    $scope.winner = '';
+    $scope.canStartGame = false;
+    $scope.opponent = ($scope.xy === 'X') ? 'O' : 'X';
+
+    var turn = 'X';
+    angular.forEach(continueGame.gameSoFar, function(move) {
+      try {
+        Gameboard.play(move)
+        turn = (turn === 'X') ? 'O' : 'X';
+      } catch(e) {}
+    });
+
+    if (turn === $scope.opponent) {
+      Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
+    }
+    makePermalink();
+
+  }
+
 
 });
 

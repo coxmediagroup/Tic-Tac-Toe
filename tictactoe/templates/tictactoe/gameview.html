@@ -2,10 +2,17 @@
 {% load staticfiles %}
 
 {% block app_content %}
+
   <div ng-app="ticTacToeApp">
     <div class="container" 
         ng-include="'{% static "tictactoe/ng/app/views/main.html" %}'" 
         ng-controller="MainCtrl">
     </div>
   </div>
+  {% if game_so_far %}
+    <script>
+      window.game_so_far = {{ game_so_far|safe }};
+      window.player = {{ player|safe }};
+    </script>
+  {% endif %}
 {% endblock app_content %}
