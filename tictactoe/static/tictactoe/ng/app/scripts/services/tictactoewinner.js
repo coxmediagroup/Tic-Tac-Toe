@@ -6,8 +6,9 @@
 // "Flexible Strategy Use in Young Children’s Tic-Tac-Toe".
 // Cognitive Science 17 (4): 531–561. doi:10.1016/0364-0213(93)90003-Q
 
-angular.module('ticTacToeApp').service('TicTacToeWinner', ['Gameboard',
-      function Tictactoewinner(Gameboard) {
+angular.module('ticTacToeApp').service('TicTacToeWinner', 
+['Gameboard',
+function Tictactoewinner(Gameboard) {
   
   var OPPOSITE_CORNERS = {
     'A1':'C3',

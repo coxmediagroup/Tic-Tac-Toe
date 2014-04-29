@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'compressor',
     'south',
     'tictactoe',
 )
@@ -84,3 +85,24 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    'compressor.finders.CompressorFinder',
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+)
+
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+
+COMPRESS_ENABLED = True
+
+try:
+    from local_settings import *
+except:
+    pass
+

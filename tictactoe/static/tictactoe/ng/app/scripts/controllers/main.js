@@ -2,6 +2,8 @@
 
 angular.module('ticTacToeApp')
 .controller('MainCtrl', 
+[ 
+'$scope', 'Gameboard', 'TicTacToeWinner', '$timeout', 'continueGame', 'currentSite', '$http', 'csrf',
 function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSite, $http, csrf) {
 
   $scope.rows = [1, 2, 3];
@@ -172,5 +174,5 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
   }
 
 
-});
+}]);
 

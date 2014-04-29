@@ -3,3 +3,4 @@
 tictactoe/static/tictactoe/ng/node_modules
 *.pyc
 db.sqlite3
+static_out/CACHE

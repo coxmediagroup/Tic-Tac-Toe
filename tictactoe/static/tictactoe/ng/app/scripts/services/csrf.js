@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('ticTacToeApp') .service('csrf', function Gameboard($http) {
+angular.module('ticTacToeApp') .service('csrf', 
+['$http',
+function Gameboard($http) {
   var cookieValue = '';
   if (document.cookie) {
     var dc = document.cookie;
@@ -12,4 +14,4 @@ angular.module('ticTacToeApp') .service('csrf', function Gameboard($http) {
   }
   $http.defaults.headers.common['X-CSRFToken'] = cookieValue;
   return cookieValue;
-});
+}]);
