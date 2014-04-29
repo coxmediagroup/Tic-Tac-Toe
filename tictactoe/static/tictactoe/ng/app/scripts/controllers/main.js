@@ -2,7 +2,7 @@
 
 angular.module('ticTacToeApp')
 .controller('MainCtrl', 
-function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSite) {
+function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSite, $http, csrf) {
 
   $scope.rows = [1, 2, 3];
   $scope.cols = ['A', 'B', 'C'];
@@ -19,8 +19,9 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
   $scope.losses = 0;
   $scope.draws = 0;
 
-  var makePermalink = function() {
-    if (!currentSite.domain) {
+  $scope.makePermalink = function() {
+    if (!currentSite.domain || Gameboard.moveList.length === 0) {
+      $scope.permalink = '#';
       return;
     }
     var u = currentSite.domain;
@@ -28,7 +29,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
       u += '/';
     }
 
-    u += '' + $scope.xy + '-' + Gameboard.moveList.join('-');
+    u += '' + $scope.xy + '-' + Gameboard.moveList.join('-') + '/';
 
     $scope.permalink = u;
 
@@ -46,6 +47,9 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
 
     // disable normal turns
     var normalPlayTurn = $scope.playTurn;
+    var normalPermalink = $scope.makePermalink;
+    $scope.makePermalink = angular.noop;
+
     $scope.playTurn = angular.noop;
 
     var playWopr = function () {
@@ -58,6 +62,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
 
         if (t >= maxTime) {
           $scope.playTurn = normalPlayTurn;
+          $scope.makePermalink = normalPermalink;
           return;
         }
 
@@ -86,7 +91,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
 
     try {
       Gameboard.play(cell);
-      makePermalink();
+      $scope.makePermalink();
     } catch (e) {
       // cell already played
       return;
@@ -95,6 +100,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
     if (!$scope.winner) {
       Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
       $scope.winner = Gameboard.winner();
+      $scope.makePermalink();
     }
   };
 
@@ -111,7 +117,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
     if ($scope.opponent === 'X') {
       Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
     }
-    makePermalink();
+    $scope.makePermalink();
   };
 
 
@@ -136,6 +142,12 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
     }
   });
 
+  $scope.$watch('permalink', function() {
+    if ($scope.permalink && $scope.permalink !== '#') {
+      $http.post($scope.permalink);
+    }
+  });
+
   if (continueGame.gameSoFar.length > 0) {
     $scope.neverStarted = false;
     Gameboard.reset();
@@ -155,7 +167,7 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
     if (turn === $scope.opponent) {
       Gameboard.play(TicTacToeWinner.suggestMoveFor($scope.opponent));
     }
-    makePermalink();
+    $scope.makePermalink();
 
   }
 

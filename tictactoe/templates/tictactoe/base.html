@@ -31,6 +31,7 @@
 <script src="{% static 'tictactoe/ng/app/scripts/services/TicTacToeWinner.js' %}"></script>
 <script src="{% static 'tictactoe/ng/app/scripts/services/continuegame.js' %}"></script>
 <script src="{% static 'tictactoe/ng/app/scripts/services/currentsite.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/scripts/services/csrf.js' %}"></script>
 <script>
 {% if current_site %}
 window.current_site = {{ current_site|safe }};

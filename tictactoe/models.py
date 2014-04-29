@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 import re
 
@@ -28,8 +28,38 @@ class Game(models.Model):
     winner = models.CharField(max_length=1, blank=True, validators=[validators.is_x_or_o])
 
 
+    @staticmethod
+    @transaction.commit_on_success
+    def create_or_append(pk, ip, player, so_far):
+        try:
+            if not pk:
+                raise Game.DoesNotExist
+                
+            gmodel = Game.objects.get(pk=pk)
+            ml = gmodel.move_list()
+            if ml == so_far:
+                return gmodel
+            elif so_far.startswith(ml):
+                so_far = so_far.split('-')
+                ml = ml.split('-')
+                while len(ml) < len(so_far):
+                    gmodel.moves.create(cell=so_far[len(ml)])
+                    ml.append(so_far[len(ml)])
+                return gmodel
+            else:
+                raise Game.DoesNotExist
+
+        except Game.DoesNotExist:
+            gmodel = Game(ip=ip, player=player  )
+            gmodel.save()
+            so_far = so_far.split('-')
+            for c in so_far:
+                gmodel.moves.create(cell=c)
+            return gmodel
+
     def move_list(self):
-        pass
+        return '-'.join([m.cell for m in self.moves.all()])
+
 
     def find_winner(self):
         board = {}
