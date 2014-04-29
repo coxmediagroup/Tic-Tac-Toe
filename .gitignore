@@ -1,6 +1,5 @@
 .tmp
 .sass-cache
-static/ng/app/bower_components
-static/ng/node_modules
+tictactoe/static/tictactoe/ng/node_modules
 *.pyc
 db.sqlite3

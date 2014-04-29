@@ -1,0 +1,34 @@
+{% load staticfiles %}
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" 
+      href="{% static 'tictactoe/ng/app/bower_components/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" 
+      href="{% static 'tictactoe/ng/app/styles/main.css' %}">
+
+
+  </head>
+  <body>
+    {% block app_content %}
+    {% endblock app_content %}
+
+<script src="{% static 'tictactoe/ng/app/bower_components/jquery/jquery.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/bower_components/angular/angular.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/bower_components/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/scripts/app.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/scripts/controllers/main.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/scripts/services/GameBoard.js' %}"></script>
+<script src="{% static 'tictactoe/ng/app/scripts/services/TicTacToeWinner.js' %}"></script>
+
+  </body>
+</html>

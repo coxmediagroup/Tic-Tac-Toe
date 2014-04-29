@@ -1,8 +1,17 @@
 from django.test import TestCase
 
-# Create your tests here.
 class FrontEndTestCase(TestCase):
     def test_everything_via_karma(self):
-        import subprocess
-        code = subprocess.call("static/ng/node_modules/karma/bin/karma start karma.conf.js", shell=True)
-        self.assertEqual(0, code)
+        import subprocess, os
+        old_dir = os.getcwd()
+        try:
+            dname = os.path.split(__file__)[0]
+
+            os.chdir(dname)
+            code = subprocess.call("static/tictactoe/ng/"
+                    "node_modules/karma/bin/karma start karma.conf.js", 
+                    shell=True)
+            self.assertEqual(0, code)
+
+        finally:
+            os.chdir(old_dir)
