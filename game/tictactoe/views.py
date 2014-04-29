@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 
 from game.http import JsonResponse
 
@@ -36,7 +36,7 @@ def play(request):
     return render(request, 'tictactoe/board.html', context)
 
 
-@csrf_exempt
+@csrf_protect
 def make_move(request):
     data = {
         'success': False

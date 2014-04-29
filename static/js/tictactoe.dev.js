@@ -8305,6 +8305,9 @@ tictactoe.config([ "$httpProvider", "$interpolateProvider", function($httpProvid
         }
         return $.param(data);
     };
+    // Thanks to http://stackoverflow.com/questions/18156452/django-csrf-token-angularjs
+    $httpProvider.defaults.xsrfCookieName = "csrftoken";
+    $httpProvider.defaults.xsrfHeaderName = "X-CSRFToken";
 } ]);
 
 tictactoe.controller("TicTacToeCtrl", [ "$scope", "$http", "$timeout", function($scope, $http, $timeout) {
