@@ -32,6 +32,9 @@ function ($scope, Gameboard, TicTacToeWinner, $timeout, continueGame, currentSit
     }
 
     u += '' + $scope.xy + '-' + Gameboard.moveList.join('-') + '/';
+    if (u.substring(0, 4) !== 'http') {
+      u = 'http://' + u;
+    }
 
     $scope.permalink = u;
 
