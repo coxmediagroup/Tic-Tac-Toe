@@ -11,7 +11,7 @@
                         {% if mv  == 0 or mv == 3 or mv == 6 %}<tr>{% endif %}
                             <td ng-controller="TicTacToeCtrl" ng-disabled="btn_state" ng-init="btn_state={% if corner == mv %}true{% else %}false{% endif %}">
                                 <button type="button" ng-init="move={{ mv }}" ng-model="move" id="move_{{ mv }}" ng-disabled="btn_state" class="btn btn-default btn-sm" ng-click="btn_state=true; makeMove()">
-                                    <span ng-init="letter={% if corner == mv %}'X'{% else %}'&nbsp;'{% endif %}">[[ letter ]]</span>
+                                    <span ng-init="letter={% if corner == mv %}'X'{% else %}'&nbsp;'{% endif %}" ng-bind="letter"></span>
                                 </button>
                             </td>
                         {% if mv == 2 or mv == 5 or mv == 8 %}</tr>{% endif %}
