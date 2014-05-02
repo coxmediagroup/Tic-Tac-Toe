@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Tic-Tac-Toe Django app for CMG consideration.">
+    <meta name="author" content="Zebula Sampedro">
+
+    <title>
+    {% block title %}Zebula Sampedro - Tic-Tac-Toe{% endblock title %}
+    </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    {% block extra_style %}
+    <link href="{{ STATIC_URL }}css/jumbotron-narrow.css" rel="stylesheet">
+    {% endblock extra_style %}
+  </head>
+
+  <body>
+  {% block body %}
+    <div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+        {% block nav_links %}
+            <li><a href="https://github.com/ResearchComputing">Research Computing GitHub</a></li>
+            <li><a href="http://www.linkedin.com/pub/zebula-sampedro/5a/b18/292/">My LinkedIn</a></li>
+            <li><a href="mailto:sampedro@colorado.edu?Subject=Zebula,%20I%20LOVED%20your%20tic-tac-toe%20app!">Contact Me</a></li>
+        {% endblock nav_links %}
+        </ul>
+        <h3 class="text-muted">Tic-Tac-Toe</h3>
+      </div>
+      
+      {% block jumbotron %}
+      <div class="jumbotron">
+        <h1>{% block jumbotron_heading %}Tic-Tac-Toe{% endblock jumbotron_heading %}</h1>
+        <p class="lead">
+        {% block jumbotron_subheading %}
+        Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+        {% endblock jumbotron_subheading %}
+        </p>
+        <p>
+        {% block jumbotron_button %}
+        <a class="btn btn-lg btn-success" href="#" role="button">Let's Play!</a>
+        {% endblock jumbotron_button %}
+        </p>
+      </div>
+      {% endblock jumbotron %}
+
+      {% block content %}
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+      </div>
+      {% endblock content %}
+
+      <div class="footer">
+        <p>Zebula Sampedro - For CMG consideration, 2014</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    {% block end_js %}
+    {% endblock end_js %}
+  {% endblock body %}
+  </body>
+</html>
