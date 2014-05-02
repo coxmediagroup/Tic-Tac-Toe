@@ -13,9 +13,7 @@ tictactoe.config([
             }
             return $.param(data);
         };
-        // Thanks to http://stackoverflow.com/questions/18156452/django-csrf-token-angularjs
-        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.defaults.headers.post['X-CSRFToken'] = $('input[name=csrfmiddlewaretoken]').val();
     }
 ]);
 

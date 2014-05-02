@@ -2,6 +2,7 @@
 
 {% block content %}
     <section class="container-fluid" ng-app="tictactoe" ng-init="corner={{ corner }}">
+        {% csrf_token %}
         <div class="col-md-4">&nbsp;</div>
 
         <div class="col-md-4">
