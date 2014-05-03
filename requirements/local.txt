@@ -5,3 +5,4 @@ django-nose==1.2
 
 flake8==2.1.0
 nose-progressive==1.5
+selenium==2.41.0
