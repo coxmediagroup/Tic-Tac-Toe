@@ -1,4 +1,5 @@
 from random import randint
+import json
 
 class gen():
 	def rand(self, ceil):
