@@ -2,8 +2,8 @@ from random import randint
 
 class gen():
 	def rand(self, ceil):
-		# return randint(1, ceil)
-		return ceil
+		return randint(1, ceil)
+		# return ceil
 
 class comp():
 	matrix = None # Global matrix container
@@ -20,9 +20,13 @@ class comp():
 		else:
 			return win
 
-	def check_for_win(self):
+	def check_for_win(self, omatrix = None):
 	#this will check for any posible winning moves.
 		global matrix
+
+		if self.matrix is None:
+			self.matrix = omatrix
+
 		win = None
 		# Logic to detect a winning move goes here.
 		win = 3
@@ -36,9 +40,13 @@ class comp():
 			counter = self.check_for_counter()
 			return counter
 
-	def check_for_counter(self):
+	def check_for_counter(self, omatrix = None):
 	# This will check for a proper counter move.
 		global matrix
+
+		if self.matrix is None:
+			self.matrix = omatrix
+
 		counter = None
 
 		#logic for counter move goes here.
