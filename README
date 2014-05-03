@@ -1,0 +1,30 @@
+This is the readme file for TicTacToe Xtreme 2014!
+
+//
+// Starting the game.
+//
+
+To start the game, one can simply run the 'tictactoe.py' script.
+
+-- *nix instructions (osX or Linux)
+
+Using terminal, navigate to the game directory (where ever it has been saved).
+Once there, run the tictactoe.py python script.
+	
+	$ cd /path/to/tictactoe
+	$ python tictactoe.py
+
+-- Windows instructions
+
+1. Open a command prompt.
+2. Type the following command.
+	
+	shutdown -s
+
+3. Get a pencil and Paper and play tictactoe with the nearest human and/or animal.
+
+// Ok, if you really want to try this awesome game in Windows, go here...
+//		
+//		https://docs.python.org/2/faq/windows.html
+//
+// But please don't do it in Internet Explorer.

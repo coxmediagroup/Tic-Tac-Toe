@@ -1,0 +1,89 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-2.1.1-rc2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<script>
+$('document').ready(function(){
+	
+	$('.tile').click(function(){
+
+		if($(this).attr('data-owner') == 0){
+			$(this).attr('data-owner','2');
+			$(this).addClass('player');
+			var tdata = $(this).attr('id');
+
+			$.ajax({
+				type: "POST",
+				url: "HTTP://127.0.0.1:8052",
+				data: tdata,
+				dataType: "text"
+			})
+			.done(function( data ){
+				target = '#' + data;
+				$(target).addClass('comp').attr('data-owner','1');
+
+			})
+			.fail(function( data, msg, err ){
+				alert("hmmm.... Something wrong here! ") + err;
+			});
+		} else {
+			alert('No Cheating!');
+		}
+
+	});
+
+	$('#end').click(function(){
+		$.ajax({
+			type: "DELETE",
+			url: "HTTP://127.0.0.1:8052",
+			dataType: "text",
+			data: "",
+			complete: function(){
+				//alert("It is finished!");
+				window.close();
+			}
+		});
+	});
+
+});
+</script>
+<style>
+	body {
+		background:#666; /* The gray of evil */
+		text-align:center;
+	}
+
+	#container {
+		clear:both !important;
+		width:505px;
+		margin-right:auto;
+		margin-left:auto;
+	}
+
+	.tile {
+		border:#fff 1px solid;
+		width:160px;
+		height:160px;
+		float:left;
+		box-sizing;border-box;
+	}
+
+	.player {
+		background:#8888aa;
+	}
+
+	.comp {
+		background:#aa8888;
+	}
+
+	.clearfix {
+		clear:both;
+	}
+
+	footer {
+		font-size:10px;
+	}
+</style>
+</head>
