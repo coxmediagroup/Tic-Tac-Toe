@@ -1,5 +1,6 @@
 import time
 
+from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
 
 from nose.tools import eq_
@@ -46,6 +47,18 @@ class TestFrontEnd(LiveServerTestCase):
         # Assert computer wins
         eq_(alert_box.text, u'I win. Better luck next time! Click on the '
             'links above to play again.')
+
+    def test_play_tie(self):
+        self._go_to('%s?start=human' % reverse('tictactoe.play'))
+        for mv in [0, 2, 7, 3, 5]:
+            self.driver.find_element_by_id('move_%s' % mv).click()
+            self.driver.implicitly_wait(9)
+
+        alert_box = self.driver.find_element_by_css_selector('.alert-box')
+        WebDriverWait(self.driver, 9).until(lambda driver: alert_box)
+        eq_(alert_box.text, u"It's a tie. You almost got me that time! Click "
+            "on the links above to play again.")
+        time.sleep(0.75)
 
     def _go_to(self, url):
         self.driver.get(self.live_server_url + url)
