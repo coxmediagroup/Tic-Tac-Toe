@@ -3,8 +3,8 @@ TicTacToe
 
 A simple fun app for two players, X and O. You, the human, 'O', will play against the computer, 'X'.
 
-Dependencies:
--------------
+Dependencies
+------------
 
 * Python 2.6 or later on the 2.x series.
 * Django 1.6 or later on the 1.x series.
@@ -51,5 +51,17 @@ Running the application
     $ ./manage.py runserver localhost:8000
     $ Open a browser and go to http://localhost:8000
     $ To play, click on 'Computer start' or 'Human start' links
+
+Running the tests
+-----------------
+
+If you want to run all tests, execute the following:
+
+    $ ./manage.py test --settings=game.settings.test game.tictactoe.tests
+
+If you want to run only the views tests, execute the following:
+
+    $ ./manage.py test --settings=game.settings.test game.tictactoe.tests:TestView
+
 
 NOTE: During the game, refreshing your browser will reset the game
