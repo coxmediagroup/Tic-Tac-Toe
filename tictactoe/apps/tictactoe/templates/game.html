@@ -9,6 +9,34 @@
 <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.index' %}" role="button">View Leaderboard</a>
 {% endblock jumbotron_button %}
 
+{% block modal %}
+<div id="usermodal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Every winner has a name&hellip;</h4>
+      </div>
+      <div class="modal-body">
+        {% if form.errors %}
+      	<div class="alert alert-danger alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		  <p><strong>That username doesn't look right.</strong> Try again using only alphanumerics.</p>
+		</div>
+		{% endif %}
+        <p>&hellip;what's yours?</p>
+        <form method="POST" action="" class="form-inline" role="form">
+          {% csrf_token %}
+		  <div class="form-group">
+		    <input type="text" class="form-control input-lg" id="id_username" maxlength="32" name="username" placeholder="Enter username">
+		  </div>
+		  <button type="submit" class="btn btn-primary btn-lg">Play!</button>
+		</form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock modal %}
+
 {% block content %}
 <div>
 <table class="table table-bordered">
@@ -50,3 +78,19 @@
 </table>
 </div>
 {% endblock content %}
+
+{% block end_js %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+{% if not request.session.username %}
+<script>
+$(document).ready(function () {
+  $('#usermodal').modal({
+  backdrop: 'static',
+  keyboard: false
+  });
+  $('#usermodal').modal('show');
+});
+</script>
+{% endif %}
+{% endblock end_js %}
