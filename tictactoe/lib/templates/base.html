@@ -25,12 +25,12 @@
       <div class="header">
         <ul class="nav nav-pills pull-right">
         {% block nav_links %}
-            <li><a href="https://github.com/ResearchComputing">Research Computing GitHub</a></li>
             <li><a href="http://www.linkedin.com/pub/zebula-sampedro/5a/b18/292/">My LinkedIn</a></li>
+            <li><a href="https://github.com/ResearchComputing">GitHub</a></li>
             <li><a href="mailto:sampedro@colorado.edu?Subject=Zebula,%20I%20LOVED%20your%20tic-tac-toe%20app!">Contact Me</a></li>
         {% endblock nav_links %}
         </ul>
-        <h3 class="text-muted">Tic-Tac-Toe</h3>
+        <h3 class="text-muted">CMGTTT</h3>
       </div>
       
       {% block jumbotron %}
@@ -43,7 +43,7 @@
         </p>
         <p>
         {% block jumbotron_button %}
-        <a class="btn btn-lg btn-success" href="#" role="button">Let's Play!</a>
+        <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.play_game' %}" role="button">Let's Play!</a>
         {% endblock jumbotron_button %}
         </p>
       </div>

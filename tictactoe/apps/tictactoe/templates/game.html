@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+{% block extra_style %}
+{{ block.super }}
+<link href="{{ STATIC_URL }}css/tictactoe.css" rel="stylesheet">
+{% endblock extra_style %}
+
+{% block jumbotron_button %}
+<a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.index' %}" role="button">View Leaderboard</a>
+{% endblock jumbotron_button %}
+
+{% block content %}
+<div>
+<table class="table table-bordered">
+	<tbody>
+          <tr>
+            <td><div class="tictac-container">
+            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
+            </div></td>
+            <td><button type="button" class="btn btn-default btn-lg btn-block">
+            <p>&nbsp;</p>
+            </button></td>
+            <td><button type="button" class="btn btn-default btn-lg btn-block">
+            <p>&nbsp;</p>
+            </button></td>
+          </tr>
+          <tr>
+            <td><button type="button" class="btn btn-default btn-lg btn-block">
+            <p>&nbsp;</p>
+            </button></td>
+            <td><div class="tictac-container">
+            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
+            </div></td>
+            <td><button type="button" class="btn btn-default btn-lg btn-block">
+            <p>&nbsp;</p>
+            </button></td>
+          </tr>
+          <tr>
+            <td><div class="tictac-container">
+            <img src="{{ STATIC_URL }}img/tac.jpg" class="img-responsive" alt="tac">
+            </div></td>
+            <td><button type="button" class="btn btn-default btn-lg btn-block">
+            <p>&nbsp;</p>
+            </button></td>
+            <td><div class="tictac-container">
+            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
+            </div></td>
+          </tr>
+    </tbody>
+</table>
+</div>
+{% endblock content %}
