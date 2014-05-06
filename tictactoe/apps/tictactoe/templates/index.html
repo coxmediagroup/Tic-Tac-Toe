@@ -9,7 +9,7 @@ It's winnable, we promise! If you lose the first time, just keep trying. We beli
 
 {% block content %}
 <div class="row marketing">
-  <h2>Recent Players</h2>
+  <h2>Highest Ranking Players</h2>
   <table class="table table-striped">
 	  <thead>
         <tr>
@@ -20,25 +20,44 @@ It's winnable, we promise! If you lose the first time, just keep trying. We beli
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Zeb</td>
-          <td>123</td>
-          <td>0</td>
+      {% for p in players %}
+      	{% if player %}
+      	  {% if player.username == p.username %}
+        	<tr class="success">
+          {% else %}
+            <tr>
+          {% endif %}
+        {% else %}
+          <tr>
+        {% endif %}
+          <td>{{ forloop.counter }}</td>
+          <td>{{ p.username }}</td>
+          <td>{{ p.plays }}</td>
+          <td>{{ p.wins }}</td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>12</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Larry</td>
-          <td>1</td>
-          <td>0</td>
-        </tr>
+      {% endfor %}
       </tbody>
   </table>
+  {% if player %}
+  <h2>Your Ranking</h2>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Times Played</th>
+          <th>Times Won</th>
+        </tr>
+      </thead>
+    <tbody>
+      <tr>
+        <td>{{ player_rank }}</td>
+        <td>{{ player.username }}</td>
+        <td>{{ player.plays }}</td>
+        <td>{{ player.wins }}</td>
+      </tr>
+	</tbody>
+  </table>
+  {% endif %}
 </div>
 {% endblock content %}
