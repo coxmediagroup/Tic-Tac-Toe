@@ -18,11 +18,10 @@ def TestCounter():
 
 def TestWin():
 	global comp
-	a = '[{"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0}]'
+	a = '[{"1":2, "2":2, "3":0, "4":1, "5":2, "6":1, "7":0, "8":1, "9":1}]'
 	matrix = json.loads(a)[0]
-	print matrix['3']
 	# print a
-	return comp.check_for_win()
+	return comp.check_for_win(matrix)
 
 # Here's our "unit tests".
 class aiTests(unittest.TestCase):
