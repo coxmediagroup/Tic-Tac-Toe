@@ -33,7 +33,7 @@ class comp():
 			return win
 
 	def check_for_win(self, omatrix = None):
-	#this will check for any posible winning moves.
+	#this will check for posible moves.
 		global matrix
 		global wins
 
@@ -41,74 +41,108 @@ class comp():
 			self.matrix = omatrix
 
 		matrix = self.matrix
-		print matrix['1']
-
+		combo = 0
+		moves = dict()
+		compw = False
+		playerw = False
 		for win in self.wins:
-			# win = str(win)
+			combo = combo + 1
 			score = 0
 			owner = None
 			mtx = set()
+
 			for key in win:	
 				key = str(key)
 				mtx.add(matrix[key])
-				print matrix[key]
-				score = score + int(matrix[key])
 
-			# if any(e in win for e in (1,1,0)):	
-			# 	owner = 'compwin'
+				score = score + int(matrix[key])
+				if matrix[key] == 0:
+					moves[combo] = [int(key), combo]
 
 			if score == 4:	
-				if all(e in mtx for e in (1,)):
-					owner = 'full'
-				else:
+				if all(e in mtx for e in (0,)):
 					owner = 'COUNTER IT!'
+					moves[combo].extend(['counter'])
 
 			if score == 3:
 				if all(e in mtx for e in (2,)):
 					owner = 'mixed'
+					moves[combo].extend(['open'])
 				else:
-					owner = 'I WIN!'
+					compw = True
 
 			if score == 2:
-				if all(e in mtx for e in (0,)):
+				if all(e in mtx for e in (1,)):
 					owner = 'MOVE!'
-				else:
-					owner = 'Find Move'
+					moves[combo].extend(['win'])
 
 			if score == 1:
 				owner = 'Find Move'
+				moves[combo].extend(['potential'])
 
 			if score == 5:
 				owner = 'full'
 
 			if score == 6:
-				owner = "ERROR!"
+				playerw = True
 
+		output = None
+		typ = None
+		op = False
+		pot = False
+		cntr = False
+		win = False
 
+		opm = None
+		potm = None
+		cntrm = None
+		winm = None
 
-			print str(win) + ' | ' + str(score) + ' | ' + str(owner)
+		for key, value in moves.iteritems():
+			value = list(value)
+						
+			if 'open' in value:
+				op = True
+				opm = value[0]
 
-		win = None
-		# Logic to detect a winning move goes here.
-		win = 3
+			if 'potential' in value:
+				pot = True
+				potm = value[0]
+			
+			if 'win' in value:
+				win = True
+				winm = value[0]
+				break
+			
+			if 'counter' in value:
+				cntr = True
+				cntrm = value[0]
 
-		# Logic to determine who's winning move it is goes here.
-		win_owner = 2
-
-		if win_owner == 1:
-			return win
+		if win:
+			output = winm
+			typ = "win"
+		elif cntr:
+			output = cntrm
+			typ = "counter"
+		elif pot:
+			output = potm
+			typ = "potential"
+		elif op:
+			output = opm
+			typ = "open"
 		else:
-			counter = self.check_for_counter()
-			return counter
+			if compw:
+				output = 0
+				typ = "Comp Wins!"
+			elif playerw:
+				output = 0
+				typ = "Player Wins... Wahhh!!???"
+			else:
+				output = 0
+				typ = "cat"
 
-	def check_for_counter(self, omatrix = None):
-	# This will check for a proper counter move.
-		global matrix
-
-		if self.matrix is None:
-			self.matrix = omatrix
-
-		counter = None
-
-		#logic for counter move goes here.
-		return counter
+		# This prints out what the final output should be.
+		print "***********"
+		print output
+		print typ
+		print "***********"

@@ -12,13 +12,12 @@ def TestGen(n):
 	rand = gen.rand(n)
 	return rand
 
-def TestCounter():
-	global comp
-	return comp.check_for_counter()
-
 def TestWin():
 	global comp
-	a = '[{"1":2, "2":2, "3":0, "4":1, "5":2, "6":1, "7":0, "8":1, "9":1}]'
+
+	#this should produce a cat
+	a = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":1, "9":1}]'
+
 	matrix = json.loads(a)[0]
 	# print a
 	return comp.check_for_win(matrix)
@@ -28,9 +27,6 @@ class aiTests(unittest.TestCase):
 
     def testRandGen(self):
         self.failUnless(TestGen(9))
-
-    def testCounter(self):
-    	self.failUnless(TestCounter() is None)
 
     def testWin(self):
     	self.failUnless(TestWin() is None)
