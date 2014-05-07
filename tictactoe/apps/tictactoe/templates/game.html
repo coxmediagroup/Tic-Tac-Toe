@@ -39,40 +39,58 @@
 
 {% block content %}
 <div>
-<table class="table table-bordered">
+<table class="table">
 	<tbody>
           <tr>
-            <td><div class="tictac-container">
-            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
-            </div></td>
-            <td><button type="button" class="btn btn-default btn-lg btn-block">
-            <p>&nbsp;</p>
-            </button></td>
-            <td><button type="button" class="btn btn-default btn-lg btn-block">
-            <p>&nbsp;</p>
-            </button></td>
+            <td>
+              <button id="space-0" value="0" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-0" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-1" value="1" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-1" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-2" value="2" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-2" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
           </tr>
           <tr>
-            <td><button type="button" class="btn btn-default btn-lg btn-block">
-            <p>&nbsp;</p>
-            </button></td>
-            <td><div class="tictac-container">
-            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
-            </div></td>
-            <td><button type="button" class="btn btn-default btn-lg btn-block">
-            <p>&nbsp;</p>
-            </button></td>
+            <td>
+              <button id="space-3" value="3" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-3" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-4" value="4" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-4" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-5" value="5" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-5" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
           </tr>
           <tr>
-            <td><div class="tictac-container">
-            <img src="{{ STATIC_URL }}img/tac.jpg" class="img-responsive" alt="tac">
-            </div></td>
-            <td><button type="button" class="btn btn-default btn-lg btn-block">
-            <p>&nbsp;</p>
-            </button></td>
-            <td><div class="tictac-container">
-            <img src="{{ STATIC_URL }}img/tic-green.jpg" class="img-responsive" alt="tic">
-            </div></td>
+            <td>
+              <button id="space-6" value="6" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-6" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-7" value="7" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-7" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
+            <td>
+              <button id="space-8" value="8" type="button" class="btn btn-default btn-lg btn-block">
+              <img id="img-8" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+              </button>
+            </td>
           </tr>
     </tbody>
 </table>
@@ -93,4 +111,13 @@ $(document).ready(function () {
 });
 </script>
 {% endif %}
+<script>
+$("button[id|='space']").click(
+	function() {
+		sid = this.value;
+		console.log('You clicked ' + sid);
+		$('#space-' + sid).replaceWith('<img id="img-' + sid +'" src="{{ STATIC_URL }}img/tic.jpg" class="img-tictac img-responsive" alt="tic">');
+	});
+
+</script>
 {% endblock end_js %}

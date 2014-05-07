@@ -1,7 +1,5 @@
-.tictac-container {
+.img-tictac {
 	margin-left:auto;
 	margin-right:auto;
-}
-.tictac-btn {
-	height: 100% !important;
+	max-width: 217px !important;
 }
