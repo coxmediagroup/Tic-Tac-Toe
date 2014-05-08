@@ -1,13 +1,9 @@
 from random import randint
 import json
 
-class gen():
-	def rand(self, ceil):
-		return randint(1, ceil)
-		# return ceil
-
 class comp():
 	matrix = None # Global matrix container
+	# matrix = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":1, "9":1}]'
 
 	wins = [
 		[7,8,9], # top row
@@ -20,19 +16,11 @@ class comp():
 		[9,6,3], # right column
 	]
 
-	def next_move(self, player, omatrix):
-	# This is where the computer figures out were to move.
-		global matrix
-		self.matrix = omatrix
-		win = self.check_for_win();
+	def findPreferred(self, matrix):
+		print matrix['3']
+		return 1
 
-		if win is None:
-			move = int(player) - 1;
-			return move
-		else:
-			return win
-
-	def check_for_win(self, omatrix = None):
+	def next_move(self, omatrix = None):
 	#this will check for posible moves.
 		global matrix
 		global wins
@@ -41,10 +29,14 @@ class comp():
 			self.matrix = omatrix
 
 		matrix = self.matrix
+		print matrix
+		matrix = json.loads(matrix)
 		combo = 0
 		moves = dict()
 		compw = False
 		playerw = False
+		total = 0
+
 		for win in self.wins:
 			combo = combo + 1
 			score = 0
@@ -54,6 +46,7 @@ class comp():
 			for key in win:	
 				key = str(key)
 				mtx.add(matrix[key])
+				total = total + score
 
 				score = score + int(matrix[key])
 				if matrix[key] == 0:
@@ -73,8 +66,11 @@ class comp():
 
 			if score == 2:
 				if all(e in mtx for e in (1,)):
-					owner = 'MOVE!'
+					owner = 'winning move'
 					moves[combo].extend(['win'])
+				elif all(e in mtx for e in (2,)):
+					owner = 'Open'
+					moves[combo].extend(['open'])
 
 			if score == 1:
 				owner = 'Find Move'
@@ -88,22 +84,29 @@ class comp():
 
 		output = None
 		typ = None
+
 		op = False
 		pot = False
 		cntr = False
 		win = False
+		cat = False
 
 		opm = None
 		potm = None
 		cntrm = None
 		winm = None
+		catm = None
 
 		for key, value in moves.iteritems():
 			value = list(value)
 						
 			if 'open' in value:
-				op = True
-				opm = value[0]
+				if total < 13:
+					op = True
+					opm = self.findPreferred(matrix);
+				else:
+					cat =True
+					catm = 0
 
 			if 'potential' in value:
 				pot = True
@@ -130,19 +133,19 @@ class comp():
 		elif op:
 			output = opm
 			typ = "open"
-		else:
-			if compw:
-				output = 0
-				typ = "Comp Wins!"
-			elif playerw:
-				output = 0
-				typ = "Player Wins... Wahhh!!???"
-			else:
-				output = 0
-				typ = "cat"
+		elif compw:
+			output = 0
+			typ = "Comp Wins!"
+		elif playerw:
+			output = 0
+			typ = "Player Wins... Wahhh!!???"
+		elif cat:
+			output = 0
+			typ = "cat"
 
-		# This prints out what the final output should be.
-		print "***********"
-		print output
-		print typ
-		print "***********"
+
+		# This returns what the final output should be.
+		finaldict = {'move':str(output), 'type':typ}
+		finaljson = json.dumps(finaldict)
+		print finaljson
+		return finaljson

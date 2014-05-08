@@ -6,13 +6,38 @@
 
 <script>
 $('document').ready(function(){
+
+	var getMatrix = function(){
+
+		// var tiles = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":0, "9":1}]';
+		var tiles = {
+			1:parseInt($('#1').attr('data-owner')),
+			2:parseInt($('#2').attr('data-owner')),
+			3:parseInt($('#3').attr('data-owner')),
+			4:parseInt($('#4').attr('data-owner')),
+			5:parseInt($('#5').attr('data-owner')),
+			6:parseInt($('#6').attr('data-owner')),
+			7:parseInt($('#7').attr('data-owner')),
+			8:parseInt($('#8').attr('data-owner')),
+			9:parseInt($('#9').attr('data-owner'))
+		};
+
+		tiles = JSON.stringify(tiles);
+		
+		console.log(tiles);
+
+		// var test = '{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":0, "9":1}';
+
+		return tiles;
+	}
 	
 	$('.tile').click(function(){
 
 		if($(this).attr('data-owner') == 0){
 			$(this).attr('data-owner','2');
 			$(this).addClass('player');
-			var tdata = $(this).attr('id');
+			//var tdata = $(this).attr('id');
+			var tdata = getMatrix();
 
 			$.ajax({
 				type: "POST",
@@ -21,7 +46,9 @@ $('document').ready(function(){
 				dataType: "text"
 			})
 			.done(function( data ){
-				target = '#' + data;
+				data = JSON.parse(data);
+				console.log(data);
+				target = '#' + data.move;
 				$(target).addClass('comp').attr('data-owner','1');
 
 			})

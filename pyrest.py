@@ -61,10 +61,10 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
 		self.end_headers()
 		
 		content_len = int(self.headers.getheader('content-length'))
-		player = self.rfile.read(content_len)
-		omatrix = ''
+		omatrix = self.rfile.read(content_len)
+		# omatrix = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":1, "9":1}]'
 		comp = ai.comp()
-		next_move = comp.next_move(player, omatrix) 
+		next_move = comp.next_move(omatrix) 
 		ID = next_move
 
 		print ID

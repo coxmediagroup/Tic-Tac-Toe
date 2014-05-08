@@ -3,33 +3,26 @@ import ai
 import json
 
 # Here's our "unit".
-
-gen = ai.gen()
 comp = ai.comp()
 
-def TestGen(n):
-	global gen
-	rand = gen.rand(n)
-	return rand
-
-def TestWin():
+def TestMove():
 	global comp
 
 	#this should produce a cat
-	a = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":1, "9":1}]'
-
-	matrix = json.loads(a)[0]
-	# print a
-	return comp.check_for_win(matrix)
+	matrix = '{"1":0, "2":0, "3":0, "4":2, "5":0, "6":0, "7":0, "8":0, "9":0}'
+	
+	results = comp.next_move(matrix)
+	print "*************"
+	print "Final json output:"
+	print results
+	print "*************"
+	return
 
 # Here's our "unit tests".
 class aiTests(unittest.TestCase):
 
-    def testRandGen(self):
-        self.failUnless(TestGen(9))
-
-    def testWin(self):
-    	self.failUnless(TestWin() is None)
+    def testMove(self):
+    	self.failUnless(TestMove() is None)
 
 def main():
     unittest.main()
