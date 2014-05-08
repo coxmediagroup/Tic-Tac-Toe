@@ -1,10 +1,8 @@
-from random import randint
+import random
 import json
 
 class comp():
 	matrix = None # Global matrix container
-	# matrix = '[{"1":2, "2":2, "3":1, "4":1, "5":2, "6":2, "7":2, "8":1, "9":1}]'
-
 	wins = [
 		[7,8,9], # top row
 		[4,5,6], # middle row
@@ -17,8 +15,29 @@ class comp():
 	]
 
 	def findPreferred(self, matrix):
-		print matrix['3']
-		return 1
+		corner = [1,3,7,9]
+		edge = [2,4,6,8]
+		fm = None
+		total = 0
+		cornerm = random.choice(corner);
+		edgem = random.choice(edge);
+		centerm = 5
+
+		if matrix['5'] == 2:			
+			preferred = [centerm, cornerm, edgem]
+		else:
+			preferred = [centerm, edgem, cornerm]
+			
+		output = 0
+
+		for key in preferred:
+			key = str(key)
+
+			if matrix[key] == 0:
+				output = key
+				break
+
+		return output
 
 	def next_move(self, omatrix = None):
 	#this will check for posible moves.
@@ -29,55 +48,49 @@ class comp():
 			self.matrix = omatrix
 
 		matrix = self.matrix
-		print matrix
 		matrix = json.loads(matrix)
 		combo = 0
 		moves = dict()
 		compw = False
 		playerw = False
-		total = 0
 
 		for win in self.wins:
 			combo = combo + 1
 			score = 0
-			owner = None
 			mtx = set()
+			total = 0
 
 			for key in win:	
 				key = str(key)
 				mtx.add(matrix[key])
-				total = total + score
 
 				score = score + int(matrix[key])
+				total = total + score
+
 				if matrix[key] == 0:
 					moves[combo] = [int(key), combo]
 
 			if score == 4:	
 				if all(e in mtx for e in (0,)):
-					owner = 'COUNTER IT!'
 					moves[combo].extend(['counter'])
 
 			if score == 3:
 				if all(e in mtx for e in (2,)):
-					owner = 'mixed'
 					moves[combo].extend(['open'])
 				else:
 					compw = True
 
 			if score == 2:
 				if all(e in mtx for e in (1,)):
-					owner = 'winning move'
 					moves[combo].extend(['win'])
 				elif all(e in mtx for e in (2,)):
-					owner = 'Open'
 					moves[combo].extend(['open'])
 
 			if score == 1:
-				owner = 'Find Move'
-				moves[combo].extend(['potential'])
+				# moves[combo].extend(['potential'])
+				moves[combo].extend(['open'])
 
-			if score == 5:
-				owner = 'full'
+			# if score == 5:
 
 			if score == 6:
 				playerw = True
@@ -143,9 +156,7 @@ class comp():
 			output = 0
 			typ = "cat"
 
-
 		# This returns what the final output should be.
 		finaldict = {'move':str(output), 'type':typ}
 		finaljson = json.dumps(finaldict)
-		print finaljson
 		return finaljson

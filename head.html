@@ -1,5 +1,6 @@
 <html>
 <head>
+<title>TicTacToe Xtreme 2014!</title>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-2.1.1-rc2.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -31,11 +32,35 @@ $('document').ready(function(){
 		return tiles;
 	}
 	
+	function resetBoard(){
+		$('.tile').each(function(){
+			$(this).removeClass('comp')
+			.removeClass('player')
+			.attr('data-owner', 0)
+			.text('');
+			$('.band').each(function(){
+				$(this).hide();
+			});
+		});
+	}
+
+	$('.chess').click(function(){
+		alert('Sorry, Deep Blue is sleeping.');
+	});
+
+	$('.wargames').click(function(){
+		alert('Sorry, JOSHUA v0.6b is not operational.');
+	});
+
+	$('.restart').click(function(){
+		resetBoard();
+	});
+
 	$('.tile').click(function(){
 
 		if($(this).attr('data-owner') == 0){
 			$(this).attr('data-owner','2');
-			$(this).addClass('player');
+			$(this).addClass('player').text('X');
 			//var tdata = $(this).attr('id');
 			var tdata = getMatrix();
 
@@ -49,7 +74,17 @@ $('document').ready(function(){
 				data = JSON.parse(data);
 				console.log(data);
 				target = '#' + data.move;
-				$(target).addClass('comp').attr('data-owner','1');
+				$(target).addClass('comp').attr('data-owner','1').text('O');
+
+				if(data.type == 'win'){
+					$('#win').show();
+				}
+
+				else if(data.type == null || data.type == 'cat'){
+					$('#cat').show();
+					// alert('cat');
+				}
+
 
 			})
 			.fail(function( data, msg, err ){
@@ -78,8 +113,33 @@ $('document').ready(function(){
 </script>
 <style>
 	body {
-		background:#666; /* The gray of evil */
+		font-family: Arial;
+		background: #a67ba8; /* Old browsers */
+		background: -moz-linear-gradient(top,  #a67ba8 26%, #ffa87a 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(26%,#a67ba8), color-stop(100%,#ffa87a)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #a67ba8 26%,#ffa87a 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #a67ba8 26%,#ffa87a 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #a67ba8 26%,#ffa87a 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #a67ba8 26%,#ffa87a 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a67ba8', endColorstr='#ffa87a',GradientType=0 ); /* IE6-9 */
+
+		color:#333;
 		text-align:center;
+	}
+
+	h1 {
+		font-size:54px;
+		color:#fff;
+		margin:0px;
+	}
+
+	a {
+		color:#cdcdcd;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color:#fff;
 	}
 
 	#container {
@@ -87,6 +147,12 @@ $('document').ready(function(){
 		width:505px;
 		margin-right:auto;
 		margin-left:auto;
+		margin-top:100px;
+		background:#ff0000;
+
+		-webkit-box-shadow: 3px 6px 25px 1px rgba(0,0,0,0.75);
+		-moz-box-shadow: 3px 6px 25px 1px rgba(0,0,0,0.75);
+		box-shadow: 3px 6px 25px 1px rgba(0,0,0,0.75);
 	}
 
 	.tile {
@@ -95,22 +161,66 @@ $('document').ready(function(){
 		height:160px;
 		float:left;
 		box-sizing;border-box;
+		padding: 0px 0px 0px 0px;
+		font-size:140px;
+		overflow:hidden;
+		color:#fff;
 	}
 
 	.player {
-		background:#8888aa;
+		background:rgba(256, 156, 0, 0.2);
 	}
 
 	.comp {
-		background:#aa8888;
+		background:rgba(256, 0, 156, 0.2);
 	}
 
 	.clearfix {
 		clear:both;
 	}
 
+	button {
+		background:rgba(256, 256, 256, 0.3);
+		border:none;
+		font-size:24px;
+	}
+
+	button:hover {
+		background:rgba(256, 256, 256, 0.7);
+	}
+
+	.band {
+		background:rgba(80, 0, 80, 0.8);
+		color:#fff;
+		font-size:18px !important;
+		position:absolute;
+		top:270px;
+		width:100%;
+		display:none;
+	}
+
+	.band h2 {
+		font-size:90px;
+		margin:0px !important;
+	}
+
+	.band .int {
+		width:760px;
+		margin: 0px auto 0px auto;
+		padding:20px;
+	}
+	.band button {
+
+	}
+
+
 	footer {
 		font-size:10px;
+		color:#fff;
+		position:absolute;
+		bottom:10px;
+		text-align: center;
+		width:100%;
 	}
 </style>
 </head>

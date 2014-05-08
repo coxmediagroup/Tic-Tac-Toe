@@ -9,7 +9,7 @@ def TestMove():
 	global comp
 
 	#this should produce a cat
-	matrix = '{"1":0, "2":0, "3":0, "4":2, "5":0, "6":0, "7":0, "8":0, "9":0}'
+	matrix = '{"1":0, "2":0, "3":0, "4":2, "5":1, "6":0, "7":0, "8":1, "9":1}'
 	
 	results = comp.next_move(matrix)
 	print "*************"

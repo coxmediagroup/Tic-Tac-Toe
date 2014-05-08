@@ -68,7 +68,7 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
 		ID = next_move
 
 		print ID
-		print(self.wfile)
+		# print(self.wfile)
 		self.wfile.write(ID)
 		self.wfile.close()
 		return
