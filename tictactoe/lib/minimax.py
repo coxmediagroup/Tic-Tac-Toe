@@ -27,7 +27,7 @@ def winning_state(state):
 
     is_winning_state = False
     for s in win_states:
-        if all(state[s[0]]==state[s[1]],state[s[1]]==state[s[2]],state[s[0]]!='-'):
+        if all([state[s[0]]==state[s[1]],state[s[1]]==state[s[2]],state[s[0]]!='-']):
             return True, state[s[0]], s
     return False, '-', ()
 
@@ -49,14 +49,15 @@ def next_move(state,player):
       3 4 5
       6 7 8
     """
-    if player=='X':
-        next_player = 'O'
+    # import pdb; pdb.set_trace()
+    if player=='O':
+        next_player = 'X'
     else:
         next_player = 'O'
 
     if len(set(state)) == 1:
         return 0,4
-
+    print state
     win_state, win_player, win_pos = winning_state(state)
     if win_state:
         if win_player == 'X':
@@ -76,6 +77,6 @@ def next_move(state,player):
         state[i] = '-'
 
     if player == 'X':
-        return = max(possible_moves)
+        return max(possible_moves)
     else :
         return min(possible_moves)

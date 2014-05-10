@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'tictactoe.views.index', name='index'),
     url(r'^play$', 'tictactoe.views.play_game', name='play_game'),
+    url(r'^move$', 'tictactoe.views.make_move', name='make_move'),
     # url(r'^tictactoe/', include('tictactoe.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

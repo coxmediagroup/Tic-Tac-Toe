@@ -117,7 +117,26 @@ $("button[id|='space']").click(
 		sid = this.value;
 		console.log('You clicked ' + sid);
 		$('#space-' + sid).replaceWith('<img id="img-' + sid +'" src="{{ STATIC_URL }}img/tic.jpg" class="img-tictac img-responsive" alt="tic">');
-	});
+		var postData = {
+	        'move': sid,
+	        'csrfmiddlewaretoken': '{{ csrf_token }}'
+	     };
+		$.post( "{% url 'tictactoe.views.make_move' %}", postData)
+		  .done(function( resp ) {
+		  	if (resp.cmove>=0) {
+		      $('#space-' + resp.cmove).replaceWith('<img id="img-' + resp.cmove +'" src="{{ STATIC_URL }}img/tac.jpg" class="img-tictac img-responsive" alt="tac">');
+		    }
+		    if (resp.game_status==='win') {
+		  		alert('Congratulations, the AI malfunctioned!');
+		  	}
+		  	else if (resp.game_status==='lose') {
+		  		alert("Keep trying, you'll get it!");
+		  	}
+		  	else if (resp.game_status==='draw') {
+		  		alert('In a sense, no one lost!');
+		  	}
+		  });
+});
 
 </script>
 {% endblock end_js %}
