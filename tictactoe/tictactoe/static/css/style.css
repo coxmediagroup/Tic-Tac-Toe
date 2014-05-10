@@ -1,0 +1,31 @@
+html {
+    height:100%;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color:#313743;
+    /*background:url("/static/images/11.png");*/
+    margin:0;
+    padding:0;
+    border:none;
+    height:100%;
+    color: #CCC;
+}
+ul {list-style:none;}
+li {list-style:none;}
+#main {
+	padding:15px;
+	border:0px solid black;
+}
+#main h3 {
+	text-align:center;
+}
+#main table {
+	margin:0 auto;
+}
+#main table td{
+	border:1px solid black;
+	height:100px;
+	width:100px;
+	text-align:center;
+}
