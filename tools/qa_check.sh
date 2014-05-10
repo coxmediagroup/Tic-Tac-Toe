@@ -21,3 +21,5 @@ if grep -q "^>" $PIP_TMP; then
     cat $PIP_TMP | cut -c3-
 fi
 rm $PIP_TMP
+
+rst2html.py --strict README.rst > /dev/null

@@ -19,3 +19,6 @@ gnureadline==6.3.3
 ipython==2.0.0
 ipdb==0.8
 ipdbplugin==1.4
+
+# RST validation
+docutils==0.11
