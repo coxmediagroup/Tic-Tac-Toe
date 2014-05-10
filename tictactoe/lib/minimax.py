@@ -57,10 +57,10 @@ def next_move(state,player):
 
     if len(set(state)) == 1:
         return 0,4
-    print state
+
     win_state, win_player, win_pos = winning_state(state)
     if win_state:
-        if win_player == 'X':
+        if player == 'X':
             return -1,-1
         else:
             return 1,-1
@@ -73,10 +73,12 @@ def next_move(state,player):
     for i in free_spaces:
         state[i] = player
         score,move = next_move(state,next_player)
-        possible_moves.append( (score,move) ) 
+        possible_moves.append(score) 
         state[i] = '-'
 
     if player == 'X':
-        return max(possible_moves)
+        m = max(possible_moves)
+        return m, free_spaces[possible_moves.index(m)]
     else :
-        return min(possible_moves)
+        m = min(possible_moves)
+        return m, free_spaces[possible_moves.index(m)]
