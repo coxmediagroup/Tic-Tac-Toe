@@ -1,17 +1,22 @@
+
 <html>
 	{%load staticfiles %}
 	{% load filter_utils %}
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title> Tic Tac Toe game </title> 
+		<title> Tic Tac Toe game </title>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="{% static "js/tictactoe.js" %}"></script>
 		<link rel="stylesheet" type="text/css" href="{% static "css/tictactoe.css" %}" />
 	</head>
 	<body>
+	
 	<center>
 	<form name="game">
 	{% csrf_token %}
+	{% if first_move %}
+	<input type="hidden" id="first_move" value="{{first_move|add:97|get_char}}">
+	{% endif %}
 		<table border=1>
 		<tr>
 			{% for i in 9|get_range %}
