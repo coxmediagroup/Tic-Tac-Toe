@@ -1,2 +1,5 @@
 *.pyc
+.coverage
+htmlcov/
 local_settings.py
+tictactoe.sqlite

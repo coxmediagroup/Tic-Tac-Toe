@@ -8,3 +8,14 @@ mccabe==0.2.1
 pep8==1.5.6
 pyflakes==0.8.1
 flake8==2.1.0
+
+# Better ./manage.py tests
+coverage==3.7.1
+nose==1.3.1
+django-nose==1.2
+
+# Better debugger
+gnureadline==6.3.3
+ipython==2.0.0
+ipdb==0.8
+ipdbplugin==1.4

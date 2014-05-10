@@ -1,6 +1,7 @@
 # Django settings for tttproj project.
 
 import os.path
+import sys
 
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SITE_DIR)
@@ -21,17 +22,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',  # Add 'postgresql_psycopg2', 'mysql',
-                                          # 'sqlite3' or 'oracle'.
-        'NAME': '',                       # Or path to database file if using
-                                          # sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                       # Empty for localhost through domain
-                                          # sockets or '127.0.0.1' for
-                                          # localhost through TCP.
-        'PORT': '',                       # Set to empty string for default.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': base_path('tictactoe.sqlite'),
     }
 }
 
@@ -171,3 +163,15 @@ except ImportError:
 else:
     i = INSTALLED_APPS.index('LOCAL-APPS')
     INSTALLED_APPS[i:i+1] = LOCAL_INSTALLED_APPS
+
+
+# Settings for testing:
+if 'test' in sys.argv:
+    try:
+        import django_nose  # noqa
+    except ImportError:
+        print 'django_nose not installed.  You\'d like it'
+        print 'pip install -r requirements.dev.txt'
+    else:
+        INSTALLED_APPS.append('django_nose')
+        TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
