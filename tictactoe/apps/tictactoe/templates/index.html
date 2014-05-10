@@ -11,44 +11,44 @@ It's winnable, we promise! If you lose the first time, just keep trying. We beli
 <div class="row marketing">
   <h2>Highest Ranking Players</h2>
   <table class="table table-striped">
-	  <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Times Played</th>
-          <th>Times Won</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for p in players %}
-      	{% if player %}
-      	  {% if player.username == p.username %}
-        	<tr class="success">
-          {% else %}
-            <tr>
-          {% endif %}
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Times Played</th>
+        <th>Times Won</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for p in players %}
+      {% if player %}
+        {% if player.username == p.username %}
+        <tr class="success">
         {% else %}
           <tr>
         {% endif %}
-          <td>{{ forloop.counter }}</td>
-          <td>{{ p.username }}</td>
-          <td>{{ p.plays }}</td>
-          <td>{{ p.wins }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
+      {% else %}
+        <tr>
+      {% endif %}
+        <td>{{ forloop.counter }}</td>
+        <td>{{ p.username }}</td>
+        <td>{{ p.plays }}</td>
+        <td>{{ p.wins }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
   </table>
   {% if player %}
   <h2>Your Ranking</h2>
   <table class="table table-striped">
     <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Times Played</th>
-          <th>Times Won</th>
-        </tr>
-      </thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Times Played</th>
+        <th>Times Won</th>
+      </tr>
+    </thead>
     <tbody>
       <tr>
         <td>{{ player_rank }}</td>
@@ -56,7 +56,7 @@ It's winnable, we promise! If you lose the first time, just keep trying. We beli
         <td>{{ player.plays }}</td>
         <td>{{ player.wins }}</td>
       </tr>
-	</tbody>
+    </tbody>
   </table>
   {% endif %}
 </div>
