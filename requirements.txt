@@ -1,1 +1,8 @@
+# Django
 Django==1.6.4
+wsgiref==0.1.2
+
+# Jinja 2 - better templates than default Django
+Jinja2==2.7.2
+MarkupSafe==0.23
+jingo==0.7

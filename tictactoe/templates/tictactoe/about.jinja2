@@ -1,0 +1,13 @@
+{# About Page #}
+{% extends 'tictactoe/base.jinja2' %}
+{% block body_title %}About Tic-Tac-Toe{% endblock %}
+
+{% block text %}
+<p>This is Tic-Tac-Toe as a website.  The source code is on
+  <a href="https://github.com/jwhitlock/Tic-Tac-Toe">github</a>.
+  <a href="{{ url('home') }}">Go play!</a>
+</p>
+{% endblock %}
+
+{% block footer_about %}About{% endblock %}
+
