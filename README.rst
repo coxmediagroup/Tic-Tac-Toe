@@ -26,7 +26,13 @@ In the app root, collect the static files:
 python manage.py collectstatic
 ```
 
-Run the server:
+Sync the database:
+
+```
+python manage.py syncdb
+```
+
+Finally, run the server:
 
 ```
 python manage.py runserver 0.0.0.0:8000
