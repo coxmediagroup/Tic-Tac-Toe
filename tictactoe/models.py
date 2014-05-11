@@ -1,5 +1,6 @@
-# from django.db import models
 from __future__ import unicode_literals
+
+# from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
 
@@ -26,6 +27,7 @@ class Board(object):
     BLANK = 0
     MARK_X = 1
     MARK_O = 2
+    STATES = (BLANK, MARK_X, MARK_O)
 
     def __init__(self, state=0):
         '''
@@ -51,6 +53,7 @@ class Board(object):
         if x_moves > o_moves + 1:
             err = 'Bad state {} - too many O moves'.format(init_state)
             raise ValueError(err)
+        self._has_winner = self.winner() or False
 
     def __str__(self):
         '''String representation of board'''
@@ -77,15 +80,21 @@ class Board(object):
 
     def next_mark(self):
         '''Return which player placed the next mark'''
-        moves = len([1 for p in self.board if p != 0])
-        if moves % 2:
-            return self.MARK_O
+        if self._has_winner:
+            return self.BLANK
         else:
-            return self.MARK_X
+            moves = len([1 for p in self.board if p != 0])
+            if moves % 2:
+                return self.MARK_O
+            else:
+                return self.MARK_X
 
     def next_moves(self):
         '''Return valid next moves'''
-        return [i for i, p in enumerate(self.board) if p == 0]
+        if self._has_winner:
+            return []
+        else:
+            return [i for i, p in enumerate(self.board) if p == 0]
 
     def winner(self):
         '''Returns the winner, or False if no winner
@@ -93,4 +102,25 @@ class Board(object):
         Returns 1 (MARK_X) if X is the winner
         Returns 2 (MARK_O) if O is the winner
         '''
-        return False
+
+        win_sets = (
+            (0, 1, 2),  # Row 1
+            (3, 4, 5),  # Row 2
+            (6, 7, 8),  # Row 3
+            (0, 3, 6),  # Column 1
+            (1, 4, 7),  # Column 2
+            (2, 5, 8),  # Column 3
+            (2, 4, 6),  # Rising slash
+            (0, 4, 8),  # Falling slash
+        )
+        winner = False
+
+        for win_set in win_sets:
+            items = [self.board[i] for i in win_set]
+            if items[0] != self.BLANK and all(x == items[0] for x in items):
+                if winner:
+                    if items[0] != winner:
+                        raise ValueError('Too many winners!')
+                else:
+                    winner = items[0]
+        return winner
