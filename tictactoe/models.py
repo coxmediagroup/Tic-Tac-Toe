@@ -96,6 +96,13 @@ class Board(object):
         else:
             return [i for i, p in enumerate(self.board) if p == 0]
 
+    def move(self, pos):
+        '''Add the next move to the board'''
+        if pos in self.next_moves():
+            self.board[pos] = self.next_mark()
+        else:
+            raise ValueError('{} is an invalid move'.format(pos))
+
     def winner(self):
         '''Returns the winner, or False if no winner
 

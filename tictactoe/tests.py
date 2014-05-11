@@ -151,4 +151,20 @@ class BoardTest(SimpleTestCase):
 
     def test_invalid_too_many_X(self):
         self.assertRaises(ValueError, Board, state=4)
-        self.assertRaises(ValueError, Board, state=2)
+
+    def test_valid_move(self):
+        b = Board()
+        b.move(0)
+        expected = (
+            'X| | \n'
+            '-+-+-\n'
+            ' | | \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(b))
+        self.assertEqual(1, b.state())
+        self.assertFalse(b.winner())
+
+    def test_invalid_move(self):
+        b = Board(state=1)
+        self.assertRaises(ValueError, b.move, 0)
