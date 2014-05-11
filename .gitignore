@@ -1,0 +1,4 @@
+*.pyc
+*.db
+local_*
+tictactoe/static

@@ -1,0 +1,188 @@
+{% extends "index.html" %}
+
+{% block extra_style %}
+{{ block.super }}
+<link href="{{ STATIC_URL }}css/tictactoe.css" rel="stylesheet">
+{% endblock extra_style %}
+
+{% block jumbotron_button %}
+<a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.index' %}" role="button">View Leaderboard</a>
+{% endblock jumbotron_button %}
+
+{% block modal %}
+<div id="usermodal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Every winner has a name&hellip;</h4>
+      </div>
+      <div class="modal-body">
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <p><strong>That username doesn't look right.</strong> Try again using only alphanumerics.</p>
+        </div>
+        {% endif %}
+        <p>&hellip;what's yours?</p>
+        <form method="POST" action="" class="form-inline" role="form">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" id="id_username" maxlength="32" name="username" placeholder="Enter username">
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">Play!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="losermodal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="losermodaltitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p>
+        <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.play_game' %}" role="button">Play again!</a>
+        <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.index' %}" role="button">View Leaderboard</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock modal %}
+
+{% block content %}
+<div>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-0" value="0" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-0" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-1" value="1" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-1" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-2" value="2" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-2" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-3" value="3" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-3" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-4" value="4" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-4" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-5" value="5" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-5" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-6" value="6" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-6" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-7" value="7" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-7" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="btn-tictac">
+            <button id="space-8" value="8" type="button" class="btn btn-default btn-lg btn-block">
+            <img id="img-8" src="{{ STATIC_URL }}img/freesquare.jpg" class="img-tictac img-responsive" alt="free">
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
+
+{% block end_js %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+{% if not request.session.username %}
+<script>
+$(document).ready(function () {
+  $('#usermodal').modal({
+  backdrop: 'static',
+  keyboard: false
+  });
+  $('#usermodal').modal('show');
+});
+</script>
+{% endif %}
+<script>
+$("button[id|='space']").click(
+  function() {
+    sid = this.value;
+    console.log('You clicked ' + sid);
+    $('#space-' + sid).replaceWith('<img id="img-' + sid +'" src="{{ STATIC_URL }}img/tic.jpg" class="img-tictac img-responsive" alt="tic">');
+    var postData = {
+          'move': sid,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+       };
+    $.post( "{% url 'tictactoe.views.make_move' %}", postData)
+      .done(function( resp ) {
+        if (resp.cmove>=0) {
+          $('#space-' + resp.cmove).replaceWith('<img id="img-' + resp.cmove +'" src="{{ STATIC_URL }}img/tac.jpg" class="img-tictac img-responsive" alt="tac">');
+        }
+        if (resp.game_status==='win') {
+          alert('Congratulations, the AI malfunctioned!');
+        }
+        else if (resp.game_status==='lose') {
+          $('#losermodaltitle').text("Keep trying, you'll get it!");
+          $(document).ready(function () {
+              $('#losermodal').modal({
+              backdrop: 'static',
+              keyboard: false
+            });
+            $('#losermodal').modal('show');
+          });
+        }
+        else if (resp.game_status==='draw') {
+          $('#losermodaltitle').text("In a sense, no one lost!");
+          $(document).ready(function () {
+              $('#losermodal').modal({
+              backdrop: 'static',
+              keyboard: false
+            });
+            $('#losermodal').modal('show');
+          });
+        }
+      });
+});
+
+</script>
+{% endblock end_js %}
