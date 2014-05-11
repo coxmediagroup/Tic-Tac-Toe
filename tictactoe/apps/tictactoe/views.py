@@ -61,10 +61,7 @@ def make_move(request):
         game_state = list(str(game_state))
         game_state[player_move] = 'X'
 
-        # score, computer_move = minimax.next_move(game_state,'X')
-        print game_state
         score, computer_move = minimax.next_move(game_state,'O')
-        print score, computer_move
         if (computer_move == -1) or (score == -1):
             username = request.session.get('username')
             player = Player.objects.get(username=username)

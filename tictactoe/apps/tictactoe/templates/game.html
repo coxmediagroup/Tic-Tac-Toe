@@ -35,6 +35,20 @@
     </div>
   </div>
 </div>
+<div id="losermodal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="losermodaltitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p>
+        <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.play_game' %}" role="button">Play again!</a>
+        <a class="btn btn-lg btn-success" href="{% url 'tictactoe.views.index' %}" role="button">View Leaderboard</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock modal %}
 
 {% block content %}
@@ -148,10 +162,24 @@ $("button[id|='space']").click(
           alert('Congratulations, the AI malfunctioned!');
         }
         else if (resp.game_status==='lose') {
-          alert("Keep trying, you'll get it!");
+          $('#losermodaltitle').text("Keep trying, you'll get it!");
+          $(document).ready(function () {
+              $('#losermodal').modal({
+              backdrop: 'static',
+              keyboard: false
+            });
+            $('#losermodal').modal('show');
+          });
         }
         else if (resp.game_status==='draw') {
-          alert('In a sense, no one lost!');
+          $('#losermodaltitle').text("In a sense, no one lost!");
+          $(document).ready(function () {
+              $('#losermodal').modal({
+              backdrop: 'static',
+              keyboard: false
+            });
+            $('#losermodal').modal('show');
+          });
         }
       });
 });

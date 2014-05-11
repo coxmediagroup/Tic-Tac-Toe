@@ -45,7 +45,7 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
-  background-image:url("/static/img/tictactoered.jpg");
+  background-image:url("/static/img/tictactoe-banner.jpg");
   color:#eeeeee;
 }
 .jumbotron .btn {
