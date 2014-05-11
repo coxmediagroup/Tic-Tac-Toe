@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 
-from .models import Board
+from .game import Board
 
 
 class BoardTest(SimpleTestCase):
