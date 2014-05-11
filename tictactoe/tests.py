@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 import mock
 
 from .board import Board
+from .models import Game
 from .strategy import RandomStrategy
 
 
@@ -170,6 +171,40 @@ class BoardTest(SimpleTestCase):
     def test_invalid_move_raises(self):
         b = Board(state=1)
         self.assertRaises(ValueError, b.move, 0)
+
+
+class GameModelTests(SimpleTestCase):
+    '''Game tests that do not require a database'''
+    def test_get_board(self):
+        game = Game(state=220)
+        board = game.board
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(board))
+        self.assertEqual(220, board.state())
+
+    def test_set_board_in_progress(self):
+        board = Board(state=220)
+        game = Game()
+        game.board = board
+        self.assertEqual(220, game.state)
+        self.assertEqual(Game.IN_PROGRESS, game.winner)
+
+    def test_set_board_winner(self):
+        board = Board(state=18859)
+        game = Game()
+        game.board = board
+        self.assertEqual(18859, game.state)
+        self.assertEqual(Game.X_WINS, game.winner)
+
+    def test_random_strategy(self):
+        game = Game(strategy_type=Game.RANDOM_STRATEGY)
+        strategy = game.strategy
+        self.assertTrue(isinstance(strategy, RandomStrategy))
 
 
 class RandomStrategyTest(SimpleTestCase):

@@ -6,3 +6,6 @@ wsgiref==0.1.2
 Jinja2==2.7.2
 MarkupSafe==0.23
 jingo==0.7
+
+# Database migrations
+South==0.8.4

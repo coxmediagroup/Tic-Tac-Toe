@@ -11,8 +11,9 @@ Getting Started
 ---------------
 1. Create a virtualenv_
 2. Install requirements: `pip install -r requirements.txt`
-3. Run it: `./manage.py runserver`
-4. Play it: `http://localhost:8000/ <http://localhost:8000>`
+3. Create the database: `./manage.py syncdb && ./manage.py migrate`
+4. Run it: `./manage.py runserver`
+5. Play it: `http://localhost:8000/ <http://localhost:8000>`
 
 If you are developing, you may want to install the additional requirements
 in `requirements.dev.txt`, and customize settings with `local_settings.py`.

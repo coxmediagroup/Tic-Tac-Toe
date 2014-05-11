@@ -1,2 +1,5 @@
+[run]
+omit = ../*migrations*
+
 [report]
 include=./tictactoe/*
