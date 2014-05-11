@@ -3,23 +3,31 @@
     
     <div id="main">
     	<h3>Tic Tac Taco</h3>
-    	<table>
-    		<tr>
-    			<td>X</td>
-    			<td>X</td>
-    			<td>X</td>
+    	<table class="board">
+    		<tr class="board-row">
+    			<td id="1" class="board-row-cell"></td>
+    			<td id="2" class="board-row-cell"></td>
+    			<td id="3" class="board-row-cell"></td>
     		</tr>
-    		<tr>
-    			<td>O</td>
-    			<td>O</td>
-    			<td>O</td>
+    		<tr class="board-row">
+    			<td id="4" class="board-row-cell"></td>
+    			<td id="5" class="board-row-cell"></td>
+    			<td id="6" class="board-row-cell"></td>
     		</tr>
-    		<tr>
-    			<td>X</td>
-    			<td>X</td>
-    			<td>X</td>
+    		<tr class="board-row">
+    			<td id="7" class="board-row-cell"></td>
+    			<td id="8" class="board-row-cell"></td>
+    			<td id="9" class="board-row-cell"></td>
     		</tr>
     	</table>
     </div>
-    
+
+<script>
+	$('.board-row-cell').click(function(){
+		id = $(this).attr('id');
+		console.log(id);
+		toggleBoard(id);
+		return false;
+	})
+</script>
 {% endblock %}
