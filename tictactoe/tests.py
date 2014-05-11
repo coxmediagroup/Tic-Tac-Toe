@@ -19,9 +19,9 @@ class BoardTest(SimpleTestCase):
             ' | | ')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(0, b.state())
-        self.assertEqual(Board.MARK_X, b.next_mark())
+        self.assertEqual(Board.X_NEXT, b.next_mark())
         self.assertEqual([0, 1, 2, 3, 4, 5, 6, 7, 8], b.next_moves())
-        self.assertFalse(b.winner())
+        self.assertIsNone(b.winner())
 
     def test_one_move(self):
         b = Board(state=1)
@@ -33,9 +33,9 @@ class BoardTest(SimpleTestCase):
             ' | | ')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(1, b.state())
-        self.assertEqual(Board.MARK_O, b.next_mark())
+        self.assertEqual(Board.O_NEXT, b.next_mark())
         self.assertEqual([1, 2, 3, 4, 5, 6, 7, 8], b.next_moves())
-        self.assertFalse(b.winner())
+        self.assertIsNone(b.winner())
 
     def test_row1_winner(self):
         b = Board(state=14755)
@@ -46,8 +46,8 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'O| |O')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_X, b.winner())
-        self.assertEqual(Board.BLANK, b.next_mark())
+        self.assertEqual(Board.X_WINS, b.winner())
+        self.assertIsNone(b.next_mark())
         self.assertEqual([], b.next_moves())
 
     def test_row2_winner(self):
@@ -59,7 +59,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             ' |X|X')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_O, b.winner())
+        self.assertEqual(Board.O_WINS, b.winner())
 
     def test_row3_winner(self):
         b = Board(state=9695)
@@ -70,7 +70,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'X|X|X')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_X, b.winner())
+        self.assertEqual(Board.X_WINS, b.winner())
 
     def test_col1_winner(self):
         b = Board(state=10343)
@@ -81,7 +81,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'O|X|X')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_O, b.winner())
+        self.assertEqual(Board.O_WINS, b.winner())
 
     def test_col2_winner(self):
         b = Board(state=3783)
@@ -92,7 +92,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'O|X| ')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_X, b.winner())
+        self.assertEqual(Board.X_WINS, b.winner())
 
     def test_col3_winner(self):
         b = Board(state=14439)
@@ -103,7 +103,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_O, b.winner())
+        self.assertEqual(Board.O_WINS, b.winner())
 
     def test_rising_slash_winner(self):
         b = Board(state=14427)
@@ -114,7 +114,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_X, b.winner())
+        self.assertEqual(Board.X_WINS, b.winner())
 
     def test_falling_slash_winner(self):
         b = Board(state=14267)
@@ -125,7 +125,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_O, b.winner())
+        self.assertEqual(Board.O_WINS, b.winner())
 
     def test_two_way_winner(self):
         self.assertRaises(ValueError, Board, state=715)
@@ -137,7 +137,7 @@ class BoardTest(SimpleTestCase):
             '-+-+-\n'
             'X|O|O')
         self.assertMultiLineEqual(expected, str(b))
-        self.assertEqual(Board.MARK_X, b.winner())
+        self.assertEqual(Board.X_WINS, b.winner())
 
     def test_two_winners_raises(self):
         self.assertRaises(ValueError, Board, state=715)
@@ -168,7 +168,7 @@ class BoardTest(SimpleTestCase):
             ' | | ')
         self.assertEqual(expected, str(b))
         self.assertEqual(1, b.state())
-        self.assertFalse(b.winner())
+        self.assertIsNone(b.winner())
 
     def test_invalid_move_raises(self):
         b = Board(state=1)
@@ -221,13 +221,13 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            'server_player': 2,
+            'server_player': Game.PLAYER_O,
             'winner': 0
         }
         self.assertEqual(expected, response.data)
 
     def test_retrieve_game(self):
-        game = Game.objects.create(server_player=2)
+        game = Game.objects.create(server_player=Game.PLAYER_O)
         path = reverse('game-detail', kwargs={'pk': game.id})
         response = self.client.get(path)
         self.assertEqual(200, response.status_code, response.content)
@@ -236,7 +236,7 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            'server_player': 2,
+            'server_player': Game.PLAYER_O,
             'winner': 0
         }
         self.assertEqual(expected, response.data)
@@ -244,6 +244,15 @@ class GameAPITest(APITestCase):
 
 class GameModelTest(SimpleTestCase):
     '''Game tests that do not require a database'''
+
+    def test_other_player_O(self):
+        game = Game(server_player=Game.PLAYER_X)
+        self.assertEqual(Game.PLAYER_O, game.other_player)
+
+    def test_other_player_X(self):
+        game = Game(server_player=Game.PLAYER_O)
+        self.assertEqual(Game.PLAYER_X, game.other_player)
+
     def test_get_board(self):
         game = Game(state=220)
         board = game.board

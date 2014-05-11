@@ -21,9 +21,8 @@ class Board(object):
     '''
     # Position states
     BLANK = 0
-    MARK_X = 1
-    MARK_O = 2
-    STATES = (BLANK, MARK_X, MARK_O)
+    MARK_X = X_NEXT = X_WINS = 1
+    MARK_O = O_NEXT = O_WINS = 2
 
     def __init__(self, state=0):
         '''
@@ -75,15 +74,15 @@ class Board(object):
         return state
 
     def next_mark(self):
-        '''Return which player placed the next mark'''
+        '''Return which player places the next mark, or None if game over'''
         if self._has_winner:
-            return self.BLANK
+            return None
         else:
             moves = len([1 for p in self.board if p != 0])
             if moves % 2:
-                return self.MARK_O
+                return self.O_NEXT
             else:
-                return self.MARK_X
+                return self.X_NEXT
 
     def next_moves(self):
         '''Return valid next moves'''
@@ -102,8 +101,8 @@ class Board(object):
     def winner(self):
         '''Returns the winner, or False if no winner
 
-        Returns 1 (MARK_X) if X is the winner
-        Returns 2 (MARK_O) if O is the winner
+        Returns 1 (X_WINS) if X is the winner
+        Returns 2 (O_WINS) if O is the winner
         '''
 
         win_sets = (
@@ -116,7 +115,7 @@ class Board(object):
             (2, 4, 6),  # Rising slash
             (0, 4, 8),  # Falling slash
         )
-        winner = False
+        winner = None
 
         for win_set in win_sets:
             items = [self.board[i] for i in win_set]

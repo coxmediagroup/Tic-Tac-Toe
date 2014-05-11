@@ -7,6 +7,12 @@ from .models import Game
 
 
 class GameCreateSerializer(HyperlinkedModelSerializer):
+    '''
+    Serializer for creating Game objects
+
+    The caller can select if the server plays first or second
+    '''
+
     board = ListField(
         IntegerField(), source='board.board', read_only=True)
     next_moves = ListField(

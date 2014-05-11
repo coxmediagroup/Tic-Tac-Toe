@@ -8,16 +8,16 @@ class Game(models.Model):
     '''A Tic-Tac-Toe game'''
 
     IN_PROGRESS = 0
-    X_WINS = Board.MARK_X
-    O_WINS = Board.MARK_O
+    X_WINS = PLAYER_X = Board.MARK_X
+    O_WINS = PLAYER_O = Board.MARK_O
 
     RANDOM_STRATEGY = 0
 
     state = models.IntegerField(
         help_text='State of the board', default=0)
     server_player = models.IntegerField(
-        help_text='Which player is the server?', default=X_WINS,
-        choices=((X_WINS, 'X'), (O_WINS, 'O')))
+        help_text='Which player is the server?', default=PLAYER_X,
+        choices=((PLAYER_X, 'X'), (PLAYER_O, 'O')))
     winner = models.IntegerField(
         help_text='Winner of the game', default=IN_PROGRESS,
         choices=(
@@ -30,6 +30,13 @@ class Game(models.Model):
         choices=(
             (RANDOM_STRATEGY, 'Random Strategy'),
         ))
+
+    @property
+    def other_player(self):
+        if self.server_player == self.PLAYER_X:
+            return self.PLAYER_O
+        else:
+            return self.PLAYER_X
 
     @property
     def board(self):
