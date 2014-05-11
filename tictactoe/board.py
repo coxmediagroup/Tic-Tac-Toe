@@ -1,5 +1,4 @@
-from __future__ import unicode_literals
-from random import choice as random_choice
+'''Defines a Board class to hold the state of a Tic-Tac-Toe game'''
 
 
 class Board(object):
@@ -128,10 +127,3 @@ class Board(object):
                 else:
                     winner = items[0]
         return winner
-
-
-class RandomStrategy(object):
-    '''Randomly picks next move'''
-
-    def next_move(self, board):
-        return random_choice(board.next_moves())

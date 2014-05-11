@@ -1,7 +1,8 @@
 from django.test import SimpleTestCase
 import mock
 
-from .game import Board, RandomStrategy
+from .board import Board
+from .strategy import RandomStrategy
 
 
 class BoardTest(SimpleTestCase):
@@ -172,7 +173,7 @@ class BoardTest(SimpleTestCase):
 
 
 class RandomStrategyTest(SimpleTestCase):
-    @mock.patch('tictactoe.game.random_choice')
+    @mock.patch('tictactoe.strategy.random_choice')
     def test_random_move(self, mock_choice):
         board = Board(state=220)
         expected = (
