@@ -170,6 +170,27 @@ class BoardTest(SimpleTestCase):
         self.assertEqual(1, b.state())
         self.assertIsNone(b.winner())
 
+    def test_winning_move(self):
+        b = Board(state=228)
+        expected = (
+            ' |X|X\n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(b))
+        b.move(0)
+        expected = (
+            'X|X|X\n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(b))
+        self.assertEqual(Board.X_WINS, b.winner())
+        self.assertIsNone(b.next_mark())
+        self.assertEqual([], b.next_moves())
+
     def test_invalid_move_raises(self):
         b = Board(state=1)
         self.assertRaises(ValueError, b.move, 0)
@@ -178,6 +199,11 @@ class BoardTest(SimpleTestCase):
 class GameAPITest(APITestCase):
     '''Test the Game API'''
 
+    def setUp(self):
+        patcher = mock.patch('tictactoe.strategy.random_choice')
+        self.addCleanup(patcher.stop)
+        self.mock_choice = patcher.start()
+
     def test_list_no_games(self):
         response = self.client.get(
             reverse('game-list'), format='json')
@@ -185,11 +211,10 @@ class GameAPITest(APITestCase):
         expected = {'count': 0, 'next': None, 'previous': None, 'results': []}
         self.assertEqual(expected, response.data)
 
-    @mock.patch('tictactoe.strategy.random_choice')
-    def test_create_game_server_is_first(self, mock_choice):
-        mock_choice.return_value = 0
+    def test_create_game_server_is_first(self):
+        self.mock_choice.return_value = 0
         response = self.client.post(
-            reverse('game-list'), {'server_player': 1})
+            reverse('game-list'), {'server_player': Game.PLAYER_X})
         self.assertEqual(201, response.status_code, response.content)
         game = Game.objects.latest('id')
         expected_url = (
@@ -200,17 +225,16 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [1, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [1, 2, 3, 4, 5, 6, 7, 8],
-            'server_player': 1,
+            'server_player': Game.PLAYER_X,
             'winner': 0
         }
         self.assertEqual(expected, response.data)
-        mock_choice.assert_called_once_with(range(9))
+        self.mock_choice.assert_called_once_with(range(9))
 
-    @mock.patch('tictactoe.strategy.random_choice')
-    def test_create_game_server_is_second(self, mock_choice):
-        mock_choice.side_effect = Exception('Not called')
+    def test_create_game_server_is_second(self):
+        self.mock_choice.side_effect = Exception('Not called')
         response = self.client.post(
-            reverse('game-list'), {'server_player': 2})
+            reverse('game-list'), {'server_player': Game.PLAYER_O})
         self.assertEqual(201, response.status_code, response.content)
         game = Game.objects.latest('id')
         expected_url = (
@@ -239,6 +263,80 @@ class GameAPITest(APITestCase):
             'server_player': Game.PLAYER_O,
             'winner': 0
         }
+        self.assertEqual(expected, response.data)
+
+    def test_make_move(self):
+        self.mock_choice.return_value = 2
+        game = Game.objects.create(server_player=Game.PLAYER_O)
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path, {'position': 0}, follow=True)
+        expected_url = reverse('game-detail', kwargs={'pk': game.id})
+        self.assertRedirects(response, expected_url)
+        game = Game.objects.get(id=game.id)
+        expected = (
+            'X| |O\n'
+            '-+-+-\n'
+            ' | | \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(game.board))
+
+    def test_make_winning_move(self):
+        self.mock_choice.side_effect = Exception('Not called')
+        game = Game.objects.create(server_player=Game.PLAYER_X, state=861)
+        expected_board = (
+            ' |O|O\n'
+            '-+-+-\n'
+            'X|X| \n'
+            '-+-+-\n'
+            'X| | ')
+        self.assertEqual(expected_board, str(game.board))
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path, {'position': 0}, follow=True)
+        expected_url = reverse('game-detail', kwargs={'pk': game.id})
+        self.assertRedirects(response, expected_url)
+        game = Game.objects.get(id=game.id)
+        self.assertEqual(game.state, 863)
+        expected_board = (
+            'O|O|O\n'
+            '-+-+-\n'
+            'X|X| \n'
+            '-+-+-\n'
+            'X| | ')
+        self.assertEqual(expected_board, str(game.board))
+
+    def test_make_duplicate_move(self):
+        self.mock_choice.side_effect = Exception('Not called')
+        game = Game.objects.create(server_player=Game.PLAYER_X, state=88)
+        expected_board = (
+            'X|O| \n'
+            '-+-+-\n'
+            ' |X| \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected_board, str(game.board))
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path, {'position': 1})
+        self.assertEqual(400, response.status_code, response.content)
+        expected = {'position': '1 is an invalid move'}
+        self.assertEqual(expected, response.data)
+
+    def test_make_invalid_move(self):
+        self.mock_choice.side_effect = Exception('Not called')
+        game = Game.objects.create(server_player=Game.PLAYER_O)
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path, {'position': 'foo'})
+        self.assertEqual(400, response.status_code, response.content)
+        expected = {'position': "invalid literal for int() with base 10: 'foo'"}
+        self.assertEqual(expected, response.data)
+
+    def test_make_move_complete_game(self):
+        self.mock_choice.side_effect = Exception('Not called')
+        game = Game.objects.create(server_player=Game.PLAYER_X, state=863)
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path, {'position': 5})
+        self.assertEqual(400, response.status_code, response.content)
+        expected = {'position': '5 is an invalid move'}
         self.assertEqual(expected, response.data)
 
 

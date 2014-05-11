@@ -95,6 +95,7 @@ class Board(object):
         '''Add the next move to the board'''
         if pos in self.next_moves():
             self.board[pos] = self.next_mark()
+            self._has_winner = self.winner()
         else:
             raise ValueError('{} is an invalid move'.format(pos))
 
