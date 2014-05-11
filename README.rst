@@ -1,28 +1,38 @@
-Story
-======
+CMG Tic-Tac-Toe
+===============
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+A Tic-Tac-Toe app for CMG consideration. The app is built with Django, Twitter-Bootstrap, and jQuery. 
+This app is fully responsive, includes a minimax AI that never loses, and a high-score board.
 
-Acceptance criteria
-=======================
+Installation
+============
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+To install this app, first clone the repository:
+
+```
+git clone https://github.com/zebulasampedro/Tic-Tac-Toe.git
+```
+
+Then, install the required packages:
+*It is recommended that this step be done in a virtualenv with no-site-packages, to avoid conflicts with existing packages.*
+
+```
+pip install -r Tic-Tac-Toe/tictactoe/requirements.txt
+```
+
+In the app root, collect the static files:
+
+```
+python manage.py collectstatic
+```
+
+Run the server:
+
+```
+python manage.py runserver 0.0.0.0:8000
+```
+
+The app will now be accessible at http://<your-host>:8000/tictactoe/!
 
 
-Technical notes
-------------------
-
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
-
-
-Submissions
----------------
-
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
 
