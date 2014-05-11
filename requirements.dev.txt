@@ -22,3 +22,6 @@ ipdbplugin==1.4
 
 # RST validation
 docutils==0.11
+
+# Mocking library, standard in py3.3
+mock==1.0.1

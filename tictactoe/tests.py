@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase
+import mock
 
-from .game import Board
+from .game import Board, RandomStrategy
 
 
 class BoardTest(SimpleTestCase):
@@ -168,3 +169,22 @@ class BoardTest(SimpleTestCase):
     def test_invalid_move_raises(self):
         b = Board(state=1)
         self.assertRaises(ValueError, b.move, 0)
+
+
+class RandomStrategyTest(SimpleTestCase):
+    @mock.patch('tictactoe.game.random_choice')
+    def test_random_move(self, mock_choice):
+        board = Board(state=220)
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertEqual(expected, str(board))
+        strategy = RandomStrategy()
+        mock_choice.return_value = 7
+
+        move = strategy.next_move(board)
+        self.assertEqual(7, move)
+        mock_choice.assert_called_once_with([2, 5, 6, 7, 8])
