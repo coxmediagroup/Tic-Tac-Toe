@@ -134,7 +134,7 @@ class BoardTest(SimpleTestCase):
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.MARK_X, b.winner())
 
-    def test_two_winners_invalid(self):
+    def test_two_winners_raises(self):
         self.assertRaises(ValueError, Board, state=715)
         # This corresponds to this board:
         # X|X|X #
@@ -143,13 +143,13 @@ class BoardTest(SimpleTestCase):
         # -+-+- #
         #  | |  #
 
-    def test_invalid_large_state(self):
+    def test_large_state_raises(self):
         self.assertRaises(ValueError, Board, state=pow(3, 9))
 
-    def test_invalid_O_first(self):
+    def test_O_first_raises(self):
         self.assertRaises(ValueError, Board, state=2)
 
-    def test_invalid_too_many_X(self):
+    def test_too_many_X_raises(self):
         self.assertRaises(ValueError, Board, state=4)
 
     def test_valid_move(self):
@@ -165,6 +165,6 @@ class BoardTest(SimpleTestCase):
         self.assertEqual(1, b.state())
         self.assertFalse(b.winner())
 
-    def test_invalid_move(self):
+    def test_invalid_move_raises(self):
         b = Board(state=1)
         self.assertRaises(ValueError, b.move, 0)
