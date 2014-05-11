@@ -118,6 +118,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     # Third-party apps
+    'rest_framework',
     'south',
     'LOCAL-APPS',
 
@@ -154,6 +155,11 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 10,
 }
 
 # Install developer extensions

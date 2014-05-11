@@ -14,19 +14,19 @@ class Game(models.Model):
     RANDOM_STRATEGY = 0
 
     state = models.IntegerField(
-        help_text='State of the board')
-    player = models.CharField(
-        max_length=1, help_text='Which player is the server',
-        choices=((c, c) for c in 'XO'))
+        help_text='State of the board', default=0)
+    server_player = models.IntegerField(
+        help_text='Which player is the server?', default=X_WINS,
+        choices=((X_WINS, 'X'), (O_WINS, 'O')))
     winner = models.IntegerField(
-        help_text='Winner of the game',
+        help_text='Winner of the game', default=IN_PROGRESS,
         choices=(
             (IN_PROGRESS, 'In Progress'),
             (X_WINS, 'X Wins'),
             (O_WINS, 'O Wins'),
         ))
     strategy_type = models.IntegerField(
-        help_text="Server's strategy",
+        help_text="Server's strategy", default=RANDOM_STRATEGY,
         choices=(
             (RANDOM_STRATEGY, 'Random Strategy'),
         ))

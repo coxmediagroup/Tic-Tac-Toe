@@ -9,3 +9,8 @@ jingo==0.7
 
 # Database migrations
 South==0.8.4
+
+# Browsable API
+Markdown==2.4
+djangorestframework==2.3.13
+drf-compound-fields==0.2.1

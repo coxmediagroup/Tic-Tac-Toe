@@ -12,10 +12,10 @@ class Migration(SchemaMigration):
         # Adding model 'Game'
         db.create_table(u'tictactoe_game', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('state', self.gf('django.db.models.fields.IntegerField')()),
-            ('player', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('winner', self.gf('django.db.models.fields.IntegerField')()),
-            ('strategy_type', self.gf('django.db.models.fields.IntegerField')()),
+            ('state', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('server_player', self.gf('django.db.models.fields.IntegerField')(default=1)),
+            ('winner', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('strategy_type', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'tictactoe', ['Game'])
 
@@ -29,10 +29,10 @@ class Migration(SchemaMigration):
         u'tictactoe.game': {
             'Meta': {'object_name': 'Game'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'player': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
-            'state': ('django.db.models.fields.IntegerField', [], {}),
-            'strategy_type': ('django.db.models.fields.IntegerField', [], {}),
-            'winner': ('django.db.models.fields.IntegerField', [], {})
+            'server_player': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'state': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'strategy_type': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'winner': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         }
     }
 
