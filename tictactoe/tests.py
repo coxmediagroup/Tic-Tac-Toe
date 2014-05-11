@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.test import SimpleTestCase
+from rest_framework.test import APITestCase
 import mock
 
 from .board import Board
@@ -173,7 +175,74 @@ class BoardTest(SimpleTestCase):
         self.assertRaises(ValueError, b.move, 0)
 
 
-class GameModelTests(SimpleTestCase):
+class GameAPITest(APITestCase):
+    '''Test the Game API'''
+
+    def test_list_no_games(self):
+        response = self.client.get(
+            reverse('game-list'), format='json')
+        self.assertEqual(200, response.status_code, response.content)
+        expected = {'count': 0, 'next': None, 'previous': None, 'results': []}
+        self.assertEqual(expected, response.data)
+
+    @mock.patch('tictactoe.strategy.random_choice')
+    def test_create_game_server_is_first(self, mock_choice):
+        mock_choice.return_value = 0
+        response = self.client.post(
+            reverse('game-list'), {'server_player': 1})
+        self.assertEqual(201, response.status_code, response.content)
+        game = Game.objects.latest('id')
+        expected_url = (
+            'http://testserver' +
+            reverse('game-detail', kwargs={'pk': game.id}))
+        self.assertEqual(expected_url, response['location'])
+        expected = {
+            'url': expected_url,
+            'board': [1, 0, 0, 0, 0, 0, 0, 0, 0],
+            'next_moves': [1, 2, 3, 4, 5, 6, 7, 8],
+            'server_player': 1,
+            'winner': 0
+        }
+        self.assertEqual(expected, response.data)
+        mock_choice.assert_called_once_with(range(9))
+
+    @mock.patch('tictactoe.strategy.random_choice')
+    def test_create_game_server_is_second(self, mock_choice):
+        mock_choice.side_effect = Exception('Not called')
+        response = self.client.post(
+            reverse('game-list'), {'server_player': 2})
+        self.assertEqual(201, response.status_code, response.content)
+        game = Game.objects.latest('id')
+        expected_url = (
+            'http://testserver' +
+            reverse('game-detail', kwargs={'pk': game.id}))
+        self.assertEqual(expected_url, response['location'])
+        expected = {
+            'url': expected_url,
+            'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'server_player': 2,
+            'winner': 0
+        }
+        self.assertEqual(expected, response.data)
+
+    def test_retrieve_game(self):
+        game = Game.objects.create(server_player=2)
+        path = reverse('game-detail', kwargs={'pk': game.id})
+        response = self.client.get(path)
+        self.assertEqual(200, response.status_code, response.content)
+        expected_url = 'http://testserver' + path
+        expected = {
+            'url': expected_url,
+            'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'server_player': 2,
+            'winner': 0
+        }
+        self.assertEqual(expected, response.data)
+
+
+class GameModelTest(SimpleTestCase):
     '''Game tests that do not require a database'''
     def test_get_board(self):
         game = Game(state=220)
