@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <div id="main">
+	    <form role="form" action="/game" name="newGame" class="new-game-form">{% csrf_token %}
+			<div class="form-group">
+	    		<label for="exampleInputEmail1">Your Name</label>
+	    		<input type="text" name="name" class="form-control" id="inputName1" placeholder="Enter Your Name">
+	  		</div>
+			<button type="submit" name="form.submitted" value="Submit" class="btn btn-primary pull-right">Submit</button>
+		</form>
+    </div>
+
+{% endblock %}

@@ -13,6 +13,8 @@ body {
 }
 ul {list-style:none;}
 li {list-style:none;}
+.icon {margin:2px 0px auto 5px;}
+.title {position:relative; left:-40px; top:8px;}
 #main {
 	padding:15px;
 	border:0px solid black;
@@ -24,10 +26,11 @@ li {list-style:none;}
 	margin:0 auto;
 }
 #main table td{
-	border:1px solid black;
+	border:2px solid black;
 	height:100px;
 	width:100px;
 	text-align:center;
 }
+#main .new-game-form {margin:0 auto; max-width:500px;}
 .board-row-cell {cursor:pointer;}
 .board-row-cell.selected {background-color:#CCC; color:#333;}

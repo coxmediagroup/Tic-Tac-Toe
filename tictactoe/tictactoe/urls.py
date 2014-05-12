@@ -5,7 +5,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'tictactoe.controllers.game.index', name='index'),
+    url(r'^$', 'tictactoe.controllers.game.new', name='new'),
+    url(r'^game', 'tictactoe.controllers.game.index', name='index'),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
