@@ -160,6 +160,11 @@ LOGGING = {
 # Django REST Framework
 REST_FRAMEWORK = {
     'PAGINATE_BY': 10,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'tictactoe.renderers.HTMLRenderer',
+    )
 }
 
 # Install developer extensions

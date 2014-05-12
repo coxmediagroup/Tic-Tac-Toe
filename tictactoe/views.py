@@ -24,7 +24,7 @@ class GameViewSet(
 
     To make a move, POST position=(next move) to the move url
     '''
-    queryset = Game.objects.all()
+    model = Game
     serializer_class = GameSerializer
 
     @action()

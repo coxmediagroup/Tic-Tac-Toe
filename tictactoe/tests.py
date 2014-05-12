@@ -268,6 +268,23 @@ class GameAPITest(APITestCase):
         }
         self.assertEqual(expected, response.data)
 
+    def test_retrieve_game_as_html(self):
+        game = Game.objects.create(server_player=Game.PLAYER_O)
+        path = reverse('game-detail', kwargs={'pk': game.id})
+        response = self.client.get(path, {'format': 'html'})
+        self.assertEqual(200, response.status_code, response.content)
+        self.assertContains(response, 'ttt_data')
+        expected_url = 'http://testserver' + path
+        expected = {
+            'url': expected_url,
+            'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'move_url': expected_url + 'move/',
+            'server_player': Game.PLAYER_O,
+            'winner': 0
+        }
+        self.assertEqual(expected, response.data)
+
     def test_make_move(self):
         self.mock_choice.return_value = 2
         game = Game.objects.create(server_player=Game.PLAYER_O)

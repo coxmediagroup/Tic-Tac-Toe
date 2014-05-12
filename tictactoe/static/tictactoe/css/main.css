@@ -34,3 +34,11 @@ footer li:last-child {
 footer li a {
   text-decoration: none;
 }
+
+.tt_board {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 600px;
+    height: 600px;
+    line-height: 0px;
+}
