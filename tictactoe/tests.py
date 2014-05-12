@@ -225,6 +225,7 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [1, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [1, 2, 3, 4, 5, 6, 7, 8],
+            'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_X,
             'winner': 0
         }
@@ -245,6 +246,7 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_O,
             'winner': 0
         }
@@ -260,6 +262,7 @@ class GameAPITest(APITestCase):
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_O,
             'winner': 0
         }
@@ -327,7 +330,8 @@ class GameAPITest(APITestCase):
         path = reverse('game-move', kwargs={'pk': game.id})
         response = self.client.post(path, {'position': 'foo'})
         self.assertEqual(400, response.status_code, response.content)
-        expected = {'position': "invalid literal for int() with base 10: 'foo'"}
+        expected = {
+            'position': "invalid literal for int() with base 10: 'foo'"}
         self.assertEqual(expected, response.data)
 
     def test_make_move_complete_game(self):
@@ -337,6 +341,15 @@ class GameAPITest(APITestCase):
         response = self.client.post(path, {'position': 5})
         self.assertEqual(400, response.status_code, response.content)
         expected = {'position': '5 is an invalid move'}
+        self.assertEqual(expected, response.data)
+
+    def test_make_move_without_position(self):
+        self.mock_choice.side_effect = Exception('Not called')
+        game = Game.objects.create(server_player=Game.PLAYER_X, state=863)
+        path = reverse('game-move', kwargs={'pk': game.id})
+        response = self.client.post(path)
+        self.assertEqual(400, response.status_code, response.content)
+        expected = {'position': 'must be a valid next move'}
         self.assertEqual(expected, response.data)
 
 

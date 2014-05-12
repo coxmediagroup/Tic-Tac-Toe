@@ -1,22 +1,27 @@
 '''API serializers'''
 
 from drf_compound_fields.fields import ListField
-from rest_framework.serializers import IntegerField, HyperlinkedModelSerializer
+from rest_framework.serializers import (
+    HyperlinkedModelSerializer, IntegerField, SerializerMethodField)
+from rest_framework.reverse import reverse
 
 from .models import Game
 
 
-class GameCreateSerializer(HyperlinkedModelSerializer):
+class GameSerializer(HyperlinkedModelSerializer):
     '''
-    Serializer for creating Game objects
-
-    The caller can select if the server plays first or second
+    Serializer for creating, viewing, and updating Game objects
     '''
 
     board = ListField(
         IntegerField(), source='board.board', read_only=True)
     next_moves = ListField(
         IntegerField(), source='board.next_moves', read_only=True)
+    move_url = SerializerMethodField('get_move_url')
+
+    def get_move_url(self, obj):
+        request = self.context.get('request')
+        return reverse('game-move', kwargs={'pk': obj.pk}, request=request)
 
     def save_object(self, obj, *args, **kwargs):
         '''If it is the server's turn, take it'''
@@ -24,14 +29,11 @@ class GameCreateSerializer(HyperlinkedModelSerializer):
         if board.next_mark() == obj.server_player:
             board.move(obj.strategy.next_move(board))
             obj.board = board
-        super(GameCreateSerializer, self).save_object(obj, *args, **kwargs)
+        super(GameSerializer, self).save_object(obj, *args, **kwargs)
 
     class Meta:
         model = Game
-        fields = ('url', 'board', 'next_moves', 'server_player', 'winner')
+        fields = (
+            'url', 'board', 'next_moves', 'move_url', 'server_player',
+            'winner')
         read_only_fields = ('winner', )
-
-
-class GameUpdateSerializer(GameCreateSerializer):
-    class Meta(GameCreateSerializer.Meta):
-        read_only_fields = ('winner', 'server_player')
