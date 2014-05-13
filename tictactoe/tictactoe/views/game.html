@@ -28,16 +28,11 @@
     </div>
 
 <script>
+	initBoard();
 	//Setup Functions
-	$('.board-row-cell').click(function(){
-		id = $(this).attr('id');
-		toggleBoard(id);
-		return false;
-	})
 	$('.new-game-btn').click(function(){
 		newGame();
 		return false;
 	})
-	setupBoard();
 </script>
 {% endblock %}

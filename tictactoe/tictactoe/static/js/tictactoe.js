@@ -1,4 +1,4 @@
-var firstPlayer = Math.floor(Math.random()*2)+1;
+var playerIndicator = Math.floor(Math.random()*2)+1;
 
 function toggleBoard(cell){
 	var selector = "#"+cell;
@@ -12,6 +12,7 @@ function toggleBoard(cell){
 			//console.log(data['board']);
 			updateBoard(data);
 			togglePlayerIndictator();
+			$(selector).off();
 		});
 	}
 }
@@ -36,47 +37,52 @@ function updateBoard(data){
 	}
 }
 function setupBoard(){
-	//Hide or show player indicator
-	$('.player-indicator').hide();
-	if (firstPlayer==1){
-		$('.player-turn').show();
-		$('.player-turn').addClass('selected');
-	}else{
-		$('.cpu-turn').show();
-		$('.cpu-turn').addClass('selected');
-		var jqxhr = $.get('/api/cpuplay', function(data){
-			updateBoard(data);
-			togglePlayerIndictator();
-		});
-	}
-	
-	//hide the alerts which indicate ties and loss
-	$('#loss-alert').hide();
-	$('#tie-alert').hide();
-	
 	//setup board, get or create a board based on email address
 	var jqxhr = $.get('/api/board', function(data){
 		updateBoard(data);
 	});
 }
+function initBoard(){
+	//apply button listeners
+	$('.board-row-cell').click(function(){
+		id = $(this).attr('id');
+		toggleBoard(id);
+		return false;
+	})
+	//hide the alerts which indicate ties and loss
+	$('#loss-alert').hide();
+	$('#tie-alert').hide();
+	togglePlayerIndictator();
+	setupBoard();
+	startGame();
+}
+function startGame(){
+	if (playerIndicator==2){
+		$.get('/api/cpuplay', function(data){
+			updateBoard(data);
+			togglePlayerIndictator();
+		});
+	}
+}
+function newGame(){
+	playerIndicator = Math.floor(Math.random()*2)+1;
+	console.log(playerIndicator);
+	$.get('/api/newGame', function(data){
+		initBoard();
+	});
+}
 function togglePlayerIndictator(){
-	if($('.player-turn').hasClass('selected')){
+	if(playerIndicator==1){
 		$('.player-turn').removeClass('selected');
 		$('.cpu-turn').addClass('selected');
 		$('.player-turn').hide();
 		$('.cpu-turn').show();
-	}else if($('.cpu-turn').hasClass('selected')){
+		playerIndicator = 2;
+	}else if(playerIndicator==2){
 		$('.cput-turn').removeClass('selected');
 		$('.player-turn').addClass('selected');
 		$('.cpu-turn').hide();
 		$('.player-turn').show();
+		playerIndicator = 1;
 	}
-}
-function newGame(){
-	firstPlayer = Math.floor(Math.random()*2)+1;
-	$('#loss-alert').hide();
-	$('#tie-alert').hide();
-	var jqxhr = $.get('/api/newGame', function(data){
-		updateBoard(data);
-	});
 }
