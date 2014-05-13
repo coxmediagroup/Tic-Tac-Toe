@@ -1,3 +1,18 @@
+Setup
+=====
+* Setup SQLite database models by navigating to project directory and typing the command 'python manage.py sql tictactoe'
+* Sync Models to SQLite database by typing command 'python manage.py syncdb'
+* Start "Tic Tac Taco" by typing command 'python manage.py runserver 8080'
+** Note that for production, a uWSGI interface would be implemented but falls outside the scope of this assignment
+
+Game
+====
+Welcome to Tic Tac Taco!
+
+If you manage to beat the computer you win a free year's supply of tacos! First player is chosen randomly. Simply enter in your email address to start or continue your game!
+
+AI algorithm "borrowed" from: https://gist.github.com/SudhagarS/3942029
+
 Story
 ======
 
