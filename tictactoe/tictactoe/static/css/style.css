@@ -16,8 +16,10 @@ li {list-style:none;}
 .icon {margin:2px 0px auto 5px;}
 .title {position:relative; left:-40px; top:8px;}
 #main {
+	margin:0px auto;
 	padding:15px;
 	border:0px solid black;
+	width:600px;
 }
 #main h3, h5{
 	margin:10px auto;

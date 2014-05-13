@@ -40,6 +40,13 @@ def play(request, place):
     board.printBoard()
     return HttpResponse(board.__json__(), content_type="application/json")
 
+def cpuplay(request):
+    id = request.session['email']
+    board = getBoard(id)
+    board.computerPlay()
+    board.printBoard()
+    return HttpResponse(board.__json__(), content_type="application/json")
+
 def returnBoard(request):
     id = request.session['email']
     board = getBoard(id)

@@ -23,11 +23,12 @@
     	</table>
     	<h5 id="loss-alert" class="alert alert-danger">Sorry, You Lose!</h5>
     	<h5 id="tie-alert" class="alert alert-warning">Sorry, You Tied!</h5>
+    	<h4 class="player-indicator player-turn pull-left">Your Turn</h4>
+    	<h4 class="player-indicator cpu-turn pull-right">Computer Turn</h4>
     </div>
 
 <script>
-	$('#loss-alert').hide();
-	$('#tie-alert').hide();
+	//Setup Functions
 	$('.board-row-cell').click(function(){
 		id = $(this).attr('id');
 		toggleBoard(id);
