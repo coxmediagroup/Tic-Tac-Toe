@@ -19,8 +19,10 @@ li {list-style:none;}
 	padding:15px;
 	border:0px solid black;
 }
-#main h3 {
+#main h3, h5{
+	margin:10px auto;
 	text-align:center;
+	max-width:400px;
 }
 #main table {
 	margin:0 auto;
@@ -30,6 +32,7 @@ li {list-style:none;}
 	height:100px;
 	width:100px;
 	text-align:center;
+	font-size:40px;
 }
 #main .new-game-form {margin:0 auto; max-width:500px;}
 .board-row-cell {cursor:pointer;}
