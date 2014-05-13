@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from tictactoe import app
+from game import Board
 
+from copy import copy
 import json
 import lxml.html
 import os
@@ -21,7 +23,7 @@ def count_total_moves(data):
 
     return counter
 
-class FlaskTestCase(unittest.TestCase):
+class TestUrl(unittest.TestCase):
     def test_tic_tac_toe(self):
         with app.test_client() as tester:
             response = tester.get('/')
@@ -29,24 +31,84 @@ class FlaskTestCase(unittest.TestCase):
 
     def test_tic_tac_toe_board(self):
         with app.test_client() as tester:
-            
             response = tester.get('/?player-first')
             self.assertEqual(response.status_code, 200)
             board = get_initial_board(response)
             self.assertEqual(board, [[u" ", u" ", u" "],
                                      [u" ", u" ", u" "],
                                      [u" ", u" ", u" "]])
-            
-            self.assertEqual(count_total_moves(board), 0)
-            response = tester.post('/board', data={'layout':
-                                                       '[["X", " ", " "], '
-                                                       '[" ", " ", " "], '
-                                                       '[" ", " ", " "]]'})
 
+            self.assertEqual(count_total_moves(board), 0)
+            test_board_1 = ('[["X", " ", " "], '
+                            '[" ", " ", " "], '
+                            '[" ", " ", " "]]')
+
+            test_board_2 = ('[["X", "O", "O"], '
+                            '["O", "X", "X"], '
+                            '["X", "X", "O"]]')
+
+            test_board_3 = ('[["X", "X", "X"], '
+                            '["X", "O", "O"], '
+                            '[" ", "O", " "]]')
+
+            response = tester.post('/board', data={'layout': test_board_1})
             board = json.loads(response.data)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(count_total_moves(board), 1)
 
+            url = '/is-draw?layout={}'.format(test_board_2)
+            response = tester.get(url)
+            self.assertEqual(response.status_code, 200)
+            is_draw = False if response.data == 'False' else True
+            self.assertEqual(is_draw, True)
+
+            url = '/is-win?layout={}'.format(test_board_2)
+            response = tester.get(url)
+            self.assertEqual(response.status_code, 200)
+            winner = None if response.data == '' else response.data
+            self.assertEqual(winner, None)
+
+            url = '/is-win?layout={}'.format(test_board_3)
+            response = tester.get(url)
+            self.assertEqual(response.status_code, 200)
+            winner = None if response.data == '' else response.data
+            self.assertEqual(winner, 'player')
+
+class BoardTest(unittest.TestCase):
+    def test_board(self):
+        blank_board = {0: {0: " ", 1: " ", 2: " "},
+                       1: {0: " ", 1: " ", 2: " "},
+                       2: {0: " ", 1: " ", 2: " "}
+                     }
+        test_board = {0: {0: "X", 1: " ", 2: "O"},
+                      1: {0: " ", 1: "X", 2: "O"},
+                      2: {0: "O", 1: " ", 2: "X"}
+                     }
+
+        board = Board()
+        self.assertEqual(board.board(), blank_board)
+        board = Board(setup=test_board)
+        self.assertEqual(board.board(), test_board)
+        for x in range(0, 3):
+            for y in range(0, 3):
+                self.assertEqual(board.square((x, y)),
+                                 board.board()[x][y])
+        test_board2 = Board(setup=copy(blank_board))
+        for i in range(0, 3):
+            test_board2.square((i, i), set_to="X")
+
+        for coords in ((0, 2), (1, 2), (2, 0)):
+            test_board2.square(coords, set_to="O")
+
+        self.assertEqual(test_board2.board(), test_board)
+        self.assertEqual(board.check_requirements(
+                         [[0, 0], [1, 1], [2,2]], {"X": 3}), True)
+        self.assertEqual(board.check_requirements(
+                         [[0, 2], [1, 2], [2,2]], {"O": 3}), False)
+        self.assertEqual(board.traverse(requires={"O": 3}), [])
+        self.assertEqual(board.traverse(requires={"O": 2}), [
+            [(0, 2), (1, 2), (2, 2)],
+            [(0, 2), (1, 1), (2, 0)]])
 
 if __name__ == '__main__':
     unittest.main()
