@@ -13,13 +13,13 @@ class Board(models.Model):
     cell6 = models.IntegerField(default=0)
     cell7 = models.IntegerField(default=0)
     cell8 = models.IntegerField(default=0)
-    playCount = 0
+    playCount = models.IntegerField(default=0)
 
     def __str__(self):
         return self.player_id
     
     def __json__(self):
-        ret_value = {"board":self.board, "isWin":self.isWin(self.board), 'isTie':self.isTie()}
+        ret_value = {"board":self.board, "isWin":self.isWin(self.board), 'isTie':self.isTie(), 'playCount':self.playCount}
         return json.dumps(ret_value)
         
     @property
