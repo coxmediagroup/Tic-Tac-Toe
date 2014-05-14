@@ -28,6 +28,18 @@
                 return board;
             }
 
+            set_board = function(board) {
+                console.log(board);
+                for(y=0;y<=2;y++) {
+                    for(x=0;x<=2;x++) {
+                        var button_id = "#" + x + "_" + y;
+                        var square = board[x][y];
+                        square = square.replace(" ", "&nbsp;");
+                        $(button_id + ".tictactoe_button ").html(square);
+                    }
+                }
+            }
+
             check_for_draw = function() {
                 var board = JSON.stringify(get_board());
                 var result;
@@ -74,6 +86,21 @@
                     },
                 });
                 return result;
+            }
+
+            ai_move = function() {
+                var board = JSON.stringify(get_board());
+                $.ajax({
+                    type: "GET",
+                    url: "/ai-move",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    async: "false",
+                    success: function(data) {
+                        var board = JSON.parse(data);
+                        set_board(board);
+                    }
+                });
             }
     </script>
     </head>
