@@ -5,6 +5,7 @@ from flask import request
 app = Flask(__name__)
 
 from game import Board
+import ai
 
 import json
 
@@ -31,6 +32,15 @@ def is_win():
     board = Board(setup=layout)
     return str(board.is_win())
 
+@app.route('/ai-move')
+def ai_move():
+    layout = request.args.get('layout')
+    layout = json.loads(layout)
+    board = Board(setup=layout)
+    ai.move(board)
+    layout = board.board()
+    layout = json.dumps(layout)
+    return layout
 
 if __name__ == '__main__':
     app.run(debug=True)

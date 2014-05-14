@@ -39,6 +39,14 @@ class Board:
         else:
             self._board[coords[0]][coords[1]] = set_to
 
+    def move(self, coords, symbol):
+        """
+        Add a new symbol to the board.
+
+        """
+
+        self.square(coords, set_to=symbol)
+
     def check_requirements(self, pathway, requires):
         """
         Check a pathway against the stated requirements.

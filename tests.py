@@ -74,6 +74,11 @@ class TestUrl(unittest.TestCase):
             winner = None if response.data == '' else response.data
             self.assertEqual(winner, 'player')
 
+            url = '/ai-move?layout={}'.format(test_board_1)
+            response = tester.get(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertNotEqual(response.data, test_board_1)
+
 class BoardTest(unittest.TestCase):
     def test_board(self):
         blank_board = {0: {0: " ", 1: " ", 2: " "},
