@@ -8,8 +8,48 @@
                 $(".tictactoe_button").click(function() {
                     //$(".tictactoe_button").prop('disabled', true);
                     $(this).html("X");
+                    is_draw();
                 });
             });
+
+            get_board = function() {
+                var board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
+
+                for(y=0;y<=2;y++) {
+                    for(x=0;x<=2;x++) {
+                        var button_id = "#" + x + "_" + y;
+                        var square = $(button_id + ".tictactoe_button ").html();
+                        square = square.replace("&nbsp;", " ");
+                        board[x][y] = square;
+                    }
+                }
+
+                return board;
+            }
+
+            is_draw = function() {
+                var board = JSON.stringify(get_board());
+                var result;
+                $.ajax({
+                    type: "GET",
+                    url: "/is-draw",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+                    async: "false",
+                    success: function(data) {
+                        console.log(data);
+                        result = data;
+                        if(data == "False") {
+                            return false;
+                        } else {
+                            $(".tictactoe_button").attr("disabled", "disabled");
+                            alert("Oh, all right, we'll call it a draw.");
+                        }
+                    },
+                });
+                return result;
+            }
     </script>
     </head>
     <body>
