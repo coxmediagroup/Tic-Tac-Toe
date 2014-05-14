@@ -79,6 +79,24 @@ class TestUrl(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertNotEqual(response.data, test_board_1)
 
+class AiTest(unittest.TestCase):
+    def test_center(self):
+        blank_board = ('[[" ", " ", " "], '
+                        '[" ", " ", " "], '
+                        '[" ", " ", " "]]')
+
+        ai_move = ('[[" ", " ", " "], '
+                   '[" ", "O", " "], '
+                   '[" ", " ", " "]]')
+
+
+
+        with app.test_client() as tester:
+            url = '/ai-move?layout={}'.format(blank_board)
+            response = tester.get(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.data, ai_move)
+
 class BoardTest(unittest.TestCase):
     def test_board(self):
         blank_board = {0: {0: " ", 1: " ", 2: " "},
