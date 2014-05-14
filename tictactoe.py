@@ -26,14 +26,11 @@ def is_draw():
 
 @app.route('/is-win')
 def is_win():
-    try:
-        layout = request.args.get('layout')
-        layout = json.loads(layout)
-        board = Board(setup=layout)
-        return str(board.is_win())
-    except Exception:
-        import traceback
-        print(traceback.format_exc())
+    layout = request.args.get('layout')
+    layout = json.loads(layout)
+    board = Board(setup=layout)
+    return str(board.is_win())
+
 
 if __name__ == '__main__':
     app.run(debug=True)
