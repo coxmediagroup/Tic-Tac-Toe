@@ -8,7 +8,8 @@
                 $(".tictactoe_button").click(function() {
                     //$(".tictactoe_button").prop('disabled', true);
                     $(this).html("X");
-                    is_draw();
+                    check_for_win();
+                    check_for_draw();
                 });
             });
 
@@ -27,7 +28,7 @@
                 return board;
             }
 
-            is_draw = function() {
+            check_for_draw = function() {
                 var board = JSON.stringify(get_board());
                 var result;
                 $.ajax({
@@ -35,16 +36,40 @@
                     url: "/is-draw",
                     data: {layout: board},
                     contentType: "application/json; charset=utf-8",
-                    //dataType: "json",
                     async: "false",
                     success: function(data) {
-                        console.log(data);
                         result = data;
                         if(data == "False") {
                             return false;
                         } else {
                             $(".tictactoe_button").attr("disabled", "disabled");
                             alert("Oh, all right, we'll call it a draw.");
+                        }
+                    },
+                });
+                return result;
+            }
+
+            check_for_win = function() {
+                var board = JSON.stringify(get_board());
+                var result;
+                $.ajax({
+                    type: "GET",
+                    url: "/is-win",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    async: "false",
+                    success: function(data) {
+                        result = data;
+                        if(data == '') {
+                            return false;
+                        } else {
+                            $(".tictactoe_button").attr("disabled", "disabled");
+                            if(data == 'player') {
+                                alert("You win.");
+                            } else {
+                                alert("I win!");
+                            }
                         }
                     },
                 });
