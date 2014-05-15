@@ -1,0 +1,28 @@
+<title>{{title}}</title>
+</br></br>
+<p style="text-align:center">
+{% if first_turn %}
+	Welcome!
+{% else %}
+	<a href='/'>Start Over</a>
+{% endif %}
+</p>
+{% for sublist in board %}
+	<p style="font-size:20px;text-align:center">
+	{% for inner in sublist %}
+		{% if inner.0 != 'o' and inner.0 != 'x' and not game_over %}
+			<a href='/?b={{ inner.1 }}'>
+		{% endif %}
+	    {{ inner.0 }}
+	    {% if inner.0 != 'o' and inner.0 != 'x' and not game_over %}
+			</a>
+		{% endif %}
+	{% endfor %}
+	</p>
+{% endfor %}
+<p style="text-align:center">{{ output_text }}</br></br>
+
+{% if first_turn %}
+	<a href='/?b=---------'>Or click here to let the computer go first.</a>
+{% endif %}
+</p>
