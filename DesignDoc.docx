@@ -1,0 +1,86 @@
+COX Media Code Challenge: 
+Tic Tac Toe Game 
+Objective:
+To create a tic tac toe game for the Cox Media Code Challenge using only python.  In this challenge the 
+ Computer player is to always win.  Technically the computer cannot always win unless a 'draw' will be counted as a win for the computer similar to a 'bust' in blackjack 
+
+Design Components
+Design will be implemented in python using the Eclipse IDE and the pydev plugin  
+Class Instance Variables         
+            @type moves: List
+            @param moves: List of X and O positions marked on the Tic Tac Toe Board
+            @type cpu: List
+            @param cpu: List of moves made by the computer player                      
+            @type human: List
+            @param human: List of moves made by the human player
+            @type count: int
+            @param count: flags set when the computer player makes its first move
+            @type player: int
+            @param player: The position marked on the board corresponding the numbered grid
+            @type cpu_mark: string
+            @param cpu_mark: The letter assigned to the computer player, X or O
+            @type human_mark= string
+            @param human_mark: The letter assigned to the human player, X or O
+            @type availableChoices: List 
+            @param availableChoices: A list of available positions on the board that a given player can mark
+            @type first: string
+            @param first: Holds the value of the player who marks the board first, cpu or human
+            
+
+
+
+
+Python Class/Functions
+Function methods along with brief descriptions of the variables used within them.
+
+
+ RedrawBoard 
+Draws the board on the start of the game and redraws tic tac toe board after every move based on the numbered position selected a mark is set to the given index within the moves list.
+
+CheckForWin 
+Based on the winning combinations, the grid is check for marks in the indexes 
+    
+FindWin      
+ Based on the winning combinations, the computer player compares currently marked positions against those combinations. It selects the next move base on that, else selects from the available choices.              
+         
+GoForWin 
+Based on the winning combinations, the computer player compares based on the current two previous moves selects the next move for the win.
+
+GoForBlock 
+ Based on the winning combinations the computer player compares based on the current two previous moves made by the human player and selects the next move to block their win.
+        
+CheckCorners  
+The computer player selects the best positions with the center (4) being priority else it selects the available corner.
+            
+pencilMark 
+Places the players mark in the selected position and then removes that position from the available choices list.            
+      
+PlayCPUMove              
+Determines the computer player's moves based on Tic Tac Toe probability strategies 
+             
+placement   
+Handles the selection of positions from the human player based on available choices
+  
+             
+Refresh 
+Refreshes/restarts class variables after a completed game               
+
+selectMark 
+Starts game, determines letter assignments and who makes the first move.  
+
+QA Process
+
+First 
+I simply created a Tic Tac Toe game in which the computer selected position randomly based on available.  I did this to familiarize myself with the mechanics and basic operations of the game itself.  This always helped in developing a workflow for board drawing, redraw, and determining the winner.
+
+Second
+To ensure that the computer player would always win, I employed strategies that would guarantee wins if the computer had the first move.   I prioritized the center square for the computer at every turn and then followed by the corners.  My thought process is that if on first moves the computer always wins, the same strategies for winning would serve as the foundation for the computer’s defensive movements.   
+
+Third
+In the defensive position, the computer is made to always locate potential winning moves by the human player and block those.  In the event of no potential win, the computer was developed to seek out the optimal positions on the board; being the corners if the center was taken.  This allowed establishing a good defense against the human player from winning.
+
+Finally
+I added the ability to replay or quit the game.
+
+Each process is development was tested with the expected results in mind.  In the case that the results were not reached, workflow was more closely examined.  
+
