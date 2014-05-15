@@ -3,6 +3,9 @@ Module for AI opponent.
 
 """
 
+class AiError(Exception):
+    pass
+
 def move(board):
     """
     Move according to strategy:
@@ -19,7 +22,7 @@ def move(board):
 
     """
 
-    strategy= [center]
+    strategy= [center, opposite_corner]
 
     move = None
     for tactic in strategy:
@@ -43,4 +46,22 @@ def center(board):
         return (1, 1)
 
     return None
-    pass
+
+def opposite_corner(board):
+    """
+    If opponent is in one corner, grab the opposite.
+
+    """
+
+    opponent_mark = "X"
+    for corner in [(0, 0), (0, 2),
+                   (2, 0), (2, 2)]:
+        if board.square(corner) == opponent_mark:
+            (x, y) = corner
+            x = abs(x - 2)
+            y = abs(y - 2)
+            if board.square((x, y)) == " ":
+                return (x, y)
+
+    return None
+

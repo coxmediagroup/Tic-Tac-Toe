@@ -81,7 +81,7 @@ class TestUrl(unittest.TestCase):
 
 class AiTest(unittest.TestCase):
     def test_center(self):
-        blank_board = ('[[" ", " ", " "], '
+        start_board = ('[[" ", " ", " "], '
                         '[" ", " ", " "], '
                         '[" ", " ", " "]]')
 
@@ -92,10 +92,58 @@ class AiTest(unittest.TestCase):
 
 
         with app.test_client() as tester:
-            url = '/ai-move?layout={}'.format(blank_board)
+            url = '/ai-move?layout={}'.format(start_board)
             response = tester.get(url)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data, ai_move)
+
+    def test_opposite_corner(self):
+        start_board = ('[[" ", " ", "X"], '
+                        '["O", "X", " "], '
+                        '[" ", " ", " "]]')
+
+        ai_move = ('[[" ", " ", "X"], '
+                    '["O", "X", " "], '
+                    '["O", " ", " "]]')
+
+        moves = (
+            ('[[" ", " ", "X"], '
+               '["O", "X", " "], '
+               '[" ", " ", " "]]',
+             '[[" ", " ", "X"], '
+                '["O", "X", " "], '
+                '["O", " ", " "]]'),
+
+            ('[[" ", " ", " "], '
+               '["O", "X", " "], '
+               '["X", " ", " "]]',
+             '[[" ", " ", "O"], '
+                '["O", "X", " "], '
+                '["X", " ", " "]]'),
+
+            ('[[" ", " ", " "], '
+               '["O", "X", " "], '
+               '[" ", " ", "X"]]',
+             '[["O", " ", " "], '
+                '["O", "X", " "], '
+                '[" ", " ", "X"]]'),
+
+            ('[[" ", " ", "X"], '
+               '["O", "X", " "], '
+               '[" ", " ", " "]]',
+             '[[" ", " ", "X"], '
+                '["O", "X", " "], '
+                '["O", " ", " "]]'),
+            )
+
+
+        with app.test_client() as tester:
+            for start_board, ai_move in moves:
+                url = '/ai-move?layout={}'.format(start_board)
+                response = tester.get(url)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.data, ai_move)
+
 
 class BoardTest(unittest.TestCase):
     def test_board(self):
