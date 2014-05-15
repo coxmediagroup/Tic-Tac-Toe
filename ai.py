@@ -22,7 +22,7 @@ def move(board):
 
     """
 
-    strategy= [center, opposite_corner]
+    strategy= [center, opposite_corner, any_corner]
 
     move = None
     for tactic in strategy:
@@ -62,6 +62,18 @@ def opposite_corner(board):
             y = abs(y - 2)
             if board.square((x, y)) == " ":
                 return (x, y)
+
+    return None
+
+def any_corner(board):
+    """
+    Grab any corner.
+
+    """
+    for corner in [(0, 0), (0, 2),
+                   (2, 0), (2, 2)]:
+        if board.square(corner) == " ":
+            return corner
 
     return None
 
