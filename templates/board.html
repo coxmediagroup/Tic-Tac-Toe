@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content-related %}
+    <h3> {{ user_message }} </h3>
+
+<form action="your_move">
+{% for row in board %}
+    <div class="cell" id="cell{{ forloop.counter0 }}">
+        {% if row != empty or game_over  %}
+            {{ row }} 
+        {% else %}
+          <button class="buttoncell" type="submit" name="button" value="{{ forloop.counter0 }}">  {{ row }}  </button>
+        {% endif %}
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+        <br class="clear" />
+    {% endif %}
+{% endfor %}
+</form>
+<br>
+
+{% if game_over %}
+<form action="reset">
+  <button type="submit" name="reset" value="play"> Play Again? </button>
+</form>
+{% endif %}
+
+{% endblock %}
