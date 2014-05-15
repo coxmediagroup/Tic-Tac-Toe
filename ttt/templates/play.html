@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Play Tic-Tac-Toe
+</title>
+<style>
+.box {
+    width: 100px;
+    height: 100px;
+    float: left;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-bottom: 20px;
+    padding-top: 0px;
+    font-size: 95px;
+}
+.right {
+    border-right: 3px solid black;
+}
+
+.bottom {
+    border-bottom: 3px solid black;
+}
+
+.clear-left {
+    clear: left;
+}
+
+.won {
+    font-size: 50px;
+    color: blue;
+}
+
+</style>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.box').click(function(e) {  
+        $("input:text[name=move]").val(this.id); 
+        $("#make_move").submit();
+    });
+});
+</script>
+</head>
+<body>
+<form id="make_move" method="POST" action="/play/">
+{% csrf_token %}
+Move(1-9): <input type="text" name="move"> {% if not won %}<a href="/">Start again</a>{% endif %}
+</form>
+
+{% if won %}
+{% if won == 'cats' %}
+    <div class="won">CATS GAME!!</div>
+{% else %}
+    <div class="won">{{ won }} WON THE GAME!!</div>
+{% endif %}
+<div><a href="/">Start again</a></div>
+{% endif %}
+
+
+<div class="box right bottom" id="1">{% if display.1 %}{{ display.1 }}{% endif %}</div>
+<div class="box right bottom" id="2">{% if display.2 %}{{ display.2 }}{% endif %}</div>
+<div class="box bottom" id="3">{% if display.3 %}{{ display.3 }}{% endif %}</div>
+
+<div class="box right bottom clear-left" id="4">{% if display.4 %}{{ display.4 }}{% endif %}</div>
+<div class="box right bottom" id="5">{% if display.5 %}{{ display.5 }}{% endif %}</div>
+<div class="box bottom" id="6">{% if display.6 %}{{ display.6 }}{% endif %}</div>
+
+<div class="box right clear-left" id="7">{% if display.7 %}{{ display.7 }}{% endif %}</div>
+<div class="box right" id="8">{% if display.8 %}{{ display.8 }}{% endif %}</div>
+<div class="box" id="9">{% if display.9 %}{{ display.9 }}{% endif %}</div>
+
+
+</body>
+</html>
