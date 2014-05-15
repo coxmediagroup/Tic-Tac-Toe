@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Ben Vinson's Tic-Tac-Toe</title>
+<style type="text/css">
+body {
+	background-color: #FF9;
+	padding: 0px;
+	margin: 0px;
+}
+#container{
+	width:100%;
+	height:100%;
+	margin: 0px auto;
+    position: absolute;
+}
+.gameBoard{
+	width: 500px;
+	height:500px;
+	background-color:#FFFFFF;
+	display:none;
+}
+
+.gameGrid{
+	height:500px;
+}
+.gameGrid td{
+	font-size:72px;
+}
+.infoBar{
+	width:500px;
+}
+
+</style>
+<link href="/static/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="/static/js/jquery-1.10.2.js"></script>
+<script language="javascript" src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script>
+  $(function() {
+      $( ".gameBoard" ).hide();
+   });
+</script>
+</head>
+
+<body>
+<form method='post' id='gameForm' name='gameForm'>
+<div class='container' id='container' name='container'>
+	<div class='gameBoard' id='gameGoard' name='gameBoard'>
+    <table width="500" border="1" class='gameGrid'>
+  <tr>
+    <td width="33%" height="33%" align="center" valign="middle" id="location0">{{gameBoard.0}}<input type='hidden' id='loc0' name='loc0' value='{{gameBoard.0}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location1">{{gameBoard.1}}<input type='hidden' id='loc1' name='loc1' value='{{gameBoard.1}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location2">{{gameBoard.2}}<input type='hidden' id='loc2' name='loc2' value='{{gameBoard.2}}'></td>
+  </tr>
+  <tr>
+    <td width="33%" height="33%" align="center" valign="middle" id="location3">{{gameBoard.3}}<input type='hidden' id='loc3' name='loc3' value='{{gameBoard.3}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location4">{{gameBoard.4}}<input type='hidden' id='loc4' name='loc4' value='{{gameBoard.4}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location5">{{gameBoard.5}}<input type='hidden' id='loc5' name='loc5' value='{{gameBoard.5}}'></td>
+  </tr>
+  <tr>
+    <td width="33%" height="33%" align="center" valign="middle" id="location6">{{gameBoard.6}}<input type='hidden' id='loc6' name='loc6' value='{{gameBoard.6}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location7">{{gameBoard.7}}<input type='hidden' id='loc7' name='loc7' value='{{gameBoard.7}}'></td>
+    <td width="33%" height="33%" align="center" valign="middle" id="location8">{{gameBoard.8}}<input type='hidden' id='loc8' name='loc8' value='{{gameBoard.8}}'></td>
+  </tr>
+</table>
+<input type='hidden' id='chosenLoc' name='chosenLoc' value=''>
+  </div>
+<div class='infoBar' name='infoBar' id='infoBar'>
+{% if information == '' %}
+Please click on a place.
+    {% if firstPlay == 1 %} <input type='submit' id='pass' value='Allow O to go first.'> {% endif %}
+{% else %}
+{{information}}.  Click <a href=''>here</a> to play again.
+{% endif %}
+</div>
+</div>
+{% csrf_token %}
+</form>
+<script>
+  $(function() {
+    $( ".gameBoard" ).position({
+        of: $( "#container" ),
+        my: "center center",
+        at: "center center",
+        collision: "fit fit"
+    });
+    $( ".gameBoard" ).show();
+	
+    $( ".infoBar" ).position({
+        of: $( ".gameBoard" ),
+        my: "center top",
+        at: "center bottom",
+        collision: "fit fit"
+    });
+
+  });
+  {% if gameOn == 1 %}
+    {% for location in '0123456789' %}
+    $( "#location{{location}}" ).click(function(){
+        $("#chosenLoc").val({{location}});
+        $("#gameForm").submit();
+    });
+    {% endfor %}
+    {% if firstPlay == 1 %}
+    $("#pass").click(function(){
+        $("#chosenLoc").val(-1);
+        $("#gameForm").submit();
+    });
+    {% endif %}
+  {% endif %}
+	</script>
+</body>
+</html>
