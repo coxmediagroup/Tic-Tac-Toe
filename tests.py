@@ -175,6 +175,46 @@ class AiTest(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data, ai_move)
 
+    def test_any_side(self):
+        moves = (
+            ('[["?", " ", "?"], '
+               '["?", "?", "?"], '
+               '["?", "?", "?"]]',
+            '[["?", "O", "?"], '
+               '["?", "?", "?"], '
+               '["?", "?", "?"]]'),
+
+            ('[["?", "?", "?"], '
+               '["?", "?", " "], '
+               '["?", "?", "?"]]',
+            '[["?", "?", "?"], '
+               '["?", "?", "O"], '
+               '["?", "?", "?"]]'),
+
+            ('[["?", "?", "?"], '
+               '["?", "?", "?"], '
+               '["?", " ", "?"]]',
+            '[["?", "?", "?"], '
+               '["?", "?", "?"], '
+               '["?", "O", "?"]]'),
+
+            ('[["?", "?", "?"], '
+               '[" ", "?", "?"], '
+               '["?", "?", "?"]]',
+            '[["?", "?", "?"], '
+               '["O", "?", "?"], '
+               '["?", "?", "?"]]'),
+            )
+
+
+        with app.test_client() as tester:
+            for start_board, ai_move in moves:
+                url = '/ai-move?layout={}'.format(start_board)
+                response = tester.get(url)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.data, ai_move)
+
+
 class BoardTest(unittest.TestCase):
     def test_board(self):
         blank_board = {0: {0: " ", 1: " ", 2: " "},
