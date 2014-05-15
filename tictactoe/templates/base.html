@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/media/styles.css" media="all">
+        <script language="javascript" src="/media/jquery-1.4.2.min.js"></script>
+        <script language="javascript">
+            window.AVATAR = "{{avatar}}";
+        </script>
+        <script language="javascript" src="/media/control.js"></script>
+        <title>Tic Tac Toe</title>
+    </head>
+    <body>
+        {% block content %}
+        <h1 id="message" style="display:none;"></h1>
+        <table>
+            {% for row in game.board.cells %}            
+            <tr class="">
+                {% for cell in row %}
+                <td x="{{forloop.counter0}}" y="{{forloop.parentloop.counter0}}" 
+                    class="{% if not forloop.first %}not_first_x {% endif %}
+                        {% if not forloop.last %} not_last_x {% endif %}
+                        {% if not forloop.parentloop.first %} not_first_y {% endif %}
+                        {% if not forloop.parentloop.last %} not_last_y {% endif %}
+                        ">
+
+                    {% if cell %}<h1>{{cell}}</h1>{% else %}&nbsp;{% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        <br/>
+        <hr/>
+
+        {% endblock %}
+        <h2>Start a new game of Tic-Tac-Toe</h2>
+        <form action="/new/" method="POST">
+            {{ form }}
+            <br/><br/>
+            <input type="submit" value="Start"/>
+        </form>
+
+        
+    </body>
+</html>
