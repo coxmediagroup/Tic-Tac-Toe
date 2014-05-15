@@ -1,0 +1,41 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    table tr td {
+        border-right: solid black thin;
+        border-bottom: solid black thin;
+    }
+    table tr td:last-child {
+        border-right: none;
+    }
+    table tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+<h1>Tic Tac Toe</h1>
+{% if winner %}
+    <h2>{{ winner }}</h2>
+{% endif %}
+<table>
+    {% for row in board %}
+        <tr>
+            {% for row_i, cell_i, symbol in row %}
+                <td>
+                    {% if not winner and symbol == '' %}
+                        <form action="{% url 'tic_tac_toe.views.make_move' row_i cell_i %}">
+                            <input type="submit" value="Move Here" />
+                        </form>
+                    {% elif symbol == '' %}
+                        &nbsp;
+                    {% else %}
+                        {{ symbol }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+<br />
+<br />
+<a href="{% url 'tic_tac_toe.views.reset' %}">Reset Game</a>
