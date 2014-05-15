@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" type="text/css" />
+  <script src="{% static 'js/jquery-1.10.2.min.js'%}"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $("#hidden_board").val("{{ json_board_str }}");
+        $("#message_text").text("Your turn. Click on a box to make a move");
+        $('#new_game').click(function() {
+            window.location.href = '/';
+            return false;
+        });
+        $(".box").click(function() {
+            var html = $(this).html();
+            // Make sure player clicked on a empty box
+            if (html.length == 0) {
+                // Make players move
+                var html_str = "<img class='box_image' src=\'{% static 'images/circle_blue.png' %}\'/>"
+                $(this).html(html_str);
+                $("#message_text").text("");
+                // Calculate computer's move
+                $.get('/make_move', { board: $("#hidden_board").val(), box: $(this).attr("id") , game_history_id : {{ game_history_id }} },function(data, textStatus){
+                        // Make computer's move
+                        if (data.computer_played == true) {
+                            var html_str = "<img class='box_image' src=\'{% static 'images/red_cross.png' %}\'/>"
+                            $("#box_" + data.box).html(html_str);
+                        }
+                        $("#hidden_board").val(data.board);
+                        
+                        var highlight_win = false;
+                        var game_over = false;
+                        // Player won
+                        if (data.game_over == "1" )
+                        {
+                            $("#message_text").text("You won!");
+                            game_over = true;
+                            highlight_win = true;
+                            $('#won').text(parseInt($('#won').text()) + 1)                            
+                        }
+                        else {
+                            // Computer won
+                            if (data.game_over == "2" ) {
+                                $("#message_text").text("The computer won!");  
+                                $('#lost').text(parseInt($('#lost').text()) + 1)
+                                highlight_win = true;
+                                game_over = true;
+                            } 
+                            else {
+                                // Game tied
+                                if (data.game_over == "3") {
+                                    $("#message_text").text("It's a tie!");
+                                    $('#tied').text(parseInt($('#tied').text()) + 1)
+                                    game_over = true;
+                                }
+                            }
+                        }
+                        // game over so prevent player from making more moves
+                        if (game_over == true) {
+                            $('.box').off('click');
+                            $('#played').text(parseInt($('#played').text()) + 1)
+                            $("#message_text").css('font-size', 35);
+                        }
+                        // Highligth winning boxes
+                        if (highlight_win == true) {
+                            for (var i = 0; i < data.winning_combination.length; i++) {
+                                $('#box_'+data.winning_combination[i].toString()).css("background-color", "yellow");
+                            }
+                        }
+                });
+            }
+            else {
+                $("#message_text").text("Please select an empty box");
+            }
+        });
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+    <a class="logout" href="/logout/">logout</a>
+    <h2 class="game_header clear">Welcome {{ user }}, Let's play Tic Tac Toe!</h2>
+    <div id="message_text"></div>
+    <div id="game_board">
+    {% for box in board %}
+        <div class="box" id="box_{{ forloop.counter0 }}"></div>
+        {% if forloop.counter|divisibleby:3 %}
+            <br class="clear"/>
+        {% endif %}
+    {% endfor %}
+    </div>
+    <input type="button" id="new_game" value="New Game" class="new_game"></input>
+    <h2 class="game_history_header clear"> Your Game History</h2>
+    <div class="history_table">
+        <table >
+            <thead>
+                <tr>
+                    <th>Played</th>
+                    <th>Won</th>
+                    <th>Lost</th>
+                    <th>Tied</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="played">{{ played }}</td>
+                    <td id="won">{{ won }}</td>
+                    <td id="lost">{{ lost }}</td>
+                    <td id="tied">{{ tied }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input id="hidden_board" type="hidden" values=""/>
+{% endblock %}

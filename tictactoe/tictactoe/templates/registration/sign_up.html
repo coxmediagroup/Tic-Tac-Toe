@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% comment %}
+  Main page to authenticate users.
+{% endcomment %}
+
+{% block head %}
+  <title>Tic Tac Toe | SignUp</title>
+  <link rel="stylesheet" href="{% static 'css/game.css' %}" type="text/css" />
+{% endblock %}
+
+{% block body %}
+  <header>
+    <br/><br/><br/><br/>    
+    <h1>Tic Tac Toe</h1>
+    <h2>Sign Up</h2>
+  </header>
+
+  <section>
+    <form class="sign_up_form" method="post" action=".">
+        {% csrf_token %}
+        {{ form }}
+      <input type="submit" value="Sign Up" />
+    </form>
+
+  </section>
+{% endblock %}
