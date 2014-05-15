@@ -1,0 +1,155 @@
+html,body {
+    width: 100%;
+    font-family: Verdana arial sans-serif;
+    line-height: 16px;
+    background-color: #101040;
+    color: #b69366;
+    margin: 0;
+    padding: 0;
+}
+.wrapper {
+    width: 100%;
+    height: 48em;
+}
+
+.homecontainer {
+    float: left;
+    margin-left: 20%;
+    margin-top: 5%;
+    min-width: 450px;
+    width: 20%;
+    padding: 2em;
+    border: 1px solid black;
+    box-shadow: .5em .5em .5em #6a6aaa;
+    color: #b6b066;
+}
+
+.PC {
+    background-color: yellow;
+}
+
+.menu {
+    list-style: none;
+}
+
+.NPC {
+    background-color: blue;
+}
+
+#board {
+    height: 15em;
+    width: 240px;
+    margin-left: 340px;
+    margin-top: 2em;
+    padding: 1em;
+    border: 3px groove darkorange;
+}
+
+input {
+    margin: 0 5px;
+}
+
+button#restart {
+    margin-left: 12.5%;
+    margin-top: 1em;
+}
+
+.player {
+    height: 5em;
+    border: 1px solid black;
+    width: 25%;
+    margin-top: 1em;
+    margin-left: 12.5%;
+    background-color: red;
+    box-shadow: .5em .25em .5em gray;
+}
+
+#NPC.field {
+    color: blue;
+}
+
+.winner > #NPC.field {
+    color: #b69366;
+}
+
+#PC.field {
+    color: yellow;
+}
+
+.winner > #PC.field {
+    color: #b69366;
+}
+
+.cell {
+    display: inline-block;
+    height: 76px;
+    margin: 0;
+    padding: 0;
+    width: 76px;
+    border: 1px solid orange;
+}
+
+.cell-tl {
+    border-left: none;
+    border-top: none;
+}
+
+.cell-tr {
+    border-top: none;
+    border-right: none;
+}
+
+.cell-tm {
+    border-top: none;
+    margin: 0 2px;
+}
+
+.cell-ml {
+    border-left: none;
+}
+
+.cell-mr {
+    border-right: none;
+}
+
+.cell-mm {
+    margin: 0 2px;
+}
+
+.cell-bl {
+    border-left: none;
+    border-bottom: none;
+}
+
+.cell-br {
+    border-bottom: none;
+    border-right: none;
+}
+
+.cell-bm {
+    border-bottom: none;
+    margin: 0 2px;
+}
+
+.input {
+    margin-left: 16px;
+}
+
+.input-container {
+    margin: .1em 0 0 1%;
+}
+
+.field {
+    padding: 1em 0 0 5em;
+    font-size: 2em;
+}
+
+.current {
+    background-color: green;
+}
+
+.winner {
+    text-shadow: 1.3em 1.5em .07em, -1.3em -1.5em .07em;
+    border: 2px dotted darkorange;
+    background-color: #423d05;
+}
