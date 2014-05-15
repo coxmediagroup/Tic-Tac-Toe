@@ -1,0 +1,144 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>
+        {% block title %}
+            I AM JaCK`s AnGry PAraKEet
+        {% endblock title %}
+    </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-responsive.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+</head>
+<body>
+<!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+
+{% block navigation %}
+
+{% endblock navigation %}
+<div id="main" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span8">
+            <h1 class="text-error"><a href="/">I AM JaCK`s AnGry PAraKEet</a><small>...and I am an ornery tic-tac-toe AI click a box to start</small></h1>
+        </div>
+        <div class="span4">
+            <br>
+            <a class="btn btn-large btn-danger" href="/">start over</a>
+        </div>
+    </div>
+    <div class="row-fluid">
+    <br>
+    {% block content %}
+
+    {% endblock content %}
+    </div>
+</div>
+
+ <footer class="footer" style="margin-left: 5%; margin-right: 5%;">
+
+    {% block footer %}
+            <div class="row-fluid">
+                <div class="span4 text-left">
+                    <div class="span12">
+                        <p>
+                            <strong>a tricky, quasi-angry, tic-tac-toe AI, disdain for humans is self evident as it always goes first. It is Jack's Angry Parakeet...say no more, say no more.</strong>
+                        </p>
+
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="span12">
+                        {% if win_message %}
+                            <h1 class="text-error pull-left">{{ win_message }}</h1>
+                            <input type="hidden" id="win_message" value="1"/>
+                        {% else %}
+                            <input type="hidden" id="win_message" value="0"/>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="span4 text-right">
+                    <div class="span12">
+                        <h4 class="text-error"><a href="/" title="START OVER">I AM JaCK`s AnGry PAraKEet</a></h4>
+                        <p class="text-left">
+                             <small><strong><h3>THE RULES</h3>
+                                I AM X<br/>
+                                I GO FIRST<br/>
+                                YOU LOSE<br/>
+                                I WIN DRAWS<br/>
+                                I AM JaCK`s AnGry PAraKEet<br/></strong></small>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+    {% endblock footer %}
+
+ </footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js' %}"></script>
+<script src="{% static 'js/jqBootstrapValidation.js' %}"></script>
+<script>
+  $(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+</script>
+
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+
+<script type="text/javascript">
+    $(document).ajaxSend(function (event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // Only send the token to relative URLs i.e. locally.
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+    $('#ajaxBusy').hide();
+    $(document).ajaxStart(function () {
+        $('#ajaxBusy').show();
+    }).ajaxStop(function () {
+                $('#ajaxBusy').hide();
+            });
+</script>
+{% block scripts %}
+
+{% endblock scripts %}
+</body>
+</html>

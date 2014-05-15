@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+    {{ board_html|safe }}
+
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'js/public.home.js' %}"></script>
+{% endblock scripts %}
