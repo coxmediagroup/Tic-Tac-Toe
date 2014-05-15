@@ -1,0 +1,27 @@
+# Python bytecode:
+*.py[co]
+
+# Packaging files:
+*.egg*
+
+# Editor temp files:
+*.swp
+*~
+
+# Sphinx docs:
+build
+
+# SQLite3 database files:
+*.db
+
+# Logs:
+*.log
+
+#saas cache
+*.sass-cache
+
+#css
+simple_games/static/css/*
+
+# cache of the compressor
+simple_games/assets

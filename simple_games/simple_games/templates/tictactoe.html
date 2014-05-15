@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{%block game-title%} TicTacToe {% endblock game-title %}
+{%block game-name%} TicTacToe {% endblock game-name %}
+{% block content %}
+<div class="game" ng:controller="TicTacToeController">
+	<div class="sign-block">
+		<a ng-click="setGame('O');" class="sign-selector" href="#"><div class="select-block O"></div></a>
+    	<a ng-click="setGame('X');" class="sign-selector" href="#"><div class="select-block X"></div></a>
+	</div>
+	<ul class="board" >
+    	<li class="square <[square]>" ng:click="makeMove($index)" ng:repeat="square in squares"></li>
+	</ul>
+	<div class="alert alert-info" ng-show="message" ><[message]></div>
+	<div class="alert alert-block" ng-show="winner" ><[winner]></div>
+</div>
+
+{% endblock content %}

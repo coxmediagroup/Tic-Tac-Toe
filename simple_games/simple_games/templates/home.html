@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="username" ng:controller="loginController">
+    <div class="hero"><h3>choose your game</h3></div>
+    <ul class="unstyled games">
+    	<li ng-repeat="game in games" >
+    		<a href="<[game]>"><[ game ]></a>
+    	</li>
+    </ul>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,13 @@
+$iconWhiteSpritePath: '/assets/img/glyphicons-halflings-white.png';
+$iconSpritePath: '/assets/img/glyphicons-halflings.png';
+
+@import "compass/reset";    
+@import "compass/utilities";
+@import "compass/layout/sticky-footer";
+@import "compass/layout/stretching";
+@import "compass/css3";
+@import "compass_twitter_bootstrap";
+@import "compass_twitter_bootstrap_responsive";
+
+
+$img_folder: "../img/";
