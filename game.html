@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+    <title>Michael Gillette presents Tic Tac No</title>
+    <style>
+    .gray { color:#999; }
+    html, body { font-family: sans-serif; }
+    input { position:absolute;clip:rect(0,0,0,0); }
+    #board { width:210px;margin:0 auto; }
+    label {
+        display:block;float:left;font-family:sans-serif;
+        width:30px;height:50px;padding:10px 20px;outline:1px solid #bbb;background:white;
+        color:transparent;font-size:50px;line-height:1;overflow:hidden; }
+    input:focus + label { background:#ffd; }
+    label:nth-of-type(3n + 1) { clear:left }
+    label:before { color:black; }
+    input:checked + label:before       { content:'X';color:green; }
+    input:not(:checked) + label:before { content:'O';color:blue; }
+    input:indeterminate + label:before { content:' '; }
+    
+    #newgame { text-align:center;clear:both;padding:25px 0; }
+    </style>
+</head>
+<body>
+    <h1 align="center">Tic Tac No <small>by Michael Gillette</small></h1>
+    <p class="gray" align="center">Implementation of Minimax Algorithm in Javascript</p>
+<div id="board">
+    <input type="checkbox" id="a11" /><label for="a11"></label>
+    <input type="checkbox" id="a12" /><label for="a12"></label>
+    <input type="checkbox" id="a13" /><label for="a13"></label>
+
+    <input type="checkbox" id="a21" /><label for="a21"></label>
+    <input type="checkbox" id="a22" /><label for="a22"></label>
+    <input type="checkbox" id="a23" /><label for="a23"></label>
+
+    <input type="checkbox" id="a31" /><label for="a31"></label>
+    <input type="checkbox" id="a32" /><label for="a32"></label>
+    <input type="checkbox" id="a33" /><label for="a33"></label>
+</div>
+<div id="newgame">
+    <button onclick="setupGame()">New Game</button>
+</div>
+
+<script>
+var board = document.getElementById('board'),
+    cells = [].slice.call(board.getElementsByTagName('input')),
+    rows =  [
+        cells.slice(0, 3),
+        cells.slice(3, 6),
+        cells.slice(6, 9)
+    ],
+    wins = [
+    'xxx......',
+    '...xxx...',
+    '......xxx',
+    'x..x..x..',
+    '.x..x..x.',
+    '..x..x..x',
+    'x...x...x',
+    '..x.x.x..',
+    ],
+    HUMAN_SEED = 1,
+    COMPUTER_SEED = 0;
+
+setupGame();
+
+board.addEventListener('change', triggerAIMove, false);
+
+function setupGame() {
+    // Set the initial state of each checkbox to -
+    // in this case - means available.
+    // also remove hindrances to disabled
+    cells.forEach(function(cell) { cell.disabled=false;cell.value=-1;cell.indeterminate=true; });
+}
+
+function triggerAIMove(e) {
+    var cell = e.target;
+    if (!cell.hasOwnProperty('checked')) { return; }
+    // prevent this cell from being issued another command
+    cell.value = HUMAN_SEED;
+    cell.disabled = true;
+    if (hasWon(HUMAN_SEED)) {
+        cells.forEach(function(cell) { cell.disabled = true; });
+        if (confirm('You have won the game! Play again?')) {
+            setupGame();
+        }
+        return;
+    }
+    // run minimax algorithm
+    var move = minimax(2, COMPUTER_SEED);
+    var aicell = rows[move[1]][move[2]];
+    // set the value, mark as checked, and remove indeterminate
+    aicell.value = COMPUTER_SEED;
+    aicell.checked = false;
+    aicell.disabled = true;
+    aicell.indeterminate = false;
+    if (hasWon(COMPUTER_SEED)) {
+        cells.forEach(function(cell) { cell.disabled = true; });
+        if (confirm('You have lost the game! Play again?')) {
+            setupGame();
+        }
+    }
+    
+}
+
+function minimax(depth, playerSeed) {
+    var nextMoves = generateMoves(),
+        // fun fact: Number.MIN_VALUE is the closest to Zero the JS engine can represent.
+        bestScore = playerSeed == COMPUTER_SEED ? -Number.MAX_VALUE : Number.MAX_VALUE,
+        bestRow = -1,
+        bestCol = -1,
+        currentScore;
+    
+    if (nextMoves.length == 0 || depth == 0) {
+        // gameover or maximum recursion allowed reached
+        bestScore = evaluate();
+    } else {
+        // iterate each move for the best possible move
+        nextMoves.forEach(function(move) {
+            var x = move[0], y = move[1];
+            // simulate move
+            rows[x][y].value = playerSeed;
+            if (playerSeed == COMPUTER_SEED) {
+                currentScore = minimax(depth - 1, HUMAN_SEED)[0];
+                if (currentScore > bestScore) {
+                    bestScore = currentScore;
+                    bestRow = x;
+                    bestCol = y;
+                }
+            } else {
+                currentScore = minimax(depth - 1, COMPUTER_SEED)[0];
+                if (currentScore < bestScore) {
+                    bestScore = currentScore;
+                    bestRow = x;
+                    bestCol = y;
+                }
+            }
+            // set cell to empty once more
+            rows[x][y].value = -1;
+        });
+    }
+    
+    return [bestScore, bestRow, bestCol];
+}
+
+function generateMoves() {
+    /* Generate a list of the remaining moves */
+    var moves = [];
+    if (hasWon(COMPUTER_SEED) || hasWon(HUMAN_SEED)) {
+        return moves; // empty list at this point
+    }
+    
+    rows.forEach(function(row, rowIndex) {
+        row.forEach(function(cell, colIndex) {
+            if (cell.value != COMPUTER_SEED && cell.value != HUMAN_SEED) {
+                moves.push([rowIndex, colIndex]);
+            }
+        });
+    });
+    return moves;
+}
+
+function hasWon(player) {
+    /* based on the board, generate a pattern similar to the ones found in `wins` */
+    var pattern = '';
+    rows.forEach(function(row) {
+        row.forEach(function(cell) {
+            if (cell.value == player) {
+                pattern += 'x';
+            } else {
+                pattern += '.';
+            }
+        });
+    });
+    
+    for (var x=0,y=wins.length;x<y;++x) {
+        if (pattern == wins[x]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function evaluate() {
+    /* test for the availability of various win conditions */
+    var score = 0;
+    score += evaluateLine(0, 0, 0, 1, 0, 2); // row 1
+    score += evaluateLine(1, 0, 1, 1, 1, 2); // row 2
+    score += evaluateLine(2, 0, 2, 1, 2, 2); // row 3
+    score += evaluateLine(0, 0, 1, 0, 2, 0); // col 1
+    score += evaluateLine(0, 1, 1, 1, 2, 1); // col 2
+    score += evaluateLine(0, 2, 1, 2, 2, 2); // col 3
+    score += evaluateLine(0, 0, 1, 1, 2, 2); // TL-BR diagonal
+    score += evaluateLine(0, 2, 1, 1, 2, 0); // TR-BL diagonal
+    return score;
+}
+
+function evaluateLine(r1, c1, r2, c2, r3, c3) {
+    /* return the score for a given combination of cells */
+    /* 100, 10, 1 for each 3-, 2-, 1-in-a-row.
+        positive for computer, negative for human */
+    var score = 0,
+        cell1 = rows[r1][c1],
+        cell2 = rows[r2][c2],
+        cell3 = rows[r3][c3];
+    
+    if (cell1.value == COMPUTER_SEED) {
+        score = 1;
+    } else if (cell1.value == HUMAN_SEED) {
+        score = -1;
+    }
+    
+    if (cell2.value == COMPUTER_SEED) {
+        switch(score) {
+            case 1:
+                score = 10; break;
+            case -1:
+                return 0;
+            default:
+                score = 1;
+        }
+    } else if (cell2.value == HUMAN_SEED) {
+        switch(score) {
+            case -1:
+                score = -10; break;
+            case 1:
+                return 0;
+            default:
+                score = -1;
+        }
+    }
+    
+    if (cell3.value == COMPUTER_SEED) {
+        if (score > 0) {
+            score *= 10;
+        } else if (score < 0) {
+            return 0;
+        } else {
+            score = 1;
+        }
+    } else if (cell3.value == HUMAN_SEED) {
+        if (score < 0) {
+            score *= 10;
+        } else if (score > 1) {
+            return 0;
+        } else {
+            score = -1;
+        }
+    }
+    
+    return score;
+}
+</script>
+</body>
+</html>
+
