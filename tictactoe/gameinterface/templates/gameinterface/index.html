@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Tic-Tac-Toe</title>
+	<script src="{% static "js/jquery-1.10.2.js" %}"></script>
+	<script src="{% static "js/jquery-ui-1.10.4.custom.min.js" %}"></script>
+	<script src="{% static "js/libttt.js" %}"></script>
+	<link rel="stylesheet" href="{% static "css/ui-lightness/jquery-ui-1.10.4.custom.css" %}" >
+	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+</head>
+<body>
+
+<div id="container">
+	<h1 id="title">Tic-Tac-Toe</h1>
+
+	<div id="dialog">
+		<p>Please wait... I'm thinking...</p>
+	</div>
+
+	<div id="win_state">
+		<p id="win_text"></p>
+		<p style="text-align: center; margin-top:25px"><button>Retry</button></p>
+	</div>
+
+	<div id="ttt_grid">
+		<div id="row0">
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+		</div>
+		<div id="row1">
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+		</div>
+		<div id="row2">
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+			<div class="ttt_cell null_cell"></div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
