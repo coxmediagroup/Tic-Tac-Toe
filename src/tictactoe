@@ -1,0 +1,96 @@
+#!/usr/bin/python
+
+"""DESCRIPTION OF SCRIPT
+Interactively play the game of Tic-Tac-Toe against a human player and never lose.
+"""
+
+from optparse import OptionParser
+import os
+import sys
+
+from board import Board
+from player import Computer, Human
+
+__author__    = "Adam Stein"
+__copyright__ = "Copyright 2013"
+__email__     = "adam@csh.rit.edu"
+__version__   = "1.0"
+
+def parse_args():
+    """Parse command line options"""
+
+    program = os.path.basename(sys.argv[0])
+
+    parser = OptionParser(
+        usage = "%s [-1] [-h] [--version]" % program,
+        version = "%prog v" + __version__,
+        description = """\
+Interactively play the game of Tic-Tac-Toe against a human player and never lose.
+"""
+    )
+
+    parser.add_option(
+        "-1", "--humanstart",
+        action = "store_true",
+        default = False,
+        dest = "humanstart",
+        help = "Human makes the first move instead of the computer"
+    )
+
+    (options, args) = parser.parse_args()
+
+    return (options, args)
+
+if __name__ == "__main__":
+    # Parse command line options
+    (options, args) = parse_args()
+
+    # Create the board
+    board = Board()
+
+    # Create the computer & human player instances
+    computer = Computer(board, not options.humanstart)
+    human = Human(board, options.humanstart)
+
+    # Give instructions to the user
+    print """
+Welcome to a friendly game of Tic-Tac-Toe.  Your objective is to beat the
+computer.  The computer's objective is to ruin your self-esteem.
+
+Choose which space to put your mark in by entering the number of the space when
+prompted.
+    """
+
+    if options.humanstart:
+        print "I see you have opted to go first.  Good luck, you'll need it."
+
+        player = [human, computer]
+    else:
+        print "I see you have opted to let the computer go first.  Let the game begin."
+
+        player = [computer, human]
+
+    # Keep taking turns until we reached the end game (there is a win or tie)
+    current = 0
+    while board.endgame() == False:
+        player[current].turn()
+        print
+        board.draw()
+
+        # Switch to next player
+        current = (current + 1)%2
+
+    # See what the final status is an comment to the user
+    winner = board.winner()
+    if winner == False:
+        # No winner, had a tie
+        print "\nThe match ended in a draw.  Better luck next time."
+    elif winner == computer.mark:
+        # Computer won
+        print "\nThe computer won the match.  Now hang your head in shame."
+    else:
+        # Human won -- THIS IS NOT POSSIBLE!
+        print "\nYou won the match.  Self-destruct sequence initiated..."
+
+    sys.exit(0)
+
