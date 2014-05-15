@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+	<head>
+		<!-- tic tac toe gameboard -->
+		<title>$title</title>
+		<!-- including jQuery for DOM manipulation -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<!-- 
+			the normal jQuery dollar sign classes with python's template
+			dollar sign. we'll use a different expression
+		-->
+		<script type="text/javascript">
+			var jQ = jQuery.noConflict();
+		</script>
+
+		<style type="text/css">
+			/* normally style would be in a different doc; here for convience */
+			/* todo: make the width, height variable by screen size */
+
+
+			/* --- Eric Meyer's infamous CSS reset --- */
+			html, body, div, span, applet, object, iframe,
+			h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+			a, abbr, acronym, address, big, cite, code,
+			del, dfn, em, img, ins, kbd, q, s, samp,
+			small, strike, strong, sub, sup, tt, var,
+			b, u, i, center,
+			dl, dt, dd, ol, ul, li,
+			fieldset, form, label, legend,
+			table, caption, tbody, tfoot, thead, tr, th, td,
+			article, aside, canvas, details, embed, 
+			figure, figcaption, footer, header, hgroup, 
+			menu, nav, output, ruby, section, summary,
+			time, mark, audio, video {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article, aside, details, figcaption, figure, 
+			footer, header, hgroup, menu, nav, section {
+				display: block;
+			}
+			body {
+				line-height: 1;
+			}
+			ol, ul {
+				list-style: none;
+			}
+			blockquote, q {
+				quotes: none;
+			}
+			blockquote:before, blockquote:after,
+			q:before, q:after {
+				content: '';
+				content: none;
+			}
+			/*
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+			*/
+			/* --- end Eric Meyer's infamous CSS reset --- */
+
+
+			body {
+				/* background gradient generated with http://www.colorzilla.com/gradient-editor/ */
+				/* background: #a90329; /* Old browsers */
+				background: #6d0019; /* Old browsers */
+				background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 ); /* IE6-9 */
+
+				color:#fafafa;
+				font-size:36px;
+				font-family: "Lucida Console", Monaco, monospace;
+			}
+
+			footer {
+				margin-top:1em;
+				width:100%;
+				font-size:0.5em;
+				background: #fafafa;
+				color:#6d0019;
+			}
+
+			h2 {
+				font-size:0.7em;
+			}
+
+			header {
+				margin-bottom:1em;
+				width:100%;
+				font-size:0.75em;
+			}
+
+			td {
+				width:100px;
+				height:100px;
+				border-radius:0.75em;
+				moz-border-radius:0.75em;
+				font-size:1em;
+				text-align:center;
+				vertical-align: middle;
+			}
+
+			td p {
+				font-size:2.5em;
+				color:#fefefe;
+				/* since we're fading in, initial display is off */
+				display:none;
+			}
+
+			.textBits {
+				padding:0.5em;
+			}
+
+			.v {
+				border-left:0.2em dotted #fafafa;
+				border-right:0.2em dotted #fafafa;
+			}
+
+			.h {
+				border-top:0.2em dotted #fafafa;
+				border-bottom:0.2em dotted #fafafa;
+			}
+
+			.t {
+				border-top:0.2em dotted #fafafa;
+			}
+
+			.b {
+				border-bottom:0.2em dotted #fafafa;
+			}
+			.l {
+				border-left:0.2em dotted #fafafa;
+			}
+			.r {
+				border-right:0.2em dotted #fafafa;
+			}
+
+			#board {
+				margin-right:auto;
+				margin-left:auto;
+				width:500px;
+			}
+		</style>
+	</head>
+	<body>
+
+	<header class="textBits">
+		$body
+	</header>
+	<div id="board">
+		<table>
+			<tr id="row1">
+				<td class="l t" id="cell0"></td>
+				<td class="v" id="cell1"></td>
+				<td class="r t" id="cell2"></td>
+			</tr>
+			<tr id="row2">
+				<td class="h" id="cell3"></td>
+				<td class="h v" id="cell4"></td>
+				<td class="h" id="cell5"></td>
+			</tr>
+			<tr id="row3">
+				<td class="l b" id="cell6"></td>
+				<td class="v" id="cell7"></td>
+				<td class="r b" id="cell8"></td>
+			</tr>
+		</table>
+	</div>
+
+	<footer class="textBits">
+		A Tic Tac Toe (Knots &amp; Crosses) Example
+	</footer>
+	
+	<script type="text/javascript">
+		/* 
+			normally behavior would be in a seperate file
+			however, for simplicity, we're including it in 
+			one file
+		*/
+		/* define the initial state, which is an empty array */
+		var GAME_STATE = ['-','-','-','-','-','-','-','-','-'];
+		var AVATAR_PLAYER = 'X';
+		var AVATAR_COMPUTER = 'O';
+
+		function displayBoard( gameState ) {
+			/*
+				treat our 1D list as our gamestate; dividing the
+				array index by 3 and taking the int result gives us our row (for example, 0/3 = row 0, 1/3 = row 0, 3/3 = row
+				1) and taking the mod gives us the desired column
+				(again, 0 mod 3 = col 0, 1 mod 3 = col 1, and 3 mod 3
+				= col 0 in row 1). Vital to remember we're 0 indexed
+			*/
+			for (var i=0; i < gameState.length; i++) {
+				/* jQ('#board').append(i); */
+				if( gameState[i] == 'P') {
+					if( ! jQ('#cell' + i).hasClass('played')) {
+						jQ('#cell' + i).addClass("played");
+						jQ('#cell' + i).append('<p>' + AVATAR_PLAYER + '</p>');
+					}
+				}
+				else if( gameState[i] == 'C') {
+					if( ! jQ('#cell' + i).hasClass('played')) {
+						jQ('#cell' + i).addClass("played");
+						jQ('#cell' + i).append('<p>' + AVATAR_COMPUTER + '</p>');
+						jQ("p",'#cell' + i).fadeIn('slow');
+					}
+				}
+			}
+		}
+
+		function applyEvents( boardDiv ) {
+			/* remember, the hover takes both mousein AND mouseout actions */
+			/* todo: we don't want this on EVERY cell, just the ones that aren't filled */
+			jQ('td').hover( function() {
+				/* display the player's piece when hovering, but only if cell isn't taken */
+				if( ! jQ(this).hasClass('played')) {
+					jQ(this).append('<p>' + AVATAR_PLAYER + '</p>');
+					jQ("p",this).fadeIn('slow');
+				}
+			},
+			function() {
+				if( ! jQ(this).hasClass('played')) {
+					jQ(this).empty();
+				}
+			});
+
+			/* apply what the cell should do when clicked on  */
+			jQ('td').click( function() {
+				if( ! jQ(this).hasClass('played')) {
+					/* set the cell contents to taken, only if not previously used */
+					jQ(this).addClass("played");
+					/* regardless of if they are 'X' or 'O', denote move made by player */
+					updateGameState( jQ(this).attr('id'), 'P' );
+					var endFlag = isEndGame();
+					if( !endFlag ) {
+						if( !isDraw() ) {
+							nextMove();
+						}
+						else {
+							var response = confirm('Aw, shucks. Looks like a draw. Play again?');
+							if( response == true ){
+								location.reload();
+							}
+						}
+					}
+					else {
+						var response = confirm("You... won? How embarassing. This isn't supposed to happend. Try again?");
+						if( response == true ){
+							location.reload();
+						}
+					}
+				}
+			});
+		}
+
+		function isEndGame() {
+			/* determine if player has won or if it is a draw */
+			/* first, determine if there is a win*/
+			console.log(GAME_STATE);
+
+			if( 
+				GAME_STATE[0] == GAME_STATE[1]
+				&& GAME_STATE[1] == GAME_STATE[2]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[3] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[5]
+				&& (GAME_STATE[3] == 'P' || GAME_STATE[3] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[6] == GAME_STATE[7]
+				&& GAME_STATE[7] == GAME_STATE[8]
+				&& (GAME_STATE[6] == 'P' || GAME_STATE[6] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[0] == GAME_STATE[3]
+				&& GAME_STATE[3] == GAME_STATE[6]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[1] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[7]
+				&& (GAME_STATE[1] == 'P' || GAME_STATE[1] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[2] == GAME_STATE[5]
+				&& GAME_STATE[5] == GAME_STATE[8]
+				&& (GAME_STATE[2] == 'P' || GAME_STATE[2] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[0] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[8]
+				&& (GAME_STATE[0] == 'P' || GAME_STATE[0] == 'C')) 
+			{
+				return true;
+			}
+			else if (
+				GAME_STATE[2] == GAME_STATE[4]
+				&& GAME_STATE[4] == GAME_STATE[6]
+				&& (GAME_STATE[2] == 'P' || GAME_STATE[2] == 'C')) 
+			{
+				return true;
+			}
+
+			return false
+		}
+
+		function isDraw() {
+			/* check to see if the game is a draw */
+			var drawFlag = true;
+			for(var i=0;i<GAME_STATE.length;i++){
+				if(GAME_STATE[i] == '-') {
+					drawFlag = false;
+				}
+			}
+
+			return drawFlag;
+		}
+
+		function nextMove() {
+			/* pass gamestate to the AI */
+			/*var AIUrl = location.host + '/' + 'move';*/
+			var AIUrl = '/move';
+			jQ.ajax( {
+				url: AIUrl,
+				data: {state:GAME_STATE.join(",")},
+				async: false,
+				success: function(text) {
+					response = text;
+					updateBoardFromAI( response );
+				}
+			})
+			.done( function() {
+				console.log('ajax call is finished');
+			});
+		}
+
+		function updateBoardFromAI( jsonResponse ) {
+			/* need to loop over the response */
+			for( var i =0; i< jsonResponse.length; i++) {
+				GAME_STATE[i] = jsonResponse[i]
+			}
+
+			displayBoard( GAME_STATE );
+			var aiWon = isEndGame();
+			var response = false;
+			if( aiWon ) {
+				response = confirm("I won. Too bad. I was enjoying that. Again?");
+			}
+			else if( isDraw() ) {
+				response = confirm('Aw, shucks. Looks like a draw. Play again?');
+			}
+
+			if( response == true ){
+				location.reload();
+			}
+
+		}
+
+
+		function updateGameState( cellName, player ){
+			/* strip chars from cellName, convert to int to get index */
+			var index = parseInt( cellName.replace(/\D/g,''));
+			GAME_STATE[index] = player;
+		}
+
+		function setTurns() {
+			var result = confirm("Would you like to go first?");
+			if(!result) {
+				/* user has opted not to go first; switch designation and move */
+				AVATAR_PLAYER = 'O';
+				AVATAR_COMPUTER = 'X';
+				/* have the computer move */
+				nextMove();
+			}
+		}
+
+
+		jQ(document).ready( function() {
+			console.log("ready!");
+			/* render the playing board; on initial state there isn't much to show */
+			displayBoard( GAME_STATE );
+
+			/* attach action elements to empty board slots */
+			applyEvents('board');
+
+			/* ask user if they'd prefer to go first or second */
+			setTurns();
+		});
+
+	</script>	
+	</body>
+</html>
