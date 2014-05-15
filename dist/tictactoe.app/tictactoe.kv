@@ -1,0 +1,183 @@
+#:kivy 1.8.0
+
+#:set DEFAULT_FONT 'fonts/Schoolbell.ttf'
+#:set DEFAULT_FONT_SIZE '30sp'
+
+
+<Button>:
+    font_name: DEFAULT_FONT
+    color: 0, 0, 0, 1
+
+
+<Label>:
+    font_name: DEFAULT_FONT
+    font_size: '35sp'
+    bold: True
+    markup: True
+
+
+<OpeningFrame>:
+    orientation: 'vertical'
+    padding: 0, 0, 0, self.height/8
+    Label:
+        text: "Hello. My name is [color=2ba6cb]Josh[/color]. Shall we play a game?"
+    Label:
+        text: "[color=c60f13]You[/color]:\nLove to. How about Tic-Tac-Toe?"
+        size_hint: (1, .7)
+        halign: 'center'
+    Button:
+        text: "Start the Game --->"
+        background_normal: "img/new-game-btn.png"
+        size_hint: (.7, .4)
+        pos_hint: {'center_x':.5}
+        on_press: app.load_game()
+
+
+<TicTacToeFrame>:
+    orientation: 'horizontal'
+    # it seems we need to explicitly declare ids with __self__ for kivy to recognize them
+    go_first_label: go_first_label.__self__
+    placeholder: placeholder.__self__
+    placeholder_label: placeholder_label.__self__
+    player1_score: player1_score.__self__
+    player2_score: player2_score.__self__
+    square8: square8.__self__
+    square7: square7.__self__
+    square6: square6.__self__
+    square5: square5.__self__
+    square4: square4.__self__
+    square3: square3.__self__
+    square2: square2.__self__
+    square1: square1.__self__
+    square0: square0.__self__
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: (.5, 1)
+        Label:
+            text: ""
+            size_hint: (1, .1)
+        Label:
+            id: player1_score
+            text: root.player_text(1)
+            font_size: DEFAULT_FONT_SIZE
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20, 20, 20, 20
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1, .15)
+            Label:
+                id: go_first_label
+                text: "[color=000000]You go first...[/color]"
+        RelativeLayout:
+            Image:
+                pos: 0, 30
+                size_hint: None, None
+                size: self.parent.width, self.parent.width
+                source: 'img/tic_tac_toe.png'
+            GridLayout:
+                pos: .141*self.parent.width, .145*self.parent.width + 30
+                size_hint: None, None
+                size: .7*self.parent.width, .7*self.parent.width
+                cols: 3
+                spacing: .02*self.parent.width
+                Button:
+                    id: square8
+                    text: root.square_label(8)
+                    on_press: root.player_move(8)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square7
+                    text: root.square_label(7)
+                    on_press: root.player_move(7)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square6
+                    text: root.square_label(6)
+                    on_press: root.player_move(6)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square1
+                    text: root.square_label(1)
+                    on_press: root.player_move(1)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square0
+                    text: root.square_label(0)
+                    on_press: root.player_move(0)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square5
+                    text: root.square_label(5)
+                    on_press: root.player_move(5)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square2
+                    text: root.square_label(2)
+                    on_press: root.player_move(2)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square3
+                    text: root.square_label(3)
+                    on_press: root.player_move(3)
+                    background_color: 1, 1, 1, 0
+                Button:
+                    id: square4
+                    text: root.square_label(4)
+                    on_press: root.player_move(4)
+                    background_color: 1, 1, 1, 0
+        BoxLayout:
+            id: placeholder
+            orientation: 'vertical'
+            size_hint: (1, .15)
+            Label:
+                id: placeholder_label
+                text: ""
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0, 30, 0, 0
+        size_hint: (.5, 1)
+        Button:
+            text: "Quit"
+            background_normal: "img/new-game-btn.png"
+            size_hint: (.8, .1)
+            pos_hint: {'center_x': .5}
+            on_press: app.quit_game()
+        Label:
+            id: player2_score
+            text: root.player_text(2)
+            font_size: DEFAULT_FONT_SIZE
+
+
+<ExitFrame>:
+    orientation: 'vertical'
+    padding: 0, 0, 0, self.height/5
+    player1: player1_score.__self__
+    player2: player2_score.__self__
+    ties: tie_score.__self__
+    exit: exit_text.__self__
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            id: player1_score
+            text: root.player1_score()
+        Label:
+            text: "Vs."
+        Label:
+            id: player2_score
+            text: root.player2_score()
+    Label:
+        id: tie_score
+        text: root.tie_score()
+        halign: 'center'
+    Label:
+        id: exit_text
+        text: root.exit_text()
+        text_size: self.width, self.height
+        halign: 'center'
