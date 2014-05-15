@@ -1,0 +1,11 @@
+<h1>Choice:</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'tictactoe:startgame' %}" method="post">
+{% csrf_token %}
+    <input type="radio" name="choice" id="1" value="X" />
+    <label for="1">Go First Choose X</label><br />
+    <input type="radio" name="choice" id="2" value="O" />
+    <label for="2">Computer First Choose O</label><br />
+<input type="submit" value="Start" />
+</form>
