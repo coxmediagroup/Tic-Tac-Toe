@@ -1,0 +1,9 @@
+os
+tempfile
+shutil
+unittest
+pkg_resources
+egg_info
+ENTRIES_V10
+TestEggInfo
+test_suite

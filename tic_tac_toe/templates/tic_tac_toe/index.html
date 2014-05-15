@@ -1,0 +1,14 @@
+{% extends "tic_tac_toe/base.html" %}
+{% block content %}
+    <div id="tic_tac_toe" data-process-url="{% url 'tic_tac_toe:ai' %}" data-new-url="{% url 'tic_tac_toe:new' %}">
+        <!-- ko foreach: squares -->
+        <div class="square" data-bind="text_two_way: $data, click: $root.make_move($index)"></div>
+        <!-- /ko -->
+    </div>
+    <div id="turn">
+        <h4 class="is_turn" data-bind="ifnot: not_player_turn">Click Square to Make Your Move</h4>
+        <h4 class="not_turn" data-bind="visible: not_player_turn">Loading...</h4>
+        <h4 class="side"><button data-bind="click: choose_x">X</button><button data-bind="click: choose_o">O</button></h4>
+        <button data-bind="click: new_game">New Game</button>
+    </div>
+{% endblock %}
