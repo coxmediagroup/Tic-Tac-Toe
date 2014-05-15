@@ -1,0 +1,34 @@
+For the sake of simplicity, the computer is always O and the human is always X.
+I give the human the option of going first or second.
+Since there are relatively few number of possible plays, this program uses brute force to find the best play following a simple priority:
+1. check for a winning play
+2. check to see if a blocking play is needed
+3. check for a potential fork
+4. play in the center
+5. play in an open corner
+6. play in an oopen side
+
+Key Methods:
+
+Print Board – prints the current state of the board; should be called after every play
+
+                1|2|3
+                4|5|6
+                7|8|9
+
+Human’s turn – Gets keyboard input for where the human wants to play. Each square corresponds to a number 1-9 and does not allow an illegal play.
+
+Computer’s turn – Searches for the best move. First check whether the human has two of the necessary squares for a win, then check for the best offensive move. (May be subdivided into different methods)
+
+Check Block - first thing done when it's the computer's turn - checks to see if it needs to make a blocking play (when the human has two out of the 3 for a win and the third square is empty)
+
+Check for Win – checks to see if someone has won the game. There are 8 possible ways to win: 123, 456, 789, 159, 357, 147, 258, and 369.
+
+Main menu – give options to start new game (if so, who goes first), exit, maybe some other things.
+
+Score – tallies the score of games won-lost-tied in this session
+
+
+Key data structures:
+
+Board – 3x3 array containing the board and whether they are claimed by an X, O, or neither.
