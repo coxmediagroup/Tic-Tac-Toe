@@ -1,0 +1,75 @@
+#pre-defined the eight winning situations ( 3 row, 3 cols and 2 diagones)
+def win(grid, ox):
+   return grid[0] == grid[1] == grid[2] == ox or \
+          grid[3] == grid[4] == grid[5] == ox or \
+          grid[6] == grid[7] == grid[8] == ox or \
+          grid[0] == grid[3] == grid[6] == ox or \
+          grid[1] == grid[4] == grid[7] == ox or \
+          grid[2] == grid[5] == grid[8] == ox or \
+          grid[0] == grid[4] == grid[8] == ox or \
+          grid[2] == grid[4] == grid[6] == ox
+
+#no one wins when the grid is fille up
+def tie(grid):
+   for i in range(9):
+       if not (grid[i] in ('O','X')):
+           return False
+   return True
+
+#prompt the player to input and check its validity
+def get_input(grid,player):
+   pos = int(raw_input(player + ", please select a number (1-9) to place your token:"))
+   while pos < 1 or pos > 9 or grid[pos-1] in ('O','X'):
+      pos = int(raw_input("Invalid input. Please try again:"))
+   return pos
+
+#nicely congrats
+def congrats(player):
+   print "Congratulations, " + player + ", you won the game!"
+
+def printGrid(grid):
+    print grid[0] + " | " + grid[1] + " | " + grid[2]
+    print "-----------"
+    print grid[3] + " | " + grid[4] + " | " + grid[5]
+    print "-----------"
+    print grid[6] + " | " + grid[7] + " | " + grid[8]
+    print "-----------"
+
+instructions = """
+Each player takes turns to place a token on the 3X3 grid:
+   1 | 2 | 3
+  -----------
+   4 | 5 | 6
+  -----------
+   7 | 8 | 9 
+by inputting a value when prompted. The first to get 3 tokens
+in a row wins.
+"""
+
+#nicely printing out the instructions how to play the game
+print instructions
+
+#pre-filled the grid with non "O" or "X"
+grid = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+player1 = raw_input("Please enter player 1's name: ")
+player2 = raw_input("Please enter player 2's name: ")
+
+#counts how many inputs have been made. The maximum should be four since there is only 9 spots in total
+
+timesPlayed = 0
+
+while not win(grid,'O') and not win(grid,'X') and not tie(grid):
+   timesPlayed += 1
+   input1 = get_input(grid, player1);
+   grid[input1-1] = 'O'
+   input2 = get_input(grid, player2);
+   grid[input2-1] = 'X'
+   if win(grid,'O'):
+      congrats(player1)
+   if win(grid,'X'):
+      congrats(player2)
+   if tie(grid) or timesPlayed == 4:
+      print "Tied"
+   printGrid(grid)
+
