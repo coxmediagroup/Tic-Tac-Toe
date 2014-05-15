@@ -1,0 +1,56 @@
+body, #afui {background-color:#000}  
+#afui #settingsList.list li {padding: 10px}       
+
+
+#play_as input.toggle:checked + label > span {
+	transform: translate3d(58px, 0px, 0px);
+	-webkit-transform: translate(58px,0px); /* Chrome, Safari, Opera */
+}
+
+#play_as input.toggle + label:before, #play_as input.toggle:checked + label:before {
+ width: 50px;
+}
+
+table
+{
+border-collapse:collapse;
+ margin: 0 auto;
+}
+
+table, td, th {
+	border:5px solid black;
+	width: 250px;
+	height: 100px;
+}
+
+.enabled {
+	cursor:pointer;
+}
+
+.enabled:hover, .enabled:focus {
+	background-color: rgb(0,136,209);
+}
+
+.notShown{
+	visibility:hidden;
+}
+.shown{
+	visibility:visible;
+}
+#turnMessage{
+	text-align:center;
+	padding:20px;
+	font-weight:bold;
+	font-size:300%; 
+}
+.humanTurnMessage{
+	text-shadow:2px	2px 3px black, 3px 7px 30px blue;	
+}
+.computerTurnMessage{
+	text-shadow:2px	2px 3px black, 3px 7px 30px red;	
+}
+
+#music{
+	position:absolute; 
+}
+

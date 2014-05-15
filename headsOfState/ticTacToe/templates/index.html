@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Heads of State</title>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0;" />
+		
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ App Framework ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<link rel="stylesheet" type="text/css" href="static/appframework/af.ui.css" />
+		<link rel="stylesheet" type="text/css" href="static/appframework/icons.css" />
+		<script type="text/javascript" charset="utf-8" src="static/appframework/appframework.ui.min.js"></script>
+
+		<!-- ~~~~~~~~Used for giving app access to native phone feature~~~~~~~~~ -->    
+		<script src="intelxdk.js"></script>
+		<script src="xhr.js"></script>
+		<script src="static/js/initialize.js"></script>	
+		
+		
+		<link rel="stylesheet" type="text/css" href="static/css/app.css" />
+		
+		<!-- ~~~~~~~~~~~~Knockout~~~~~~~~~~~~ -->
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js" ></script>
+
+		
+	</head>
+	<body> 
+		<span id="musicContainer"></span>
+
+	
+		<div id="afui">
+			<div id="content" style="background-color:white" >
+				
+				<!-- ~~~~main panel~~~~~ -->
+				<div class="panel" title="Title" id="main"  selected="true">
+					<header>
+						<h1>Heads of State: Tic Tac Toe</h1>
+						<a href="#settings" onclick="vm.music.toggleOnMain()" data-transition="up" class="button icon settings" style="float:right"></a>
+					</header>
+
+					<div id="turnMessage" data-bind="text: vm.turnNotifier, attr:{'class': vm.turnMessageStyle() }"></div>
+					<table>
+						<tbody>
+							<tr data-bind="foreach: vm.table.grids.slice(0, 3)">
+								<td data-bind="click:userClicked , attr:{'class': enabled() }">
+									<img data-bind="attr:{'src': image, 'class': imageClass() }" height="80" width="80">					
+								</td>
+							</tr>	
+							<tr data-bind="foreach: vm.table.grids.slice(3, 6)">
+								<td data-bind="click:userClicked , attr:{'class': enabled() }">
+									<img data-bind="attr:{'src': image, 'class': imageClass() }" height="80" width="80"> 
+								</td>
+							</tr>
+							<tr data-bind="foreach: vm.table.grids.slice(6, 9)">
+								<td data-bind="click:userClicked , attr:{'class': enabled() }">
+									<img data-bind="attr:{'src': image, 'class': imageClass() }" height="80" width="80"> 
+								</td>
+							</tr>						
+						</tbody>
+					</table>	
+				</div>
+				<!-- ~~~~main panel~~~~~ -->
+				
+				<!-- ~~~~settings panel~~~~~ -->
+				<div class="panel" title="Settings" id="settings"  >
+					<header>
+						<h1>Settings</h1>
+						<a onclick="vm.music.toggleOnMain(); $.ui.goBack()" class="button icon close" style="float:right"></a>
+					</header>
+					<div style="height:30px;"></div>
+					
+					<ul class="list inset" id="settingsList">
+						<li>
+							<label>Play As</label>
+							<div id="play_as">
+								<input onchange="vm.toggleSelectedCharacter()" id="toggle1" type="checkbox" name="toggle1" class="toggle" checked>
+								<label style="left:70%; width:85px" for="toggle1" data-on="Obama" data-off="Putin">
+									<span ></span>
+								</label>
+							</div>
+						</li>
+						<li>
+							<label>Music</label>
+							<input onchange="vm.music.toggleMusic()" id="toggle2" type="checkbox" name="toggle2" class="toggle" checked><label style="left:70%" for="toggle2" data-on="On" data-off="Off"><span></span></label>
+						</li>
+					</ul> 
+				</div>
+				<!-- ~~~~settings panel~~~~~ -->
+				
+				
+			</div>
+			
+				<div id="navbar">
+					<a href="#main" class='icon refresh' onclick="vm.resetTable()" >Start Over</a>			
+				</div>		
+		</div>
+		
+		<script src="static/js/grid_object.js"></script>	
+		<script src="static/js/table_object.js"></script>	
+		<script src="static/js/computer_object.js"></script>
+		<script src="static/js/music_object.js"></script>			
+		<script src="static/js/app_object.js"></script>			
+		
+	</body>
+</html>    
+
+
+
+
+
+
+
+
+
+
+

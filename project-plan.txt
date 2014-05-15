@@ -1,0 +1,47 @@
+
+	
+#Project plan:
+	phase one research:
+		(1) observed game, looked for patterns
+		(2) utilized website resources such as:
+			http://www.wikihow.com/Win-at-Tic-Tac-Toe
+			
+	phase two:
+		(1) created high level rules for problem
+		(2) created schema for tic tac toe
+			-used javascript for logic of app b/c:
+				(a) logic is:
+					(a1) not handling security sensitive information
+					(a2) not proprietary
+					(a3) not complicated
+				(b) app is simpler because it has less moving parts. No need to do multiple ajax calls to server for each move which results in less strain of the server and less probability of failure (due to the server not responding).
+				(c) I can use javascript logic to make a mobile app to accompany Django app
+				
+			-note I considered letting the core functionality be in Python on the backend. 
+				Would have stored information about grid selection in the session, or a sql db.
+				Would have used that information to find the next point then sending that back to the client via an api.
+				(But as I stated, this setup is more complicated than placing than logic client side. And I appreciate simplicity)
+			
+	phase three:
+		(1) develop app based upon high level rules
+			(a) build mock of ui
+				-table
+				-clickability of grid depends on a computed value in knockoutjs
+			(b) 
+		(2) make sure app meets coding standards
+			-use JSHint
+			-check for errors
+			
+		(3) Integrate app with Django
+		
+	phase four:
+		(1) deploy app
+			-place on github
+			-develop android app with same code base (This is one of the advantages of placing most of the code base in JS)
+			-place project on test server
+			-place apk of app on test server
+			
+			
+			
+
+	
