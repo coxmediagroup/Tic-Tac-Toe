@@ -1,0 +1,46 @@
+<html>
+<head>
+    <style>
+        td {width:20px; height:20px}
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+        function submitIt(position) {
+	$.ajax({
+	   type: "POST",
+	   url: "play/",
+	   data: "position="+position,
+	   success: function(reponsePosition){
+	     $(".tableCell").slice(position,position+1).html("O");
+	     $(".tableCell").slice(parseInt(reponsePosition),parseInt(reponsePosition)+1).html("X");
+	   }
+	 });
+        }
+    </script>
+</head>
+<body>
+<!--
+position layout
+1 2 3
+4 5 6
+7 8 9
+-->
+    Tic Tac Toe<br/>
+    <table border=1>
+        <tr><td><span class="tableCell">X</span><span class="tableCell"></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(2);"/></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(3);"/></span></td>
+        </tr>
+        <tr><td><span class="tableCell"><input type="button" value=" " onclick="submitIt(4);"/></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(5);"/></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(6);"/></span></td>
+        </tr>
+        <tr><td><span class="tableCell"><input type="button" value=" " onclick="submitIt(7);"/></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(8);"/></span></td>
+            <td><span class="tableCell"><input type="button" value=" " onclick="submitIt(9);"/></span></td>
+        </tr>
+    </table>
+    please don't click buttons twice at each turn<br/><br/>
+    <a href="/">Restart</a>     
+</body>
+</html>
