@@ -1,0 +1,8 @@
+{
+  "name": "TicTacToe",
+  "preferGlobal": false,
+  "dependencies": {
+    "stylus": "*",
+    "nib": "*"
+  }
+}

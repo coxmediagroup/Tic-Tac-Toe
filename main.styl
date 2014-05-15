@@ -1,0 +1,92 @@
+@import nib
+
+*
+  box-sizing border-box
+  margin 0
+  padding 0
+
+#container
+  font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
+  margin 50px auto 0
+  line-height 14pt
+  width 700px
+
+h1, #players
+  float left
+  width 50%
+
+h1
+  line-height 90px
+
+#players
+  border-collapse collapse
+  margin 0 auto
+  text-align left
+
+  td, th
+    padding 5px
+
+  .current
+    font-weight 700
+
+.player1
+  color red
+
+.player2
+  color blue
+
+#board
+  clear both
+  height 700px
+  width 100%
+
+  li
+    float left
+    border-color #000
+    border-style solid
+    border-width 0 5px 5px 0
+    cursor pointer
+    font-size 180pt
+    height 33.3%
+    line-height 180px
+    list-style none
+    overflow hidden
+    text-align center
+    width 33.3%
+
+    &.marked
+      cursor not-allowed
+
+      &, &:hover
+        background white !important
+
+    &.winner, &.draw
+      color white
+
+      &.player1
+        background red !important
+
+      &.player2
+        background blue !important
+
+    &:nth-child(3n)
+      border-right-width 0
+
+    &:nth-child(7), &:nth-child(8), &:nth-child(9)
+      border-bottom-width 0
+
+#board.turn-player1 li:hover
+  background red
+
+#player1.current
+  th, td
+    background red
+    color white
+
+#board.turn-player2 li:hover
+  background blue
+
+#player2.current
+  th, td
+    background blue
+    color white

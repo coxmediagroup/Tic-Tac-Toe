@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>Tic Tac Toe Challenge</title>
+<link rel=stylesheet href=main.css>
+
+<div id=container class=turn-player1>
+  <h1>Tic Tac Toe</h1>
+  <table id=players>
+    <thead>
+      <tr>
+        <th>
+        <th title=Wins>W
+        <th title=Losses>L
+        <th title=Draws>D
+        <th>
+    <tbody>
+      <tr id=player1 class=current>
+        <th class=player1>Player 1
+        <td>0 <td>0 <td>0
+        <td><label>Is a bot?  <input type=checkbox></label>
+      <tr id=player2>
+        <th class=player2>Player 2
+        <td>0 <td>0 <td>0
+        <td><label>Is a bot?  <input type=checkbox checked></label>
+  </table>
+  <ul id=board>
+    <li><li><li>
+    <li><li><li>
+    <li><li><li>
+  </div>
+</div>
+
+<script src=main.js></script>
