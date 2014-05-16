@@ -22,7 +22,7 @@ def move(board):
 
     """
 
-    strategy= [center, opposite_corner, any_corner, any_side]
+    strategy= [win, center, opposite_corner, any_corner, any_side]
 
     move = None
     for tactic in strategy:
@@ -93,3 +93,34 @@ def any_side(board):
             return side
 
     return None
+
+def winning_move(board, symbol, return_format="single"):
+    """
+    Look for a move that will win the game.  Take it, if found.
+
+    """
+    opponent_mark = "X" if symbol == "O" else "O"
+    my_mark = symbol
+    paths = board.traverse(banned=[opponent_mark], requires={my_mark: 2})
+
+    return_list = []
+    for p in paths:
+        for coords in p:
+            if board.square(coords) == " ":
+                if return_format == "single":
+                    return coords
+                else:
+                    return_list.append(coords)
+
+    if return_format == "list":
+        return return_list
+
+    return None
+
+def win(board):
+    """
+    Win, if able.
+
+    """
+    move = winning_move(board, "O")
+    return move
