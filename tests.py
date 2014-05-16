@@ -351,6 +351,45 @@ class AiTest(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data, ai_move)
 
+    def test_fork(self):
+        moves = (
+            ('[[" ", "O", " "], '
+              '["X", "X", "O"], '
+              '["O", " ", " "]]',
+             '[[" ", "O", "O"], '
+              '["X", "X", "O"], '
+              '["O", " ", " "]]'),
+
+            ('[[" ", "O", " "], '
+              '["O", "X", "X"], '
+              '[" ", " ", " "]]',
+             '[["O", "O", " "], '
+              '["O", "X", "X"], '
+              '[" ", " ", " "]]'),
+
+            ('[[" ", "O", " "], '
+              '["O", "X", "X"], '
+              '[" ", "O", " "]]',
+             '[[" ", "O", " "], '
+              '["O", "X", "X"], '
+              '["O", "O", " "]]'),
+
+            ('[["O", " ", " "], '
+              '["X", "X", "O"], '
+              '[" ", "O", " "]]',
+             '[["O", " ", " "], '
+              '["X", "X", "O"], '
+              '[" ", "O", "O"]]'),
+          )
+
+
+        with app.test_client() as tester:
+            for start_board, ai_move in moves:
+                url = '/ai-move?layout={}'.format(start_board)
+                response = tester.get(url)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.data, ai_move)
+
 class BoardTest(unittest.TestCase):
     def test_board(self):
         blank_board = {0: {0: " ", 1: " ", 2: " "},
@@ -388,4 +427,13 @@ class BoardTest(unittest.TestCase):
             [(0, 2), (1, 1), (2, 0)]])
 
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
+    from unittest import TestResult
+    from unittest import TestSuite
+    from unittest import TextTestRunner
+    result = TestResult()
+    runner = TextTestRunner()
+    fast = TestSuite()
+    fast.addTest(AiTest('test_fork'))
+    runner.run(fast)
+

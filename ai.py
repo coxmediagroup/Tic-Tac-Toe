@@ -22,7 +22,7 @@ def move(board):
 
     """
 
-    strategy= [win, center, opposite_corner, any_corner, any_side]
+    strategy= [win, fork, center, opposite_corner, any_corner, any_side]
 
     move = None
     for tactic in strategy:
@@ -123,4 +123,68 @@ def win(board):
 
     """
     move = winning_move(board, "O")
+    return move
+
+def forking_move(board, symbol, return_format="single"):
+    """
+    Look for a move that will result in two possible ways to win,
+    guaranteeing victory if the opposition can't win next round.
+
+    """
+    my_mark = symbol
+    opponent_mark = "O" if symbol == "X" else "X"
+
+    # Get a list of paths that have 1 move taken, unblocked by opponent.
+    paths = board.traverse(banned=[opponent_mark], requires={my_mark: 1})
+
+    # Pathways are irrelevent, make one list.
+    coord_list = []
+    for e in paths:
+        for c in e:
+            coord_list.append(c)
+
+    # Intersect them, checking for overlapping coordinates.
+    coords = {}
+    for e in coord_list:
+        if e not in coords.keys():
+            # Because of the way Board.traverse slices the board,
+            # moves intersect with themselves, leading to strange math.
+            # Delete them, compare only spaces from this point forward.
+            if board.square(e) in [my_mark, opponent_mark]:
+                continue
+
+            # We're tracking intersections, not numbers, so start with 0.
+            coords[e] = 0
+        else:
+            coords[e] += 1
+
+    # Pick the most vicious fork possible (.e., most interesections.)
+    max_ = 0
+    for e in coords.keys():
+        max_ = coords[e] if coords[e] > max_ else max_
+
+    # If max is not > 0, then there aren't any interesting intersections.
+    return_list = []
+    if max_ > 0:
+        for e in coords.keys():
+            if coords[e] == max_:
+                # We're indexing by coords, so just return e.
+                if return_format == "single":
+                    return e
+                elif return_format == "list":
+                    return_list.append(e)
+
+    if return_format == "list":
+        return return_list
+
+    return None
+
+
+def fork(board):
+    """
+    Create a fork, resulting in multiple ways to win.
+
+    """
+
+    move = forking_move(board, "O")
     return move
