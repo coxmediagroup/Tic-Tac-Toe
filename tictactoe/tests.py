@@ -139,6 +139,17 @@ class BoardTest(SimpleTestCase):
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
 
+    def test_tie(self):
+        b = Board(state=12119)
+        expected = (
+            'O|X|O\n'
+            '-+-+-\n'
+            'X|O|X\n'
+            '-+-+-\n'
+            'X|O|X')
+        self.assertMultiLineEqual(expected, str(b))
+        self.assertEqual(Board.TIE, b.winner())
+
     def test_two_winners_raises(self):
         self.assertRaises(ValueError, Board, state=715)
         # This corresponds to this board:

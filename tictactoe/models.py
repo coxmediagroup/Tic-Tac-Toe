@@ -10,6 +10,7 @@ class Game(models.Model):
     IN_PROGRESS = 0
     X_WINS = PLAYER_X = Board.MARK_X
     O_WINS = PLAYER_O = Board.MARK_O
+    TIE = Board.TIE
 
     RANDOM_STRATEGY = 0
 
@@ -24,6 +25,7 @@ class Game(models.Model):
             (IN_PROGRESS, 'In Progress'),
             (X_WINS, 'X Wins'),
             (O_WINS, 'O Wins'),
+            (TIE, 'Tie'),
         ))
     strategy_type = models.IntegerField(
         help_text="Server's strategy", default=RANDOM_STRATEGY,

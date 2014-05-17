@@ -46,17 +46,16 @@ var update_winner = function() {
     var title = $('#body-title');
     if (title) {
         if (ttt_data.winner === 0) {
-            if (ttt_data.next_moves.length === 0) {
-                title.text("It's a tie!");
-                add_next();
-            } else {
-                title.text('Your turn.');
-            }
+            title.text('Your turn.');
+        } else if (ttt_data.winner === 3) {
+            title.text("It's a tie!");
         } else if (ttt_data.winner === ttt_data.server_player) {
             title.text('Server wins!');
-            add_next();
         } else {
             title.text('Player wins!');
+        }
+
+        if (ttt_data.winner !== 0){
             add_next();
         }
     }

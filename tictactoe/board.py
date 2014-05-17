@@ -23,6 +23,7 @@ class Board(object):
     BLANK = 0
     MARK_X = X_NEXT = X_WINS = 1
     MARK_O = O_NEXT = O_WINS = 2
+    TIE = 3
 
     def __init__(self, state=0):
         '''
@@ -78,7 +79,7 @@ class Board(object):
         if self._has_winner:
             return None
         else:
-            moves = len([1 for p in self.board if p != 0])
+            moves = len([1 for p in self.board if p != self.BLANK])
             if moves % 2:
                 return self.O_NEXT
             else:
@@ -100,10 +101,12 @@ class Board(object):
             raise ValueError('{} is an invalid move'.format(pos))
 
     def winner(self):
-        '''Returns the winner, or False if no winner
+        '''Returns the winner, or None if no winner
 
+        Returns None if the game is in progess
         Returns 1 (X_WINS) if X is the winner
         Returns 2 (O_WINS) if O is the winner
+        Returns 3 (TIE) if game ends w/o a winner
         '''
 
         win_sets = (
@@ -126,4 +129,7 @@ class Board(object):
                         raise ValueError('Too many winners!')
                 else:
                     winner = items[0]
-        return winner
+        if not winner and not any([x == self.BLANK for x in self.board]):
+            return self.TIE
+        else:
+            return winner

@@ -4,31 +4,29 @@
 {%- endblock %}
 
 {% block text %}
-{% for game in data.results %}
-{% if loop.first %}<ul>{% endif %}
+{%- for game in data.results %}
+{%- if loop.first %}<ul>{% endif %}
   <li><a href="{{game.url}}?format=html">
     {%- if game.winner == 0 -%}
-      {%- if game.next_moves -%}
-        Game in progress
-      {%- else -%}
-        Tie game
-      {%- endif -%}
+      Game in progress
+    {%- elif game.winner == 3 %}
+      Tie game
     {%- elif game.winner == game.server_player -%}
       Server won the game
     {%- else -%}
       Player won the game
     {%- endif -%}
   </a></li>
-{% if loop.last %}</ul>{% endif %}
-{% endfor %}
+{%- if loop.last %}</ul>{% endif %}
+{%- endfor %}
 
-{% if data.previous or data.next %}
+{%- if data.previous or data.next %}
 <p>(
   {%- if data.previous %}<a href="{{data.previous}}">earlier games</a>{% endif %}
   {%- if data.previous and data.next %}, {% endif %}
   {%- if data.next %}<a href="{{data.next}}">later games</a>{% endif -%}
 )</p>
-{% endif %}
+{%- endif %}
 
 <h2 class='text-center'>Start a new game?</h2>
 <ul class='play-buttons'>
