@@ -42,6 +42,30 @@ var make_svg = function(board) {
     board.prepend(svg);
 }
 
+var update_winner = function() {
+    var title = $('#body-title');
+    if (title) {
+        if (ttt_data.winner === 0) {
+            if (ttt_data.next_moves.length === 0) {
+                title.text("It's a tie!");
+                add_next();
+            } else {
+                title.text('Your turn.');
+            }
+        } else if (ttt_data.winner === ttt_data.server_player) {
+            title.text('Server wins!');
+            add_next();
+        } else {
+            title.text('Player wins!');
+            add_next();
+        }
+    }
+}
+
+var add_next = function() {
+    $('.tt_next').removeClass("hidden");
+}
+
 var mark = function(position) {
     /* Report the user's choice and get the server's move */
     $.ajax(ttt_data.move_url, {data: {position: position}, type: 'POST'})
@@ -50,8 +74,10 @@ var mark = function(position) {
             ttt_data = data;
             $('#ttt_svg').remove();
             make_svg(board);
+            update_winner();
         });
 }
 
 /* On initial load, create the board */
 make_svg($('.tt_board'));
+update_winner();
