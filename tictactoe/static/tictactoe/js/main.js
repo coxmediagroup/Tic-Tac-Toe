@@ -4,6 +4,7 @@ var init_svg = function() {
     var g = d3.select("svg")
         .append('g')
         .attr("style", "stroke:black;stroke-width:10")
+        .attr("fill", "none")
         .attr("id", "ttt_g")
     g.append('line').attr({x1: 200, y1:   0, x2: 200, y2: 600})
     g.append('line').attr({x1: 400, y1:   0, x2: 400, y2: 600})
@@ -22,12 +23,8 @@ var add_mark = function(position, mark, fast) {
         top_x = 20 + 200 * x,
         top_y = 20 + 200 * y,
         width = 160,
-        height = 160,
         bot_x = top_x + width,
-        bot_y = top_y + width,
-        r = (width / 2),
-        ctr_x = top_x + r,
-        ctr_y = top_y + r;
+        bot_y = top_y + width;
     $('#' + id).remove();
     var g_sub = g.append('g').attr('id', id);
 
@@ -35,31 +32,75 @@ var add_mark = function(position, mark, fast) {
         case 0:
             /* User clicks to add their mark */
             g_sub
-                .attr({class: 'tt_choice', style: "stroke:white"})
+                .attr({class: 'tt_choice', style: "stroke:none"})
                 .append('rect')
                 .attr({
                     class: 'btn',
                     x: top_x,
                     y: top_y,
                     width: width,
-                    height: height,
+                    height: width,
                     fill: "white",
                     onclick: "mark(\'" + position + "\')"
                 })
             break;
         case 1:
-            g_sub.attr('class', 'tt_x')
-            g_sub.append('line')
-                .attr({x1: top_x, y1: top_y, x2: bot_x, y2: bot_y})
-            g_sub.append('line')
-                .attr({x1: top_x, y1: bot_y, x2: bot_x, y2: top_y})
+            g_sub.attr('class', 'tt_x');
+            if (fast) {
+                g_sub.append('line')
+                    .attr({x1: top_x, y1: top_y, x2: bot_x, y2: bot_y});
+                g_sub.append('line')
+                    .attr({x1: top_x, y1: bot_y, x2: bot_x, y2: top_y});
+            } else {
+                g_sub.append('line')
+                    .attr({x1: top_x, y1: top_y, x2: top_x, y2: top_y})
+                    .transition(250)
+                    .attr({x2: bot_x, y2: bot_y});
+                g_sub.append('line')
+                    .attr({x1: bot_x, y1: top_y, x2: bot_x, y2: top_y})
+                    .transition(250).delay(300)
+                    .attr({x2: top_x, y2: bot_y});
+            }
             break;
         case 2:
-            g_sub.attr('class', 'tt_o')
-            g_sub.append('circle')
-                .attr({cx: ctr_x, cy: ctr_y, r: r, fill: 'white'})
+            var r = (width / 2),
+                ctr_x = top_x + r,
+                ctr_y = top_y + r;
+            g_sub.attr('class', 'tt_o');
+            if (fast) {
+                g_sub.append('circle')
+                    .attr({cx: ctr_x, cy: ctr_y, r: r, fill: 'none'});
+            } else {
+                var right_arc = d3.svg.arc()
+                    .innerRadius(r)
+                    .outerRadius(r)
+                    .startAngle(0);
+                var left_arc = d3.svg.arc()
+                    .innerRadius(r)
+                    .outerRadius(r)
+                    .startAngle(Math.PI);
+                g_sub.attr('transform', 'translate(' + ctr_x + ',' + ctr_y + ')');
+                g_sub.append('path')
+                    .datum({endAngle: 0.1})
+                    .attr("d", right_arc)
+                    .transition(500)
+                    .call(arcTween, right_arc, 2 * Math.PI)
+            }
             break;
     }
+}
+
+// Creates a tween on the specified transition's "d" attribute, transitioning
+// any selected arcs from their current angle to the specified new angle.
+// From http://bl.ocks.org/mbostock/5100636
+function arcTween(transition, arc, newAngle) {
+  transition.attrTween("d", function(d) {
+    var interpolate = d3.interpolate(d.endAngle, newAngle);
+    return function(t) {
+      d.endAngle = interpolate(t);
+      return arc(d);
+    };
+  });
 }
 
 var update_winner = function() {
@@ -93,18 +134,20 @@ var mark = function(position) {
         user_mark = 2;
     }
     add_mark(position, user_mark);
-    $.ajax(ttt_data.move_url, {data: {position: position}, type: 'POST'})
-        .done(function(data) {
-            $.each(data.board,  function( i, val ) {
-                if (val !== ttt_data.board[i]) {
-                    add_mark(i, val);
-                }
-            });
-            ttt_data = data;
-            update_winner();
-        });
+    ttt_data.board[position] = user_mark;
+    setTimeout(function() {
+        $.ajax(ttt_data.move_url, {data: {position: position}, type: 'POST'})
+            .done(function(data) {
+                $.each(data.board,  function( i, val ) {
+                    if (val !== ttt_data.board[i]) {
+                        add_mark(i, val);
+                    }
+                });
+                ttt_data = data;
+                update_winner();
+            })}, 250);
 }
 
 /* On initial load, create the board */
-init_svg($('.tt_board'));
+init_svg();
 update_winner();
