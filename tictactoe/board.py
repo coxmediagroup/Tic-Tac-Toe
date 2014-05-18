@@ -67,39 +67,6 @@ class Board(object):
         }
         return fmt.format(*[s[x] for x in self.board])
 
-    def state(self):
-        '''Return the state number of the board'''
-        state = 0
-        for p in reversed(self.board):
-            state = (state * 3) + p
-        return state
-
-    def next_mark(self):
-        '''Return which player places the next mark, or None if game over'''
-        if self._has_winner:
-            return None
-        else:
-            moves = len([1 for p in self.board if p != self.BLANK])
-            if moves % 2:
-                return self.O_NEXT
-            else:
-                return self.X_NEXT
-
-    def next_moves(self):
-        '''Return valid next moves'''
-        if self._has_winner:
-            return []
-        else:
-            return [i for i, p in enumerate(self.board) if p == 0]
-
-    def move(self, pos):
-        '''Add the next move to the board'''
-        if pos in self.next_moves():
-            self.board[pos] = self.next_mark()
-            self._has_winner, self_winning_positions = self.check_winner()
-        else:
-            raise ValueError('{} is an invalid move'.format(pos))
-
     def check_winner(self):
         '''Returns the winner and the winning lines
 
@@ -139,6 +106,39 @@ class Board(object):
             return self.TIE, []
         else:
             return winner, winning_positions
+
+    def state(self):
+        '''Return the state number of the board'''
+        state = 0
+        for p in reversed(self.board):
+            state = (state * 3) + p
+        return state
+
+    def next_mark(self):
+        '''Return which player places the next mark, or None if game over'''
+        if self._has_winner:
+            return None
+        else:
+            moves = len([1 for p in self.board if p != self.BLANK])
+            if moves % 2:
+                return self.O_NEXT
+            else:
+                return self.X_NEXT
+
+    def next_moves(self):
+        '''Return valid next moves'''
+        if self._has_winner:
+            return []
+        else:
+            return [i for i, p in enumerate(self.board) if p == 0]
+
+    def move(self, pos):
+        '''Add the next move to the board'''
+        if pos in self.next_moves():
+            self.board[pos] = self.next_mark()
+            self._has_winner, self_winning_positions = self.check_winner()
+        else:
+            raise ValueError('{} is an invalid move'.format(pos))
 
     def winner(self):
         return self._has_winner
