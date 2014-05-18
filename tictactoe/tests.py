@@ -535,3 +535,15 @@ class MinimaxStrategyTest(SimpleTestCase):
         res = self.strategy.score_moves(board)
         self.assertEqual(res, {2: 4, 5: -3, 8: -3})
         self.assertEqual(2, self.strategy.next_move(board))
+
+    def test_all_ties_for_first_move(self):
+        board = Board()
+        expected = (
+            ' | | \n'
+            '-+-+-\n'
+            ' | | \n'
+            '-+-+-\n'
+            ' | | ')
+        self.assertMultiLineEqual(expected, str(board))
+        res = self.strategy.score_moves(board)
+        self.assertEqual(res, {k: 0 for k in range(9)})

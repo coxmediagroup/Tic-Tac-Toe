@@ -38,10 +38,13 @@ The requirements are:
 * You should include clear instructions for how to run your application
 
 When I was first recruited, I was too busy to write code, but I did have about
-2 months to think about the problem before I started.
+2 months to think about the problem before I started.  Not enough to come up
+with Minimax_, but enough to learn a little d3_.
 
 .. _`job application`: http://cmgd-jobs.readthedocs.org
         /en/latest/developer.html
 .. _`programming exercise`: https://github.com/coxmediagroup/Tic-Tac-Toe
 .. _`the game tic-tac-toe`: http://en.wikipedia.org/wiki/Tic-tac-toe
 .. _virtualenv: http://virtualenvwrapper.readthedocs.org/en/latest/
+.. _Minimax: http://en.wikipedia.org/wiki/Minimax
+.. _d3: http://d3js.org
