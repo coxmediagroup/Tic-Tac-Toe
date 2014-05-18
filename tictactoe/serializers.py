@@ -18,6 +18,8 @@ class GameSerializer(HyperlinkedModelSerializer):
     next_moves = ListField(
         IntegerField(), source='board.next_moves', read_only=True)
     move_url = SerializerMethodField('get_move_url')
+    winning_positions = ListField(
+        IntegerField(), source='board.winning_positions', read_only=True)
 
     def get_move_url(self, obj):
         request = self.context.get('request')
@@ -35,5 +37,5 @@ class GameSerializer(HyperlinkedModelSerializer):
         model = Game
         fields = (
             'url', 'board', 'next_moves', 'move_url', 'server_player',
-            'winner')
+            'winner', 'winning_positions')
         read_only_fields = ('winner', )

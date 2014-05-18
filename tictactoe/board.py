@@ -49,7 +49,7 @@ class Board(object):
         if x_moves > o_moves + 1:
             err = 'Bad state {} - too many O moves'.format(init_state)
             raise ValueError(err)
-        self._has_winner = self.winner() or False
+        self._has_winner, self._winning_positions = self.check_winner()
 
     def __str__(self):
         '''String representation of board'''
@@ -96,17 +96,21 @@ class Board(object):
         '''Add the next move to the board'''
         if pos in self.next_moves():
             self.board[pos] = self.next_mark()
-            self._has_winner = self.winner()
+            self._has_winner, self_winning_positions = self.check_winner()
         else:
             raise ValueError('{} is an invalid move'.format(pos))
 
-    def winner(self):
-        '''Returns the winner, or None if no winner
+    def check_winner(self):
+        '''Returns the winner and the winning lines
 
-        Returns None if the game is in progess
-        Returns 1 (X_WINS) if X is the winner
-        Returns 2 (O_WINS) if O is the winner
-        Returns 3 (TIE) if game ends w/o a winner
+        Return is a two element tuple.  The first element is:
+        - None if the game is in progess
+        - 1 (X_WINS) if X is the winner
+        - 2 (O_WINS) if O is the winner
+        - 3 (TIE) if game ends w/o a winner
+
+        The second element is a list of three-element tuples, representing
+        the winning positions, or None if there is no winner.
         '''
 
         win_sets = (
@@ -120,16 +124,24 @@ class Board(object):
             (0, 4, 8),  # Falling slash
         )
         winner = None
+        winning_positions = []
 
         for win_set in win_sets:
             items = [self.board[i] for i in win_set]
             if items[0] != self.BLANK and all(x == items[0] for x in items):
+                winning_positions.append(win_set)
                 if winner:
                     if items[0] != winner:
                         raise ValueError('Too many winners!')
                 else:
                     winner = items[0]
         if not winner and not any([x == self.BLANK for x in self.board]):
-            return self.TIE
+            return self.TIE, []
         else:
-            return winner
+            return winner, winning_positions
+
+    def winner(self):
+        return self._has_winner
+
+    def winning_positions(self):
+        return self._winning_positions

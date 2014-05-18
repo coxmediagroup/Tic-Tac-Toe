@@ -3,9 +3,9 @@
 /*properties
     PI, ajax, append, arc, attr, attrTween, board, call, class, cx, cy, data,
     datum, delay, done, each, endAngle, fill, floor, height, innerRadius,
-    interpolate, move_url, onclick, outerRadius, position, r, remove,
+    interpolate, map, move_url, onclick, outerRadius, position, r, remove,
     removeClass, select, server_player, startAngle, style, svg, text, transition,
-    type, width, winner, x, x1, x2, y, y1, y2
+    type, width, winner, winning_positions, x, x1, x2, y, y1, y2
 */
 
 var mark = (function () {
@@ -100,6 +100,31 @@ var mark = (function () {
         }
     }
 
+    function mark_winner(fast) {
+        var g = d3.select('#ttt_g'),
+            g_sub = g.append('g')
+                .attr("style", "stroke:red; stroke-width:20")
+                .attr("class", "tt_win");
+        ttt_data.winning_positions.map(function (val) {
+            var p1_x = val[0] % 3,
+                p1_y = Math.floor(val[0] / 3),
+                p2_x = val[2] % 3,
+                p2_y = Math.floor(val[2] / 3),
+                start_x = 100 + 200 * p1_x,
+                start_y = 100 + 200 * p1_y,
+                end_x = 100 + 200 * p2_x,
+                end_y = 100 + 200 * p2_y;
+            if (fast) {
+                g_sub.append('line').attr({x1: start_x, y1: start_y, x2: end_x, y2: end_y});
+            } else {
+                g_sub.append('line').attr({x1: start_x, y1: start_y, x2: start_x, y2: start_y})
+                    .transition(250)
+                    .attr({x2: end_x, y2: end_y});
+            }
+        });
+        $('.tt_next').removeClass("hidden");
+    }
+
     function init_svg() {
         var g = d3.select("svg")
             .append('g')
@@ -113,10 +138,10 @@ var mark = (function () {
         $.each(ttt_data.board, function (i, val) {
             add_mark(i, val, true);
         });
-    }
-
-    function add_next() {
-        $('.tt_next').removeClass("hidden");
+        if (ttt_data.winner !== 0) {
+            $('.tt_choice').remove();
+            mark_winner(true);
+        }
     }
 
     function update_winner() {
@@ -134,7 +159,7 @@ var mark = (function () {
 
             if (ttt_data.winner !== 0) {
                 $('.tt_choice').remove();
-                add_next();
+                mark_winner(false);
             }
         }
     }

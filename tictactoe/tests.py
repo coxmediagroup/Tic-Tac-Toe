@@ -47,6 +47,7 @@ class BoardTest(SimpleTestCase):
             'O| |O')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
+        self.assertEqual([(0, 1, 2)], b.winning_positions())
         self.assertIsNone(b.next_mark())
         self.assertEqual([], b.next_moves())
 
@@ -60,6 +61,7 @@ class BoardTest(SimpleTestCase):
             ' |X|X')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.O_WINS, b.winner())
+        self.assertEqual([(3, 4, 5)], b.winning_positions())
 
     def test_row3_winner(self):
         b = Board(state=9695)
@@ -71,6 +73,7 @@ class BoardTest(SimpleTestCase):
             'X|X|X')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
+        self.assertEqual([(6, 7, 8)], b.winning_positions())
 
     def test_col1_winner(self):
         b = Board(state=10343)
@@ -82,6 +85,7 @@ class BoardTest(SimpleTestCase):
             'O|X|X')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.O_WINS, b.winner())
+        self.assertEqual([(0, 3, 6)], b.winning_positions())
 
     def test_col2_winner(self):
         b = Board(state=3783)
@@ -93,6 +97,7 @@ class BoardTest(SimpleTestCase):
             'O|X| ')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
+        self.assertEqual([(1, 4, 7)], b.winning_positions())
 
     def test_col3_winner(self):
         b = Board(state=14439)
@@ -104,6 +109,7 @@ class BoardTest(SimpleTestCase):
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.O_WINS, b.winner())
+        self.assertEqual([(2, 5, 8)], b.winning_positions())
 
     def test_rising_slash_winner(self):
         b = Board(state=14427)
@@ -115,6 +121,7 @@ class BoardTest(SimpleTestCase):
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
+        self.assertEqual([(2, 4, 6)], b.winning_positions())
 
     def test_falling_slash_winner(self):
         b = Board(state=14267)
@@ -126,6 +133,7 @@ class BoardTest(SimpleTestCase):
             'X| |O')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.O_WINS, b.winner())
+        self.assertEqual([(0, 4, 8)], b.winning_positions())
 
     def test_two_way_winner(self):
         self.assertRaises(ValueError, Board, state=715)
@@ -138,6 +146,7 @@ class BoardTest(SimpleTestCase):
             'X|O|O')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.X_WINS, b.winner())
+        self.assertEqual([(0, 1, 2), (2, 4, 6)], b.winning_positions())
 
     def test_tie(self):
         b = Board(state=12119)
@@ -149,6 +158,7 @@ class BoardTest(SimpleTestCase):
             'X|O|X')
         self.assertMultiLineEqual(expected, str(b))
         self.assertEqual(Board.TIE, b.winner())
+        self.assertEqual([], b.winning_positions())
 
     def test_two_winners_raises(self):
         self.assertRaises(ValueError, Board, state=715)
@@ -238,7 +248,8 @@ class GameAPITest(APITestCase):
             'next_moves': [1, 2, 3, 4, 5, 6, 7, 8],
             'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_X,
-            'winner': 0
+            'winner': 0,
+            'winning_positions': [],
         }
         self.assertEqual(expected, response.data)
         self.mock_choice.assert_called_once_with(range(9))
@@ -259,7 +270,8 @@ class GameAPITest(APITestCase):
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
             'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_O,
-            'winner': 0
+            'winner': 0,
+            'winning_positions': [],
         }
         self.assertEqual(expected, response.data)
 
@@ -275,7 +287,8 @@ class GameAPITest(APITestCase):
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
             'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_O,
-            'winner': 0
+            'winner': 0,
+            'winning_positions': [],
         }
         self.assertEqual(expected, response.data)
 
@@ -292,7 +305,8 @@ class GameAPITest(APITestCase):
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
             'move_url': expected_url + 'move/',
             'server_player': Game.PLAYER_O,
-            'winner': 0
+            'winner': 0,
+            'winning_positions': [],
         }
         self.assertEqual(expected, response.data)
 
