@@ -1,7 +1,7 @@
 from django.db import models
 
 from .board import Board
-from .strategy import RandomStrategy
+from .strategy import RandomStrategy, MinimaxStrategy
 
 
 class Game(models.Model):
@@ -13,6 +13,11 @@ class Game(models.Model):
     TIE = Board.TIE
 
     RANDOM_STRATEGY = 0
+    MINIMAX_STRATEGY = 1
+    STRATEGIES = {
+        RANDOM_STRATEGY: RandomStrategy,
+        MINIMAX_STRATEGY: MinimaxStrategy,
+    }
 
     state = models.IntegerField(
         help_text='State of the board', default=0)
@@ -28,9 +33,10 @@ class Game(models.Model):
             (TIE, 'Tie'),
         ))
     strategy_type = models.IntegerField(
-        help_text="Server's strategy", default=RANDOM_STRATEGY,
+        help_text="Server's strategy", default=MINIMAX_STRATEGY,
         choices=(
             (RANDOM_STRATEGY, 'Random Strategy'),
+            (MINIMAX_STRATEGY, 'Minimax Strategy'),
         ))
 
     @property
@@ -51,5 +57,5 @@ class Game(models.Model):
 
     @property
     def strategy(self):
-        assert self.strategy_type == self.RANDOM_STRATEGY
-        return RandomStrategy()
+        assert self.strategy_type in self.STRATEGIES
+        return self.STRATEGIES[self.strategy_type]()

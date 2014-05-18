@@ -5,7 +5,7 @@ import mock
 
 from .board import Board
 from .models import Game
-from .strategy import RandomStrategy
+from .strategy import RandomStrategy, MinimaxStrategy
 
 
 class BoardTest(SimpleTestCase):
@@ -478,3 +478,60 @@ class RandomStrategyTest(SimpleTestCase):
         move = strategy.next_move(board)
         self.assertEqual(7, move)
         mock_choice.assert_called_once_with([2, 5, 6, 7, 8])
+
+
+class MinimaxStrategyTest(SimpleTestCase):
+    def setUp(self):
+        self.strategy = MinimaxStrategy()
+
+    def test_one_move_left(self):
+        board = Board(state=17230)
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O|X\n'
+            '-+-+-\n'
+            'O|X|O')
+        self.assertMultiLineEqual(expected, str(board))
+        res = self.strategy.score_moves(board)
+        self.assertEqual(res, {2: 2})
+        self.assertEqual(2, self.strategy.next_move(board))
+
+    def test_o_wins_next_move(self):
+        board = Board(state=10426)
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            'O|X|X')
+        self.assertMultiLineEqual(expected, str(board))
+        res = self.strategy.score_moves(board)
+        self.assertEqual(res, {2: -3, 5: -3})
+        self.assertTrue(self.strategy.next_move(board) in [2, 5])
+
+    def test_o_can_win_next_move(self):
+        board = Board(state=4108)
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O|X\n'
+            '-+-+-\n'
+            'O|X| ')
+        self.assertMultiLineEqual(expected, str(board))
+        res = self.strategy.score_moves(board)
+        self.assertEqual(res, {2: -3, 8: 2})
+        self.assertEqual(2, self.strategy.next_move(board))
+
+    def test_x_can_win_on_next_move(self):
+        board = Board(state=3865)
+        expected = (
+            'X|X| \n'
+            '-+-+-\n'
+            'O|O| \n'
+            '-+-+-\n'
+            'O|X| ')
+        self.assertMultiLineEqual(expected, str(board))
+        res = self.strategy.score_moves(board)
+        self.assertEqual(res, {2: 4, 5: -3, 8: -3})
+        self.assertEqual(2, self.strategy.next_move(board))

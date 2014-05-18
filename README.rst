@@ -13,11 +13,17 @@ Getting Started
 2. Install requirements: ``pip install -r requirements.txt``
 3. Create the database: ``./manage.py syncdb && ./manage.py migrate``
 4. Run it: ``./manage.py runserver``
-5. Play it: http://localhost:8000/ <http://localhost:8000>
+5. Play it: `http://localhost:8000/ <http://localhost:8000>`_
 
 If you are developing, you may want to install the additional requirements
 in `requirements.dev.txt`, and customize settings with `local_settings.py`.
 Use `tools/qa_chech.sh` to run tests, check coverage, and check code quality.
+
+To Do
+-----
+* Add rotation transforms
+* Winning lines need to be offset (diagonal win is weird)
+* Code cleanup
 
 Purpose
 -------
