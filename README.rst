@@ -14,6 +14,7 @@ Getting Started
 3. Create the database: ``./manage.py syncdb && ./manage.py migrate``
 4. Run it: ``./manage.py runserver``
 5. Play it: `http://localhost:8000/ <http://localhost:8000>`_
+6. Play it against itself: ``./manage.py check_ttt_strategy``
 
 If you are developing, you may want to install the additional requirements
 in `requirements.dev.txt`, and customize settings with `local_settings.py`.
@@ -21,7 +22,6 @@ Use `tools/qa_chech.sh` to run tests, check coverage, and check code quality.
 
 To Do
 -----
-* Add management command for random testing
 * Code cleanup
 
 Purpose
