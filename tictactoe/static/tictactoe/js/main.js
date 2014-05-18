@@ -1,45 +1,65 @@
 "use strict"
 
-var make_svg = function(board) {
-    /* Make the tic-tac-toe SVG */
-    var svg = '<svg id="ttt_svg" height="600" width="600">',
-        line_style = ' style="stroke:black;stroke-width:10" ';
-
-    svg += '<line x1="200" y1="0" x2="200" y2="600"' + line_style + '/>';
-    svg += '<line x1="400" y1="0" x2="400" y2="600"' + line_style + '/>';
-    svg += '<line x1="0" y1="200" x2="600" y2="200"' + line_style + '/>';
-    svg += '<line x1="0" y1="400" x2="600" y2="400"' + line_style + '/>';
-
+var init_svg = function() {
+    var g = d3.select("svg")
+        .append('g')
+        .attr("style", "stroke:black;stroke-width:10")
+        .attr("id", "ttt_g")
+    g.append('line').attr({x1: 200, y1:   0, x2: 200, y2: 600})
+    g.append('line').attr({x1: 400, y1:   0, x2: 400, y2: 600})
+    g.append('line').attr({x1:   0, y1: 200, x2: 600, y2: 200})
+    g.append('line').attr({x1:   0, y1: 400, x2: 600, y2: 400})
     $.each(ttt_data.board, function( i, val ) {
-        var top_x = 20 + 200 * (i % 3),
-            top_y = 20 + 200 * (Math.floor(i / 3)),
-            width = 160,
-            bot_x = top_x + width,
-            bot_y = top_y + width,
-            r = (width / 2),
-            ctr_x = top_x + r,
-            ctr_y = top_y + r;
-
-        switch (val) {
-            case 0:
-                /* User clicks to add their mark */
-                svg += '<rect class="btn" x="' + top_x + '" y="' + top_y +
-                       '" width="' + width + '" height="' + width +
-                       '" fill="white" onclick="mark(\'' + i + '\')" />';
-                break;
-            case 1:
-                svg += '<line x1="' + top_x + '" y1="' + top_y + '" x2="' +
-                       bot_x + '" y2="' + bot_y + '" ' + line_style + '/>';
-                svg += '<line x1="' + top_x + '" y1="' + bot_y + '" x2="' +
-                       bot_x + '" y2="' + top_y + '" ' + line_style + '/>';
-                break;
-            case 2:
-                svg += '<circle cx="' + ctr_x + '" cy="' + ctr_y + '" r="' +
-                        r + '"' + line_style + ' fill="white" />';
-                break;
-        }
+        add_mark(i, val, true);
     });
-    board.prepend(svg);
+}
+
+var add_mark = function(position, mark, fast) {
+    var g = d3.select("#ttt_g"),
+        id = 'ttt_pos_' + position,
+        x = position % 3,
+        y = Math.floor(position / 3),
+        top_x = 20 + 200 * x,
+        top_y = 20 + 200 * y,
+        width = 160,
+        height = 160,
+        bot_x = top_x + width,
+        bot_y = top_y + width,
+        r = (width / 2),
+        ctr_x = top_x + r,
+        ctr_y = top_y + r;
+    $('#' + id).remove();
+    var g_sub = g.append('g').attr('id', id);
+
+    switch (mark) {
+        case 0:
+            /* User clicks to add their mark */
+            g_sub
+                .attr({class: 'tt_choice', style: "stroke:white"})
+                .append('rect')
+                .attr({
+                    class: 'btn',
+                    x: top_x,
+                    y: top_y,
+                    width: width,
+                    height: height,
+                    fill: "white",
+                    onclick: "mark(\'" + position + "\')"
+                })
+            break;
+        case 1:
+            g_sub.attr('class', 'tt_x')
+            g_sub.append('line')
+                .attr({x1: top_x, y1: top_y, x2: bot_x, y2: bot_y})
+            g_sub.append('line')
+                .attr({x1: top_x, y1: bot_y, x2: bot_x, y2: top_y})
+            break;
+        case 2:
+            g_sub.attr('class', 'tt_o')
+            g_sub.append('circle')
+                .attr({cx: ctr_x, cy: ctr_y, r: r, fill: 'white'})
+            break;
+    }
 }
 
 var update_winner = function() {
@@ -56,6 +76,7 @@ var update_winner = function() {
         }
 
         if (ttt_data.winner !== 0){
+            $('.tt_choice').remove()
             add_next();
         }
     }
@@ -67,16 +88,23 @@ var add_next = function() {
 
 var mark = function(position) {
     /* Report the user's choice and get the server's move */
+    var user_mark = 1;
+    if (ttt_data.server_player === 1) {
+        user_mark = 2;
+    }
+    add_mark(position, user_mark);
     $.ajax(ttt_data.move_url, {data: {position: position}, type: 'POST'})
         .done(function(data) {
-            var board = $('.tt_board');
+            $.each(data.board,  function( i, val ) {
+                if (val !== ttt_data.board[i]) {
+                    add_mark(i, val);
+                }
+            });
             ttt_data = data;
-            $('#ttt_svg').remove();
-            make_svg(board);
             update_winner();
         });
 }
 
 /* On initial load, create the board */
-make_svg($('.tt_board'));
+init_svg($('.tt_board'));
 update_winner();
