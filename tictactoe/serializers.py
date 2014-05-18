@@ -36,6 +36,6 @@ class GameSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Game
         fields = (
-            'url', 'board', 'next_moves', 'move_url', 'server_player',
+            'id', 'url', 'board', 'next_moves', 'move_url', 'server_player',
             'winner', 'winning_positions')
         read_only_fields = ('winner', )

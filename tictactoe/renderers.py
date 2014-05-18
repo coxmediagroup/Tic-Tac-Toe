@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from rest_framework.renderers import TemplateHTMLRenderer
 import json
@@ -18,6 +19,11 @@ class HTMLRenderer(TemplateHTMLRenderer):
             'data': data,
             'data_json': json.dumps(data),
         }
+        if getattr(request, 'is_captive', False):
+            context['next_game_url'] = reverse('start-game')
+        else:
+            context['next_game_url'] = reverse('game-list') + '?format=html'
+
         return RequestContext(request, context)
 
     def get_template_names(self, response, view):

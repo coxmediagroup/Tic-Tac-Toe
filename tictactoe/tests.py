@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 from rest_framework.test import APITestCase
 import mock
 
@@ -243,6 +243,7 @@ class GameAPITest(APITestCase):
             reverse('game-detail', kwargs={'pk': game.id}))
         self.assertEqual(expected_url, response['location'])
         expected = {
+            'id': game.id,
             'url': expected_url,
             'board': [1, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [1, 2, 3, 4, 5, 6, 7, 8],
@@ -265,6 +266,7 @@ class GameAPITest(APITestCase):
             reverse('game-detail', kwargs={'pk': game.id}))
         self.assertEqual(expected_url, response['location'])
         expected = {
+            'id': game.id,
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -282,6 +284,7 @@ class GameAPITest(APITestCase):
         self.assertEqual(200, response.status_code, response.content)
         expected_url = 'http://testserver' + path
         expected = {
+            'id': game.id,
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -300,6 +303,7 @@ class GameAPITest(APITestCase):
         self.assertContains(response, 'ttt_data')
         expected_url = 'http://testserver' + path
         expected = {
+            'id': game.id,
             'url': expected_url,
             'board': [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'next_moves': [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -436,6 +440,25 @@ class GameModelTest(SimpleTestCase):
         game = Game(strategy_type=Game.RANDOM_STRATEGY)
         strategy = game.strategy
         self.assertTrue(isinstance(strategy, RandomStrategy))
+
+
+class GameViewTest(TestCase):
+    '''User's game interface'''
+    def test_start_game(self):
+        url = reverse('start-game')
+        response = self.client.post(
+            url, data={'server_player': 1}, follow=True)
+        game = Game.objects.latest('id')
+        game_url = reverse('play-game', kwargs={'game_id': game.id})
+        self.assertRedirects(response, game_url)
+        self.assertContains(response, url)
+
+    def test_start_game_bad_args(self):
+        url = reverse('start-game')
+        response = self.client.post(
+            url, data={'server_player': 4}, follow=True)
+        self.assertFalse(Game.objects.exists())
+        self.assertContains(response, 'Start over?', status_code=400)
 
 
 class RandomStrategyTest(SimpleTestCase):

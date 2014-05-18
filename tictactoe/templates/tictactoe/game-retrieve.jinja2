@@ -9,13 +9,13 @@
 <div class="center-block tt_next hidden">
   <h2 class='text-center'>Play again?</h2>
   <ul class='play-buttons'>
-      <form action="{{ url('game-list') + '?format=html' }}" method="POST">
-          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}" />
+      <form action="{{ next_game_url }}" method="POST">
+          {{ csrf() }}
           <input type="hidden" name="server_player" value="1" />
           <button class="btn btn-primary">Server goes first (X)</button>
       </form>
-      <form action="{{ url('game-list') + '?format=html' }}" method="POST">
-          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}" />
+      <form action="{{ next_game_url }}" method="POST">
+          {{ csrf() }}
           <input type="hidden" name="server_player" value="2" />
           <button class="btn btn-primary">Server goes second (O)</button>
       </form>

@@ -1,11 +1,19 @@
 {# Home Page #}
 {% extends 'tictactoe/base.jinja2' %}
-{% block body_title %}Let's Play Tic-Tac-Toe{% endblock %}
+{% block body_title %}Let's Play Tic-Tac-Toe!{% endblock %}
 
 {% block text %}
 <ul class='play-buttons'>
-    <li><a href="#" class="btn btn-lg btn-primary">Go First (X)</a></li>
-    <li><a href="#" class="btn btn-lg btn-primary">Go Second (O)</a></li>
+    <form action="{{ url('start-game') }}" method="POST">
+        {{ csrf() }}
+        <input type="hidden" name="server_player" value="1" />
+        <button class="btn btn-lg btn-primary">Go First (X)</button>
+    </form>
+    <form action="{{ url('start-game') }}" method="POST">
+        {{ csrf() }}
+        <input type="hidden" name="server_player" value="2" />
+        <button class="btn btn-lg btn-primary">Go Second (O)</button>
+    </form>
 </ul>
 {% endblock %}
 

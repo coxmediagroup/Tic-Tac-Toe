@@ -31,12 +31,12 @@
 <h2 class='text-center'>Start a new game?</h2>
 <ul class='play-buttons'>
     <form action="{{ url('game-list') + '?format=html' }}" method="POST">
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}" />
+        {{ csrf() }}
         <input type="hidden" name="server_player" value="1" />
         <button class="btn btn-primary">Server goes first (X)</button>
     </form>
     <form action="{{ url('game-list') + '?format=html' }}" method="POST">
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}" />
+        {{ csrf() }}
         <input type="hidden" name="server_player" value="2" />
         <button class="btn btn-primary">Server goes second (O)</button>
     </form>
