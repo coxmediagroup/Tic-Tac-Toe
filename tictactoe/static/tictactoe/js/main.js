@@ -24,6 +24,8 @@ var mark = (function () {
         });
     }
 
+    // Adds an X, O, or clickable blank to the grid
+    // If fast === false, transitions are used to 'draw' the shape
     function add_mark(position, mark, fast) {
         var g = d3.select("#ttt_g"),
             id = 'ttt_pos_' + position,
@@ -44,7 +46,7 @@ var mark = (function () {
 
         switch (mark) {
         case 0:
-            /* User clicks to add their mark */
+            // User clicks to add their mark
             g_sub
                 .attr({class: 'tt_choice', style: "stroke:none"})
                 .append('rect')
@@ -100,6 +102,8 @@ var mark = (function () {
         }
     }
 
+    // Adds one or more 'winner' lines, and exposes the next game buttons
+    // If fast === false, transitions are used to 'draw' the line
     function mark_winner(fast) {
         var g = d3.select('#ttt_g'),
             g_sub = g.append('g')
@@ -110,10 +114,10 @@ var mark = (function () {
                 p1_y = Math.floor(val[0] / 3),
                 p2_x = val[2] % 3,
                 p2_y = Math.floor(val[2] / 3),
-                start_x = 100 + 50 * (p1_x - p2_x) + 200 * p1_x,
-                start_y = 100 + 50 * (p1_y - p2_y) + 200 * p1_y,
-                end_x = 100 + 50 * (p2_x - p1_x) + 200 * p2_x,
-                end_y = 100 + 50 * (p2_y - p1_y) + 200 * p2_y;
+                start_x = 85 + 50 * (p1_x - p2_x) + 200 * p1_x,
+                start_y = 110 + 50 * (p1_y - p2_y) + 200 * p1_y,
+                end_x = 95 + 50 * (p2_x - p1_x) + 200 * p2_x,
+                end_y = 90 + 50 * (p2_y - p1_y) + 200 * p2_y;
             if (fast) {
                 g_sub.append('line').attr({x1: start_x, y1: start_y, x2: end_x, y2: end_y});
             } else {
@@ -126,6 +130,7 @@ var mark = (function () {
         $('.tt_next').removeClass("hidden");
     }
 
+    // Draws the Tic Tac Toe grid and historical plays, quickly
     function init_svg() {
         var g = d3.select("svg")
             .append('g')
@@ -145,6 +150,7 @@ var mark = (function () {
         }
     }
 
+    // Checks if the game is in progress or done, and updates the board
     function update_winner() {
         var title = $('#body-title');
         if (title) {
@@ -165,8 +171,8 @@ var mark = (function () {
         }
     }
 
+    // Report the user's choice and get the server's move
     function mark(position) {
-        /* Report the user's choice and get the server's move */
         var user_mark = 1;
         if (ttt_data.server_player === 1) {
             user_mark = 2;
@@ -188,7 +194,7 @@ var mark = (function () {
         }, 250);
     }
 
-    /* On initial load, create the board */
+    // On initial load, create the board
     init_svg();
     update_winner();
     return mark;

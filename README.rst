@@ -21,8 +21,7 @@ Use `tools/qa_chech.sh` to run tests, check coverage, and check code quality.
 
 To Do
 -----
-* Add rotation transforms
-* Winning lines need to be offset (diagonal win is weird)
+* Add management command for random testing
 * Code cleanup
 
 Purpose
