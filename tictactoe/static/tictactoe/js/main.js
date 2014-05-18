@@ -103,22 +103,23 @@ var mark = (function () {
     function mark_winner(fast) {
         var g = d3.select('#ttt_g'),
             g_sub = g.append('g')
-                .attr("style", "stroke:red; stroke-width:20")
+                .attr("style", "stroke:red; stroke-width:13")
                 .attr("class", "tt_win");
         ttt_data.winning_positions.map(function (val) {
             var p1_x = val[0] % 3,
                 p1_y = Math.floor(val[0] / 3),
                 p2_x = val[2] % 3,
                 p2_y = Math.floor(val[2] / 3),
-                start_x = 100 + 200 * p1_x,
-                start_y = 100 + 200 * p1_y,
-                end_x = 100 + 200 * p2_x,
-                end_y = 100 + 200 * p2_y;
+                start_x = 100 + 50 * (p1_x - p2_x) + 200 * p1_x,
+                start_y = 100 + 50 * (p1_y - p2_y) + 200 * p1_y,
+                end_x = 100 + 50 * (p2_x - p1_x) + 200 * p2_x,
+                end_y = 100 + 50 * (p2_y - p1_y) + 200 * p2_y;
             if (fast) {
                 g_sub.append('line').attr({x1: start_x, y1: start_y, x2: end_x, y2: end_y});
             } else {
                 g_sub.append('line').attr({x1: start_x, y1: start_y, x2: start_x, y2: start_y})
                     .transition(250)
+                    .delay(300)
                     .attr({x2: end_x, y2: end_y});
             }
         });
