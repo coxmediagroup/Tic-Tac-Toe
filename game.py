@@ -39,13 +39,26 @@ class Board:
         else:
             self._board[coords[0]][coords[1]] = set_to
 
-    def move(self, coords, symbol):
+    def move(self, coords, symbol, test=False):
         """
         Add a new symbol to the board.
+        returns True if move is valid, False otherwise.
+
+        test: if test=True, copy the board, make the move,
+              and return the board for viewing.
 
         """
 
-        self.square(coords, set_to=symbol)
+        if self.square(coords) == " ":
+            self.square(coords, set_to=symbol)
+            if test:
+                return self
+            if test:
+                print('return True')
+            return True
+        if test:
+            print('return False, board/coords: ', self.board(), coords)
+        return False
 
     def check_requirements(self, pathway, requires):
         """

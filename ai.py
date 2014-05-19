@@ -3,6 +3,8 @@ Module for AI opponent.
 
 """
 
+from sets import Set
+
 class AiError(Exception):
     pass
 
@@ -22,7 +24,8 @@ def move(board):
 
     """
 
-    strategy= [win, fork, center, opposite_corner, any_corner, any_side]
+    strategy= [win, fork, block_fork, center, opposite_corner, any_corner,
+               any_side]
 
     move = None
     for tactic in strategy:
@@ -158,7 +161,7 @@ def forking_move(board, symbol, return_format="single"):
         else:
             coords[e] += 1
 
-    # Pick the most vicious fork possible (.e., most interesections.)
+    # Pick the most vicious fork possible (i.e., the most interesections).
     max_ = 0
     for e in coords.keys():
         max_ = coords[e] if coords[e] > max_ else max_
@@ -179,7 +182,6 @@ def forking_move(board, symbol, return_format="single"):
 
     return None
 
-
 def fork(board):
     """
     Create a fork, resulting in multiple ways to win.
@@ -188,3 +190,64 @@ def fork(board):
 
     move = forking_move(board, "O")
     return move
+
+def list_forcing_moves(board, player_mark):
+    """
+    return moves that force opponent t omove, thus preventing him from making
+    a fork you can't block otherwise.
+
+    """
+
+    my_mark = player_mark
+    opponent_mark = "X" if player_mark == "O" else "O"
+    paths = board.traverse(banned=[opponent_mark], requires={my_mark: 1})
+
+    coord_list = []
+    move_list = []
+    for e in paths:
+        for c in e:
+            coord_list.append(c)
+
+    for e in coord_list:
+        if board.square(e) not in [my_mark, opponent_mark]:
+            move_list.append(e)
+
+    return move_list
+
+def block_fork(board):
+    """
+    Detect a fork and block it.
+
+    """
+
+    forks = forking_move(board, "X", return_format="list")
+    flen = len(forks)
+    move = None
+    if flen == 0:
+        return None
+    elif flen == 1:
+        move = forks[0]
+    else:
+        force_moves = list_forcing_moves(board, "O")
+        moves = []
+        for e in force_moves:
+            import game
+            (x, y) = e
+            test_board = game.Board(setup=board.board())
+            test_board = test_board.move((x, y), "O", test=True)
+            # We've added our move to our temporary board, now check it
+            # for forks and wins by our opponent.  The coords that don't
+            # result in these, store in a list.
+            test_forks = forking_move(test_board, "X", return_format="list")
+
+            new_forks = list(Set(test_forks) - Set(forks))
+            if new_forks:
+                continue
+            test_wins = winning_move(test_board, "X", format="list")
+            if test_wins:
+                continue
+            move = e
+
+    return move
+
+
