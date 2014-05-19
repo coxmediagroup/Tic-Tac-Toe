@@ -6,6 +6,10 @@ Module for AI opponent.
 from sets import Set
 
 class AiError(Exception):
+    """
+    Exception for when the AI can't figure out what to do.
+
+    """
     pass
 
 def move(board):
@@ -24,19 +28,19 @@ def move(board):
 
     """
 
-    strategy= [win, fork, block_fork, center, opposite_corner, any_corner,
-               any_side]
+    strategy = [win, fork, block_fork, center, opposite_corner, any_corner,
+                any_side]
 
-    move = None
+    move_ = None
     for tactic in strategy:
-        if move:
+        if move_:
             break
-        move = tactic(board)
+        move_ = tactic(board)
 
-    if not move:
+    if not move_:
         raise AiError("Nothing to be done.")
 
-    board.move(move, "O")
+    board.move(move_, "O")
 
 def center(board):
     """
@@ -44,8 +48,8 @@ def center(board):
 
     """
 
-    center = (1, 1)
-    if board.square(center) == " ":
+    center_ = (1, 1)
+    if board.square(center_) == " ":
         return (1, 1)
 
     return None
@@ -125,8 +129,8 @@ def win(board):
     Win, if able.
 
     """
-    move = winning_move(board, "O")
-    return move
+    move_ = winning_move(board, "O")
+    return move_
 
 def forking_move(board, symbol, return_format="single"):
     """
@@ -188,8 +192,8 @@ def fork(board):
 
     """
 
-    move = forking_move(board, "O")
-    return move
+    move_ = forking_move(board, "O")
+    return move_
 
 def list_forcing_moves(board, player_mark):
     """
@@ -222,14 +226,13 @@ def block_fork(board):
 
     forks = forking_move(board, "X", return_format="list")
     flen = len(forks)
-    move = None
+    move_ = None
     if flen == 0:
         return None
     elif flen == 1:
-        move = forks[0]
+        move_ = forks[0]
     else:
         force_moves = list_forcing_moves(board, "O")
-        moves = []
         for e in force_moves:
             import game
             (x, y) = e
@@ -243,11 +246,11 @@ def block_fork(board):
             new_forks = list(Set(test_forks) - Set(forks))
             if new_forks:
                 continue
-            test_wins = winning_move(test_board, "X", format="list")
+            test_wins = winning_move(test_board, "X", return_format="list")
             if test_wins:
                 continue
-            move = e
+            move_ = e
 
-    return move
+    return move_
 
 

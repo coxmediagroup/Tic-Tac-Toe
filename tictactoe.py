@@ -34,17 +34,13 @@ def is_win():
 
 @app.route('/ai-move')
 def ai_move():
-    try:
-        layout = request.args.get('layout')
-        layout = json.loads(layout)
-        board = Board(setup=layout)
-        ai.move(board)
-        layout = board.board()
-        layout = json.dumps(layout)
-        return layout
-    except Exception:
-        import traceback
-        print(traceback.format_exc())
+    layout = request.args.get('layout')
+    layout = json.loads(layout)
+    board = Board(setup=layout)
+    ai.move(board)
+    layout = board.board()
+    layout = json.dumps(layout)
+    return layout
 
 if __name__ == '__main__':
     app.run(debug=True)

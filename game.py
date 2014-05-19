@@ -25,6 +25,11 @@ class Board:
             self._board = deepcopy(setup)
 
     def board(self):
+        """
+        Show the current state of the board.
+
+        """
+
         return self._board
 
     def square(self, coords, set_to=None):
@@ -53,11 +58,7 @@ class Board:
             self.square(coords, set_to=symbol)
             if test:
                 return self
-            if test:
-                print('return True')
             return True
-        if test:
-            print('return False, board/coords: ', self.board(), coords)
         return False
 
     def check_requirements(self, pathway, requires):
@@ -75,14 +76,14 @@ class Board:
 
         for e in requires.keys():
             try:
-                if contents[e] < requires [e]:
+                if contents[e] < requires[e]:
                     return False
             except KeyError:
                 return False
 
         return True
 
-    def traverse(self, banned=[], requires={}):
+    def traverse(self, banned=None, requires=None):
         """
         Traverse the board and return the eight different pathways
         as a list of lists.
@@ -91,6 +92,8 @@ class Board:
         requires: {"X": 3}, etc.  {symbol, required number}
 
         """
+        banned = [] if banned == None else banned
+        requires = {} if requires == None else requires
 
         minimum = 3
         paths = []
@@ -98,7 +101,6 @@ class Board:
         # rows
         for row in range(0, 3):
             pathway = []
-            passes_reqs = True
             for col in range(0, 3):
                 if False and self.square((row, col)) in banned:
                     continue
@@ -139,7 +141,7 @@ class Board:
         # Need to consider the other diagonal.  Subtracting
         # 2 and taking the absolute value yields the
         # appropriate numbers.
-        for row in (range(0, 3)):
+        for row in range(0, 3):
             col = abs(row - 2)
             if False and self.square((row, col)) in banned:
                 continue
@@ -157,7 +159,7 @@ class Board:
         See if the game is a draw.
 
         """
-        
+
         open_spaces = self.traverse(requires={" ": 1})
         if not open_spaces:
             return 'True'
@@ -170,13 +172,9 @@ class Board:
         or an empty string if not.
 
         """
-        winner = None
-
-        paths = self.traverse()
-
         x_wins = self.traverse(requires={"X": 3})
         o_wins = self.traverse(requires={"O": 3})
 
         return 'player' if x_wins else 'ai' if o_wins else ''
-        
+
 

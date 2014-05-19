@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+Unit testing module.
+
+"""
 
 from tictactoe import app
 from game import Board
@@ -6,8 +10,6 @@ from game import Board
 from copy import copy
 import json
 import lxml.html
-import os
-import tempfile
 import unittest
 
 def get_initial_board(response):
@@ -386,7 +388,10 @@ class AiTest(unittest.TestCase):
               '[" ", "O", " "]]',
              ['[[" ", "X", " "], '
                '["X", "O", " "], '
-               '[" ", "O", "O"]]']),
+               '[" ", "O", "O"]]',
+              '[[" ", "X", " "], '
+               '["X", "O", " "], '
+               '["O", "O", " "]]']),
 
             ('[[" ", "X", " "], '
               '["O", "O", "X"], '
@@ -491,6 +496,23 @@ class AiTest(unittest.TestCase):
                 self.assertIn(response.data, ai_moves)
 
 class BoardTest(unittest.TestCase):
+    def test_traverse(self):
+        board = Board()
+        paths = board.traverse()
+        # horizontals
+        for y in range(0, 3):
+            self.assertIn([(0, y), (1, y), (2, y)], paths)
+
+        # verticals
+        for x in range(0, 3):
+            self.assertIn([(x, 0), (x, 1), (x, 2)], paths)
+
+        # \ diagonal
+        self.assertIn([(0, 0), (1, 1), (2, 2)], paths)
+
+        # / diagonal
+        self.assertIn([(0, 2), (1, 1), (2, 0)], paths)
+
     def test_board(self):
         blank_board = {0: {0: " ", 1: " ", 2: " "},
                        1: {0: " ", 1: " ", 2: " "},
@@ -518,21 +540,13 @@ class BoardTest(unittest.TestCase):
 
         self.assertEqual(test_board2.board(), test_board)
         self.assertEqual(board.check_requirements(
-                         [[0, 0], [1, 1], [2,2]], {"X": 3}), True)
+                         [[0, 0], [1, 1], [2, 2]], {"X": 3}), True)
         self.assertEqual(board.check_requirements(
-                         [[0, 2], [1, 2], [2,2]], {"O": 3}), False)
+                         [[0, 2], [1, 2], [2, 2]], {"O": 3}), False)
         self.assertEqual(board.traverse(requires={"O": 3}), [])
         self.assertEqual(board.traverse(requires={"O": 2}), [
             [(0, 2), (1, 2), (2, 2)],
             [(0, 2), (1, 1), (2, 0)]])
 
 if __name__ == '__main__':
-    #unittest.main()
-    from unittest import TestResult
-    from unittest import TestSuite
-    from unittest import TextTestRunner
-    result = TestResult()
-    runner = TextTestRunner()
-    fast = TestSuite()
-    fast.addTest(AiTest('test_fork_block'))
-    runner.run(fast)
+    unittest.main()
