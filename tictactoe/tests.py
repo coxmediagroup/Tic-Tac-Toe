@@ -470,8 +470,9 @@ class GameViewTest(TestCase):
 class HomeViewTest(TestCase):
     def test_no_games(self):
         response = self.client.get(reverse('home'))
-        expected = "I've won 0 games, tied 0 games, and lost 0 games."
-        self.assertContains(response, expected)
+        self.assertContains(response, "I've won 0 games")
+        self.assertContains(response, "tied 0 games")
+        self.assertContains(response, "lost 0 games")
 
     def test_games(self):
         # In progress, Lose, Win, Tie
@@ -480,8 +481,9 @@ class HomeViewTest(TestCase):
         Game.objects.create(state=14755, server_player=1, winner=1)
         Game.objects.create(state=12119, server_player=1, winner=3)
         response = self.client.get(reverse('home'))
-        expected = "I've won 1 game, tied 1 game, and lost 1 game."
-        self.assertContains(response, expected)
+        self.assertContains(response, "I've won 1 game")
+        self.assertContains(response, "tied 1 game")
+        self.assertContains(response, "lost 1 game")
 
 
 class RandomStrategyTest(SimpleTestCase):
