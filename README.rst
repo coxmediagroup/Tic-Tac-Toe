@@ -1,6 +1,6 @@
-Tic-Tac-Toe
-===========
-This is `the game tic-tac-toe`_ as a client-server Django app.
+Tic-Tac-Toe: The Django app
+===========================
+This is the game `tic-tac-toe`_ as a client-server Django app.
 
 The user loads the front page, and clicks a button to decide if they want to
 go first ('X') or second ('O').  The user and the app take turns adding X's
@@ -34,12 +34,12 @@ The requirements are:
 
 When I was first recruited, I was too busy to write code, but I did have about
 2 months to think about the problem before I started.  Not enough to come up
-with Minimax_, but enough to learn a little d3_.
+with Minimax_ by myself, but enough to learn a little d3_.
 
 .. _`job application`: http://cmgd-jobs.readthedocs.org
         /en/latest/developer.html
 .. _`programming exercise`: https://github.com/coxmediagroup/Tic-Tac-Toe
-.. _`the game tic-tac-toe`: http://en.wikipedia.org/wiki/Tic-tac-toe
+.. _`tic-tac-toe`: http://en.wikipedia.org/wiki/Tic-tac-toe
 .. _virtualenv: http://virtualenvwrapper.readthedocs.org/en/latest/
 .. _Minimax: http://en.wikipedia.org/wiki/Minimax
 .. _d3: http://d3js.org
