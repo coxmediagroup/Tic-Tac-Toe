@@ -28,8 +28,8 @@ def move(board):
 
     """
 
-    strategy = [win, fork, block_fork, center, opposite_corner, any_corner,
-                any_side]
+    strategy = [win, block, fork, block_fork, center, opposite_corner,
+                any_corner, any_side]
 
     move_ = None
     for tactic in strategy:
@@ -193,6 +193,14 @@ def fork(board):
     """
 
     move_ = forking_move(board, "O")
+    return move_
+
+def block(board):
+    """
+    Block opponent from winning, if able.
+
+    """
+    move_ = winning_move(board, "X")
     return move_
 
 def list_forcing_moves(board, player_mark):
