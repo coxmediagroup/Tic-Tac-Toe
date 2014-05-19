@@ -20,10 +20,6 @@ If you are developing, you may want to install the additional requirements
 in `requirements.dev.txt`, and customize settings with `local_settings.py`.
 Use `tools/qa_chech.sh` to run tests, check coverage, and check code quality.
 
-To Do
------
-* Code cleanup
-
 Purpose
 -------
 This project was created as a `programming exercise`_ for a `job application`_.

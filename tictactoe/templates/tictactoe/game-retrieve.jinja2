@@ -11,13 +11,13 @@
   <ul class='play-buttons'>
       <form action="{{ next_game_url }}" method="POST">
           {{ csrf() }}
-          <input type="hidden" name="server_player" value="1" />
-          <button class="btn btn-primary">Server goes first (X)</button>
+          <input type="hidden" name="server_player" value="2" />
+          <button class="btn btn-primary">Go First (X)</button>
       </form>
       <form action="{{ next_game_url }}" method="POST">
           {{ csrf() }}
-          <input type="hidden" name="server_player" value="2" />
-          <button class="btn btn-primary">Server goes second (O)</button>
+          <input type="hidden" name="server_player" value="1" />
+          <button class="btn btn-primary">Go Second (O)</button>
       </form>
   </ul>
 </div>

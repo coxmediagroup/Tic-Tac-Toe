@@ -31,6 +31,7 @@
     <footer class="text-center">
         <nav>
             <ul>
+                <li>{% block footer_home %}<a href="{{ url('home')}}">Home</a>{% endblock %}</li>
                 <li>{% block footer_about %}<a href="{{ url('about')}}">About</a>{% endblock %}</li>
                 <li class="text-muted">&copy&nbsp;<a href="https://github.com/jwhitlock/Tic-Tac-Toe">John&nbsp;Whitlock</a></li>
             </ul>

@@ -157,11 +157,11 @@ var mark = (function () {
             if (ttt_data.winner === 0) {
                 title.text('Your turn.');
             } else if (ttt_data.winner === 3) {
-                title.text("It's a tie!");
+                title.text("It's a tie.  Let's play again!");
             } else if (ttt_data.winner === ttt_data.server_player) {
-                title.text('Server wins!');
+                title.text('I win!');
             } else {
-                title.text('Player wins!');
+                title.text('You win!');
             }
 
             if (ttt_data.winner !== 0) {
@@ -179,6 +179,7 @@ var mark = (function () {
         }
         add_mark(position, user_mark);
         ttt_data.board[position] = user_mark;
+        $('#body-title').text('Hmmm....')
 
         setTimeout(function () {
             $.ajax(ttt_data.move_url, {data: {position: position}, type: 'POST'})
@@ -191,7 +192,7 @@ var mark = (function () {
                     ttt_data = data;
                     update_winner();
                 });
-        }, 250);
+        }, 500);
     }
 
     // On initial load, create the board

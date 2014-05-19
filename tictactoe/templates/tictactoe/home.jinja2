@@ -3,17 +3,24 @@
 {% block body_title %}Let's Play Tic-Tac-Toe!{% endblock %}
 
 {% block text %}
+<p>
+    I've won {{ win_count }} game{% if win_count != 1 %}s{% endif %},
+    tied {{ tie_count }} games{% if tie_count != 1 %}s{% endif %},
+    and lost {{ lost_count }} game{% if lost_count != 1 %}s{% endif %}.
+    Do you think you can beat me?
+</p>
 <ul class='play-buttons'>
     <form action="{{ url('start-game') }}" method="POST">
         {{ csrf() }}
-        <input type="hidden" name="server_player" value="1" />
+        <input type="hidden" name="server_player" value="2" />
         <button class="btn btn-lg btn-primary">Go First (X)</button>
     </form>
     <form action="{{ url('start-game') }}" method="POST">
         {{ csrf() }}
-        <input type="hidden" name="server_player" value="2" />
+        <input type="hidden" name="server_player" value="1" />
         <button class="btn btn-lg btn-primary">Go Second (O)</button>
     </form>
 </ul>
 {% endblock %}
 
+{% block footer_home %}Home{% endblock %}
