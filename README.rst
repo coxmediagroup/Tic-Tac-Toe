@@ -17,8 +17,9 @@ Getting Started
 6. Play it against itself: ``./manage.py check_ttt_strategy``
 
 If you are developing, you may want to install the additional requirements
-in `requirements.dev.txt`, and customize settings with `local_settings.py`.
-Use `tools/qa_chech.sh` to run tests, check coverage, and check code quality.
+in ``requirements.dev.txt``, and customize settings with
+``local_settings.py``.  Use ``tools/qa_check.sh`` to run tests,
+check coverage, and check code quality.
 
 Purpose
 -------
