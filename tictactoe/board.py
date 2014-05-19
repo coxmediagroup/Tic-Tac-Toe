@@ -35,7 +35,7 @@ class Board(object):
 
         self.board = []
         init_state = state
-        for i in range(9):
+        for _ in range(9):
             mark = state % 3
             self.board.append(mark)
             state /= 3
@@ -60,12 +60,12 @@ class Board(object):
 {}|{}|{}
 -+-+-
 {}|{}|{}'''
-        s = {
+        char = {
             self.BLANK: ' ',
             self.MARK_X: 'X',
             self.MARK_O: 'O',
         }
-        return fmt.format(*[s[x] for x in self.board])
+        return fmt.format(*[char[x] for x in self.board])
 
     def check_winner(self):
         '''Returns the winner and the winning lines
@@ -110,8 +110,8 @@ class Board(object):
     def state(self):
         '''Return the state number of the board'''
         state = 0
-        for p in reversed(self.board):
-            state = (state * 3) + p
+        for pos in reversed(self.board):
+            state = (state * 3) + pos
         return state
 
     def next_mark(self):
@@ -136,12 +136,14 @@ class Board(object):
         '''Add the next move to the board'''
         if pos in self.next_moves():
             self.board[pos] = self.next_mark()
-            self._has_winner, self_winning_positions = self.check_winner()
+            self._has_winner, self._winning_positions = self.check_winner()
         else:
             raise ValueError('{} is an invalid move'.format(pos))
 
     def winner(self):
+        '''Return the winner, or None if in progress'''
         return self._has_winner
 
     def winning_positions(self):
+        '''Return the winning positions, or empty list if in progress'''
         return self._winning_positions

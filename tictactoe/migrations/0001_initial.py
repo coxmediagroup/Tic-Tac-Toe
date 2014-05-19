@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
-from south.utils import datetime_utils as datetime
+# pylint: disable=line-too-long, invalid-name, missing-docstring, unused-argument, no-self-use
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):

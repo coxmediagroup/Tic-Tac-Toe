@@ -1,3 +1,4 @@
+'''Django models for the tictactoe app'''
 from django.db import models
 
 from .board import Board
@@ -41,6 +42,7 @@ class Game(models.Model):
 
     @property
     def other_player(self):
+        '''Return the number identifying the other player'''
         if self.server_player == self.PLAYER_X:
             return self.PLAYER_O
         else:
@@ -48,14 +50,17 @@ class Game(models.Model):
 
     @property
     def board(self):
+        '''Return the current Board for the Game'''
         return Board(state=self.state)
 
     @board.setter
     def board(self, value):
+        '''Set the current Board for the Game'''
         self.state = value.state()
         self.winner = value.winner() or self.IN_PROGRESS
 
     @property
     def strategy(self):
+        '''Return the server strategy for the Game'''
         assert self.strategy_type in self.STRATEGIES
         return self.STRATEGIES[self.strategy_type]()

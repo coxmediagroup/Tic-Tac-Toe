@@ -1,4 +1,4 @@
-'''API serializers'''
+'''restframework API serializers for the tictactoe app'''
 
 from drf_compound_fields.fields import ListField
 from rest_framework.serializers import (
@@ -22,6 +22,8 @@ class GameSerializer(HyperlinkedModelSerializer):
         IntegerField(), source='board.winning_positions', read_only=True)
 
     def get_move_url(self, obj):
+        '''Return the move URL for POSTing the player's move'''
+        # pylint: disable=no-member
         request = self.context.get('request')
         return reverse('game-move', kwargs={'pk': obj.pk}, request=request)
 
@@ -33,7 +35,9 @@ class GameSerializer(HyperlinkedModelSerializer):
             obj.board = board
         super(GameSerializer, self).save_object(obj, *args, **kwargs)
 
-    class Meta:
+    class Meta(object):
+        '''metadata for GameSerializer'''
+        # pylint: disable=too-few-public-methods
         model = Game
         fields = (
             'id', 'url', 'board', 'next_moves', 'move_url', 'server_player',

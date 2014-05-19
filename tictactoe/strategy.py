@@ -11,8 +11,11 @@ from tictactoe.board import Board
 
 class RandomStrategy(object):
     '''Randomly picks next move'''
+    # pylint: disable=too-few-public-methods
 
     def next_move(self, board):
+        '''Randomly pick the next move'''
+        # pylint: disable=no-self-use
         return random_choice(board.next_moves())
 
 
@@ -52,7 +55,7 @@ class MinimaxStrategy(object):
 
     def next_move(self, board):
         '''Pick a random choice from the best moves'''
-        score, best_moves = self.best_moves(board)
+        _, best_moves = self.best_moves(board)
         return random_choice(best_moves)
 
     def best_moves(self, board):
@@ -84,6 +87,6 @@ class MinimaxStrategy(object):
             elif next_board.winner() == board.TIE:
                 scores[pos] = 0
             else:
-                score, moves = self.best_moves(next_board)
+                score, _ = self.best_moves(next_board)
                 scores[pos] = score
         return scores

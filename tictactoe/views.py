@@ -1,3 +1,7 @@
+'''Views for Django app tictactoe'''
+# pylint: disable=attribute-defined-outside-init, star-args
+# pylint: disable=too-many-ancestors, too-many-public-methods, invalid-name
+# pylint: disable=no-value-for-parameter
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import resolve, reverse
 from django.shortcuts import redirect
@@ -89,6 +93,7 @@ class GameViewSet(
 
     @action()
     def move(self, request, pk):
+        '''Select the next move on the board'''
         game = self.get_object()
         board = game.board
         if 'position' not in request.DATA:
@@ -97,8 +102,8 @@ class GameViewSet(
         try:
             position = int(request.DATA['position'])
             board.move(position)
-        except ValueError as e:
-            error = {'position': str(e)}
+        except ValueError as exception:
+            error = {'position': str(exception)}
             return Response(error, status=HTTP_400_BAD_REQUEST)
         if board.next_mark() == game.server_player:
             board.move(game.strategy.next_move(board))

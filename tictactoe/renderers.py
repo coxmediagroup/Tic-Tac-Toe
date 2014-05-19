@@ -1,3 +1,4 @@
+'''restframework API renderers for the tictactoe app'''
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from rest_framework.renderers import TemplateHTMLRenderer

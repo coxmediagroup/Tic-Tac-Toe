@@ -1,3 +1,5 @@
+'''urlpatterns for Tic-Tac-Toe project'''
+# pylint: disable=invalid-name
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 

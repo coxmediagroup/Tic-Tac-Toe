@@ -1,3 +1,5 @@
+'''urlpatterns for tictactoe app'''
+# pylint: disable=invalid-name
 from django.conf.urls import include, patterns, url
 
 from .views import router

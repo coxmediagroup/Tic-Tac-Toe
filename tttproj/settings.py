@@ -1,4 +1,5 @@
-# Django settings for tttproj project.
+'''Django settings for tttproj project.'''
+# pylint: disable=wildcard-import
 
 import os.path
 import sys
@@ -181,10 +182,11 @@ else:
 # Settings for testing:
 if 'test' in sys.argv:
     try:
-        import django_nose  # noqa
+        import django_nose
     except ImportError:
         print 'django_nose not installed.  You\'d like it'
         print 'pip install -r requirements.dev.txt'
     else:
+        assert django_nose
         INSTALLED_APPS.append('django_nose')
         TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
