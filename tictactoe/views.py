@@ -1,7 +1,7 @@
 '''Views for Django app tictactoe'''
 # pylint: disable=attribute-defined-outside-init, star-args
 # pylint: disable=too-many-ancestors, too-many-public-methods, invalid-name
-# pylint: disable=no-value-for-parameter
+# pylint: disable=no-value-for-parameter, no-member
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import resolve, reverse
 from django.shortcuts import redirect
@@ -116,6 +116,25 @@ class HomeView(TemplateView):
     '''Root-level home page'''
     template_name = 'tictactoe/home.jinja2'
 
+    def get_context_data(self, **kwargs):
+        '''Add play statistics to context'''
+        context = super(HomeView, self).get_context_data(**kwargs)
+        game_results = Game.objects.exclude(
+            winner=0).values_list('winner', 'server_player')
+        wins = 0
+        losses = 0
+        ties = 0
+        for winner, server_player in game_results:
+            if winner == server_player:
+                wins += 1
+            elif winner == Game.TIE:
+                ties += 1
+            else:
+                losses += 1
+        context['win_count'] = wins
+        context['tie_count'] = ties
+        context['lost_count'] = losses
+        return context
 
 # For urlpatterns
 about = AboutView.as_view()

@@ -3,9 +3,9 @@
 {% block body_title %}Let's Play Tic-Tac-Toe!{% endblock %}
 
 {% block text %}
-<p>
+<p class="text-center">
     I've won {{ win_count }} game{% if win_count != 1 %}s{% endif %},
-    tied {{ tie_count }} games{% if tie_count != 1 %}s{% endif %},
+    tied {{ tie_count }} game{% if tie_count != 1 %}s{% endif %},
     and lost {{ lost_count }} game{% if lost_count != 1 %}s{% endif %}.
     Do you think you can beat me?
 </p>

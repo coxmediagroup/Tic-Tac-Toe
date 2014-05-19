@@ -467,6 +467,23 @@ class GameViewTest(TestCase):
         self.assertContains(response, 'Start over?', status_code=400)
 
 
+class HomeViewTest(TestCase):
+    def test_no_games(self):
+        response = self.client.get(reverse('home'))
+        expected = "I've won 0 games, tied 0 games, and lost 0 games."
+        self.assertContains(response, expected)
+
+    def test_games(self):
+        # In progress, Lose, Win, Tie
+        Game.objects.create(state=0)
+        Game.objects.create(state=9453, server_player=1, winner=2)
+        Game.objects.create(state=14755, server_player=1, winner=1)
+        Game.objects.create(state=12119, server_player=1, winner=3)
+        response = self.client.get(reverse('home'))
+        expected = "I've won 1 game, tied 1 game, and lost 1 game."
+        self.assertContains(response, expected)
+
+
 class RandomStrategyTest(SimpleTestCase):
     @mock.patch('tictactoe.strategy.random_choice')
     def test_random_move(self, mock_choice):

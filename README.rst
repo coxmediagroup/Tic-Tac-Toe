@@ -4,7 +4,7 @@ This is the game `tic-tac-toe`_ as a client-server Django app.
 
 The user loads the front page, and clicks a button to decide if they want to
 go first ('X') or second ('O').  The user and the app take turns adding X's
-and O's to a three-by-three grid until the app wins.  The user can then
+and O's to a three-by-three grid until the app wins or ties.  The user can then
 start a new game.
 
 Getting Started
