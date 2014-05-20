@@ -63,7 +63,7 @@
                         result = data;
                         if(data != "False") {
                             $(".tictactoe_button").attr("disabled", "disabled");
-                            alert("Oh, all right, we'll call it a draw.");
+                            $("#message").html("Oh, all right, we'll call it a draw.");
                             return;
                         }
                         if(callback_func) {
@@ -88,10 +88,10 @@
                         if(data != '') {
                             $(".tictactoe_button").attr("disabled", "disabled");
                             if(data == 'player') {
-                                alert("You win.");
+                                $("#message").html("You win.");
                                 return;
                             } else {
-                                alert("I win.");
+                                $("#message").html("I win.");
                                 return;
                             }
                         }
@@ -123,6 +123,7 @@
     </script>
     </head>
     <body>
+        <div id="message"></div>
         <div id="board" board_layout='[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]'>
             {% for row in layout %}
                 {% set row_number=loop.index - 1 %}
