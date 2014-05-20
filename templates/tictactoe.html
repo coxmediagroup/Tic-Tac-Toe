@@ -29,21 +29,23 @@
                 });
 
                 $(".tictactoe_button").click(function() {
-                    $(this).html("X");
-                    /*
-                     * We have to check for draw and win before and after we
-                     * move, and the joys of asynchronicity require that we
-                     * pass each step as a callback to the previous step.
-                     */
-                    check_for_win(function() {
-                        check_for_draw(function() {
-                            ai_move(function() {
-                                check_for_win(function() {
-                                    check_for_draw();
+                    if($(this).html() == "&nbsp;") {
+                        $(this).html("X");
+                        /*
+                         * We have to check for draw and win before and after we
+                         * move, and the joys of asynchronicity require that we
+                         * pass each step as a callback to the previous step.
+                         */
+                        check_for_win(function() {
+                            check_for_draw(function() {
+                                ai_move(function() {
+                                    check_for_win(function() {
+                                        check_for_draw();
+                                    });
                                 });
                             });
                         });
-                    });
+                    }
                 });
             });
 
