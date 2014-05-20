@@ -4,14 +4,30 @@
         <title>Tic Tac Toe</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script>
-            var first_move = true;
-            $(document).ready(function() {
-                if(first_move) {
-                    first_move = false;
+            var is_first_move = true;
+            var blank_board = JSON.parse('[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]');
+
+            first_move = function() {
+                if(is_first_move) {
+                    is_first_move = false;
                     if(Math.round(Math.random())) {
                         ai_move();
                     }
                 }
+            }
+
+            $(document).ready(function() {
+                first_move();
+
+                $("#play_again_bttn").click(function() {
+                    set_board(blank_board);
+                    $("#play_again").hide();
+                    $("#message").html("");
+                    is_first_move = true;
+                    first_move();
+                    $(".tictactoe_button").removeAttr("disabled");
+                });
+
                 $(".tictactoe_button").click(function() {
                     $(this).html("X");
                     /*
@@ -71,6 +87,7 @@
                         if(data != "False") {
                             $(".tictactoe_button").attr("disabled", "disabled");
                             $("#message").html("Oh, all right, we'll call it a draw.");
+                            $("#play_again").show();
                             return;
                         }
                         if(callback_func) {
@@ -96,9 +113,11 @@
                             $(".tictactoe_button").attr("disabled", "disabled");
                             if(data == 'player') {
                                 $("#message").html("You win.");
+                                $("#play_again").show();
                                 return;
                             } else {
                                 $("#message").html("I win.");
+                                $("#play_again").show();
                                 return;
                             }
                         }
@@ -130,7 +149,12 @@
     </script>
     </head>
     <body>
-        <div id="message"></div>
+        <div id="message_wrap">
+            <span id="message"></span>
+            <span id="play_again" style="display: none;">
+                <button id="play_again_bttn">Play again?</button>
+            </span>
+        </div>
         <div id="board" board_layout='[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]'>
             {% for row in layout %}
                 {% set row_number=loop.index - 1 %}
