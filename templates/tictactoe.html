@@ -6,10 +6,21 @@
         <script>
             $(document).ready(function() {
                 $(".tictactoe_button").click(function() {
-                    //$(".tictactoe_button").prop('disabled', true);
                     $(this).html("X");
-                    check_for_win();
-                    check_for_draw();
+                    /*
+                     * We have to check for draw and win before and after we
+                     * move, and the joys of asynchronicity require that we
+                     * pass each step as a callback to the previous step.
+                     */
+                    check_for_win(function() {
+                        check_for_draw(function() {
+                            ai_move(function() {
+                                check_for_win(function() {
+                                    check_for_draw();
+                                });
+                            });
+                        });
+                    });
                 });
             });
 
@@ -29,7 +40,6 @@
             }
 
             set_board = function(board) {
-                console.log(board);
                 for(y=0;y<=2;y++) {
                     for(x=0;x<=2;x++) {
                         var button_id = "#" + x + "_" + y;
@@ -40,7 +50,7 @@
                 }
             }
 
-            check_for_draw = function() {
+            check_for_draw = function(callback_func) {
                 var board = JSON.stringify(get_board());
                 var result;
                 $.ajax({
@@ -51,18 +61,20 @@
                     async: "false",
                     success: function(data) {
                         result = data;
-                        if(data == "False") {
-                            return false;
-                        } else {
+                        if(data != "False") {
                             $(".tictactoe_button").attr("disabled", "disabled");
                             alert("Oh, all right, we'll call it a draw.");
+                            return;
                         }
+                        if(callback_func) {
+                            callback_func();
+                        }
+                        return
                     },
                 });
-                return result;
             }
 
-            check_for_win = function() {
+            check_for_win = function(callback_func) {
                 var board = JSON.stringify(get_board());
                 var result;
                 $.ajax({
@@ -73,22 +85,25 @@
                     async: "false",
                     success: function(data) {
                         result = data;
-                        if(data == '') {
-                            return false;
-                        } else {
+                        if(data != '') {
                             $(".tictactoe_button").attr("disabled", "disabled");
                             if(data == 'player') {
                                 alert("You win.");
+                                return;
                             } else {
-                                alert("I win!");
+                                alert("I win.");
+                                return;
                             }
                         }
+                        if(callback_func) {
+                            callback_func();
+                        }
+                        return;
                     },
                 });
-                return result;
             }
 
-            ai_move = function() {
+            ai_move = function(callback_func) {
                 var board = JSON.stringify(get_board());
                 $.ajax({
                     type: "GET",
@@ -99,6 +114,9 @@
                     success: function(data) {
                         var board = JSON.parse(data);
                         set_board(board);
+                        if(callback_func) {
+                            callback_func();
+                        }
                     }
                 });
             }
