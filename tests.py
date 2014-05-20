@@ -33,7 +33,7 @@ class TestUrl(unittest.TestCase):
 
     def test_tic_tac_toe_board(self):
         with app.test_client() as tester:
-            response = tester.get('/?player-first')
+            response = tester.get('/')
             self.assertEqual(response.status_code, 200)
             board = get_initial_board(response)
             self.assertEqual(board, [[u" ", u" ", u" "],
@@ -53,7 +53,7 @@ class TestUrl(unittest.TestCase):
                             '["X", "O", "O"], '
                             '[" ", "O", " "]]')
 
-            response = tester.post('/board', data={'layout': test_board_1})
+            response = tester.post('/', data={'layout': test_board_1})
             board = json.loads(response.data)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(count_total_moves(board), 1)

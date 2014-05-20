@@ -4,7 +4,14 @@
         <title>Tic Tac Toe</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script>
+            var first_move = true;
             $(document).ready(function() {
+                if(first_move) {
+                    first_move = false;
+                    if(Math.round(Math.random())) {
+                        ai_move();
+                    }
+                }
                 $(".tictactoe_button").click(function() {
                     $(this).html("X");
                     /*

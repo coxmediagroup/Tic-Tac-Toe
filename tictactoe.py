@@ -9,9 +9,8 @@ import ai
 
 import json
 
-@app.route('/', defaults={'first_player': None}, methods=['GET', 'POST'])
-@app.route('/<first_player>', methods=['GET', 'POST'])
-def tic_tac_toe(first_player=None):
+@app.route('/', methods=['GET', 'POST'])
+def tic_tac_toe():
     if request.method == 'POST':
         return request.form['layout']
     return render_template('tictactoe.html', layout=[[" ", " ", " "],
