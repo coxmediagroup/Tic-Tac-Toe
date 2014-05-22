@@ -3,8 +3,6 @@ Module for AI opponent.
 
 """
 
-from sets import Set
-
 class AiError(Exception):
     """
     Exception for when the AI can't figure out what to do.
@@ -205,7 +203,7 @@ def block(board):
 
 def list_forcing_moves(board, player_mark):
     """
-    return moves that force opponent t omove, thus preventing him from making
+    return moves that force opponent to move, thus preventing him from making
     a fork you can't block otherwise.
 
     """
@@ -251,12 +249,26 @@ def block_fork(board):
             # result in these, store in a list.
             test_forks = forking_move(test_board, "X", return_format="list")
 
-            new_forks = list(Set(test_forks) - Set(forks))
+            new_forks = list(set(test_forks) - set(forks))
             if new_forks:
                 continue
+
             test_wins = winning_move(test_board, "X", return_format="list")
             if test_wins:
                 continue
+
+            # Make sure the move we are forcing will actually help us block
+            # the fork.  I.e., don't force them to take the fork we're trying
+            # to block.
+            bad_move = False
+            forced_moves = winning_move(test_board, "O", return_format="list")
+            for forced_move in forced_moves:
+                if forced_move in test_forks:
+                    bad_move = True
+
+            if bad_move:
+                continue
+
             move_ = e
 
     return move_
