@@ -1,0 +1,7 @@
+#board { max-width: 400px; margin-top: 50px; }
+#board .square { height: 100px;  }
+#board .square:hover { height: 100px; cursor: pointer; background: #d0d0d0; }
+#board #top .square{ border-bottom: solid 3px #222; }
+#board .left { border-right: solid 3px #222; }
+#board .right { border-left: solid 3px #222; }
+#board #bottom .square{ border-top: solid 3px #222; }
