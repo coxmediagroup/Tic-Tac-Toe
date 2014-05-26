@@ -11,7 +11,9 @@ $(document).ready(function(){
         } else {
             createBoardArray(board, $(this).attr('pos'));
             // If square is free, determine best move
-            $.post("/board", { data: board });
+            $.post("/board", { board: board }, function(data){
+                console.log(data);
+            });
         }
 
     });
