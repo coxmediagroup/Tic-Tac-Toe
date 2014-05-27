@@ -2,6 +2,8 @@ var $ = jQuery;
 
 $(document).ready(function(){
     board = new Object();
+    human_char = 'O';
+    computer_char = 'X';
     $(".square").click(function(){
         // Check to see if the square is free
         if ($(this).html()) {
@@ -12,7 +14,7 @@ $(document).ready(function(){
             readBoard(board, $(this).attr('pos'));
             // If square is free, determine best move
             $.post("/board", { board: board }, function(data){
-                repopulateBoard(data);
+                repopulateBoard(data["board"]);
             });
         }
 
@@ -23,12 +25,22 @@ $(document).ready(function(){
             temp = new Array();
             $(this).children().each(function(){
                 if ( $(this).attr('pos') === clickedItem ) {
-                    temp.push('O');
+                    temp.push(human_char);
                 } else {
                     temp.push($(this).html());
                 }
             });
             board[$(this).attr('id')] = temp;
+        });
+    }
+
+    function repopulateBoard(new_board){
+        squares = $('.square');
+        $.each(squares, function(){
+            pos = $(this).attr('pos');
+            coords = pos.split(',');
+            value = new_board[coords[0]][coords[1]];
+            $(this).html(value);
         });
     }
 });
