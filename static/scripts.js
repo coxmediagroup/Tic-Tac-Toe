@@ -9,16 +9,16 @@ $(document).ready(function(){
 
         // TODO: Make this ask if you're sure about the move first.
         } else {
-            createBoardArray(board, $(this).attr('pos'));
+            readBoard(board, $(this).attr('pos'));
             // If square is free, determine best move
             $.post("/board", { board: board }, function(data){
-                console.log(data);
+                repopulateBoard(data);
             });
         }
 
     });
 
-    function createBoardArray(board, clickedItem) {
+    function readBoard(board, clickedItem) {
         $('#board .row').each(function() {
             temp = new Array();
             $(this).children().each(function(){

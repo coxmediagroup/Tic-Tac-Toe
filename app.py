@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask( __name__ )
 
 @app.route("/")
-def test_board():
+def setup_board():
     return render_template('board.html')
 
 @app.route("/board", methods=['POST'])
