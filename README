@@ -1,0 +1,11 @@
+Tic-tac-toe authored by Ronald Braly
+
+Notes about this tic-tac-toe game:
+
+This game was written using python 2.7 and will require that version to run. Earlier versions of 2.X may work, but cannot be guaranteed.
+
+To play the game, enter the following at a command prompt:
+
+>python tictactoe.py
+
+When you are ready to stop playing, enter 'no' when prompted.
