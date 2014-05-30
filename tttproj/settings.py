@@ -121,7 +121,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'south',
-    'LOCAL-APPS',
+    # Additional local apps will appear here
 
     # Our apps
     'tictactoe',
@@ -175,8 +175,8 @@ try:
 except ImportError:
     pass
 else:
-    i = INSTALLED_APPS.index('LOCAL-APPS')
-    INSTALLED_APPS[i:i+1] = LOCAL_INSTALLED_APPS
+    i = INSTALLED_APPS.index('south')
+    INSTALLED_APPS[i:i] = LOCAL_INSTALLED_APPS
 
 
 # Settings for testing:
