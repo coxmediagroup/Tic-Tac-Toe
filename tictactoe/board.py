@@ -39,8 +39,8 @@ class Board(object):
             mark = state % 3
             self.board.append(mark)
             state /= 3
-        x_moves = len([1 for p in self.board if p == self.MARK_X])
-        o_moves = len([1 for p in self.board if p == self.MARK_O])
+        x_moves = self.board.count(self.MARK_X)
+        o_moves = self.board.count(self.MARK_O)
         if state != 0:
             raise ValueError('Bad state {} - too big'.format(init_state))
         if x_moves < o_moves:
