@@ -1,0 +1,30 @@
+{% extends 'tictactoe/base.jinja2' %}
+
+{% block body_title %}Let's Play Tic-Tac-Toe!{% endblock %}
+
+{% block text %}
+<div class="center-block tt_board">
+  <svg xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="center-block tt_next hidden">
+  <h2 class='text-center'>Play again?</h2>
+  <ul class='play-buttons'>
+      <form action="{{ next_game_url }}" method="POST">
+          {{ csrf() }}
+          <input type="hidden" name="server_player" value="2" />
+          <button class="btn btn-lg btn-primary">Go First (X)</button>
+      </form>
+      <form action="{{ next_game_url }}" method="POST">
+          {{ csrf() }}
+          <input type="hidden" name="server_player" value="1" />
+          <button class="btn btn-lg btn-primary">Go Second (O)</button>
+      </form>
+  </ul>
+</div>
+{% endblock %}
+
+{% block body_script_extra %}
+<script type="text/javascript">ttt_data={{data_json | safe}};</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
+<script type="text/javascript" src="{{ static('tictactoe/js/main.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+#body-title {
+    text-align: center;
+    color: #32485E;
+}
+
+.play-buttons {
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+}
+
+.play-buttons li,
+.play-buttons form {
+  display: inline-block;
+  padding: 8px 6px;
+}
+
+
+footer ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+footer li {
+  display: inline-block;
+  padding: 8px 6px;
+  font-size: smaller;
+}
+
+footer li:last-child {
+  padding-left: 12px;
+}
+
+footer li a {
+  text-decoration: none;
+}
+
+.tt_board {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 600px;
+    height: 600px;
+    line-height: 0px;
+}

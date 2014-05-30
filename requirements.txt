@@ -1,0 +1,16 @@
+# Django
+Django==1.6.4
+wsgiref==0.1.2
+
+# Jinja 2 - better templates than default Django
+Jinja2==2.7.2
+MarkupSafe==0.23
+jingo==0.7
+
+# Database migrations
+South==0.8.4
+
+# Browsable API
+Markdown==2.4
+djangorestframework==2.3.13
+drf-compound-fields==0.2.1
