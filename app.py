@@ -64,7 +64,26 @@ def defensive_moves(board):
 
 
 def offensive_moves(board):
-    pass
+    def check_center():
+        if board[1][1] == '':
+            board[1][1] = 'X'
+
+    def check_corners(rows=[0,2], columns=[0,2]):
+        count = 0
+        for row in rows:
+            if board[row[count]][columns[count]] == '':
+                board[row[count]][columns[count]] = 'X'
+            elif board[row[count]][columns[count + 1]] == '':
+                board[row[count]][columns[count +1]] = 'X'
+            elif board[row[count + 1]][columns[count]] == '':
+                board[row[count + 1]][columns[count]] = 'X'
+            elif board[row[count + 1]][columns[count + 1]] == '':
+                board[row[count + 1]][columns[count + 1]] = 'X'
+
+    def check_middles():
+        pass
+
+
 
 
 if __name__ == "__main__":
