@@ -36,31 +36,30 @@ def defensive_moves(board):
                 if square == '':
                     board[row][column] = 'X'
 
-    def check_diagonals():
-        diagonal1 = [board[0][0], board[1][1], board[2][2]]
-        diagonal2 = [board[0][2], board[1][1], board[2][0]]
-        count1 = sum([1 for square in diagonal1 if square=='O'])
-        count2 = sum([1 for square in diagonal2 if square=='O'])
-        if count1 == 2:
-            if diagonal1[0] == '':
-                board[0][0] = 'X'
+    def check_diagonals(diagonal):
+        count = sum([1 for square in diagonal if square=='O'])
+        if count == 2:
+            if diagonal[0] == '':
+                board[diagonal["positions"][0]][diagonal["positions"][1]] = 'X'
             elif diagonal1[1] == '':
-                board[1][1] = 'X'
+                board[diagonal["positions"][2]][diagonal["positions"][3]] = 'X'
             elif diagonal1[2] == '':
-                board[2][2] = 'X'
-        if count2 == 2:
-            if diagonal2[0] == '':
-                board[0][2] = 'X'
-            elif diagonal2[1] == '':
-                board[1][1] = 'X'
-            elif diagonal2[2] == '':
-                board[2][0] = 'X'
+                board[diagonal["positions"][4]][diagonal["positions"][5]] = 'X'
 
     for i in range(3):
         check_row(i)
         check_column(i)
 
-    check_diagonals()
+    diagonal1 = {
+        "values": [board[0][0], board[1][1], board[2][2]],
+        "positions": [0,0,1,1,2,2]
+    }
+    diagonal2 = {
+        "values": [board[0][2], board[1][1], board[2][0]],
+        "positions": [0,2,1,1,2,0]
+    }
+    check_diagonals(diagonal1)
+    check_diagonals(diagonal2)
 
 
 def offensive_moves(board):
