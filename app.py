@@ -31,7 +31,7 @@ class Board:
             [(0, 2, board[0][2]), (1, 1, board[1][1]), (0, 2, board[0][2])]
         ]
         self.ranked_triplets = []
-        self.new_board = []
+        self.new_board = board
         self.player_letter = 'O'
         self.computer_letter = 'X'
 
@@ -44,22 +44,41 @@ class Board:
 
     def prioritize_moves(self):
         for triplet in orig_board:
-            computer_can_win = tally_values(triplet, computer_letter)
-            player_can_win = tally_values(triplet, player_letter)
+            ranking = 0
+            ranking += tally_values(ranking, triplet, computer_letter)
+            ranking += tally_values(ranking, triplet, player_letter)
 
+            self.ranked_triplets.append([ranking, triplet])
 
-        def tally_values(triplet, letter):
+        make_play()
+
+        def tally_values(ranking, triplet, letter):
             count = 0
-            empty = '';
+            corners = [(0,0), (0,2), (0,2), (2,2)]
+
             for index, square in enumerate(triplet):
-                x = square[0]
-                y = square[1]
+                xy = (square[0], square[1])
+
                 if square[2] == letter:
                     count += 1
-                elif square[2] == '';
-                    empty = [x,y]
+
+                if square[2] == '':
+                    # If this is the middle square, make it worth more than corners
+                    if xy == (1,1):
+                        ranking += 2
+
+                    if xy in corners:
+                        ranking += 1
+
+            # If someone can win, rank higher
             if count == 2:
-                self.new_board[empty[0]][empty[1]] == computer_letter
+                ranking += 1
+
+                # If computer can win, rank higher
+                if letter == computer_letter:
+                    ranking += 1
+
+            return ranking
 
     return self.new_board
 
