@@ -14,10 +14,9 @@ def calculate_move():
     ]
     board_instance = Board(board)
     board_instance.prioritize_moves()
+    board = board_instance.new_board
 
-    raise Exception("UGLY BUTTHOLE")
-#    return jsonify(board=Board(board))
-
+    return jsonify(board=board)
 class Board:
     def __init__(self, board):
         # Tuples of every possible legit combo
@@ -28,7 +27,7 @@ class Board:
             [(1, 0, board[1][0]), (1, 1, board[1][1]), (1, 2, board[1][2])],
             [(2, 0, board[2][0]), (2, 1, board[2][1]), (2, 2, board[2][2])],
             [(0, 0, board[0][0]), (1, 0, board[1][0]), (2, 0, board[2][0])],
-            [(1, 0, board[1][0]), (1, 1, board[1][1]), (1, 2, board[1][2])],
+            [(0, 1, board[0][1]), (1, 1, board[1][1]), (2, 1, board[2][1])],
             [(0, 2, board[0][2]), (1, 2, board[1][2]), (2, 2, board[2][2])],
             [(0, 0, board[0][0]), (1, 1, board[1][1]), (2, 2, board[2][2])],
             [(0, 2, board[0][2]), (1, 1, board[1][1]), (0, 2, board[0][2])]
@@ -49,9 +48,15 @@ class Board:
     def prioritize_moves(self):
         for triplet in self.orig_board:
             self.ranked_triplets += self.tally_values(triplet)
-        from pprint import pprint
-        pprint(self.ranked_triplets)
 
+        sorted_list = sorted(self.ranked_triplets)
+        from pprint import pprint
+        pprint(sorted_list)
+        if len(sorted_list) > 0:
+            ranking, (x,y) = sorted_list.pop()
+            self.new_board[x][y] = 'X'
+        else:
+            pass
 
     def tally_values(self, triplet):
         count = 0
@@ -64,21 +69,24 @@ class Board:
         can_take_middle = True if triplet[1] == (1,1,'') else False
 
         ranked_triplets = []
-
-        if can_win:
-            ranked_triplets.append((10, playable_squares[0]))
-        elif can_lose:
-            ranked_triplets.append((9, playable_squares[0]))
-        elif can_take_middle:
-            ranked_triplets.append((8, (1,1)))
-        elif len(playable_corners) > 0:
-            for corner in playable_corners:
-                ranked_triplets.append((7, corner))
+        if len(playable_squares) == 0:
+            pass
         else:
-            for square in playable_squares:
-                ranked_triplets.append((6, square))
+            if can_win:
+                ranked_triplets.append((10, playable_squares[0]))
+            elif can_lose:
+                ranked_triplets.append((9, playable_squares[0]))
+            elif can_take_middle:
+                ranked_triplets.append((8, (1,1)))
+            elif len(playable_corners) > 0:
+                for corner in playable_corners:
+                    ranked_triplets.append((7, corner))
+            else:
+                for square in playable_squares:
+                    ranked_triplets.append((6, square))
 
         return ranked_triplets
+
         """
             for index, square in enumerate(triplet):
                 xy = (square[0], square[1])
