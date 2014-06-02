@@ -16,7 +16,7 @@ def calculate_move():
     board_instance.prioritize_moves()
     board = board_instance.new_board
 
-    return jsonify(board=board)
+    return jsonify(board=board, is_winner=board_instance.is_winner)
 class Board:
     def __init__(self, board):
         # Tuples of every possible legit combo
@@ -30,54 +30,59 @@ class Board:
             [(0, 1, board[0][1]), (1, 1, board[1][1]), (2, 1, board[2][1])],
             [(0, 2, board[0][2]), (1, 2, board[1][2]), (2, 2, board[2][2])],
             [(0, 0, board[0][0]), (1, 1, board[1][1]), (2, 2, board[2][2])],
-            [(0, 2, board[0][2]), (1, 1, board[1][1]), (0, 2, board[0][2])]
+            [(0, 2, board[0][2]), (1, 1, board[1][1]), (2, 0, board[2][0])]
         ]
         self.ranked_triplets = []
+        self.corners = [(0, 0), (0, 2), (0, 2), (2, 2)]
         self.new_board = board
+        self.is_winner = False
         self.player_letter = 'O'
         self.computer_letter = 'X'
 
-    # Moves & values:
-    # 1 - winning
-    # 2 - blocking player's win
-    # 3 - take middle square
-    # 4 - take corner
-    # 5 - take other square
-
-
     def prioritize_moves(self):
+        """
+        Loop through rows, columns and diagonals to find plays
+        """
         for triplet in self.orig_board:
             self.ranked_triplets += self.tally_values(triplet)
 
         sorted_list = sorted(self.ranked_triplets)
-        from pprint import pprint
-        pprint(sorted_list)
+
         if len(sorted_list) > 0:
-            ranking, (x,y) = sorted_list.pop()
+            ranking, (x, y) = sorted_list.pop()
             self.new_board[x][y] = 'X'
         else:
             pass
 
     def tally_values(self, triplet):
-        count = 0
-        corners = [(0,0), (0,2), (0,2), (2,2)]
+        """
+        Assign rank to valid plays if there are any.
+        10 - winning
+        9 - blocking player's win
+        8 - take middle square
+        7 - take corner
+        6 - take other square
+        """
 
+        # Readability won out over optimization
         playable_squares = [(x, y) for x, y, value in triplet if value == '']
-        playable_corners = [(x,y) for x, y in playable_squares if (x,y) in corners]
+        playable_corners = [(x, y) for x, y in playable_squares if (x, y) in self.corners]
         can_win = sum([1 for x, y, value in triplet if value == self.computer_letter]) == 2
         can_lose = sum([1 for x, y, value in triplet if value == self.player_letter]) == 2
-        can_take_middle = True if triplet[1] == (1,1,'') else False
+        can_take_middle = True if triplet[1] == (1, 1, '') else False
 
         ranked_triplets = []
+
         if len(playable_squares) == 0:
             pass
         else:
             if can_win:
                 ranked_triplets.append((10, playable_squares[0]))
+                self.is_winner = True
             elif can_lose:
                 ranked_triplets.append((9, playable_squares[0]))
             elif can_take_middle:
-                ranked_triplets.append((8, (1,1)))
+                ranked_triplets.append((8, (1, 1)))
             elif len(playable_corners) > 0:
                 for corner in playable_corners:
                     ranked_triplets.append((7, corner))
@@ -86,34 +91,6 @@ class Board:
                     ranked_triplets.append((6, square))
 
         return ranked_triplets
-
-        """
-            for index, square in enumerate(triplet):
-                xy = (square[0], square[1])
-
-                if square[2] == letter:
-                    count += 1
-
-                if square[2] == '':
-                    # If this is the middle square, make it worth more than corners
-                    if xy == (1,1):
-                        ranking += 2
-
-                    if xy in corners:
-                        ranking += 1
-
-            # If someone can win, rank higher
-            if count == 2:
-                ranking += 1
-
-                # If computer can win, rank higher
-                if letter == computer_letter:
-                    ranking += 1
-
-            return ranking
-
-    return self.new_board
-        """
 
 if __name__ == "__main__":
     app.run(debug=True)

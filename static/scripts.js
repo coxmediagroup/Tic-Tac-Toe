@@ -9,16 +9,22 @@ $(document).ready(function(){
         if ($(this).html()) {
             alert("That square is taken.");
 
-        // TODO: Make this ask if you're sure about the move first.
         } else {
             readBoard(board, $(this).attr('pos'));
             // If square is free, determine best move
             $.post("/board", { board: board }, function(data){
-                repopulateBoard(data["board"]);
+                repopulateBoard(data["board"], data["is_winner"]);
             });
         }
 
     });
+
+    function resetBoard(){
+        squares = $('.square');
+        $.each(squares, function(){
+            $(this).html('');
+        });
+    }
 
     function readBoard(board, clickedItem) {
         $('#board .row').each(function() {
@@ -34,13 +40,19 @@ $(document).ready(function(){
         });
     }
 
-    function repopulateBoard(new_board){
+    function repopulateBoard(newBoard, isWinner){
         squares = $('.square');
         $.each(squares, function(){
             pos = $(this).attr('pos');
             coords = pos.split(',');
-            value = new_board[coords[0]][coords[1]];
+            value = newBoard[coords[0]][coords[1]];
             $(this).html(value);
         });
+        if (isWinner) {
+          //alert("Game over!")
+          $('.alert').alert();
+          console.log("game over");
+          resetBoard();
+        }
     }
 });
