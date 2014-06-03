@@ -1,6 +1,13 @@
+from random import choice
+
+
 def get_next_state(state=None, player='x'):
     if not state:
-        state = [['']*3]*3
+        state = [['', '', ''],
+                 ['', '', ''],
+                 ['', '', '']]
+        choice(state)[choice((0, 1, 2))] = player
+        return state
     return get_next_opt_state(state, player, max_player=True)[1]
 
 
