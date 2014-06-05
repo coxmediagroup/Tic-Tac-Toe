@@ -24,6 +24,7 @@ $(document).ready(function(){
         $.each(squares, function(){
             $(this).html('');
         });
+        $('#messages').hide();
     }
 
     function readBoard(board, clickedItem) {
@@ -51,8 +52,8 @@ $(document).ready(function(){
         if (isWinner) {
           //alert("Game over!")
           $('.alert').alert();
-          console.log("game over");
-          resetBoard();
+          $('#messages').show();
+          $('#messages').append('<h3>You lost!</h3>');
         }
     }
 });
