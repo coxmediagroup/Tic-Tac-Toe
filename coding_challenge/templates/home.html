@@ -1,27 +1,40 @@
 {% extends "base.html" %}
 
 {% block headscript %}
-<script type="text/javascript">
-function get_state_from_table($table) {
-    var state = [];
-    $table.find("td").each(function (i, e) {
-        state.push($(e).text());
-    });
-    return state;
-}
+  <script type="text/javascript">
+    var ai_player = 'x';
+    var player = ai_player=='o' ? 'x': 'o';
+    function get_state_from_table($table) {
+        var state = '';
+        $table.find("td").each(function (i, e) {
+            if ($(e).hasClass('x'))
+                state += 'x';
+            else if ($(e).hasClass('o'))
+                state += 'o';
+            else
+                state += ' ';
+        });
+        return state;
+    }
 
-function set_state_to_table($table, state) {
-
-}
+    function set_state_to_table($table, state) {
+        $table.find("td").each(function (i, e) {
+            $(e).removeClass("x o straight");
+            $(e).addClass(state[i]);
+        });
+    }
 
     $(function () {
-        $("#tic-tac-toe-table").click(function () {
+        $("#tic-tac-toe-table td").click(function () {
+            if (!($(this).hasClass('x') || $(this).hasClass('o')))
+                $(this).addClass(player);
             state = get_state_from_table($(this));
-            $.get("{% url 'play' %}",
-                  {state: state,
-                   player: 'x'},
-                  function (data) {
-                  });
+            $.getJSON("{% url 'play' %}",
+                      {state: state,
+                       player: ai_player},
+                      function (data) {
+                          set_state_to_table(data.state);
+                      });
         });
     });
 </script>
@@ -32,19 +45,19 @@ function set_state_to_table($table, state) {
 <table id="tic-tac-toe-table">
     <tbody>
         <tr>
-            <td>x</td>
-            <td></td>
-            <td>x</td>
+            <td class="x top left"></td>
+            <td class="x top"></td>
+            <td class="x top right"></td>
         </tr>
         <tr>
-            <td>x</td>
-            <td>o</td>
-            <td>x</td>
+            <td class="x left"></td>
+            <td class="o"></td>
+            <td class="right"></td>
         </tr>
         <tr>
-            <td>x</td>
-            <td>o</td>
-            <td>x</td>
+            <td class="x bottom left"></td>
+            <td class="x bottom"></td>
+            <td class="x bottom right"></td>
         </tr>
     </tbody>
 </table>

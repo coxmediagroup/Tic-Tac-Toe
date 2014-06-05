@@ -1,9 +1,33 @@
 #content #tic-tac-toe-table {
-    padding: 20px 30px;
+    margin: 20px 30px;
+    border-collapse: collapse;
 }
 
 #content #tic-tac-toe-table td {
-    font-family: arial, verdana;
-    font-size: 45px;
-    padding: 0px 10px 0px 10px;
+    padding: 50px 40px;
+}
+
+#content #tic-tac-toe-table td.top {
+    border-bottom: 1px solid;
+}
+
+#content #tic-tac-toe-table td.bottom {
+    border-top: 1px solid;
+}
+
+#content #tic-tac-toe-table td.left {
+    border-right: 1px solid;
+}
+
+#content #tic-tac-toe-table td.right {
+    border-left: 1px solid;
+}
+
+
+.x {
+    background: url('/static/img/x_o.png') 0 0;
+}
+
+.o {
+    background: url('/static/img/x_o.png') 0 100px;
 }
