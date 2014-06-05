@@ -22,7 +22,18 @@ class LoadTicTacToe(TemplateView):
 class PlayTicTacToeAjax(View):
     def get(self, request):
         current_state = request.GET.get('state')
-        current_player = request.GET.get('player')
-        next_state = get_next_state(current_state, current_player)
-        return HttpResponse(json.dumps(next_state),
+        ai_player = request.GET.get('ai_player')
+        next_state = get_next_play(
+            current_state,
+            ai_player,
+            get_next_state)
+        return HttpResponse(json.dumps({'state': next_state}),
                             mimetype="application/json")
+
+
+def get_next_play(current_state, player, play_func):
+    current_state = str(current_state)
+    player = str(player)
+    from_str = lambda state: [list(state[i:i+3]) for i in (0, 3, 6)]
+    to_str = lambda state: ''.join([''.join(r) for r in state])
+    return to_str(play_func(from_str(current_state), player))

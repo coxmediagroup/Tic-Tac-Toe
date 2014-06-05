@@ -2,7 +2,7 @@
 
 {% block headscript %}
   <script type="text/javascript">
-    var ai_player = 'x';
+    var ai_player = 'o';
     var player = ai_player=='o' ? 'x': 'o';
     function get_state_from_table($table) {
         var state = '';
@@ -12,28 +12,31 @@
             else if ($(e).hasClass('o'))
                 state += 'o';
             else
-                state += ' ';
+                state += 'e';
         });
         return state;
     }
 
     function set_state_to_table($table, state) {
         $table.find("td").each(function (i, e) {
-            $(e).removeClass("x o straight");
+            $(e).removeClass("x o e straight");
             $(e).addClass(state[i]);
         });
     }
 
     $(function () {
         $("#tic-tac-toe-table td").click(function () {
-            if (!($(this).hasClass('x') || $(this).hasClass('o')))
+            var $table = $("#tic-tac-toe-table");
+            if ($(this).hasClass('e')) {
+                $(this).removeClass('e');
                 $(this).addClass(player);
-            state = get_state_from_table($(this));
+            }
+            state = get_state_from_table($table);
             $.getJSON("{% url 'play' %}",
                       {state: state,
-                       player: ai_player},
+                      ai_player: ai_player},
                       function (data) {
-                          set_state_to_table(data.state);
+                          set_state_to_table($table, data.state);
                       });
         });
     });
@@ -45,19 +48,19 @@
 <table id="tic-tac-toe-table">
     <tbody>
         <tr>
-            <td class="x top left"></td>
-            <td class="x top"></td>
-            <td class="x top right"></td>
+            <td class="e top left"></td>
+            <td class="e top"></td>
+            <td class="e top right"></td>
         </tr>
         <tr>
-            <td class="x left"></td>
-            <td class="o"></td>
-            <td class="right"></td>
+            <td class="e left"></td>
+            <td class="e "></td>
+            <td class="e right"></td>
         </tr>
         <tr>
-            <td class="x bottom left"></td>
-            <td class="x bottom"></td>
-            <td class="x bottom right"></td>
+            <td class="e bottom left"></td>
+            <td class="e bottom"></td>
+            <td class="e bottom right"></td>
         </tr>
     </tbody>
 </table>
