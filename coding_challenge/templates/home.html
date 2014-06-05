@@ -2,8 +2,27 @@
 
 {% block headscript %}
 <script type="text/javascript">
-    $(function () {
+function get_state_from_table($table) {
+    var state = [];
+    $table.find("td").each(function (i, e) {
+        state.push($(e).text());
+    });
+    return state;
+}
 
+function set_state_to_table($table, state) {
+
+}
+
+    $(function () {
+        $("#tic-tac-toe-table").click(function () {
+            state = get_state_from_table($(this));
+            $.get("{% url 'play' %}",
+                  {state: state,
+                   player: 'x'},
+                  function (data) {
+                  });
+        });
     });
 </script>
 {% endblock %}
@@ -13,19 +32,19 @@
 <table id="tic-tac-toe-table">
     <tbody>
         <tr>
-            <td>X</td>
-            <td>O</td>
-            <td>X</td>
+            <td>x</td>
+            <td></td>
+            <td>x</td>
         </tr>
         <tr>
-            <td>X</td>
-            <td>O</td>
-            <td>X</td>
+            <td>x</td>
+            <td>o</td>
+            <td>x</td>
         </tr>
         <tr>
-            <td>X</td>
-            <td>O</td>
-            <td>X</td>
+            <td>x</td>
+            <td>o</td>
+            <td>x</td>
         </tr>
     </tbody>
 </table>
