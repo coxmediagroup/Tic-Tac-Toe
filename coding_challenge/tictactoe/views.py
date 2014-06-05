@@ -1,7 +1,8 @@
+import json
+
 from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-from django.utils import simplejson as json
 
 from tic_tac_toe_play import get_next_state
 
@@ -13,7 +14,7 @@ class LoadTicTacToe(TemplateView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
-        D.t()
+
         context = super(LoadTicTacToe, self).get_context_data(**kwargs)
         return context
 

@@ -1,5 +1,32 @@
 {% extends "base.html" %}
 
+{% block headscript %}
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>
+{% endblock %}
+
 {% block content %}
-Welcome to the Tic Tac Toe!<br>
+<span>Welcome to the Tic Tac Toe!</span>
+<table id="tic-tac-toe-table">
+    <tbody>
+        <tr>
+            <td>X</td>
+            <td>O</td>
+            <td>X</td>
+        </tr>
+        <tr>
+            <td>X</td>
+            <td>O</td>
+            <td>X</td>
+        </tr>
+        <tr>
+            <td>X</td>
+            <td>O</td>
+            <td>X</td>
+        </tr>
+    </tbody>
+</table>
 {% endblock %}
