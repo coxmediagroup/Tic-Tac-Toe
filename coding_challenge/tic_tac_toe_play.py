@@ -14,18 +14,18 @@ def get_next_state(state=None, player='x'):
 def get_next_opt_state(state, player, max_player):
     if has_winner(state):
         if max_player:
-            return (-1,)
+            return (-1, state)
         elif not max_player:
-            return (1,)
+            return (1, state)
     elif is_final(state):
-        return (0,)
+        return (0, state)
 
     scores = []
     for next_state in get_next_states(state, player):
-        score_tup = get_next_opt_state(next_state,
-                                       'o' if player == 'x' else 'x',
-                                       max_player=not max_player)
-        scores.append((score_tup[0], next_state))
+        score, _ = get_next_opt_state(next_state,
+                                      'o' if player == 'x' else 'x',
+                                      max_player=not max_player)
+        scores.append((score, next_state))
     if max_player:
         return max(scores, key=lambda t: t[0])
     else:
