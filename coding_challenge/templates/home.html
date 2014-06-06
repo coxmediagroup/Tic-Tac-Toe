@@ -19,20 +19,29 @@
 
     function set_state_to_table($table, state) {
         $table.find("td").each(function (i, e) {
-            $(e).removeClass("x o e straight");
+            $(e).removeClass("x o e X O");
             $(e).addClass(state[i]);
         });
+    }
+
+    function reset_table($table) {
+        set_state_to_table($table, "eeeeeeeee");
+    }
+
+    function game_won($table) {
+        return $table.find("X").length || $table.find("O").length;
     }
 
     $(function () {
         $("#tic-tac-toe-table td").click(function () {
             var $table = $("#tic-tac-toe-table");
-            if ($(this).hasClass('e')) {
+            if (game_won($table)) {
+                reset_table($table);
+            } else if ($(this).hasClass('e')) {
                 $(this).removeClass('e');
                 $(this).addClass(player);
-                state = get_state_from_table($table);
                 $.getJSON("{% url 'play' %}",
-                          {state: state,
+                          {state: get_state_from_table($table),
                            ai_player: ai_player},
                           function (data) {
                               set_state_to_table($table, data.state);

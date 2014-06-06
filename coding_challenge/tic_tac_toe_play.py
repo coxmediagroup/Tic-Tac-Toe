@@ -8,28 +8,42 @@ def get_next_state(state=None, player='x'):
                  ['e', 'e', 'e']]
         choice(state)[choice((0, 1, 2))] = player
         return state
-    return get_next_opt_state(state, player, max_player=True)[1]
 
-
-def get_next_opt_state(state, player, max_player):
-    if has_winner(state):
-        if max_player:
-            return (-1, state)
-        elif not max_player:
-            return (1, state)
+    won_state = has_winner(state)
+    if won_state:
+        return won_state
     elif is_final(state):
-        return (0, state)
+        return state
 
     scores = []
     for next_state in get_next_states(state, player):
-        score, _ = get_next_opt_state(next_state,
-                                      'o' if player == 'x' else 'x',
-                                      max_player=not max_player)
+        score = get_state_score(next_state,
+                                'o' if player == 'x' else 'x',
+                                max_player=False)
         scores.append((score, next_state))
+    return max(scores, key=lambda t: t[0])[1]
+
+
+def get_state_score(state, player, max_player):
+    if has_winner(state):
+        if max_player:
+            return -1
+        elif not max_player:
+            return 1
+    elif is_final(state):
+        return 0
+
+    scores = []
+    for next_state in get_next_states(state, player):
+        score = get_state_score(next_state,
+                                'o' if player == 'x' else 'x',
+                                max_player=not max_player)
+        scores.append(score)
+
     if max_player:
-        return max(scores, key=lambda t: t[0])
+        return max(scores)
     else:
-        return min(scores, key=lambda t: t[0])
+        return min(scores)
 
 
 def get_next_states(state, player):
@@ -47,14 +61,18 @@ def get_next_states(state, player):
 def has_winner(state):
     for row in state:
         if row[0] == row[1] == row[2] != 'e':
-            return True
-    for col in zip(*state):
+            row[0] = row[1] = row[2] = row[0].upper()
+            return state
+    for j, col in enumerate(zip(*state)):
         if col[0] == col[1] == col[2] != 'e':
-            return True
+            state[0][j] = state[1][j] = state[2][j] = col[0].upper()
+            return state
     if state[0][0] == state[1][1] == state[2][2] != 'e':
-        return True
+        state[0][0] = state[1][1] = state[2][2] = state[0][0].upper()
+        return state
     if state[0][2] == state[1][1] == state[2][0] != 'e':
-        return True
+        state[0][2] = state[1][1] = state[2][0] = state[0][2].upper()
+        return state
 
 
 def is_final(state):

@@ -24,10 +24,18 @@
 }
 
 
-.x {
+td.x {
     background: url('/static/img/x_o.png') 0 0;
 }
 
-.o {
+td.o {
+    background: url('/static/img/x_o.png') 0 -100px;
+}
+
+td.X {
+    background: url('/static/img/x_o.png') 0 200px;
+}
+
+td.O {
     background: url('/static/img/x_o.png') 0 100px;
 }
