@@ -29,23 +29,27 @@
     }
 
     function game_won($table) {
-        return $table.find("X").length || $table.find("O").length;
+        return $table.find(".X").length || $table.find(".O").length;
     }
 
     $(function () {
         $("#tic-tac-toe-table td").click(function () {
             var $table = $("#tic-tac-toe-table");
-            if (game_won($table)) {
-                reset_table($table);
-            } else if ($(this).hasClass('e')) {
-                $(this).removeClass('e');
-                $(this).addClass(player);
-                $.getJSON("{% url 'play' %}",
-                          {state: get_state_from_table($table),
-                           ai_player: ai_player},
-                          function (data) {
-                              set_state_to_table($table, data.state);
-                          });
+            if (!$table.hasClass("locked")) {
+                if (game_won($table)) {
+                    reset_table($table);
+                } else if ($(this).hasClass('e')) {
+                    $(this).removeClass('e');
+                    $(this).addClass(player);
+                    $table.addClass('locked');
+                    $.getJSON("{% url 'play' %}",
+                              {state: get_state_from_table($table),
+                               ai_player: ai_player},
+                              function (data) {
+                                  set_state_to_table($table, data.state);
+                                  $table.removeClass("locked");
+                              });
+                }
             }
         });
     });
