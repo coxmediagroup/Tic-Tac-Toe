@@ -15,35 +15,50 @@ def get_next_opt_state(state=None, player='x'):
     if has_winner(state) or is_final(state):
         return state
 
-    scores = []
+    best_score = -2
+    best_move = None
     for next_state in get_next_states(state, player):
         score = get_state_score(next_state,
                                 'o' if player == 'x' else 'x',
-                                max_player=False)
-        scores.append((score, next_state))
-    return max(scores, key=lambda t: t[0])[1]
+                                max_player=False,
+                                best_possible_score=1)
+        if score > best_score:
+            best_score = score
+            best_move = next_state
+
+    return best_move
 
 
-def get_state_score(state, player, max_player):
+def get_state_score(state, player, max_player, best_possible_score):
     if has_winner(state):
         if max_player:
-            return -1
+            return -best_possible_score
         elif not max_player:
-            return 1
+            return best_possible_score
     elif is_final(state):
         return 0
 
-    scores = []
+    best_max_score = -best_possible_score - 1
+    best_min_score = best_possible_score + 1
     for next_state in get_next_states(state, player):
         score = get_state_score(next_state,
                                 'o' if player == 'x' else 'x',
-                                max_player=not max_player)
-        scores.append(score)
-
+                                max_player=not max_player,
+                                best_possible_score=best_possible_score)
+        if max_player:
+            if score > best_max_score:
+                best_max_score = score
+                if best_max_score == best_possible_score:
+                    return best_max_score
+        else:
+            if score < best_min_score:
+                best_min_score = score
+                if best_min_score == -best_possible_score:
+                    return best_min_score
     if max_player:
-        return max(scores)
+        return best_max_score
     else:
-        return min(scores)
+        return best_min_score
 
 
 def get_next_states(state, player):

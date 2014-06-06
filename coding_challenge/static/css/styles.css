@@ -33,9 +33,9 @@ td.o {
 }
 
 td.X {
-    background: url('/static/img/x_o.png') 0 200px;
+    background: url('/static/img/x_o.png') 0 198px;
 }
 
 td.O {
-    background: url('/static/img/x_o.png') 0 100px;
+    background: url('/static/img/x_o.png') 0 98px;
 }

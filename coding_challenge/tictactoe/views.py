@@ -32,11 +32,11 @@ class PlayTicTacToeAjax(View):
 
 
 def get_next_play(current_state, player, play_func):
-    current_state = str(current_state)
-    player = str(player)
     from_str = lambda state: [list(state[i:i+3]) for i in (0, 3, 6)]
     to_str = lambda state: ''.join([''.join(r) for r in state])
-    print "in: ", from_str(current_state)
+
+    current_state = str(current_state)
+    player = str(player)
+
     next_state = play_func(from_str(current_state), player)
-    print "out: ", next_state
     return to_str(next_state)
