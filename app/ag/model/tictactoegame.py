@@ -7,83 +7,70 @@ class TicTacToeGame(object):
        Invent Your Own Computer Games with Python, 2nd Edition
        by Al Sweigart
     """
+    MESSAGE_YOU_WIN = 'Hooray! You have won the game!' 
+    MESSAGE_YOU_LOSE = 'The computer has beaten you! You lose.' 
+    MESSAGE_YOU_TIE = 'The game is a tie!' 
+    MESSAGE_CONTINUE = 'Continue'
+    CODE_YOU_LOSE = 1
+    CODE_YOU_TIE = 2
+    CODE_CONTINUE = 3
+    CODE_YOU_WIN = 4
 
-    def __init__(self):
-        print "TicTacToeGame.__init__()"
+    playerLetter = 'X'
+    computerLetter = 'O'
 
+    def take_a_turn(self, theBoard):
+        # Submit a board and evaluate the next move.
+        # evaluate the players turn
+        turn = self.players_turn(theBoard)
+        if turn.get('outcome_code') in \
+            (self.CODE_YOU_WIN, self.CODE_YOU_TIE):
+            return turn
 
-    def play_game(self):
-        # Play the tic tac toe game
+        # still here? Let the computer take a turn.
+        turn = self.computers_turn(theBoard)
 
-        print('Welcome to Tic Tac Toe!')
+        return turn 
 
-        while True:
-            # Reset the board
-            theBoard = [' '] * 10
-            playerLetter, computerLetter = self.inputPlayerLetter()
-            turn = self.whoGoesFirst()
-            print('The ' + turn + ' will go first.')
-            gameIsPlaying = True
-
-            while gameIsPlaying:
-                if turn == 'player':
-                    # Player's turn.
-                    self.drawBoard(theBoard)
-                    move = self.getPlayerMove(theBoard)
-                    self.makeMove(theBoard, playerLetter, move)
-
-                    if self.isWinner(theBoard, playerLetter):
-                        self.drawBoard(theBoard)
-                        print('Hooray! You have won the game!')
-                        gameIsPlaying = False
-                    else:
-                        if self.isBoardFull(theBoard):
-                            self.drawBoard(theBoard)
-                            print('The game is a tie!')
-                            break
-                        else:
-                            turn = 'computer'
-
-                else:
-                    # Computer's turn.
-                    move = self.getComputerMove(theBoard, computerLetter)
-                    self.makeMove(theBoard, computerLetter, move)
-
-                    if self.isWinner(theBoard, computerLetter):
-                        self.drawBoard(theBoard)
-                        print('The computer has beaten you! You lose.')
-                        gameIsPlaying = False
-                    else:
-                        if self.isBoardFull(theBoard):
-                            self.drawBoard(theBoard)
-                            print('The game is a tie!')
-                            break
-                        else:
-                            turn = 'player'
-
-            if not self.playAgain():
-                break
-
-
-
-    def uber_insert(self, ecard):
-        """Insert ecard; handle all recipients and series ecard instances.
-        @param  ecard                   an Ecard instance with one or more
-                                        items in ecard.all_recipients
-        @return ecards                  a list of Ecard instances
-        """
-        ecards = []
-        for r in ecard.all_recipients:
-            e = copy.copy(ecard)
-            e.recipient = r
-            if e.is_series:
-                ecards.extend(self.insert_ecard_series(e))
+    def players_turn(self, theBoard):
+        # Player's turn.
+        # - evaluate passed in board from the client.
+        move = 0
+        if self.isWinner(theBoard, self.playerLetter):
+            outcome_code = self.CODE_YOU_WIN
+            message = self.MESSAGE_YOU_WIN
+        else:
+            if self.isBoardFull(theBoard):
+                outcome_code = self.CODE_YOU_TIE
+                message = self.MESSAGE_YOU_TIE
             else:
-                self.insert_ecard(e)
-                ecards.append(e)
-            ecard.related.parent_item_number = e.related.parent_item_number
-        return ecards
+                outcome_code = self.CODE_CONTINUE
+                message = self.MESSAGE_CONTINUE
+        
+        turn = {'move': move, 'outcome_code':outcome_code, 'message':message} 
 
+        return turn 
+
+    def computers_turn(self, theBoard):
+        # Computer's turn.
+        # - return the next move and the outcome.
+        move = self.getComputerMove(theBoard, self.computerLetter)
+        self.makeMove(theBoard, self.computerLetter, move)
+
+        if self.isWinner(theBoard, self.computerLetter):
+            outcome_code = self.CODE_YOU_LOSE
+            message = self.MESSAGE_YOU_LOSE
+        else:
+            if self.isBoardFull(theBoard):
+                outcome_code = self.CODE_YOU_TIE
+                message = self.MESSAGE_YOU_TIE
+            else:
+                outcome_code = self.CODE_CONTINUE
+                message = self.MESSAGE_CONTINUE
+
+        turn = {'move': move, 'outcome_code':outcome_code, 'message':message} 
+
+        return turn 
 
     def drawBoard(self, board):
         # This function prints out the board that it was passed.
@@ -223,5 +210,58 @@ class TicTacToeGame(object):
                 return False
         return True
 
+    def play_game_command_line(self):
+        # Play the tic tac toe game
+
+        print('Welcome to Tic Tac Toe!')
+
+        while True:
+            # Reset the board
+            theBoard = [' '] * 10
+            print 'theBoard: {0}'.format(theBoard)
+            playerLetter, computerLetter = self.inputPlayerLetter()
+            turn = self.whoGoesFirst()
+            print('The ' + turn + ' will go first.')
+            gameIsPlaying = True
+
+            while gameIsPlaying:
+                print 'theBoard: {0}'.format(theBoard)
+                if turn == 'player':
+                    # Player's turn.
+                    self.drawBoard(theBoard)
+                    move = self.getPlayerMove(theBoard)
+                    self.makeMove(theBoard, playerLetter, move)
+
+                    if self.isWinner(theBoard, playerLetter):
+                        self.drawBoard(theBoard)
+                        print('Hooray! You have won the game!')
+                        gameIsPlaying = False
+                    else:
+                        if self.isBoardFull(theBoard):
+                            self.drawBoard(theBoard)
+                            print('The game is a tie!')
+                            break
+                        else:
+                            turn = 'computer'
+
+                else:
+                    # Computer's turn.
+                    move = self.getComputerMove(theBoard, computerLetter)
+                    self.makeMove(theBoard, computerLetter, move)
+
+                    if self.isWinner(theBoard, computerLetter):
+                        self.drawBoard(theBoard)
+                        print('The computer has beaten you! You lose.')
+                        gameIsPlaying = False
+                    else:
+                        if self.isBoardFull(theBoard):
+                            self.drawBoard(theBoard)
+                            print('The game is a tie!')
+                            break
+                        else:
+                            turn = 'player'
+
+            if not self.playAgain():
+                break
 
 
