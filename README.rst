@@ -1,3 +1,9 @@
 Program notes
 =======================
-TK, how to run & install program, any special env notes (like because this is just an exercise, it uses Flask's internal server -- which I wouldn't use on prod)
+Download & run app.py in your terminal. Fire up a localhost in your browser and try to beat the computer.
+
+Uses Flask's dev server for quick & easy local testing, and Bootstrap 3 styles (though it is not currently responsive, 
+and the styling is quite rudimentary).
+
+No session states because this amount of data doesn't really need it. Instead, the whole board gets passed 
+from the front to back end and back again every time.
