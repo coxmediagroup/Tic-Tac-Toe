@@ -27,6 +27,8 @@ $(document).ready(function(){
         squares = $('.square');
         $.each(squares, function(){
             $(this).html('');
+            $(this).removeClass('human');
+            $(this).removeClass('computer');
         });
         $('#messages').hide();
     }
@@ -55,6 +57,11 @@ $(document).ready(function(){
             $(this).html(value);
             if (value != '') {
               filledSquares += 1;
+              if (value == human_char) {
+                $(this).addClass('human');
+              } else {
+                $(this).addClass('computer');
+              }
             }
         });
         if (isWinner) {
