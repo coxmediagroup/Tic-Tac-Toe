@@ -24,13 +24,28 @@
     }
 
     function reset_table($table) {
+        $table.removeClass("locked");
         set_state_to_table($table, "eeeeeeeee");
+        $("#comment").text("");
+        if (ai_player == 'x')
+            play($table, true);
     }
 
     function game_finished($table) {
-        var won = $table.find(".X").length || $table.find(".O").length;
-        var tied = !$table.find(".e").length
-        return won || tied;
+        var $comment = $("#comment");
+        if ($table.find(".X").length) {
+            $comment.text("X wins!");
+            return true;
+        }
+        if ($table.find(".O").length) {
+            $comment.text("O wins!");
+            return true;
+        }
+        if (!$table.find(".e").length) {
+            $comment.text("It's a draw!");
+            return true;
+        }
+        return false;
     }
    
     function set_player(to_player, $table) {
@@ -38,9 +53,6 @@
         ai_player = player=='o' ? 'x': 'o';
 
         reset_table($table);
-        if (ai_player == 'x') {
-            play($table, true);
-        }
     }
 
     function play($table, empty) {
@@ -52,12 +64,13 @@
                   function (data) {
                       set_state_to_table($table, data.state);
                       $table.removeClass("locked");
+                      game_finished($table)
                   });
     }
 
     $(function () {
-        var $table = $("#tic-tac-toe-table");        
-        set_player('o', $table);
+        var $table = $("#tic-tac-toe-table");
+        $table.addClass("locked");
 
         $("#tic-tac-toe-table td").click(function () {            
             if (!$table.hasClass("locked")) {
@@ -78,7 +91,8 @@
 {% endblock %}
 
 {% block content %}
-<span>Welcome to the Tic Tac Toe!</span>
+<div>Welcome to the Tic Tac Toe!</div>
+<div id="comment">Pick a player:</div>
 <button type="button" class="set-player" id="x">Play as X</button>
 <button type="button" class="set-player" id="o">Play as O</button>
 <table id="tic-tac-toe-table">
