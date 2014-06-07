@@ -19,6 +19,10 @@ $(document).ready(function(){
 
     });
 
+    $('#messages button').click(function(){
+        resetBoard();
+    });
+
     function resetBoard(){
         squares = $('.square');
         $.each(squares, function(){
@@ -43,17 +47,25 @@ $(document).ready(function(){
 
     function repopulateBoard(newBoard, isWinner){
         squares = $('.square');
+        filledSquares = 0;
         $.each(squares, function(){
             pos = $(this).attr('pos');
             coords = pos.split(',');
             value = newBoard[coords[0]][coords[1]];
             $(this).html(value);
+            if (value != '') {
+              filledSquares += 1;
+            }
         });
         if (isWinner) {
-          //alert("Game over!")
           $('.alert').alert();
           $('#messages').show();
-          $('#messages').append('<h3>You lost!</h3>');
+          $('#messages h2').html('You lost!');
+        }
+        if (!isWinner && filledSquares == 8) {
+          $('.alert').alert();
+          $('#messages').show();
+          $('#messages h2').html('It\'s a draw!');
         }
     }
 });

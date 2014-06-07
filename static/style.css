@@ -6,3 +6,7 @@
 #board .left { border-right: solid 3px #025463; }
 #board .right { border-left: solid 3px #025463; }
 #board #bottom .square{ border-top: solid 3px #025463; }
+
+button .close {
+    float: none;
+}
