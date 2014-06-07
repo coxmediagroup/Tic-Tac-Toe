@@ -1,0 +1,39 @@
+.jumbotron { text-align: center; padding-bottom: 40px; }
+
+#messages { max-width: 60%; margin: 30px auto 0;}
+
+#board { max-width: 400px; margin-top: 50px; }
+#board .square {
+    height: 100px;
+    text-align: center;
+    font-size: 3em;
+    padding-top: 4.5%;
+    color: #a94442;
+}
+#board .square.human { color: #306D58; }
+#board .square:hover {
+    height: 100px;
+    cursor: pointer;
+    background: #D5FFD9;
+}
+#board .left { border-right: solid 3px #999; }
+#board .right { border-left: solid 1px #666; }
+#board .middle {
+    border-left: solid 1px #666;
+    border-right: solid 3px #999;
+}
+#board #top .square { border-bottom: solid 3px #999; }
+#board #top .middle.square { 
+    border-bottom: solid 3px #999;
+  }
+#board #middle .square {
+  border-top: solid 1px #333;
+  border-bottom: solid 3px #999;
+}
+#board #middle .middle {
+    border-top: solid 1px #666;
+    border-right: solid 3px #999;
+    border-bottom: solid 3px #999;
+    border-left: solid 1px #666;
+}
+#board #bottom .square { border-top: solid 1px #666; }
