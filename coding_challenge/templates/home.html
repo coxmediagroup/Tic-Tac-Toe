@@ -2,8 +2,7 @@
 
 {% block headscript %}
   <script type="text/javascript">
-    var ai_player = 'x';
-    var player = ai_player=='o' ? 'x': 'o';
+    var ai_player, player;
     function get_state_from_table($table) {
         var state = '';
         $table.find("td").each(function (i, e) {
@@ -28,29 +27,51 @@
         set_state_to_table($table, "eeeeeeeee");
     }
 
-    function game_won($table) {
-        return $table.find(".X").length || $table.find(".O").length;
+    function game_finished($table) {
+        var won = $table.find(".X").length || $table.find(".O").length;
+        var tied = !$table.find(".e").length
+        return won || tied;
+    }
+   
+    function set_player(to_player, $table) {
+        player = to_player;
+        ai_player = player=='o' ? 'x': 'o';
+
+        reset_table($table);
+        if (ai_player == 'x') {
+            play($table, true);
+        }
+    }
+
+    function play($table, empty) {
+        state = empty ? '': get_state_from_table($table);
+        $table.addClass('locked');
+        $.getJSON("{% url 'play' %}",
+                  {state: state,
+                   ai_player: ai_player},
+                  function (data) {
+                      set_state_to_table($table, data.state);
+                      $table.removeClass("locked");
+                  });
     }
 
     $(function () {
-        $("#tic-tac-toe-table td").click(function () {
-            var $table = $("#tic-tac-toe-table");
+        var $table = $("#tic-tac-toe-table");        
+        set_player('o', $table);
+
+        $("#tic-tac-toe-table td").click(function () {            
             if (!$table.hasClass("locked")) {
-                if (game_won($table)) {
+                if (game_finished($table)) {
                     reset_table($table);
                 } else if ($(this).hasClass('e')) {
                     $(this).removeClass('e');
                     $(this).addClass(player);
-                    $table.addClass('locked');
-                    $.getJSON("{% url 'play' %}",
-                              {state: get_state_from_table($table),
-                               ai_player: ai_player},
-                              function (data) {
-                                  set_state_to_table($table, data.state);
-                                  $table.removeClass("locked");
-                              });
+                    play($table);
                 }
             }
+        });
+        $(".set-player").click(function () {
+            set_player($(this).attr('id'), $table);
         });
     });
 </script>
@@ -58,6 +79,8 @@
 
 {% block content %}
 <span>Welcome to the Tic Tac Toe!</span>
+<button type="button" class="set-player" id="x">Play as X</button>
+<button type="button" class="set-player" id="o">Play as O</button>
 <table id="tic-tac-toe-table">
     <tbody>
         <tr>

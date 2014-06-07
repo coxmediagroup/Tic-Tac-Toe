@@ -4,10 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
-from tic_tac_toe_play import get_next_opt_state
-
-from django.conf import settings
-D = settings.D
+from tic_tac_toe_play import get_next_opt_state as play_func
 
 
 class LoadTicTacToe(TemplateView):
@@ -25,18 +22,19 @@ class PlayTicTacToeAjax(View):
         ai_player = request.GET.get('ai_player')
         next_state = get_next_play(
             current_state,
-            ai_player,
-            get_next_opt_state)
+            ai_player)
         return HttpResponse(json.dumps({'state': next_state}),
                             mimetype="application/json")
 
 
-def get_next_play(current_state, player, play_func):
+def get_next_play(current_state, player):
     from_str = lambda state: [list(state[i:i+3]) for i in (0, 3, 6)]
     to_str = lambda state: ''.join([''.join(r) for r in state])
 
     current_state = str(current_state)
+    if current_state:
+        current_state = from_str(current_state)
     player = str(player)
 
-    next_state = play_func(from_str(current_state), player)
+    next_state = play_func(current_state, player)
     return to_str(next_state)
