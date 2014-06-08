@@ -105,7 +105,20 @@ class UtilTestCase(TestCase):
 
 
     def test_get_next_states(self):
-        next_states = [
-            [['e', 'e', 'e'],
-             ['e', 'e', 'e'],
-             ['e', 'e', 'e']],
+        states = [
+            ("eeeeeeeeee", 'x',
+             ["xeeeeeeee", "exeeeeeee", "eexeeeeee",
+              "eeexeeeee", "eeeexeeee", "eeeeexeee",
+              "eeeeeexee", "eeeeeeexe", "eeeeeeeex"]),
+            ("exoxoeoxe", 'o',
+             ["oxoxoeoxe", "exoxoooxe", "exoxoeoxo"]),
+            ("xoxoxoxoxo", 'x',
+             []),
+            ]
+
+        for state, player, _next_states in states:
+            next_states = map(to_str,
+                              get_next_states(from_str(state), player))
+            self.assertEqual(set(next_states),
+                             set(_next_states))
+    
