@@ -2,8 +2,27 @@
 EMPTY = '_'
 
 class GameBoard:
-
+   """ This class contains all logic pertaining to the rules of tic-tac-toe.
+   Each square in the game board is referenced by its (row, column) coordinates:
+    (0,0) | (0,1) | (0,2)
+    ------+-------+------
+    (1,0) | (1,1) | (1,2)
+    ------+-------+------
+    (2,0) | (2,1) | (2,2)
+    
+    "XOO_X___X" corresponsed to the board:
+    X | O | O
+   ---+---+---
+      | X |
+   ---+---+---
+      |   | X
+   """
+   
    def __init__(self, game_state=9 * EMPTY):
+      """Game state is input as a 9-character string which each character representing the contents of a square.
+      Game state is stored as a 2-D list so it is mutable.
+      """
+   
       if len(game_state) != 9:
          raise ValueError("Invalid game state {}".format(game_state))
 
@@ -29,12 +48,15 @@ class GameBoard:
       self.board[row][column] = self.get_player()
       
    def get_player(self):
+      "The next player to move is derived from the game state."
       return 'X' if self.get_state().count(EMPTY) % 2 else 'O'
       
    def get_rows(self):
+      "Get a concatenated string for each row"
       return [''.join(row) for row in self.board]
       
    def get_columns(self):
+      "Get a concatenated string for each row"
       columns = []
       for col in range(3):
          columns.append(''.join([row[col] for row in self.board]))
@@ -42,11 +64,13 @@ class GameBoard:
       return columns
       
    def get_diags(self):
+      "Get a concatenated string for the two diagonals"
       board = self.board
       return [''.join([board[0][0], board[1][1], board[2][2]]),
               ''.join([board[0][2], board[1][1], board[2][0]])]
       
    def get_state(self):
+      "Convert game state back to a string representation, compatible with the GameBoard constructor."
       return ''.join(self.get_rows())
       
    def is_game_over(self):
@@ -66,6 +90,7 @@ class GameBoard:
       return None
       
    def get_valid_moves(self):
+      "A list of tuples in (row, column) format. It will be populated even if a player was won."
       valid_moves = []
       for row in range(3):
          for col in range(3):
