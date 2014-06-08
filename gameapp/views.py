@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django import forms
 
 from .game import GameBoard
+from .player import *
 
 def index(request):
    if request.method == "POST":
@@ -13,6 +14,11 @@ def index(request):
       
       game_board = GameBoard(state)
       game_board.move(row, column)
+      
+      if game_board.is_game_over():
+         return render(request, 'end.html', {'game': game_board})
+         
+      game_board.move(*PlayerRandom.choose_move(game_board))
       
       if game_board.is_game_over():
          return render(request, 'end.html', {'game': game_board})
