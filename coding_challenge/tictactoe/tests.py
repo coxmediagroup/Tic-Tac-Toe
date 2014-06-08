@@ -1,10 +1,43 @@
 from django.test import TestCase
 from tic_tac_toe_play import *
 
-class UtilTestCase(TestCase):
-    def setUp(self):
-        pass
 
+class GamePlayTest(TestCase):
+    def setUp(self):
+        def get_init_state(state, i, player):
+            state = list(state)
+            state[i] = player
+            return from_str(''.join(state))
+        empty = "eeeeeeeee"
+        self.starting_states_x = [get_init_state(empty, i, 'x')
+                                  for i in range(len(empty))]
+        self.starting_states_o = [get_init_state(empty, i, 'o')
+                                  for i in range(len(empty))]
+
+    def test_never_lose_o(self):
+        players = ('x', 'o')
+        for state in self.starting_states_o:
+            c = 0
+            while True:
+                state = get_next_opt_state(state, players[c%2])
+                self.assertFalse(has_winner(state))
+                if is_final(state):
+                    break
+                c += 1
+
+    def test_never_lose_x(self):
+        players = ('x', 'o')
+        for state in self.starting_states_x:
+            c = 1
+            while True:
+                state = get_next_opt_state(state, players[c%2])
+                self.assertFalse(has_winner(state))
+                if is_final(state):
+                    break
+                c += 1
+
+
+class UtilTestCase(TestCase):
     def test_str_conversion(self):
         self.assertEqual(to_str([['a', 'b', 'c'],
                                  ['d', 'e', 'f'],
@@ -14,7 +47,7 @@ class UtilTestCase(TestCase):
                          [['a', 'b', 'c'],
                           ['d', 'e', 'f'],
                           ['g', 'h', 'i']])
-    
+
     def test_is_final(self):
         self.assertFalse(is_final([['x', 'o', 'x'],
                                    ['x', 'o', 'x'],
@@ -121,4 +154,3 @@ class UtilTestCase(TestCase):
                               get_next_states(from_str(state), player))
             self.assertEqual(set(next_states),
                              set(_next_states))
-    
