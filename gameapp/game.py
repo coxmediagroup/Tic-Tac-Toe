@@ -10,7 +10,7 @@ class GameBoard:
     ------+-------+------
     (2,0) | (2,1) | (2,2)
     
-    "XOO_X___X" corresponsed to the board:
+    "XOO_X___X" corresponds to the board:
     X | O | O
    ---+---+---
       | X |

@@ -13,6 +13,10 @@ def index(request):
       
       game_board = GameBoard(state)
       game_board.move(row, column)
+      
+      if game_board.is_game_over():
+         return render(request, 'end.html', {'game': game_board})
+         
    else:
       game_board = GameBoard()
 
