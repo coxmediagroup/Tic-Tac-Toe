@@ -1,8 +1,7 @@
 import json
 
 from django.http import HttpResponse
-from django.views.generic import View
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView, View
 
 from tic_tac_toe_play import get_next_opt_state as play_func
 

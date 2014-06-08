@@ -1,7 +1,5 @@
-from random import choice
 from copy import deepcopy
-from django.conf import settings
-D = settings.D
+from random import choice
 
 
 def get_next_opt_state(state=None, player='x'):
