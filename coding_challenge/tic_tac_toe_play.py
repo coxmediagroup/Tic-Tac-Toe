@@ -94,3 +94,7 @@ def is_final(state):
         if 'e' in row:
             return False
     return True
+
+
+from_str = lambda state: [list(state[i:i+3]) for i in (0, 3, 6)]
+to_str = lambda state: ''.join([''.join(r) for r in state])

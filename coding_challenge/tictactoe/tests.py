@@ -1,10 +1,20 @@
 from django.test import TestCase
-from tic_tac_toe_play import is_final, has_winner
+from tic_tac_toe_play import *
 
 class UtilTestCase(TestCase):
     def setUp(self):
         pass
 
+    def test_str_conversion(self):
+        self.assertEqual(to_str([['a', 'b', 'c'],
+                                 ['d', 'e', 'f'],
+                                 ['g', 'h', 'i']]),
+                         "abcdefghi")
+        self.assertEqual(from_str("abcdefghi"),
+                         [['a', 'b', 'c'],
+                          ['d', 'e', 'f'],
+                          ['g', 'h', 'i']])
+    
     def test_is_final(self):
         self.assertFalse(is_final([['x', 'o', 'x'],
                                    ['x', 'o', 'x'],
@@ -92,3 +102,10 @@ class UtilTestCase(TestCase):
             _state = deepcopy(state)
             self.assertFalse(has_winner(state))
             self.assertEqual(state,_state)
+
+
+    def test_get_next_states(self):
+        next_states = [
+            [['e', 'e', 'e'],
+             ['e', 'e', 'e'],
+             ['e', 'e', 'e']],

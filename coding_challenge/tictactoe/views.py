@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 
-from tic_tac_toe_play import get_next_opt_state as play_func
+from tic_tac_toe_play import from_str, to_str, get_next_opt_state as play_func
 
 
 class LoadTicTacToe(TemplateView):
@@ -27,9 +27,6 @@ class PlayTicTacToeAjax(View):
 
 
 def get_next_play(current_state, player):
-    from_str = lambda state: [list(state[i:i+3]) for i in (0, 3, 6)]
-    to_str = lambda state: ''.join([''.join(r) for r in state])
-
     current_state = str(current_state)
     if current_state:
         current_state = from_str(current_state)
