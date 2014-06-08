@@ -34,11 +34,11 @@ class GameBoardTest(TestCase):
       #test valid moves
       board.move(1, 0)
       self.assertEqual('___X_____', board.get_state())
-      self.assertRaises(IndexError, board.move, *(1, 0))
+      self.assertRaises(ValueError, board.move, *(1, 0))
       
       board.move(2, 2)
       self.assertEqual('___X____O', board.get_state())
-      self.assertRaises(IndexError, board.move, *(2, 2))
+      self.assertRaises(ValueError, board.move, *(2, 2))
       
    def test_game_over(self):
       #game start
@@ -50,11 +50,13 @@ class GameBoardTest(TestCase):
       #game ended
       self.assertEqual(True, GameBoard('X__OOOX_X').is_game_over())
       self.assertEqual(True, GameBoard('XOO_X___X').is_game_over())
+      self.assertEqual(True, GameBoard('XOOX__X__').is_game_over())
       self.assertEqual(True, GameBoard('XXOOOXXOX').is_game_over())
       
    def test_get_winner(self):
-      self.assertEqual('O', GameBoard('X__OOOX_X').get_winner())
-      self.assertEqual('X', GameBoard('XOO_X___X').get_winner())
+      self.assertEqual('O',  GameBoard('X__OOOX_X').get_winner())
+      self.assertEqual('X',  GameBoard('XOO_X___X').get_winner())
+      self.assertEqual(True, GameBoard('OXXOX_O__').is_game_over())
       self.assertEqual(None, GameBoard('XXOOOXXOX').get_winner())
       
       #game not finished
