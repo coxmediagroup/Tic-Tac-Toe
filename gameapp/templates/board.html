@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+{% block body %}
+<table>
+   {% for row in board %}
+      <tr>
+      {% for item in row %}
+         <td>{{ item }}</td>
+      {% endfor %}
+      </tr>
+   {% endfor %}
+</table>
+{% endblock %}
