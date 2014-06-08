@@ -1,10 +1,10 @@
 {% extends "main.html" %}
 {% block body %}
 <table>
-   {% for row in board %}
+   {% for row in game.board %}
       <tr>
       {% for item in row %}
-         <td>{{ item }}</td>
+         <td>{% include "square.html" with state=game.get_state row=forloop.parentloop.counter0 column=forloop.counter0 value=item %}</td>
       {% endfor %}
       </tr>
    {% endfor %}
