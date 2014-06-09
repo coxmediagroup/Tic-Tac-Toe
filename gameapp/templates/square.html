@@ -1,10 +1,10 @@
 {% if value == '_' %}
-    <form method="POST" class="square">
+    <form method="POST">
         {% csrf_token %}
         <input name="row" value="{{ row }}" type="hidden">
         <input name="column" value="{{ column }}" type="hidden">
         <input name="state" value="{{ state }}" type="hidden">
-        <button type="submit">{{ value }}</button>
+        <button class="square button" type="submit"> </button>
     </form>
 {% else %}
     <div class="square">

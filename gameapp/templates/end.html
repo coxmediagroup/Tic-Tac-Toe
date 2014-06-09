@@ -1,11 +1,6 @@
 {% extends "main.html" %}
 {% block body %}
-<p> 
-{% if not game.get_winner == None %}
-   Player {{ game.get_winner }} wins!
-{% else %}
-   Cat's Game!
-{% endif %}
+
 <table>
    {% for row in game.board %}
       <tr>
@@ -20,5 +15,13 @@
    {% endfor %}
 </table>
 
+<p> 
+{% if not game.get_winner == None %}
+   Player {{ game.get_winner }} wins!
+{% else %}
+   Cat's Game!
+{% endif %}
+
+<p>
 <a href="{% url 'index' %}">New Game</a>
 {% endblock %}

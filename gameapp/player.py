@@ -32,11 +32,12 @@ def minimax(board, depth, player_multiplyer):
    if depth == 0 or board.is_game_over():
       return get_value(board) * player_multiplyer, []
    bestValue = -1
-   player_multiplyer *= -1
+
    for choice in board.get_valid_moves():
       new_board = GameBoard(board.get_state())
       new_board.move(*choice)
-      nega_val, tmp_choices = minimax(new_board, depth - 1, player_multiplyer)
+
+      nega_val, tmp_choices = minimax(new_board, depth - 1, -player_multiplyer)
       value = -nega_val
       bestValue, best_choices = get_max(bestValue, value, best_choices, choice)
       

@@ -124,6 +124,13 @@ class PlayerMinimaxTest(TestCase):
       # OO
       #
       self.assertEqual( (1, [(0,2)]), minimax(GameBoard('XX_OO____'), 1, 1) )
+      
+      # X
+      # XO
+      # O X
+      # Counter-intuitive, but this is the first square that allows a win
+      # TODO: optimize for winning in fewer turns
+      self.assertEqual( (1, [(0,1)]), minimax(GameBoard('X__XO_O_X'), 6, -1) )
    
    def test_minimax_block(self):
       # X X
