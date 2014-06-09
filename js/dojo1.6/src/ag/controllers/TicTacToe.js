@@ -68,19 +68,6 @@ dojo.declare(
             var message = response.message;
             var targetId = "move-"+move;
 
-            // Update to AI Letter O
-            dojo.byId(targetId).innerHTML = 'O';
-
-            // Update class of selected div to display AI's move.
-            dojo.style(targetId, "opacity", 1);
-
-            // Add AI  move to board
-            this.theBoard[parseInt(move)] = this.computerLetter;
-            console.debug(this.theBoard);
-
-            // Disconnect click handler for AI move
-            dojo.disconnect(this.connections[move-1]);
-
             // hide the busyOverlay
             this.busyOverlay.hide();
 
@@ -103,6 +90,18 @@ dojo.declare(
                 }
             }
 
+            // Update to AI Letter O
+            dojo.byId(targetId).innerHTML = 'O';
+
+            // Update class of selected div to display AI's move.
+            dojo.style(targetId, "opacity", 1);
+
+            // Add AI  move to board
+            this.theBoard[parseInt(move)] = this.computerLetter;
+            console.debug(this.theBoard);
+
+            // Disconnect click handler for AI move
+            dojo.disconnect(this.connections[move-1]);
         },
 
         // Connect every span onclick that has an id in the moveIds array. 
