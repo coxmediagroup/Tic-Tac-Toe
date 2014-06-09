@@ -1,3 +1,4 @@
+from copy import deepcopy
 from django.test import TestCase
 from tic_tac_toe_play import *
 
@@ -20,7 +21,7 @@ class GamePlayTest(TestCase):
             c = 0
             while True:
                 state = get_next_opt_state(state, players[c%2])
-                self.assertFalse(has_winner(state))
+                self.assertFalse(get_winning_state(state))
                 if is_final(state):
                     break
                 c += 1
@@ -31,10 +32,81 @@ class GamePlayTest(TestCase):
             c = 1
             while True:
                 state = get_next_opt_state(state, players[c%2])
-                self.assertFalse(has_winner(state))
+                self.assertFalse(get_winning_state(state))
                 if is_final(state):
                     break
                 c += 1
+
+    def test_get_next_opt_state(self):
+        states = [('o', [['x', 'e', 'x'],
+                         ['e', 'e', 'e'],
+                         ['o', 'e', 'e']],
+                        [['x', 'o', 'x'],
+                         ['e', 'e', 'e'],
+                         ['o', 'e', 'e']]),
+                  ('x', [['o', 'e', 'x'],
+                         ['e', 'o', 'e'],
+                         ['e', 'e', 'e']],
+                        [['o', 'e', 'x'],
+                         ['e', 'o', 'e'],
+                         ['e', 'e', 'x']])]
+
+        for player, state, prevent_loss_state in states:
+            self.assertEqual(get_next_opt_state(state, player),
+                            prevent_loss_state)
+
+        states = [('o', [['x', 'e', 'e'],
+                         ['e', 'e', 'e'],
+                         ['e', 'e', 'e']],
+                        ([['x', 'e', 'e'],
+                          ['e', 'e', 'o'],
+                          ['e', 'e', 'e']],
+                         [['x', 'e', 'e'],
+                          ['e', 'e', 'e'],
+                          ['o', 'e', 'e']],
+                         [['x', 'e', 'o'],
+                          ['e', 'e', 'e'],
+                          ['e', 'e', 'e']],
+                         [['x', 'e', 'e'],
+                          ['o', 'e', 'e'],
+                          ['e', 'e', 'e']],
+                         [['x', 'o', 'e'],
+                          ['e', 'e', 'e'],
+                          ['e', 'e', 'e']]))]
+
+        for player, state, doomed_states in states:
+            self.assertNotIn(get_next_opt_state(state, player),
+                             doomed_states)
+
+    def test_get_state_score(self):
+        states = [(-1, 'x', True, [['o', 'x', 'x'],
+                                   ['e', 'o', 'e'],
+                                   ['e', 'e', 'o']]),
+                  (1, 'o', False, [['x', 'x', 'x'],
+                                   ['e', 'o', 'e'],
+                                   ['e', 'e', 'o']]),
+                  (1, 'x', True, [['x', 'e', 'e'],
+                                  ['e', 'e', 'o'],
+                                  ['e', 'e', 'e']]),
+                  (-1, 'o', True, [['x', 'e', 'x'],
+                                   ['e', 'e', 'o'],
+                                   ['e', 'e', 'e']]),
+                  (-1, 'x', True, [['e', 'e', 'e'],
+                                   ['e', 'e', 'e'],
+                                   ['o', 'o', 'o']]),
+                  (1, 'x', False, [['x', 'e', 'e'],
+                                   ['e', 'x', 'e'],
+                                   ['e', 'e', 'x']]),
+                  (1, 'o', False, [['x', 'o', 'o'],
+                                   ['o', 'x', 'o'],
+                                   ['o', 'x', 'x']]),
+                  (0, 'x', True, [['x', 'x', 'o'],
+                                  ['o', 'x', 'x'],
+                                  ['x', 'o', 'o']])]
+
+        for score, player, max_player, state in states:
+            self.assertEqual(get_state_score(state, player, max_player, 1),
+                             score)
 
 
 class UtilTestCase(TestCase):
@@ -56,7 +128,7 @@ class UtilTestCase(TestCase):
                                   ['x', 'x', 'x'],
                                   ['x', 'o', 'o']]))
 
-    def test_has_winner_true(self):
+    def test_get_winning_state_true(self):
         states = [
              ([['x', 'e', 'o'],
                ['o', 'x', 'x'],
@@ -115,13 +187,13 @@ class UtilTestCase(TestCase):
                ['e', 'e', 'O']])
                ]
 
-        for state, winning_state in states:
-            self.assertTrue(has_winner(state))
-            self.assertEqual(state, winning_state)
+        for state, _winning_state in states:
+            _state = deepcopy(state)
+            winning_state = get_winning_state(state)
+            self.assertEqual(winning_state, _winning_state)
+            self.assertEqual(state, _state)
 
-
-    def test_has_winner_false(self):
-        from copy import deepcopy
+    def test_get_winning_state_false(self):
         states = [
             [['e', 'e', 'e'],
              ['o', 'x', 'x'],
@@ -133,7 +205,7 @@ class UtilTestCase(TestCase):
 
         for state in states:
             _state = deepcopy(state)
-            self.assertFalse(has_winner(state))
+            self.assertFalse(get_winning_state(state))
             self.assertEqual(state,_state)
 
 
