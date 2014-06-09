@@ -32,7 +32,6 @@ def get_next_opt_state(state=None, player='x'):
 
     final_state = get_winning_state(best_move) or is_final(best_move)
     if final_state:
-        print "### FINAL STATE"
         return final_state
 
     return best_move

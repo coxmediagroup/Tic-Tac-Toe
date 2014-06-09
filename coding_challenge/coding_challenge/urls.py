@@ -6,8 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', RedirectView.as_view(url='tictactoe/home',
-                                    permanent=True)),
+    url(r'^$', RedirectView.as_view(url='tictactoe/home')),
     url(r'^tictactoe/', include('tictactoe.urls')),
     url(r'^admin/', include(admin.site.urls)),
     )

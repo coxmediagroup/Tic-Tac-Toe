@@ -26,4 +26,3 @@ class PlayTicTacToeAjax(View):
                                                  ai_player)
         return HttpResponse(json.dumps({'state': next_state}),
                             mimetype="application/json")
-

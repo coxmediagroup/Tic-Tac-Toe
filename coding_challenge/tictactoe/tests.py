@@ -1,6 +1,37 @@
 from copy import deepcopy
+import json
 from django.test import TestCase
 from tic_tac_toe_play import *
+
+
+class LoadTicTacToeViewTest(TestCase):
+    def test_redirect(self):
+        response = self.client.get('', follow=True)
+        self.assertRedirects(response, 'http://testserver/tictactoe/home/', 301)
+
+class PlayTicTacToeAjaxTest(TestCase):
+    def setUp(self):
+        self.base = "/tictactoe/ajax/play"
+        def get_state(response):
+            return json.loads(response.content)['state']
+        self.get_state = get_state
+
+    def test_get(self):
+        states = (("xexeeeoee", "o", "xoxeeeoee"),
+                  ("xexeoeoee", "x", "XXXeoeoee"),
+                 )
+        for state_0, player, state_1 in states:
+            response = self.client.get("%s/?state=%s&ai_player=%s"
+                                       % (self.base, state_0, player))
+            self.assertEqual(self.get_state(response), state_1)
+
+    def test_get_empty_state(self):
+        response = self.client.get("%s/?state=%s&ai_player=%s"
+                                   % (self.base, "", "x"))
+        state = self.get_state(response)
+        self.assertEqual(len(state), 9)
+        self.assertEqual(state.count('e'), 8)
+        self.assertIn('x', state)
 
 
 class GamePlayTest(TestCase):
