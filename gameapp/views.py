@@ -18,7 +18,7 @@ def index(request):
       if game_board.is_game_over():
          return render(request, 'end.html', {'game': game_board})
          
-      game_board.move(*PlayerRandom.choose_move(game_board))
+      game_board.move(*PlayerMinimax.choose_move(game_board))
       
       if game_board.is_game_over():
          return render(request, 'end.html', {'game': game_board})

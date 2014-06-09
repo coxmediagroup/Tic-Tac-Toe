@@ -1,6 +1,4 @@
 
-EMPTY = '_'
-
 class GameBoard:
    """ This class contains all logic pertaining to the rules of tic-tac-toe.
    Each square in the game board is referenced by its (row, column) coordinates:
@@ -18,10 +16,17 @@ class GameBoard:
       |   | X
    """
    
-   def __init__(self, game_state=9 * EMPTY):
+   player_x = 'X'
+   player_o = 'O'
+   EMPTY = '_'
+   
+   def __init__(self, game_state=None):
       """Game state is input as a 9-character string which each character representing the contents of a square.
       Game state is stored as a 2-D list so it is mutable.
       """
+      
+      if game_state is None:
+         game_state = 9 * self.EMPTY
    
       if len(game_state) != 9:
          raise ValueError("Invalid game state {}".format(game_state))
@@ -42,14 +47,14 @@ class GameBoard:
       if row not in range(3) or column not in range(3):
          raise IndexError("Move location ({}, {}) out of bounds".format(row, column))
          
-      if self.board[row][column] != EMPTY:
+      if self.board[row][column] != self.EMPTY:
          raise ValueError("Space ({}, {}) already occupied on board {}".format(row, column, self.get_state()))
          
       self.board[row][column] = self.get_player()
       
    def get_player(self):
       "The next player to move is derived from the game state."
-      return 'X' if self.get_state().count(EMPTY) % 2 else 'O'
+      return self.player_x if self.get_state().count(self.EMPTY) % 2 else self.player_o
       
    def get_rows(self):
       "Get a concatenated string for each row"
@@ -82,10 +87,10 @@ class GameBoard:
       winning_states.extend(self.get_diags())
       
       if 'XXX' in winning_states:
-         return 'X'
+         return self.player_x
          
       if 'OOO' in winning_states:
-         return 'O'
+         return self.player_o
          
       return None
       
@@ -94,20 +99,20 @@ class GameBoard:
       valid_moves = []
       for row in range(3):
          for col in range(3):
-            if self.board[row][col] == EMPTY:
+            if self.board[row][col] == self.EMPTY:
                valid_moves.append((row, col))
       return valid_moves
       
    def validate_board(self):
       state = self.get_state()
       
-      x_count = state.count('X')
-      o_count = state.count('O')
+      x_count = state.count(self.player_x)
+      o_count = state.count(self.player_o)
       if x_count < o_count or x_count - o_count > 1:
          raise ValueError("Invalid play sequence in board: {}".format(state))
       
       for eachSquare in state:
-         if eachSquare not in ['X', 'O', EMPTY]:
+         if eachSquare not in [self.player_x, self.player_o, self.EMPTY]:
             raise ValueError("Invalid character {} in state {}".format(eachSquare, state))
       
    def __str__(self):
