@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    table tr td{
+      height: 100px;
+      width: 100px;
+      padding: 0;
+    }
+
+    .large{
+      font-size: 95px;
+      padding: 0;
+      margin-left: 10px;
+    }
+
+    .blue{
+      color: #1F7872;
+    }
+
+    .red{
+      color: #D13F31;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <table border="1">
+    {% for i in "012" %}
+    <tr>
+      {% for j in "012" %}
+      <td id="cell_{{ i }}_{{ j }}" value="-"></td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(function(){
+    $("td").click(function(){
+      if ($(this).attr("value") != "-")
+        return
+      $(this).html("<i class='icon-circle-blank large blue'></i>");
+      $(this).attr("value", "O");
+      var positions = []
+      for (var i = 0; i < 3; i++) { 
+          for (var j = 0; j < 3; j++) {
+            value = $("#cell_" + i + "_" + j).attr("value");
+            positions.push(value);
+          }
+      }
+      positions_string = positions.join(",")
+      $.get("/game", {positions: positions_string}, function(result){
+        $("#cell_" + result.move[0] + "_" + result.move[1]).html("<i class='icon-remove large red'></i>").
+          attr("value", "X");
+
+        if (result.win){
+          if (result.win == "user")
+            alert("You win!");
+          if (result.win == "ai")
+            alert("You lose!");
+          if (result.win == "draw")
+            alert("Draw game!");
+          $("td").html("").attr("value", "-");
+        }
+      }, "json");
+    });
+  });
+  </script>
+</body>
+</html>
