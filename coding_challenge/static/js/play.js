@@ -27,6 +27,7 @@ function set_state_to_table(state) {
 
 function reset_table() {
     $table.removeClass("locked");
+    $table.tooltip("destroy");
     set_state_to_table("eeeeeeeee");
     var reset_comment = "You are playing as " + player.toUpperCase();
     if (player == 'x')
@@ -75,6 +76,9 @@ function make_next_ai_play(empty) {
                   $table.removeClass("locked");
                   update_game_finished();
                   if (game_finished) {
+                      $table.tooltip({title: "Click anywhere here to start over",
+                                      placement: "right"});
+                      $table.tooltip('show');                      
                       if (winner == ai_player) {
                           increment_losses();
                           set_comment("You lost!", "bg-danger");
