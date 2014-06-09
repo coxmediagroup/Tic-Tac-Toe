@@ -3,7 +3,8 @@ import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 
-from tic_tac_toe_play import from_str, to_str, get_next_opt_state as play_func
+from tic_tac_toe_play import get_next_opt_state, convert_repr
+get_next_opt_state = convert_repr(get_next_opt_state)
 
 
 class LoadTicTacToe(TemplateView):
@@ -16,21 +17,13 @@ class LoadTicTacToe(TemplateView):
 
 
 class PlayTicTacToeAjax(View):
+    play_func = staticmethod(get_next_opt_state)
+
     def get(self, request):
         current_state = request.GET.get('state')
         ai_player = request.GET.get('ai_player')
-        next_state = get_next_play(
-            current_state,
-            ai_player)
+        next_state = PlayTicTacToeAjax.play_func(current_state,
+                                                 ai_player)
         return HttpResponse(json.dumps({'state': next_state}),
                             mimetype="application/json")
 
-
-def get_next_play(current_state, player):
-    current_state = str(current_state)
-    if current_state:
-        current_state = from_str(current_state)
-    player = str(player)
-
-    next_state = play_func(current_state, player)
-    return to_str(next_state)
