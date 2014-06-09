@@ -13,6 +13,11 @@ class PlayerMinimax:
       if board.get_player() == board.player_o:
          player_value = -1
          
+      #win next move, if possible
+      bestval, choices = minimax(board, 1, player_value)
+      if bestval == 1:
+         return random.choice(choices)
+         
       bestval, choices = minimax(board, 6, player_value)
       return random.choice(choices)
          

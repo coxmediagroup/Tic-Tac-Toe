@@ -7,7 +7,9 @@
       {% for item in row %}
          <td>
             <div class="square">
-               {{ item }}
+               {% if item != '_' %}
+                  {{ item }}
+               {% endif %}
             </div>
          </td>
       {% endfor %}
