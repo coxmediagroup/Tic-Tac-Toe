@@ -28,29 +28,38 @@
 {% endblock %}
 
 {% block content %}
-<div>Welcome to the Tic Tac Toe!</div>
-<div id="comment">Pick a player:</div>
-<button type="button" class="set-player" id="x">Play as X</button>
-<button type="button" class="set-player" id="o">Play as O</button>
-<table id="tic-tac-toe-table">
+  <h3>Welcome to the unbeatable Tic Tac Toe!</h3>
+  <p class="bg-info" id="comment">Pick a player</p>
+  <div class="btn-group btn-group-justified" data-toggle="buttons">
+    <label class="btn btn-primary set-player" id="x">
+      <input type="radio">Play as X
+    </label>
+    <label class="btn btn-primary set-player" id="o">
+      <input type="radio">Play as O
+    </label>
+  </div>
+
+  <table id="tic-tac-toe-table">
     <tbody>
-        <tr>
-            <td class="e top left"></td>
-            <td class="e top"></td>
-            <td class="e top right"></td>
-        </tr>
-        <tr>
-            <td class="e left"></td>
-            <td class="e "></td>
-            <td class="e right"></td>
-        </tr>
-        <tr>
-            <td class="e bottom left"></td>
-            <td class="e bottom"></td>
-            <td class="e bottom right"></td>
-        </tr>
+      <tr>
+        <td class="e top left"></td>
+        <td class="e top"></td>
+        <td class="e top right"></td>
+      </tr>
+      <tr>
+        <td class="e left"></td>
+        <td class="e "></td>
+        <td class="e right"></td>
+      </tr>
+      <tr>
+        <td class="e bottom left"></td>
+        <td class="e bottom"></td>
+        <td class="e bottom right"></td>
+      </tr>
     </tbody>
-</table>
-<div>Your losses: <span id="losses">0</span></div>
-<div>AI's losses: 0</div>
+  </table>
+  <div>Your losses: <strong><span id="losses">0</span></strong><div>
+  <div id="taunting-area" class="fg-embarrassing"></div>
+  </div>
+  <div>AI's losses: 0</div>
 {% endblock %}

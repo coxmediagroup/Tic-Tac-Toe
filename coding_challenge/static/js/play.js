@@ -1,9 +1,9 @@
 var $table, $comment, ai_player, player, losses = 0;
 var winner, game_finished = false;
 var url_play;
-var taunting_strs = [" What's goining on? Maybe try harder.",
-                     " Wow, that's embarrassing, maybe give up?",
-                     " Yawn ... think I'm gonna take a nap."];
+var taunting_strs = [" What's goining on? Try a bit harder.",
+                     " Wow, that's embarrassing, maybe just give up?",
+                     " Yawn* ... think I'm gonna take a nap."];
 
 function get_state_from_table() {
     var state = '';
@@ -28,7 +28,11 @@ function set_state_to_table(state) {
 function reset_table() {
     $table.removeClass("locked");
     set_state_to_table("eeeeeeeee");
-    $comment.text("You are playing as " + player.toUpperCase());
+    var reset_comment = "You are playing as " + player.toUpperCase();
+    if (player == 'x')
+        reset_comment += " ... Go!"
+    set_comment(reset_comment, "bg-info");
+
     game_finished = false;
     winner = false;
     if (ai_player == 'x')
@@ -73,11 +77,12 @@ function make_next_ai_play(empty) {
                   if (game_finished) {
                       if (winner == ai_player) {
                           increment_losses();
-                          $comment.text("You lost!");
+                          set_comment("You lost!", "bg-danger");
                       } else if (winner == player) {
-                          $comment.text("Oops! You Won! That wasn't supposed to happen.");
+                          set_comment("Oops! You Won! That wasn't supposed to happen.",
+                                      "bg-warning");
                       } else {
-                          $comment.text("It's a draw!");
+                          set_comment("It's a draw!", "bg-success");
                       }
                   }
               });
@@ -85,10 +90,20 @@ function make_next_ai_play(empty) {
 
 function increment_losses() {
     losses += 1;
-    var taunting = losses;
+    $("#losses").text(losses);
+    var taunting;
     if (losses > 10)
-        taunting += " Wow, that's a lot of losses. Just stop!"
-    else if (losses%2 == 0)
-        taunting += taunting_strs[(Math.floor(losses/2)-1)%taunting_strs.length];
-    $("#losses").text(taunting);
+        taunting = "Wow, that's a lot of losses. Just stop!"
+    else if (losses%2 == 0) {
+        taunting = taunting_strs[(Math.floor(losses/2)-1)%taunting_strs.length];
+        var font_size = parseInt($("#losses").css("font-size"));
+        $("#losses").css({'font-size': font_size + 5 + "px"});
+    }
+    $("#taunting-area").text(taunting);
+}
+
+function set_comment(text, klass) {
+    $comment.text(text);
+    $comment.removeClass();
+    $comment.addClass(klass);
 }
