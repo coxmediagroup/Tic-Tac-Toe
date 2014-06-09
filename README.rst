@@ -1,28 +1,31 @@
 Story
 ======
+The following is my submission to TicTacToe coding challenge for the 100% Telecommuting Python Developer position.
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
 
-Acceptance criteria
+Acceptance criteria checked
 =======================
-
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+* The AI never loses.
+* The submission includes both server & client side code.
 
 
-Technical notes
-------------------
+Instructions for running application
+=====================================
+* The only requirements are **Python 2.7** and **Django 1.6.5**.
+* If Django is not installed yet, install it via ``pip install django==1.6.5``.
+* With Django installed, from the root of the project ``cd`` to the directory: ``coding_challenge``. Then run the development server
+::
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+  cd coding_challenge
+  ./manage runserver
+
+* Now open a browser winow and browse to ``http://127.0.0.1:8000/`` or whichever address you specified with ``./manage`` and try to beat the AI at a game of TicTacToe.
+* To run tests:
+::
+
+  ./manage test
 
 
-Submissions
----------------
+Applicant's name: Maysam Heydari
 
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
 

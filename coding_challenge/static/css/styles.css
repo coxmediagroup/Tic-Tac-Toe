@@ -1,0 +1,63 @@
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    text-align: center;
+}
+
+#content #comment {
+    padding: 10px 0;
+    margin-left:100px;
+    margin-right:100px;
+}
+
+#content #tic-tac-toe-table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+
+#content #tic-tac-toe-table td {
+    padding: 50px 40px;
+}
+
+#content #tic-tac-toe-table td.top {
+    border-bottom: 2px solid gray;
+}
+
+#content #tic-tac-toe-table td.bottom {
+    border-top: 2px solid gray;
+}
+
+#content #tic-tac-toe-table td.left {
+    border-right: 2px solid gray;
+}
+
+#content #tic-tac-toe-table td.right {
+    border-left: 2px solid gray;
+}
+
+#content #tic-tac-toe-table td.x {
+    background: url('/static/img/x_o.png') 0 0;
+}
+
+#content #tic-tac-toe-table td.o {
+    background: url('/static/img/x_o.png') 0 -100px;
+}
+
+#content #tic-tac-toe-table td.X {
+    background: url('/static/img/x_o.png') 0 198px;
+}
+
+#content #tic-tac-toe-table td.O {
+    background: url('/static/img/x_o.png') 0 98px;
+}
+
+.fg-embarrassing {
+    padding: 10px 0;
+    margin-left: 80px;
+    margin-right: 80px;
+    color: #FF64C7;
+}
