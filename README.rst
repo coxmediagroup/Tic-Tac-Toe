@@ -20,6 +20,10 @@ Instructions for running application
   ./manage runserver
 
 * Now open a browser winow and browse to ``http://127.0.0.1:8000/`` or whichever address you specified with ``./manage`` and try to beat the AI at a game of TicTacToe.
+* To run tests:
+::
+
+  ./manage test
 
 
 Applicant's name: Maysam Heydari
