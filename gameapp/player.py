@@ -39,6 +39,11 @@ def minimax(board, depth, player_multiplyer):
       nega_val, tmp_choices = minimax(new_board, depth - 1, player_multiplyer)
       value = -nega_val
       bestValue, best_choices = get_max(bestValue, value, best_choices, choice)
+      
+      #shortcut game logic if we find a winner
+      if bestValue == 1:
+         return bestValue, [choice]
+         
    return bestValue, best_choices
    
 def get_max(bestVal, comparisonVal, bestChoices, comparisonChoice):
