@@ -9,4 +9,8 @@
       </tr>
    {% endfor %}
 </table>
+<p>
+   {% if game.get_state == "_________" %}
+      Click to play or <a href="{% url 'index' 'O' %}">Play as O</a>
+   {% endif %}
 {% endblock %}
