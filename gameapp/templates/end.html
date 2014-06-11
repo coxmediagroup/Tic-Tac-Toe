@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% block body %}
 
-<table>
+<table class="center">
    {% for row in game.board %}
       <tr>
       {% for item in row %}
          <td>
-            <div class="square">
+            <div class="square square_outer">
                {% if item != '_' %}
                   {{ item }}
                {% endif %}
@@ -23,7 +23,9 @@
 {% else %}
    Cat's Game!
 {% endif %}
+</p>
 
 <p>
 <a href="{% url 'index' %}">New Game</a>
+</p>
 {% endblock %}

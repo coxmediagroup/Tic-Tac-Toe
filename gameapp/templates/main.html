@@ -2,11 +2,22 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <title>Tic Tac Toe</title>
+      <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
       <link rel="stylesheet" href="{% static 'view.css' %}">
    </head>
    </body>
-      <h1>Tic Tac Toe</h1>
-      {% block body %}
-      {% endblock %}
+      <div class="wrapper">
+         <div class="header">
+            <p>Welcome to Tic-Tac-Toe!</p>
+         </div>
+         <div class="content">
+            {% block body %}
+            {% endblock %}
+         </div>
+         <div class="footer">
+            <p><a href="http://github.com/veri745/Tic-Tac-Toe"><img src="{% static 'veri745-GitHub.png' %}" /></a></p>
+         </div>
+      </div>
    </body>
 </html>
