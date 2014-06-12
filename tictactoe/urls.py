@@ -5,5 +5,4 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^(?P<player>[XO])?$', 'gameapp.views.index', name='index'),
-    url(r'^admin/', include(admin.site.urls)),
 )
