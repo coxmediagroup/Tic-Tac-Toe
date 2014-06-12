@@ -3,8 +3,10 @@
 html {
 	height: 100%;
 }
-article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
-	display: block;
+
+p {
+   margin: 5px 5px;
+   display: inline-block;
 }
 
 body {
@@ -68,7 +70,7 @@ body {
 	-moz-border-radius-bottomleft:0px;
 	border-bottom-left-radius:0px;
 	text-indent:0px;
-	display:inline-block;
+	display:block;
 	color:#666666;
 	font-family:Arial;
 	font-size:50px;
