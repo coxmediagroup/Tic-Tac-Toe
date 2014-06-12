@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% block body %}
+   <table class="center">
+      {% for row in game.board %}
+         <tr>
+         {% for item in row %}
+            <td>{% include "square.html" with state=game.get_state row=forloop.parentloop.counter0 column=forloop.counter0 value=item %}</td>
+         {% endfor %}
+         </tr>
+      {% endfor %}
+   </table>
+
+   {% if game.get_state == "_________" %}
+      <p>Click to play or <a href="{% url 'index' 'O' %}">Play as O</a></p>
+   {% endif %}
+{% endblock %}

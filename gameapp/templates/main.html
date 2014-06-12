@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Tic Tac Toe</title>
+      <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+      <link rel="stylesheet" href="{% static 'view.css' %}">
+   </head>
+   </body>
+      <div class="wrapper">
+         <div class="header">
+            <p>Welcome to Tic-Tac-Toe!</p>
+            <p>The object of the game is to get three in a row. You and the computer take turns placing X's and O's. If the board is filled with without a winner, the stalemate is called a cat's game.</p>
+         </div>
+         <div class="content">
+            {% block body %}
+            {% endblock %}
+         </div>
+         <div class="footer">
+            <p><a href="http://github.com/veri745/Tic-Tac-Toe"><img src="{% static 'veri745-GitHub.png' %}" /></a></p>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,111 @@
+@import url("reset.css");
+
+html {
+	height: 100%;
+}
+
+p {
+   margin: 5px 5px;
+   display: inline-block;
+}
+
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    height: 100%;
+    color:#333
+}
+
+.wrapper {
+	min-width: 256px;
+	max-width: 768px;
+	margin: 0 auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+
+/* Header
+-----------------------------------------------------------------------------*/
+.header {
+	height: 100px;
+   color: #FFFFFF;
+	background: #001F7A;
+}
+
+
+/* Middle
+-----------------------------------------------------------------------------*/
+.content {
+	padding: 0 0 100px;
+   background: #E6E6E6;
+}
+
+.center {
+   margin: 0 auto;
+}
+
+.square_outer {
+   border:2px solid #c0c0c0;
+}
+
+.square {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f9f9f9), color-stop(1, #e9e9e9) );
+	background:-moz-linear-gradient( center top, #f9f9f9 5%, #e9e9e9 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#e9e9e9');
+	background-color:#f9f9f9;
+	-webkit-border-top-left-radius:0px;
+	-moz-border-radius-topleft:0px;
+	border-top-left-radius:0px;
+	-webkit-border-top-right-radius:0px;
+	-moz-border-radius-topright:0px;
+	border-top-right-radius:0px;
+	-webkit-border-bottom-right-radius:0px;
+	-moz-border-radius-bottomright:0px;
+	border-bottom-right-radius:0px;
+	-webkit-border-bottom-left-radius:0px;
+	-moz-border-radius-bottomleft:0px;
+	border-bottom-left-radius:0px;
+	text-indent:0px;
+	display:block;
+	color:#666666;
+	font-family:Arial;
+	font-size:50px;
+	font-weight:bold;
+	font-style:normal;
+	height:75px;
+	line-height:70px;
+	width:75px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #ffffff;
+}
+
+.button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #e9e9e9), color-stop(1, #f9f9f9) );
+	background:-moz-linear-gradient( center top, #e9e9e9 5%, #f9f9f9 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e9e9e9', endColorstr='#f9f9f9');
+	background-color:#e9e9e9;
+}
+
+.square:active {
+	position:relative;
+	top:1px;
+}
+/* This button was generated using CSSButtonGenerator.com */
+
+
+/* Footer
+-----------------------------------------------------------------------------*/
+.footer {
+	margin: -50px auto 0;
+	height: 50px;
+   line-height:50px;
+   color: #FFFFFF;
+	background: #001F7A;
+	position: relative;
+   clear: both;
+}

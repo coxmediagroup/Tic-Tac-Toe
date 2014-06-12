@@ -1,28 +1,27 @@
 Story
 ======
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+As an applicant, I created this game of Tic Tac Toe to demonstrate my skills and strengths as a developer.
 
 Acceptance criteria
 =======================
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
-
+* The AI will never lose
+* This submission must includes both server & client side code.
 
 Technical notes
 ------------------
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+* This game is implemented as a Django app.
+* Due to the simplicity of the game logic and the lack of any security concerns, there is no database or any sort of data persistence in the back-end.
+* The AI employs a minimax (negamax) algorithm to find an appropriate move.
+* The front-end is built entirely using Django html templates and css.
 
+Instructions
+============
 
-Submissions
----------------
-
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
-
+* Download from GitHub
+* Install Python 3 and Django
+* Navigate to repository main directory
+* Execute> python manage.py runserver [ip:port]
+* In a web browser, navigate to ip:port (default is 127.0.0.1:8000)
