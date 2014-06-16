@@ -1,14 +1,6 @@
 import itertools
 
 
-class InvalidSymbol(Exception):
-    pass
-
-
-class InvalidMove(Exception):
-    pass
-
-
 class TicTacToeGame(object):
     
     PLAYER = 'X'
@@ -24,8 +16,11 @@ class TicTacToeGame(object):
         if board is None:
             self._board = [None for _ in range(9)]
         else:
-            self._board = board
-        self._status = None
+            assert len(board) == 9
+            assert set(board).issubset(set([self.PLAYER,
+                                            self.OPPONENT_PLAYER,
+                                            None]))
+            self._board = list(board)
     
     def __str__(self):
         lns = []
@@ -35,12 +30,16 @@ class TicTacToeGame(object):
     
     @classmethod
     def from_game(cls, other_game):
-        return cls(board=other_game._board[:])
+        if isinstance(other_game, cls):
+            board = other_game.board[:]
+        else:
+            board = other_game
+        return cls(board=board)
     
     @property
-    def status(self):
-        # OVER_BY_DRAW, OVER_BY_WINNER
-        pass
+    def board(self):
+        return tuple(self._board)
+    
     
     @property
     def winner(self):
@@ -78,10 +77,7 @@ class TicTacToeGame(object):
         return [pos for pos, val in enumerate(self._board) if val is None]
     
     def _game_result(self):
-        """
-        
-        Returns:
-        """
+        """Return """
         def win_cond(win_perm):
             if len(set(map(lambda pos: self._board[pos], win_perm))) == 1:
                 return self._board[win_perm[0]]
@@ -109,7 +105,7 @@ class Player(object):
 
 
 class ComputerPlayer(object):
-    """A smarty player"""
+    """A smarty unbeatable player"""
     
     def __init__(self):
         self._symbol = TicTacToeGame.PLAYER
@@ -166,3 +162,11 @@ class ComputerPlayer(object):
         else:
             score = -1
         return score
+
+
+class InvalidSymbol(Exception):
+    pass
+
+
+class InvalidMove(Exception):
+    pass

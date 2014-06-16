@@ -25,10 +25,12 @@ class TestTicTacToeGame(unittest.TestCase):
             'X X X O X O X O O',
             'X X O O X X O O X',
             'O X O X X X O O X',
-            '. X X . O X O O X',
         )
+        board_configs = [b.split() for b in board_configs]
+        board_configs.append([None, 'X', 'X', None, 'O', 'X', 'O', 'O', 'X'])
+        
         for board in board_configs:
-            game = TicTacToeGame(board=board.split())
+            game = TicTacToeGame(board=board)
             self.assertEquals(game.winner, 'X')
     
     def test_game_is_a_draw(self):
@@ -49,3 +51,11 @@ class TestTicTacToeGame(unittest.TestCase):
             game = TicTacToeGame(board=board)
             computer_player.do_move(game)
             self.assertEquals(game._board[best_move], 'X')
+
+    def test_game_cannot_be_created_with_odd_chars(self):
+        tampered_board = 'X X X O X O X O Y'.split()
+        self.assertRaises(Exception, TicTacToeGame.from_game, game=tampered_board)
+    
+    def test_game_cannot_be_created_with_wrong_size(self):
+        wrong_sized_board = 'X X X O'.split()
+        self.assertRaises(Exception, TicTacToeGame.from_game, game=wrong_sized_board)
