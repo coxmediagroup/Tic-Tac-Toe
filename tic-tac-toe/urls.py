@@ -6,7 +6,10 @@ from django.views.generic import RedirectView
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-     url(r'^games/tic-tac-toe/', include('apps.tic_tac_toe.urls')),
+     url(
+         r'^games/tic-tac-toe/',
+         include('apps.tic_tac_toe.urls', namespace='tic_tac_toe'),
+    ),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

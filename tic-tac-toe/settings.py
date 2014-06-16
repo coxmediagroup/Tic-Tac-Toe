@@ -39,7 +39,12 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'EXCEPTION_HANDLER': 'tic_tac_toe.utils.custom_exception_handler'
 }
 
 
@@ -137,17 +142,19 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+#     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # third party apps
     'rest_framework',
     # local apps
-    'apps.tic_tac_toe',
+    'tic_tac_toe',
     # 'django.contrib.admin',
     # 'django.contrib.admindocs',
 )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

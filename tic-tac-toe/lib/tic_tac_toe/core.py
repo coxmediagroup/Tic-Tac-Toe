@@ -40,10 +40,25 @@ class TicTacToeGame(object):
     def board(self):
         return tuple(self._board)
     
-    
+    @property
+    def status(self):
+        """Return the status for this game. Possible values are:
+        
+        'WIN', 'DRAW', 'ACTIVE'
+        """
+        is_over, winner = self._game_result()
+        if is_over:
+            if winner is None:
+                return GAME_STATUS.DRAW
+            return GAME_STATUS.WIN
+        return GAME_STATUS.ACTIVE
+        
     @property
     def winner(self):
-        """"""
+        """Return the game winner if the game is over and is not
+        
+        a draw; otherwise None.
+        """
         is_over, winner = self._game_result()
         if is_over and winner is not None:
             return winner
@@ -77,7 +92,14 @@ class TicTacToeGame(object):
         return [pos for pos, val in enumerate(self._board) if val is None]
     
     def _game_result(self):
-        """Return """
+        """Return a tuple indicating the status of this game:
+            
+            Possible outputs:
+                (True, 'X') => game over and player 'X' won
+                (True, 'O') => game over and player 'O' won 
+                (True, None) => game over and is a draw
+                (False, None) => game is active
+        """
         def win_cond(win_perm):
             if len(set(map(lambda pos: self._board[pos], win_perm))) == 1:
                 return self._board[win_perm[0]]
@@ -170,3 +192,20 @@ class InvalidSymbol(Exception):
 
 class InvalidMove(Exception):
     pass
+
+
+class attrdict(dict):
+    
+    def __getattr__(self, name):
+        if self.has_key(name):
+            return self[name]
+        raise AttributeError("'%s' object has no attribute '%s'" %
+                             (self.__class__.name, name))
+
+
+
+GAME_STATUS = attrdict(
+    WIN='WIN',
+    DRAW='DRAW',
+    ACTIVE='ACTIVE'
+)

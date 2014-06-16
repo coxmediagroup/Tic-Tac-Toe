@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
-from tic_tac_toe.views.api import *
+from tic_tac_toe.views.api import GamePlayView
 
 
 # web api
@@ -10,4 +10,6 @@ urlpatterns = patterns('',
 )
 
 # rest api
-# urlpatterns += patterns('api/v1/',)
+urlpatterns += patterns('',
+    url(r'^api/v1/play[/]?$', GamePlayView.as_view(), name='play-game'),
+)
