@@ -148,7 +148,11 @@ class ComputerPlayer(object):
         """
         if game.is_over:
             return
-        _, best_move = self._mini_max(game, self._symbol)
+        # special case: computer starts, batter cache this result
+        elif tuple(set(game.board)) == (None,):
+            best_move = 0
+        else:
+            _, best_move = self._mini_max(game, self._symbol)
         game.mark(self._symbol, best_move)
     
     def _mini_max(self, game, active_turn):
@@ -166,12 +170,10 @@ class ComputerPlayer(object):
 
             if active_turn == self._symbol:
                 if best_score is None or score > best_score:
-                    best_score = score
-                    best_move = move
+                    best_score, best_move = score, move
             else:
                 if best_score is None or score < best_score:
-                    best_score = score
-                    best_move = move
+                    best_score, best_move = score, move
         return best_score, best_move
     
     def _score(self, game):

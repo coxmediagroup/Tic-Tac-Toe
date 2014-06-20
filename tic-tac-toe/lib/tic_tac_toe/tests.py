@@ -45,6 +45,7 @@ class TestTicTacToeGame(unittest.TestCase):
             (2, [None, 'X', None, None, 'O', 'X', 'O', 'O', 'X']),
             (0, [None, 'X', 'O', 'O', 'X', 'X', 'O', 'O', 'X']),
             (4, [None, None, None, None, None, None, None, None, 'O']),
+            (0, [None, None, None, None, None, None, None, None, None]),
         )
         computer_player = ComputerPlayer()
         
