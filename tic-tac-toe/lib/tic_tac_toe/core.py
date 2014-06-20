@@ -2,6 +2,7 @@ import itertools
 
 
 class TicTacToeGame(object):
+    """Represents a TTT game board"""
     
     PLAYER = 'X'
     OPPONENT_PLAYER = 'O'
@@ -87,6 +88,9 @@ class TicTacToeGame(object):
         
         self._board[pos] = symbol
     
+    def undo_mark(self, pos):
+        self._board[pos] = None
+    
     def available_positions(self):
         """Return list containing available move positions"""
         return [pos for pos, val in enumerate(self._board) if val is None]
@@ -131,45 +135,44 @@ class ComputerPlayer(object):
     
     def __init__(self):
         self._symbol = TicTacToeGame.PLAYER
-        self._next_active_turn = itertools.cycle(
-            (TicTacToeGame.PLAYER, TicTacToeGame.OPPONENT_PLAYER)
-        )
     
     def do_move(self, game):
-        """Perform best possible move on `game`'s board.
+        """Perform best possible move on `game`'s board. If the game is
+        
+        over no action will be performed.
         
         Args:
             game: A TicTacToeGame instance
         Returns:
             None
         """
-        best_move, _ = self._mini_max(game, self._next_active_turn.next())
+        if game.is_over:
+            return
+        _, best_move = self._mini_max(game, self._symbol)
         game.mark(self._symbol, best_move)
-        
+    
     def _mini_max(self, game, active_turn):
         """Minimax algorithm implementation"""    
-        best_score = None
-        best_move = None
-        
         if game.is_over:
-            return None, self._score(game)
+            return self._score(game), None
+        
+        next_active_turn = self._next_active_turn(active_turn)
+        best_score = best_move = None
+        
+        for move in game.available_positions():
+            game.mark(active_turn, move)
+            score, _ = self._mini_max(game, next_active_turn)
+            game.undo_mark(move)
 
-        for pos in game.available_positions():
-            game = TicTacToeGame.from_game(game)
-            game.mark(active_turn, pos)
-            _, score = self._mini_max(game, self._next_active_turn.next())
-            
-            # computer's turn
             if active_turn == self._symbol:
                 if best_score is None or score > best_score:
                     best_score = score
-                    best_move = pos
-            else: # opponent's turn
+                    best_move = move
+            else:
                 if best_score is None or score < best_score:
                     best_score = score
-                    best_move = pos
-        
-        return best_move, best_score
+                    best_move = move
+        return best_score, best_move
     
     def _score(self, game):
         assert game.is_over
@@ -178,13 +181,15 @@ class ComputerPlayer(object):
         if winner is None:
             score = 0
         # computer won
-        if winner == self._symbol:
+        elif winner == self._symbol:
             score = 1
         # opponent won
         else:
             score = -1
         return score
-
+    
+    def _next_active_turn(self, player_symbol):
+        return player_symbol == 'O' and 'X' or 'O'
 
 class InvalidSymbol(Exception):
     pass
@@ -201,7 +206,6 @@ class attrdict(dict):
             return self[name]
         raise AttributeError("'%s' object has no attribute '%s'" %
                              (self.__class__.name, name))
-
 
 
 GAME_STATUS = attrdict(

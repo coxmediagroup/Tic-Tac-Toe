@@ -44,18 +44,37 @@ class TestTicTacToeGame(unittest.TestCase):
             (3, ['O', 'X', 'O', None, 'X', 'X', 'O', 'O', 'X']),
             (2, [None, 'X', None, None, 'O', 'X', 'O', 'O', 'X']),
             (0, [None, 'X', 'O', 'O', 'X', 'X', 'O', 'O', 'X']),
+            (4, [None, None, None, None, None, None, None, None, 'O']),
         )
         computer_player = ComputerPlayer()
         
         for best_move, board in board_configs:
             game = TicTacToeGame(board=board)
             computer_player.do_move(game)
-            self.assertEquals(game._board[best_move], 'X')
+            self.assertEquals(game.board[best_move], 'X')
 
     def test_game_cannot_be_created_with_odd_chars(self):
         tampered_board = 'X X X O X O X O Y'.split()
         self.assertRaises(Exception, TicTacToeGame.from_game, game=tampered_board)
     
     def test_game_cannot_be_created_with_wrong_size(self):
-        wrong_sized_board = 'X X X O'.split()
+        wrong_sized_board = ['X', 'X', 'O']
         self.assertRaises(Exception, TicTacToeGame.from_game, game=wrong_sized_board)
+    
+    def test_game_score(self):
+        end_game_configs = (
+            (1, [None, None, 'X', None, 'X', 'O', 'X', 'O', 'O']), # X WINs
+            (1, ['X', None, 'O', None, 'X', 'O', None, 'O', 'X']), # X WINs
+            (1, ['X','O','X','O','O','X','O', None, 'X']), # X WINs
+            (-1, ['O','X','O','X','X','O','X', None, 'O']), # O WINs
+            (0, ['X', 'O', 'X', 'X', 'O', 'O', 'O', 'X', 'O']) # DRAW
+        )
+        for score, board in end_game_configs:
+            game = TicTacToeGame(board=board)
+            self.assertEquals(score, ComputerPlayer()._score(game))
+        
+        # unfinished game board config; we should get errors
+        board =[None, None, None, None, None, None, None, None, 'O']
+        game = TicTacToeGame(board=board)
+        self.assertRaises(AssertionError, ComputerPlayer()._score, game)
+    
