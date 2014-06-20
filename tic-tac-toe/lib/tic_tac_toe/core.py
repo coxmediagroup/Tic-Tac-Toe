@@ -31,6 +31,7 @@ class TicTacToeGame(object):
     
     @classmethod
     def from_game(cls, other_game):
+        """Game factory function"""
         if isinstance(other_game, cls):
             board = other_game.board[:]
         else:
@@ -56,7 +57,7 @@ class TicTacToeGame(object):
         
     @property
     def winner(self):
-        """Return the game winner if the game is over and is not
+        """Return the game winner if the game is over and it is not
         
         a draw; otherwise None.
         """
@@ -75,6 +76,7 @@ class TicTacToeGame(object):
     
     def mark(self, symbol, pos):
         """
+        Set `symbol` in position `pos` of this game's board
         
         Raises:
             InvalidSymbol
@@ -89,6 +91,7 @@ class TicTacToeGame(object):
         self._board[pos] = symbol
     
     def undo_mark(self, pos):
+        """Set board's position `pos` to None"""
         self._board[pos] = None
     
     def available_positions(self):
@@ -137,9 +140,9 @@ class ComputerPlayer(object):
         self._symbol = TicTacToeGame.PLAYER
     
     def do_move(self, game):
-        """Perform best possible move on `game`'s board. If the game is
+        """Perform the best possible move on `game`'s board. If the
         
-        over no action will be performed.
+        game is over no action will be performed.
         
         Args:
             game: A TicTacToeGame instance
@@ -177,6 +180,18 @@ class ComputerPlayer(object):
         return best_score, best_move
     
     def _score(self, game):
+        """Return the score for a finished game. If this player
+        
+        wins, return 1; if the opponent wins return -1; 0 if
+        the game is a draw.
+        
+        Args:
+            game: A TicTacToeGame instance.
+        Returns:
+            score: any value in (1, -1, 0).
+        Raises:
+            AssertionError: if the game is not over.
+        """
         assert game.is_over
         winner = game.winner
         # it's a draw
@@ -189,16 +204,18 @@ class ComputerPlayer(object):
         else:
             score = -1
         return score
-    
+        
     def _next_active_turn(self, player_symbol):
+        """Returns either 'X' or 'O' depending on the passed `player_symbol`"""
         return player_symbol == 'O' and 'X' or 'O'
 
+
 class InvalidSymbol(Exception):
-    pass
+    """Raised when an invalid marker has been used in a game"""
 
 
 class InvalidMove(Exception):
-    pass
+    """Raised when an invalid move was performed"""
 
 
 class attrdict(dict):
@@ -210,6 +227,7 @@ class attrdict(dict):
                              (self.__class__.name, name))
 
 
+# Possible status values for a game 
 GAME_STATUS = attrdict(
     WIN='WIN',
     DRAW='DRAW',

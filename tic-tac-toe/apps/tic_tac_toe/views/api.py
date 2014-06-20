@@ -9,20 +9,21 @@ class GamePlayView(views.APIView):
         
     def post(self, request):
         data = request.DATA
-        # ok computer, do your thing
+        # 'ok computer', do your magic
         game = self._build_game(data['board'])
+        
         if game is None:
-            raise BadRequestError(
-                'Game could not be created with board %r' % (data['board'],)
-            )
+            raise BadRequestError('Game could not be created with board %r' %
+                                  (data['board'],))
         ComputerPlayer().do_move(game)
         
         # build response data
-        board_data = dict(board=game.board, status=game.status)
         game_status = game.status
+        board_data = dict(board=game.board, status=game_status)
+        
         if game_status == GAME_STATUS.WIN:
             board_data['winner'] = game.winner
-        
+
         # send it back.
         return Response({'success': True, 'data': board_data})
     
@@ -30,7 +31,7 @@ class GamePlayView(views.APIView):
         try:
             return TicTacToeGame.from_game(board)
         except Exception:
-            pass
+            pass # Explicitly silenced: check out "import this" 8^)
         return None
 
 

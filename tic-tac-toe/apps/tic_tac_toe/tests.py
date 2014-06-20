@@ -30,7 +30,6 @@ class TestAPIGamePlayView(APISimpleTestCase):
         self.assertTrue(resp.data['success'])
     
     def test_game_play_its_a_draw(self):
-        #'O X O X X O O O X'
         data = {'board': ['O','X','O','X','X','O','O','O',None]}
         resp = self.post_to_play_endpoint(data=data)
         # expected response board
