@@ -40,6 +40,7 @@
 					        $prompt_cell.html("Go Go Go!");
 					        $computer_cell.html("OK Computer, start over");
 					        $human_cell.html("I'll start over");
+					        $(".mask").hide();
 					    }
 					    else if (status === "ACTIVE") {
 					        $prompt_cell.html("Go Go Go!");
@@ -51,7 +52,7 @@
 					    else if (status === "WIN") {
 					        $prompt_cell.html("Computer Wins!");
 					    }
-					    else if (status === "PENDING") {
+					    else if (status === "PENDING" || status === "NEW") {
                             $(".mask").show().css({bottom: $(".util").outerHeight()});
                         }
                         else if (status === "FAIL") {

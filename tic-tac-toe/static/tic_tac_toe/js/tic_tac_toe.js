@@ -9,7 +9,7 @@ var TTTGame = function (handler) {
     var board_data = [];
     var player_symbol = "O";
     var computer_symbol = "X";
-    var status;
+    var status = "NEW";
     var board_markup = '<table><tbody><tr><td data-id="0"></td><td data-id="1" class="center-column"></td><td data-id="2"></td></tr><tr><td data-id="3" class="middle-row"></td><td data-id="4" class="middle-row center-column"></td><td data-id="5" class="middle-row"></td></tr><tr><td data-id="6"></td><td data-id="7" class="center-column"></td><td data-id="8"></td></tr></tbody></table>';
     
     var call_game_backend = function () {
@@ -67,6 +67,7 @@ var TTTGame = function (handler) {
                 call_game_backend();
         },
         draw: function($draw_element) {
+        	handler(status);
             $draw_element.empty();
             $draw_element.html(board_markup);
             $draw_element.click(function (event) {
