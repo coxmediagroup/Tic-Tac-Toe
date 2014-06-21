@@ -1,0 +1,5 @@
+Django==1.6.5
+-e git+git@github.com:coxmediagroup/Tic-Tac-Toe.git@3de761a0287a9aa078a4f3475a3cee72758a92b2#egg=Tic_Tac_Toe-dev
+django-rest-swagger==0.1.14
+djangorestframework==2.3.14
+wsgiref==0.1.2
