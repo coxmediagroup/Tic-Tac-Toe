@@ -50,6 +50,9 @@ class TicTacToeNode(object):
         by supplying the history of moves.
         """
         parent = None
+        if not moves:
+            node = cls()
+
         for move in moves:
             node = cls(move, parent)
             parent = node
@@ -132,6 +135,7 @@ def score(node):
     return 0
 
 
+# TODO: Speed up with caching or pruning
 def minimax(node, depth, max_player):
     """ Implementation of the minimax algorithm.
     More info here: http://en.wikipedia.org/wiki/Minimax
