@@ -1,3 +1,25 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-# Create your views here.
+from tictactoe.api.ai import TicTacToeNode, get_recommended_play
+
+
+class RecommendedPlay(APIView):
+    """ Given a list of tic-tac-toe moves,
+    return the recommended next move.
+    """
+    def post(self, request, format=None):
+        moves = request.DATA.get('moves', [])
+        # TODO: Add validation for moves
+        node = TicTacToeNode.from_history(*moves)
+        if node.terminal:
+            next_move = None
+        else:
+            recommended_play = get_recommended_play(node)
+            next_move = recommended_play.move
+            moves += [recommended_play.move]
+
+        return Response({
+            "moves": moves,
+            "next_move": next_move,
+        })
