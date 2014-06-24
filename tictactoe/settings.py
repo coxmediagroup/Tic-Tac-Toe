@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'rest_framework',
 
     'tictactoe.api',
+    'tictactoe.board',
 )
 
 MIDDLEWARE_CLASSES = (
