@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="static/lib/react.js"></script>
-    <script src="static/lib/JSXTransformer.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
     <link rel="stylesheet" href="static/css/app.css"></style>
   </head>
   <body>
-    <div id="board"></div>
-    <script type="text/jsx" src="static/js/app.js"></script>
+    <div id="board">
+      <div class="cell" id="pos0"></div>
+      <div class="cell" id="pos1"></div>
+      <div class="cell" id="pos2"></div>
+      <div class="cell" id="pos3"></div>
+      <div class="cell" id="pos4"></div>
+      <div class="cell" id="pos5"></div>
+      <div class="cell" id="pos6"></div>
+      <div class="cell" id="pos7"></div>
+      <div class="cell" id="pos8"></div>
+    </div>
+    <button id="reset">Reset</button>
+    <script type="text/javascript" src="static/js/app.js"></script>
   </body>
 </html>

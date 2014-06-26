@@ -1,43 +1,75 @@
-/** @jsx React.DOM */
-var data = [0, 1, 5, 6, 4, 3, 8];
-
-var TicTacToeCell = React.createClass({
-  render: function() {
-    return (
-      <div className="cell">
-        <span>{this.props.type}</span>
-      </div>
-    )
-  }
-});
-
-var TicTacToeBoard = React.createClass({
-  render: function() {
-    var board = {};
-    for (var i=0; i < this.props.data.length; i++) {
-      var pos = this.props.data[i];
-      var token = i % 2 ? 'O' : 'X';
-      board[pos] = token;
+function TicTacToe() {
+  this.moves = [];
+  this.playing = false;
+  this.play = function(pos) {
+    if (this.playing === true) {
+      return;
     }
-    var board_array = [];
-    for (var i=0; i < 9; i++) {
-      var token = board[i] || " ";
-      board_array.push(token);
+    if (_.contains(this.moves, pos)) {
+      return;
     }
-    var cells = board_array.map(function(cell) {
-      return <TicTacToeCell type={cell} />
+    this.playing = true;
+    this.moves.push(pos);
+    this.draw();
+    this.playing = false;
+    this.getRecommendedPlay();
+  };
+  this.getRecommendedPlay = function() {
+    var url = "/api/recommended_play/";
+    this.playing = true;
+    $.ajax({
+      url: url,
+      type: "POST",
+      dataType: "json",
+      data: JSON.stringify({
+        moves: this.moves
+      }),
+      contentType: "application/json",
+      success: function(data) {
+        this.playing = false;
+        this.moves = data.moves;
+        this.draw();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+        this.playing = false;
+      }.bind(this)
     });
-      
-    return (
-      <div id="board">
-        {cells}
-      </div>
-    )
-  }
-});
+  };
+  this.draw = function() {
+    $("#board .cell").each(function(elem) {
+      $(this).text("");
+    });
 
-React.renderComponent(
-  <TicTacToeBoard data={data}/>,
-  document.getElementById('board')
-);
+    _.each(this.moves, function(move, idx) {
+      var token = idx % 2 ? "O" : "X";
+      var elem = $("#pos" + move);
+      elem.text(token);
+    });
+  };
+  this.reset = function() {
+    if (this.playing) {
+      alert("AI is thinking.");
+      return;
+    }
+    this.moves = [];
+    this.draw();
+  };
+  // set up click handlers
+  this.initialize = function () {
+    var that = this;
 
+    $("#board .cell").each(function(idx, obj) {
+      $(obj).click(function() {
+        that.play(idx);
+      });
+    });
+
+    $("#reset").click(function() {
+      that.reset();
+    });
+  };
+  this.initialize();
+}
+
+var tictactoe = new TicTacToe();
