@@ -42,7 +42,17 @@ class TicTacToeNode(object):
         if move is None and parent is not None:
             raise ValueError("Move cannot be None if parent is not None")
         self.parent = parent
+        if move is not None:
+            move = int(move)
         self.move = move
+        self.validate_moves()
+
+    def validate_moves(self):
+        valid_cells = set(range(9))
+        moves = set(self.moves)
+        invalid_moves = moves - valid_cells
+        if invalid_moves:
+            raise ValueError("Invalid Moves: {0}".format(list(invalid_moves)))
 
     @classmethod
     def from_history(cls, *moves):
@@ -56,6 +66,7 @@ class TicTacToeNode(object):
         for move in moves:
             node = cls(move, parent)
             parent = node
+
         return node
 
     def is_win(self, positions):

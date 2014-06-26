@@ -9,9 +9,14 @@ class RecommendedPlay(APIView):
     return the recommended next move.
     """
     def post(self, request, format=None):
-        moves = request.DATA.get('moves', [])
+        moves = request.DATA.get("moves", [])
         # TODO: Add validation for moves
-        node = TicTacToeNode.from_history(*moves)
+        try:
+            node = TicTacToeNode.from_history(*moves)
+        except ValueError as e:
+            return Response({
+                "error": str(e),
+            }, status=404)
         if node.terminal:
             next_move = None
         else:
