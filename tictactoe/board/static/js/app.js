@@ -9,7 +9,11 @@ function TicTacToe() {
   this.gameOver = false;
   this.playing = false;
   this.play = function(pos) {
-    if (this.playing === true) {
+    if (this.gameOver || this.moves.length === 9) {
+      alert("The game is over.");
+      return;
+    }
+    if (this.playing) {
       return;
     }
     if (_.contains(this.moves, pos)) {
