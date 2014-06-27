@@ -1,0 +1,25 @@
+{
+  "name": "Tic-Tac-Toe",
+  "version": "0.0.1",
+  "homepage": "https://github.com/coxmediagroup/Tic-Tac-Toe",
+  "authors": [
+    "Tim Willis <tim@willishq.com>"
+  ],
+  "description": "Tic Tac Toe for Cox Media Group",
+  "main": "js/main.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tictactoe/board/static/js/libs/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.9.1",
+    "requirejs": "~2.1.14",
+    "underscore": "~1.6.0"
+  }
+}

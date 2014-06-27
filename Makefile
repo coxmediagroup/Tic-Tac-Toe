@@ -1,4 +1,6 @@
-install: virtualenv
+all: run
+
+install: virtualenv javascript
 
 virtualenv:
 	if [ ! -d ve ] ; then virtualenv ve ; fi
@@ -7,3 +9,7 @@ virtualenv:
 
 run:
 	ve/bin/python manage.py runserver
+
+javascript:
+	npm install
+	bower install
