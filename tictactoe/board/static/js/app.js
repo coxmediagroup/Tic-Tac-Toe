@@ -1,5 +1,12 @@
+var winningStates = [
+  [0,1,2], [3,4,5], [6,7,8], //rows
+  [0,3,6], [1,4,7], [2,5,8], //columns
+  [0,4,8], [2,4,6], // diagonals
+];
+
 function TicTacToe() {
   this.moves = [];
+  this.gameOver = false;
   this.playing = false;
   this.play = function(pos) {
     if (this.playing === true) {
@@ -46,6 +53,9 @@ function TicTacToe() {
       var elem = $("#pos" + move);
       elem.text(token);
     });
+
+    this.checkWin();
+    this.checkTie();
   };
   this.reset = function() {
     if (this.playing) {
@@ -54,8 +64,48 @@ function TicTacToe() {
     }
     this.moves = [];
     this.draw();
+    $("#board .cell").removeClass("win").removeClass("tie");
+    this.gameOver = false;
   };
-  // set up click handlers
+  this.checkWin = function() {
+    var p1 = {}, p2 = {};
+    var winningState = null;
+    var hasWin = false;
+    var i,x,y,z = null;
+    var move = null;
+
+    for (i = 0; i < this.moves.length; i++) {
+      move = this.moves[i];
+      if (i % 2 === 1) {
+        p1[move] = true;
+      } else {
+        p2[move] = true;
+      }
+    }
+
+    for (i = 0; i < winningStates.length; i++) {
+      winningState = winningStates[i];
+      x = winningState[0];
+      y = winningState[1];
+      z = winningState[2];
+      if ((p1[x] && p1[y] && p1[z]) || (p2[x] && p2[y] && p2[z])) {
+        hasWin = true;
+        break;
+      }
+    }
+
+    if(hasWin) {
+      _.each(winningState, function(num) {
+        $("#pos" + num).addClass("win");
+      });
+      this.gameOver = true;
+    }
+  };
+  this.checkTie = function() {
+    if (this.moves.length === 9) {
+      $("#board .cell").addClass("tie");
+    }
+  };
   this.initialize = function () {
     var that = this;
 

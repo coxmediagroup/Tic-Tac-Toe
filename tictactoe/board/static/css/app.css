@@ -11,6 +11,12 @@
   font-size: 20pt;
   box-sizing: border-box;
 }
+#board .cell.win {
+  background-color: green;
+}
+#board .cell.tie {
+  background-color: yellow;
+}
 #board .cell:nth-child(1),
 #board .cell:nth-child(2),
 #board .cell:nth-child(3) {
