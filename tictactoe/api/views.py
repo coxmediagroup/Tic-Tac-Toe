@@ -3,6 +3,9 @@ from rest_framework.response import Response
 
 from tictactoe.api.ai import TicTacToeNode, get_recommended_play
 
+# warm up the cache
+get_recommended_play(TicTacToeNode())
+
 
 class RecommendedPlay(APIView):
     """ Given a list of tic-tac-toe moves,

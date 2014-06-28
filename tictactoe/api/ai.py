@@ -1,7 +1,6 @@
 from collections import defaultdict
 from itertools import chain, permutations, combinations
 import sys
-import random
 
 INFINITY = sys.maxint
 
@@ -128,6 +127,19 @@ class TicTacToeNode(object):
     def __repr__(self):
         return "TicTacToeNode[pos:{0}]".format(self.move)
 
+    def __hash__(self):
+        p1_moves = ','.join(map(str, sorted(self.p1_moves)))
+        p2_moves = ','.join(map(str, sorted(self.p2_moves)))
+        return hash(p1_moves + p2_moves)
+
+    def __eq__(self, other):
+        p1_moves = ','.join(map(str, sorted(self.p1_moves)))
+        other_p1_moves = ','.join(map(str, sorted(other.p1_moves)))
+        p2_moves = ','.join(map(str, sorted(self.p2_moves)))
+        other_p2_moves = ','.join(map(str, sorted(other.p2_moves)))
+
+        return p1_moves == other_p1_moves and p2_moves == other_p2_moves
+
 
 def score(node):
     """ Heuristic for minimax algorithm.
@@ -146,36 +158,50 @@ def score(node):
     return 0
 
 
-# TODO: Speed up with caching or pruning
+def minimax_cache(func):
+    """ Simple in memory cache mapping nodes
+    to their recommended next value.
+    """
+    cache = {}
+
+    def inner(node, depth, max_player):
+        if node in cache:
+            return cache[node]
+        result = func(node, depth, max_player)
+        cache.setdefault(node, result)
+        return result
+    return inner
+
+
+@minimax_cache
 def minimax(node, depth, max_player):
     """ Implementation of the minimax algorithm.
     More info here: http://en.wikipedia.org/wiki/Minimax
+
+    tl;dr - in a zero sum game, we try to minimize the opponents
+    maximum outcome and achieve the greatest result for ourselves
     """
     if depth == 0 or node.terminal:
         return node, score(node)
 
     if max_player:
         best_value = -INFINITY
-        best_nodes = []
+        best_node = None
         for child in node.children:
             _, val = minimax(child, depth - 1, False)
-            if val > best_value:
+            if val >= best_value:
                 best_value = val
-                best_nodes = [child]
-            if val == best_value:
-                best_nodes.append(child)
-        return random.choice(best_nodes), best_value
+                best_node = child
+        return best_node, best_value
     else:
         best_value = INFINITY
-        best_nodes = []
+        best_node = None
         for child in node.children:
             _, val = minimax(child, depth - 1, True)
-            if val < best_value:
+            if val <= best_value:
                 best_value = val
-                best_nodes = [child]
-            if val == best_value:
-                best_nodes.append(child)
-        return random.choice(best_nodes), best_value
+                best_node = child
+        return best_node, best_value
 
 
 def get_recommended_play(node):
