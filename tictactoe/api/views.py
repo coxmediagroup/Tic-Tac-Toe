@@ -13,7 +13,6 @@ class RecommendedPlay(APIView):
     """
     def post(self, request, format=None):
         moves = request.DATA.get("moves", [])
-        # TODO: Add validation for moves
         try:
             node = TicTacToeNode.from_history(*moves)
         except ValueError as e:

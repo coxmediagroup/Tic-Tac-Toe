@@ -1,3 +1,17 @@
+How to Run
+=============
+
+Pre-requisites
+--------------
+* npm
+* virtualenv
+
+Steps
+-----
+
+make install
+make
+
 Story
 ======
 
