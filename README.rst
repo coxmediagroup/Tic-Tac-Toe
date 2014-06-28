@@ -9,8 +9,8 @@ Pre-requisites
 Steps
 -----
 
-make install
-make
+#. make install
+#. make
 
 Available at http://localhost:8000/
 
