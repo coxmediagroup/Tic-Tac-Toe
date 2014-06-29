@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+    <head>
+      <script type='text/javascript'>var _sf_startpt=(new Date()).getTime();</script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block meta_title %}{% if meta_title %}{{meta_title}}{%else%}TicTacToe Game {% endif %}{% endblock meta_title %} </title>
+        <meta name="description" content="{% block meta_description %}{% if meta_description %}{{meta_description}}{%else%}It is fun to play tic-tac-toe{%endif%}{% endblock meta_description %}">
+
+        <!-- bootstrap  -->
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap.css">
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap-responsive.min.css"> 
+
+        <!-- Vendor plugins -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        {% block extra_head %}
+        {% endblock extra_head %}
+    </head>
+    <body>
+        {% block main_content %}
+        {% endblock main_content %}
+
+        {% block boostrap_js %}
+          <script src="{{ STATIC_PREFIX }}js/bootstrap.min.js"></script>
+        {% endblock boostrap_js %}
+      
+        {% block footer_scripts %}
+        {% endblock footer_scripts %}
+        
+    </body>
+</html>
