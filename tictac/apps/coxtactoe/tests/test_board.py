@@ -140,7 +140,7 @@ class BoardTests(unittest.TestCase):
             if self.board.game_over:
                 break
             # Next player's turn
-            marker = self.o if marker == self.x else self.x
+            marker = marker.opponent
 
         self.assertEquals(repr(self.board), repr(game_state))
 
