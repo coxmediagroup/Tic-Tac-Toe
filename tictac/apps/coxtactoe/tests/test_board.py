@@ -123,7 +123,7 @@ class BoardTests(unittest.TestCase):
 
     def test_playing_a_random_choice_game(self):
         log.debug("In test_playing_a_random_choice_game()")
-        game_state = self.board.SQUARES * [None]
+        game_state = self.board.SQUARES * [self._]
         marker = self.x
         squares_available = range(self.board.SQUARES)
 
