@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-MODULE_DIR = os.path.realpath(os.path.dirname(BASE_DIR))
-PROJECT_DIR = os.path.dirname(MODULE_DIR)
+PROJECT_DIR = os.path.dirname(BASE_DIR)
 
 WEB_ROOT = os.path.join(PROJECT_DIR, 'webroot')
 if not os.path.exists(WEB_ROOT):
@@ -25,11 +24,11 @@ STATIC_ROOT = os.path.join(WEB_ROOT, 'static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(MODULE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(MODULE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 
@@ -57,6 +56,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 )
 
+
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # custom modules
-    'tictactoe.apps.game',
+    #'tictactoe.apps.game',
 )
 
 ROOT_URLCONF = 'tictactoe.conf.urls'
