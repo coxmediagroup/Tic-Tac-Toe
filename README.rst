@@ -26,3 +26,12 @@ Submissions
 1. Publicly: Fork this repo and send us a pull request.
 2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
 
+Run (Requirements)
+--------------
+
+1. download project tictactoe to a python virtual env
+
+2. Launch django server python manage.py runserver 0.0.0.0:8080
+
+3. There is a sqlite3 database with admin user sion/sion123
+
