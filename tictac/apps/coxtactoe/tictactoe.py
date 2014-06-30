@@ -5,6 +5,7 @@ import uuid
 
 from coxtactoe import const as C
 from coxtactoe.exceptions import InvalidMoveError
+from coxtactoe.models import TicTacToeGameModel
 
 import logging as log
 log.basicConfig(level=log.INFO)
@@ -187,8 +188,8 @@ class Game(object):
     def __init__(self, id=None):
         if id is not None:
             self.id = id
-            # get_or_create game model
-            self.board = Board()
+            game = TicTacToeGameModel.objects.get(gid=self.id)
+            self.board = Board(board=game.board, turn=Marker(game.turn))
         else:
             self.id = str(uuid.uuid1()).replace('-','')
             self.board = Board()
@@ -202,7 +203,10 @@ class Game(object):
         return self.board.winner
 
     def save(self):
-        pass
+        game, created = TicTacToeGameModel.objects.get_or_create(gid=self.id)
+        game.turn = repr(self.board.turn)
+        game.board = self.board.key
+        game.save()
 
     def reset(self):
         """Resets game state for a new game"""
