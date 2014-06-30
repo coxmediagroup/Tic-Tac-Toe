@@ -47,7 +47,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'tictactoe.urls'
+ROOT_URLCONF = 'tictactoe.conf.urls'
 
 WSGI_APPLICATION = 'tictactoe.wsgi.application'
 
