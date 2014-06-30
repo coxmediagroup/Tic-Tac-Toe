@@ -13,11 +13,21 @@
     <p>Tell me your name and Let's play a game?</p>
     </div>
     <div class="row">
-    <form method="POST">
+    <form name="myForm" method="POST" onsubmit="return validateForm()">
         {% csrf_token %}
         <input type="text" id="xplayer" name="xplayer" />
-        <input id="oplayer" name="oplayer" type="hidden" value="computer"/>
+        <input id="oplayer" name="oplayer" type="hidden" value="sion"/>
         <button type="submit">Let's Play</button>
     </form>
     </div>
+
+<script>    
+    function validateForm() {
+    var x = document.forms["myForm"]["xplayer"].value;
+    if (x == null || x == "") {
+        alert("No Name, No Game!");
+        return false;
+    }
+}
+</script>
 {% endblock %}

@@ -6,6 +6,7 @@ var cells;
 	
 $(document).ready(function() {
 	buildBoard();
+	newGame();
 });
 
 function buildBoard(){
@@ -21,6 +22,48 @@ function getValidMoves(state){
         }
     }
     return moves;
+}
+
+
+function updateGame(xplayer, oplayer, winner) {
+
+	var grid0 = document.getElementById("grid0").value,
+		grid1 = document.getElementById("grid1").value,
+		grid2 = document.getElementById("grid2").value,
+		grid3 = document.getElementById("grid3").value,
+		grid4 = document.getElementById("grid4").value,
+		grid5 = document.getElementById("grid5").value,
+		grid6 = document.getElementById("grid6").value,
+		grid7 = document.getElementById("grid7").value,
+		grid8 = document.getElementById("grid8").value;
+	if (!grid0.length || grid0 == "None") grid0 = null;
+	if (!grid1.length || grid1 == "None") grid1 = null;
+	if (!grid2.length || grid2 == "None") grid2 = null;	
+	if (!grid3.length || grid3 == "None") grid3 = null;
+	if (!grid4.length || grid4 == "None") grid4 = null;
+	if (!grid5.length || grid5 == "None") grid5 = null;
+	if (!grid6.length || grid6 == "None") grid6 = null;
+	if (!grid7.length || grid7 == "None") grid7 = null;
+	if (!grid8.length || grid8 == "None") grid8 = null;
+	
+	var s = grid0
+	var board = s.concat(grid1, grid2, grid3, grid4, grid5, grid6, grid7, grid8);
+	
+	var gameInfo = {"game":board,
+					"xplayer":xplayer,
+					"oplayer":oplayer,
+					"winner":winner}
+
+	event.preventDefault();
+	$.ajax({
+		url:"/result/",
+		data: gameInfo,
+		success:function(response){},
+		complete:function(){},
+		error:function (xhr, textStatus, thrownError){
+			alert("error recording game result");
+		}
+	});
 }
 
 function placeComputerTokenRandomly(moves){
@@ -135,30 +178,13 @@ function displayStats(){
     b.xWon.value = xWon;
     b.oWon.value = oWon;
     b.catsGame.value = catsGame;
-}
 
-function clearStats(){
-	xWon = 0;
-    oWon = 0;
-    catsGame = 0;
-    displayStats();
 }
 
 function checkoutState(state){
     var winner = checkForWin(state);
-    if ((winner & 0x300000) != 0){
-        if ((winner & 0x300000) == 0x100000){
-            xWon++;
-			document.getElementById("prompt").innerHTML="You won!";
-        } else if ((winner & 0x300000) == 0x200000){
-            oWon++;
-			document.getElementById("prompt").innerHTML="You Lost!";
-        } else {
-			document.getElementById("prompt").innerHTML="It\'s a draw.";
-            catsGame++;
-        }
-        displayStats();
-    }
+	var xplayer = document.getElementById("xplayer").value;
+
     for (var i=0; i<9; i++){
         var value = '';
         if ((state & (1<<(i*2+1))) != 0){
@@ -181,6 +207,24 @@ function checkoutState(state){
         }
         cells[i].value = value;
     }
+
+    if ((winner & 0x300000) != 0){
+        if ((winner & 0x300000) == 0x100000){
+            xWon++;
+			document.getElementById("prompt").innerHTML="You won!";
+			updateGame(xplayer, 'sion', xplayer);
+        } else if ((winner & 0x300000) == 0x200000){
+            oWon++;
+			document.getElementById("prompt").innerHTML="You Lost!";
+			updateGame(xplayer, 'sion', 'sion');
+        } else {
+			document.getElementById("prompt").innerHTML="It\'s a draw.";
+            catsGame++;
+			updateGame(xplayer, 'sion', '');
+        }
+        displayStats();
+    }	
+
 }
 
 function stateMove(state, move, nextTurn){
