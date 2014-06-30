@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}css/tictac.css" />
+{% endblock extra_head %}
+
+{% block main_content %}
+    <div class="row">
+    <h1>Tic-Tac-Toe</h1>
+    <p>Tell me your name and Let's play a game?</p>
+    </div>
+    <div class="row">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" id="xplayer" name="xplayer" />
+        <input id="oplayer" name="oplayer" type="hidden" value="computer"/>
+        <button type="submit">Let's Play</button>
+    </form>
+    </div>
+{% endblock %}
