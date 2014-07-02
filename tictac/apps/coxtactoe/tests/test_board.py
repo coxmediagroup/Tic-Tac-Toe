@@ -160,6 +160,7 @@ class BoardTests(unittest.TestCase):
         self.assertTrue(self.board.game_over)
 
     def test_board_game_over_when_o_wins(self):
+        self.board.place(self.x, 8)
         self._winner_across(self.o)
         self.assertTrue(self.board.game_over)
 
