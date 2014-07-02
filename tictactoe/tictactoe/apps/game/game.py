@@ -1,5 +1,4 @@
 import pdb
-import random
 import operator
 
 
@@ -32,7 +31,27 @@ class TicTacToe (object):
         """ Return a list of all tiles that are set to None """
         return [i for i, x in enumerate(self.board) if not x]
 
-    def check_winner(self):
+    def player_move(self, x):
+        """
+        Update the the game board when the user plays a tile and check for a winner
+        """
+        if self.board[x]:
+            raise Exception('That move has already been taken.')
+
+        self.board[x] = self.player
+        self.winner = self._check_winner()
+
+    def computer_move(self):
+        """
+        Make the computer perform a valid move and check for a winner
+        """
+        value, x = self._minimax(self.computer)
+
+        if x:
+            self.board[x] = self.computer
+        self.winner = self._check_winner()
+
+    def _check_winner(self):
         """
         Determine if there is currently a winner by checking each board tile in a combination and seeing if they match
         """
@@ -43,31 +62,11 @@ class TicTacToe (object):
 
         return None if None in self.board else self.draw
 
-    def player_move(self, x):
-        """
-        Update the the game board when the user plays a tile and check for a winner
-        """
-        if self.board[x]:
-            raise Exception('That move has already been taken.')
-
-        self.board[x] = self.player
-        self.winner = self.check_winner()
-        return self.winner
-
-    def computer_move(self):
-        """
-        Make the computer perform a valid move and check for a winner
-        """
-        value, x = self._minimax(self.computer)
-        self.board[x] = self.computer
-        self.winner = self.check_winner()
-        return self.winner
-
     def _minimax(self, player):
         """
         Use the minimax algorithm to determine the next move
         """
-        winner = self.check_winner()
+        winner = self._check_winner()
 
         if winner == self.computer:
             return 1, None
