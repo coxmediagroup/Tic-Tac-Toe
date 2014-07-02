@@ -4,7 +4,7 @@ __docformat__ = 'restructuredtext en'
 import uuid
 
 from coxtactoe import const as C
-from coxtactoe.exceptions import InvalidMoveError
+from coxtactoe.exceptions import InvalidGameError, InvalidMoveError
 from coxtactoe.models import TicTacToeGameModel
 
 import logging as log
@@ -187,9 +187,13 @@ class Board(object):
 class Game(object):
     def __init__(self, id=None):
         if id is not None:
-            self.id = id
-            game = TicTacToeGameModel.objects.get(gid=self.id)
-            self.board = Board(board=game.board, turn=Marker(game.turn))
+            try:
+                game = TicTacToeGameModel.objects.get(gid=id)
+            except TicTacToeGameModel.DoesNotExist:
+                raise InvalidGameError("Game ID %s does not exist." % id)
+            else:
+                self.board = Board(board=game.board, turn=Marker(game.turn))
+                self.id = id
         else:
             self.id = str(uuid.uuid1()).replace('-','')
             self.board = Board()

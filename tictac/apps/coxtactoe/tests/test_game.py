@@ -3,6 +3,7 @@ __docformat__ = 'restructuredtext en'
 import unittest
 
 from coxtactoe import tictactoe as ttt
+from coxtactoe.exceptions import InvalidGameError
 from coxtactoe import const as C
 
 import logging as log
@@ -52,3 +53,5 @@ class GameTests(unittest.TestCase):
         self.game.reset()
         self.assertEquals(self.game.board.key, self.game.board.initial_board)
 
+    def test_invalid_game_error_exception(self):
+        self.assertRaises(InvalidGameError, ttt.Game, 0)

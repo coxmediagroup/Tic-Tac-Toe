@@ -3,3 +3,6 @@ __docformat__ = 'restructuredtext en'
 
 class InvalidMoveError(Exception):
     pass
+
+class InvalidGameError(Exception):
+    pass
