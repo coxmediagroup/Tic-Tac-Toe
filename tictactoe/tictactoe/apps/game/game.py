@@ -19,13 +19,13 @@ class TicTacToe (object):
     player = 'o'
     draw = '-'
 
-    def __init__(self):
+    def __init__(self, user_starts=True):
         self.winner = None
 
         # generate the board with None as the starting values
         self.board = [None for x in range(self._board_size**2)]
 
-        if random.choice([self.player, self.computer]) == self.computer:
+        if not user_starts:
             self.computer_move()
 
     @property
