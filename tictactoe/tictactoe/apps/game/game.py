@@ -6,7 +6,7 @@ class TicTacToe (object):
     """
     Manages the current game state
     """
-    # winning tile combinations never change, define them on the class level
+    # winning tile combinations never change, define them at the class level
     _winning_combos = (
         (0, 1, 2), (3, 4, 5), (6, 7, 8),    # horizontal
         (0, 3, 6), (1, 4, 7), (2, 5, 8),    # vertical
@@ -17,13 +17,17 @@ class TicTacToe (object):
     player = 'o'
     draw = '-'
 
-    def __init__(self, user_starts=True):
-        self.winner = None
+    def __init__(self, user_starts=True, session_data=None):
+        if session_data:
+            self.winner = session_data['winner']
+            self.board = session_data['board']
+            self.next_turn = session_data['next_turn']
+        else:
+            self.winner = None
+            self.board = [None for x in range(9)]
+            self.next_turn = self.player if user_starts else self.computer
 
-        # generate the board with None as the starting values
-        self.board = [None for x in range(9)]
-
-        if not user_starts:
+        if not user_starts or self.next_turn == self.computer:
             self.computer_move()
 
     @property
@@ -40,6 +44,7 @@ class TicTacToe (object):
 
         self.board[x] = self.player
         self.winner = self._check_winner()
+        self.next_turn = self.computer
 
     def computer_move(self):
         """
@@ -50,6 +55,7 @@ class TicTacToe (object):
         if x:
             self.board[x] = self.computer
         self.winner = self._check_winner()
+        self.next_turn = self.player
 
     def _check_winner(self):
         """
