@@ -25,9 +25,9 @@ __docformat__ = 'restructuredtext en'
 
 
 class MinMaxPlayer(object):
-    def __init__(self, board=Board()):
+    def __init__(self, player, board=Board()):
         self.board = board
-        self.player = X
+        self.player = player
         self.wins = {X: 0, O: 0}
         self.ties = {X: 0, O: 0}
         self.loses = {X: 0, O: 0}
@@ -207,5 +207,5 @@ if __name__ == "__main__":
     stderr_unbuffered = os.fdopen(sys.stderr.fileno(), 'w', 0)
     sys.stdout = stdout_unbuffered
     sys.stderr = stderr_unbuffered
-    ai = MinMaxPlayer()
+    ai = MinMaxPlayer(X)
     ai.play()
