@@ -93,6 +93,13 @@ class BoardTests(unittest.TestCase):
     def test_no_winner(self):
         self.assertIsNone(self.board.winner)
 
+    def _tie_game(self):
+        player = self.x
+        for square in (0, 1, 2, 5, 3, 6, 4, 8, 7):
+            self.board.place(player, square)
+            player = player.opponent
+
+
     def _winner_across(self, player, across=0):
         opponent = player.opponent
         opponent_offset = 1 if across < 2 else -1
@@ -144,4 +151,22 @@ class BoardTests(unittest.TestCase):
 
         self.assertEquals(repr(self.board), repr(game_state))
 
+    def test_board_json(self):
+        self.assertEquals(
+            self.board.json, "['_','_','_','_','_','_','_','_','_']")
+
+    def test_board_game_over_when_x_wins(self):
+        self._winner_across(self.x)
+        self.assertTrue(self.board.game_over)
+
+    def test_board_game_over_when_o_wins(self):
+        self._winner_across(self.o)
+        self.assertTrue(self.board.game_over)
+
+    def test_board_game_over_when_tie_game(self):
+        self._tie_game()
+        self.assertTrue(self.board.game_over)
+
+    def test_board_not_game_over_when_no_winner(self):
+        self.assertFalse(self.board.game_over)
 
