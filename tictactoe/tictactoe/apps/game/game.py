@@ -13,7 +13,6 @@ class TicTacToe (object):
         (0, 3, 6), (1, 4, 7), (2, 5, 8),    # vertical
         (0, 4, 8), (2, 4, 6)                # diagonal
     )
-    _board_size = 3
 
     computer = 'x'
     player = 'o'
@@ -23,7 +22,7 @@ class TicTacToe (object):
         self.winner = None
 
         # generate the board with None as the starting values
-        self.board = [None for x in range(self._board_size**2)]
+        self.board = [None for x in range(9)]
 
         if not user_starts:
             self.computer_move()
