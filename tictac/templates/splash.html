@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="//fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+  {% load staticfiles %}
+  <link href="{% static "css/coxtactoe.css" %}" rel="stylesheet">
+  <title>cOXtactoe</title>
+</head>
+<body>
+  <nav>
+    <hr class="orange">
+    <hr class="green">
+    <form id="xo-choice-form" method="post">
+      {% csrf_token %}
+      <h1 class="logo-text">
+        <span>C</span><button type="submit" id="o" name="xo_choice" value="o"><img src="{% static "img/o.png" %}" alt="O"></button><button type="submit" id="x" name="xo_choice" value="x"><img src="{% static "img/x.png" %}" alt="X"></button><span>TACTOE</span>
+      </h1>
+    </form>
+    <hr class="green">
+    <hr class="orange">
+    <p>Pick X or O above to play</p>
+  </nav>
+</body>
+</html>

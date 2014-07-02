@@ -18,3 +18,12 @@ class TicTacToeMoveModel(models.Model):
         null=False, blank=False, db_index=True)
     move = fields.SmallIntegerField(verbose_name="Move",
          null=False, blank=False, db_index=True)
+
+
+class TicTacToeGameModel(models.Model):
+    gid = UUIDField(verbose_name="Game ID",
+        null=False, blank=False, auto=True)
+    board = fields.IntegerField(verbose_name="Board State",
+        null=True, blank=True)
+    turn = fields.CharField(verbose_name="Player's Turn",
+        null=True, blank=True, max_length=1)
