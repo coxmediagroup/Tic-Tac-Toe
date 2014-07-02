@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tictactoe.apps.game',
 )
 
 
@@ -65,9 +66,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # custom modules
-    #'tictactoe.apps.game',
 )
 
 ROOT_URLCONF = 'tictactoe.conf.urls'
