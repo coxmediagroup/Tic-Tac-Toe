@@ -55,8 +55,12 @@ class MinMaxPlayer(object):
             return C.LOSS
         return C.TIE
 
-    def get_best_move(self, player, board):
+    def get_best_move(self, player=None, board=None):
         moves = []
+        if player is None:
+            player = self.player
+        if board is None:
+            board = self.board
 
         # Look up saved move and take it if we find one for current board state
         if self.board.key == board.key:
@@ -102,7 +106,7 @@ class MinMaxPlayer(object):
         self.board.reset()
 
     def move(self):
-        if self.player == X:
+        if self.board.turn == X:
             move = self.get_best_move(self.player, self.board)
         else:
             move = random.choice(self.board.open_squares)
@@ -209,3 +213,9 @@ if __name__ == "__main__":
     sys.stderr = stderr_unbuffered
     ai = MinMaxPlayer(X)
     ai.play()
+    board = Board()
+    board.place(X, 0)
+    ai = MinMaxPlayer(O, board)
+    ai_move = ai.get_best_move()
+    board.place(O, ai_move)
+    print board.json
