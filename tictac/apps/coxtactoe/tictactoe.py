@@ -87,7 +87,8 @@ class Board(object):
 
     @property
     def json(self):
-        return str(['{}'.format(self.square(i)) for i in range(self.SQUARES)])
+        board = ['%s' % repr(self.square(i)) for i in range(self.SQUARES)]
+        return "['%s']" % "','".join(board)
 
     @property
     def _win_masks(self):
