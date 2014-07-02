@@ -86,6 +86,10 @@ class Board(object):
         return self.BIT_LEN
 
     @property
+    def json(self):
+        return str(['{}'.format(self.square(i)) for i in range(self.SQUARES)])
+
+    @property
     def _win_masks(self):
         wins = {self.X: {'down': [], 'across': [], 'diagonal': []},
                 self.O: {'down': [], 'across': [], 'diagonal': []}}
