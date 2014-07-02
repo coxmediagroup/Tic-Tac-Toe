@@ -16,6 +16,15 @@
       // Log messages sent from server
       socket.on('server msg', function(msg) {
         $('#log').append('<br>Recv\'d Msg #<em>' + msg.count + ': ' + msg.data + '</em>');
+        if (msg.xo_choice !== undefined) {
+          $('form#move input[name="xo_choice"]').val(msg.xo_choice);
+        }
+        if (msg.game_id !== undefined) {
+          $('form#move input[name="game_id"]').val(msg.game_id);
+        }
+        if (msg.board !== undefined) {
+          $('#log').append('<br>Board State: <em>' + msg.board + '</em>');
+        }
       });
       socket.on('server taunt', function(msg) {
         $('#log').append('<br><em>' + msg.data + '</em>');
@@ -32,7 +41,8 @@
       $('form#move').submit(function(event) {
         socket.emit('move', {
           game_id: $('#game_id').val(),
-          move: $('#move').val()});
+          player: $('#xo_choice').val(),
+          square: $('#square').val()});
         return false;
       });
     });
@@ -49,8 +59,9 @@
     <input type="submit" value="Leave Game">
   </form>
   <form id="move" method='POST' action='#'>
-    <input type="text" name="game_id" id="game_id" placeholder="Game ID">
-    <input type="text" name="move" id="move" placeholder="Move">
+    <input type="hidden" name="game_id" id="game_id">
+    <input type="hidden" name="xo_choice" id="xo_choice">
+    <input type="text" name="square" id="square" placeholder="Square #">
     <input type="submit" value="Make Move">
   </form>
   <h1>log</h1>

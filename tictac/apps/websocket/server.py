@@ -67,58 +67,86 @@ def disconnect():
     log.debug('Client disconnected')
     emit('server msg', {'data': 'Connected', 'count': 0})
 
+
 def handle_join_error():
     pass
 
+def get_game(id):
+    try:
+        game = ttt.Game(id=id)
+    except InvalidGameError as e:
+        emit('server msg',
+             {'data': str(e),
+              'error': True,
+              'count': session['receive_count']},
+             callback=handle_join_error)
+        return None
+    else:
+        return game
+
 @socketio.on('join')
 def join(msg):
-    game_id = msg['game_id']
     session['receive_count'] = session.get('receive_count', 0) + 1
-    try:
-        game = ttt.Game(id=game_id)
-    except InvalidGameError as e:
-        emit('server msg', {'data': str(e), 'error': True,
-                            'count': session['receive_count']},
-             callback=handle_join_error)
-    else:
+    game_id = msg['game_id']
+
+    game = get_game(game_id)
+    if game is not None:
         join_room(game_id)
         log.debug('Player joined game ' + game_id)
         emit('server msg',
              {'data': 'Joined game ' + game_id,
+              'game_id': game_id,
               'board': game.board.json,
-              'turn': repr(game.board.turn),
+              'xo_choice': repr(game.board.turn),
               'count': session['receive_count']},
              room=game_id)
 
 
 @socketio.on('leave')
 def leave(msg):
-    game_id = msg['game_id']
-    leave_room(game_id)
-    # TODO: Call ttt API
-    log.debug('Player left game ' + game_id)
     session['receive_count'] = session.get('receive_count', 0) + 1
+    game_id = msg['game_id']
+
+    log.debug('Player left game ' + game_id)
     emit('server msg',
-         {'data': 'Left game ' + game_id,
-          'player': 'x',  # TODO: Get player from game.board.turn
-          'count': session['receive_count']},
+         {'data': 'Leaving game ' + game_id, 'count': session['receive_count']},
          room=game_id)
+    leave_room(game_id)
 
 
 @socketio.on('move')
 def move(msg):
-    game_id = msg['game_id']
-    player = msg['player']
-    square = msg['move']
     session['receive_count'] = session.get('receive_count', 0) + 1
-    # TODO: Call ttt API
-    log.debug('{0} in game {1} moved to square {3}'
-              .format(player, game_id, square))
-    emit('server msg',
-         {'data': msg['data'],
-          'turn': 'x',  # TODO: Get turn from game.board.turn
-          'count': session['receive_count']},
-         room=game_id)
+    game_id = msg['game_id']
+    player = ttt.Marker(msg['player'])
+    opponent = player.opponent
+    square = int(msg['square'])
+
+    # TODO: Refactor this mess
+    game = get_game(game_id)
+    if game is not None:
+        game.board.place(player, square)
+        emit('server msg', {'data': game.board.json}, room=game_id)
+        log.debug(game.board.json)
+        ai = MinMaxPlayer(opponent, game.board)
+        ai_move = ai.get_best_move()
+        emit('server msg', {'data': 'AI chose sq %s' % ai_move}, room=game_id)
+        log.debug('AI chose square %s' % ai_move)
+        game.board.place(opponent, ai_move)
+        game.save()
+        log.debug('{0} in game {1} moved to square {2}'
+                  .format(player, game_id, square))
+        emit('server msg',
+             {'data': 'AI played at square %s' % ai_move,
+              'board': game.board.json,
+              'count': session['receive_count']},
+             room=game_id)
+        if game.over:
+            emit('server msg',
+                 {'data': 'Game over. Winner: %s' % game.winner,
+                  'winner': game.winner,
+                  'count': session['receive_count']},
+                 room=game_id)
 
 
 if __name__ == '__main__':
