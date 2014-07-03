@@ -1,0 +1,44 @@
+{% extends 'page-base.html' %}
+{% load sekizai_tags %}
+
+{% block page_title %}Tic Tac Toe!{% endblock %}
+
+{% block navbar_content %}
+    <p class="navbar-brand">Tic Tac Toe!</p>
+    <p class="navbar-text navbar-right">Eric Ressler</p>
+{% endblock %}
+
+{% block main_content %}
+    {% addtoblock "custom_css" %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/tic-tac-toe.css">
+    {% endaddtoblock %}
+    {% addtoblock "custom_js" %}
+        <script src="{{ STATIC_URL }}js/tic-tac-toe.js"></script>
+    {% endaddtoblock %}
+
+    <div class="debug">
+        {{ game }}
+    </div>
+    <div class="gameboard col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <table class="table table-bordered">
+            {% for tile in game.board %}
+                {# handle new table rows based on the index of the tile #}
+                {% if forloop.first %}
+                    <tr>
+                {% elif forloop.counter0|divisibleby:"3" %}
+                    </tr><tr>
+                {% endif %}
+
+                <td class="{{ tile|default_if_none:"warning empty" }}">
+                    <input type="submit" class="btn btn-large btn-{{ tile|default_if_none:"warning" }}" value="{{ tile|default_if_none:"" }}" name="tile-{{ forloop.counter0 }}" {% if tile %}disabled{% endif %}>
+                </td>
+
+                {# close out the last table row #}
+                {% if forloop.last %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

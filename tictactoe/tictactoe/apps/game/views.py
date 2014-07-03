@@ -9,7 +9,7 @@ class GameBoardView (TemplateView):
     """
     Displays the gameboard to the user.
     """
-    template_name = 'apps/game/gameboard.html'
+    template_name = 'apps/game/tic-tac-toe.html'
 
     def get_context_data(self, **kwargs):
         context = super(GameBoardView, self).get_context_data(**kwargs)
