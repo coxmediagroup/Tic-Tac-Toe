@@ -1,21 +1,15 @@
-table {
+.gameboard table {
     width: auto !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
-td {
+.gameboard td {
     border: 0 !important;
     background-color: #A6E0FF;
 }
 
-div.gameboard {
-
-}
-
-.btn-info,
-.btn-o,
-.btn-x {
+.gameboard input[type=submit] {
     min-height: 100px;
     min-width: 100px;
     display: block;
@@ -27,9 +21,9 @@ div.gameboard {
 
 }
 
-.btn-x:disabled {
+.gameboard .btn-x:disabled {
     background-color: #F00;
 }
-.btn-o:disabled {
+.gameboard .btn-o:disabled {
     background-color: #0F0;
 }
