@@ -66,6 +66,4 @@ class SubmitMoveView (View):
             response = {'success': True, 'game': tictactoe.__dict__}
         finally:
             save_game(request, tictactoe)
-
-
         return HttpResponse(json.dumps(response), content_type='application/json')

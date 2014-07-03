@@ -1,0 +1,35 @@
+table {
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+td {
+    border: 0 !important;
+    background-color: #A6E0FF;
+}
+
+div.gameboard {
+
+}
+
+.btn-info,
+.btn-o,
+.btn-x {
+    min-height: 100px;
+    min-width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 50px;
+    font-weight: bolder;
+    color: #FFF;
+
+}
+
+.btn-x:disabled {
+    background-color: #F00;
+}
+.btn-o:disabled {
+    background-color: #0F0;
+}

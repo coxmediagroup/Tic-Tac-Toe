@@ -19,8 +19,10 @@
     <div class="debug">
         {{ game }}
     </div>
-    <div class="gameboard col-lg-6 col-md-6 col-sm-6 col-xs-6">
-        <table class="table table-bordered">
+
+    <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
+    <div class="gameboard col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <table class="table">
             {% for tile in game.board %}
                 {# handle new table rows based on the index of the tile #}
                 {% if forloop.first %}
@@ -29,8 +31,8 @@
                     </tr><tr>
                 {% endif %}
 
-                <td class="{{ tile|default_if_none:"warning empty" }}">
-                    <input type="submit" class="btn btn-large btn-{{ tile|default_if_none:"warning" }}" value="{{ tile|default_if_none:"" }}" name="tile-{{ forloop.counter0 }}" {% if tile %}disabled{% endif %}>
+                <td>
+                    <input type="submit" class="btn btn-large btn-{{ tile|default_if_none:"info" }}" value="{{ tile|default_if_none:""|upper }}" name="tile-{{ forloop.counter0 }}" {% if tile %}disabled{% endif %}>
                 </td>
 
                 {# close out the last table row #}
@@ -40,5 +42,6 @@
             {% endfor %}
         </table>
     </div>
+    <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
 
 {% endblock %}
