@@ -14,10 +14,16 @@ class GameBoardView (TemplateView):
     def get_context_data(self, **kwargs):
         context = super(GameBoardView, self).get_context_data(**kwargs)
 
-        # retrieve the game from the session data, or create a new one if needed
+        # create a new game with existing session data if it exists
         self.request.session.flush()  # temporary so that I can test new games with a browser refresh to start
+
         session_data = self.request.session.get('tictactoe')
-        tictactoe = game.TicTacToe(user_starts=random.randint(0, 1), session_data=session_data)
+        tictactoe = game.TicTacToe(session_data=session_data)
+
+        # if session data was none, randomly decide if the computer should move first
+        if not session_data and random.randint(0, 1):
+            tictactoe.computer_move()
+
         self.request.session['tictactoe'] = tictactoe.__dict__
 
         context.update({
@@ -34,3 +40,5 @@ class SubmitMoveView (View):
         # only accept ajax requests
         if not request.is_ajax():
             raise Http404
+
+

@@ -17,18 +17,14 @@ class TicTacToe (object):
     player = 'o'
     draw = '-'
 
-    def __init__(self, user_starts=True, session_data=None):
+    def __init__(self, session_data=None):
         if session_data:
             self.winner = session_data['winner']
             self.board = session_data['board']
-            self.next_turn = session_data['next_turn']
         else:
             self.winner = None
             self.board = [None for x in range(9)]
-            self.next_turn = self.player if user_starts else self.computer
 
-        if not user_starts or self.next_turn == self.computer:
-            self.computer_move()
 
     @property
     def available_tiles(self):
@@ -44,18 +40,22 @@ class TicTacToe (object):
 
         self.board[x] = self.player
         self.winner = self._check_winner()
-        self.next_turn = self.computer
 
     def computer_move(self):
         """
         Make the computer perform a valid move and check for a winner
         """
+        if len(self.available_tiles) == 9:
+            self.board[0] = self.computer
+            return
+
         value, x = self._minimax(self.computer)
 
         if x:
             self.board[x] = self.computer
+        else:
+            print "COMPUTER MOVE RETURNED NONE!!!!!!!"
         self.winner = self._check_winner()
-        self.next_turn = self.player
 
     def _check_winner(self):
         """
@@ -98,3 +98,11 @@ class TicTacToe (object):
             if op(value, best_value):
                 best_value, best_play = value, x
         return best_value, best_play
+
+    def __unicode__(self):
+        return "[TicTacToe winner:{winner}, board:{board}".format(
+            winner=self.winner, board=self.board
+        )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
