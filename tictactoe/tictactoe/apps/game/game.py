@@ -2,6 +2,10 @@ import pdb
 import operator
 
 
+class InvalidMoveError (Exception):
+    pass
+
+
 class TicTacToe (object):
     """
     Manages the current game state
@@ -17,14 +21,13 @@ class TicTacToe (object):
     player = 'o'
     draw = '-'
 
-    def __init__(self, session_data=None):
-        if session_data:
-            self.winner = session_data['winner']
-            self.board = session_data['board']
+    def __init__(self, current_game=None):
+        if current_game:
+            self.winner = current_game['winner']
+            self.board = current_game['board']
         else:
             self.winner = None
             self.board = [None for x in range(9)]
-
 
     @property
     def available_tiles(self):
@@ -35,8 +38,8 @@ class TicTacToe (object):
         """
         Update the the game board when the user plays a tile and check for a winner
         """
-        if self.board[x]:
-            raise Exception('That move has already been taken.')
+        if self.winner or self.board[x]:
+            raise InvalidMoveError
 
         self.board[x] = self.player
         self.winner = self._check_winner()
@@ -56,17 +59,6 @@ class TicTacToe (object):
         else:
             print "COMPUTER MOVE RETURNED NONE!!!!!!!"
         self.winner = self._check_winner()
-
-    def _check_winner(self):
-        """
-        Determine if there is currently a winner by checking each board tile in a combination and seeing if they match
-        """
-        for combo in self._winning_combos:
-            winner = reduce(lambda x, y: x if x == y else None, [self.board[x] for x in combo])
-            if winner:
-                return winner
-
-        return None if None in self.board else self.draw
 
     def _minimax(self, player):
         """
@@ -99,10 +91,19 @@ class TicTacToe (object):
                 best_value, best_play = value, x
         return best_value, best_play
 
+    def _check_winner(self):
+        """
+        Determine if there is currently a winner by checking each board tile in a combination and seeing if they match
+        """
+        for combo in self._winning_combos:
+            winner = reduce(lambda x, y: x if x == y else None, [self.board[x] for x in combo])
+            if winner:
+                return winner
+
+        return None if None in self.board else self.draw
+
     def __unicode__(self):
-        return "[TicTacToe winner:{winner}, board:{board}".format(
-            winner=self.winner, board=self.board
-        )
+        return "[TicTacToe winner:{0}, board:{1}".format(self.winner, self.board)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
