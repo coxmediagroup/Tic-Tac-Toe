@@ -9,16 +9,20 @@
 {% endblock %}
 
 {% block main_content %}
+    {# page specific static files appended to base blocks by sekizai #}
     {% addtoblock "custom_css" %}
         <link rel="stylesheet" href="{{ STATIC_URL }}css/tic-tac-toe.css">
     {% endaddtoblock %}
     {% addtoblock "custom_js" %}
         <script src="{{ STATIC_URL }}js/tic-tac-toe.js"></script>
+        <script>
+            $('.gameboard').TicTacToe();
+        </script>
     {% endaddtoblock %}
 
     <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
-    <div class="gameboard col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <form action="{% url "submit" %}" method="post">
+    <div class="tictactoe col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <form class="gameboard" action="{% url "submit" %}" method="post">
             {% csrf_token %}
             <table class="table">
                 {% for tile in game.board %}
