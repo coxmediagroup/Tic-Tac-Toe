@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Tic Tac Toe Challenge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/toastr.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+
+</head>
+<body>
+
+    <div id="mainContainer" class="container well">
+        <div id="gameBoard" data-bind="foreach:markers">
+            <div class="tile" data-bind="click: $parent.chooseMarker, text: player, css: { humanTile : player() == 'X' }"></div>
+        </div>
+        <button style="margin-top:5px;" type="button" class="btn btn-primary" data-bind="visible: gameInProgress() == true || gameIsOver() == true, click: requestReset">New Game</button>
+    </div>
+
+    <!-- Reset confirmation modal dialog (hidden initially) -->
+    <div id="resetConfirmationModal" class="modal hide fade">
+        <div class="modal-body">Giving up?! How can you look at yourself, in the mirror?</div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn null">You're right</button>
+            <button type="button" data-dismiss="modal" class="btn btn-primary" data-bind="click: initializeGame">Just do it</button>
+        </div>
+    </div>
+
+    <!-- Including JS files towards bottom, for faster perceived page load time. -->    
+    <script type="text/javascript" src="{% static "js/jquery-1.9.1.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/knockout.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/toastr.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/main.js" %}"></script>
+
+</body>
+</html>
