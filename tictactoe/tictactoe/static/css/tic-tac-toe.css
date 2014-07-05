@@ -1,3 +1,10 @@
+/* general style settings */
+.text-centered {
+    text-align: center;
+}
+
+
+/* game specific styles */
 .gameboard table {
     width: auto !important;
     margin-left: auto !important;
@@ -18,7 +25,6 @@
     font-size: 50px;
     font-weight: bolder;
     color: #FFF;
-
 }
 
 .gameboard .btn-x:disabled {

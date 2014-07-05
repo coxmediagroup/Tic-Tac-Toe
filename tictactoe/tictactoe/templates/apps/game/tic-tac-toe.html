@@ -22,6 +22,8 @@
 
     <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
     <div class="tictactoe col-lg-6 col-md-6 col-sm-8 col-xs-12">
+
+        <h4 class="text-centered" id="status">&nbsp;</h4>
         <form class="gameboard" action="{% url "submit" %}" method="post">
             {% csrf_token %}
             <table class="table">
@@ -49,6 +51,10 @@
                 {% endfor %}
             </table>
         </form>
+
+        <div class="text-centered">
+            <a href="#" class="btn btn-primary" role="button">Start New Game</a>
+        </div>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
 
