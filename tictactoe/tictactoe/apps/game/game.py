@@ -49,47 +49,43 @@ class TicTacToe (object):
         Make the computer perform a valid move and check for a winner
         """
         if len(self.available_tiles) == 9:
+            # first move strategy
             self.board[0] = self.computer
             return
 
-        value, x = self._minimax(self.computer)
-
-        if x:
-            self.board[x] = self.computer
-        else:
-            print "COMPUTER MOVE RETURNED NONE!!!!!!!"
+        value, move = self._minimax(self.computer, 0)
+        print "------- COMPUTER MOVE: ", move
+        self.board[move] = self.computer
         self.winner = self._check_winner()
 
-    def _minimax(self, player):
+    def _minimax(self, current_player, depth):
         """
         Use the minimax algorithm to determine the next move
         """
+        depth += 1
+        scores = []
+        moves = []
         winner = self._check_winner()
 
         if winner == self.computer:
-            return 1, None
+            return 10 - depth, None
         elif winner == self.player:
-            return -1, None
+            return depth - 10, None
         elif winner == self.draw:
             return 0, None
 
-        if player == self.computer:
-            best_value, best_play = float('-inf'), None
-            op = operator.gt
-            next_player = self.player
+        for tile in self.available_tiles:
+            self.board[tile] = current_player
+            best_score, unused_move = self._minimax(self.player if current_player == self.computer else self.computer, depth)
+            scores.append(best_score)
+            moves.append(tile)
+            self.board[tile] = None
+
+        if current_player == self.computer:
+            index = scores.index(max(scores))
         else:
-            best_value, best_play = float('inf'), None
-            op = operator.lt
-            next_player = self.computer
-
-        for x in self.available_tiles:
-            self.board[x] = player
-            value, unused_play = self._minimax(next_player)
-            self.board[x] = None
-
-            if op(value, best_value):
-                best_value, best_play = value, x
-        return best_value, best_play
+            index = scores.index(min(scores))
+        return scores[index], moves[index]
 
     def _check_winner(self):
         """
