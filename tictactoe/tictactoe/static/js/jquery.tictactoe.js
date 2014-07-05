@@ -8,7 +8,10 @@
         $.each($.find("input[type=submit]"), function() {
             $(this).on('click', function(e) {
                 e.preventDefault();
+
+                // clear any status and disable button clicks while we're waiting for a response
                 setStatus();
+                $("input[type=submit]").prop('disabled', true);
 
                 var $this = $(this),
                     $form = $(this.form),

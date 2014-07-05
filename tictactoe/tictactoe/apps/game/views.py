@@ -60,8 +60,7 @@ class SubmitMoveView (View):
         except (ValueError, TypeError, IndexError, InvalidMoveError):
             response = {'success': False, 'message': 'We are unable to process your move. It appears to be invalid. Please try again.'}
         else:
-            if not tictactoe.winner:
-                tictactoe.computer_move()
+            tictactoe.computer_move()
             response = {'success': True, 'game': tictactoe.__dict__}
         finally:
             save_game(request, tictactoe)

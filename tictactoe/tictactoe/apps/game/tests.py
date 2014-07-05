@@ -11,7 +11,7 @@ class TestGame(unittest.TestCase):
     def test_game_play(self):
         def _play(game, next_player):
             if game.winner:
-                print "[Winner: {winner}, {board}]".format(winner=game.winner, board=game.board)
+                print game
                 assert game.winner != game.player
                 return
 

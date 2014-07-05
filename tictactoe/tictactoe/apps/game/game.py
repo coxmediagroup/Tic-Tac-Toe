@@ -1,7 +1,3 @@
-import pdb
-import operator
-
-
 class InvalidMoveError (Exception):
     pass
 
@@ -48,15 +44,13 @@ class TicTacToe (object):
         """
         Make the computer perform a valid move and check for a winner
         """
-        if len(self.available_tiles) == 9:
-            # first move strategy
-            self.board[0] = self.computer
-            return
-
-        value, move = self._minimax(self.computer, 0)
-        print "------- COMPUTER MOVE: ", move
-        self.board[move] = self.computer
-        self.winner = self._check_winner()
+        if not self.winner:
+            if len(self.available_tiles) == len(self.board):
+                self.board[0] = self.computer  # first move strategy, bypass minimax check
+            else:
+                value, move = self._minimax(self.computer, 0)
+                self.board[move] = self.computer
+            self.winner = self._check_winner()
 
     def _minimax(self, current_player, depth):
         """
