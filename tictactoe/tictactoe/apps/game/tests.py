@@ -12,17 +12,17 @@ class TestGame(unittest.TestCase):
         def _play(game, next_player):
             if game.winner:
                 print "[Winner: {winner}, {board}]".format(winner=game.winner, board=game.board)
-                #assert game.winner != game.player
+                assert game.winner != game.player
                 return
 
-            this_game = deepcopy(game)
-            if next_player == this_game.computer:
-                this_game.computer_move()
-                _play(this_game, this_game.player)
+            if next_player == game.computer:
+                game.computer_move()
+                _play(game, game.player)
             else:
                 for tile in game.available_tiles:
+                    this_game = deepcopy(game)
                     this_game.player_move(tile)
-                    _play(this_game, this_game.computer)
+                    _play(this_game, game.computer)
 
-        _play(TicTacToe(), TicTacToe.computer)                  # user starts game
-        _play(TicTacToe(user_starts=False), TicTacToe.player)   # computer starts game
+        _play(TicTacToe(), TicTacToe.player)                  # user starts game
+        _play(TicTacToe(), TicTacToe.computer)                # computer starts game
