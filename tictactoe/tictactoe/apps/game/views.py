@@ -1,6 +1,7 @@
 import json
 import random
 from django.http import Http404, HttpResponse
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
 from tictactoe.apps.game.game import TicTacToe, InvalidMoveError
 
@@ -36,8 +37,6 @@ class GameBoardView (TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(GameBoardView, self).get_context_data(**kwargs)
-
-        self.request.session.flush()  # temporary so that I can test new games with a browser refresh to start
         tictactoe = create_game(self.request)
         context.update({
             'game': tictactoe
@@ -67,3 +66,12 @@ class SubmitMoveView (View):
         finally:
             save_game(request, tictactoe)
         return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+class ResetGameView (View):
+    """
+    Resets the current game session and redirects to the game board view to initialize a new game.
+    """
+    def get(self, request, *args, **kwargs):
+        request.session['tictactoe'] = None
+        return redirect('gameboard')
