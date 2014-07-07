@@ -18,7 +18,7 @@ __docformat__ = 'restructuredtext en'
 
 
 class TicTacToeSplashView(TemplateView):
-    template_name = "splash.html"
+    template_name = "coxtactoe/splash.html"
     http_method_names = ['get', 'post']
 
     def post(self, request):
@@ -39,7 +39,20 @@ class TicTacToeSplashView(TemplateView):
         return HttpResponseRedirect(
             reverse(C.VIEW_NAME_GAME, kwargs={C.URL_KEY_GAME_ID: game.id}))
 
+    def get_context_data(self, **kwargs):
+        context = super(TicTacToeSplashView, self).get_context_data(**kwargs)
+        context['title'] = "cOXtactoe - X or O?"
+        context['app'] = ''
+        return context
+
+
 
 class TicTacToeGameView(TemplateView):
-    template_name = "game.html"
+    template_name = "coxtactoe/game.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(TicTacToeGameView, self).get_context_data(**kwargs)
+        context['title'] = "cOXtactoe - Game"
+        context['app'] = 'coxtactoe'
+        return context
 

@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link href="//fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-  {% load staticfiles %}
-  <link href="{% static "css/coxtactoe.css" %}" rel="stylesheet">
-  <title>cOXtactoe</title>
-</head>
-<body>
+{% extends "coxtactoe/base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+<body {% block ng_controller %}{% endblock %}>
   <nav>
     <div id="form-container">
       <hr class="orange">
       <hr class="green">
-      <form id="xo-choice-form" method="post">
+      <form id="xo-choice-form" {% block form_action %}{% endblock %}method="post">
         {% csrf_token %}
         <h1 class="logo-text">
           <span>C</span><button type="submit" id="o" name="xo_choice" value="o"><img src="{% static "img/o.png" %}" alt="O"></button><button type="submit" id="x" name="xo_choice" value="x"><img src="{% static "img/x.png" %}" alt="X"></button><span>TACTOE</span>
@@ -20,8 +15,12 @@
       </form>
       <hr class="green">
       <hr class="orange">
+      {% block msg_area %}
       <p>Pick X or O above to play</p>
+      {% endblock %}
     </div>
   </nav>
+  {% block content %}{% endblock %}
+  {% block scripts %}{% endblock %}
 </body>
-</html>
+{% endblock %}
