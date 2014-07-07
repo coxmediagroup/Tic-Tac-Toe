@@ -83,10 +83,10 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
   var render_ai_msg = function(ai_msg) {
     var msg = ai_msg,
         box = $('#dialog'),
-        delay_per_char = 70,
+        delay_per_char = 65,
         hide_delay = msg.length * delay_per_char;
     return (function() {
-      $scope.dialog_locked = true;
+      $scope.dialog_rendering = true;
       box
           .fadeTo('fast', 0.8, function() {
             for (var i = 0; i < msg.length; i++) {
@@ -96,7 +96,7 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
           .delay(hide_delay)
           .text('')
           .fadeTo('fast', 0.0, function() {
-            $scope.dialog_locked = false;
+            $scope.dialog_rendering = false;
           });
     });
   };
