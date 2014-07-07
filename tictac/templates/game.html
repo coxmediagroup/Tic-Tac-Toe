@@ -1,33 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="coxtactoe">
 <head>
   <meta charset="UTF-8">
-  <link href="//fonts.googleapis.com/css?family=VT323:400" rel="stylesheet">
   {% load staticfiles %}
-  <link href="{% static "css/coxtactoe.css" %}" rel="stylesheet">
+  <link href="{% static "fonts/VT323.css" %}" rel="stylesheet">
+  <link href="{% static "css/coxtactoe.css" %}" media="screen" rel="stylesheet">
   <title>cOXtactoe game</title>
 </head>
-<body>
+<body data-ng-controller='CoxtactoeCtrl'>
+  <nav>
+    <div id="form-container">
+      <hr class="orange">
+      <hr class="green">
+      <form id="xo-choice-form" action="../../" method="post">
+        {% csrf_token %}
+        <h1 class="logo-text">
+          <span>C</span><button type="submit" id="o" name="xo_choice" value="o"><img src="{% static "img/o.png" %}" alt="O"></button><button type="submit" id="x" name="xo_choice" value="x"><img src="{% static "img/x.png" %}" alt="X"></button><span>TACTOE</span>
+        </h1>
+      </form>
+      <hr class="green">
+      <hr class="orange">
+      <div id="dialog-container">
+        <div id="dialog"></div>
+      </div>
+    </div>
+  </nav>
+  {%verbatim%}
   <div id="tictactoe-bg">
     <div id="tictactoe-container">
       <div id="tictactoe">
-        <div id="0" style="background-image: url({% static "img/x.png" %});
-            background-position: 13px 4px; background-repeat: no-repeat;"></div>
-        <div id="1"></div>
-        <div id="2"></div>
-        <div id="3"></div>
-        <div id="4" style="background-image: url({% static "img/o.png" %});
-            background-position: 13px 4px; background-repeat: no-repeat;"></div>
-        <div id="5"></div>
-        <div id="6"></div>
-        <div id="7"></div>
-        <div id="8"></div>
+        <form novalidate>
+          <div data-ng-repeat="square in squares" data-ng-click="move(square)"
+               data-ng-class="[square.marker, squareTaken(square)]"></div>
+          <input type="hidden" name="game_id" data-ng-model="game_id">
+          <input type="hidden" name="xo_choice" data-ng-model="xo_choice">
+        </form>
       </div>
     </div>
   </div>
-  <h2 class="o-turn-text">YOUR TURN</h2>
-  <h2 class="x-turn-text">YOUR TURN</h2>
-  <h2 class="lose-text">YOU LOSE!</h2>
-  <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+  <h2 class="game-over-text">{{ game_over_msg }}</h2>
+  <div id="log">
+    <br>:: Game Log ::
+    <br>
+  </div>
+  {%endverbatim%}
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="{% static "js/lib/socket.io.min.js" %}"></script>
+  <script src="{% static "js/app.js" %}"></script>
+  <script src="{% static "js/controllers.js" %}"></script>
+  <script src="{% static "js/filters.js" %}"></script>
+  <script src="{% static "js/directives.js" %}"></script>
 </body>
 </html>

@@ -9,6 +9,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin$', lambda request: HttpResponsePermanentRedirect('admin/')),
-    url(r'^api/', include('api.urls')),
-    url(r'^/?', include('coxtactoe.urls')),
+    url(r'^/?', include('apps.coxtactoe.urls')),
 )

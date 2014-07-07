@@ -2,9 +2,9 @@
 __docformat__ = 'restructuredtext en'
 import unittest
 
-from coxtactoe import tictactoe as ttt
-from coxtactoe.exceptions import InvalidGameError
-from coxtactoe import const as C
+from apps.coxtactoe import tictactoe as ttt
+from apps.coxtactoe.exceptions import InvalidGameError
+from apps.coxtactoe import const as C
 
 import logging as log
 log.basicConfig(level=log.INFO)

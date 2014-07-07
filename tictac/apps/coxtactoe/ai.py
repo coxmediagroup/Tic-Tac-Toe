@@ -9,9 +9,9 @@ from math import floor
 
 from tictac.settings import dev as settings
 
-from coxtactoe.models import TicTacToeMoveModel
-from coxtactoe.tictactoe import Marker, Board
-from coxtactoe import const as C
+from apps.coxtactoe.models import TicTacToeMoveModel
+from apps.coxtactoe.tictactoe import Marker, Board
+from apps.coxtactoe import const as C
 
 import logging as log
 log.basicConfig(level=log.INFO)

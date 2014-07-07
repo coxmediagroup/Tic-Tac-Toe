@@ -2,8 +2,8 @@
 __docformat__ = 'restructuredtext en'
 import unittest
 
-from coxtactoe import tictactoe as ttt
-from coxtactoe import const as C
+from apps.coxtactoe import tictactoe as ttt
+from apps.coxtactoe import const as C
 
 import logging as log
 log.basicConfig(level=log.INFO)

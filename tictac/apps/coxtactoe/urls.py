@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
-from coxtactoe import views
-from coxtactoe import const as C
+from apps.coxtactoe import views
+from apps.coxtactoe import const as C
 
 
 __docformat__ = 'restructuredtext en'

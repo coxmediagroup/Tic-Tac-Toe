@@ -3,9 +3,9 @@ __docformat__ = 'restructuredtext en'
 import unittest
 import random
 
-from coxtactoe import tictactoe as ttt
-from coxtactoe import const as C
-from coxtactoe.exceptions import InvalidMoveError
+from apps.coxtactoe import tictactoe as ttt
+from apps.coxtactoe import const as C
+from apps.coxtactoe.exceptions import InvalidMoveError
 
 import logging as log
 log.basicConfig(level=log.INFO)
@@ -153,7 +153,7 @@ class BoardTests(unittest.TestCase):
 
     def test_board_json(self):
         self.assertEquals(
-            self.board.json, "['_','_','_','_','_','_','_','_','_']")
+            self.board.json, '["_","_","_","_","_","_","_","_","_"]')
 
     def test_board_game_over_when_x_wins(self):
         self._winner_across(self.x)

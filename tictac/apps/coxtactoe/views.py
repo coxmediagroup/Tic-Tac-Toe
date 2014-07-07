@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, redirect
 from django.views.generic import TemplateView
 
-
-
-from coxtactoe import tictactoe as ttt
-from coxtactoe.ai import MinMaxPlayer
-from coxtactoe import const as C
-
-from pprint import PrettyPrinter as PP
-pformat = PP().pformat
+from apps.coxtactoe import tictactoe as ttt
+from apps.coxtactoe.ai import MinMaxPlayer
+from apps.coxtactoe import const as C
 
 import logging as log
-log.basicConfig(level=log.DEBUG)
 
+
+log.basicConfig(level=log.DEBUG)
 
 __docformat__ = 'restructuredtext en'
 

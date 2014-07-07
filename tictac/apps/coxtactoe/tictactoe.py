@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-__docformat__ = 'restructuredtext en'
-
 import uuid
 
-from coxtactoe import const as C
-from coxtactoe.exceptions import InvalidGameError, InvalidMoveError
-from coxtactoe.models import TicTacToeGameModel
+from apps.coxtactoe import const as C
+from apps.coxtactoe.exceptions import InvalidGameError, InvalidMoveError
+from apps.coxtactoe.models import TicTacToeGameModel
 
 import logging as log
 log.basicConfig(level=log.INFO)
+
+
+__docformat__ = 'restructuredtext en'
 
 
 class Marker(int):
@@ -85,10 +86,14 @@ class Board(object):
     def __len__(self):
         return self.BIT_LEN
 
+    def __iter__(self):
+        for item in ['%s' % repr(self.square(i)) for i in range(self.SQUARES)]:
+            yield item
+
     @property
     def json(self):
         board = ['%s' % repr(self.square(i)) for i in range(self.SQUARES)]
-        return "['%s']" % "','".join(board)
+        return '["%s"]' % '","'.join(board)
 
     @property
     def _win_masks(self):
@@ -200,8 +205,9 @@ class Game(object):
                 self.board = Board(board=game.board, turn=Marker(game.turn))
                 self.id = id
         else:
-            self.id = str(uuid.uuid1()).replace('-','')
+            self.id = uuid.uuid4().hex
             self.board = Board()
+        self.player = self.board.turn
 
     @property
     def over(self):
