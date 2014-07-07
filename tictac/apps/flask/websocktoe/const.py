@@ -10,7 +10,7 @@ HOST = '0.0.0.0'
 PORT=8001
 
 # Wibbily-wobbly, timey-wimey...stuff (in seconds)
-THREAD_SLEEP_TIME = 30
+THREAD_SLEEP_TIME = 60
 
 # Smack talk and silly banter for "MarvMin" the melancholy MinMax AI
 # (with apologies to Douglas Adams - http://tinyurl.com/djm53)
