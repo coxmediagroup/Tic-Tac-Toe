@@ -17,13 +17,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': root('db', 'dev.sqlite3')
     },
-    'postgres': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'coxtactoe',
-        'USER': 'coxtactoe',
-        'PASSWORD': 'c0Xtactoe',
-        'HOST': '127.0.0.1'
-    }
+    # 'postgres': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'coxtactoe',
+    #     'USER': 'coxtactoe',
+    #     'PASSWORD': 'c0Xtactoe',
+    #     'HOST': '127.0.0.1'
+    # }
 }
 
 INSTALLED_APPS += ("debug_toolbar", )

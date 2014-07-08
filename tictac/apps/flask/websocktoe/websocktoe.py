@@ -45,7 +45,6 @@ socketio = SocketIO(app)
 thread = None
 
 
-
 ####   Event Dispatchers   ####################################################
 
 def emit_msg(msg, game_id=None, event='msg'):

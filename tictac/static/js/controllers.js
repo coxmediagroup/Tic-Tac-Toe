@@ -16,7 +16,7 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
     {id: 8, marker: ''}
   ];
 
-  // Scope Variables
+  //  Scope Variables  /////////////////////////////////////////////////////////
   $scope.game_over_msg = '';
   $scope.squares = squares;
   $scope.game_id = game_id;

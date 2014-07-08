@@ -116,12 +116,6 @@ class MinMaxPlayer(object):
 
     # TESTING METHODS
     ###########################################################################
-    # The code below this point was intended to be disposable; for helping me
-    # debug the program and verify its behavior while I was developing it.
-    # I decided to leave it in and use it as a game play driver for automated
-    # testing of the AI code. If this were code anyone would have to maintain,
-    # it would make the sort list for refactoring.
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def reset_game(self):
         self.player = X
         self.board.reset()
