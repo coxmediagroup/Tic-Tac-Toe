@@ -16,9 +16,9 @@
   `----'          ``'      `--`       `--`---'   `----'                `----'
   .:[  s e t t i n g s  ]:.
 """
-import sys
+from __future__ import unicode_literals
 
-from os.path import join as joinpath, abspath, dirname, basename
+from os.path import join as joinpath, abspath, dirname, basename, realpath
 
 
 # ID of the current site in the django_site table.
@@ -26,6 +26,8 @@ SITE_ID = 1
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(g%$zefou7!tmjm2n7!+%%5=pn74@zfu34p7n#_e2aic^c=*p5'
+FLASK_SECRET_KEY = '5610b66b69aa4e238b255fa1df340e50' \
+                   'fc593a32222d602e65be2c4a4007ee44'
 ALLOWED_HOSTS = []
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -40,11 +42,7 @@ PROJECT_ROOT = here("..", "..")
 root = lambda *dirs: abspath(joinpath(PROJECT_ROOT, *dirs))
 PROJECT_NAME = basename(PROJECT_ROOT)
 APPS_ROOT = root('apps')
-LIB_ROOT = root('lib')
 SITE_ROOT = root('..', 'site')
-
-sys.path.append(APPS_ROOT)
-sys.path.append(LIB_ROOT)
 
 
 # Language and time zone
@@ -160,7 +158,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'coxtactoe',
+    'apps.coxtactoe',
     'south',
 )
 
