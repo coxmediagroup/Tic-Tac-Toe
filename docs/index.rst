@@ -9,6 +9,11 @@ Contents
    
    install
 
+Running
+~~~~~~~
+cd Tic-Tac-Toe/tictac
+./run.sh &
+./run_tests.sh
 
 Indices and tables
 ==================

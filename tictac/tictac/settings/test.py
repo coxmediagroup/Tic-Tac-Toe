@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from .base import *
 
 import logging as log
-log.disable(log.ERROR)
+log.disable(log.CRITICAL)
 
 __docformat__ = 'restructuredtext en'
 
@@ -49,30 +49,30 @@ COVERAGE_MODULE_EXCLUDES = [
 ]
 #COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(PROJECT_ROOT, 'coverage')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'stream_to_console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': here('coxtactoe_debug.log'),
-            },
-        },
-    'loggers': {
-        'django.request': {
-            'handlers': ['stream_to_console'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-        'another_random_logger': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-        }
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'stream_to_console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler'
+#         },
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': here('coxtactoe_debug.log'),
+#             },
+#         },
+#     'loggers': {
+#         'django.request': {
+#             'handlers': ['stream_to_console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             },
+#         'another_random_logger': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             },
+#         }
+# }
