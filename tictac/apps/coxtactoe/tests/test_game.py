@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-__docformat__ = 'restructuredtext en'
-import unittest
+from __future__ import unicode_literals
+
+from django.test import TestCase
 
 from apps.coxtactoe import tictactoe as ttt
 from apps.coxtactoe.exceptions import InvalidGameError
-from apps.coxtactoe import const as C
 
 import logging as log
 log.basicConfig(level=log.INFO)
 
+__docformat__ = 'restructuredtext en'
 
-class GameTests(unittest.TestCase):
+
+class GameTests(TestCase):
     def setUp(self):
         self.game = ttt.Game()
         self._ = ttt.Marker('_')

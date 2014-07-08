@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-__docformat__ = 'restructuredtext en'
-import unittest
+from __future__ import unicode_literals
+
 import random
+
+from django.test import TestCase
 
 from apps.coxtactoe import tictactoe as ttt
 from apps.coxtactoe import const as C
@@ -10,8 +12,10 @@ from apps.coxtactoe.exceptions import InvalidMoveError
 import logging as log
 log.basicConfig(level=log.INFO)
 
+__docformat__ = 'restructuredtext en'
 
-class BoardTests(unittest.TestCase):
+
+class BoardTests(TestCase):
     def setUp(self):
         self._ = ttt.Marker()
         self.x = ttt.Marker('X')

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-__docformat__ = 'restructuredtext en'
-import unittest
+from __future__ import unicode_literals
+
+from django.test import TestCase
 
 from apps.coxtactoe import tictactoe as ttt
 from apps.coxtactoe import const as C
@@ -8,8 +9,10 @@ from apps.coxtactoe import const as C
 import logging as log
 log.basicConfig(level=log.INFO)
 
+__docformat__ = 'restructuredtext en'
 
-class MarkerTests(unittest.TestCase):
+
+class MarkerTests(TestCase):
     def setUp(self):
         self._ = ttt.Marker('_')
         self.x = ttt.Marker('X')
