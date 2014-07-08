@@ -11,7 +11,8 @@ Pre-requisites
 Installation & Configuration
 ----------------------------
 
-0. Set installation/path options.
+0. Set installation/path options
+---------------------------------
 
 .. code-block:: bash
 
@@ -19,6 +20,7 @@ Installation & Configuration
     $ TTT_PROJ="tictac"
 
 1.  Install virtualenv, pyenv, and pyenv-virtualenv
+---------------------------------------------------
 
     * pyenv: `https://github.com/yyuu/pyenv`
     * pyenv-installer: `https://github.com/yyuu/pyenv-installer`
@@ -57,6 +59,7 @@ Manual Install
 
 
 2.  Install Python-2.7 with pyenv
+---------------------------------
 
 
 `OS X`
@@ -82,6 +85,7 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
 
 3. Create and activate pyenv virtualenv
+---------------------------------------
 
 .. code-block:: bash
 
@@ -90,6 +94,7 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
 
 4.  Clone this repo where you keep your project source code
+------------------------------------------------------------
 
 .. code-block:: bash
 
@@ -99,6 +104,7 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
 
 5.  Customize settings (optional)
+---------------------------------
 
     If you would like to update your TIME_ZONE or any other options, the
     settings files are located in `$TTT_PROJ/tictac/settings/`. They are
@@ -123,7 +129,8 @@ use Homebrew or MacPorts if the build process complains of a missing library.
       Settings for production deployment. E.g. DEBUG=False, production DB, etc.
 
 
-6.  Add project to python library path.
+6.  Add project to python library path
+---------------------------------------
 
 .. code-block:: bash
 
@@ -131,8 +138,8 @@ use Homebrew or MacPorts if the build process complains of a missing library.
     $ echo `pwd` > ~/.pyenv/versions/${TTT_PROJ}/lib/python2.7/site-packages/tictac.pth
 
 
-7.  Set the `DJANGO_SETTINGS_MODULE` environment variable now, and on every
-    virtualenv activation:
+7.  Set the `DJANGO_SETTINGS_MODULE` environment var
+----------------------------------------------------
 
 .. code-block:: bash
 
@@ -142,7 +149,8 @@ use Homebrew or MacPorts if the build process complains of a missing library.
         $ pyenv activate $TTT_PROJ
 
 
-8.  Install the basic project requirements:
+8.  Install the basic project requirements
+-------------------------------------------
 
 .. code-block:: bash
 
