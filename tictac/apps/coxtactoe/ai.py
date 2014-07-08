@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
 import sys
 import random
 
 from math import floor
-
-from tictac.settings import dev as settings
 
 from apps.coxtactoe.models import TicTacToeMoveModel
 from apps.coxtactoe.tictactoe import Marker, Board
@@ -25,9 +22,19 @@ __docformat__ = 'restructuredtext en'
 
 
 class MinMaxPlayer(object):
+    """Implements a MinMax 3,3,3-game player.
+
+        With some small modification it would be able to play any m,n,k-game.
+        The MinMax approach works because "no player can profit from deviating
+        from the strategy for one period and then reverting to the strategy."
+
+        Source: http://en.wikipedia.org/wiki/One-Shot_deviation_principle
+
+    """
     def __init__(self, player, board=Board()):
         self.board = board
         self.player = player
+        self.minmax_ai = player
         self.wins = {X: 0, O: 0}
         self.ties = {X: 0, O: 0}
         self.loses = {X: 0, O: 0}
@@ -36,10 +43,16 @@ class MinMaxPlayer(object):
         self.recent_loses = {X: 0, O: 0}
 
     def save_move(self, player, board, move):
+        """Saves moves for faster decisions later"""
         TicTacToeMoveModel.objects.get_or_create(
             player=repr(player), prev_board=board.key, move=move)
 
     def get_saved_move(self, player, board):
+        """Retrieves a move for the current board state if available.
+
+            Assuming a B-tree for the DB implementation, this
+            gives us O(log n) performance once a move has been saved.
+        """
         try:
             move = TicTacToeMoveModel.objects.get(
                 player=repr(player), prev_board=board.key)
@@ -49,6 +62,7 @@ class MinMaxPlayer(object):
             return move
 
     def score(self, player, board):
+        """Scores the game"""
         if board.winner == player:
             return C.WIN
         if board.winner is not None:
@@ -99,19 +113,26 @@ class MinMaxPlayer(object):
         else:
             return min(moves, key=lambda m: m[C.SCORE_IDX])[C.SCORE_IDX]
 
+
     # TESTING METHODS
     ###########################################################################
+    # The code below this point was intended to be disposable; for helping me
+    # debug the program and verify its behavior while I was developing it.
+    # I decided to leave it in and use it as a game play driver for automated
+    # testing of the AI code. If this were code anyone would have to maintain,
+    # it would make the sort list for refactoring.
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def reset_game(self):
         self.player = X
         self.board.reset()
 
     def move(self):
-        if self.board.turn == X:
+        if self.board.turn == self.minmax_ai:
             move = self.get_best_move(self.player, self.board)
         else:
             move = random.choice(self.board.open_squares)
         self.board.place(self.player, move)
-        self.player = X if self.player == O else O
+        self.player = self.player.opponent
 
     def print_recent_game_stats(self):
         x_wins = (float(self.recent_wins[X]) / 100.0)
@@ -202,20 +223,5 @@ class MinMaxPlayer(object):
             print("TIES:   %d" % self.ties[O])
             print("LOSES:  %d" % self.loses[O])
 
-            assert self.loses[X] == 0
-            assert self.wins[O] == 0
-
-
-if __name__ == "__main__":
-    stdout_unbuffered = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    stderr_unbuffered = os.fdopen(sys.stderr.fileno(), 'w', 0)
-    sys.stdout = stdout_unbuffered
-    sys.stderr = stderr_unbuffered
-    ai = MinMaxPlayer(X)
-    ai.play()
-    board = Board()
-    board.place(X, 0)
-    ai = MinMaxPlayer(O, board)
-    ai_move = ai.get_best_move()
-    board.place(O, ai_move)
-    print board.json
+            assert self.loses[self.minmax_ai] == 0
+            assert self.wins[self.minmax_ai.opponent] == 0

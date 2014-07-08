@@ -16,9 +16,9 @@
   `----'          ``'      `--`       `--`---'   `----'                `----'
   .:[  s e t t i n g s  ]:.
 """
-import sys
+from __future__ import unicode_literals
 
-from os.path import join as joinpath, abspath, dirname, basename
+from os.path import join as joinpath, abspath, dirname, basename, realpath
 
 
 # ID of the current site in the django_site table.
@@ -42,11 +42,7 @@ PROJECT_ROOT = here("..", "..")
 root = lambda *dirs: abspath(joinpath(PROJECT_ROOT, *dirs))
 PROJECT_NAME = basename(PROJECT_ROOT)
 APPS_ROOT = root('apps')
-LIB_ROOT = root('lib')
 SITE_ROOT = root('..', 'site')
-
-# sys.path.append(APPS_ROOT)
-# sys.path.append(LIB_ROOT)
 
 
 # Language and time zone
@@ -162,7 +158,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'apps.coxtactoe',
     'south',
 )

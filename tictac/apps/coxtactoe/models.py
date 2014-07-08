@@ -11,8 +11,7 @@ __docformat__ = 'restructuredtext en'
 
 
 class TicTacToeMoveModel(models.Model):
-    """
-    Provides move node model for building a move tree and looking up moves
+    """Provides move node model for building a move tree and looking up moves
     """
     player = fields.CharField(verbose_name="Player",
         null=False, blank=False, db_index=True, max_length=1)
@@ -23,6 +22,8 @@ class TicTacToeMoveModel(models.Model):
 
 
 class TicTacToeGameModel(models.Model):
+    """Provides a game model for persisting game state.
+    """
     gid = UUIDField(verbose_name="Game ID",
         null=False, blank=False, auto=True)
     board = fields.IntegerField(verbose_name="Board State",

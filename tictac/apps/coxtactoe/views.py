@@ -10,14 +10,13 @@ from apps.coxtactoe.ai import MinMaxPlayer
 from apps.coxtactoe import const as C
 
 import logging as log
-
-
 log.basicConfig(level=log.DEBUG)
 
 __docformat__ = 'restructuredtext en'
 
 
 class TicTacToeSplashView(TemplateView):
+    """Provides splash screen and X/O marker selection"""
     template_name = "coxtactoe/splash.html"
     http_method_names = ['get', 'post']
 
@@ -46,8 +45,12 @@ class TicTacToeSplashView(TemplateView):
         return context
 
 
-
 class TicTacToeGameView(TemplateView):
+    """Displays basic game template view.
+
+        Interaction is handled by `apps.flask.websocktoe`.
+
+    """
     template_name = "coxtactoe/game.html"
 
     def get_context_data(self, **kwargs):

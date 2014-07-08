@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import random
-import traceback
 
 from apps.coxtactoe import tictactoe as ttt
 from apps.coxtactoe.exceptions import InvalidGameError
@@ -14,9 +13,6 @@ __docformat__ = 'restructuredtext en'
 
 def get_game(id):
     """Gets :class:`~ttt.Game` instance for game ``id``
-
-    ``id``
-        Game ID of saved game.
     """
     try:
         return ttt.Game(id=id)

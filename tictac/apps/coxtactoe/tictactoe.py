@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import uuid
 
-from apps.coxtactoe import const as C
-from apps.coxtactoe.exceptions import InvalidGameError, InvalidMoveError
 from apps.coxtactoe.models import TicTacToeGameModel
+from apps.coxtactoe.exceptions import InvalidGameError, InvalidMoveError
+from apps.coxtactoe import const as C
 
 import logging as log
 log.basicConfig(level=log.INFO)
@@ -45,6 +47,7 @@ class Marker(int):
 
     @property
     def opponent(self):
+        """Your nemesis! *or you, to your nemesis*"""
         if self == self._:  return None
         if self == self.X:  return Marker(self.O)
         if self == self.O:  return Marker(self.X)
@@ -92,6 +95,7 @@ class Board(object):
 
     @property
     def json(self):
+        """Generates a JSON string representation of the board"""
         board = ['%s' % repr(self.square(i)) for i in range(self.SQUARES)]
         return '["%s"]' % '","'.join(board)
 
@@ -131,14 +135,17 @@ class Board(object):
 
     @property
     def key(self):
+        """An integer representation of game board state"""
         return self.board
 
     @property
     def bits(self):
+        """Returns string representation of board's binary value"""
         return "{0:0>{width}b}".format(int(self), width=len(self))
 
     @property
     def winner(self):
+        """Checks game board against winning bit masks."""
         for player in (self.X, self.O):
             for direction, win_masks in self.win_masks[player].iteritems():
                 for win_mask in win_masks:
@@ -148,10 +155,12 @@ class Board(object):
 
     @property
     def open_squares(self):
+        """Returns a list of open squares"""
         return [s for s in range(self.SQUARES) if self.square(s) == self._]
 
     @property
     def game_over(self):
+        """Indicates game over state"""
         if not self.open_squares:
             return True
         if self.winner is not None:
@@ -195,6 +204,7 @@ class Board(object):
 
 
 class Game(object):
+    """Implements a generic container for saving and retrieving a game model"""
     def __init__(self, id=None):
         if id is not None:
             try:
@@ -211,13 +221,16 @@ class Game(object):
 
     @property
     def over(self):
+        """Returns true when the game is over"""
         return self.board.game_over
 
     @property
     def winner(self):
+        """Returns game winner, if any."""
         return self.board.winner
 
     def save(self):
+        """Persists game state"""
         game, created = TicTacToeGameModel.objects.get_or_create(gid=self.id)
         game.turn = repr(self.board.turn)
         game.board = self.board.key

@@ -12,10 +12,7 @@ __docformat__ = 'restructuredtext en'
 
 class WebSockToeJSONEncoder(JSONEncoder):
     def default(self, o):
-        """Implement this method in a subclass such that it returns a
-        serializable object for ``o``, or calls the base implementation (to
-        raise a ``TypeError``).
-        """
+        """Provides JSON encoding support for Game objects."""
         if isinstance(o, ttt.Game):
             if not o.over:
                 tied = lost = False
