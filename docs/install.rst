@@ -159,3 +159,11 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
     As you edit your `requirements.txt` files, you can run those last commands again;
     `pip` will realise which packages you've added and will ignore those already installed.
+
+9.  syncdb && migrate
+---------------------
+
+.. code-block:: bash
+
+    $ cd tictac
+    $ ./manage.py syncdb && ./manage.py migrate
