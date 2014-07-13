@@ -5,8 +5,9 @@ export DJANGO_SETTINGS_MODULE=tictac.settings.dev
 export FLASK_SETTINGS_MODULE=tictac.settings.flask.test
 
 function _cleanup() {
+    ws_pids=$(pgrep -f websocktoe.py)
     pids=$(pgrep -f `which python`)
-    echo $pids | xargs kill -TERM
+    echo $ws_pids $pids | xargs kill -TERM
 }
 
 # Run flask websocket server in background
