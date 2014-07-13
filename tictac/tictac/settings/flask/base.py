@@ -8,15 +8,15 @@ Flask Settings
 	enable/disable testing mode
 
 ``PROPAGATE_EXCEPTIONS``
-	explicitly enable or disable the propagation of exceptions. 
-	If not set or explicitly set to None this is implicitly true 
+	explicitly enable or disable the propagation of exceptions.
+	If not set or explicitly set to None this is implicitly true
 	if either TESTING or DEBUG is true.
 
 ``PRESERVE_CONTEXT_ON_EXCEPTION``
-	By default if the application is in debug mode the request context 
-	is not popped on exceptions to enable debuggers to introspect the data. 
-	This can be disabled by this key. You can also use this setting to 
-	force-enable it for non debug execution which might be useful to debug 
+	By default if the application is in debug mode the request context
+	is not popped on exceptions to enable debuggers to introspect the data.
+	This can be disabled by this key. You can also use this setting to
+	force-enable it for non debug execution which might be useful to debug
 	production applications (but also very risky).
 
 ``SECRET_KEY``
@@ -122,7 +122,7 @@ from os.path import join as joinpath, abspath, dirname
 
 
 DEBUG = True
-TESTING = True
+TESTING = False
 SECRET_KEY = '5610b66b69aa4e238b255fa1df340e50fc593a32222d602e65be2c4a4007ee44'
 
 
