@@ -35,3 +35,7 @@ NOSE_ARGS = [
     '--with-progressive'
 ]
 
+# chromedriver must be on path
+#SELENIUM_WEBDRIVER = 'chrome'
+SELENIUM_WEBDRIVER = 'firefox'
+

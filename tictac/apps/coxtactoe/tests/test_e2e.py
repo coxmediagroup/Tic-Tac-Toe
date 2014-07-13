@@ -31,7 +31,7 @@ class CoxtactoeEndToEndTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = Browser('chrome')
+        cls.browser = Browser(settings.SELENIUM_WEBDRIVER)
         super(CoxtactoeEndToEndTests, cls).setUpClass()
 
     @classmethod

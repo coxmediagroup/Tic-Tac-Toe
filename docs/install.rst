@@ -120,6 +120,9 @@ Use Homebrew or MacPorts if the build process complains of a missing library.
     * Testing: `$TTT_PROJ/tictac/settings/test.py`
       Settings specific to running tests.
 
+      Set `SELENIUM_WEBDRIVER = "chrome"` if you have `chromedriver` installed
+      and in your PATH.
+
     * Stage: `$TTT_PROJ/tictac/settings/stage.py`
       Settings for stage deployment.
 
