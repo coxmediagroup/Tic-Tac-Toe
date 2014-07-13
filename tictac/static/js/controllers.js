@@ -1,23 +1,21 @@
 app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
   'use strict';
 
-  var socket = io.connect('http://' + document.domain + ':8001');
-  var path = window.location.pathname.split('/');
-  var game_id = path[path.length - 1];
-  var squares = [
-    {id: 0, marker: ''},
-    {id: 1, marker: ''},
-    {id: 2, marker: ''},
-    {id: 3, marker: ''},
-    {id: 4, marker: ''},
-    {id: 5, marker: ''},
-    {id: 6, marker: ''},
-    {id: 7, marker: ''},
-    {id: 8, marker: ''}
-  ];
+  var socket = io.connect('http://' + document.domain + ':8001'),
+      path = window.location.pathname.split('/'),
+      game_id = path[path.length - 1],
+      squares = [
+        {id: 0, marker: ''},
+        {id: 1, marker: ''},
+        {id: 2, marker: ''},
+        {id: 3, marker: ''},
+        {id: 4, marker: ''},
+        {id: 5, marker: ''},
+        {id: 6, marker: ''},
+        {id: 7, marker: ''},
+        {id: 8, marker: ''}];
 
   //  Scope Variables  /////////////////////////////////////////////////////////
-  $scope.game_over_msg = '';
   $scope.squares = squares;
   $scope.game_id = game_id;
   $scope.dialog_queue = [];
@@ -26,8 +24,9 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
 
   //  Scope Methods  ///////////////////////////////////////////////////////////
   $scope.squareTaken = function(square) {
-    return square.marker === '' ? '' : 'taken';
+    return square.marker && 'taken';
   };
+
   $scope.move = function(square) {
     var move = { square: square.id };
     if (!$scope.game_over) {
@@ -46,9 +45,11 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
     });
     // Set square hover bg img to match human player's xo_choice
     $('#tictactoe div').hover(
+        // mouseenter
         function() {
           $(this).not('.taken').addClass(xo_choice + '-hover');
         },
+        // mouseleave
         function() {
           $(this).not('.taken').removeClass('X-hover O-hover');
         });
@@ -56,7 +57,7 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
 
   var update_local_game_state = function(board) {
     $scope.$apply(function() {
-      for (var i = 0; i < board.length; i++) {
+      for (var i = 0, len = board.length; i < len; i++) {
         if (board[i] === 'X' || board[i] === 'O') {
           $scope.squares[i].marker = board[i];
         }
@@ -89,7 +90,7 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
       $scope.dialog_rendering = true;
       box
           .fadeTo('fast', 0.8, function() {
-            for (var i = 0; i < msg.length; i++) {
+            for (var i = 0, len = msg.length; i < len; i++) {
               teletype_keypress(msg, i, box);
             }
           })
@@ -173,5 +174,4 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
   })();
 
 }]);
-
 
