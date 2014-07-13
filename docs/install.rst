@@ -1,5 +1,3 @@
-cOXtactoe
-=========
 
 Pre-requisites
 --------------
@@ -28,9 +26,9 @@ Installation & Configuration
 
 NOTE
 ~~~~
-If you already have Python 2.7.x and virtualenv, you may simply create a new
+If you already have Python 2.7 and virtualenv, you may simply create a new
 virtual env and skip the pyenv/pyenv-virtualenv setup. If you do skip the pyenv
-installation make sure to use the appropriate virtualenv path in step #6.
+installation make sure to use the appropriate virtualenv path in steps #6 & #7.
 
 
 Installation
@@ -64,7 +62,7 @@ Manual Install
 
 `OS X`
 
-use Homebrew or MacPorts if the build process complains of a missing library.
+Use Homebrew or MacPorts if the build process complains of a missing library.
 
 
 `Ubuntu`
@@ -143,10 +141,10 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
 .. code-block:: bash
 
-        $ export DJANGO_SETTINGS_MODULE=tictac.settings.dev
-        $ echo "!!" >> ~/.pyenv/versions/${TTT_PROJ}/bin/activate
-        $ exec "$SHELL"
-        $ pyenv activate $TTT_PROJ
+    $ export DJANGO_SETTINGS_MODULE=tictac.settings.dev
+    $ echo "!!" >> ~/.pyenv/versions/${TTT_PROJ}/bin/activate
+    $ exec "$SHELL"
+    $ pyenv activate $TTT_PROJ
 
 
 8.  Install the basic project requirements
@@ -154,8 +152,9 @@ use Homebrew or MacPorts if the build process complains of a missing library.
 
 .. code-block:: bash
 
-        $ pip install -r requirements/bin.txt
-        $ pip install -r requirements/dev.txt
+    $ cd $INSTALL_DIR/$TTT_PROJ
+    $ pip install -r requirements/bin.txt
+    $ pip install -r requirements/dev.txt
 
     As you edit your `requirements.txt` files, you can run those last commands again;
     `pip` will realise which packages you've added and will ignore those already installed.
