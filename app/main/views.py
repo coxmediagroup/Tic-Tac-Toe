@@ -1,6 +1,7 @@
 import json
 from django.http import StreamingHttpResponse
 from django.views.generic import TemplateView
+from minimax.minimax import play_turn
 
 class BoardView(TemplateView):
     template_name = 'board.html'
@@ -13,6 +14,9 @@ def make_a_move(request):
     # Decode the json into python
     board = json.loads(request.GET['board'])
     # Make a move
+    status, board = play_turn(board=board)
+    '''
     if 0 in board:
         board[board.index(0)] = 2
+    '''
     return StreamingHttpResponse(json.dumps(board), content_type='application/json')
