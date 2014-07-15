@@ -2,11 +2,11 @@
 
     $(document).ready(function() {
 
-        var board = [0,0,0,0,0,0,0,0,0];
+        board = [0,0,0,0,0,0,0,0,0];
 
         $('a[name=move]').bind('click', function() { 
             index = $(this).attr('id');
-            board[index] = 1
+            board[index] = 1;
             $.ajax({
                 url: "/ajax/make_a_move/",
                 type: "GET",
@@ -17,6 +17,9 @@
                     $.each(board, function(i) {
                         if (board[i] == 1) {
                             $('#' + i).html('X');
+                        }
+                        else if (board[i] == 2) {
+                            $('#' + i).html('O');
                         }
                     });
                 }
