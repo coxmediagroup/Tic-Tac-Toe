@@ -203,7 +203,7 @@ def play_turn(board=None):
     # attach it to a MinMax tree generator/evaluator, max depth 6:
     mm = MinMax(6)
 
-    curplayer = Board.X   # computer
+    curplayer = Board.O   # computer
 
     done = 0
 
@@ -213,7 +213,7 @@ def play_turn(board=None):
         done = 3
         sys.stdout.write("Tie game!\n")
 
-    if curplayer == Board.X:
+    if curplayer == Board.O:
         sys.stdout.write("Computer is thinking...\n")
 
         # run the minmax tree for the current board
@@ -236,18 +236,18 @@ def play_turn(board=None):
 
         winner = board.getWinner()
 
-        if winner == Board.X:
+        if winner == Board.O:
             sys.stdout.write("X wins!\n")
             done = 2
-        elif winner == Board.O:
+        elif winner == Board.X:
             sys.stdout.write("O wins!\n")
             done = 1
 
     # switch to other player:
 
-    if curplayer == Board.X:
-        curplayer = Board.O
-    else:
+    if curplayer == Board.O:
         curplayer = Board.X
+    else:
+        curplayer = Board.O
 
-    return 0, board
+    return done, board
