@@ -19,4 +19,5 @@ def make_a_move(request):
     if 0 in board:
         board[board.index(0)] = 2
     '''
-    return StreamingHttpResponse(json.dumps(board), content_type='application/json')
+    data = {'status': status, 'board': board}
+    return StreamingHttpResponse(json.dumps(data), content_type='application/json')

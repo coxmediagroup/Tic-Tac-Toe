@@ -1,22 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>Let's play Tic Tac Toe</div>
+<div>Tic Tac Toe</div>
+<div>Game Status: <span id='game_status'></span></div>
 <table class="board">
   <tr>
-    <td><a id="0" name="move" href="#" ></a></td>
-    <td><a id="1" name="move" href="#" ></a></td>
-    <td><a id="2" name="move" href="#" ></a></td>
+    <td><a id="0" name="move"></a></td>
+    <td><a id="1" name="move"></a></td>
+    <td><a id="2" name="move"></a></td>
   </tr>
   <tr>
-    <td><a id="3" name="move" href="#" ></a></td>
-    <td><a id="4" name="move" href="#" ></a></td>
-    <td><a id="5" name="move" href="#" ></a></td>
+    <td><a id="3" name="move"></a></td>
+    <td><a id="4" name="move"></a></td>
+    <td><a id="5" name="move"></a></td>
   </tr>
   <tr>
-    <td><a id="6" name="move" href="#" ></a></td>
-    <td><a id="7" name="move" href="#" ></a></td>
-    <td><a id="8" name="move" href="#" ></a></td>
+    <td><a id="6" name="move"></a></td>
+    <td><a id="7" name="move"></a></td>
+    <td><a id="8" name="move"></a></td>
   </tr>
 </table>
+<div>
+<a id="restart_game" href='/board'>Restart The Game</a>
+<div>
 {% endblock %}
