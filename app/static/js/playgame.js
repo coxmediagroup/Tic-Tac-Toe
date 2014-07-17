@@ -16,33 +16,35 @@
                     // for each item in data['board'] fill in the corresponding game board table cell
                     board = data['board']
                     $.each(board, function(i) {
+                        space = $('#space_' + i)
                         if (board[i] == 1) {
-                            $('#' + i).html('X');
+                            space.html('X');
                         }
                         else if (board[i] == 2) {
-                            $('#' + i).html('O');
+                            space.html('O');
                         }
                     });
 
                     // Write out the current game status to the DOM
-                    status_game = data['status']
-                    if (status_game == 1) {
-                        status_game = "You've beaten the AI"; // This should never be executed
+                    game_status = data['status'];
+                    game_status_text = ''; 
+                    if (game_status == 1) {
+                        game_status_text = "You've beaten the AI"; // This should never be executed
                     }
-                    else if (status_game == 2) {
-                        status_game = "the AI has beaten you";
+                    else if (game_status == 2) {
+                        game_status_text = "the AI has beaten you";
                     }
-                    else if (status_game == 3) {
-                        status_game = "Tie game - click restart to play again";
+                    else if (game_status == 3) {
+                        game_status_text = "Tie game - click restart to play again";
                     }
                     else {
-                        status_game = "No Result - keep playing!";
+                        game_status_text = "No Result - keep playing!";
                     }
-                    $('#game_status').text(status_game);
+                    $('#game_status').text(game_status_text);
 
-                    // If the game is over then disable the game board
-                    if (status_game == 1 || status_game == 2 || status_game == 3) {
-                        $("a[name='move']").preventDefault();
+                    // If the game is over then disable the remaining space links
+                    if (game_status == 1 || game_status == 2 || game_status == 3) {
+                        $("a[name='move']").parent().html('');
                     }
                 }
             });

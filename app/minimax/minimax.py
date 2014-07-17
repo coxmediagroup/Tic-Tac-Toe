@@ -11,7 +11,6 @@
 # This software is hereby granted to the Public Domain
 #
 
-import sys
 import random
 
 INFINITY=99999999
@@ -20,8 +19,6 @@ def numStr(n):
     if n == INFINITY: return "+INFINITY"
     elif n == -INFINITY: return "-INFINITY"
     return str(n)
-
-#-------------------------------------------------------------------
 
 class MinMax(object):
     def __init__(self, maxdepth=INFINITY):
@@ -92,8 +89,6 @@ class MinMax(object):
         alpha = self._buildtree_r(board, curplayer, 0)
         return self.bestmove
 
-
-#-------------------------------------------------------------------
 
 class Board(list):
     """Holds a complete board in self, row-major order."""
@@ -193,61 +188,35 @@ class Board(list):
 
         return r
 
-#-------------------------------------------------------------------
-# MAIN:
-
-def play_turn(board=None):
-    # make the real board we'll be using
+def play_turn(board=None, curplayer=Board.O):
+    # Make the real board we'll be using
     board = Board(board=board)
-
-    # attach it to a MinMax tree generator/evaluator, max depth 6:
+    # Attach it to a MinMax tree generator/evaluator, max depth 6:
     mm = MinMax(6)
+    # Initialize the game_status variable
+    # game_status: 0 - Keep Playing, 1 - other player wins, 2 - current player wins, 3 - Tie game
+    game_status = 0
+    other_player = Board.X if curplayer == Board.O else Board.X
 
-    curplayer = Board.O   # computer
-
-    done = 0
-
-    sys.stdout.write("%s\n" % board)
+    print("%s" % board)
 
     if board.full():
-        done = 3
-        sys.stdout.write("Tie game!\n")
+        game_status = 3
+        print("Tie game!")
 
-    if curplayer == Board.O:
-        sys.stdout.write("Computer is thinking...\n")
-
-        # run the minmax tree for the current board
-        move = mm.buildtree(board, curplayer)
-
-        sys.stdout.write("Computer's move: %s\n" % move)
-
-    else:
-        badMove = True
-        while badMove:
-            sys.stdout.write("Enter a move: ");
-            sys.stdout.flush();
-            move = int(sys.stdin.readline())
-            badMove = move < 0 or move > 8 or board[move] != Board.NONE
+    # Run the minmax tree for the current board
+    move = mm.buildtree(board, curplayer)
+    print("Current player's move: %s" % move)
 
     if move >= 0:
         board.move(curplayer, move)
-
-        sys.stdout.write("%s\n" % board)
-
+        print("%s" % board)
         winner = board.getWinner()
+        if winner == curplayer:
+            print("Current player wins!")
+            game_status = 2
+        elif winner == other_player:
+            print("Other player wins!")
+            game_status = 1
 
-        if winner == Board.O:
-            sys.stdout.write("X wins!\n")
-            done = 2
-        elif winner == Board.X:
-            sys.stdout.write("O wins!\n")
-            done = 1
-
-    # switch to other player:
-
-    if curplayer == Board.O:
-        curplayer = Board.X
-    else:
-        curplayer = Board.O
-
-    return done, board
+    return game_status, board
