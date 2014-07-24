@@ -28,7 +28,7 @@ class WebSockToeJSONEncoder(JSONEncoder):
                 'over': o.over,
                 'tied': tied,
                 'lost': lost,
-            })
+            }, separators=(',',':'))
         return JSONEncoder.default(self, o)
 
 
