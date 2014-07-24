@@ -50,8 +50,8 @@ class CoxtactoeEndToEndTests(LiveServerTestCase):
         return True
 
     def _test_xo_choice_matches_player(self, player):
-        xo_choice = self.browser.evaluate_script(
-            'angular.element("body").scope().xo_choice')
+        xo_choice_selector = 'angular.element("main").scope().xo_choice'
+        xo_choice = self.browser.evaluate_script(xo_choice_selector)
         self.assertEquals(xo_choice, player)
 
     def _test_clicking_xo_on_game_page_starts_new_game_as_xo(self, player):
