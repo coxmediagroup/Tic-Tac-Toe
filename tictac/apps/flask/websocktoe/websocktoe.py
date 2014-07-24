@@ -88,7 +88,7 @@ def async_background_thread():
 ####   WS Event Listeners   ###################################################
 
 @socketio.on('connect')
-def connect():
+def connect(*args):
     """Sends confirmation msg on socketio connect."""
     log.debug('Client connected')
     emit_msg('Connected')
@@ -98,7 +98,6 @@ def connect():
 def disconnect():
     """Sends confirmation msg on SocketIO disconnect."""
     log.debug('Client disconnected')
-    emit_msg('Disconnected')
 
 
 @socketio.on('join')

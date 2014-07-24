@@ -1,94 +1,41 @@
-app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
+(function(angular) {
   'use strict';
 
-  var socket = io.connect('http://' + document.domain + ':8001'),
-      path = window.location.pathname.split('/'),
-      game_id = path[path.length - 1],
-      squares = [
-        {id: 0, marker: ''},
-        {id: 1, marker: ''},
-        {id: 2, marker: ''},
-        {id: 3, marker: ''},
-        {id: 4, marker: ''},
-        {id: 5, marker: ''},
-        {id: 6, marker: ''},
-        {id: 7, marker: ''},
-        {id: 8, marker: ''}];
+  var app = angular.module('coxtactoe.controllers', ['coxtactoe.websocket']);
 
-  //  Scope Variables  /////////////////////////////////////////////////////////
-  $scope.squares = squares;
-  $scope.game_id = game_id;
-  $scope.dialog_queue = [];
-  $scope.dialog_rendering = false;
+  app.controller('AiMsgAreaCtrl',
+  ['$scope', 'socketio', function($scope, socketio) {
 
+    var socket = socketio;
 
-  //  Scope Methods  ///////////////////////////////////////////////////////////
-  $scope.squareTaken = function(square) {
-    return square.marker && 'taken';
-  };
+    //  Scope Variables  //////////////////////////////////////////////////////
+    $scope.ai_msg_queue = [];
+    $scope.ai_msg_rendering = false;
 
-  $scope.move = function(square) {
-    var move = { square: square.id };
-    if (!$scope.game_over) {
-      socket.emit('move', move);
-      $('#log').append([
-        '<br>[send] move: <em>', JSON.stringify(move), '</em>'].join(''));
-    }
-  };
+    //  Helper Functions  /////////////////////////////////////////////////////
+    var log_ai_msg = function(msg) {
+      var log_msg = [
+        '<br>[recv] ai_msg: MarvMin, the melancholy minmax AI, said:<br>',
+        Array(8).join('&nbsp;'), '<em class="ai-said">', msg, '</em>'];
+      angular.element('#log').append(log_msg.join(''));
+    };
 
+    var teletype_keypress = function(msg, char, el) {
+      var box = el,
+          key_delay = 10 * char;
+      setTimeout(function() {
+        box.text(box.text() + msg[char]);
+      }, key_delay);
+    };
 
-  //  Helper Functions  ////////////////////////////////////////////////////////
-  var update_player_xo_choice = function(xo_choice) {
-    // Push xo_choice to $scope for use in move() calls from game form
-    $scope.$apply(function() {
-      $scope.xo_choice = xo_choice;
-    });
-    // Set square hover bg img to match human player's xo_choice
-    $('#tictactoe div').hover(
-        // mouseenter
-        function() {
-          $(this).not('.taken').addClass(xo_choice + '-hover');
-        },
-        // mouseleave
-        function() {
-          $(this).not('.taken').removeClass('X-hover O-hover');
-        });
-  };
-
-  var update_local_game_state = function(board) {
-    $scope.$apply(function() {
-      for (var i = 0, len = board.length; i < len; i++) {
-        if (board[i] === 'X' || board[i] === 'O') {
-          $scope.squares[i].marker = board[i];
-        }
-        $('#tictactoe div').removeClass('X-hover O-hover');
-      }
-    });
-  };
-
-  var log_ai_msg = function(msg) {
-    var log_msg = [
-      '<br>[recv] ai_msg: MarvMin, the melancholy minmax AI, said:<br>',
-      Array(8).join('&nbsp;'), '<em style="color: #fc6">', msg, '</em>'];
-    $('#log').append(log_msg.join(''));
-  };
-
-  var teletype_keypress = function(msg, char, el) {
-    var key_delay = 10 * char,
-        box = el;
-    setTimeout(function() {
-      box.text(box.text() + msg[char]);
-    }, key_delay);
-  };
-
-  var render_ai_msg = function(ai_msg) {
-    var msg = ai_msg,
-        box = $('#dialog'),
-        delay_per_char = 65,
-        hide_delay = msg.length * delay_per_char;
-    return (function() {
-      $scope.dialog_rendering = true;
-      box
+    var render_ai_msg = function(ai_msg) {
+      var msg = ai_msg,
+          box = $('#dialog'),
+          delay_per_char = 65,
+          hide_delay = msg.length * delay_per_char;
+      return (function() {
+        $scope.ai_msg_rendering = true;
+        box
           .fadeTo('fast', 0.8, function() {
             for (var i = 0, len = msg.length; i < len; i++) {
               teletype_keypress(msg, i, box);
@@ -97,81 +44,110 @@ app.controller('CoxtactoeCtrl', ['$scope', function($scope) {
           .delay(hide_delay)
           .text('')
           .fadeTo('fast', 0.0, function() {
-            $scope.dialog_rendering = false;
+            $scope.ai_msg_rendering = false;
           });
+      });
+    };
+
+    //  AI Message Event Handlers  ////////////////////////////////////////////
+    socket.on('ai_msg', function(data) {
+      log_ai_msg(data.msg);
+      $scope.ai_msg_queue.push(render_ai_msg(data.msg));
     });
-  };
 
-
-  //  Socket.io Event Handlers  ////////////////////////////////////////////////
-  socket.on('connect', function() {
-    socket.emit('connect');
-    $('#log')
-        .append('<br>[send] msg: <em>Connected</em>')
-        .append('<br>[send] join: <em>Join game ' + game_id + '</em>');
-    socket.emit('join', {game_id: game_id});
-  });
-
-  socket.on('msg', function(data) {
-    $('#log').append('<br>[recv] msg: <em>' + data.msg + '</em>');
-  });
-
-  socket.on('ai_msg', function(data) {
-    log_ai_msg(data.msg);
-    $scope.$apply(function() {
-      $scope.dialog_queue.push(render_ai_msg(data.msg));
-    });
-  });
-
-  socket.on('error', function(data) {
-    $('#log')
+    socket.on('error', function(data) {
+      angular.element('#log')
         .append('<br>[recv] error: msg: <em>' + data.msg + '</em>')
         .append('<br>[recv] error: traceback: <em>' + data.traceback + '</em>');
-    $scope.$apply(function() {
-      $scope.dialog_queue.push(render_ai_msg(data.msg));
+      $scope.ai_msg_queue.push(render_ai_msg(data.msg));
     });
-  });
 
-  socket.on('state', function(state_json) {
-    $('#log').append('<br>[recv] state: <em>' + state_json + '</em>');
-    var state = JSON.parse(state_json);
+    //  AI Msg Queue Runner  //////////////////////////////////////////////////
+    (function() {
+      // Consumes AI msg queue, rendering msg dialog boxes in serial
+      setInterval(function() {
+        if ($scope.ai_msg_queue.length === 0) { return; }
+        if ($scope.ai_msg_rendering) { return; }
+        var render_ai_msg = $scope.ai_msg_queue.shift();
+        render_ai_msg();
+      }, 500);
+    })();
 
-    if (state.xo_choice === 'X' || state.xo_choice === 'O') {
-      update_player_xo_choice(state.xo_choice);
-    }
+  }]);
 
-    if (state.board !== undefined) {
-      update_local_game_state(state.board);
-    }
 
-    if (state.lost === true) {
-      $scope.$apply(function() {
+  app.controller('CoxtactoeCtrl',
+  ['$scope', '$window', 'socketio', function($scope, $window, socketio) {
+
+    var socket = socketio,
+        path = $window.location.pathname.split('/'),
+        game_id = path[path.length - 1];
+
+    //  Scope Variables  //////////////////////////////////////////////////////
+    $scope.squares = [];
+    $scope.sq_classes = [];
+    $scope.game_id = game_id;
+
+    //  Scope Methods  ////////////////////////////////////////////////////////
+    $scope.hoverClass = function(square, mouseover) {
+      // No hover bg img when square already taken
+      if (square === 'X' || square === 'O') { return 'taken'; }
+      // Set square hover bg img to match human player's xo_choice
+      if (mouseover) { return $scope.xo_choice + '-hover'; }
+      return '';
+    };
+
+    $scope.move = function(square_idx) {
+      var move = { square: square_idx };
+      if (!$scope.game_over) {
+        socket.emit('move', move);
+        angular.element('#log').append([
+          '<br>[send] move: <em>', JSON.stringify(move), '</em>'].join(''));
+      }
+    };
+
+    //  Game State Event Handlers  ////////////////////////////////////////////
+    socket.on('connect', function() {
+      socket.emit('connect');
+      angular.element('#log')
+        .append('<br>[send] msg: <em>Connected</em>')
+        .append('<br>[send] join: <em>Join game ' + game_id + '</em>');
+      socket.emit('join', {game_id: game_id});
+    });
+
+    socket.on('msg', function(data) {
+      angular.element('#log')
+        .append('<br>[recv] msg: <em>' + data.msg + '</em>');
+    });
+
+    // Updates local game state w/ game data sent from server over WebSocket.
+    socket.on('state', function(state_json) {
+      angular.element('#log')
+        .append('<br>[recv] state: <em>' + state_json + '</em>');
+      var state = JSON.parse(state_json);
+
+      if (state.board) {
+        $scope.squares = state.board;
+      }
+
+      if (state.xo_choice) {
+        $scope.xo_choice = state.xo_choice;
+      }
+
+      if (state.lost === true) {
         $scope.game_over = true;
         $scope.game_over_msg = 'YOU LOSE';
-      });
-      $('.game-over-text').animate({opacity: 1}, 250);
-    }
+        $('.game-over-text').animate({opacity: 1}, 250);
+      }
 
-    if (state.tied === true) {
-      $scope.$apply(function() {
+      if (state.tied === true) {
         $scope.game_over = true;
         $scope.game_over_msg = 'TIE GAME';
-      });
-      $('.game-over-text').animate({opacity: 1}, 250);
-    }
-  });
+        $('.game-over-text').animate({opacity: 1}, 250);
+      }
+    });
 
+  }]);
 
-  //  AI msg box queue runner  /////////////////////////////////////////////////
-  // Watches AI msg queue and renders msg dialog boxes in serial
-  (function() {
-    setInterval(function() {
-      if ($scope.dialog_queue.length === 0) { return; }
-      if ($scope.dialog_rendering) { return; }
-      var render_dialog = $scope.dialog_queue.shift();
-      render_dialog();
-    }, 500);
-  })();
-
-}]);
+})(window.angular);
 

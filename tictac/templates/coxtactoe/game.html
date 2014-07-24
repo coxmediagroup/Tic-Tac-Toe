@@ -1,44 +1,30 @@
 {% extends "coxtactoe/splash.html" %}
 {% load staticfiles %}
 
-{% block ng_controller %}data-ng-controller="CoxtactoeCtrl"{% endblock %}
-
 {% block form_action %}action="../../../"{% endblock %}
 
 {% block msg_area %}
-<div id="dialog-container">
-  <div id="dialog"></div>
-</div>
+<ai-msg-area ng-controller="AiMsgAreaCtrl"></ai-msg-area>
 {% endblock %}
 
-{% block content %}
-  <div id="tictactoe-bg">
-    <div id="tictactoe-container">
-      <div id="tictactoe">
-        <form novalidate>
-          <div data-ng-repeat="square in squares" data-ng-click="move(square)"
-               data-ng-class="[square.marker, squareTaken(square)]"></div>
-          <input type="hidden" name="game_id" data-ng-model="game_id">
-          <input type="hidden" name="xo_choice" data-ng-model="xo_choice">
-        </form>
-      </div>
-    </div>
-  </div>
-  {% verbatim %}
-  <h2 class="game-over-text">{{ game_over_msg }}</h2>
-  {% endverbatim %}
-  <div id="log">
-    <br>:: Game Log ::
-    <br>
-  </div>
+{% block ng_controller %}
+<main data-ng-controller="CoxtactoeCtrl">
+  {% block content %}
+    {% verbatim %}
+    <tic-tac-toe></tic-tac-toe>
+    <game-over-msg></game-over-msg>
+    <game-log></game-log>
+    {% endverbatim %}
+  {% endblock %}
+</main>
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static "js/lib/jquery.min.js" %}"></script>
-  <script src="{% static "js/lib/angular.min.js" %}"></script>
-  <script src="{% static "js/lib/socket.io.min.js" %}"></script>
-  <script src="{% static "js/app.js" %}"></script>
-  <script src="{% static "js/controllers.js" %}"></script>
-  <script src="{% static "js/directives.js" %}"></script>
-  <script src="{% static "js/filters.js" %}"></script>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script>
+  <script src="{% static 'js/lib/socket.io.min.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/directives.js' %}"></script>
+  <script src="{% static 'js/websocket.js' %}"></script>
+  <script src="{% static 'js/controllers.js' %}"></script>
 {% endblock %}

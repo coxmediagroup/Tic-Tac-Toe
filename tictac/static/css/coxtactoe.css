@@ -150,10 +150,6 @@ p {
 
 #dialog {
   -ms-interpolation-mode: nearest-neighbor;
-  /*border-radius: 4px;*/
-  /*image-rendering: -webkit-nearest-neighbor;*/
-  /*image-rendering: pixelated;*/
-  /*text-transform: uppercase;*/
   background: #fc6 url(/static/img/ai_talking.gif) no-repeat 2px 2px;
   background-size: 100px 100px;
   box-shadow: 0 0 0 6px #e63,6px 0 0 6px #222,0 6px 0 6px #222,-6px 0 0 6px #222,0 -6px 0 6px #222;
@@ -315,6 +311,10 @@ p {
   opacity: .9;
   overflow-x: auto;
   width: 100%;
+}
+
+.ai-said {
+  color: #fc6;
 }
 
 /*   A N I M A T I O N   */

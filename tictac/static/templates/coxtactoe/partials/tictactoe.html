@@ -1,0 +1,13 @@
+<div id="tictactoe-bg">
+  <div id="tictactoe-container">
+    <div id="tictactoe">
+      <div data-ng-repeat="square in squares track by $id($index)"
+           data-ng-mouseover="sq_classes[$index] = hoverClass(square, true)"
+           data-ng-mouseleave="sq_classes[$index] = hoverClass(square, false)"
+           data-ng-class="[square, sq_classes[$index]]"
+           data-ng-click="move($index)"></div>
+      <input type="hidden" name="game_id" data-ng-model="game_id">
+      <input type="hidden" name="xo_choice" data-ng-model="xo_choice">
+    </div>
+  </div>
+</div>
