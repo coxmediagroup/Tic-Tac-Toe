@@ -93,7 +93,7 @@ class TicTacToe (object):
         return None if None in self.board else self.draw
 
     def __unicode__(self):
-        return "[TicTacToe winner:{0}, board:{1}".format(self.winner, self.board)
+        return "[TicTacToe winner:{0}, board:{1}]".format(self.winner, self.board)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
