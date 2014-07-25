@@ -1,0 +1,35 @@
+/* general style settings */
+.text-centered {
+    text-align: center;
+}
+
+
+/* game specific styles */
+.gameboard table {
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.gameboard td {
+    border: 0 !important;
+    background-color: #A6E0FF;
+}
+
+.gameboard input[type=submit] {
+    min-height: 100px;
+    min-width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 50px;
+    font-weight: bolder;
+    color: #FFF;
+}
+
+.gameboard .btn-x:disabled {
+    background-color: #F00;
+}
+.gameboard .btn-o:disabled {
+    background-color: #0F0;
+}

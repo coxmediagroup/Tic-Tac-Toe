@@ -1,0 +1,61 @@
+{% extends 'page-base.html' %}
+{% load sekizai_tags %}
+
+{% block page_title %}Tic Tac Toe!{% endblock %}
+
+{% block navbar_content %}
+    <p class="navbar-brand">Tic Tac Toe!</p>
+    <p class="navbar-text navbar-right">Eric Ressler</p>
+{% endblock %}
+
+{% block main_content %}
+    {# page specific static files appended to base blocks by sekizai #}
+    {% addtoblock "custom_css" %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/tic-tac-toe.css">
+    {% endaddtoblock %}
+    {% addtoblock "custom_js" %}
+        <script src="{{ STATIC_URL }}js/jquery.tictactoe.js"></script>
+        <script>
+            $('.gameboard').TicTacToe();
+        </script>
+    {% endaddtoblock %}
+
+    <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
+    <div class="tictactoe col-lg-6 col-md-6 col-sm-8 col-xs-12">
+
+        <h4 class="text-centered" id="status">&nbsp;</h4>
+        <form class="gameboard" action="{% url "submit" %}" method="post">
+            {% csrf_token %}
+            <table class="table">
+                {% for tile in game.board %}
+                    {# handle new table rows based on the index of the tile #}
+                    {% if forloop.first %}
+                        <tr>
+                    {% elif forloop.counter0|divisibleby:"3" %}
+                        </tr><tr>
+                    {% endif %}
+
+                    <td>
+                        <input type="submit"
+                               class="btn btn-{{ tile|default_if_none:"info" }}"
+                               value="{{ tile|default_if_none:""|upper }}"
+                               name="tile-{{ forloop.counter0 }}"
+                               {% if tile %}disabled{% endif %}
+                        >
+                    </td>
+
+                    {# close out the last table row #}
+                    {% if forloop.last %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </form>
+
+        <div class="text-centered">
+            <a href="{% url "reset" %}" class="btn btn-primary" role="button">Start New Game</a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-2 col-xs-0"></div>
+
+{% endblock %}

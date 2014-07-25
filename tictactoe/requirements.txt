@@ -1,0 +1,4 @@
+Django==1.6.5
+django-classy-tags==0.5.1
+django-sekizai==0.7
+wsgiref==0.1.2

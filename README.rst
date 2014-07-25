@@ -1,28 +1,38 @@
-Story
-======
+=============
+Tic Tac Toe
+=============
+:Author:
+	Eric Ressler, 
+	eric.k.ressler@gmail.com
+:Version: 1.0
+:Date: July 5, 2014
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+Installation Instructions
+--------------------------
 
-Acceptance criteria
-=======================
+* Clone this repository locally and cd into the *tictactoe* directory.
+* Create a new virtual environment::
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+	$ virtualenv ttt
+	$ source ttt/bin/activate
+	
+* Use ``pip`` to install the necessary requirements::
 
+	(ttt)$ pip install -r requirements.txt
+	
+* Run syncdb to create the sqlite3 database and setup the django tables::
 
-Technical notes
-------------------
+	(ttt)$ ./manage.py syncdb
+	
+* Startup the local webserver and navigate to http://localhost:8000 to run the application::
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+	(ttt)$ ./manage.py runserver
+	
+	
+Tests
+------
 
+Unit tests are included for this application and can be run from the command line::
 
-Submissions
----------------
-
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
-
+	(ttt)$ ./manage.py test tictactoe.apps.game
+	
