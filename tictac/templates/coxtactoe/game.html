@@ -4,16 +4,16 @@
 {% block form_action %}action="../../../"{% endblock %}
 
 {% block msg_area %}
-<ai-msg-area ng-controller="AiMsgAreaCtrl"></ai-msg-area>
+<ai-msg-area ng-controller="AiMsgAreaCtrl" ng-cloak></ai-msg-area>
 {% endblock %}
 
 {% block ng_controller %}
 <main data-ng-controller="CoxtactoeCtrl">
   {% block content %}
     {% verbatim %}
-    <tic-tac-toe></tic-tac-toe>
-    <game-over-msg></game-over-msg>
-    <game-log></game-log>
+    <tic-tac-toe ng-cloak></tic-tac-toe>
+    <game-over-msg ng-cloak></game-over-msg>
+    <game-log ng-cloak></game-log>
     {% endverbatim %}
   {% endblock %}
 </main>
