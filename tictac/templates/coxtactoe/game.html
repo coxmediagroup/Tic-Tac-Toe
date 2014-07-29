@@ -1,0 +1,30 @@
+{% extends "coxtactoe/splash.html" %}
+{% load staticfiles %}
+
+{% block form_action %}action="../../../"{% endblock %}
+
+{% block msg_area %}
+<ai-msg-area ng-controller="AiMsgAreaCtrl" ng-cloak></ai-msg-area>
+{% endblock %}
+
+{% block ng_controller %}
+<main data-ng-controller="CoxtactoeCtrl">
+  {% block content %}
+    {% verbatim %}
+    <tic-tac-toe ng-cloak></tic-tac-toe>
+    <game-over-msg ng-cloak></game-over-msg>
+    <game-log ng-cloak></game-log>
+    {% endverbatim %}
+  {% endblock %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script>
+  <script src="{% static 'js/lib/socket.io.min.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/directives.js' %}"></script>
+  <script src="{% static 'js/websocket.js' %}"></script>
+  <script src="{% static 'js/controllers.js' %}"></script>
+{% endblock %}
