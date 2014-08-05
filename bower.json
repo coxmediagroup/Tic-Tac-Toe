@@ -1,0 +1,26 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "homepage": "https://github.com/paul-wade/Tic-Tac-Toe",
+  "authors": [
+    "Paul Wade <paul.wade@psibitsoftware.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "toastr": "~2.0.3",
+    "angular": "~1.2.21",
+    "angular-resource": "~1.2.21",
+    "angular-route": "~1.2.21",
+    "angular-bootstrap": "~0.11.0"
+  }
+}
