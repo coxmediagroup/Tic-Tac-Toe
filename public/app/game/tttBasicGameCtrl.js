@@ -8,15 +8,15 @@ angular.module('tttApp').controller('tttBasicGameCtrl', function ($scope) {
     $scope.move = function (col, row) {
         var result = game.makeMove(col, row, $scope.currentPlayer);
         if (result) $scope.currentPlayer = SetNextPlayer($scope.currentPlayer);
+        
+        //verify on server
     };
 
     function SetNextPlayer(currentPlayer) {
         if (currentPlayer === 1) return 2;
         else return 1;
     }
-
 });
-
 
 function Game(cols, rows) {
     this.columnsCount = cols;
@@ -34,5 +34,4 @@ function Game(cols, rows) {
         }
         else return false;
     };
-
 }
