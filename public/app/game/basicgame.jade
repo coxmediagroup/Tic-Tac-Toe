@@ -1,3 +1,4 @@
+.player1
 .gameBoard
     .gameRow
         .gameColumn.noLeftBorder(ng-click="move(0,0)")
@@ -20,5 +21,5 @@
             {{ game.gameBoard[2][1] }}
         .gameColumn(ng-click="move(2,2)")
             {{ game.gameBoard[2][2] }}
-            
-//A static board like this isn't ideal maybe but its a good starting point
+.player2
+    //A static board like this isn't ideal maybe but its a good starting point

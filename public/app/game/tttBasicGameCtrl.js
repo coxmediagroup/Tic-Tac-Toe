@@ -4,6 +4,7 @@ angular.module('tttApp').controller('tttBasicGameCtrl', function ($scope) {
     $scope.game = game;
     $scope.currentPlayer = 1;
     
+    //need the controller to abstract out the UI needing to know whos turn it is
     $scope.move = function (col, row) {
         game.makeMove(col, row, $scope.currentPlayer);
         $scope.currentPlayer = SetNextPlayer($scope.currentPlayer);
