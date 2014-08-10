@@ -1,9 +1,11 @@
 body {
-  margin-top: 60px;
+  margin-top: 80px;
   margin-left: 20px;
   margin-right: 20px;
 }
 .gameBoard {
+  margin-right: auto;
+  margin-left: auto;
   width: 300px;
   height: 300px;
 }
@@ -25,15 +27,25 @@ body {
 .noBottomBorder {
   border-bottom: 0px solid;
 }
-.player1 {
-  width: 100px;
-  height: 100px;
-  background-image: "../images/player1.png";
+.playerImage {
+  width: 300;
+  height: 300px;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: #80b3ff;
+  text-align: center;
+}
+.playerImage img {
+  width: 200px;
+  height: 200px;
   display: inline-block;
 }
-.player2 {
-  width: 100px;
-  height: 100px;
-  background-image: "../images/player2.png";
-  display: inline-block;
+.playerImage div {
+  text-align: center;
+}
+.playerImage span {
+  font-family: 'Indie Flower';
+  font-size: 2em;
 }
