@@ -6,8 +6,8 @@ angular.module('tttApp').controller('tttBasicGameCtrl', function ($scope) {
 
     //need the controller to abstract out the UI needing to know whos turn it is
     $scope.move = function (col, row) {
-        game.makeMove(col, row, $scope.currentPlayer);
-        $scope.currentPlayer = SetNextPlayer($scope.currentPlayer);
+        var result = game.makeMove(col, row, $scope.currentPlayer);
+        if (result) $scope.currentPlayer = SetNextPlayer($scope.currentPlayer);
     };
 
     function SetNextPlayer(currentPlayer) {
@@ -28,8 +28,11 @@ function Game(cols, rows) {
         [0, 0, 0]
     ];
     this.makeMove = function (col, row, player) {
-        this.gameBoard[col][row] = player;
-
+        if (this.gameBoard[col][row] === 0) {
+            this.gameBoard[col][row] = player;
+            return true;
+        }
+        else return false;
     };
 
 }

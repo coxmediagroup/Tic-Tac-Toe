@@ -2,10 +2,14 @@
     img(src="../images/player1.jpg")
     .div
         span Player 1
+i.fa.fa-mail-reply.fa-5x.text-danger.pull-left(ng-show = "currentPlayer == 1")
 .playerImage.pull-right
     img(src="../images/player2.jpg")
     .div
-        span Player 2 (Computer)
+        span Player 2 
+        .div 
+            | (Computer for now maybe socket.io 2 player?)
+i.fa.fa-mail-forward.fa-5x.text-danger.pull-right(ng-show = "currentPlayer == 2")
 .gameBoard
     .gameRow
         .gameColumn.noLeftBorder(ng-click="move(0,0)")
