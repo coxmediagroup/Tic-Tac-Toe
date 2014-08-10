@@ -28,15 +28,15 @@ describe('gamestate Row win', function () {
     it('Should show a draw when no moves left and no winners', function () {
         var gameboard = [
             [1, 2, 1],
-            [2, 1, 2],
-            [2, 2, 1]
+            [1, 2, 2],
+            [2, 1, 1]
         ];
         assert.equal(3, GameState.IsWinner(gameboard));
     });
     it('Should show no winnders when moves left and no winners', function () {
         var gameboard = [
             [1, 2, 0],
-            [0, 1, 2],
+            [0, 0, 2],
             [2, 0, 1]
         ];
         assert.equal(0, GameState.IsWinner(gameboard));
@@ -68,14 +68,47 @@ describe('gamestate column win', function () {
         assert.equal(1, GameState.IsWinner(gameboard));
     });
 
-    describe('gamestate column win', function () {
+    describe('gamestate DIAG win', function () {
         it('should return a win for player 1 on top left to bottom right', function () {
             var gameboard = [
                 [1, 0, 0],
                 [0, 1, 0],
                 [0, 0, 1]
             ];
-            assert.equal(1,GameState.IsWinner(gameboard));
+            assert.equal(1, GameState.IsWinner(gameboard));
+        });
+        it('should return a win for player 1 on top left to bottom right', function () {
+            var gameboard = [
+                [0, 0, 1],
+                [0, 1, 0],
+                [1, 0, 0]
+            ];
+            assert.equal(1, GameState.IsWinner(gameboard));
+        });
+
+        it('should return a win for player 2 on top left to bottom right', function () {
+            var gameboard = [
+                [2, 0, 0],
+                [0, 2, 0],
+                [0, 0, 2]
+            ];
+            assert.equal(2, GameState.IsWinner(gameboard));
+        });
+        it('should return a win for player 2 on top left to bottom right', function () {
+            var gameboard = [
+                [0, 0, 2],
+                [0, 2, 0],
+                [2, 0, 0]
+            ];
+            assert.equal(2, GameState.IsWinner(gameboard));
+        });
+        it('should return a win for player 1 on top left to bottom right', function () {
+            var gameboard = [
+                [1, 0, 2],
+                [0, 2, 0],
+                [2, 0, 1]
+            ];
+            assert.equal(2, GameState.IsWinner(gameboard));
         });
     });
 });
