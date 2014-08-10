@@ -1,1 +1,24 @@
-| basic game!!!
+.gameBoard
+    .gameRow
+        .gameColumn.noLeftBorder(ng-click="move(0,0)")
+            {{ game.gameBoard[0][0] }}
+        .gameColumn(ng-click="move(0,1)")
+            {{ game.gameBoard[0][1] }}
+        .gameColumn(ng-click="move(0,2)")
+            {{ game.gameBoard[0][2] }}
+    .gameRow
+        .gameColumn.noLeftBorder(ng-click="move(1,0)")
+            {{ game.gameBoard[1][0] }}
+        .gameColumn(ng-click="move(1,1)")
+            {{ game.gameBoard[1][1] }}
+        .gameColumn(ng-click="move(1,2)")
+            {{ game.gameBoard[1][2] }}
+    .gameRow.noBottomBorder
+        .gameColumn.noLeftBorder(ng-click="move(2,0)")
+            {{ game.gameBoard[2][0] }}
+        .gameColumn(ng-click="move(2,1)")
+            {{ game.gameBoard[2][1] }}
+        .gameColumn(ng-click="move(2,2)")
+            {{ game.gameBoard[2][2] }}
+            
+//A static board like this isn't ideal maybe but its a good starting point
