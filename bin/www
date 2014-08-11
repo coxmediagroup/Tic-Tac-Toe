@@ -3,9 +3,4 @@
 var debug = require('debug')('tic-tac-toe');
 var app = require('../app');
 
-app.set('port', process.env.PORT || 3000);
-app.set('host', process.env.IP || 'localhost');
-
-var server = app.listen(app.get('port'),app.get('host'), function () {
-    debug('Express server listening on port ' + server.address());
-});
+var server = app.listen(process.env.PORT || 3003, process.env.IP);
