@@ -6,11 +6,12 @@ exports.AINextMove = function (gameBoard) {
     var posibleMoves = openSpace.FindMoves(gameBoard);
 
 
-    var result = BlockOponent(gameBoard);
+   
+    result = GetMyWinningMove(gameBoard);
     if (result.status === 1) {
         return result.gameBoard;
     }
-    result = GetMyWinningMove(gameBoard);
+     var result = BlockOponent(gameBoard);
     if (result.status === 1) {
         return result.gameBoard;
     }
