@@ -42,5 +42,21 @@ describe('Pauls super AI', function () {
         var nowinner = gameState.IsWinner(updatedGameBoard);
         assert.equal(0, nowinner);
     });
- 
+
+    it('should anticipate and block a player move', function () {
+        var gameboard = [
+            [1, 2, 1],
+            [0, 0, 0],
+            [1, 0, 0]
+        ];
+        var expectedgameboard = [
+            [1, 2, 1],
+            [2, 2, 0],
+            [1, 0, 0]
+        ];
+        var updatedGameBoard = superAI.AINextMove(gameboard);
+
+        
+    });
+
 });
