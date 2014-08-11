@@ -11,26 +11,10 @@ i.fa.fa-mail-reply.fa-5x.text-danger.pull-left(ng-show = "currentPlayer == 1")
             | (Computer for now maybe socket.io 2 player?)
 i.fa.fa-mail-forward.fa-5x.text-danger.pull-right(ng-show = "currentPlayer == 2")
 .gameBoard
-    .gameRow
-        .gameColumn.noLeftBorder(ng-click="move(0,0)")
-            {{ game.gameBoard[0][0] }}
-        .gameColumn(ng-click="move(0,1)")
-            {{ game.gameBoard[0][1] }}
-        .gameColumn(ng-click="move(0,2)")
-            {{ game.gameBoard[0][2] }}
-    .gameRow
-        .gameColumn.noLeftBorder(ng-click="move(1,0)")
-            {{ game.gameBoard[1][0] }}
-        .gameColumn(ng-click="move(1,1)")
-            {{ game.gameBoard[1][1] }}
-        .gameColumn(ng-click="move(1,2)")
-            {{ game.gameBoard[1][2] }}
-    .gameRow.noBottomBorder
-        .gameColumn.noLeftBorder(ng-click="move(2,0)")
-            {{ game.gameBoard[2][0] }}
-        .gameColumn(ng-click="move(2,1)")
-            {{ game.gameBoard[2][1] }}
-        .gameColumn(ng-click="move(2,2)")
-            {{ game.gameBoard[2][2] }}
-
-    //A static board like this isn't ideal maybe but its a good starting point
+    .gameRow(ng-repeat="row in game.gameBoard  track by $index",ng-class="{noBottomBorder: $index ===2}")
+        .gameColumn.noLeftBorder(ng-click="move($index,0)")
+            {{ game.gameBoard[$index][0] }}
+        .gameColumn(ng-click="move($index,1)")
+            {{ game.gameBoard[$index][1] }}
+        .gameColumn(ng-click="move($index,2)")
+            {{ game.gameBoard[$index][2] }}
