@@ -21,6 +21,18 @@ body {
   display: inline-block;
   padding: 5px;
 }
+.gamePiece {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+}
+.gamePiece img {
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  vertical-align: baseline;
+  display: block;
+}
 .noLeftBorder {
   border-left: 0px solid;
 }

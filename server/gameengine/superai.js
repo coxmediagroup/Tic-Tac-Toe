@@ -5,13 +5,11 @@ var gameTypes = require("./gametypes");
 exports.AINextMove = function (gameBoard) {
     var posibleMoves = openSpace.FindMoves(gameBoard);
 
-
-   
     result = GetMyWinningMove(gameBoard);
     if (result.status === 1) {
         return result.gameBoard;
     }
-     var result = BlockOponent(gameBoard);
+    var result = BlockOponent(gameBoard);
     if (result.status === 1) {
         return result.gameBoard;
     }
@@ -19,9 +17,6 @@ exports.AINextMove = function (gameBoard) {
     if (result.status === 1) {
         return result.gameBoard;
     }
-
-
-
     return gameBoard;
 }
 

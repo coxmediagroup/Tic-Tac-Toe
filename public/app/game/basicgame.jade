@@ -13,8 +13,11 @@ i.fa.fa-mail-forward.fa-5x.text-danger.pull-right(ng-show = "currentPlayer == 2"
 .gameBoard
     .gameRow(ng-repeat="row in game.gameBoard  track by $index",ng-class="{noBottomBorder: $index ===2}")
         .gameColumn.noLeftBorder(ng-click="move($index,0)")
-            {{ game.gameBoard[$index][0] }}
+            .gamePiece 
+                img(src="../images/player{{game.gameBoard[$index][0]}}.jpg" ng-hide="game.gameBoard[$index][0] ===0")
         .gameColumn(ng-click="move($index,1)")
-            {{ game.gameBoard[$index][1] }}
+            .gamePiece
+                img(src="../images/player{{game.gameBoard[$index][1]}}.jpg" ng-hide="game.gameBoard[$index][1] ===0")
         .gameColumn(ng-click="move($index,2)")
-            {{ game.gameBoard[$index][2] }}
+            .gamePiece
+                img(src="../images/player{{game.gameBoard[$index][2]}}.jpg" ng-hide="game.gameBoard[$index][2] ===0")
