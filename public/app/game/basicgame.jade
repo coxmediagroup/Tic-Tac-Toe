@@ -21,3 +21,11 @@ i.fa.fa-mail-forward.fa-5x.text-danger.pull-right(ng-show = "currentPlayer == 2"
         .gameColumn(ng-click="move($index,2)")
             .gamePiece
                 img(src="../images/player{{game.gameBoard[$index][2]}}.jpg" ng-hide="game.gameBoard[$index][2] ===0")
+
+.modalWindow(ng-show="showModal")
+    .modalContent
+        span  
+            {{gameResult}}
+        br
+        button(ng-click="playAgain()")
+            | Play Again?

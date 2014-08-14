@@ -61,3 +61,36 @@ body {
   font-family: 'Indie Flower';
   font-size: 2em;
 }
+.modalOverlay {
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.8;
+}
+.modalWindow {
+  z-index: 10000;
+  position: absolute;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 4px 4px 80px #000;
+}
+.modalContent {
+  padding: 10px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+.modalContent span {
+  font-family: 'Indie Flower';
+  font-size: 2em;
+}
+.modalContent button {
+  margin-top: 30px;
+}
