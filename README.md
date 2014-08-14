@@ -1,3 +1,9 @@
+[![Build Status](https://snap-ci.com/paul-wade/Tic-Tac-Toe/branch/master/build_image)](https://snap-ci.com/paul-wade/Tic-Tac-Toe/branch/master)
+
+CI Env: http://paultictactoe.herokuapp.com/basicgame
+
+=====
+
 Story
 ======
 

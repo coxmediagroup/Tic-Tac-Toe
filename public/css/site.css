@@ -1,0 +1,96 @@
+body {
+  margin-top: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.gameBoard {
+  margin-right: auto;
+  margin-left: auto;
+  width: 300px;
+  height: 300px;
+}
+.gameRow {
+  height: 100px;
+  width: 300px;
+  border-bottom: 4px solid;
+}
+.gameColumn {
+  width: 100px;
+  height: 100px;
+  border-left: 4px solid;
+  display: inline-block;
+  padding: 5px;
+}
+.gamePiece {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+}
+.gamePiece img {
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  vertical-align: baseline;
+  display: block;
+}
+.noLeftBorder {
+  border-left: 0px solid;
+}
+.noBottomBorder {
+  border-bottom: 0px solid;
+}
+.playerImage {
+  width: 300;
+  height: 300px;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: #80b3ff;
+  text-align: center;
+}
+.playerImage img {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+}
+.playerImage div {
+  text-align: center;
+}
+.playerImage span {
+  font-family: 'Indie Flower';
+  font-size: 2em;
+}
+.modalOverlay {
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.8;
+}
+.modalWindow {
+  z-index: 10000;
+  position: absolute;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 4px 4px 80px #000;
+}
+.modalContent {
+  padding: 10px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+.modalContent span {
+  font-family: 'Indie Flower';
+  font-size: 2em;
+}
+.modalContent button {
+  margin-top: 30px;
+}
