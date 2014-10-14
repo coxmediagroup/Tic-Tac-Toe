@@ -7,11 +7,16 @@
 #            of the table to manageable and intellible level
 # initial stage - naive tic tac toe
 # next stage - intelligent ai with rules to win and block and be naive as last resort
-
+# tested - ran 10000 moves within minute (54s), no errors or ai losses
+# 100 moves in 0.6 seconds so approx 6ms per op includes reads
 import sys
 import os 
 import time 
+import random
 import re
+from datetime import datetime
+
+
 
 board=""
 boardreset="0123A5678"
@@ -75,6 +80,12 @@ def tictactoeboard(humaninput):
       boardfile.close()
       print loss
       print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
+      boardfile = open('board', 'w')
+      boardfile.write(boardreset)
+      boardfile.close()
+      board = open('board').read()
+      print reset
+      print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
       return
 
    # check if board is full for draw
@@ -87,6 +98,12 @@ def tictactoeboard(humaninput):
    	  boardfile.write(board)
    	  boardfile.close()
    	  print draw
+   	  print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
+   	  boardfile = open('board', 'w')
+   	  boardfile.write(boardreset)
+   	  boardfile.close()
+   	  board = open('board').read()
+   	  print reset
    	  print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
    	  return
    
@@ -170,6 +187,12 @@ def tictactoeboard(humaninput):
     	boardfile.close()
     	print win
     	print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
+    	boardfile = open('board', 'w')
+    	boardfile.write(boardreset)
+    	boardfile.close()
+    	board = open('board').read()
+    	print reset
+    	print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
     	return 
    		
    # human block 
@@ -214,6 +237,13 @@ def tictactoeboard(humaninput):
         		full=False
         if full == True:
             print draw
+            print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
+            boardfile = open('board', 'w')
+            boardfile.write(boardreset)
+            boardfile.close()
+            board = open('board').read()
+            print reset
+            print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
         return 
 
    # ai naive move
@@ -236,6 +266,13 @@ def tictactoeboard(humaninput):
         		full=False
         if full == True:
             print draw
+            print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
+            boardfile = open('board', 'w')
+            boardfile.write(boardreset)
+            boardfile.close()
+            board = open('board').read()
+            print reset
+            print board[0:3] + "\n" + board[3:6] + "\n" + board[6:9]
     	return 
 
    
@@ -243,8 +280,17 @@ def tictactoeboard(humaninput):
 
 # 1..8 : Mark Board ('H')
 # 9    : Reset Board
-myhumaninput = '6'
+myhumaninput = '9'
 print tictactoeboard(myhumaninput)
-
-
-
+a = datetime.now()
+print a
+i=0
+while i < 100:
+	myhumaninput=str(random.randint(0,9))
+	print myhumaninput
+	print tictactoeboard(myhumaninput)
+	print "\n"
+	i = i + 1
+b = datetime.now()
+print b
+print (b-a).seconds
