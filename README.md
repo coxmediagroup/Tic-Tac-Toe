@@ -20,7 +20,7 @@ A simple Django application is included in the package `tictactoe`. It uses Djan
 It currently only supports playing against the computer but the user may choose to play as either X or O.
 
 ### Demo
-A demo can be played at http://www.engineignite.com:8001/
+A demo can be played at http://engineignite.com/ (http://162.243.47.93/)
 
 ### Requirements
  + Django >= 1.3
