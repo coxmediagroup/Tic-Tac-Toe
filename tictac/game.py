@@ -51,8 +51,11 @@ def pretty_board(board):
 
 
 # Check board for a Win
-def is_win(board):
+# If player is provided, check it for a win for only that player
+def is_win(board, player = None):
     current_lines = [ ''.join([ board[p] for p in line ]) for line in lines ]
+    if player is not None:
+        return (3*player in current_lines)
     return ('xxx' in current_lines) or ('ooo' in current_lines)
 
 
@@ -62,7 +65,7 @@ def get_legal_moves(board):
 
 
 # Make a move and return the resulting board
-def apply_move(board, player, point):
+def apply_move(point, board, player):
     board_list = list(board)
     board_list[point] = player
     return ''.join(board_list) 
@@ -72,36 +75,68 @@ example_board = 'x--oo-x--'
 
 
 # Given a board, get the next best move
-def get_best_move(board, depth=0):
+# returns a tuple in the format (move, board, player)
+def get_best_move(board, depth=-1):
+    #keep up with the relative depth
+    depth = depth + 1
+
     player = 'x' if board.count('-') % 2 == 1 else 'o' 
 
     # list of possible moves
     moves = get_legal_moves(board)
 
-    # TODO
     # if the board is empty, take 0
-    # if the board has only one place, take center
-    # if the board has only one place and center is taken, take 0
+    if board.count('-') == 9:
+        return 0, apply_move(0, board, player), player
+
+    # if the board has only one piece placed, take center
+    if board.count('-') == 8 and board[4] == '-':
+        return 4, apply_move(4, board, player), player
+
+    # if the board has only one piece placed and center is taken, take 0
+    if board.count('-') == 8 and board[4] == 'x':
+        return 0, apply_move(4, board, player), player
+
+    # if the board has only one possible move, take it
+    if len(moves) == 1:
+        return moves[0], apply_move(moves[0], board, player), player
 
     # dict of outcomes of possible moves
     # move : (board, win?)
     results = { m : (
-        apply_move(board, player, m),
-        is_win(apply_move(board,player, m))
+        apply_move(m, board, player),
+        is_win(apply_move(m, board, player), player)
         ) for m in moves }
     
     # if one of the moves results in a win, take it
     if [ k for k, v in results.iteritems() if v[1] is True ]:
-        return [ k for k, v in results.iteritems() if v[1] is True ][0]
+        winning_move = [ k for k, v in results.iteritems() if v[1] == True ][0]
+        return winning_move, apply_move(winning_move, board, player), player
 
-    # if any of these moves results in a possible loss on the next move,
+    # if any of these moves results in a possible loss on oponent's next move,
     # prune them
+    losing_moves = []
+    for m in moves:
+        print depth, m
+        m2, b2, p2 = get_best_move(apply_move(m, board, player), depth)
+        if is_win(b2, p2):
+            losing_moves.append(m)
+    
+    for lm in losing_moves:
+        moves.remove(lm)
+
+    if len(moves) == 1:
+        return moves[0], apply_move(moves[0], board, player), player
 
     # if one of these moves results in multiple possible wins on our next
     # turn, take them
 
+    
+    
+    
+
     # if one of these moves results in multiple possible losses on opponents
     # next, next turn, prune them
 
-
+    return -1, board, player 
 
