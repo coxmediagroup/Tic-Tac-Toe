@@ -71,7 +71,12 @@ class TTTGameBoard(object):
 
     # return a (fixed-width) test friendly board representation
     def friendly_board(self):
-        return self.board[0:3] + '\n' + self.board[3:6] + '\n' + self.board[6:9]
+        #return self.board[0:3] + '\n' + self.board[3:6] + '\n' + self.board[6:9]
+        board_list = list(self.board)
+        position_list = range(9)
+        board_position_list = zip(board_list, position_list)
+        output_list = [ i[0].upper() if i[0] != '-' else i[1] for i in board_position_list ]
+        return "\n{} | {} | {} \n---------\n{} | {} | {} \n---------\n{} | {} | {} \n".format(*output_list)
 
 
     # get the winner of the current board state.
