@@ -44,8 +44,8 @@ def get_next_gamestate(game, player=None):
         else:
             return game.apply_move(4)
 
-    #if opponent placed in 5 or 7, take 8:
-    if game.depth == 2 and game.last_move in [5,7]:
+    #if opponent didn't take the opposing corner, take it
+    if game.depth == 2 and 8 in game.get_legal_moves():
         return game.apply_move(8)
 
     #if there is only one possible move, take it
