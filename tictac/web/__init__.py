@@ -1,9 +1,7 @@
-from flask import Flask, request, session, g, render_template, abort, flash
+from flask import Flask
 
 app = Flask(__name__)
 app.secret_key = 'xyzzy'
 
+from tictac.web import views
 
-@app.route('/')
-def index():
-    return "Hello, world!"
