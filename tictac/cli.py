@@ -79,6 +79,31 @@ class TTTGameLoop(object):
                 gametype = None
             else:
                 return int(gametype)
+
+    def get_player_piece(self):
+        first_player = None
+        while first_player is None:
+            print "\n---------"
+            print "Who would you like to go first?"
+            print "    1.) I would like to go first."
+            print "    2.) The Bot should go first."
+            print "    3.) Flip a coin!."
+            print "---------\n"
+            first_player = raw_input("Your pick? ")
+
+            if not first_player.isdigit() or int(first_player) not in [1,2,3]:
+                print "\nERROR"
+                print "'{}' is an invalid choice.".format(gametype)
+                first_player = None
+            else:
+                if first_player == '1':
+                    return 'x'
+                elif first_player == '2':
+                    return 'o'
+                else:
+                    player_turn = random.choice(['x','o'])
+                    print "\nWe flipped a coin, you're playing as {}!".format(player_turn.upper())
+                    return player_turn
     
     def declare_winner(self):
         print "Game Over!  Final board:"
@@ -100,9 +125,8 @@ class TTTGameLoop(object):
 
         #if the player is playing, choose which side 
         #if the AI is playing vs random, this will act as the random turn
-        player_turn = random.choice(['x','o'])
         if gametype == 1:
-            print "\nWe flipped a coin, you're playing as {}!".format(player_turn.upper())
+            player_turn = self.get_player_piece()
 
         if gametype == 4:
             print "\nYou're right.  The only way to win is not to play.  Goodbye!"
