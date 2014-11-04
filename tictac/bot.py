@@ -28,8 +28,8 @@ def get_next_gamestate(game, player=None):
 
     opponent = 'x' if player == 'o' else 'o'
 
-    #if the board is full, return the current board:
-    if game.depth == 9:
+    #if the board is full or game is over:
+    if game.winner or game.depth == 9:
         return game
 
     #if the board is empty, grab 0:
@@ -65,7 +65,11 @@ def get_next_gamestate(game, player=None):
     losing_moves = [ 
         m for m, gs
         in movetree.iteritems() 
-        if opponent in [ gs2.winner for m2, gs2 in generate_movetree(gs).iteritems() ]
+        if opponent in [ 
+            gs2.winner 
+            for m2, gs2 
+            in generate_movetree(gs).iteritems() 
+        ]
     ]
     for lm in losing_moves:
         del movetree[lm]
@@ -76,7 +80,7 @@ def get_next_gamestate(game, player=None):
 
     #multi-move look-ahead only matters of turns 6 and below.  In that case,
     #or if no non-losing moves remain, return the first legal move:
-    if game.depth > 6 or len(movetree) == 0: 
+    if game.depth > 8 or len(movetree) == 0: 
         return game.apply_move(game.get_legal_moves()[0])
 
     #look for moves for which all opponents moves result in a loss for them
