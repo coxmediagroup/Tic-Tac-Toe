@@ -42,9 +42,11 @@ def test_moves(game, player='x'):
 
 
 if __name__ == '__main__':
+    print "Check all possible moves for losing board positions."
     game = board.TTTGameBoard()
-    print "Player First"
+    print "Player First: "
     test_moves(game)
-    print "Player Second"
+    print "Player Second: "
     test_moves(game,player='o')
+    print "Done!"
 

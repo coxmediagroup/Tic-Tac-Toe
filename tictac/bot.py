@@ -48,6 +48,11 @@ def get_next_gamestate(game, player=None):
     if game.depth == 2 and 8 in game.get_legal_moves():
         return game.apply_move(8)
 
+    #if you have corner and opp took opposing corner, take a 2nd corner
+    #the sides adjacent to your existing piece are a 4 turn fork
+    if game.depth == 2 and game.board[0] == player and game.board[8] == opponent:
+        return game.apply_move(2)
+
     #if there is only one possible move, take it
     if len(game.get_legal_moves()) == 1:
         m = game.get_legal_moves()[0]
