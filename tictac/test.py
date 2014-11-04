@@ -43,5 +43,8 @@ def test_moves(game, player='x'):
 
 if __name__ == '__main__':
     game = board.TTTGameBoard()
+    print "Player First"
     test_moves(game)
+    print "Player Second"
+    test_moves(game,player='o')
 
