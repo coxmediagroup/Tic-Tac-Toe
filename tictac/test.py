@@ -11,6 +11,7 @@
 """
 
 import pprint
+import sys
 
 import board
 import bot 
@@ -40,8 +41,7 @@ def test_moves(game, player='x'):
             print gameprime
         test_moves(gameprime, player)
 
-
-if __name__ == '__main__':
+def run_tests():
     print "Check all possible moves for losing board positions."
     game = board.TTTGameBoard()
     print "Player First: "
@@ -49,4 +49,8 @@ if __name__ == '__main__':
     print "Player Second: "
     test_moves(game,player='o')
     print "Done!"
+    sys.exit()
 
+
+if __name__ == '__main__':
+    run_tests()

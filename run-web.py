@@ -1,3 +1,3 @@
 from tictac.web import app
 
-app.run(debug=True)
+app.run()
