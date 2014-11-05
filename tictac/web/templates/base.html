@@ -1,6 +1,9 @@
+<!doctype html>
 <html>
     <head>
-        <title>Tic Tac Toe! - {% block subtitle %}Home{% endblock %}</title>
+    <title>{% block title %}Tic Tac Toe! - {% block subtitle %}Home{% endblock %} {% endblock %}</title>
+    {% block head %}
+    {% endblock %}
     </head>
     <body>
         {% block body %}

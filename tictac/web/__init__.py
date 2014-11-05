@@ -1,7 +1,16 @@
-from flask import Flask
+from flask import Flask, session
+from flask.ext.session import Session
 
 app = Flask(__name__)
 app.secret_key = 'xyzzy'
 
-from tictac.web import views
+#Config Parameters
+SESSION_TYPE = 'filesystem'
 
+#End Config Paramters
+
+app.config.from_object(__name__)
+
+Session(app)
+
+from tictac.web import views
