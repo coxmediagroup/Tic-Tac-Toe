@@ -1,6 +1,6 @@
 
 from django.conf.urls import patterns, url
-from tictactoe import views
+from tictactoe_api import views
 
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),

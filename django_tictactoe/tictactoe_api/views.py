@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 import json
 import uuid
 
-from tictactoe.models import PersistentGameState
+from tictactoe_api.models import PersistentGameState
 
 # Create your views here.
 

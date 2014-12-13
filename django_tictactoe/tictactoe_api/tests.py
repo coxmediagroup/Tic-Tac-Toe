@@ -50,7 +50,7 @@ class PostTest(TestCase):
     self.assertEqual(len(jresp2['game']['moves']), 2, "computer should have played")
 
 
-class GameTest(TestCase):
+class GameApiTest(TestCase):
   def setUp(self):
     c = Client()
     resp = c.get('/tictactoe/game/')
