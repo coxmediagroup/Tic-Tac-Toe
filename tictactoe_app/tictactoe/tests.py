@@ -76,7 +76,8 @@ class GameTest(TestCase):
     self.do_move("X", "1")
     self.do_move("X", "6")
     self.do_move("X", "8")
-    self.do_move("X", "5")
-    # game is drawn. computer should fail
+    resp = self.do_move("X", "5")
+    pp(resp)
+    self.assertEqual(resp['isDrawn'], True, "Game should be drawn")
 
 

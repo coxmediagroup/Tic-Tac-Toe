@@ -36,10 +36,19 @@ class GameState:
   def isWon(self):
     return minmax.isWin(self.board)
 
+  def isDrawn(self):
+    "Drawn if the game isn't won and there is nowhere to play"
+    return (not self.isWon()) and ("-" not in self.board)
+
+  def isFinished(self):
+    return self.isDrawn() or self.isWon()
+
   def validate_next(self, player, position):
     "Report whether the supplied move makes sense"
     if self.isWon():
       return (False, "The game has already been won.")
+    if self.isDrawn():
+      return (False, "The game is drawn.")
     if not self.validate_next_player(player):
       return (False, "It's not your turn!")
     if self.board[position] == player:
@@ -62,6 +71,7 @@ class GameState:
       "lastPlayer": self.last_player(),
       "gameId": self.game_id,
       "isWon": self.isWon(),
+      "isDrawn": self.isDrawn()
       }
 
 

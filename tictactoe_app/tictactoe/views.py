@@ -36,8 +36,9 @@ def game(request, game_id=None):
       g.save_move(*data)
       if g.isWon():
         return success_response(g, yourWin=True)
-      else:
-        return do_computer_move(player, g)
+      if g.isFinished():
+        return success_response(g, draw=True)
+      return do_computer_move(player, g)
 
 
 def do_computer_move(last_player, game):
@@ -51,5 +52,7 @@ def do_computer_move(last_player, game):
     game.save_move(*data)
     if game.isWon():
       return success_response(game, yourWin=False)
+    if game.isFinished():
+      return success_response(game, draw=True)
     return success_response(game)
 
