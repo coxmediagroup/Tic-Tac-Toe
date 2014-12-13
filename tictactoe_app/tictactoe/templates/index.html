@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+  </head>
+  <body>
+  	<h1>Tic-Tac-Toe</h1>
+  	<ul>
+  	{% for gameId in gameIds %}
+  	  <li><a href="game/{{gameId}}">{{gameId}}</a></li>
+  	{% endfor %}
+  	</ul>
+  </body>
+</html>

@@ -31,7 +31,7 @@ class GameState:
   def tally_move(self, player, position):
     "Update our history of the game to include a move"
     self.board[position] = player
-    self.movelist.append((player, position))
+    self.movelist.append((player, position),)
 
   def isWon(self):
     return minmax.isWin(self.board)
@@ -81,5 +81,11 @@ class PersistentGameState(GameState):
     for recordedMove in recordedMoves:
       gameState.tally_move(recordedMove.player, recordedMove.position)
     return gameState
+
+  @staticmethod
+  def getAllGameIds():
+    firstMoves = Move.objects.filter(insert_id=1)
+    for m in firstMoves:
+      yield m.session_id
 
 

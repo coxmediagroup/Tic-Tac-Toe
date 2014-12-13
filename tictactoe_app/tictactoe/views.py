@@ -8,7 +8,8 @@ from tictactoe.models import PersistentGameState
 # Create your views here.
 
 def index(http_request):
-  return HttpResponse("hello there")
+  context = {"gameIds":PersistentGameState.getAllGameIds()}
+  return render(http_request, 'index.html', context)
 
 def success_response(game, **kw):
   body = {"status":"success", "game":game.summarize()}
