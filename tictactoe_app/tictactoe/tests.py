@@ -32,3 +32,18 @@ class PersistentGameTests(TestCase):
     self.game.save_move('O',1)
     game = PersistentGameState.load("some-id")
     self.assertEqual(len(game.movelist), 2, "movelist not loaded")  	
+
+
+from django.test import Client
+import json
+
+
+class PostTest(TestCase):
+  def test_one_move(self):
+    c = Client()
+    resp = c.get('/tictactoe/game/')
+    jresp = json.loads(resp.content.decode('utf-8'))
+    game_id = jresp["game"]["gameId"]
+    resp2 = c.post('/tictactoe/game/%s/'%(game_id,), {'player':'X', 'position':'0'}, follow=True)
+    jresp2 = json.loads(resp2.content.decode('utf-8'))
+    self.assertEqual(len(jresp2['game']['moves']), 2, "computer should have played")

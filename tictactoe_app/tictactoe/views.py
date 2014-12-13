@@ -36,17 +36,17 @@ def game(request, game_id=None):
 
 
 def do_computer_move(last_player, game):
-  computer_player = 'O' if player == 'X' else 'X'
-  winSurety, computer_move = g.suggest_next(computer_player)
-  valid, data = g.validate_next(computer_player, computer_move)
+  computer_player = 'O' if last_player == 'X' else 'X'
+  winSurety, computer_move = game.suggest_next(computer_player)
+  valid, data = game.validate_next(computer_player, computer_move)
   if not valid:
     # malfunctioning minmax
     raise Exception("Computer player tried to play an invalid move")
   else:
-    g.save_move(*data)
-    if g.isWon():
-      return success_response(g, yourWin=False)
-    return success_reponse(g)
+    game.save_move(*data)
+    if game.isWon():
+      return success_response(game, yourWin=False)
+    return success_response(game)
 
 
 
