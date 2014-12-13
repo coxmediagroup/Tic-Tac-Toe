@@ -10,7 +10,7 @@ class Move(models.Model):
   position = models.IntegerField()
 
 
-import tictactoe.SudhagarS_minmax_tictactoe as minmax
+import tictactoe_api.SudhagarS_minmax_tictactoe as minmax
 
 class GameState:
   """Records tic-tac-toe state and validates moves against the model."""

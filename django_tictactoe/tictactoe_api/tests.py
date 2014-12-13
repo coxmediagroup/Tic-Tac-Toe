@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from tictactoe.models import GameState, PersistentGameState
+from tictactoe_api.models import GameState, PersistentGameState
 # Create your tests here.
 
 
@@ -42,10 +42,10 @@ from pprint import pprint as pp
 class PostTest(TestCase):
   def test_one_move(self):
     c = Client()
-    resp = c.get('/tictactoe/game/')
+    resp = c.get('/api/game/')
     jresp = json.loads(resp.content.decode('utf-8'))
     game_id = jresp["game"]["gameId"]
-    resp2 = c.post('/tictactoe/game/%s/'%(game_id,), {'player':'X', 'position':'0'}, follow=True)
+    resp2 = c.post('/api/game/%s/'%(game_id,), {'player':'X', 'position':'0'}, follow=True)
     jresp2 = json.loads(resp2.content.decode('utf-8'))
     self.assertEqual(len(jresp2['game']['moves']), 2, "computer should have played")
 
@@ -53,13 +53,13 @@ class PostTest(TestCase):
 class GameApiTest(TestCase):
   def setUp(self):
     c = Client()
-    resp = c.get('/tictactoe/game/')
+    resp = c.get('/api/game/')
     jresp = json.loads(resp.content.decode('utf-8'))
     self.game_id = jresp["game"]["gameId"]
 
   def do_move(self, player, pos):
     c = Client()
-    url = '/tictactoe/game/%s/'%(self.game_id,)
+    url = '/api/game/%s/'%(self.game_id,)
     body = {'player': player, 'position': pos}
     resp = c.post(url, body, follow=True)
     #self.assertEqual(resp.status, 200, "Didn't get HTTP OK back")
