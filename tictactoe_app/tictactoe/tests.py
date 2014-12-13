@@ -77,7 +77,6 @@ class GameTest(TestCase):
     self.do_move("X", "6")
     self.do_move("X", "8")
     resp = self.do_move("X", "5")
-    pp(resp)
-    self.assertEqual(resp['isDrawn'], True, "Game should be drawn")
+    self.assertEqual(resp['game']['isDrawn'], True, "Game should be drawn")
 
 

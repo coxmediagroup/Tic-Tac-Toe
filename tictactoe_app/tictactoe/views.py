@@ -34,11 +34,10 @@ def game(request, game_id=None):
       return JsonResponse({"status":"error", "message":data})
     else:
       g.save_move(*data)
-      if g.isWon():
-        return success_response(g, yourWin=True)
       if g.isFinished():
-        return success_response(g, draw=True)
-      return do_computer_move(player, g)
+        return success_response(g)
+      else:
+        return do_computer_move(player, g)
 
 
 def do_computer_move(last_player, game):
@@ -50,9 +49,5 @@ def do_computer_move(last_player, game):
     raise Exception("Computer player tried to play an invalid move")
   else:
     game.save_move(*data)
-    if game.isWon():
-      return success_response(game, yourWin=False)
-    if game.isFinished():
-      return success_response(game, draw=True)
     return success_response(game)
 
