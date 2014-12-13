@@ -16,8 +16,8 @@ class GameState:
   """Records tic-tac-toe state and validates moves against the model."""
   def __init__(self, game_id):
     self.game_id = game_id
-    self.board = list("---------")
-    self.movelist = []
+    self.board = list("---------") # "X", "O", or "-"
+    self.movelist = [] # list of (player, position) tuples
 
   def last_player(self):
     return None if not self.movelist else self.movelist[-1][0]
@@ -46,6 +46,7 @@ class GameState:
       return (False, "You've already played there!")
     if self.board[position] != "-":
       return (False, "Opponent has already played there!")
+     # otherwise a valid move
     return (True, (player, position))
 
   def suggest_next(self, player):
