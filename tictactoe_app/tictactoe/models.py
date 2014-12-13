@@ -70,7 +70,7 @@ class PersistentGameState(GameState):
     "save a move to the database and then tally it"
     m = Move(session_id=self.game_id, player=player, position=position)
     m.save()
-    m.tally_move(player, position)
+    self.tally_move(player, position)
 
   @classmethod
   def load(PGS, game_id):
