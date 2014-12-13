@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 import uuid
 
@@ -13,8 +13,12 @@ def index(http_request):
 def success_response(game, **kw):
   body = {"status":"success", "game":game.summarize()}
   body.update(kw)
-  return HttpResponse(json.dumps(body), content_type="application/json")
+  return JsonResponse(body)
 
+from pprint import pprint as pp
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def game(request, game_id=None):
   if not game_id:
     game_id = str(uuid.uuid4())
@@ -26,7 +30,7 @@ def game(request, game_id=None):
     position = int(request.POST['position'])
     valid, data = g.validate_next(player, position)
     if not valid:
-      return {"status":"error", "message":data}
+      return JsonResponse({"status":"error", "message":data})
     else:
       g.save_move(*data)
       if g.isWon():
@@ -47,6 +51,4 @@ def do_computer_move(last_player, game):
     if game.isWon():
       return success_response(game, yourWin=False)
     return success_response(game)
-
-
 
