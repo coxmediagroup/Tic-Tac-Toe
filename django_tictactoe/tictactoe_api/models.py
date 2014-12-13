@@ -98,4 +98,11 @@ class PersistentGameState(GameState):
     for m in firstMoves:
       yield m.session_id
 
-
+  def execute_move(self, player, pos, onValid, onInvalid):
+    "onValid should take the game as an argument, onInvalid takes the reason string"
+    valid, data = self.validate_next(player, pos)
+    if not valid:
+      return onInvalid(data)
+    else:
+      self.save_move(*data)
+      return onValid(self)
