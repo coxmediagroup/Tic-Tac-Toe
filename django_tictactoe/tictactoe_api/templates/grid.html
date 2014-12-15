@@ -1,23 +1,32 @@
-{% if err %}
-  <p class="err">{{err}}</p>
-{% endif %}
-<table class="tictactoe">
-{% for row in rows %}
-  <tr>
-    {% for position,square in row %}
-      <td>
-        {% if square == "-" %}
-          <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="player" value="X" />
-            <input type="hidden" name="position" value="{{ position }}" />
-            {% if not isFinished %} <input type="submit" value="Play" /> {% else %} &nbsp; {% endif %}
-          </form>
-        {% else %}
-          {{ square }}
-        {% endif %}
-      </td>
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+  </head>
+  <body>
+
+    {% if err %}
+      <p class="err">{{err}}</p>
+    {% endif %}
+    <table class="tictactoe">
+    {% for row in rows %}
+      <tr>
+        {% for position,square in row %}
+          <td>
+            {% if square == "-" %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="player" value="X" />
+                <input type="hidden" name="position" value="{{ position }}" />
+                {% if not isFinished %} <input type="submit" value="Play" /> {% else %} &nbsp; {% endif %}
+              </form>
+            {% else %}
+              {{ square }}
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+
+  </body>
+</html>

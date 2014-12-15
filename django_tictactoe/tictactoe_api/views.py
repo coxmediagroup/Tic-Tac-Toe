@@ -29,6 +29,11 @@ def list_games(request):
   gameIds = list(PersistentGameState.getAllGameIds())
   return JsonResponse({'status':'success', 'gameIds':gameIds})
 
+def index(request):
+  "return all the games for which there's been a recorded move"
+  gameIds = list(PersistentGameState.getAllGameIds())
+  return render(request, "index.html", {'gameIds':gameIds})
+
 
 
 @csrf_exempt
@@ -86,6 +91,19 @@ def html_form_response(request, game, err=None):
   squares = list(enumerate(game.board))
   rows = [squares[0:3], squares[3:6], squares[6:9]]
   return render(request, "grid.html", {"rows": rows, "err": err, "isFinished":game.isFinished()})
+
+
+
+
+@csrf_exempt
+def new_game_grid(request):
+  "synthesize a new ID and redirect to it. The returned Game ID is ephemeral until a move is posted"
+  if request.method != 'POST':
+    return error_response("Must POST to get a new game ID")
+  else:
+    game_id = str(uuid.uuid4()) # TODO move ID synthesis to the model
+    return redirect('grid', game_id=game_id)
+
 
 
 def grid(request, game_id):

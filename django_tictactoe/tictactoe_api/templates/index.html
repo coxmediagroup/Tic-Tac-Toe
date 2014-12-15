@@ -6,8 +6,13 @@
   	<h1>Tic-Tac-Toe</h1>
   	<ul>
   	{% for gameId in gameIds %}
-  	  <li><a href="game/{{gameId}}">{{gameId}}</a></li>
+  	  <li><a href="api/game/{{gameId}}/getGrid">{{gameId}}</a></li>
   	{% endfor %}
   	</ul>
+    <form method="post" action="api/game/newGrid">
+    {% csrf_token %}
+      <input type="submit" value="Start New Game" />
+
+    </form>
   </body>
 </html>
