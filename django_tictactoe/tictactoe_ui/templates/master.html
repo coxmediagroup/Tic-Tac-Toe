@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>{% block title %}Tic-tac-toe{% endblock %}</title>
+  </head>
+  <body>
+  {% block body %}
+    
+    {% block body_header %}
+    <h1>{% block body_header_text %}Tic-tac-toe{% endblock %}</h1>
+    {% endblock %}
+
+    {% block body_content %}
+    {% endblock %}
+
+    {% block body_footer %}
+    <a href="../">Return home</a>
+    {% endblock %}
+
+  {% endblock %}
+  </body>
+</html>

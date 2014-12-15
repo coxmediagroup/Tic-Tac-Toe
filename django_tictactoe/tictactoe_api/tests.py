@@ -1,8 +1,10 @@
 from django.test import TestCase
 
-from tictactoe_api.models import GameState, PersistentGameState, Move
-# Create your tests here.
+from tictactoe_api.models.game_state import GameState
+from tictactoe_api.models.persistent_game_state import PersistentGameState
+from tictactoe_api.models.move import Move
 
+# Create your tests here.
 
 class GameStateTests(TestCase):
   def setUp(self):
@@ -48,7 +50,7 @@ from pprint import pprint as pp
 class PostTest(TestCase):
   def test_one_move(self):
     c = Client()
-    resp = c.post('/api/game/new')
+    resp = c.post('/api/game/new', follow=True)
     jresp = json.loads(resp.content.decode('utf-8'))
     game_id = jresp["game"]["gameId"]
     resp2 = c.post('/api/game/%s/makeMove'%(game_id,), {'player':'X', 'position':'0'}, follow=True)
@@ -59,7 +61,7 @@ class PostTest(TestCase):
 class GameApiTest(TestCase):
   def setUp(self):
     c = Client()
-    resp = c.post('/api/game/new')
+    resp = c.post('/api/game/new', follow=True)
     jresp = json.loads(resp.content.decode('utf-8'))
     self.game_id = jresp["game"]["gameId"]
 

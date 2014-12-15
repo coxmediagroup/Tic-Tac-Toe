@@ -1,0 +1,22 @@
+{% extends "master.html" %}
+
+{% block body_content %}
+<h2>Overview</h2>
+<p>
+  Let's play Tic-Tac-Toe! You can start a new game by clicking "New Game", or return to a previous game by click its ID number.
+</p>
+
+<h2>Start new game</h2>
+<form method="post" action="newGame/">
+  {% csrf_token %}
+  <input type="submit" value="Start New Game" />
+</form>
+
+
+<h2>Stored games</h2>
+<ul>
+  {% for gameId in gameIds %}
+  <li><a href="game/{{gameId}}">{{gameId}}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

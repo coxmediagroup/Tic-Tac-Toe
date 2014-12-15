@@ -2,10 +2,8 @@
 from django.conf.urls import patterns, url
 from tictactoe_ui import views
 
-#urlpatterns = patterns('',
-#	url(r'^$', views.list_games, name='index'),
-#	url(r'^game/(?P<game_id>[a-zA-Z0-9\-]+)/makeMove/?$', views.make_move, name='make_move'),
-#	url(r'^game/(?P<game_id>[a-zA-Z0-9\-]+)/?$', views.get_game, name='get_game'),
-#	url(r'^game/new/?$', views.new_game, name='new_game'),
-#	url(r'^game/(?P<game_id>[a-zA-Z0-9\-]+)/getGrid/?$', views.grid, name='grid'),
-#	)
+urlpatterns = patterns('',
+	url(r'^/?$',        views.index,    name='index'),
+	url(r'^newGame/?$', views.new_game, name='new_game'),
+	url(r'^game/(?P<game_id>[a-fA-F0-9\-]+)/?$', views.game,  name='game')
+	)

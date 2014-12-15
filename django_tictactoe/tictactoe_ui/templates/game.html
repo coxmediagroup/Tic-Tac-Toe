@@ -1,12 +1,10 @@
-<html>
-  <head>
-    <title>Tic-Tac-Toe</title>
-  </head>
-  <body>
+{% extends "master.html" %}
+{% block body_content %}
 
-    {% if err %}
-      <p class="err">{{err}}</p>
+    {% if msg %}
+      <p>{{msg}}</p>
     {% endif %}
+
     <table class="tictactoe">
     {% for row in rows %}
       <tr>
@@ -28,5 +26,4 @@
       {% endfor %}
     </table>
 
-  </body>
-</html>
+{% endblock %}

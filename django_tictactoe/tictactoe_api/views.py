@@ -5,7 +5,7 @@ import uuid
 from pprint import pprint as pp
 from django.views.decorators.csrf import csrf_exempt
 
-from tictactoe_api.models import PersistentGameState
+from tictactoe_api.models.persistent_game_state import PersistentGameState
 
 
 def success_response(game, **kw):
@@ -29,10 +29,6 @@ def list_games(request):
   gameIds = list(PersistentGameState.getAllGameIds())
   return JsonResponse({'status':'success', 'gameIds':gameIds})
 
-def index(request):
-  "return all the games for which there's been a recorded move"
-  gameIds = list(PersistentGameState.getAllGameIds())
-  return render(request, "index.html", {'gameIds':gameIds})
 
 
 
@@ -42,7 +38,7 @@ def new_game(request):
   if request.method != 'POST':
     return error_response("Must POST to get a new game ID")
   else:
-    game_id = str(uuid.uuid4()) # TODO move ID synthesis to the model
+    game_id = PersistentGameState.generate_id()
     return redirect('get_game', game_id=game_id)
 
 
@@ -51,6 +47,8 @@ def get_game(request, game_id):
   "Return the persisted game state. Games don't exist until a move is posted, so new and non-existant are the same."
   g = PersistentGameState.load(game_id)
   return success_response(g)
+
+
 
 
 
@@ -63,63 +61,23 @@ def make_move(request, game_id):
   return g.execute_move(
     player,
     position,
-    onValid = make_computer_move_response(success_response, computer_misplay_response),
+    onValid = make_computer_move,
     onInvalid = error_response
     )
 
 
 
-
-def make_computer_move_response(onValid, onInvalid):
-  def doResponse(game):
-    "Act as the computer opponent. if the game is finished, just return it. "
-    "Otherwise find a move with the minmax algorithm and play it"
-    if game.isFinished():
-      return onValid(game)
-    else:
-      computer_player = 'O' if game.last_player() == 'X' else 'X'
-      _, computer_move = game.suggest_next(computer_player)
-      return game.execute_move(
-        computer_player,
-        computer_move,
-        onValid,
-        onInvalid
-        )
-  return doResponse
-
-def html_form_response(request, game, err=None):
-  squares = list(enumerate(game.board))
-  rows = [squares[0:3], squares[3:6], squares[6:9]]
-  return render(request, "grid.html", {"rows": rows, "err": err, "isFinished":game.isFinished()})
-
-
-
-
-@csrf_exempt
-def new_game_grid(request):
-  "synthesize a new ID and redirect to it. The returned Game ID is ephemeral until a move is posted"
-  if request.method != 'POST':
-    return error_response("Must POST to get a new game ID")
+def make_computer_move(game):
+  "Act as the computer opponent. if the game is finished, just return it. "
+  "Otherwise find a move with the minmax algorithm and play it"
+  if game.isFinished():
+    return success_response(game)
   else:
-    game_id = str(uuid.uuid4()) # TODO move ID synthesis to the model
-    return redirect('grid', game_id=game_id)
-
-
-
-def grid(request, game_id):
-  game = PersistentGameState.load(game_id)
-  if request.method == 'POST':
-    player = request.POST['player']
-    position = int(request.POST['position'])
+    computer_player = game.next_player()
+    _, computer_move = game.suggest_next(computer_player)
     return game.execute_move(
-      player,
-      position,
-      onValid = make_computer_move_response(
-        lambda game: html_form_response(request, game),
-        lambda reason: html_form_response(request, game, "The computer played an invalid move: " + reason)
-        ),
-      onInvalid = lambda reason: html_form_response(request, game, reason)
-    )
-  else:
-    return html_form_response(request, game)
-    
+      computer_player,
+      computer_move,
+      success_response,
+      computer_misplay_response
+      )
