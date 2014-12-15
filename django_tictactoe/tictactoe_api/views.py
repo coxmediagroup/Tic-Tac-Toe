@@ -33,7 +33,7 @@ def list_games(request):
 
 @csrf_exempt
 def new_game(request):
-  "synthesize a new ID and redirect to it. The returned ID is ephemeral until a move is posted"
+  "synthesize a new ID and redirect to it. The returned Game ID is ephemeral until a move is posted"
   if request.method != 'POST':
     return error_response("Must POST to get a new game ID")
   else:
@@ -43,6 +43,7 @@ def new_game(request):
 
 
 def get_game(request, game_id):
+  "Return the persisted game state. Games don't exist until a move is posted, so new and non-existant are the same."
   g = PersistentGameState.load(game_id)
   return success_response(g)
 
@@ -50,29 +51,57 @@ def get_game(request, game_id):
 
 @csrf_exempt
 def make_move(request, game_id):
+  "Validate and persist a new Move to a given game ID."
   g = PersistentGameState.load(game_id)
   player = request.POST['player']
   position = int(request.POST['position'])
   return g.execute_move(
     player,
     position,
-    onValid = do_computer_move,
+    onValid = make_computer_move_response(success_response, computer_misplay_response),
     onInvalid = error_response
     )
 
 
-def do_computer_move(game):
-  if game.isFinished():
-    return success_response(game)
-  else:
-    computer_player = 'O' if game.last_player() == 'X' else 'X'
-    _, computer_move = game.suggest_next(computer_player)
+
+
+def make_computer_move_response(onValid, onInvalid):
+  def doResponse(game):
+    "Act as the computer opponent. if the game is finished, just return it. "
+    "Otherwise find a move with the minmax algorithm and play it"
+    if game.isFinished():
+      return onValid(game)
+    else:
+      computer_player = 'O' if game.last_player() == 'X' else 'X'
+      _, computer_move = game.suggest_next(computer_player)
+      return game.execute_move(
+        computer_player,
+        computer_move,
+        onValid,
+        onInvalid
+        )
+  return doResponse
+
+def html_form_response(request, game, err=None):
+  squares = list(enumerate(game.board))
+  rows = [squares[0:3], squares[3:6], squares[6:9]]
+  return render(request, "grid.html", {"rows": rows, "err": err, "isFinished":game.isFinished()})
+
+
+def grid(request, game_id):
+  game = PersistentGameState.load(game_id)
+  if request.method == 'POST':
+    player = request.POST['player']
+    position = int(request.POST['position'])
     return game.execute_move(
-      computer_player,
-      computer_move,
-      onValid = success_response,
-      onInvalid = computer_misplay_response
-      )
-
-
-
+      player,
+      position,
+      onValid = make_computer_move_response(
+        lambda game: html_form_response(request, game),
+        lambda reason: html_form_response(request, game, "The computer played an invalid move: " + reason)
+        ),
+      onInvalid = lambda reason: html_form_response(request, game, reason)
+    )
+  else:
+    return html_form_response(request, game)
+    
