@@ -4,6 +4,10 @@ from django.db import models
 
 
 class Move(models.Model):
+  """A way of recording tic-tac-toe moves in a database,
+     indexed by session (game) ID.
+     Each game is a sequence of moves in order. The player
+     and position played is recorded for each player's move"""
   session_id = models.CharField(max_length=36)
   insert_id = models.AutoField(primary_key=True)
   player = models.CharField(max_length=1)
@@ -77,11 +81,25 @@ class GameState:
 
 class PersistentGameState(GameState):
   "A GameState with extra methods that allow us to persist via saving and loading Moves"
+  " PersistentGameState follows a lightweight event-sourced approach with moves being events. "
+  " The GameState is the ephemeral domain model that is 'hydrated' on every request with the "
+  " events recorded to that point."
+
   def save_move(self, player, position):
     "save a move to the database and then tally it"
     m = Move(session_id=self.game_id, player=player, position=position)
     m.save()
     self.tally_move(player, position)
+
+  def execute_move(self, player, pos, onValid, onInvalid):
+    "Perform the move validation and commit it if it's valid. Return one of the two callbacks depending on validity."
+    "onValid should take the resulting game as an argument, onInvalid takes the reason string"
+    valid, data = self.validate_next(player, pos)
+    if not valid:
+      return onInvalid(data)
+    else:
+      self.save_move(*data)
+      return onValid(self)
 
   @classmethod
   def load(PGS, game_id):
@@ -94,15 +112,6 @@ class PersistentGameState(GameState):
 
   @staticmethod
   def getAllGameIds():
-    firstMoves = Move.objects.filter(insert_id=1)
+    firstMoves = Move.objects.filter(insert_id=1) 
     for m in firstMoves:
       yield m.session_id
-
-  def execute_move(self, player, pos, onValid, onInvalid):
-    "onValid should take the game as an argument, onInvalid takes the reason string"
-    valid, data = self.validate_next(player, pos)
-    if not valid:
-      return onInvalid(data)
-    else:
-      self.save_move(*data)
-      return onValid(self)

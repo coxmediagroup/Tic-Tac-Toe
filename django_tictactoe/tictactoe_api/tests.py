@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from tictactoe_api.models import GameState, PersistentGameState
+from tictactoe_api.models import GameState, PersistentGameState, Move
 # Create your tests here.
 
 
@@ -33,6 +33,12 @@ class PersistentGameTests(TestCase):
     game = PersistentGameState.load("some-id")
     self.assertEqual(len(game.movelist), 2, "movelist not loaded")    
 
+  def test_first_move_numbering_assumption(self):
+    import uuid
+    g = PersistentGameState(uuid.uuid4())
+    g.save_move("X",0)
+    obj = Move.objects.filter(session_id=g.game_id).order_by('insert_id').first()
+    self.assertEqual(obj.insert_id, 1, "expected database to use 1 for first insert; adjust getAllIds to fix")
 
 from django.test import Client
 import json
