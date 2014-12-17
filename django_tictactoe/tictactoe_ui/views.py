@@ -11,7 +11,7 @@ def html_form_response(request, game, msg=None):
   "Capture the request object for rendering the response"
   squares = list(enumerate(game.board))
   rows = [squares[0:3], squares[3:6], squares[6:9]]
-  return render(request, "game.html", {"rows": rows, "msg": msg, "isFinished":game.isFinished()})
+  return render(request, "game.html", {"game": game, "rows": rows, "msg": msg})
 
 def new_game(request):
   "synthesize a new ID and redirect to it. The returned Game ID is ephemeral until a move is posted"
@@ -46,6 +46,6 @@ def computer_move_response(request, game):
     return game.execute_move(
       computer_player,
       computer_move,
-      onValid = lambda game: html_form_response(request, game, "Your turn."),
+      onValid = lambda game: html_form_response(request, game, "Computer has moved."),
       onInvalid = lambda reason: html_form_response(request, game, "Computer made an invalid move: " + reason)
       )

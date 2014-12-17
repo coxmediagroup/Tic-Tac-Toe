@@ -5,6 +5,12 @@
       <p>{{msg}}</p>
     {% endif %}
 
+    {% if game.isWon %}
+      <h2>{{ game.last_player }} has won!</h2>
+    {% elif game.isDrawn %}
+      <h2>Game is drawn.</h2>
+    {% endif %}
+
     <table class="tictactoe">
     {% for row in rows %}
       <tr>
@@ -15,7 +21,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="player" value="X" />
                 <input type="hidden" name="position" value="{{ position }}" />
-                {% if not isFinished %} <input type="submit" value="Play" /> {% else %} &nbsp; {% endif %}
+                {% if not game.isFinished %} <input type="submit" value="Play" /> {% else %} &nbsp; {% endif %}
               </form>
             {% else %}
               {{ square }}
