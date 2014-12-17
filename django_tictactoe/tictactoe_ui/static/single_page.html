@@ -1,0 +1,69 @@
+<!doctype html>
+<html ng-app="tictactoeApp">
+  <head>
+    <title>Tic-tac-toe</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular.min.js"></script>
+    <script src="tictactoe.js"></script>
+    <link rel="stylesheet" href="tictactoe.css">
+  </head>
+  <body>
+    <h1>Tic-tac-toe</h1>
+    <div ng-controller="TicTacToeController">
+      <button ng-click="newGame()" >New Game</button>
+      <table>
+        <tr>
+          <td>
+            <button ng-if="serverGame.board[0] =='-'" ng-click="makeMove(0)">Play</button>
+            <img ng-if="serverGame.board[0] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[0] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[1] =='-'" ng-click="makeMove(1)">Play</button>
+            <img ng-if="serverGame.board[1] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[1] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[2] =='-'" ng-click="makeMove(2)">Play</button>
+            <img ng-if="serverGame.board[2] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[2] == 'O'" src="o.jpg">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button ng-if="serverGame.board[3] =='-'" ng-click="makeMove(3)">Play</button>
+            <img ng-if="serverGame.board[3] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[3] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[4] =='-'" ng-click="makeMove(4)">Play</button>
+            <img ng-if="serverGame.board[4] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[4] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[5] =='-'" ng-click="makeMove(5)">Play</button>
+            <img ng-if="serverGame.board[5] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[5] == 'O'" src="o.jpg">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button ng-if="serverGame.board[6] =='-'" ng-click="makeMove(6)">Play</button>
+            <img ng-if="serverGame.board[6] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[6] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[7] =='-'" ng-click="makeMove(7)">Play</button>
+            <img ng-if="serverGame.board[7] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[7] == 'O'" src="o.jpg">
+          </td>
+          <td>
+            <button ng-if="serverGame.board[8] =='-'" ng-click="makeMove(8)">Play</button>
+            <img ng-if="serverGame.board[8] == 'X'" src="x.jpg">
+            <img ng-if="serverGame.board[8] == 'O'" src="o.jpg">
+          </td>
+        </tr>
+      </table>
+    </div>
+    <a href="../">Return home</a>
+  </body>
+</html>
