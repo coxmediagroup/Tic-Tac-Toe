@@ -30,17 +30,11 @@ def list_games(request):
   return JsonResponse({'status':'success', 'gameIds':gameIds})
 
 
-
-
 @csrf_exempt
 def new_game(request):
   "synthesize a new ID and redirect to it. The returned Game ID is ephemeral until a move is posted"
-  if request.method != 'POST':
-    return error_response("Must POST to get a new game ID")
-  else:
-    game_id = PersistentGameState.generate_id()
-    return redirect('get_game', game_id=game_id)
-
+  game_id = PersistentGameState.generate_id()
+  return get_game(request, game_id)
 
 
 def get_game(request, game_id):
@@ -49,15 +43,18 @@ def get_game(request, game_id):
   return success_response(g)
 
 
-
-
-
 @csrf_exempt
 def make_move(request, game_id):
   "Validate and persist a new Move to a given game ID."
   g = PersistentGameState.load(game_id)
-  player = request.POST['player']
-  position = int(request.POST['position'])
+  if 'json' in request.META['CONTENT_TYPE']:
+    data = json.loads(request.body.decode('utf-8'))
+    player = data['player']
+    position = int(data['position'])
+  else:
+    player = request.POST['player']
+    position = int(request.POST['position'])
+  print("Loaded")
   return g.execute_move(
     player,
     position,
