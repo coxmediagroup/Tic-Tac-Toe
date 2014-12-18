@@ -1,28 +1,31 @@
-Story
-======
-
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
-
-Acceptance criteria
+Tic-Tac-Toe example app
 =======================
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+To run this app,
 
+  * Install python 3.4 and ensure that the `pip` tool is present. This depends on platform. The example runs under Python 3.4.
 
-Technical notes
-------------------
+  * Ensure you have `django` in your python installation::
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+      $ pip install django
 
+  * Enter the project and attempt tests::
 
-Submissions
----------------
+      $ cd django_tictactoe
+      $ python manage.py test
 
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
+  * Migrate the database, creating a new SQLite file::
+
+      $ python manage.py migrate
+
+  * Run the development server on http://localhost:8000/::
+
+      $ python manage.py runserver
+
+There are two user interfaces:
+
+  * Form/POST based UI: http://localhost:8000/
+
+  * Angular single-page UI:  http://localhost:8000/static/single_page.html
+
 
