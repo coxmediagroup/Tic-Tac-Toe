@@ -3,6 +3,8 @@ Tic-Tac-Toe example app
 
 To run this app,
 
+  * Install python 3.4 and ensure that the `pip` tool is present. This depends on platform. The example runs under Python 3.4.
+
   * Ensure you have `django` in your python installation::
 
       $ pip install django
