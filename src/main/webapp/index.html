@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>TicTacToe</title>
+		<link rel=stylesheet href="css/style.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/game-controller.js"></script>
+ 		<script src="js/models/game-board.js"></script>
+		<script src="js/services/computer-player-service.js"></script>
+		<script src="js/services/winner-service.js"></script>
+	</head>
+	<body ng-app="app" ng-controller="GameController as game">
+		<h1 align="center">{{game.title}}</h1>
+		
+		<div class="wrapper">
+
+			<div class="tictactoe">
+				<div class="board">
+					<div ng-repeat="row in game.grid track by $index" class="row">
+						<div ng-repeat="col in game.grid track by $index" col-index="{{$index}}" row-index="{{$parent.$index}}" class="col" ng-class="{'disabled' : !game.gameOver && game.boardDisabled}" ng-click="game.makePlayerMove($parent.$index, $index)">
+							<span disabled=true class="symbol" ng-class="{'winner' : game.isWinningSquare($parent.$index, $index)}">{{game.getSquareSymbol($parent.$index, $index)}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+</html>
