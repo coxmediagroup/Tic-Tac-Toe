@@ -33,6 +33,14 @@ dependencies {
     testCompile("junit:junit")
 }
 
+test {
+    testLogging.showStandardStreams = true
+
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+    }
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }

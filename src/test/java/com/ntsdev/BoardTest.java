@@ -36,4 +36,24 @@ public class BoardTest {
         assertFalse("Invalid move successful", success);
     }
 
+    @Test
+    public void testCopyIsExact(){
+        Board board = new Board();
+        board.makeMove(0,0,CellState.X);
+        board.makeMove(2,2,CellState.X);
+
+        Board copy = board.copy();
+        assertEquals("Move not copied", copy.getState(0,0), CellState.X);
+        assertEquals("Move not copied", copy.getState(2,2), CellState.X);
+    }
+
+    @Test
+    public void testBoardJson(){
+        Board board = new Board();
+        board.setState(0,0,CellState.X);
+        board.setState(2,2,CellState.X);
+        String testString = "{\"board\":[[\"X\",\"_\",\"_\"],[\"_\",\"_\",\"_\"],[\"_\",\"_\",\"X\"]]}";
+        String boardString = board.toJSON();
+        assertEquals("JSON didn't match", testString, boardString);
+    }
 }

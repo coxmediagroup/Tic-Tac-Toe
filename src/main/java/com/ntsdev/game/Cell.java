@@ -11,4 +11,14 @@ public class Cell {
     public void setState(CellState state){
         this.state = state;
     }
+
+    @Override
+    public String toString(){
+        if(this.state == CellState.BLANK){
+            return "_";
+        }
+        else{
+            return this.state.name();
+        }
+    }
 }
