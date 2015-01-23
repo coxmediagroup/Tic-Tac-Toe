@@ -3,6 +3,7 @@ package com.rts.tictactoe.services;
 import org.scalatra._
 import scalate.ScalateSupport
 import com.rts.tictactoe.models.GameBoard
+import com.rts.tictactoe.models.GameBoardMinMax
 
 class ComputerPlayer extends ScalatraServlet with ScalateSupport {
   
@@ -15,31 +16,8 @@ class ComputerPlayer extends ScalatraServlet with ScalateSupport {
         {params("boardSquares")}.split(",");
     }
     
-    val gameBoard = new GameBoard(boardSquaresArray);
-    Ok(ComputerPlayer.nextComputerMove(gameBoard));    
+    val gameBoard = new GameBoardMinMax(boardSquaresArray, false);
+    Ok(gameBoard.bestMove);    
   }
 
-}
-object ComputerPlayer {
-  
-  private val COMPUTER_SYMBOL = "O";
-  private val PLAYER_SYMBOL = "X";
-  
-  def nextComputerMove(gameBoard:GameBoard):Int = {
-    val winningComputerMove = gameBoard.winningMoveFor(COMPUTER_SYMBOL); 
-    lazy val winningPlayerMove = gameBoard.winningMoveFor(PLAYER_SYMBOL);
-    
-    if (winningComputerMove != -1) 
-      winningComputerMove;
-    else if (winningPlayerMove != -1) 
-      winningPlayerMove;
-    else {
-      if (gameBoard.futureWinningMoveExistsFor(PLAYER_SYMBOL)) {
-        gameBoard.bestSquareToBlockWinningScenarioFor(PLAYER_SYMBOL);
-      } else {
-        gameBoard.highestPrioritySquareOpen();
-      }
-    }
-  }
-  
 }
