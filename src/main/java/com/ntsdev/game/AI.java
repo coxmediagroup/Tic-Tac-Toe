@@ -5,56 +5,72 @@ public class AI {
     private final CellState computerState = CellState.X;
     private final CellState playerState = CellState.O;
 
-    //computer always makes winning move
+    public Board makeMove(Board board){
+        //see if computer can win with this turn, or if player can win, move to that space
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(isWinningMove(i,j,board,computerState)){
+                    board.makeMove(i,j,computerState);
+                    return board;
+                }
+                else if(isWinningMove(i,j,board,playerState)){
+                    board.makeMove(i,j,computerState);
+                    return board;
+                }
+            }
+        }
+        //nobody's going to win on this move, so try to get a corner or the center
+        if(couldPlayCorner(board)) return board;
+        if(couldPlayCenter(board)) return board;
+
+        //just pick somewhere
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++) {
+                if(board.cellAvailable(i,j)){
+                    board.makeMove(i,j,computerState);
+                    return board;
+                }
+            }
+        }
+
+        return board; //shouldn't happen
+    }
 
     public boolean isWinningMove(int x, int y, Board board, CellState stateToCheck){
         Board copy = board.copy();
         copy.setState(x,y,stateToCheck);
-        return checkWin(copy, stateToCheck);
+        return copy.checkWin(stateToCheck);
     }
 
-    private boolean checkWin(Board board, CellState state){
-        //if any combination wins, return true
-        for(int i=0;i<3;i++){
-            if(checkHorizontal(board, i, state)) return true;
-            if(checkVertical(board, i, state)) return true;
+
+    private boolean couldPlayCorner(Board board){
+        boolean couldPlay = false;
+        if(board.cellAvailable(0,0)){
+            board.makeMove(0,0,computerState);
+            couldPlay = true;
         }
-        return checkDiagonals(board, state);
-    }
-
-    private boolean checkHorizontal(Board board, int row, CellState state){
-        for(int i=0;i<3;i++){
-            CellState cellState = board.getState(row, i);
-            boolean match = (cellState == state);
-            if(!match){
-                return false;
-            }
+        else if(board.cellAvailable(0,2)){
+            board.makeMove(0,2,computerState);
+            couldPlay = true;
         }
-        return true;
-    }
-
-    private boolean checkVertical(Board board, int col, CellState state){
-        for(int i=0;i<3;i++){
-            CellState cellState = board.getState(i, col);
-            boolean match = (cellState == state);
-            if(!match){
-                return false;
-            }
+        else if(board.cellAvailable(2,2)){
+            board.makeMove(2,2,computerState);
+            couldPlay = true;
         }
-        return true;
+        else if(board.cellAvailable(2,0)){
+            board.makeMove(2,0,computerState);
+            couldPlay = true;
+        }
+        return couldPlay;
     }
 
-    private boolean checkDiagonals(Board board, CellState state){
-        return
-        //top left to bottom right
-        ((board.getState(0,0) == state) &&
-        (board.getState(1,1) == state) &&
-        (board.getState(2,2) == state)) ||
-
-        //top right to bottom left
-        ((board.getState(0,2) == state) &&
-        (board.getState(1,1) == state) &&
-        (board.getState(2,0) == state));
+    private boolean couldPlayCenter(Board board){
+        boolean couldPlay = false;
+        if(board.cellAvailable(1,1)){
+            board.makeMove(1,1,computerState);
+            couldPlay = true;
+        }
+        return couldPlay;
     }
 
 }

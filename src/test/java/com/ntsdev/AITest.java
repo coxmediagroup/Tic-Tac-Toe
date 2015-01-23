@@ -34,4 +34,95 @@ public class AITest {
 
         assertTrue("Winning move not identified", winning);
     }
+
+    @Test
+    public void testDiagonalWinTopLeftToBottomRight(){
+        Board board = new Board();
+        board.setState(0,0,CellState.X);
+        board.setState(1,1,CellState.X);
+
+        AI ai = new AI();
+        boolean winning = ai.isWinningMove(2,2,board,CellState.X);
+
+        assertTrue("Winning move not identified", winning);
+    }
+
+    @Test
+    public void testDiagonalWinTopRightToBottomLeft(){
+        Board board = new Board();
+        board.setState(0,2,CellState.X);
+        board.setState(1,1,CellState.X);
+
+        AI ai = new AI();
+        boolean winning = ai.isWinningMove(2,0,board,CellState.X);
+
+        assertTrue("Winning move not identified", winning);
+    }
+
+    @Test
+    public void testNonWinningMove(){
+        Board board = new Board();
+        board.setState(0,2,CellState.X);
+        board.setState(1,1,CellState.X);
+
+        AI ai = new AI();
+        boolean winning = ai.isWinningMove(0,0,board,CellState.X);
+
+        assertFalse("Non-winning move not identified", winning);
+    }
+
+    @Test
+    public void testComputerPlaysWinningMoveDiagonally(){
+        Board board = new Board();
+        board.setState(0,2,CellState.X);
+        board.setState(1,1,CellState.X);
+
+        AI ai = new AI();
+        Board newBoard = ai.makeMove(board);
+
+        CellState winner = newBoard.checkWinner();
+
+        assertEquals("Computer didn't win", winner, CellState.X);
+    }
+
+    @Test
+    public void testComputerPlaysWinningMoveVertically(){
+        Board board = new Board();
+        board.setState(0,0,CellState.X);
+        board.setState(1,0,CellState.X);
+
+        AI ai = new AI();
+        Board newBoard = ai.makeMove(board);
+
+        CellState winner = newBoard.checkWinner();
+
+        assertEquals("Computer didn't win", winner, CellState.X);
+    }
+
+    @Test
+    public void testComputerPlaysWinningMoveHorizontally(){
+        Board board = new Board();
+        board.setState(0,0,CellState.X);
+        board.setState(0,1,CellState.X);
+
+        AI ai = new AI();
+        Board newBoard = ai.makeMove(board);
+
+        CellState winner = newBoard.checkWinner();
+
+        assertEquals("Computer didn't win", winner, CellState.X);
+    }
+
+    @Test
+    public void testComputerBlocksPlayerFromWinning(){
+        Board board = new Board();
+        board.setState(0,0,CellState.O);
+        board.setState(0,1,CellState.O);
+
+        AI ai = new AI();
+        Board newBoard = ai.makeMove(board);
+
+        assertEquals("Computer didn't block player", newBoard.getState(0,2), CellState.X);
+    }
+
 }
