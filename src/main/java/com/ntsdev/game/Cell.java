@@ -1,5 +1,8 @@
 package com.ntsdev.game;
 
+/**
+ * A cell on the Tic-Tac-Toe game board
+ */
 public class Cell {
 
     private CellState state = CellState.BLANK;

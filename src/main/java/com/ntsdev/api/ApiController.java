@@ -15,9 +15,6 @@ import java.io.IOException;
 @RequestMapping("/api")
 public class ApiController {
 
-    private AI ai = new AI();
-    //this is actually OK to share across clients...it's stateless
-
     @RequestMapping(value = "/newgame", method = RequestMethod.POST)
     public String newGame(HttpSession session) {
         Board board = new Board();
@@ -49,6 +46,7 @@ public class ApiController {
         board.makeMove(x,y, CellState.O); //player is always "o"
 
         if(!board.checkWin(CellState.O)) {
+            AI ai = new AI();
             board = ai.makeMove(board);
             session.setAttribute("board", board);
         }

@@ -5,6 +5,11 @@ public class AI {
     private final CellState computerState = CellState.X;
     private final CellState playerState = CellState.O;
 
+    /**
+     * The computer makes a move
+     * @param board the current game board
+     * @return the board with the computer's move applied
+     */
     public Board makeMove(Board board){
         //see if computer can win with this turn, or if player can win, move to that space
         for(int i=0;i<3;i++){
@@ -36,6 +41,14 @@ public class AI {
         return board; //shouldn't happen
     }
 
+    /**
+     * Checks if the prospective move is a winner
+     * @param x x coordinate of the move
+     * @param y y coordinate of the move
+     * @param board the game board
+     * @param stateToCheck state to place on the board at x,y
+     * @return true if this move will cause the player's state to win
+     */
     public boolean isWinningMove(int x, int y, Board board, CellState stateToCheck){
         boolean win = false;
         Board copy = board.copy();

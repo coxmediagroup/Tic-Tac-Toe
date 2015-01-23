@@ -1,28 +1,32 @@
-Story
+Summary
+=======
+
+I did this assignment in Java because it's one of the languages I'm more familiar with than Python.
+I used Spring Boot to get rid of most of the Java webapp boilerplate.  It's not very pretty, but
+it's functional and covered pretty well by tests (I took a TDD approach for the most part).
+
+Requirements
+============
+
+A Java7 runtime.  This has been tested on OSX with Firefox and Chrome.
+
+To Run
 ======
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+Clone this repository and run from the command line:
 
-Acceptance criteria
-=======================
+``java -jar tictactoe-0.1.0.jar``
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+Point your browser at http://localhost:8080/ and play away!
 
+To Build
+========
 
-Technical notes
-------------------
+You'll need gradle.
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+Run ``gradle build`` at the command line.  You'll see build/libs/tictactoe-0.1.0.jar created.
 
+To Test
+=======
 
-Submissions
----------------
-
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
-
+Run ``gradle test`` at the command line.
