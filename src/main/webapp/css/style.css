@@ -1,0 +1,48 @@
+.wrapper{
+	margin:0px auto;
+	text-align:center;
+	background:#ccc;
+	border:1px solid #ddd;
+	padding:25px;
+	width:414px;
+}
+
+.board{
+	box-shadow(0 3px 7px rgba(0,0,0,1));
+	margin:0px auto;
+}
+
+.row{
+	display:table-row;
+}
+
+.col{
+	width:136px;
+	height:136px;
+	display:table-cell;
+	background-color:#ccc;
+	border-right:1px solid #999;
+	border-bottom:1px solid #999;
+	cursor:pointer;
+}
+
+.col.disabled{
+	cursor:wait;
+}
+
+.col:last-child{
+	border-right:0;
+}
+
+.row:last-child .col{
+	border-bottom:0;
+}
+
+.symbol{
+	font-size:48px;
+	color:#999;
+}
+
+.symbol.winner{
+	color:green;
+}

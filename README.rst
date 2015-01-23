@@ -1,28 +1,25 @@
-Story
-======
+Tic Tac Toe
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+Plays a game of Tic Tac Toe where the computer will never lose. It was coded using angular, scala, scalatra, and simple http services. jsTestDriver was used to unit test the javascript, and specs2 for unit testing the scala code.
+How To Run
 
-Acceptance criteria
-=======================
+    Download and install SBT version 13.7
+    Download and install Scala 11.5
+    Run ./sbt from within the project directory
+    At the > prompt, type package
+    Then type container:start at the next prompt.
+    In a browser, hit the URL http://localhost:8080
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+Simple Way To Run
 
+    Install Tomcat
+    Rename the ROOT application in Tomcat to ORIGNAL_ROOT
+    copy the tictactoe.war file to tomcat webapps directory
+    rename the tictactoe.war file to ROOT.war
+    start tomcat
+    In a browser, hit the URL http://localhost:8080
 
-Technical notes
-------------------
+.git History
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
-
-
-Submissions
----------------
-
-1. Publically: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
-
+  Please see https://github.com/rstacy542/ticTacToe.git.  I intended to send a .tar.gz file but when I added the .war file for convenience, it made the file to large for email.
+  

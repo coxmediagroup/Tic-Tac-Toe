@@ -1,0 +1,62 @@
+<classpath>
+  <classpathentry kind="src" path="src\main\scala" output="target\scala-2.11\classes"/>
+  <classpathentry kind="src" path="src\main\java" output="target\scala-2.11\classes"/>
+  <classpathentry kind="src" path="src\test\scala" output="target\scala-2.11\test-classes"/>
+  <classpathentry kind="src" path="src\test\java" output="target\scala-2.11\test-classes"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra\scalatra_2.11\jars\scalatra_2.11-2.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra\scalatra-common_2.11\jars\scalatra-common_2.11-2.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.slf4j\slf4j-api\jars\slf4j-api-1.7.7.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.clapper\grizzled-slf4j_2.11\jars\grizzled-slf4j_2.11-1.0.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra.rl\rl_2.11\jars\rl_2.11-0.4.10.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\com.googlecode.juniversalchardet\juniversalchardet\jars\juniversalchardet-1.0.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\eu.medsea.mimeutil\mime-util\bundles\mime-util-2.1.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\joda-time\joda-time\jars\joda-time-2.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.joda\joda-convert\jars\joda-convert-1.6.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scala-lang.modules\scala-parser-combinators_2.11\bundles\scala-parser-combinators_2.11-1.0.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scala-lang.modules\scala-xml_2.11\bundles\scala-xml_2.11-1.0.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra\scalatra-scalate_2.11\jars\scalatra-scalate_2.11-2.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra.scalate\scalate-core_2.11\bundles\scalate-core_2.11-1.7.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra.scalate\scalate-util_2.11\bundles\scalate-util_2.11-1.7.0.jar"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_COMPILER_CONTAINER"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\javax.servlet\javax.servlet-api\jars\javax.servlet-api-3.1.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\ch.qos.logback\logback-classic\jars\logback-classic-1.1.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\ch.qos.logback\logback-core\jars\logback-core-1.1.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra\scalatra-specs2_2.11\jars\scalatra-specs2_2.11-2.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalatra\scalatra-test_2.11\jars\scalatra-test_2.11-2.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-webapp\jars\jetty-webapp-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-xml\jars\jetty-xml-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-util\jars\jetty-util-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-servlet\jars\jetty-servlet-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-security\jars\jetty-security-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-server\jars\jetty-server-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-http\jars\jetty-http-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.eclipse.jetty\jetty-io\jars\jetty-io-9.2.1.v20140609.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.mockito\mockito-all\jars\mockito-all-1.9.5.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.apache.commons\commons-lang3\jars\commons-lang3-3.3.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.apache.httpcomponents\httpclient\jars\httpclient-4.3.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.apache.httpcomponents\httpcore\jars\httpcore-4.3.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\commons-logging\commons-logging\jars\commons-logging-1.1.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\commons-codec\commons-codec\jars\commons-codec-1.6.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.apache.httpcomponents\httpmime\jars\httpmime-4.3.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.specs2\specs2_2.11\jars\specs2_2.11-2.3.12.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.pegdown\pegdown\jars\pegdown-1.2.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.parboiled\parboiled-java\jars\parboiled-java-1.1.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.parboiled\parboiled-core\jars\parboiled-core-1.1.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.ow2.asm\asm\jars\asm-4.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.ow2.asm\asm-tree\jars\asm-tree-4.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.ow2.asm\asm-analysis\jars\asm-analysis-4.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.ow2.asm\asm-util\jars\asm-util-4.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalaz\scalaz-core_2.11\bundles\scalaz-core_2.11-7.0.6.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalaz\scalaz-concurrent_2.11\bundles\scalaz-concurrent_2.11-7.0.6.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalaz\scalaz-effect_2.11\bundles\scalaz-effect_2.11-7.0.6.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scalacheck\scalacheck_2.11\jars\scalacheck_2.11-1.11.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.scala-sbt\test-interface\jars\test-interface-1.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.hamcrest\hamcrest-core\jars\hamcrest-core-1.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.mockito\mockito-core\jars\mockito-core-1.9.5.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.objenesis\objenesis\jars\objenesis-1.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\junit\junit\jars\junit-4.11.jar"/>
+  <classpathentry kind="lib" path="C:\Users\rstacy\.ivy2\cache\org.specs2\classycle\jars\classycle-1.4.3.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>
