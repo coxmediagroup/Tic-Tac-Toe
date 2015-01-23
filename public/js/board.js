@@ -12,6 +12,8 @@ function renderBoard(result){
             rowElement.append('<span class="column" onclick="makeMove(' + i + ',' + j + ');">' + cellValue + '</span>');
         }
     }
+
+    checkWin();
 }
 
 function getBoard(){
@@ -23,7 +25,18 @@ function getBoard(){
 function makeMove(x, y){
     var url = '/api/makemove?x=' + x + "&y=" + y;
     $.get(url, function(result){
-            renderBoard(result);
-        }
-    )
+        renderBoard(result);
+    });
+}
+
+function newGame(){
+    $.get("/api/newgame", function(result){
+        renderBoard(result);
+    });
+}
+
+function checkWin(){
+    $.get("/api/checkwin", function(result){
+        $('#announcement').html(result);
+    })
 }

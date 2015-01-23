@@ -20,8 +20,8 @@ public class AI {
             }
         }
         //nobody's going to win on this move, so try to get a corner or the center
-        if(couldPlayCorner(board)) return board;
         if(couldPlayCenter(board)) return board;
+        if(couldPlayCorner(board)) return board;
 
         //just pick somewhere
         for(int i=0;i<3;i++){
@@ -37,9 +37,13 @@ public class AI {
     }
 
     public boolean isWinningMove(int x, int y, Board board, CellState stateToCheck){
+        boolean win = false;
         Board copy = board.copy();
-        copy.setState(x,y,stateToCheck);
-        return copy.checkWin(stateToCheck);
+        if(copy.cellAvailable(x, y)) {
+            copy.setState(x, y, stateToCheck);
+            win = copy.checkWin(stateToCheck);
+        }
+        return win;
     }
 
 

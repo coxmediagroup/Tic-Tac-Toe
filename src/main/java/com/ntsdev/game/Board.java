@@ -30,12 +30,20 @@ public class Board {
     public boolean cellAvailable(int x, int y){
         return board[x][y].getState() == CellState.BLANK;
     }
-    
-    public CellState checkWinner(){
-        if(checkWin(CellState.X)) return CellState.X;
-        if(checkWin(CellState.O)) return CellState.O;
-        return CellState.BLANK;
+
+    public boolean draw(){
+        if(!checkWin(CellState.X) && !checkWin(CellState.O)){
+            for(int i=0;i<3;i++){
+                for(int j=0;j<3;j++){
+                    if(getState(i,j) == CellState.BLANK){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
+
 
     public Board copy(){
         Board copy = new Board();
@@ -81,14 +89,6 @@ public class Board {
         return boardString.toString();
     }
 
-    private void initializeBoard(){
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                board[i][j] = new Cell();
-            }
-        }
-    }
-
     public boolean checkWin(CellState playerState){
         //if any combination wins, return true
         for(int i=0;i<3;i++){
@@ -96,6 +96,20 @@ public class Board {
             if(checkVertical(i, playerState)) return true;
         }
         return checkDiagonals(playerState);
+    }
+
+    public CellState checkWinner(){
+        if(checkWin(CellState.X)) return CellState.X;
+        if(checkWin(CellState.O)) return CellState.O;
+        return CellState.BLANK;
+    }
+
+    private void initializeBoard(){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                board[i][j] = new Cell();
+            }
+        }
     }
 
     private boolean checkHorizontal(int row, CellState state){

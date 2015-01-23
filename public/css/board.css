@@ -11,3 +11,7 @@
 .row {
     vertical-align: middle;
 }
+
+#announcement {
+    font-size: 5em;
+}

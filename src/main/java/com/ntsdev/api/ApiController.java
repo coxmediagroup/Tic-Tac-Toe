@@ -5,10 +5,8 @@ import com.ntsdev.game.Board;
 import com.ntsdev.game.CellState;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -20,15 +18,13 @@ public class ApiController {
     //this is actually OK to share across clients...it's stateless
 
     @RequestMapping("/newgame")
-    public String newGame(HttpSession session, HttpServletResponse response) {
+    public String newGame(HttpSession session) {
         Board board = new Board();
         session.setAttribute("board", board);
-        response.setContentType("application/json");
         return board.toJSON();
     }
 
     @RequestMapping("/board")
-    @ResponseBody
     public String gameBoard(HttpSession session) {
         Object maybeBoard = session.getAttribute("board");
         if(maybeBoard == null){
@@ -43,27 +39,35 @@ public class ApiController {
     }
 
     @RequestMapping("/makemove")
-    @ResponseBody
     public String playerMove(
             HttpSession session,
             @RequestParam("x") Integer x,
-            @RequestParam("y") Integer y,
-            HttpServletResponse response) throws IOException {
+            @RequestParam("y") Integer y) throws IOException {
 
         Board board = (Board) session.getAttribute("board");
         board.makeMove(x,y, CellState.O); //player is always "o"
-        if(board.checkWin(CellState.O)){
-            response.sendRedirect("/winner.html");
-        }
 
-        board = ai.makeMove(board);
-        session.setAttribute("board", board);
-
-        if(board.checkWin(CellState.X)){
-            response.sendRedirect("/loser.html");
+        if(!board.checkWin(CellState.O)) {
+            board = ai.makeMove(board);
+            session.setAttribute("board", board);
         }
 
         return board.toJSON();
+    }
+
+    @RequestMapping("/checkwin")
+    public String checkWin(HttpSession session){
+        Board board = (Board) session.getAttribute("board");
+        if(board.checkWin(CellState.O)){
+            return "You win!";
+        }
+        else if(board.checkWin(CellState.X)){
+            return "You lose!";
+        }
+        else if(board.draw()){
+            return "It's a draw!";
+        }
+        return "";
     }
 
 }
