@@ -1,0 +1,13 @@
+.column {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    background-color: #cccccc;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.row {
+    vertical-align: middle;
+}
