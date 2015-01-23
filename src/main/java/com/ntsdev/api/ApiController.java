@@ -4,6 +4,7 @@ import com.ntsdev.game.AI;
 import com.ntsdev.game.Board;
 import com.ntsdev.game.CellState;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ public class ApiController {
     private AI ai = new AI();
     //this is actually OK to share across clients...it's stateless
 
-    @RequestMapping("/newgame")
+    @RequestMapping(value = "/newgame", method = RequestMethod.POST)
     public String newGame(HttpSession session) {
         Board board = new Board();
         session.setAttribute("board", board);
@@ -38,7 +39,7 @@ public class ApiController {
         }
     }
 
-    @RequestMapping("/makemove")
+    @RequestMapping(value = "/makemove", method = RequestMethod.POST)
     public String playerMove(
             HttpSession session,
             @RequestParam("x") Integer x,

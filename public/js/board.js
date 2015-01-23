@@ -23,14 +23,14 @@ function getBoard(){
 }
 
 function makeMove(x, y){
-    var url = '/api/makemove?x=' + x + "&y=" + y;
-    $.get(url, function(result){
+    var url = '/api/makemove';
+    $.post(url, {"x": x, "y": y}, function(result){
         renderBoard(result);
     });
 }
 
 function newGame(){
-    $.get("/api/newgame", function(result){
+    $.post("/api/newgame", function(result){
         renderBoard(result);
     });
 }
