@@ -1,0 +1,26 @@
+
+var tttoe = require('lib/tictactoe_server');
+
+/**
+ * @desc Returns a tic-tac-toe board state for testing purpose.
+ */
+function getBoardStateSample() {
+  //var x = [['X', '', ''], ['', 'X', ''], ['', '', 'X']];
+  //var x = [['O', '', ''], ['', 'X', ''], ['', '', 'X']];
+  var x = [['', '', ''], ['', '', ''], ['', '', '']]; // An empty board.
+  return x;
+}
+
+/**
+ * @desc Unit test for isGameOver()
+ */
+exports['isGameOver'] = function (test) {
+  var x = getBoardStateSample();
+  var result = tictactoe_server.isGameOver(x);
+  console.log('x:');
+  console.log(x);
+  console.log('result:');
+  console.log(result);
+  test.equal(result.gameOver, false);
+  test.done();
+};
