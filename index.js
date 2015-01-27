@@ -48,7 +48,8 @@ io.on('connection', function(socket){
       // Let the machine player make a move:
       // 1) Machine makes a move.
       var nmove2 = null;
-      nmove2 = t.getMPNextMoveRandom(board);
+      //nmove2 = t.getMachineNextMoveRandom(board);
+      nmove2 = t.getMachineNextMove(board);
       console.log(nmove2);
 
       //   Update the board state on the server:
