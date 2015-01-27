@@ -17,10 +17,13 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.emit('updateMsg', 'Welcome! Lets player a game of Tic-Tac-Toe!');
-  board = t.getBoardStateSample()
+  socket.emit('updateMsg', 'Welcome! Press Start to play a game of Tic-Tac-Toe!');
+  board = t.getBoardStateSample('initial')
   socket.emit('updateBoard', board);
-  setTimeout(function(){console.log('settimeout'); socket.emit('updateMsg', 'Your turn to make a move.');}, 3000);
+  
+  socket.on('gameStarted', function() {
+    socket.emit('updateMsg', 'Your turn to make a move. Click on a box to make a move.')
+  });
   
   
 
@@ -32,11 +35,16 @@ io.on('connection', function(socket){
     // If nextMove valid, update the board:
     board = t.updateBoard(board, nmove);
 
+
     console.log('from server:'); console.log(board);
 
     socket.emit('updateBoard', board);
+    var gstate = t.getGameState(board);
+    if (gstate.isGameOver == true) {
+      socket.emit('updateMsg', 'Game Over. Winner = '+gstate.playerWinner+'. Refresh to play again.');
+    }
 
-    if (nmove.player != 'machine') {
+    if ((gstate.isGameOver == false) &&(nmove.player != 'machine')) {
       // Let the machine player make a move:
       // 1) Machine makes a move.
       var nmove2 = null;
@@ -48,8 +56,16 @@ io.on('connection', function(socket){
 
       // 2) Update the boardUI on the client:
       socket.emit('updateBoard', board);  // Here, board.playerBefore == 'machine'. 
-      // 3) Update msg:
-      socket.emit('updateMsg', 'Your turn to make a move.');
+
+      // 3) Check whether game ended:
+      gstate = t.getGameState(board);
+      if (gstate.isGameOver == true) {
+        socket.emit('updateMsg', 'Game Over. Winner = '+gstate.playerWinner);
+      } else {
+
+      // 4) Update msg:
+        socket.emit('updateMsg', 'Your turn to make a move.');
+      }
     }
   });
 
