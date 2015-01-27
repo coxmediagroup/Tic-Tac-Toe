@@ -35,5 +35,10 @@ exports['getGameState'] = function (test) {
   test.equal(gstate.isGameOver, true);
   test.equal(gstate.playerWinner, 'draw');
 
+  board = t.getBoardStateSample('d');
+  gstate = t.getGameState(board);
+  test.equal(gstate.isGameOver, true);
+  test.equal(gstate.playerWinner, 'X');
+
   test.done();
 };
