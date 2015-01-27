@@ -12,6 +12,11 @@ REQUIREMENTS
 INSTALLATION
 ============
 All necessary nodejs modules are under ./node_modules. 
+If for some reason, modules need to be downloaded, issue the following commands:
+  npm install express
+  npm install socket.io
+  npm install nodeunit
+
 To run the application, clone the repo and issue the following command:
   node index.js
 
@@ -21,5 +26,6 @@ This should display an empty tic-tac-toe board.
 
 TESTS
 =====
+
 Issue the following command to run all tests:
   ./node_modules/nodeunit/bin/nodeunit test
