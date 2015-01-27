@@ -1,0 +1,36 @@
+* DATA STRUCTURES
+** boardState =
+{
+  bdata: [],  // 2-diensional array specifying which cell has 'X' or 'O'.
+  playerBefore: [human, machine] // Player that made the move.
+}
+
+Algorithm for interactions between a server and a human player.
+
+
+Note: Everything is event based!!
+Note: The server keeps info on who is to make a next move. 'playerMakeMove=[human, machine]'
+
+1) The machine player is already available to play.
+
+2) Human joins the game.
+
+3) The server sends an empty board and asks the human to play first.
+  server.sendBoardStateToPlayers()    data='boardState'
+
+4) The human makes first move. Sends this info to the server. Server updates the board accordingly. Now the server knows that it is machine's turn. (based on event).
+  client.sendMyMoveToServer()         data='nextMove'
+  server.receiveMoveFromPlayer()
+
+5) The server sends out info on updated board to all.
+  server.sendBoardStateToPlayers()    data='boardState'
+
+6) Once the human gets the updated board, updates the UI.
+
+7) The machine makes next move. Sends this info to the server.
+  server.receiveMachineMakeMove()
+
+8) The server sends out info on updated board to all.
+  server.sendBoardStateToPlayers()
+
+9) Once the human gets the updated board, updates the UI.
