@@ -1,4 +1,8 @@
 
+OVERVIEW
+========
+This nodejs application uses socket.io to establish a server/client bi-directional communcation to exchange game related data.
+In addition, it partially implements the perfect player game strategy of Newell and Simon's 1972 tic-tac-toe program for the machine player's game AI.
 
 REQUIREMENTS
 ============
@@ -17,4 +21,5 @@ This should display an empty tic-tac-toe board.
 
 TESTS
 =====
-See 'run_tests.sh'.
+Issue the following command to run all tests:
+  ./node_modules/nodeunit/bin/nodeunit test
