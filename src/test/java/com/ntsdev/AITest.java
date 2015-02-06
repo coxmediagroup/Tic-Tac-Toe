@@ -3,6 +3,7 @@ package com.ntsdev;
 import com.ntsdev.game.AI;
 import com.ntsdev.game.Board;
 import com.ntsdev.game.CellState;
+import com.ntsdev.game.Position;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,8 +15,8 @@ public class AITest {
     @Test
     public void testHorizontalWin(){
         Board board = new Board();
-        board.setState(0,0,CellState.X);
-        board.setState(1,0,CellState.X);
+        board.setState(Position.withCoordinates(0,0),CellState.X);
+        board.setState(Position.withCoordinates(1,0),CellState.X);
 
         AI ai = new AI();
         boolean winning = ai.isWinningMove(2,0,board,CellState.X);
@@ -26,8 +27,8 @@ public class AITest {
     @Test
     public void testVerticalWin(){
         Board board = new Board();
-        board.setState(0,0,CellState.X);
-        board.setState(0,1,CellState.X);
+        board.setState(Position.withCoordinates(0,0),CellState.X);
+        board.setState(Position.withCoordinates(0,1),CellState.X);
 
         AI ai = new AI();
         boolean winning = ai.isWinningMove(0,2,board,CellState.X);
@@ -38,8 +39,8 @@ public class AITest {
     @Test
     public void testDiagonalWinTopLeftToBottomRight(){
         Board board = new Board();
-        board.setState(0,0,CellState.X);
-        board.setState(1,1,CellState.X);
+        board.setState(Position.withCoordinates(0,0),CellState.X);
+        board.setState(Position.withCoordinates(1,1),CellState.X);
 
         AI ai = new AI();
         boolean winning = ai.isWinningMove(2,2,board,CellState.X);
@@ -50,8 +51,8 @@ public class AITest {
     @Test
     public void testDiagonalWinTopRightToBottomLeft(){
         Board board = new Board();
-        board.setState(0,2,CellState.X);
-        board.setState(1,1,CellState.X);
+        board.setState(Position.withCoordinates(0,2),CellState.X);
+        board.setState(Position.withCoordinates(1,1),CellState.X);
 
         AI ai = new AI();
         boolean winning = ai.isWinningMove(2,0,board,CellState.X);
@@ -62,8 +63,8 @@ public class AITest {
     @Test
     public void testNonWinningMove(){
         Board board = new Board();
-        board.setState(0,2,CellState.X);
-        board.setState(1,1,CellState.X);
+        board.setState(Position.withCoordinates(0,2),CellState.X);
+        board.setState(Position.withCoordinates(1,1),CellState.X);
 
         AI ai = new AI();
         boolean winning = ai.isWinningMove(0,0,board,CellState.X);
@@ -74,8 +75,8 @@ public class AITest {
     @Test
     public void testComputerPlaysWinningMoveDiagonally(){
         Board board = new Board();
-        board.setState(0,2,CellState.X);
-        board.setState(1,1,CellState.X);
+        board.setState(Position.withCoordinates(0,2),CellState.X);
+        board.setState(Position.withCoordinates(1,1),CellState.X);
 
         AI ai = new AI();
         Board newBoard = ai.makeMove(board);
@@ -88,8 +89,8 @@ public class AITest {
     @Test
     public void testComputerPlaysWinningMoveVertically(){
         Board board = new Board();
-        board.setState(0,0,CellState.X);
-        board.setState(1,0,CellState.X);
+        board.setState(Position.withCoordinates(0,0),CellState.X);
+        board.setState(Position.withCoordinates(1,0),CellState.X);
 
         AI ai = new AI();
         Board newBoard = ai.makeMove(board);
@@ -102,8 +103,8 @@ public class AITest {
     @Test
     public void testComputerPlaysWinningMoveHorizontally(){
         Board board = new Board();
-        board.setState(0,0,CellState.X);
-        board.setState(0,1,CellState.X);
+        board.setState(Position.withCoordinates(0,0),CellState.X);
+        board.setState(Position.withCoordinates(0,1),CellState.X);
 
         AI ai = new AI();
         Board newBoard = ai.makeMove(board);
@@ -116,13 +117,13 @@ public class AITest {
     @Test
     public void testComputerBlocksPlayerFromWinning(){
         Board board = new Board();
-        board.setState(0,0,CellState.O);
-        board.setState(0,1,CellState.O);
+        board.setState(Position.withCoordinates(0,0),CellState.O);
+        board.setState(Position.withCoordinates(0,1),CellState.O);
 
         AI ai = new AI();
         Board newBoard = ai.makeMove(board);
 
-        assertEquals("Computer didn't block player", newBoard.getState(0,2), CellState.X);
+        assertEquals("Computer didn't block player", newBoard.getState(Position.withCoordinates(0,2)), CellState.X);
     }
 
 }

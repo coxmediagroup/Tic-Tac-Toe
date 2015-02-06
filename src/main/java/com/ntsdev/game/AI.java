@@ -5,6 +5,7 @@ public class AI {
     private final CellState computerState = CellState.X;
     private final CellState playerState = CellState.O;
 
+
     /**
      * The computer makes a move
      * @param board the current game board
@@ -15,24 +16,24 @@ public class AI {
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
                 if(isWinningMove(i,j,board,computerState)){
-                    board.makeMove(i,j,computerState);
+                    board.makeMove(Position.withCoordinates(i,j),computerState);
                     return board;
                 }
                 else if(isWinningMove(i,j,board,playerState)){
-                    board.makeMove(i,j,computerState);
+                    board.makeMove(Position.withCoordinates(i,j),computerState);
                     return board;
                 }
             }
         }
         //nobody's going to win on this move, so try to get a corner or the center
-        if(couldPlayCenter(board)) return board;
         if(couldPlayCorner(board)) return board;
+        if(couldPlayCenter(board)) return board;
 
         //just pick somewhere
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++) {
-                if(board.cellAvailable(i,j)){
-                    board.makeMove(i,j,computerState);
+                if(board.cellAvailable(Position.withCoordinates(i,j))){
+                    board.makeMove(Position.withCoordinates(i,j),computerState);
                     return board;
                 }
             }
@@ -52,8 +53,8 @@ public class AI {
     public boolean isWinningMove(int x, int y, Board board, CellState stateToCheck){
         boolean win = false;
         Board copy = board.copy();
-        if(copy.cellAvailable(x, y)) {
-            copy.setState(x, y, stateToCheck);
+        if(copy.cellAvailable(Position.withCoordinates(x, y))) {
+            copy.setState(Position.withCoordinates(x, y), stateToCheck);
             win = copy.checkWin(stateToCheck);
         }
         return win;
@@ -62,20 +63,20 @@ public class AI {
 
     private boolean couldPlayCorner(Board board){
         boolean couldPlay = false;
-        if(board.cellAvailable(0,0)){
-            board.makeMove(0,0,computerState);
+        if(board.cellAvailable(Position.withCoordinates(0,0))){
+            board.makeMove(Position.withCoordinates(0,0),computerState);
             couldPlay = true;
         }
-        else if(board.cellAvailable(0,2)){
-            board.makeMove(0,2,computerState);
+        else if(board.cellAvailable(Position.withCoordinates(0,2))){
+            board.makeMove(Position.withCoordinates(0,2),computerState);
             couldPlay = true;
         }
-        else if(board.cellAvailable(2,2)){
-            board.makeMove(2,2,computerState);
+        else if(board.cellAvailable(Position.withCoordinates(2,2))){
+            board.makeMove(Position.withCoordinates(2,2),computerState);
             couldPlay = true;
         }
-        else if(board.cellAvailable(2,0)){
-            board.makeMove(2,0,computerState);
+        else if(board.cellAvailable(Position.withCoordinates(2,0))){
+            board.makeMove(Position.withCoordinates(2,0),computerState);
             couldPlay = true;
         }
         return couldPlay;
@@ -83,8 +84,8 @@ public class AI {
 
     private boolean couldPlayCenter(Board board){
         boolean couldPlay = false;
-        if(board.cellAvailable(1,1)){
-            board.makeMove(1,1,computerState);
+        if(board.cellAvailable(Position.withCoordinates(1,1))){
+            board.makeMove(Position.withCoordinates(1,1),computerState);
             couldPlay = true;
         }
         return couldPlay;

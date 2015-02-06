@@ -12,15 +12,14 @@ public class Board {
 
     /**
      * Attempts to make a move on the board
-     * @param x x coordinate on the game board
-     * @param y y coordinate on the game board
+     * @param position coordinates for the move
      * @param state either an X or an O
      * @return true if the move could be made
      */
-    public boolean makeMove(int x, int y, CellState state){
+    public boolean makeMove(Position position, CellState state){
         boolean success;
-        if(cellAvailable(x,y)){
-            board[x][y].setState(state);
+        if(cellAvailable(position)){
+            board[position.getX()][position.getY()].setState(state);
             success = true;
         }
         else{
@@ -31,32 +30,29 @@ public class Board {
 
     /**
      * Gets the state of a cell on the game board
-     * @param x x coordinate of the game board
-     * @param y y coordinate of the game board
+     * @param position Position to check
      * @return the current state of the given cell
      */
-    public CellState getState(int x, int y){
-        return board[x][y].getState();
+    public CellState getState(Position position){
+        return board[position.getX()][position.getY()].getState();
     }
 
     /**
      * Sets the state of a cell on the game board
-     * @param x x coordinate of the game board
-     * @param y y coordinate of the game board
+     * @param position Position to check
      * @param state the state to set
      */
-    public void setState(int x, int y, CellState state){
-        board[x][y].setState(state);
+    public void setState(Position position, CellState state){
+        board[position.getX()][position.getY()].setState(state);
     }
 
     /**
      * Checks if a letter has already been placed on the game board
-     * @param x x coordinate of the game board
-     * @param y y coordinate of the game board
+     * @param position Position to check
      * @return true if the cell is blank
      */
-    public boolean cellAvailable(int x, int y){
-        return board[x][y].getState() == CellState.BLANK;
+    public boolean cellAvailable(Position position){
+        return board[position.getX()][position.getY()].getState() == CellState.BLANK;
     }
 
     /**
@@ -67,7 +63,7 @@ public class Board {
         if(!checkWin(CellState.X) && !checkWin(CellState.O)){
             for(int i=0;i<3;i++){
                 for(int j=0;j<3;j++){
-                    if(getState(i,j) == CellState.BLANK){
+                    if(getState(Position.withCoordinates(i,j)) == CellState.BLANK){
                         return false;
                     }
                 }
@@ -86,7 +82,7 @@ public class Board {
         for(int x=0;x<3;x++){
             for(int y=0;y<3;y++){
                 CellState state = board[x][y].getState();
-                copy.setState(x,y, state);
+                copy.setState(Position.withCoordinates(x,y), state);
             }
         }
         return copy;
@@ -163,7 +159,7 @@ public class Board {
 
     private boolean checkHorizontal(int row, CellState state){
         for(int i=0;i<3;i++){
-            CellState cellState = getState(row, i);
+            CellState cellState = getState(Position.withCoordinates(row, i));
             boolean match = (cellState == state);
             if(!match){
                 return false;
@@ -174,7 +170,7 @@ public class Board {
 
     private boolean checkVertical(int col, CellState state){
         for(int i=0;i<3;i++){
-            CellState cellState = getState(i, col);
+            CellState cellState = getState(Position.withCoordinates(i, col));
             boolean match = (cellState == state);
             if(!match){
                 return false;
@@ -186,14 +182,14 @@ public class Board {
     private boolean checkDiagonals(CellState state){
         return
                 //top left to bottom right
-                ((getState(0,0) == state) &&
-                        (getState(1,1) == state) &&
-                        (getState(2,2) == state)) ||
+                ((getState(Position.withCoordinates(0,0)) == state) &&
+                        (getState(Position.withCoordinates(1,1)) == state) &&
+                        (getState(Position.withCoordinates(2,2)) == state)) ||
 
                         //top right to bottom left
-                        ((getState(0,2) == state) &&
-                                (getState(1,1) == state) &&
-                                (getState(2, 0) == state));
+                        ((getState(Position.withCoordinates(0,2)) == state) &&
+                                (getState(Position.withCoordinates(1,1)) == state) &&
+                                (getState(Position.withCoordinates(2, 0)) == state));
     }
 
 }

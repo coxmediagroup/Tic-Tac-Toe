@@ -3,6 +3,7 @@ package com.ntsdev.api;
 import com.ntsdev.game.AI;
 import com.ntsdev.game.Board;
 import com.ntsdev.game.CellState;
+import com.ntsdev.game.Position;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class ApiController {
             @RequestParam("y") Integer y) throws IOException {
 
         Board board = (Board) session.getAttribute("board");
-        board.makeMove(x,y, CellState.O); //player is always "o"
+        board.makeMove(Position.withCoordinates(x,y), CellState.O); //player is always "o"
 
         if(!board.checkWin(CellState.O)) {
             AI ai = new AI();
