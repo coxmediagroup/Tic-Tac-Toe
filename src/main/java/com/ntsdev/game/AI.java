@@ -1,10 +1,25 @@
 package com.ntsdev.game;
 
+import java.util.List;
+
 public class AI {
 
-    private final CellState computerState = CellState.X;
-    private final CellState playerState = CellState.O;
+    private final CellState computerPlayer = CellState.X;
+    private final CellState humanPlayer = CellState.O;
 
+    class Result {
+        private int score;
+        private Position position;
+
+        Result(int score, Position position) {
+            this.score = score;
+            this.position = position;
+        }
+
+        public String toString(){
+            return "Score: [" + score + "] Position: x[" + position.getX() + "] y[" + position.getY() + "]";
+        }
+    }
 
     /**
      * The computer makes a move
@@ -12,83 +27,78 @@ public class AI {
      * @return the board with the computer's move applied
      */
     public Board makeMove(Board board){
-        //see if computer can win with this turn, or if player can win, move to that space
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                if(isWinningMove(i,j,board,computerState)){
-                    board.makeMove(Position.withCoordinates(i,j),computerState);
-                    return board;
+        Result result = minimax(computerPlayer, board.copy(), 0);
+        System.out.println(result);
+        board.makeMove(result.position, computerPlayer);
+        return board;
+    }
+
+    private Result minimax(CellState player, Board board, int depth){
+        List<Position> moves = board.getAvailableMoves();
+
+        int bestX = -1;
+        int bestY = -1;
+        int currentScore;
+        int bestScore;
+
+        if(player == computerPlayer){
+            bestScore = Integer.MIN_VALUE;
+        }
+        else{
+            bestScore = Integer.MAX_VALUE;
+        }
+
+        if(moves.isEmpty() || board.checkWin(computerPlayer) || board.checkWin(humanPlayer)){  //game over
+            bestScore = evaluate(board);
+        }
+        else{
+            for(Position move: moves){
+                board.makeMove(move, player); //make the move for the player
+                if(player == computerPlayer){ //maximize score for computer
+                    Result result = minimax(humanPlayer, board, depth + 1);
+                    currentScore = result.score;
+                    if(currentScore > bestScore){
+                        bestScore = currentScore;
+                        Position position = result.position;
+                        bestX = position.getX();
+                        bestY = position.getY();
+                    }
+                    if(currentScore == 1) {
+                        System.out.println("COMPUTER WINS!");
+                        return new Result(bestScore, Position.withCoordinates(bestX, bestY));
+                    }
                 }
-                else if(isWinningMove(i,j,board,playerState)){
-                    board.makeMove(Position.withCoordinates(i,j),computerState);
-                    return board;
+                else{ //minimize score for player
+                    Result result = minimax(computerPlayer, board, depth + 1);
+                    currentScore = result.score;
+                    if(currentScore < bestScore){
+                        bestScore = currentScore;
+                        Position position = result.position;
+                        bestX = position.getX();
+                        bestY = position.getY();
+                    }
                 }
+                board.makeMove(move, CellState.BLANK);
             }
-        }
-        //nobody's going to win on this move, so try to get a corner or the center
-        if(couldPlayCorner(board)) return board;
-        if(couldPlayCenter(board)) return board;
-
-        //just pick somewhere
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++) {
-                if(board.cellAvailable(Position.withCoordinates(i,j))){
-                    board.makeMove(Position.withCoordinates(i,j),computerState);
-                    return board;
-                }
-            }
+            return new Result(bestScore, Position.withCoordinates(bestX, bestY));
         }
 
-        return board; //shouldn't happen
+        System.out.println("bestX: " + bestX + " bestY: " + bestY + " bestScore: " + bestScore);
+        return new Result(bestScore, Position.withCoordinates(bestX, bestY));
     }
 
-    /**
-     * Checks if the prospective move is a winner
-     * @param x x coordinate of the move
-     * @param y y coordinate of the move
-     * @param board the game board
-     * @param stateToCheck state to place on the board at x,y
-     * @return true if this move will cause the player's state to win
-     */
-    public boolean isWinningMove(int x, int y, Board board, CellState stateToCheck){
-        boolean win = false;
-        Board copy = board.copy();
-        if(copy.cellAvailable(Position.withCoordinates(x, y))) {
-            copy.setState(Position.withCoordinates(x, y), stateToCheck);
-            win = copy.checkWin(stateToCheck);
+    private int evaluate(Board board){
+        CellState winner = board.checkWinner();
+        if(winner == computerPlayer){
+            System.out.println(board);
+            return 1;
         }
-        return win;
-    }
-
-
-    private boolean couldPlayCorner(Board board){
-        boolean couldPlay = false;
-        if(board.cellAvailable(Position.withCoordinates(0,0))){
-            board.makeMove(Position.withCoordinates(0,0),computerState);
-            couldPlay = true;
+        else if(winner == humanPlayer){
+            return -1;
         }
-        else if(board.cellAvailable(Position.withCoordinates(0,2))){
-            board.makeMove(Position.withCoordinates(0,2),computerState);
-            couldPlay = true;
+        else{
+            return 0;
         }
-        else if(board.cellAvailable(Position.withCoordinates(2,2))){
-            board.makeMove(Position.withCoordinates(2,2),computerState);
-            couldPlay = true;
-        }
-        else if(board.cellAvailable(Position.withCoordinates(2,0))){
-            board.makeMove(Position.withCoordinates(2,0),computerState);
-            couldPlay = true;
-        }
-        return couldPlay;
-    }
-
-    private boolean couldPlayCenter(Board board){
-        boolean couldPlay = false;
-        if(board.cellAvailable(Position.withCoordinates(1,1))){
-            board.makeMove(Position.withCoordinates(1,1),computerState);
-            couldPlay = true;
-        }
-        return couldPlay;
     }
 
 }

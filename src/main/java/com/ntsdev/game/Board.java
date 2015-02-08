@@ -1,10 +1,16 @@
 package com.ntsdev.game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The Tic-Tac-Toe game board
  */
 public class Board {
-    private Cell [][] board = new Cell[3][3];
+    private Cell[][] board = new Cell[3][3];
+
+    List<List<Position>> winningCombinations = initializeWinningCombinations();
 
     public Board(){
         initializeBoard();
@@ -18,7 +24,7 @@ public class Board {
      */
     public boolean makeMove(Position position, CellState state){
         boolean success;
-        if(cellAvailable(position)){
+        if(cellAvailable(position) || state == CellState.BLANK){
             board[position.getX()][position.getY()].setState(state);
             success = true;
         }
@@ -104,7 +110,7 @@ public class Board {
             }
          */
         StringBuilder boardString = new StringBuilder(256);
-        boardString.append("{\"board\":[");
+        boardString.append("{\"board\":[\n");
         for(int i=0;i<3;i++){
             boardString.append("[");
             for(int j=0;j<3;j++){
@@ -115,7 +121,7 @@ public class Board {
                     boardString.append(",");
                 }
             }
-            boardString.append("]");
+            boardString.append("]\n");
             if(i<2) {
                 boardString.append(',');
             }
@@ -147,6 +153,34 @@ public class Board {
         if(checkWin(CellState.X)) return CellState.X;
         if(checkWin(CellState.O)) return CellState.O;
         return CellState.BLANK;
+    }
+
+    /**
+     * Returns all available moves
+     * @return
+     */
+    public List<Position> getAvailableMoves(){
+        List<Position> availableMoves = new ArrayList<>();
+
+        CellState potentialWinner = checkWinner();
+        if(potentialWinner == CellState.X || potentialWinner == CellState.O){
+            return availableMoves;
+        }
+
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                Position position = Position.withCoordinates(i,j);
+                if(cellAvailable(position)){
+                    availableMoves.add(position);
+                }
+            }
+        }
+        return availableMoves;
+    }
+
+    @Override
+    public String toString(){
+        return toJSON();
     }
 
     private void initializeBoard(){
@@ -190,6 +224,29 @@ public class Board {
                         ((getState(Position.withCoordinates(0,2)) == state) &&
                                 (getState(Position.withCoordinates(1,1)) == state) &&
                                 (getState(Position.withCoordinates(2, 0)) == state));
+    }
+
+    private List<List<Position>> initializeWinningCombinations(){
+        List<Position> horizontalFirstRow = Arrays.asList(
+                Position.withCoordinates(0,0), Position.withCoordinates(0,1), Position.withCoordinates(0,2));
+        List<Position> horizontalSecondRow = Arrays.asList(
+                Position.withCoordinates(1,0), Position.withCoordinates(1,1), Position.withCoordinates(1,2));
+        List<Position> horizontalThirdRow = Arrays.asList(
+                Position.withCoordinates(2,0), Position.withCoordinates(2,1), Position.withCoordinates(2,2));
+        List<Position> verticalFirstColumn = Arrays.asList(
+                Position.withCoordinates(0,0), Position.withCoordinates(1,0), Position.withCoordinates(2,0));
+        List<Position> verticalSecondColumn = Arrays.asList(
+                Position.withCoordinates(0,1), Position.withCoordinates(1,1), Position.withCoordinates(2,1));
+        List<Position> verticalThirdColumn = Arrays.asList(
+                Position.withCoordinates(0,2), Position.withCoordinates(1,2), Position.withCoordinates(2,2));
+        List<Position> diagonalLeftToRight = Arrays.asList(
+                Position.withCoordinates(0,0), Position.withCoordinates(1,1), Position.withCoordinates(2,2));
+        List<Position> diagonalRightToLeft = Arrays.asList(
+                Position.withCoordinates(0,2), Position.withCoordinates(1,1), Position.withCoordinates(2,0));
+
+        return Arrays.asList(
+                horizontalFirstRow, horizontalSecondRow, horizontalThirdRow, verticalFirstColumn,
+                verticalSecondColumn, verticalThirdColumn, diagonalLeftToRight, diagonalRightToLeft);
     }
 
 }
