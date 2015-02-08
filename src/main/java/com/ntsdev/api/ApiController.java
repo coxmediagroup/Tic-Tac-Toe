@@ -26,12 +26,11 @@ public class ApiController {
     @RequestMapping("/board")
     public String gameBoard(HttpSession session) {
         Object maybeBoard = session.getAttribute("board");
-        if(maybeBoard == null){
+        if (maybeBoard == null) {
             Board newBoard = new Board();
             session.setAttribute("board", newBoard);
             return newBoard.toJSON();
-        }
-        else{
+        } else {
             Board board = (Board) maybeBoard;
             return board.toJSON();
         }
@@ -44,9 +43,9 @@ public class ApiController {
             @RequestParam("y") Integer y) throws IOException {
 
         Board board = (Board) session.getAttribute("board");
-        board.makeMove(Position.withCoordinates(x,y), CellState.O); //player is always "o"
+        board.makeMove(Position.withCoordinates(x, y), CellState.O); //player is always "o"
 
-        if(!board.checkWin(CellState.O)) {
+        if (!board.checkWin(CellState.O) && !board.getAvailableMoves().isEmpty()) {
             AI ai = new AI();
             board = ai.makeMove(board);
             session.setAttribute("board", board);
@@ -56,15 +55,13 @@ public class ApiController {
     }
 
     @RequestMapping("/checkwin")
-    public String checkWin(HttpSession session){
+    public String checkWin(HttpSession session) {
         Board board = (Board) session.getAttribute("board");
-        if(board.checkWin(CellState.O)){
+        if (board.checkWin(CellState.O)) {
             return "You win!";
-        }
-        else if(board.checkWin(CellState.X)){
+        } else if (board.checkWin(CellState.X)) {
             return "You lose!";
-        }
-        else if(board.draw()){
+        } else if (board.draw()) {
             return "It's a draw!";
         }
         return "";
