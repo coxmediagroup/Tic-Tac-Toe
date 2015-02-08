@@ -51,7 +51,7 @@ public class BoardTest {
         Board board = new Board();
         board.setState(Position.withCoordinates(0, 0), CellState.X);
         board.setState(Position.withCoordinates(2, 2), CellState.X);
-        String testString = "{\"board\":[[\"X\",\"_\",\"_\"],[\"_\",\"_\",\"_\"],[\"_\",\"_\",\"X\"]]}";
+        String testString = "{\"board\":[\n[\"X\",\"_\",\"_\"]\n,[\"_\",\"_\",\"_\"]\n,[\"_\",\"_\",\"X\"]\n]}";
         String boardString = board.toJSON();
         assertEquals("JSON didn't match", testString, boardString);
     }

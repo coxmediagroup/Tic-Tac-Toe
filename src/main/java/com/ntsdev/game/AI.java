@@ -86,9 +86,10 @@ public class AI {
     private int minimax(CellState player, Board board, int depth) {
         List<Integer> scores = new ArrayList<>();
         List<Position> moves = board.getAvailableMoves();
-        if (moves.isEmpty()) return 0;
+
         if (board.checkWin(computerPlayer)) return 1;
         if (board.checkWin(humanPlayer)) return -1;
+        if (moves.isEmpty()) return 0;
 
         for (Position move : moves) {
             board.makeMove(move, player); //make the move for the player
