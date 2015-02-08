@@ -5,6 +5,9 @@ I did this assignment in Java because it's one of the languages I'm more familia
 I used Spring Boot to get rid of most of the Java webapp boilerplate.  It's not very pretty, but
 it's functional and covered pretty well by tests (I took a TDD approach for the most part).
 
+Updated to use the minimax_ algorithm to guarantee the AI either wins or draws in all cases.
+.. _minimax: http://en.wikipedia.org/wiki/Minimax
+
 Requirements
 ============
 
