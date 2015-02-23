@@ -1,4 +1,5 @@
 var app = angular.module('ticTacToe', []);
+var apiUrl = "http://localhost/tictactoe/server/";
 
  app.controller('gameGridController', function ($scope, $http, $window) {
  
@@ -41,7 +42,20 @@ var app = angular.module('ticTacToe', []);
 	{
 		$scope.ticTacToeMoves.push([rowIndex,columnIndex]);
 		applyTicTacToeMovesToGrid($scope.ticTacToeMoves,$scope.gridVm);
-		// todo: Get AI move from server
+		$scope.getAiMove($scope.ticTacToeMoves);
 	}
+
+	$scope.getAiMove = function (moves)
+ 	{
+ 		$http.post(apiUrl + "make_move.php", moves)
+ 			.success(function (result, status, headers, config) 
+ 			{
+				console.log(result);
+ 			})
+ 			.error(function (result, status, headers, config) 
+ 			{
+	 			console.log(result);
+ 			});
+ 	}
 
  });
