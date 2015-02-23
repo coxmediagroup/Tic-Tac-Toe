@@ -1,0 +1,42 @@
+
+.title {
+	font-size: 18px;
+	font-family: Arial;
+	font-variant: small-caps;
+	color: blue;
+}
+
+.gameGrid {
+	position: absolute;
+	top: 100px;
+	left: 50%;
+	margin-left: -200px;
+}
+
+.row {
+	border: 0px;
+	overflow: auto;
+	display: table-row;
+}
+
+.row.bottom .cell {
+	border-bottom: 0px;
+}
+
+.cell {
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+
+	padding-top: 12px;
+	text-align: center;
+	font-size: 80px;
+	font-family: Arial;
+
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+
+.cell.right {
+	border-right: 0px;
+}

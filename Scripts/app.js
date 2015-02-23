@@ -1,6 +1,6 @@
 var app = angular.module('ticTacToe', []);
 
- app.controller('mainController', function ($scope, $http, $window) {
+ app.controller('gameGridController', function ($scope, $http, $window) {
  
  	var oMove = "O";
  	var xMove = "X";
@@ -13,7 +13,6 @@ var app = angular.module('ticTacToe', []);
  	$scope.gridVm = [[empty,empty,empty],[empty,empty,empty],[empty,empty,empty]];
  	// 4x4 grid:
 	//$scope.gridVm = [[oMove,xMove,empty,empty],[empty, oMove,empty,empty],[xMove,empty,xMove,empty],[xMove,empty,empty,empty]];
- 	
  	//applyTicTacToeMovesToGrid($scope.ticTacToeMoves,$scope.gridVm);
 
 	function applyTicTacToeMovesToGrid(moves, grid) {
