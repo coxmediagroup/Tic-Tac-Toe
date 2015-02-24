@@ -40,17 +40,25 @@ var apiUrl = "http://localhost/tictactoe/server/";
 
 	$scope.makeTicTacToeMove = function(rowIndex,columnIndex)
 	{
-		$scope.ticTacToeMoves.push([rowIndex,columnIndex]);
-		applyTicTacToeMovesToGrid($scope.ticTacToeMoves,$scope.gridVm);
-		$scope.getAiMove($scope.ticTacToeMoves);
+		if($scope.gridVm[rowIndex][columnIndex].length == 0)
+		{
+			$scope.ticTacToeMoves.push([rowIndex,columnIndex]);
+
+			applyTicTacToeMovesToGrid($scope.ticTacToeMoves,$scope.gridVm);
+
+			$scope.getAiMove($scope.ticTacToeMoves);
+		}
 	}
 
 	$scope.getAiMove = function (moves)
  	{
  		$http.post(apiUrl + "make_move.php", moves)
- 			.success(function (result, status, headers, config) 
+ 			.success(function (returnedMoves, status, headers, config) 
  			{
-				console.log(result);
+				console.log(returnedMoves);
+				$scope.ticTacToeMoves = returnedMoves;
+				applyTicTacToeMovesToGrid($scope.ticTacToeMoves,$scope.gridVm);
+				
  			})
  			.error(function (result, status, headers, config) 
  			{
