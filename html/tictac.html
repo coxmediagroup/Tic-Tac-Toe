@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #outer {
+            min-height: 100%;
+            position: relative;
+        }
+
+        #header {
+            padding: 10px;
+            text-align: center;
+            font-size: 48pt;
+            font-weight: bold;
+        }
+
+        #content {
+            padding: 10px;
+            padding-bottom: 80px;
+        }
+
+        #footer {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            height: 80px;
+            left: 0;
+            text-align: center;
+        }
+
+        div.message {
+            text-align: center;
+            font-size: 36pt;
+            padding: 36px;
+        }
+
+        div.restart {
+            text-align: center;
+        }
+
+        p.choices {
+            text-align: center;
+        }
+
+        table.tttable {
+            border-collapse: collapse;
+            border: 0;
+        }
+
+        table.tttable td.row2 {
+            border-bottom: 2px solid black;
+            border-top: 2px solid black;
+        }
+
+        table.tttable td.col2 {
+            border-left: 2px solid black;
+            border-right: 2px solid black;
+        }
+
+        button.ttbutton {
+            background-color: transparent;
+            border: 0;
+            color: black;
+            width: 72px;
+            height: 72px;
+            font-family: sans-serif;
+            font-size: 48pt;
+            font-weight: bold;
+        }
+
+        button.button {
+            width: 108px;
+            height: 36px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        var playerNumber = 0;
+        var computerNumber = 0;
+        var playerLetter = '';
+        var computerLetter = '';
+        var winner = 0;
+        var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        function setPlayerNumber(pn) {
+            if (pn === 1) {
+                playerNumber = 1;
+                computerNumber = 2;
+                switchVis("NewGame", "ExOh")
+            }
+            if (pn === 2) {
+                playerNumber = 2;
+                computerNumber = 1;
+                switchVis('NewGame', 'ExOh');
+            }
+        }
+
+        function setPlayerLetter(pl) {
+            if (pl === "X") {
+                playerLetter = 'X';
+                computerLetter = 'O';
+                startGame();
+            }
+            if (pl === "O") {
+                playerLetter = 'O';
+                computerLetter = 'X';
+                startGame();
+            }
+        }
+
+        function restart() {
+            playerNumber = 0;
+            computerNumber = 0;
+            playerLetter = '';
+            computerLetter = '';
+            winner = 0;
+            board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            setboard(board);
+            var rd = document.getElementById('Restart');
+            rd.style.display = 'none';
+            switchVis('TicTac', 'NewGame');
+        }
+
+        function setboard(board) {
+            for (var i = 0; i < 9; i++) {
+                var bt = document.getElementById('tictac' + i);
+                bt.innerHTML = '';
+                bt.disabled = true;
+            }
+        }
+
+        function startGame() {
+            switchVis('ExOh', 'TicTac');
+            if (playerNumber === 1) {
+                playersMove()
+            }
+            else {
+                computersMove()
+            }
+        }
+
+        function setMessage(message) {
+            var md = document.getElementById('message');
+            md.innerHTML = message;
+        }
+
+        function playersMove() {
+            for (var i = 0; i < 9; i++) {
+                var bt = document.getElementById('tictac' + i);
+                bt.disabled = board[i] !== 0;
+            }
+            setMessage("Your Move...")
+        }
+
+        function computersMove() {
+            for (var i = 0; i < 9; i++) {
+                var bt = document.getElementById('tictac' + i);
+                bt.disabled = true;
+            }
+            setMessage("Computer is thinking...");
+            callBackend();
+        }
+
+        function processResponse(message) {
+            var payload = JSON.parse(message);
+            if (payload.move !== undefined) {
+                var move = payload.move;
+                board[move] = payload.player;
+                var bt = document.getElementById('tictac' + move);
+                bt.innerHTML = computerLetter;
+            }
+            if (payload.winner !== undefined) {
+                if (payload.winner == 3) {
+                    setMessage("A Draw.");
+                }
+                if (payload.winner == computerNumber) {
+                    setMessage("Computer Wins.");
+                }
+                if (payload.winner == playerNumber) {
+                    setMessage("Human Wins.");
+                }
+                var rd = document.getElementById('Restart');
+                rd.style.display = 'block';
+            }
+            else {
+                playersMove();
+            }
+        }
+
+        function ttbutton(bn) {
+            if (board[bn] != 0) {
+                alert("that space is already taken; something bad has happened.");
+                return
+            }
+            board[bn] = playerNumber;
+            var bt = document.getElementById('tictac' + bn);
+            bt.innerHTML = playerLetter;
+            computersMove();
+        }
+
+        function switchVis(hideDiv, showDiv) {
+            var hd = document.getElementById(hideDiv);
+            var sd = document.getElementById(showDiv);
+            hd.style.display = 'none';
+            sd.style.display = 'block';
+        }
+
+        function callBackend() {
+            var xmlHttp = new XMLHttpRequest();
+            if (xmlHttp == null) {
+                alert("get a better browser!");
+                return;
+            }
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    processResponse(xmlHttp.responseText);
+                }
+            };
+            var s = '';
+            for (var i = 0; i < 9; i++) {
+                s = s + board[i];
+            }
+            var payload = 'computer=' + computerNumber + '&board=' + s;
+            xmlHttp.open("GET", "/cgi-bin/tictacservice?" + payload, true);
+            xmlHttp.send();
+        }
+
+
+    </script>
+    <title>Otterson TicTacToe Demo</title>
+</head>
+<body>
+<div id="outer">
+
+    <div id="header">Tic Tac Toe</div>
+    <div id="content">
+
+        <div id="NewGame" style="display:block">
+            <p class="choices">Let's play a game of Tic Tac Toe.</p>
+
+            <p class="choices">Do you want to play first or second?</p>
+
+            <p class="choices">
+                <button type="button" class="button" onclick="setPlayerNumber(1)">First</button>
+                <button type="button" class="button" onclick="setPlayerNumber(2)">Second</button>
+            </p>
+        </div>
+        <div id="ExOh" style="display:none">
+            <p class="choices">Do you want to be X or O?</p>
+
+            <p class="choices">
+                <button type="button" class="button" onclick="setPlayerLetter('X')">X</button>
+                <button type="button" class="button" onclick="setPlayerLetter('O')">O</button>
+            </p>
+
+        </div>
+        <div id="TicTac" style="display:none">
+            <table class="tttable" align="center">
+                <tr>
+                    <td>
+                        <button type="button" class="ttbutton" id="tictac0" onclick="ttbutton(0)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td class="col2">
+                        <button type="button" class="ttbutton" id="tictac1" onclick="ttbutton(1)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="ttbutton" id="tictac2" onclick="ttbutton(2)" disabled>&nbsp
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row2">
+                        <button type="button" class="ttbutton" id="tictac3" onclick="ttbutton(3)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td class="col2 row2">
+                        <button type="button" class="ttbutton" id="tictac4" onclick="ttbutton(4)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td class="row2">
+                        <button type="button" class="ttbutton" id="tictac5" onclick="ttbutton(5)" disabled>&nbsp
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="ttbutton" id="tictac6" onclick="ttbutton(6)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td class="col2">
+                        <button type="button" class="ttbutton" id="tictac7" onclick="ttbutton(7)" disabled>&nbsp
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="ttbutton" id="tictac8" onclick="ttbutton(8)" disabled>&nbsp
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="message" id="message"></div>
+        </div>
+        <div id="Restart" class="restart" style="display:none">
+            <button type="button" class="button" onclick="restart()">Play Again</button>
+        </div>
+    </div>
+    <div id="footer">Otterson Tic-Tac-Toe Demo<br>
+        Your browser's &quot;View-Source&quot; function will show you the front end.<br>
+        <a href="tictacserver.html">See the back-end code</a></div>
+</div>
+
+</body>
+</html>
