@@ -89,7 +89,7 @@ def find_winning_move(board, player):
     return -1
 
 
-def find_forcing_moves(board, player, opponents_forking_moves):
+def find_forcing_moves(board, player, opponents_forking_moves, opponents_favorable_moves):
     """
     find a square that will force the opponent to play defensively
     :param board:
@@ -97,6 +97,7 @@ def find_forcing_moves(board, player, opponents_forking_moves):
     :return: the square that will put the opponent on defense
     """
     forcing_moves = []
+
     for winner in winners:
         choices = []
         found = False
@@ -110,7 +111,30 @@ def find_forcing_moves(board, player, opponents_forking_moves):
             for square in choices:
                 if square not in forcing_moves:
                     forcing_moves.append(square)
-    return forcing_moves
+
+    best_moves = []
+    for square in forcing_moves:
+        if square in opponents_favorable_moves:
+            best_moves.append(square)
+    if len(best_moves) == 0:
+        for square in forcing_moves:
+            if square not in opponents_favorable_moves:
+                best_moves.append(square)
+
+    return best_moves
+
+
+def find_favorable_moves(board, player, opponent):
+    favorable_moves = []
+    for square in range(0, 9):
+        if board[square] == player:
+            for winner in winners:
+                if square in winner:
+                    if board[winner[0]] != opponent and  board[winner[2]] != opponent and board[winner[2]] != opponent:
+                        for good_move in winner:
+                            if good_move not in favorable_moves and good_move != square:
+                                favorable_moves.append(good_move)
+    return favorable_moves
 
 
 def is_forking_square(board, square, player, opponent):
@@ -191,7 +215,10 @@ def try_to_win(board, player, opponent):
 
     # find opponent's forks
     forking_moves = find_forking_moves(board, empty, opponent, player)
-    forcing_moves = find_forcing_moves(board, player, forking_moves)
+
+    # find opponents' favorable moves
+    opponents_favorable_moves = find_favorable_moves(board, opponent, player)
+    forcing_moves = find_forcing_moves(board, player, forking_moves, opponents_favorable_moves)
 
     if len(forcing_moves) > 0:
         return forcing_moves[random.randrange(len(forcing_moves))]
