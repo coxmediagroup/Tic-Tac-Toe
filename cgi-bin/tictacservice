@@ -10,8 +10,10 @@ Strategy lifted from http://en.wikipedia.org/wiki/Tic-tac-toe
 """
 import cgi
 import cgitb
+import random
 
 cgitb.enable()
+random.seed()
 
 '''
 the board is stored as a list of ints, 0 for unclaimed, 1, for claimed by X, 2 for claimed by o (oh).
@@ -87,7 +89,7 @@ def find_winning_move(board, player):
     return -1
 
 
-def find_forcing_moves(board, player):
+def find_forcing_moves(board, player, opponents_forking_moves):
     """
     find a square that will force the opponent to play defensively
     :param board:
@@ -99,10 +101,11 @@ def find_forcing_moves(board, player):
         choices = []
         found = False
         for test in winner:
-            if board[test] == 0:
-                choices.append(test)
-            if board[test] == player:
-                found = True
+            if test not in opponents_forking_moves:
+                if board[test] == 0:
+                    choices.append(test)
+                if board[test] == player:
+                    found = True
         if found and len(choices) == 2:
             for square in choices:
                 if square not in forcing_moves:
@@ -188,14 +191,13 @@ def try_to_win(board, player, opponent):
 
     # find opponent's forks
     forking_moves = find_forking_moves(board, empty, opponent, player)
-    forcing_moves = find_forcing_moves(board, player)
+    forcing_moves = find_forcing_moves(board, player, forking_moves)
 
-    for square in forcing_moves:
-        if square in forking_moves:
-            return square
+    if len(forcing_moves) > 0:
+        return forcing_moves[random.randrange(len(forcing_moves))]
 
     if len(forking_moves) > 0:
-        return forking_moves[0]
+        return forking_moves[random.randrange(len(forking_moves))]
 
     for test_move in preferred_moves:
         if board[test_move] == 0:
