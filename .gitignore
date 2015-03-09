@@ -6,8 +6,10 @@ lib-cov
 *.out
 *.pid
 *.gz
-
+.gradle
 vendor
+gradlew.bat
+gradlew
 pids
 logs
 results
