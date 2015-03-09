@@ -1,6 +1,14 @@
 <?php
+
 	session_start();
 	include 'tictactoe.php';
+	
+	/**
+ 	* TicTacToe Controller. 
+ 	* @author Eric Blanks
+	*/
+	
+
 	$ticTacToe = unserialize($_SESSION['tictactoe']);
 
 
@@ -13,7 +21,6 @@
 			$square = $_POST['square'];
 			$x = substr($square, 0, 1);
     		$y = substr($square, 2, 1);
-
 			$results = $ticTacToe->userMove($x, $y);
 			break;
 		case "computerMove" :

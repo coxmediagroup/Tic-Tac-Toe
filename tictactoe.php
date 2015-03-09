@@ -1,5 +1,10 @@
 <?php
 
+    /**
+    * TicTacToe Game. 
+    * @author Eric Blanks
+    */
+
 	class TicTacToe {
 
 		private $currentPlayer = 'o';
@@ -12,6 +17,8 @@
 
 		public function __construct() {
         }
+
+        // Sets board back to empty
 		
     	public function newGame() {
 
@@ -24,6 +31,11 @@
             $this->currentPlayer = 'o';
     	}
 
+        /**
+         *  Sets player 1 move
+         *  @param $x position, $y position, $setBlank set pos to blank
+         *  @returns results 
+         */
     	public function userMove($x, $y, $setBlank=false) {
     		
             if($setBlank) {
@@ -37,6 +49,11 @@
 
     		return $results;
     	}
+
+        /**
+         *  Sets player 2 move via best position (min max algo)
+         *  @returns results 
+         */
 
     	public function computerMove() {
             

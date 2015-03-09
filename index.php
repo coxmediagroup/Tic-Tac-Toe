@@ -7,83 +7,30 @@
 
 <html>
 	<head>
-<style>
-body {
-    background-color: linen;
-}
-h1 {
-    color: maroon;
-    margin-left: 40px;
-} 
-.row{
-	background-color: #bbb;
-}
-
-.row:after {
-    content: "";
-    clear: both;
-    display: block;
-}
-
-.column{
-	
-	float: left;
-	height:90px;
-	width:90px;
-	background-color: #FF1493;
-	padding:10 10 0 0;
-}
-
-.column_title {
-	float: left;
-	color: #333333;
-	width: 125px;
-	font-family: Century Gothic, sans-serif;
-	font-weight: bold;
-	font-size: 8pt;
-}
-
-.column_data {
-	float: left;
-	width: 125px;
-	color: #333333;
-	font-size: 8pt;
-	font-family: Century Gothic, sans-serif;
-}
-
-.column_winner{
-	background-color: yellow;
-}
-
-#play_again{
-	display: none;
-}
-
-.stats:after {
-    content: "";
-    clear: both;
-    display: block;
-}
-
-</style>
+       <link rel="stylesheet" type="text/css" href="./css/tictactoe.css">
 	</head>
 	<body>
+	<div id="game">	
+		<div id="center">
+		<img src="./images/logo.png"/>
 		<h1>Tic Tac Toe</h1>
-		<div id="message"></div>
+		<div id="message" class="message"></div>
+		<div class="board">
 		<?php
 			// draw 3x3 tic tac toe board
 			for($x = 0; $x< 3; $x++) {
 				echo('<div class="row" id="row' .($x+1) ."\">\n");
 
 				for($y = 0; $y < 3; $y++) {
-					echo('<div class="column" id="' .$x .'_' .$y ."\" onclick=handleUserMove(this)></div>\n");
+					echo('<div class="column" id="' .$x .'_' .$y ."\" onclick=handleUserMove(this)></div><div style=\"width=10px;float:left\"></div>\n");
 				}
 				echo('</div>');
 			}
 		?>
+	</div>
 		
-		<div>
-			<input type="button" name="play_again" id="play_again" value="Play Again" class="button" onclick=clearBoard()>
+		<div id="play_again">
+			<input type="button" name="play_again" value="Play Again" class="button" onclick=clearBoard()>
 		</div>
 		<div id="stats" style="display:none">
 			<div class="row">
@@ -99,6 +46,8 @@ h1 {
 				<div class="column_data" id="draw_wins"></div>
 			</div>
 		</div>
+	</div>	
+	</div>
 	</body>
 </html>
 
@@ -106,7 +55,6 @@ h1 {
 <script>
 
 	$(document).ready(function() {
-    	console.log("doc ready");
     	newGame();
 	}); 
 
@@ -126,14 +74,19 @@ h1 {
 	}
 
 	function handleUserMove(divColumn) {
+		
+		var className = $("#" + divColumn.id).attr('class');
 
 		if ($('#message').html().toUpperCase().indexOf('WINS') >= 0) {
 			return false;
 		}
-		else if($(divColumn).text().length != 0) {
+		
+		else if((className.indexOf('x-image') >= 0 || className.indexOf('o-image') >= 0)) {
+
 			$('#message').html('Move already taken! Please try again.');
 
 		}  else {
+
 			$('#message').html('');
   			
 			var data = {
@@ -145,11 +98,8 @@ h1 {
 
   				var results = JSON.parse(data);
   				handleResults(results, true);
-  				$(divColumn).html(results.currentPlayer);
-
+  				$(divColumn).addClass(results.currentPlayer + '-image');
 	  			
-	  			console.log('results=');
-	  			console.log(results);
 			});
 		}	
 	}
@@ -212,19 +162,17 @@ h1 {
 		$.post( "TicTacToeController.php", data, function( data ) {
 
 			var results = JSON.parse(data);
-
-  			$('#' + results.computerMove).html(results.currentPlayer);
-
+  			$('#' + results.computerMove).addClass(results.currentPlayer + '-image');
+	  			
   			handleResults(results);
 		});
-
 	}
 
 	function clearBoard() {
 		for(x = 0; x < 3; x++) {
 			for(y = 0; y < 3; y++) {
 				$('#' + x + '_' + y).html('');
-				$('#' + x + '_' + y).removeClass('column_winner');
+				$('#' + x + '_' + y).removeClass('column_winner o-image x-image');
 			}
 		}
 
