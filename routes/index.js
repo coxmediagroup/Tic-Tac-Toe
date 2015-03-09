@@ -7,7 +7,9 @@ router.get('/select/:tile/:player', function(req, res) {
 	var tile = req.params.tile;
 	var player = req.params.player;
 
-	var response = game.selectTile(tile, player);
+	game.selectTile(tile, player);
+	game.performAiMove();
+	var response = game.gameStatus();
 	res.json(response);
 });
 

@@ -10,9 +10,11 @@ module.exports = (function() {
 		undefined, undefined, undefined,
 		undefined, undefined, undefined,
 	];
-
+	
+	var lastPlayer = undefined;
+	
 	function canMove(tile) {
-		return board[tile] === undefined;
+		return !hasWinner() && (board[tile] === undefined);
 	}
 	
 	function hasWinner() {
@@ -49,26 +51,42 @@ module.exports = (function() {
 	function selectTile(tile, player) {
 		if (canMove(tile)) {
 			board[tile] = player;
+			lastPlayer = player;
 		}
+	}
+
+	function performAiMove() {
+		for (var i = 0; i < board.length; i++) {
+			if (canMove(i)) {
+				selectTile(i, 'O');
+				break;
+			}
+		}
+	}
+	
+	function gameStatus() {
 		var resp = {
-			player: player,
+			winningPlayer: lastPlayer,
 			winner: hasWinner(),
 			hasMovesLeft: hasMoves(),
 			board: board
 		}
 		return resp;
 	}
-
+	
 	function resetBoard() {
 		for (var i in board) {
 			board[i] = undefined;
 		}
+		lastPlayer = undefined;
 	}
 	
 	return {
 		hasWinner: hasWinner,
 		hasMoves: hasMoves,
 		selectTile: selectTile,
+		performAiMove: performAiMove,
+		gameStatus: gameStatus,
 		reset: resetBoard
 	};
 }())
