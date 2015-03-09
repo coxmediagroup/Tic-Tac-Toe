@@ -13,6 +13,8 @@ module.exports = (function() {
 	
 	var lastPlayer = undefined;
 	
+	var AI_MOVES = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+	
 	function canMove(tile) {
 		return !hasWinner() && (board[tile] === undefined);
 	}
@@ -56,9 +58,10 @@ module.exports = (function() {
 	}
 
 	function performAiMove() {
-		for (var i = 0; i < board.length; i++) {
-			if (canMove(i)) {
-				selectTile(i, 'O');
+		for (var i = 0; i < AI_MOVES.length; i++) {
+			var tile = AI_MOVES[i];
+			if (canMove(tile)) {
+				selectTile(tile, 'O');
 				break;
 			}
 		}
