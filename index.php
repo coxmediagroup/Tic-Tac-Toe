@@ -34,6 +34,23 @@ h1 {
 	padding:10 10 0 0;
 }
 
+.column_title {
+	float: left;
+	color: #333333;
+	width: 125px;
+	font-family: Century Gothic, sans-serif;
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+.column_data {
+	float: left;
+	width: 125px;
+	color: #333333;
+	font-size: 8pt;
+	font-family: Century Gothic, sans-serif;
+}
+
 .column_winner{
 	background-color: yellow;
 }
@@ -42,28 +59,45 @@ h1 {
 	display: none;
 }
 
+.stats:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
 </style>
 	</head>
 	<body>
 		<h1>Tic Tac Toe</h1>
 		<div id="message"></div>
-		<div class="row" id="row1">
-   			<div class="column" id="0_0" onclick=handleUserMove(this)></div>
-   			<div class="column" id="0_1" onclick=handleUserMove(this)></div>
-   			<div class="column" id="0_2" onclick=handleUserMove(this)></div>
-		</div>
-		<div class="row" id="row2">
-   			<div class="column" id="1_0" onclick=handleUserMove(this)></div>
-   			<div class="column" id="1_1" onclick=handleUserMove(this)></div>
-   			<div class="column" id="1_2" onclick=handleUserMove(this)></div>
-		</div>
-		<div class="row" id="row3">
-   			<div class="column" id="2_0" onclick=handleUserMove(this)></div>
-   			<div class="column" id="2_1" onclick=handleUserMove(this)></div>
-   			<div class="column" id="2_2" onclick=handleUserMove(this)></div>
-		</div>
+		<?php
+			// draw 3x3 tic tac toe board
+			for($x = 0; $x< 3; $x++) {
+				echo('<div class="row" id="row' .($x+1) ."\">\n");
+
+				for($y = 0; $y < 3; $y++) {
+					echo('<div class="column" id="' .$x .'_' .$y ."\" onclick=handleUserMove(this)></div>\n");
+				}
+				echo('</div>');
+			}
+		?>
+		
 		<div>
 			<input type="button" name="play_again" id="play_again" value="Play Again" class="button" onclick=clearBoard()>
+		</div>
+		<div id="stats" style="display:none">
+			<div class="row">
+				<div class="column_title">Total Games</div>
+				<div class="column_title">Player 1</div>
+				<div class="column_title">Player 2</div>
+				<div class="column_title">Draw</div>
+			</div>
+			<div class="row">
+				<div class="column_data" id="total_games"></div>
+				<div class="column_data" id="player_1_wins"></div>
+				<div class="column_data" id="player_2_wins"></div>
+				<div class="column_data" id="draw_wins"></div>
+			</div>
 		</div>
 	</body>
 </html>
@@ -74,7 +108,6 @@ h1 {
 	$(document).ready(function() {
     	console.log("doc ready");
     	newGame();
-		
 	}); 
 
 	function newGame() {
@@ -131,11 +164,42 @@ h1 {
 			} else {
 				$('#message').html('Player 2 (Computer) Wins!!!!');
 			}
+			player1Wins = results.stats.player1Wins;
+			player2Wins = results.stats.player2Wins;
+			drawWins = results.stats.drawWins;
+
+			$('#stats').show();
+			$('#total_games').html(player1Wins + player2Wins);
+			$('#player_1_wins').html(player1Wins);
+			$('#player_2_wins').html(player2Wins);
+			$('#draw_wins').html(drawWins);
 			$('#play_again').show();
+
+			drawWinner(results);
 		} else {
 			if(isUser) {
 				computerPlay();
 			}
+		}
+	}
+
+	function drawWinner(results) {
+		if(results.winData.col) {
+			for(i = 0; i < 3; i++) {
+				$('#' + i + '_' + results.winData.col).addClass('column_winner');
+			}
+		} else if(results.winData.row) {
+			for(i = 0; i < 3; i++) {
+				$('#' + results.winData.row + '_' + i).addClass('column_winner');
+			}
+		} else if(results.winData.diagnol1) {				
+			$('#0_0').addClass('column_winner');
+			$('#1_1').addClass('column_winner');
+			$('#2_2').addClass('column_winner');
+		} else if(results.winData.diagnol2) {
+			$('#0_2').addClass('column_winner');
+			$('#1_1').addClass('column_winner');
+			$('#2_0').addClass('column_winner');
 		}
 	}
 
@@ -148,9 +212,6 @@ h1 {
 		$.post( "TicTacToeController.php", data, function( data ) {
 
 			var results = JSON.parse(data);
-
-			console.log('!!!!!!!!!!!!!!!COMPUTER MOVE results=');
-  			console.log(results);
 
   			$('#' + results.computerMove).html(results.currentPlayer);
 
@@ -172,12 +233,4 @@ h1 {
 		newGame();
 	}
 
-	function disableBoard() {
-		alert('in disable');
-		for(x = 0; x < 3; x++) {
-			for(y = 0; y < 3; y++) {
-				$('#' + x + '_' + y).unbind('onclick click');
-			}
-		}
-	}
 </script>

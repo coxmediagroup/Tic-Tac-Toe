@@ -5,6 +5,10 @@
 		private $currentPlayer = 'o';
 		private $board;
 		private $winner;
+        private $player1Wins = 0;
+        private $player2Wins = 0;
+        private $drawWins = 0;
+        private $winData;
 
 		public function __construct() {
         }
@@ -29,11 +33,7 @@
             }
     		  
     		$results['currentPlayer'] = $this->currentPlayer;
-
-            $winner = $this->isGameOver();
-            $results['winner'] = $winner;
-
-    		$results['board'] = $this->board;
+            $results = $this->handleResults($results);
 
     		return $results;
     	}
@@ -45,14 +45,33 @@
             
             $this->board[$move[0]][$move[1]] = $this->currentPlayer;
     		$results['computerMove'] = $move[0] . '_' .$move[1];
+            $results = $this->handleResults($results);
+           
+    		return $results;
+    	}
 
+        private function handleResults($results) {
             $winner = $this->isGameOver();
             $results['winner'] = $winner;
 
-            $results['board'] = $this->board;
+            if($winer ===  'x') {
+                $this->player1Wins++;
+            } else if ($winner === 'o') {
+                $this->player2Wins++;
+            } else if ($winner === 'c') {
+                $this->drawWins++;
+            }
 
-    		return $results;
-    	}
+            $results['stats'] = array('player1Wins' => $this->player1Wins, 
+                'player2Wins' => $this->player2Wins,
+                'drawWins' => $this->drawWins);
+
+            if($winner == 'x' || $winner == 'o') {
+                $results['winData'] = $this->winData;
+            }
+
+            return $results;
+        }
 
     	// returns best move for the current computer player
     	private function minMax() {
@@ -110,6 +129,7 @@
             for($i=0; $i<3;$i++){
                 if (false !== $this->board[$i][0] &&($this->board[$i][0] == $this->board[$i][1]
                     && $this->board[$i][1] == $this->board[$i][2])){ 
+                    $this->winData = array("row" => $i);
                     return $this->board[$i][0]; 
                 } 
             } 
@@ -118,19 +138,24 @@
             for($i=0; $i<3;$i++){
                 if (false !== $this->board[0][$i] &&($this->board[0][$i] == $this->board[1][$i]
                     && $this->board[1][$i] == $this->board[2][$i])){ 
+                    $this->winData = array("col" => $i);
                     return $this->board[0][$i]; 
                 } 
             } 
             
-            //DIAGONAL 
+            //DIAGONAL
+            $diagnolWon = false; 
             if (($this->board[0][0] == $this->board[1][1] 
-                    && $this->board[1][1] == $this->board[2][2]) 
-                    || ($this->board[0][2] == $this->board[1][1]
+                    && $this->board[1][1] == $this->board[2][2])) {
+                $this->winData = array("diagnol1" => "diagnol1");
+                $diagnolWon = true;
+            } else if (($this->board[0][2] == $this->board[1][1]
                     && $this->board[1][1] == $this->board[2][0])){
-                    
-                if (false !== $this->board[1][1]){ 
+                $this->winData = array("diagnol2" => "diagnol2");
+                $diagnolWon = true;
+            }        
+            if ($diagnolWon && '-' !== $this->board[1][1]){ 
                     return $this->board[1][1]; 
-                } 
             }
             
             //DRAW
