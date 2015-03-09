@@ -41,7 +41,7 @@ class DynamicContentRequestHandler(SimpleHTTPRequestHandler):
             self._send_head(content, mimeType)
 
 def run(hostName, hostPort, requestHandler):
-    chdir('../static')     
+    chdir('static')     
     myServer = HTTPServer((hostName, hostPort), requestHandler)
     print("[%s] Server started on %s:%s" % (time.asctime(), hostName, hostPort))
     try:

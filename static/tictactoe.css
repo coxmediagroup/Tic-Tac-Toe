@@ -1,0 +1,32 @@
+* {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+#status {
+    margin-bottom: 2em;
+}
+
+/* styles common to all cells */
+td {
+    width: 1.3em;
+    height: 1.3em;
+    text-align: center;
+    vertical-align: middle;
+    font: bold 36px sans-serif;
+}
+
+/* draw solid line under each of 1st 2 rows */
+#cell-0, #cell-1, #cell-2,
+#cell-3, #cell-4, #cell-5 {
+    border-bottom: .1em solid;
+}
+
+/* draw solid line after each of 1st 2 columns */
+#cell-0, #cell-1,
+#cell-3, #cell-4,
+#cell-6, #cell-7 {
+    border-right: .1em solid;
+}

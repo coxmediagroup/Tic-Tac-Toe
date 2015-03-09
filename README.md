@@ -4,7 +4,6 @@ This is an app that plays the game of tic-tac-toe; human vs AI.
  * The human's user interface is a web browser.  The AI engine's interface is a web service.
  * The browser and web service interact by exchanging an evolving tic-tac-toe board state.
  * All game logic is performed by the web service; the browser's responsibilities are simply:
-
   1. collect user prefs (e.g. who goes first),
   2. display the current board state,
   3. change the board state when user clicks on an empty cell,
@@ -47,6 +46,38 @@ Requirements
 
 Installation/Setup Instructions
 -------------------------------
+The following assumes that you're running a Debian variant of Linux.
+If you're not, you'll need to make the appropriate changes (e.g. use **yum** instead of **apt**).
+
+####1. Clone (or download) this repo
+
+####2. Install Python 3+
+Chances are that you already have Python 3 installed.  Here's how to find out...
+
+If you don't have Python 3 installed, here's how to install it.
+
+####3. Start the web server
+cd to the project root directory and enter the following
+```
+server/start_server
+```
+
+You should then see something like...
+```
+[Mon Mar  9 14:13:34 2015] Server started on :9000
+```
+
+####4. Run the unit tests
+From a different terminal window, and again from the project root...
+```
+tests/run_tests
+```
+
+####5. Play the game!
+
+http://localhost:9000
+
+
 
 Code components/structure
 -------------------------

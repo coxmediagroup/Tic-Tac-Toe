@@ -1,2 +1,2 @@
 #python3.4 -m webbrowser -t "http://localhost:9000"
-python3.4 tictactoe_server.py
+python3.4 server/tictactoe_server.py
