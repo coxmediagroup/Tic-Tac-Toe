@@ -1,11 +1,9 @@
 <?php
-
 	session_start();
-	$sessionId = session_id ();
-	echo("sessionId=" + $sessionId);
+	include 'tictactoe.php';
+	$ticTacToe = new TicTacToe();
+	$_SESSION['tictactoe'] = serialize($ticTacToe);
 ?>
-
-
 
 <html>
 	<head>
@@ -50,19 +48,19 @@ h1 {
 		<h1>Tic Tac Toe</h1>
 		<div id="message"></div>
 		<div class="row" id="row1">
-   			<div class="column" id="square_1" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_2" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_3" onclick=handleUserMove(this)></div>
+   			<div class="column" id="0_0" onclick=handleUserMove(this)></div>
+   			<div class="column" id="0_1" onclick=handleUserMove(this)></div>
+   			<div class="column" id="0_2" onclick=handleUserMove(this)></div>
 		</div>
 		<div class="row" id="row2">
-   			<div class="column" id="square_4" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_5" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_6" onclick=handleUserMove(this)></div>
+   			<div class="column" id="1_0" onclick=handleUserMove(this)></div>
+   			<div class="column" id="1_1" onclick=handleUserMove(this)></div>
+   			<div class="column" id="1_2" onclick=handleUserMove(this)></div>
 		</div>
 		<div class="row" id="row3">
-   			<div class="column" id="square_7" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_8" onclick=handleUserMove(this)></div>
-   			<div class="column" id="square_9" onclick=handleUserMove(this)></div>
+   			<div class="column" id="2_0" onclick=handleUserMove(this)></div>
+   			<div class="column" id="2_1" onclick=handleUserMove(this)></div>
+   			<div class="column" id="2_2" onclick=handleUserMove(this)></div>
 		</div>
 		<div>
 			<input type="button" name="play_again" id="play_again" value="Play Again" class="button" onclick=clearBoard()>
@@ -75,43 +73,114 @@ h1 {
 
 	$(document).ready(function() {
     	console.log("doc ready");
-    	/* start new sesssion */
+    	newGame();
+		
 	}); 
+
+	function newGame() {
+		var data = {
+			"action" : "newGame"
+		};
+		
+    	/* start new sesssion */
+    	
+    	$.post( "TicTacToeController.php", data, function( data ) {
+  			
+  			var results = JSON.parse(data);
+  			
+  			$('#message').html('Please make your first move');
+  			
+		});
+	}
 
 	function handleUserMove(divColumn) {
 
-		if($(divColumn).text().length != 0) {
+		if ($('#message').html().toUpperCase().indexOf('WINS') >= 0) {
+			return false;
+		}
+		else if($(divColumn).text().length != 0) {
 			$('#message').html('Move already taken! Please try again.');
 
-		} else {
-			$(divColumn).html('X');
-
+		}  else {
+			
 			//we have a winner
 			var data = {
-				"sessionId" : "<?php echo($sessionId)?>",
-				"action" : "move",
+				"action" : "userMove",
 				"square" : divColumn.id
 			};
 
-			//var results = $ticTacToe->processRequest(data);
+			$.post( "TicTacToeController.php", data, function( data ) {
 
-			//console.log(results);
-			//$(divColumn).addClass('column_winner');
-			//$('#play_again').show();
-			
-			$.post( "tictactoe.php", data, function( data ) {
-  				alert( "Data Loaded: " + data );
+  				var results = JSON.parse(data);
+  				handleResults(results, true);
+  				$(divColumn).html(results.currentPlayer);
+
+	  			
+	  			console.log('results=');
+	  			console.log(results);
 			});
+		}	
 
+		
+	}
+
+	function handleResults(results, isUser) {
+		if(results.winner != '-') {
+			if(results.winner == 'c') {
+				$('#message').html('Tie: No one wins');
+			}
+			else if(results.winner == 'x') {
+				$('#message').html('Player 1 Wins!!!!');
+			} else {
+				$('#message').html('Player 2 (Computer) Wins!!!!');
+			}
+			$('#play_again').show();
+		} else {
+			if(isUser) {
+				computerPlay();
+			}
 		}
 	}
 
+	function computerPlay() {
+		//we have a winner
+		var data = {
+			"action" : "computerMove"
+		};
+
+		$.post( "TicTacToeController.php", data, function( data ) {
+
+			var results = JSON.parse(data);
+
+			console.log('!!!!!!!!!!!!!!!COMPUTER MOVE results=');
+  			console.log(results);
+
+  			$('#' + results.computerMove).html(results.currentPlayer);
+
+  			handleResults(results);
+		});
+
+	}
+
 	function clearBoard() {
-		for(i=1; i <= 9; i++) {
-			$('#square_' + i).html('');
-			$('#square_' + i).removeClass('column_winner');
+		for(x = 0; x < 3; x++) {
+			for(y = 0; y < 3; y++) {
+				$('#' + x + '_' + y).html('');
+				$('#' + x + '_' + y).removeClass('column_winner');
+			}
 		}
 
 		$('#play_again').hide();
+		$('#message').html('');
+		newGame();
+	}
+
+	function disableBoard() {
+		alert('in disable');
+		for(x = 0; x < 3; x++) {
+			for(y = 0; y < 3; y++) {
+				$('#' + x + '_' + y).unbind('onclick click');
+			}
+		}
 	}
 </script>

@@ -1,14 +1,24 @@
 <?php
-
-$data = 'hello world';
-
-
-
-$return["json"] = json_encode($data);
-$return["action"] = $_POST['action'];
-$return["square"] = $_POST['square'];
-echo json_encode($return);
+	session_start();
+	include 'tictactoe.php';
+	$ticTacToe = unserialize($_SESSION['tictactoe']);
 
 
+	switch($_POST['action']) {
+		case "newGame" :
+			$results = $ticTacToe->newGame();
+			break;
+		case "userMove" :
+			$ticTacToe->changePlayer();
+			$results = $ticTacToe->userMove($_POST['square']);
+			break;
+		case "computerMove" :
+			$ticTacToe->changePlayer();
+			$results = $ticTacToe->computerMove();
+			break;
+	}
 
+	$_SESSION['tictactoe'] = serialize($ticTacToe);
+
+	echo json_encode($results);
 ?>
