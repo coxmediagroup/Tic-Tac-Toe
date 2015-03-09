@@ -1,10 +1,3 @@
-<?php
-	session_start();
-	include 'tictactoe.php';
-	$ticTacToe = new TicTacToe();
-	$_SESSION['tictactoe'] = serialize($ticTacToe);
-?>
-
 <html>
 	<head>
        <link rel="stylesheet" type="text/css" href="./css/tictactoe.css">

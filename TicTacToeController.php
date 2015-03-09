@@ -8,9 +8,12 @@
  	* @author Eric Blanks
 	*/
 	
-
-	$ticTacToe = unserialize($_SESSION['tictactoe']);
-
+ 	if(!$_SESSION['tictactoe']) {
+		$ticTacToe = new TicTacToe();
+		$_SESSION['tictactoe'] = serialize($ticTacToe);
+	} else {
+		$ticTacToe = unserialize($_SESSION['tictactoe']);
+	}
 
 	switch($_POST['action']) {
 		case "newGame" :
