@@ -61,9 +61,32 @@
             jqxhr = $.getJSON("/evalBoard?board="+board);
             jqxhr.done(function(data) {
                 board = data.board;
-                status = data.status;
-                setStatus(status);
                 displayBoard();
+
+                status = data.status;
+                switch(status) {
+                    case 'continue':
+                        setStatus("Your move again...");
+                        break;
+
+                    case 'iwin':
+                        setStatus("I won!");
+                        gameOver = true;
+                        break;
+
+                    case 'uwin':
+                        setStatus("You won!");
+                        gameOver = true;
+                        break;
+
+                    case 'draw':
+                        setStatus("We tied.");
+                        gameOver = true;
+                        break;
+
+                    default:
+                        alert("bad status = "+status);
+                }
                 console.log("success! data =", data, JSON.stringify(data));
             });
             jqxhr.fail(function(jqXHR, textStatus, errorThrown) {
