@@ -10,7 +10,11 @@
 			break;
 		case "userMove" :
 			$ticTacToe->changePlayer();
-			$results = $ticTacToe->userMove($_POST['square']);
+			$square = $_POST['square'];
+			$x = substr($square, 0, 1);
+    		$y = substr($square, 2, 1);
+
+			$results = $ticTacToe->userMove($x, $y);
 			break;
 		case "computerMove" :
 			$ticTacToe->changePlayer();

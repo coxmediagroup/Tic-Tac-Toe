@@ -89,7 +89,6 @@ h1 {
   			var results = JSON.parse(data);
   			
   			$('#message').html('Please make your first move');
-  			
 		});
 	}
 
@@ -102,8 +101,8 @@ h1 {
 			$('#message').html('Move already taken! Please try again.');
 
 		}  else {
-			
-			//we have a winner
+			$('#message').html('');
+  			
 			var data = {
 				"action" : "userMove",
 				"square" : divColumn.id

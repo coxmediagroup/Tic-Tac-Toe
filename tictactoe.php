@@ -26,13 +26,10 @@
             return $results;
     	}
 
-    	public function userMove($position, $setBlank=false) {
+    	public function userMove($x, $y, $setBlank=false) {
     		$this->numMoves += 1;
-    		$x = substr($position, 0, 1);
-    		$y = substr($position, 2, 1);
-
+    		
             if($setBlank) {
-
                 $this->board[$x][$y] = '-';
             } else {
                 $this->board[$x][$y] = $this->currentPlayer;
@@ -117,10 +114,10 @@
     					continue;
     				}
     				$gameClone = clone $this;
-    				$gameClone->userMove($x . '_' . $y);
+    				$gameClone->userMove($x, $y);
     				$gameClone->changePlayer();
     				$value = $this->minMove($gameClone, 1, $best, 10000);
-                    $gameClone->userMove($x . '_' . $y, true);
+                    $gameClone->userMove($x, $y, true);
 
 
     				if($value > $best) {
@@ -236,11 +233,11 @@
     					continue;
     				}
 
-    				$gameClone->userMove($x . '_' . $y);
+    				$gameClone->userMove($x, $y);
     				$gameClone->changePlayer();
     				$value = $this->minMove($gameClone, ++$depth, $alpha, $beta);
 
-                    $gameClone->userMove($x . '_' . $y, true);
+                    $gameClone->userMove($x, $y, true);
                     $gameClone->changePlayer();
 
                     if($value > $alpha) {
@@ -271,10 +268,10 @@
     				if($gameBoard[$x][$y] != '-') {
     					continue;
     				}
-					$gameClone->userMove($x . '_' . $y);
+					$gameClone->userMove($x, $y);
 					$gameClone->changePlayer();
 					$value = $this->maxMoves($gameClone, ++$depth, $alpha, $beta);
-                    $gameClone->userMove($x . '_' . $y, true);
+                    $gameClone->userMove($x, $y, true);
                     $gameClone->changePlayer();
                     if($value <  $beta) {
                         $beta = $value;
