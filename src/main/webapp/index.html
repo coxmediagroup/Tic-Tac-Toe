@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html ng-app="tictac"
+<head>
+<title>Tic Tac toe</title>
+<meta
+     name="viewport"
+     content="width=device-width, initial-scale=1">
+<link
+     href="styles/global.css"
+     rel="stylesheet"
+     type="text/css" />
+<!-- FRAMEWORKS -->
+<script src="frameworks/jquery-1.11.1.min.js"></script>
+<script src="frameworks/bootstrap.min.js"></script>
+<script src="frameworks/angular.min.js"></script>
+<script src="controller/tictac.js"></script>
+</head>
+<h1>TicTacToe</h1>
+<body>
+     <div class="container">
+          <div class="navbar navbar-default">
+               <div class="navbar-header"></div>
+               <div
+                    class="collapse navbar-collapse"
+                    collapse="menuCollapsed"></div>
+          </div>
+     </div>
+     <div ng-controller="game">
+          <p>
+          <h2>
+               Select Current Player:
+               <label>
+                    <input
+                         type="radio"
+                         value="X"
+                         ng-model="player"
+                         checked />
+                    <strong>X</strong>
+               </label>
+               <label>
+                    <input
+                         type="radio"
+                         value="O"
+                         ng-model="player"
+                         value="Clear Board" />
+                    <strong>O</strong>
+               </label>
+               </p>
+               <div>
+                    <h2 ng-show="winner">
+                         {{winner}} wins!!!</h2>
+                    <table border="1">
+                         <tr ng-repeat="row in [0,1,2]">
+                              <td
+                                   ng-repeat="column in [0,1,2]"
+                                   ng-click="cellClick(row,column)"
+                                   ng-class="cellClass(row,column)">{{cellText(row,column)}}</td>
+                         </tr>
+                    </table>
+               </div>
+               <div>
+                    <input
+                         type="button"
+                         ng-click="newGame()"
+                         value="New Game" />
+                    <h5
+                         ng-show="currentPlayer == player">
+                         {{player}}'s move ...</h5>
+                    <h5
+                         ng-show="currentPlayer != player">Waiting
+                         for opposing player to make
+                         their move.</h5>
+               </div>
+               <footer class="footer">
+                    <div class="container">
+                         <div class="footer-inner">
+                              <p>
+                                   2015 <a
+                                        href="http://www.linkedin.com/pub/ryan-mcdonald/26/465/554/en">
+                                        Ryan K.
+                                        McDonald</a>.
+                              </p>
+                         </div>
+                    </div>
+               </footer>
+</body>
