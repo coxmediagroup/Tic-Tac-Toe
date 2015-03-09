@@ -119,8 +119,6 @@ h1 {
 	  			console.log(results);
 			});
 		}	
-
-		
 	}
 
 	function handleResults(results, isUser) {
