@@ -12,11 +12,12 @@ This is an app that plays the game of tic-tac-toe; human vs AI.
 
 
 ###Features
- * few dependencies
+ * Few dependencies
   - python3.4
   - normalize.css
   - jQuery
   - modern browser (IE8+)
+ * Single Page Application
 
 ###Shortcomings
  * Mouse only

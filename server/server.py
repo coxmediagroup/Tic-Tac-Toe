@@ -16,7 +16,7 @@ class DynamicContentRequestHandler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         methodName = basename(path)
-        if hasattr(self, methodName):
+        if (not methodName.startswith('_')) and hasattr(self, methodName):
             method = getattr(self, methodName)
             queryParms = parse_qs(parsed.query)
             return method(path, queryParms)
@@ -41,7 +41,7 @@ class DynamicContentRequestHandler(SimpleHTTPRequestHandler):
             self._send_head(content, mimeType)
 
 def run(hostName, hostPort, requestHandler):
-    chdir('static')     
+    chdir('static')
     myServer = HTTPServer((hostName, hostPort), requestHandler)
     print("[%s] Server started on %s:%s" % (time.asctime(), hostName, hostPort))
     try:
