@@ -53,18 +53,16 @@ module.exports = (function() {
 		var resp = {
 			player: player,
 			winner: hasWinner(),
-			movesLeft: hasMoves(),
+			hasMovesLeft: hasMoves(),
 			board: board
 		}
 		return resp;
 	}
 
 	function resetBoard() {
-		board = [
-			undefined, undefined, undefined,
-			undefined, undefined, undefined,
-			undefined, undefined, undefined,
-		];
+		for (var i in board) {
+			board[i] = undefined;
+		}
 	}
 	
 	return {

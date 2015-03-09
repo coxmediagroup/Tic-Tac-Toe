@@ -8,7 +8,6 @@ router.get('/select/:tile/:player', function(req, res) {
 	var player = req.params.player;
 
 	var response = game.selectTile(tile, player);
-	console.log('response: ' + response);
 	res.json(response);
 });
 
