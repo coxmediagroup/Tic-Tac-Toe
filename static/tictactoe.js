@@ -18,7 +18,7 @@
         board = '---------';
 
         displayBoard();
-        setStatus("You're X and I'm O...  You go first!");
+        setStatus("OK so you're X and I'm O.<br/><br/>You go first!");
     }
 
     function displayBoard() {
@@ -27,6 +27,14 @@
             char = board.charAt(i);
             if (char === '-') char = '';
             $("#cell-" + i).text(char);
+        }
+    }
+
+    function highlightPositions(positions) {
+        var position;
+        for (var i=0; i<positions.length; i++) {
+            position = positions[i];
+            $("#cell-" + position).css('color', 'limegreen');
         }
     }
 
@@ -44,7 +52,7 @@
             return;
         }
 
-        setStatus("Ok, my turn...");
+        setStatus("");
 
         index = $clickedCell.attr('id').split('-')[1];
 
@@ -61,9 +69,11 @@
             jqxhr = $.getJSON("/evalBoard?board="+board);
             jqxhr.done(function(data) {
                 board = data.board;
+                var status = data.status;
+                var positions = data.positions;
+
                 displayBoard();
 
-                status = data.status;
                 switch(status) {
                     case 'continue':
                         setStatus("Your move again...");
@@ -71,11 +81,13 @@
 
                     case 'iwin':
                         setStatus("I won!");
+                        highlightPositions(positions);
                         gameOver = true;
                         break;
 
                     case 'uwin':
                         setStatus("You won!");
+                        highlightPositions(positions);
                         gameOver = true;
                         break;
 
@@ -87,7 +99,6 @@
                     default:
                         alert("bad status = "+status);
                 }
-                console.log("success! data =", data, JSON.stringify(data));
             });
             jqxhr.fail(function(jqXHR, textStatus, errorThrown) {
                 alert("Error!\ntextStatus = " + textStatus + "\nerrorThrown = " + errorThrown);
