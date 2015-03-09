@@ -12,4 +12,9 @@ router.get('/select/:tile/:player', function(req, res) {
 	res.json(response);
 });
 
+router.get('/reset', function(req, res) {
+	game.reset();
+	res.end()
+});
+
 module.exports = router;

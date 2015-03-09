@@ -6,3 +6,27 @@ body {
 a {
   color: #00B7FF;
 }
+
+span {
+	margin: 0;
+	padding: 0;
+}
+
+div {
+	margin: 0;
+	padding: 0;
+}
+
+span.cell {
+	width: 32%;
+	height: 200px;
+	border: 1px solid black;
+	display: inline-block;
+	font-size: 164px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.row {
+	width: 100%;
+}

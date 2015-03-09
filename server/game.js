@@ -58,10 +58,19 @@ module.exports = (function() {
 		}
 		return resp;
 	}
+
+	function resetBoard() {
+		board = [
+			undefined, undefined, undefined,
+			undefined, undefined, undefined,
+			undefined, undefined, undefined,
+		];
+	}
 	
 	return {
 		hasWinner: hasWinner,
 		hasMoves: hasMoves,
-		selectTile: selectTile
+		selectTile: selectTile,
+		reset: resetBoard
 	};
 }())
