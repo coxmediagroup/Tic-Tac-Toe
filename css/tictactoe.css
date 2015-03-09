@@ -1,0 +1,88 @@
+body {
+    background: #00a1e5 url("../images/bg.jpg") 50% 0% no-repeat
+}
+h1 {
+    color: maroon;
+    margin-left: 40px;
+} 
+
+.board {
+	height:300px;
+	width:300px;
+	background-image: url('../images/board-bg.png');
+}
+
+
+.column{
+	float: left;
+	height:90px;
+	width:90px;
+	padding: 10px 10px 0 0;
+}
+
+.column:after {
+    padding-left: 10px;
+}
+
+.column_title {
+	float: left;
+	color: #333333;
+	width: 75px;
+	font-family: Century Gothic, sans-serif;
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+.column_data {
+	float: left;
+	width: 75px;
+	color: #333333;
+	font-size: 8pt;
+	font-family: Century Gothic, sans-serif;
+}
+
+.column_winner{
+	background-color: yellow;
+}
+
+#center {
+	width:300px;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+#game {
+	width:100%;
+}
+
+.message {
+	padding: 10px 0 20px 0;
+}
+
+#play_again{
+	display: none;
+	padding: 10px 0 0 10px;
+}
+
+.o-image {
+	background-image: url('../images/o.png');
+}
+
+.row{
+}
+
+.row:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.stats:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.x-image {
+	background-image: url('../images/x.png');
+}
