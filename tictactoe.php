@@ -67,6 +67,11 @@
     		return $results;
     	}
 
+        /**
+         *  results of move
+         *  @returns results 
+         */
+
         private function handleResults($results) {
             $winner = $this->isGameOver();
             $results['winner'] = $winner;
@@ -128,6 +133,10 @@
     		return $this->board;
     	}
 
+        /**
+         *  isAvailableSpace
+         *  @return true if more moves false otherwise
+         */
     	private function isAvailableSpace() {
     		for($x = 0; $x < 3; $x++) {
     			for($y = 0; $y < 3; $y++) {
@@ -140,6 +149,15 @@
             return false;
     	}
 
+        /**
+         *  Check if the game is over: 
+         *      1. check if we have full row 
+         *      2. check if we have full column 
+         *      3. check if we have diagonal 
+         *      4. its a draw? 
+         *      5. game isn't over 
+         *  @returns x for x winner, o for o winner, c for draw and - for none
+         */
         public function isGameOver(){ 
 
             //FULL ROW 
@@ -184,6 +202,13 @@
             return '-';
         } 
 
+
+        /**
+         *  Get current node score 
+         *  @param Game 
+         *  @param int  $depth
+         *  @returns score
+        */
     	private function score($game, $depth) {
             $res = $game->isGameOver();
   
@@ -199,6 +224,15 @@
     				return 1;
     		}
     	}
+
+        /**
+         *  Apply Max Moves 
+         *  @param Game $gameClone
+         *  @param int $depth
+         *  @param int $alpha
+         *  @param int $beta
+            @returns int
+        */
 
     	private function maxMoves($gameClone, $depth, $alpha, $beta) {
         
@@ -235,6 +269,14 @@
     		return $value;
     	}
 
+        /* computes the minimal move based on the minmax algorithm 
+        *  @param Game $gameClone
+        *  @param int $depth
+        *  @param int $alpha
+        *  @param int $beta
+        *  @returns int
+        */
+
     	private function minMove($gameClone, $depth, $alpha, $beta) {
     		$res = $this->score($gameClone, $depth);
 
@@ -265,22 +307,6 @@
     			}
     		}
     		return $value;
-    	}
-
-    	private function getAvailableMoves($board, $player) {
-
-    		$availableMoves = array(array());
-    		$i = 0;
-    		for($x = 0; $x < 3; $x++) {
-            	for($y = 0; $y < 3; $y ++) {
-            		if($board[$x][$y] == '-') {
-            			$availableMoves[$i] = array($x, $y);
-            			$i++;
-            		}
-            	}
-            }
-            return $availableMoves;
-
     	}
 
     	// Change player marks back and forth.
