@@ -18,7 +18,7 @@ module.exports = {
             res.json({
                 currentTimeMs : new Date().getTime() / 1000
             })
-        }
+        };
     },
     '/more' : {
         methods : [ 'get' ],
