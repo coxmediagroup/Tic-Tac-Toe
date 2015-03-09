@@ -59,7 +59,7 @@ function handleResults(results, isUser) {
 		drawWins = results.stats.drawWins;
 
 		$('#stats').show();
-		$('#total_games').html(player1Wins + player2Wins);
+		$('#total_games').html(player1Wins + player2Wins + drawWins);
 		$('#player_1_wins').html(player1Wins);
 		$('#player_2_wins').html(player2Wins);
 		$('#draw_wins').html(drawWins);
