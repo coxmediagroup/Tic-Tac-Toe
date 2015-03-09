@@ -8,10 +8,10 @@ Install
 
 * Install node: https://nodejs.org/
 * Update npm: https://docs.npmjs.com/getting-started/installing-node
-* cd into the project directory and run `npm install`
+* cd into the project directory and run 'npm install'
 
 Start
 =====
 
-* cd into the project directory and run `npm start`
+* cd into the project directory and run 'npm start'
 * open http://localhost:3000/index.html in your browser
