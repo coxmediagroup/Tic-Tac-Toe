@@ -26,3 +26,14 @@ Submissions
 1. Publicly: Fork this repo and send us a pull request.
 2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
 
+Developer Notes:
+-----------------
+
+* Install sinatra $gem install sinatra : require in app file that starts the program
+	enable sessions after require (enable :sessions)
+* Adde files for Passenger since that's what runs on my VPS
+* Install rspec and run rspec --init
+* localdev install shotgun so you don't have to restart Sinatra at every code change:
+	$gem install shotgun
+	$shotgun -p 4567 app.rb
+* initial game will always let client move first.
