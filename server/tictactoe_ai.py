@@ -18,7 +18,7 @@ WINNING_POSITIONS_LIST = [
         (0,4,8), (2,4,6)        # 3 diagonal
 ]
 
-def findBestScoreMove(board, myChar='O'):
+def findBestScoreMove(board, playerChar='O'):
     """
     Evaluate all game positions and return best position for next move.
 
@@ -29,12 +29,12 @@ def findBestScoreMove(board, myChar='O'):
         make move (change copy of board)
         if game would be over:
             calculate score for this move as:
-                1 if myChar wins
+                1 if playerChar wins
                 0 if a draw
                 -1 otherwise (opponent wins)
         else:
             calculate score for this move as:
-                if myChar is 'O':
+                if playerChar is 'O':
                     opponentChar = 'X'
                 else:
                     opponentChar = 'O'
@@ -50,18 +50,18 @@ def findBestScoreMove(board, myChar='O'):
     for pos, val in enumerate(board):
         if val != '-': continue
         newBoard = list(board)      # make copy of board
-        newBoard[pos] = myChar
+        newBoard[pos] = playerChar
         status = gameIsOver(newBoard)
         if status:  # game would be over
             winner = status[0]
-            if winner == myChar:    # player myChar wins
+            if winner == playerChar:    # player playerChar wins
                 score = 1
             elif winner == '':      # draw
                 score = 0
             else:                   # opponent wins
                 score = -1
         else:
-            if myChar == 'O':
+            if playerChar == 'O':
                 opponentChar = 'X'
             else:
                 opponentChar = 'O'

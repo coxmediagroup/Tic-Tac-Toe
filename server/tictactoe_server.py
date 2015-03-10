@@ -1,6 +1,7 @@
 import json
 from server import DynamicContentRequestHandler, run
 from tictactoe_ai import gameIsOver, findBestScoreMove
+from random import choice
 
 HOST = ""   # listen on all interfaces
 PORT = 9000
@@ -22,6 +23,13 @@ class RequestHandler(DynamicContentRequestHandler):
                     containing the indexes of the three-in-a-row
 
         """
+
+        # if board is empty, just randomly select a corner and be done with it.
+        if board.count('-') == 9:
+            # corners are 0, 2, 6, and 8
+            pos = choice([0,2,6,8])
+            board[pos] = 'O'
+            return board, 'continue', []
 
         status = gameIsOver(board)
 

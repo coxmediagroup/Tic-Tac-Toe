@@ -31,3 +31,12 @@ td {
 #cell-6, #cell-7 {
     border-right: .1em solid black;
 }
+
+/* utility classes */
+.disabled {
+    color: #999;
+}
+
+.highlighted {
+    color: limegreen;
+}
