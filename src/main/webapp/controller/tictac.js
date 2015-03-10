@@ -1,4 +1,7 @@
-var tic = angular
+/**
+ * 
+ */
+var tictac = angular
         .module('tictac', [])
         .config(
                 [
@@ -8,153 +11,159 @@ var tic = angular
                                     .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
                         } ]);
 
-tic
-        .controller(
-                'game',
-                function($scope) {
+/**
+ * 
+ */
+tictac.controller('play', function($scope, $http) {
 
-                    $scope.currentPlayer = 'X';
-                    $scope.player = 'X';
-                    $scope.winner = null;
-                    $scope.board = [ [ null, null, null ],
-                            [ null, null, null ], [ null, null, null ] ];
+    $scope.b = ' ';
 
-                    var keys = [ 'board', 'currentPlayer', 'winner' ];
+    $scope.currentPlayer = 'X';
+    $scope.player = 'X';
+    $scope.winner = null;
+    $scope.board = [ [ null, null, null ], [ null, null, null ],
+            [ null, null, null ] ];
 
-                    $scope.cellClass = function(row, column) {
-                        var value = cell(row, column);
-                        return 'cell cell-' + value;
-                    }
-                    $scope.cellText = function(row, column) {
-                        var value = cell(row, column);
-                        return value ? value : '-';
-                    }
-                    $scope.cellClick = function(row, column) {
-                        if ($scope.winner) {
-                            alert('WINNER!!');
-                            return;
-                        }
-                        if ($scope.player != $scope.currentPlayer) {
-                            alert('Waiting for other player to complete their turn.');
-                            return;
-                        }
+    $scope.firstMove = true;
+    var keys = [ 'board', 'currentPlayer', 'winner' ];
 
-                        var set = setCell(row, column, $scope.player);
-                        checkBoard();
+    /**
+     * 
+     */
+    $scope.cellClass = function(row, column) {
+        var value = cell(row, column);
+        return 'cell cell-' + value;
+    }
 
-                        if (set) {
-                            $scope.currentPlayer = nextPlayer($scope.currentPlayer);
-                        }
-                    }
-                    $scope.newGame = function() {
-                        for (var i = 0; i < 3; i++) {
-                            for (var j = 0; j < 3; j++) {
-                                setCell(i, j, null);
-                            }
-                        }
-                        $scope.currentPlayer = 'X';
-                        $scope.player = 'X';
-                        $scope.winner = null;
-                        $scope.board = [ [ null, null, null ],
-                                [ null, null, null ], [ null, null, null ] ];
+    /**
+     * 
+     */
+    $scope.cellText = function(row, column) {
+        var value = cell(row, column);
+        return value ? value : '-';
+    }
 
-                    }
+    /**
+     * 
+     */
+    $scope.cellClick = function(row, column) {
 
-                    /**
-                     * 
-                     */
-                    function cell(row, column) {
-                        return $scope.board[row][column];
-                    }
+        console.log('row: ' + row + '-Column: ' + column + '-Current Player '
+                + $scope.currentPlayer);
 
-                    /**
-                     * 
-                     */
-                    function setCell(row, column, value) {
-                        console.log($scope.board[row][column]);
-                        if ($scope.board[row][column] == null) {
-                            $scope.board[row][column] = value;
-                            return true;
-                        }
-                        return false;
-                    }
+        var set = setCell(row, column, $scope.player);
 
-                    /**
-                     * 
-                     */
-                    function nextPlayer(player) {
-                        return {
-                            O : 'X',
-                            X : 'O'
-                        }[player];
-                    }
+        if (!set) return;
 
-                    /**
-                     * 
-                     */
-                    function request(board) {
-                        $http
-                                .get(
-                                        '/')
-                                .success(function(data) {
+        console.log('Do AI stuff');
 
-                                    // verify instances were found
-                                    if (data.length > 0) {
-                                        store.buildChecked(data);
-                                    }
+        var payload = {
+            'firstMove' : $scope.firstMove,
+            'board' : $scope.board
+        };
 
-                                }).error(function(data) {
-                                    // console.log('Error: --' + data);
-                                });
+        checkWin('/checkboard', arrayToJSON($scope.board));
 
-                    }
-                    /**
-                     * 
-                     */
-                    function checkBoard() {
-                        var winner, empty = false;
+        ai('/automate', payload);
 
-                        // check for any empty cell
-                        for (var i = 0; i < 3; i++) {
-                            for (var j = 0; j < 3; j++) {
-                                if (!cell(i, j)) empty = true;
-                            }
-                        }
+        // after first pass set to false
+        if ($scope.firstMove) {
+            $scope.firstMove = false;
+        }
 
-                        // no more empty cell - no winner
-                        if (!empty) {
-                            $scope.winner = 'NONE';
-                            return;
+    }
 
-                        }
+    /**
+     * 
+     */
+    function arrayToJSON(array) {
+        console.log(JSON.stringify(array));
+        return JSON.stringify(array);
+    }
 
-                        // check board vertically and horizontally
-                        for (var i = 0; i < 3; i++) {
-                            if (cell(i, 0) && cell(i, 0) == cell(i, 1)
-                                    && cell(i, 1) == cell(i, 2)) {
-                                winner = cell(i, 0);
-                            }
-                            if (cell(0, i) && cell(0, i) == cell(1, i)
-                                    && cell(1, i) == cell(2, i)) {
-                                winner = cell(0, i);
-                            }
-                        }
+    /**
+     * 
+     */
+    function jsonToArray(json) {
+        console.log(JSON.parse(json));
+        return JSON.parse(json);
+    }
 
-                        // check board diagonally
-                        if (cell(0, 0) && cell(0, 0) == cell(1, 1)
-                                && cell(1, 1) == cell(2, 2)) {
-                            winner = cell(0, 0);
-                        }
-                        if (cell(0, 2) && cell(0, 2) == cell(1, 1)
-                                && cell(1, 1) == cell(2, 0)) {
-                            winner = cell(0, 2);
-                        }
+    /**
+     * 
+     */
+    $scope.newGame = function() {
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                setCell(i, j, null);
+            }
+        }
+        $scope.currentPlayer = 'X';
+        $scope.player = 'X';
+        $scope.winner = null;
+        $scope.board = [ [ null, null, null ], [ null, null, null ],
+                [ null, null, null ] ];
+        $scope.firstMove = true;
+    }
 
-                        // winner? declare!
-                        if (winner) {
-                            $scope.winner = winner;
-                        }
+    /**
+     * 
+     */
+    function cell(row, column) {
+        return $scope.board[row][column];
+    }
 
-                    }
+    /**
+     * 
+     */
+    function setCell(row, column, value) {
 
-                });
+        if ($scope.board[row][column] == null) {
+            $scope.board[row][column] = value;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * REST HANDLER
+     */
+    function checkWin(endpoint, payload) {
+
+        $http.post(endpoint, payload).success(function(data) {
+
+            if (data == 'tie') {
+                $scope.winner = 'NO ONE';
+                alert('tie');
+                return;
+            } else {
+                if (data == 'X' || data == 'O') {
+
+                    $scope.winner = data;
+                    alert('WINNER!!');
+                    return;
+                }
+            }
+        }).error(function(data) {
+            console.log('Error: --' + data);
+        });
+
+    }
+
+    /**
+     * REST HANDLER
+     */
+    function ai(endpoint, payload) {
+
+        $http.post(endpoint, payload).success(function(data) {
+
+            // return board with O move
+            $scope.board = jsonToArray(JSON.stringify(data));
+            console.log("AI RESPONSE: " + data);
+        }).error(function(data) {
+            console.log('Error: --' + data);
+        });
+
+    }
+
+});
