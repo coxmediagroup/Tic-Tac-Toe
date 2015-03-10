@@ -29,9 +29,11 @@ class Game
   end
   
   def apply_move( pos, token )
-    if @board.position_open(pos)
-      @board.insert_token(pos, token)
-    end
+    # unless pos.nil? || pos.empty? || token.nil? || token.empty?
+      if @board.position_open(pos)
+        @board.insert_token(pos, token)
+      end
+    # end
   end
    
 end

@@ -10,20 +10,21 @@ class Play
     @position = "#{params[:move]}"
     @token = "#{params[:token]}"
     @game = params[:game]
-    @board = @game.get_board
-    commit
+    # @board = @game.get_board
+    @game.apply_move(@position, @token)
+    # commit
   end
   
-  def game
-    @game
-  end
-  
-  def commit
-    unless @position.nil? || @position.empty? || @token.nil? || @token.empty? 
-      if @board.position_open(@position)
-        @board.insert_token(@position,@token)
-      end
-    end
-  end
+  # def game
+  #   @game
+  # end
+  #
+  # def commit
+  #   unless @position.nil? || @position.empty? || @token.nil? || @token.empty?
+  #     if @board.position_open(@position)
+  #       @board.insert_token(@position,@token)
+  #     end
+  #   end
+  # end
   
 end
