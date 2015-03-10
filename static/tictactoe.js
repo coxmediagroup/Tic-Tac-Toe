@@ -3,6 +3,7 @@
 
     // global state variables
     var gameOver = false,
+        usersTurn = true,
         board = '---------';
 
     function displayBoard() {
@@ -17,52 +18,60 @@
 
     function handleAiMove() {
         // have AI evaluate board, then display results
+
+        usersTurn = false;
+
         var jqxhr;
         var f = function() {
-            jqxhr = $.getJSON("/evalBoard?board="+board);
-            jqxhr.done(function(data) {
-                // console.log(data);
-                board = data.board;
-                var status = data.status;
-                var positions = data.positions;
+            jqxhr = $.getJSON("/evalBoard?board="+board)
+                .done(function(data) {
+                    // console.log(data);
+                    board = data.board;
+                    var status = data.status;
+                    var positions = data.positions;
 
-                displayBoard();
+                    displayBoard();
 
-                switch(status) {
-                    case 'continue':
-                        setStatus("Your turn.");
-                        break;
+                    switch(status) {
+                        case 'continue':
+                            setStatus("Your turn.");
+                            break;
 
-                    case 'iwin':
-                        setStatus("I won!");
-                        highlightPositions(positions);
-                        gameOver = true;
-                        break;
+                        case 'iwin':
+                            setStatus("I won!");
+                            highlightPositions(positions);
+                            gameOver = true;
+                            break;
 
-                    case 'uwin':
-                        setStatus("You won!");
-                        highlightPositions(positions);
-                        gameOver = true;
-                        break;
+                        case 'uwin':
+                            setStatus("You won!");
+                            highlightPositions(positions);
+                            gameOver = true;
+                            break;
 
-                    case 'draw':
-                        setStatus("We tied.");
-                        gameOver = true;
-                        break;
+                        case 'draw':
+                            setStatus("We tied.");
+                            gameOver = true;
+                            break;
 
-                    default:
-                        alert("bad status = "+status);
-                }
-            });
-            jqxhr.fail(function(jqXHR, textStatus, errorThrown) {
-                alert("Error!\ntextStatus = " + textStatus + "\nerrorThrown = " + errorThrown);
-            });
+                        default:
+                            alert("bad status = "+status);
+
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    alert("Error!\ntextStatus = " + textStatus + "\nerrorThrown = " + errorThrown);
+                })
+                .always(function() {
+                    usersTurn = true;
+                });
         };
 
         // f();
 
         // wait half a sec so that AI's response feels more human
-        setTimeout(f, 500);
+        // setTimeout(f, 500);
+        setTimeout(f, 2000);
     }
 
     function highlightPositions(positions) {
@@ -83,6 +92,12 @@
 
     function handleUserMove(event) {
         var $clickedCell, index, boardList;
+
+        if (usersTurn !== true) {
+            setStatus("Sorry, it's not your turn yet");
+            return;
+        }
+
 
         if (gameOver === true) {
             setStatus("Sorry, game over!");
@@ -118,6 +133,7 @@
     function startOver() {
         // set global state vars
         gameOver = false;
+        usersTurn = true;
         board = '---------';
 
         $("td").removeClass('highlighted');

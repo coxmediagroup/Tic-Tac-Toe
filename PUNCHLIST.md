@@ -18,8 +18,7 @@ Javascript
  * unit tests
  * comments
  * remove console.logs
-
-
+ 
 HTML
 ----
  * validate
