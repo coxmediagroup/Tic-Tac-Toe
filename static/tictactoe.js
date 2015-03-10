@@ -68,6 +68,7 @@
         var f = function() {
             jqxhr = $.getJSON("/evalBoard?board="+board);
             jqxhr.done(function(data) {
+                console.log(data);
                 board = data.board;
                 var status = data.status;
                 var positions = data.positions;

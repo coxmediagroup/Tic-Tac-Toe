@@ -24,6 +24,7 @@ HTML
 ----
  * validate
  * comments
+ * handle cdn being down (and load from server instead)
 
 CSS
 ---

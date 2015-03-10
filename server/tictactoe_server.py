@@ -1,5 +1,6 @@
 import json
 from server import DynamicContentRequestHandler, run
+from tictactoe_ai import gameIsOver, findBestScoreMove
 
 HOST = ""   # listen on all interfaces
 PORT = 9000
@@ -22,55 +23,32 @@ class RequestHandler(DynamicContentRequestHandler):
 
         """
 
-        # game over if there's 3 in a row
-        positions = self._threeInARow('O', board)
-        if positions: return board, 'iwin', positions
+        status = gameIsOver(board)
 
-        positions = self._threeInARow('X', board)
-        if positions: return board, 'uwin', positions
+        if status:
+            winner, positions = status
+            if winner is 'O':
+                return board, 'iwin', positions
+            elif winner is 'X':
+                return board, 'uwin', positions
+            else:
+                return board, 'draw', []
+        else:
+            # game not over so select a move
+            _score, pos = findBestScoreMove(board)
+            board[pos] = 'O'
 
-        # game also over if no empty squares, it's a draw
-        if '-' not in board: return board, 'draw', []
+            # see if game over now
+            status = gameIsOver(board)
 
-        # game not over so select a move
-        board = self._makeMove(board)
-
-        # see if game over now
-        positions = self._threeInARow('O', board)
-        if positions: return board, 'iwin', positions
-        if '-' not in board: return board, 'draw', []
-
-        return board, 'continue', []
-
-    def _threeInARow(self, char, board):
-        """
-            board is a list of 9 elements, representing 3 rows of 3 columns:
-                0   1   2
-                3   4   5
-                6   7   8
-        """
-        def _charAtAllPositions(board, char, positions):
-            for position in positions:
-                if board[position] != char:
-                    return False
-            return True
-
-        winningPositionsList = [
-            (0,1,2), (3,4,5), (6,7,8),  # 3 across
-            (0,3,6), (1,4,7), (2,5,8),  # 3 down
-                (0,4,8), (2,4,6)        # 3 diagonal
-        ]
-
-        for positions in winningPositionsList:
-            if _charAtAllPositions(board, char, positions):
-                return positions
-        return False
-
-    def _makeMove(self, board):
-        # replace first '-' with 'O'
-        i = board.index('-')
-        board[i] = 'O'
-        return board
+            if status:
+                winner, positions = status
+                if winner is 'O':
+                    return board, 'iwin', positions
+                else:
+                    return board, 'draw', []
+            else:
+                return board, 'continue', []
 
     def evalBoard(self, path, queryParms):
         board = list(queryParms['board'][0])
