@@ -31,9 +31,10 @@ class RequestHandler(DynamicContentRequestHandler):
             board[pos] = 'O'
             return board, 'continue', []
 
+        # board isn't empty, so examine board to see if we have a draw or a winner
         status = gameIsOver(board)
-
         if status:
+            # yep, game's over, so return the results.
             winner, positions = status
             if winner is 'O':
                 return board, 'iwin', positions
@@ -59,6 +60,16 @@ class RequestHandler(DynamicContentRequestHandler):
                 return board, 'continue', []
 
     def evalBoard(self, path, queryParms):
+        """ Since this is a public method, its name will become a public
+            web service.  Any calls to this web service will be handled
+            by this method.
+
+            This method examines the 'board' query parameter and returns
+            a JSON object containing 3 attributes:
+                * board - the received board plus any move the AI made.
+                * status - one of 'uwin', 'iwin', 'draw', 'continue'
+                * positions - a list of 3 positions if status is 'iwin' or 'uwin'
+        """
         board = list(queryParms['board'][0])
         newBoard, status, positions = self._evaluateBoard(board)
         newBoard = ''.join(newBoard)

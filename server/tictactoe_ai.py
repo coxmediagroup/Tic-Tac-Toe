@@ -20,7 +20,11 @@ WINNING_POSITIONS_LIST = [
 
 def findBestScoreMove(board, playerChar='O'):
     """
-    Evaluate all game positions and return best position for next move.
+    Evaluate all game positions and return best position for next move
+    and its score as a tuple: (score, position)
+
+    This utilizes the recursive minmax algorithm from game theory
+    (http://en.wikipedia.org/wiki/Minimax#Combinatorial_game_theory)
 
     let m be the list of all available moves.
 
@@ -38,7 +42,7 @@ def findBestScoreMove(board, playerChar='O'):
                     opponentChar = 'X'
                 else:
                     opponentChar = 'O'
-                -1 * findBestMove(board, opponentChar)
+                -1 * findBestScoreMove(board, opponentChar)[0]
         score_move.append((score, pos))
 
     # now find move/pos with highest score
@@ -98,9 +102,3 @@ def gameIsOver(board):
 
     # game not over
     return False
-
-if __name__ == '__main__':
-    board = list('---------')
-    pos = findBestMove(board)
-    print(pos)
-    print("done")

@@ -6,6 +6,10 @@
         usersTurn = true,
         board = '---------';
 
+    /**
+    * Reflects the global board state into the DOM.
+    * Called after each human and AI move.
+    */
     function displayBoard() {
         var char;
         for (var i=0; i<9; i++) {
@@ -17,6 +21,10 @@
         changeStateOfRestartButton('enabled');
     }
 
+    /**
+    * Pass the global board state to the AI (via AJAX),
+    * evaluate the results, and update the DOM and global state accordingly.
+    */
     function handleAiMove() {
         // don't process user's move until AI has moved.
         usersTurn = false;
@@ -71,6 +79,9 @@
         setTimeout(f, 500);
     }
 
+    /**
+    * Illuminate the winning three-in-a-row.
+    */
     function highlightPositions(positions) {
         var position;
         for (var i=0; i<positions.length; i++) {
@@ -79,6 +90,9 @@
         }
     }
 
+    /**
+    * enable/disable the "start over" button.
+    */
     function changeStateOfRestartButton(state) {
         if (state === 'disabled') {
             $("#restart").prop('disabled', true).addClass('disabled');
@@ -94,6 +108,9 @@
     //////////////////////////////////////////////////////////////////////////
     // Event handlers
     //////////////////////////////////////////////////////////////////////////
+    /**
+    * Called when user clicks a cell on board.
+    */
     function handleUserMove(event) {
         var $clickedCell, index, boardList;
 
@@ -129,6 +146,9 @@
         return;
     }
 
+    /**
+    * Called when user clicks "start over" button.
+    */
     function startOver() {
         // set global state vars
         gameOver = false;
@@ -138,10 +158,13 @@
         $("td").removeClass('highlighted');
 
         displayBoard();
-        setStatus("Make your first move or click <a href data-action='ai-starts'>here</a> and I'll start.");
+        setStatus("Make your first move or <a href data-action='ai-starts'>click here</a> and I'll start.");
         changeStateOfRestartButton('disabled');
     }
 
+    /**
+    * Called when user clicks status, indicating that AI should start game.
+    */
     function statusClicked(event) {
         event.preventDefault();
         var $target = $(event.target);
