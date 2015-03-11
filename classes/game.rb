@@ -52,16 +52,28 @@ class Game
       end
   end
   
-  def find_threats
-    @game_paths.select{|s| s[:status].include? "threat"}
-  end
+  # def find_threats
+  #   @game_paths.select{|s| s[:status].include? "threat"}
+  # end
+  #
+  # def find_wins
+  #  wins = @game_paths.select{|s| s[:status].include? "win"}
+  #  wins
+  # end
+  #
+  # def find_possible_wins
+  #   pwins = @game_paths.select{|s| s[:status].include? "mychance"}
+  #   pwins
+  # end
+  #
+  # def find_possible_wins
+  #   epwins = @game_paths.select{|s| s[:status].include? "enemychance"}
+  #   epwins
+  # end
   
-  def find_wins
-   wins = @game_paths.select{|s| s[:status].include? "win"}
-   wins
+  def find_paths_by_status( status )
+    @game_paths.select{|s| s[:status].include? "#{status}"}
   end
-  
-
   
   def update_paths
   	@board.board_array.each.with_index do |piece, idx|
@@ -87,14 +99,14 @@ class Game
         if (my_damage==1 && opens==2)
           p[:status]="mychance"
         end
-        if (my_damage==1 && opens==2)
-          p[:status]="enemychance"
+        if (enemy_damage==1 && opens==2)
+          p[:status]="echance"
         end
   		end
   	end
     
     #TODO: remove this after the debugging is done
-    puts "#{@game_paths}"
+    # puts "#{@game_paths}"
   	#rat out the "O"s
   end
    
