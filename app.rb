@@ -15,7 +15,7 @@ end
 get '/make_move' do
   pos = params[:move].to_i.between?(0,8) ? params[:move].to_s : ""
   game = session[:game]
-  @play = Play.new( game: game, move: pos.to_i - 1, token: "0" )
+  @play = Play.new( game: game, move: pos , token: game.enemy_token )
   session[:game] = @play.game
   board = @play.game.get_board
   "#{board.board_array}"

@@ -26,4 +26,8 @@ RSpec.describe Game do
     expect( @test_game.apply_move(position_to_set, "1") ).to eq nil
   end
   
+  it 'will make a game path into "threat" if the score is enemy:2 and other:0' do
+    
+  end
+  
 end
