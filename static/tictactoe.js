@@ -10,22 +10,22 @@
         var char;
         for (var i=0; i<9; i++) {
             char = board.charAt(i);
+            // don't display - chars, use '' instead
             if (char === '-') char = '';
             $("#cell-" + i).text(char);
         }
-        restartButton('enabled');
+        changeStateOfRestartButton('enabled');
     }
 
     function handleAiMove() {
-        // have AI evaluate board, then display results
-
+        // don't process user's move until AI has moved.
         usersTurn = false;
 
-        var jqxhr;
+        // have AI evaluate board, then display results
         var f = function() {
-            jqxhr = $.getJSON("/evalBoard?board="+board)
+            $.getJSON("/evalBoard?board="+board)
                 .done(function(data) {
-                    // console.log(data);
+                    // AI returns 3 values: new board, status, and winning positions
                     board = data.board;
                     var status = data.status;
                     var positions = data.positions;
@@ -56,22 +56,19 @@
 
                         default:
                             alert("bad status = "+status);
-
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
                     alert("Error!\ntextStatus = " + textStatus + "\nerrorThrown = " + errorThrown);
                 })
                 .always(function() {
+                    // AI done, so it's ok for user to move.
                     usersTurn = true;
                 });
         };
 
-        // f();
-
         // wait half a sec so that AI's response feels more human
-        // setTimeout(f, 500);
-        setTimeout(f, 2000);
+        setTimeout(f, 500);
     }
 
     function highlightPositions(positions) {
@@ -82,7 +79,7 @@
         }
     }
 
-    function restartButton(state) {
+    function changeStateOfRestartButton(state) {
         if (state === 'disabled') {
             $("#restart").prop('disabled', true).addClass('disabled');
         } else {
@@ -90,6 +87,13 @@
         }
     }
 
+    function setStatus(msg) {
+        $("#status").html(msg);
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Event handlers
+    //////////////////////////////////////////////////////////////////////////
     function handleUserMove(event) {
         var $clickedCell, index, boardList;
 
@@ -97,7 +101,6 @@
             setStatus("Sorry, it's not your turn yet");
             return;
         }
-
 
         if (gameOver === true) {
             setStatus("Sorry, game over!");
@@ -114,7 +117,7 @@
 
         index = $clickedCell.attr('id').split('-')[1];
 
-        // change board at position index to 'X'
+        // change board at position = index to 'X'
         boardList = board.split('');
         boardList[index] = 'X';
         board = boardList.join('');
@@ -124,10 +127,6 @@
 
         handleAiMove();
         return;
-    }
-
-    function setStatus(msg) {
-        $("#status").html(msg);
     }
 
     function startOver() {
@@ -140,7 +139,7 @@
 
         displayBoard();
         setStatus("Make your first move or click <a href data-action='ai-starts'>here</a> and I'll start.");
-        restartButton('disabled');
+        changeStateOfRestartButton('disabled');
     }
 
     function statusClicked(event) {
@@ -153,12 +152,13 @@
 
     //////////////////////////////////////////////////////////////////////////
 
-    function init() {
+    (function() {
+        // hookup our event handlers
         $("td").click(handleUserMove);
         $("#restart").click(startOver);
         $("#status").click(statusClicked);
-        startOver();
-    }
 
-    init();
+        startOver();
+    })();
+
 })();

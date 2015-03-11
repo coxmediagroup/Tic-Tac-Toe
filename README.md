@@ -14,8 +14,7 @@ This is an app that plays the game of tic-tac-toe; human vs AI.
 ###Features
  * Few dependencies
   - python3.4
-  - normalize.css
-  - jQuery
+  - JavaScript enabled in browser
   - modern browser (IE8+)
  * Single Page Application
 
@@ -43,7 +42,7 @@ acceptable performance for hundreds of simultaneous users, even if deployed on c
 
 Requirements
 ------------
-
+ * python 3.x
 
 Installation/Setup Instructions
 -------------------------------
@@ -52,15 +51,18 @@ If you're not, you'll need to make the appropriate changes (e.g. use **yum** ins
 
 ####1. Clone (or download) this repo
 
-####2. Install Python 3+
+####2. Install Python 3.x
 Chances are that you already have Python 3 installed.  Here's how to find out...
 
-If you don't have Python 3 installed, here's how to install it.
+```
+$ python --version
+Python 3.4.3
+```
 
 ####3. Start the web server
 cd to the project root directory and enter the following
 ```
-server/start_server
+python server/tictactoe_server.py
 ```
 
 You should then see something like...
@@ -71,7 +73,17 @@ You should then see something like...
 ####4. Run the unit tests
 From a different terminal window, and again from the project root...
 ```
-tests/run_tests
+python -m unittest
+```
+
+You should then see something like...
+
+```
+....
+----------------------------------------------------------------------
+Ran 4 tests in 4.398s
+
+OK
 ```
 
 ####5. Play the game!

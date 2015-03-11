@@ -6,7 +6,6 @@
 }
 
 #status {
-    margin-top: 3em;
     color: blue;
 }
 
@@ -33,8 +32,9 @@ td {
 }
 
 /* utility classes */
-.disabled {
-    color: #999;
+.disabled, .disabled:hover {
+    color: lightgrey;
+    border: 1px solid lightgrey;
 }
 
 .highlighted {
