@@ -2,6 +2,9 @@ import unittest
 import urllib.request
 import json
 
+AI_VS_AI_GAMES = 3
+AI_VS_RANDOM_GAMES = 25
+
 class TestSequenceFunctions(unittest.TestCase):
 
     def _evalBoard(self, board):
@@ -13,7 +16,6 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_evalBoard_firstMove(self):
         results = self._evalBoard("X--------")
-        # self.assertEqual(results['board'], "XO-------")
         self.assertEqual(results['status'], "continue")
         self.assertEqual(results['positions'], [])
 
@@ -67,6 +69,54 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(results['board'], "XOXXOXOXO")
         self.assertEqual(results['status'], "draw")
         self.assertEqual(results['positions'], [])
+
+    def test_evalBoard_aiVSai(self):
+        """ Have AI play itself a number of times.
+        """
+        def swapOsAndXs(board):
+            return board.replace('X','~').replace('O','X').replace('~','O')
+
+        games = AI_VS_AI_GAMES
+        for n in range(1,games+1):
+            print("\nAI vs AI: Game %d of %d"%(n,games))
+            board = '---------'
+            status = 'continue'
+            while status == 'continue':
+                # print(board)
+                results = self._evalBoard(board)
+                board = results['board']
+                # print(board)
+                board = swapOsAndXs(board)
+                status = results['status']
+            # print(status)
+            self.assertEqual(status, 'draw')
+
+    def test_evalBoard_aiVSrandom(self):
+        """ Have AI play random opponent a number of times.
+        """
+        import random
+        def randomMove(board):
+            board = list(board)
+            emptyPositions = [pos for pos in range(9) if board[pos] == '-']
+            movePos = random.choice(emptyPositions)
+            board[movePos] = 'X'
+            return ''.join(board)
+
+        games = AI_VS_RANDOM_GAMES
+        for n in range(1,games+1):
+            print("\nAI vs Random: Game %d of %d"%(n,games))
+            board = '---------'
+            status = 'continue'
+            while status == 'continue':
+                # print(board)
+                board = randomMove(board)
+                # print(board)
+                results = self._evalBoard(board)
+                board = results['board']
+                status = results['status']
+            # print(status)
+            self.assertIn(status, ['iwin', 'draw'])
+
 
 if __name__ == '__main__':
     unittest.main()
