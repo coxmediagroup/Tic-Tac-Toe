@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>CMG Tic Tac Toe Challenge</title>
+    <!-- prevent zooming on mobile devices to give app a more native feel -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--  make browsers render all elements more consistently and in line with modern standards -->
+    <link rel="stylesheet" type="text/css" href="normalize.css"/>
+
+    <!--  a small library of styles -->
+    <link rel="stylesheet" type="text/css" href="skeleton.css"/>
+
+    <!-- make older versions of IE recognize/style HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="tictactoe.css" />
+</head>
+<body>
+    <h1>CMG <i>Tic Tac Toe</i> Challenge</h1>
+
+    <p><button id="restart">Start Over</button></p>
+
+    <!-- We could have made the board without using a table, but this is sooo much easier -->
+    <table>
+        <tbody>
+            <tr>
+                <td id="cell-0"></td>
+                <td id="cell-1"></td>
+                <td id="cell-2"></td>
+            </tr>
+            <tr>
+                <td id="cell-3"></td>
+                <td id="cell-4"></td>
+                <td id="cell-5"></td>
+            </tr>
+            <tr>
+                <td id="cell-6"></td>
+                <td id="cell-7"></td>
+                <td id="cell-8"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 id="status"></h3>
+
+    <script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="tictactoe.js"></script>
+</body>
+</html>
