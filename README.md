@@ -11,11 +11,11 @@ This is an app that plays the game of tic-tac-toe; human vs AI.
   5. display the web service's response (either the new board state or "game over" details)
 
 ###Requirements
- * python 3.x
+ * Python 3.x
 
 ###Features
  * Few dependencies
-  - python 3.x
+  - Python 3.x
   - JavaScript enabled in browser
   - modern browser (IE8+)
  * Single Page Application
@@ -50,7 +50,7 @@ You should then see something like...
 [Mon Mar  9 14:13:34 2015] Server started on :9000
 ```
 
-Note: to stop the server, type ctrl+c (^C)
+Note: to stop the server, type `ctrl+c` (^C)
 
 ####4. Run the unit tests
 From a different terminal window, and again from the project root...
@@ -126,9 +126,9 @@ At the start of the game all positions are unoccupied, making the board string `
 
 ###Performance
 Because...
-1. the server is stateless (i.e. the entire board state is passed in each request), and
-2. each response takes roughly the same amount of time to calculate, and
-3. the user will introduce latency as he/she selects the next move,
+ 1. the server is stateless (i.e. the entire board state is passed in each request), and
+ 2. each response takes roughly the same amount of time to calculate, and
+ 3. the user will introduce latency as he/she selects the next move,
 
 ...Python's simple, single-threaded web server (`http.server`) is used and should be able to provide
 acceptable performance for hundreds of simultaneous users, even if deployed on commodity-level hardware.
@@ -152,7 +152,8 @@ The server is comprised of the three files in the `Tic-Tac-Toe/server` subdirect
  * `tictactoe_server.py` - the actual backend server.  Subclasses `DynamicContentRequestHandler`
    from `server.py` and provides the sole backend endpoint: `evalBoard`
 
- * `tictactoe_ai.py` - houses the actual AI and imported by `tictactoe_server.py`
+ * `tictactoe_ai.py` - houses the actual AI and is imported by `tictactoe_server.py`.
+   Performs these tasks:
    1. determines if the game is over and if so who won (or if a draw), and
    2. makes the next move for the AI player.
 
