@@ -3,9 +3,6 @@ from server import DynamicContentRequestHandler, run
 from tictactoe_ai import gameIsOver, findBestScoreMove
 from random import choice
 
-HOST = ""   # listen on all interfaces
-PORT = 9000
-
 class RequestHandler(DynamicContentRequestHandler):
     def _evaluateBoard(self, board):
         """
@@ -79,4 +76,4 @@ class RequestHandler(DynamicContentRequestHandler):
              'positions': positions})
         return (content, 'application/json')
 
-run(HOST, PORT, RequestHandler)
+run(RequestHandler)

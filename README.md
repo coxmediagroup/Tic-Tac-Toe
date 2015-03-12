@@ -10,68 +10,19 @@ This is an app that plays the game of tic-tac-toe; human vs AI.
   4. send the new board state to the web service, and
   5. display the web service's response (either the new board state or "game over" details)
 
+###Requirements
+ * python 3.x
 
 ###Features
  * Few dependencies
-  - python3.4
+  - python 3.x
   - JavaScript enabled in browser
   - modern browser (IE8+)
  * Single Page Application
 
 ###Shortcomings
  * Mouse only
- * Server ip address and port are hard-coded (`server/tictactoe_server.py`)
  * IE8+
-
-Technical Notes
----------------
-This solution was designed to be "just right" for the assignment (e.g. No
-client-side or server-side frameworks were needed so none were used).
-
-###The Game Board
-The game board is represented as a 9 character string, where characters 0-2
-represent the top row of the board, characters 3-5 represent the middle row,
-and characters 6-8 represent the bottom row, e.g.
-
-```
-0 1 2
-3 4 5
-6 7 8
-```
-
-Each character will always have 1 of 3 values:
-
-  Character | Meaning
-  --------- | -------
-  `X`       | position occupied by Human player
-  `O`       | position occupied by AI player
-  `-`       | position unoccupied
-
-So if the board state was this...
-
-```
-X O X
-O   X
-X O
-```
-
-...the board string would be `XOXO-XXO-`
-
-At the start of the game all positions are unoccupied, making the board string `---------`.
-
-###Performance
-Because...
- 1. the server is stateless (i.e. the entire board state is passed in each request), and
- 2. each response takes roughly the same amount of time to calculate, and
- 3. the user will introduce latency as he/she selects the next move,
-
-...Python's simple, single-threaded web server (`http.server`) is used and should be able to provide
-acceptable performance for hundreds of simultaneous users, even if deployed on commodity-level hardware.
-
-
-Requirements
-------------
- * python 3.x
 
 Installation/Setup Instructions
 -------------------------------
@@ -121,6 +72,66 @@ OK
 
 http://localhost:9000
 
+###Config parameters (server host, port, etc.)
+All configuration variables are stored in `server/config.ini`.  
+
+```
+[DEFAULT]
+# listen on all interfaces
+host_name =
+host_port = 9000
+
+[TESTS]
+number_of_ai_vs_ai_games = 10
+number_of_ai_vs_random_games = 25
+```
+
+This file is used by both the server and unit tests.
+
+Technical Notes
+---------------
+This solution was designed to be "just right" for the assignment (e.g. No
+client-side or server-side frameworks were needed so none were used).
+
+###The Game Board
+The game board is represented as a 9 character string, where characters 0-2
+represent the top row of the board, characters 3-5 represent the middle row,
+and characters 6-8 represent the bottom row, e.g.
+
+```
+0 1 2
+3 4 5
+6 7 8
+```
+
+Each character will always have 1 of 3 values:
+
+Character | Meaning
+--------- | -------
+`X`       | position occupied by Human player
+`O`       | position occupied by AI player
+`-`       | position unoccupied
+
+So if the board state was this...
+
+```
+X O X
+O   X
+X O
+```
+
+...the board string would be `XOXO-XXO-`
+
+At the start of the game all positions are unoccupied, making the board string `---------`.
+
+###Performance
+Because...
+1. the server is stateless (i.e. the entire board state is passed in each request), and
+2. each response takes roughly the same amount of time to calculate, and
+3. the user will introduce latency as he/she selects the next move,
+
+...Python's simple, single-threaded web server (`http.server`) is used and should be able to provide
+acceptable performance for hundreds of simultaneous users, even if deployed on commodity-level hardware.
 
 
 Code components/structure
@@ -140,8 +151,6 @@ The server is comprised of the three files in the `Tic-Tac-Toe/server` subdirect
 
  * `tictactoe_server.py` - the actual backend server.  Subclasses `DynamicContentRequestHandler`
    from `server.py` and provides the sole backend endpoint: `evalBoard`
-
-   *Note: Modify this file to change port to something other than 9000.*
 
  * `tictactoe_ai.py` - houses the actual AI and imported by `tictactoe_server.py`
    1. determines if the game is over and if so who won (or if a draw), and

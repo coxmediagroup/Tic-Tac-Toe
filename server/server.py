@@ -1,4 +1,5 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
+import configparser
 from urllib.parse import urlparse, parse_qs
 from os.path import basename
 from os import chdir
@@ -58,18 +59,24 @@ class DynamicContentRequestHandler(SimpleHTTPRequestHandler):
             content, mimeType = content
             self._send_head(content, mimeType)
 
-def run(hostName, hostPort, requestHandler):
+def run(requestHandler):
     """ Start the server
     """
+    # read hostname and port from ini
+    config = configparser.ConfigParser()
+    config.read('server/config.ini')
+    host_name = config['DEFAULT']['host_name']
+    host_port = int(config['DEFAULT']['host_port'])
+
     # change to a directory 'static', a child directory where
     # all static content is located
     chdir('static')
-    myServer = HTTPServer((hostName, hostPort), requestHandler)
-    print("[%s] Server started on %s:%s" % (time.asctime(), hostName, hostPort))
+    myServer = HTTPServer((host_name, host_port), requestHandler)
+    print("[%s] Server started on %s:%s" % (time.asctime(), host_name, host_port))
     try:
         myServer.serve_forever()
     except KeyboardInterrupt:
         print("\nKeyboard interrupt received.  Shutting down server...")
     finally:
         myServer.server_close()
-        print("[%s] Server stopped on %s:%s" % (time.asctime(), hostName, hostPort))
+        print("[%s] Server stopped on %s:%s" % (time.asctime(), host_name, host_port))

@@ -1,15 +1,21 @@
+import configparser
 import unittest
 import urllib.request
 import json
 
-AI_VS_AI_GAMES = 3
-AI_VS_RANDOM_GAMES = 25
+# initialize config
+CONFIG = configparser.ConfigParser()
+CONFIG.read('server/config.ini')
+
+# initialize URL_PREFIX
+_host_name = CONFIG['DEFAULT']['host_name']
+_host_port = int(CONFIG['DEFAULT']['host_port'])
+if not _host_name: _host_name = 'localhost'
+URL_PREFIX = "http://%s:%s/evalBoard?board="%(_host_name, _host_port)
 
 class TestSequenceFunctions(unittest.TestCase):
-
     def _evalBoard(self, board):
-        url = "http://localhost:9000/evalBoard?board=%s"%board
-        f = urllib.request.urlopen(url)
+        f = urllib.request.urlopen(URL_PREFIX + board)
         contents = f.read().decode('utf-8')
         f.close()
         return json.loads(contents)
@@ -76,19 +82,18 @@ class TestSequenceFunctions(unittest.TestCase):
         def swapOsAndXs(board):
             return board.replace('X','~').replace('O','X').replace('~','O')
 
-        games = AI_VS_AI_GAMES
-        for n in range(1,games+1):
-            print("\nAI vs AI: Game %d of %d"%(n,games))
+        print()
+        games = int(CONFIG['TESTS']['number_of_ai_vs_ai_games'])
+        for n in range(1, games+1):
+            print("AI vs AI: Game %d of %d... "%(n, games), end="")
             board = '---------'
             status = 'continue'
             while status == 'continue':
-                # print(board)
                 results = self._evalBoard(board)
                 board = results['board']
-                # print(board)
                 board = swapOsAndXs(board)
                 status = results['status']
-            # print(status)
+            print(status)
             self.assertEqual(status, 'draw')
 
     def test_evalBoard_aiVSrandom(self):
@@ -102,19 +107,18 @@ class TestSequenceFunctions(unittest.TestCase):
             board[movePos] = 'X'
             return ''.join(board)
 
-        games = AI_VS_RANDOM_GAMES
-        for n in range(1,games+1):
-            print("\nAI vs Random: Game %d of %d"%(n,games))
+        print()
+        games = int(CONFIG['TESTS']['number_of_ai_vs_random_games'])
+        for n in range(1, games+1):
+            print("AI vs Random: Game %d of %d... "%(n, games), end="")
             board = '---------'
             status = 'continue'
             while status == 'continue':
-                # print(board)
                 board = randomMove(board)
-                # print(board)
                 results = self._evalBoard(board)
                 board = results['board']
                 status = results['status']
-            # print(status)
+            print(status)
             self.assertIn(status, ['iwin', 'draw'])
 
 
