@@ -200,7 +200,15 @@ class Game
         else
           #per the pros, if you didn't go first and they take a corner then take the center and take a side adjacent to their last corner play
           if @defensive_move_count == 2 && (@board.corners.include? @last_offensive_move)
-            @board.corner_adjacent_edge(@last_offensive_move)[1]
+            if( 
+              (@first_offensive_move == 5 && @last_offensive_move == 0) || 
+              (@first_offensive_move == 1 && (@last_offensive_move == 6 || @last_offensive_move == 8)) || 
+              (@first_offensive_move == 3 && @last_offensive_move == 2) 
+              )
+              @board.corner_adjacent_edge(@last_offensive_move)[0]
+            else
+              @board.corner_adjacent_edge(@last_offensive_move)[1]
+            end
           elsif threat_pos.size > 0
             puts "************************** @last_offensive_move.to_i == 4 => #{@last_offensive_move.to_i == 4}" if @@debug == true
             puts "************************** available_corners.size > 0 => #{available_corners.size > 0}" if @@debug == true
