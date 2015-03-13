@@ -6,9 +6,10 @@ h1 {
 .container {
   position: relative;
   width: 500px;
-  height: 500px;
+  height: 550px;
   margin: auto;
   background-color: #E2E2E2;
+  padding: 15px;
 }
 
 table {
@@ -35,7 +36,8 @@ span {
 #status {
   display: block;
   color: blue;
-  background-color: white; 
+  background: none;
+/*  background-color: white;*/
   text-align: center;
   margin: auto;
   width: 100% ;

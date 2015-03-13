@@ -29,6 +29,8 @@ Submissions
 Developer Notes:
 -----------------
 
+This is a sinatra app written under Ruby 1.9.3
+
 * Install sinatra $gem install sinatra : require in app file that starts the program
 	enable sessions after require (enable :sessions)
 * Adde files for Passenger since that's what runs on my VPS
@@ -36,4 +38,5 @@ Developer Notes:
 * localdev install shotgun so you don't have to restart Sinatra at every code change:
 	$gem install shotgun
 	$shotgun -p 4567 app.rb
-* initial game will always let client move first.
+* initial game will always have client move first. As tic-tac-toe goes this gives the upper hand and this exercise does not allow turn switching.
+

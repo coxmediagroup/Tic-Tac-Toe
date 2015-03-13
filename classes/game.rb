@@ -15,7 +15,7 @@ class Game
   # 0 1 2
   # 3 4 5
   # 6 7 8
-  @@debug = true
+  @@debug = false
   @game_paths = []
   
   def initialize
@@ -202,10 +202,12 @@ class Game
           if @defensive_move_count == 2 && (@board.corners.include? @last_offensive_move)
             if( 
               (@first_offensive_move == 5 && @last_offensive_move == 0) || 
-              (@first_offensive_move == 1 && (@last_offensive_move == 6 || @last_offensive_move == 8)) || 
-              (@first_offensive_move == 3 && @last_offensive_move == 2) 
+              ((@first_offensive_move == 1) && (@last_offensive_move == 6 || @last_offensive_move == 8)) || 
+              (@first_offensive_move == 3 && @last_offensive_move == 2)
               )
               @board.corner_adjacent_edge(@last_offensive_move)[0]
+            elsif (@first_offensive_move == 4 && @last_offensive_move == 8)
+              2
             else
               @board.corner_adjacent_edge(@last_offensive_move)[1]
             end
