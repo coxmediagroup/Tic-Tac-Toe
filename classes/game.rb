@@ -69,13 +69,10 @@ class Game
     @active_token = "#{who}"
     if who != enemy_token
       @defensive_move_count += 1
-      puts "********************************* making the counter move for #{who}" if @@debug == true
       if @first_defensive_move.nil?
         @first_defensive_move = find_best_move
-        puts "*********************** assigning @first_defensive_move : #{@first_defensive_move}" if @@debug == true
         first_play = Play.new( game: self, move: "#{@first_defensive_move}" , token: my_token )
       else
-        puts "*********************** already have @first_defensive_move : #{@first_defensive_move}" if @@debug == true
         counter_play = Play.new( game: self, move: "#{find_best_move}" , token: my_token )
       end      
     end
@@ -136,8 +133,6 @@ class Game
         end
   		end
   	end
-    
-    puts "*******************************************\n#{@game_paths}\n********************************************" if @@debug == true
   end
    
   def find_best_move
@@ -158,20 +153,7 @@ class Game
         win_pos = self.collect_available_moves_from_paths( possible_wins, [] )
         threat_win_union = @first_defensive_move.nil? ? threat_pos : threat_pos || win_pos
         available_corners = @board.corners & threat_win_union
-        available_edges = @board.edges & threat_win_union
-        
-        puts "************************** @board.edges #{@board.edges}" if @@debug == true
-        puts "************************** @board.corners #{@board.corners}"  if @@debug == true
-        puts "************************** threat_pos #{threat_pos}" if @@debug == true
-        puts "************************** win_pos #{win_pos}" if @@debug == true
-        puts "************************** threat_win_union #{threat_win_union}" if @@debug == true
-        puts "************************** available_corners #{available_corners}" if @@debug == true
-        puts "************************** available_edges #{available_edges}" if @@debug == true
-        puts "************************** @first_defensive_move #{@first_defensive_move}" if @@debug == true
-        puts "************************** @first_offensive_move #{@first_offensive_move}" if @@debug == true
-        puts "************************** @last_offensive_move #{@last_offensive_move}" if @@debug == true
-        puts "************************** @defensive_move_count #{@defensive_move_count}" if @@debug == true
-        
+        available_edges = @board.edges & threat_win_union        
       
         if @first_defensive_move.nil? && @first_offensive_move >= 0
           
@@ -212,22 +194,13 @@ class Game
               @board.corner_adjacent_edge(@last_offensive_move)[1]
             end
           elsif threat_pos.size > 0
-            puts "************************** @last_offensive_move.to_i == 4 => #{@last_offensive_move.to_i == 4}" if @@debug == true
-            puts "************************** available_corners.size > 0 => #{available_corners.size > 0}" if @@debug == true
             
             if ((@board.corners.include? @last_offensive_move)|| @last_offensive_move.to_i == 4) && available_corners.length>0
               stupid_choice = ((threat_pos & available_edges).nil? && !threat_pos.nil?) ? threat_pos[0] : (threat_pos & available_corners)[0]
               smarter_choice = @board.most_impacted_open_corner(enemy_token) 
               
-              puts "********************** doing the center trap" if @@debug == true
-              puts "********************** stupid_choice : #{stupid_choice}" if @@debug == true
-              puts "********************** smarter_choice : #{smarter_choice}" if @@debug == true
-              
               smarter_choice.nil? ? stupid_choice : smarter_choice
             else
-              puts "**********************NOT doing the center trap" if @@debug == true
-              puts "**********************@board.most_impacted_open_piece(threat_pos , enemy_token) : #{@board.most_impacted_open_piece(threat_pos , enemy_token)}" if @@debug == true
-              puts "**********************@board.most_impacted_open_corner(enemy_token) : #{@board.most_impacted_open_corner(enemy_token)}" if @@debug == true
               (@board.most_impacted_open_piece(threat_pos , enemy_token) != 4) && !@board.most_impacted_open_corner(enemy_token).nil? ? @board.most_impacted_open_corner(enemy_token) : @board.most_impacted_open_piece(threat_pos , enemy_token)
             end
           elsif win_pos.size > 0 
