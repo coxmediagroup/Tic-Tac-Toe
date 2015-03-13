@@ -10,16 +10,6 @@ get '/tic-tac-toe' do
   erb :index
 end
 
-get '/follower_viz' do
-  @user = params[:user]
-  erb :follower
-end
- 
-get '/repo_viz' do
-  @user = params[:user]
-  erb :repo
-end
-
 get '/new_game' do
   @game = Game.new
   session[:game] = @game
@@ -84,9 +74,3 @@ __END__
     </div>
   </body>
 </html>
- 
-@@ follower
-<p>here comes the crazy follower_viz for <%= @user %></p>
- 
-@@ repo
-<h1>this viz from <%= @user %>'s repos is HUGE!</h1>

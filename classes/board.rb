@@ -85,7 +85,6 @@ class Board
   
   def adjacent_piece_count(number, token)
     acc = 0
-    # puts "*************** adjacents : #{@@adjacents}"
     slots = @@adjacents.find {|x| x[:id] == number}[:adj]
     slots.each do |s|
       acc += @board[s] == token ? 1 : 0
