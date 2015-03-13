@@ -93,6 +93,20 @@ class Board
    acc
   end
   
+  def corner_adjacent_edge(number)
+    if number == 0
+      [1,3]
+    elsif number == 2
+      [1,5]
+    elsif number == 6
+      [3,7]
+    elsif number == 8
+      [5,7]
+    else
+      []
+    end
+  end
+  
   def opposite_edge(number)
     if number == 1 
       7
