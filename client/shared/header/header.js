@@ -8,8 +8,8 @@ angular.module('tictactoe')
                 'link': 'play'
             },
             {
-                'title': 'Replay',
-                'link': 'replay'
+                'title': 'Instructions',
+                'link': 'instructions'
             },
             {
                 'title': 'Statistics',
