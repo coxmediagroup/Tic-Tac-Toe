@@ -1,0 +1,20 @@
+<!doctype html>
+
+<head>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="app/main.css" />
+</head>
+<body ng-app="tictactoe">
+
+    <!--header-->
+    <div ng-include="'shared/header/header.html'"></div>
+
+    <!--pages-->
+    <div ui-view></div>
+
+    <!--next load scripts-->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+</body>
+
+</html>

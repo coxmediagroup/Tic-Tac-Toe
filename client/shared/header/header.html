@@ -1,0 +1,8 @@
+<!--header-->
+<div ng-controller="HeaderCtrl">
+    <nav>
+        <ul>
+            <li ng-repeat="item in navlinks"><a ui-sref="{{ item.link }}">{{ item.title }}</a></li>
+        </ul>
+    </nav>
+</div>
