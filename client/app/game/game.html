@@ -1,3 +1,5 @@
-<script type="text/ng-template">
-    <h3>Play game</h3>
-</script>
+<h3>Play game</h3>
+
+<div id="grid">
+    <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
+</div>
