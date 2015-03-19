@@ -7,5 +7,5 @@ angular.module('tictactoe')
                 url: '/statistics',
                 templateUrl: 'app/statistics/statistics.html',
                 controller: 'StatsCtrl'
-            })
+            });
     });

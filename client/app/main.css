@@ -1,3 +1,17 @@
 /*
  * Main CSS file for the Tic-Tac-Toe app
  */
+.container {
+    margin-top: 20px;
+}
+.navbar {
+    min-height: 40px;
+}
+.nav-tabs {
+    border-bottom: none;
+}
+.nav-tabs li a {
+    border-bottom: none;
+    min-height: 40px;
+    border-radius: 0;
+}
