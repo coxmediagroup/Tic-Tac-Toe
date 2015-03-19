@@ -15,3 +15,27 @@
     min-height: 40px;
     border-radius: 0;
 }
+
+#grid {
+    height: 302px;
+    width: 302px;
+}
+#grid > div {
+    cursor: pointer;
+    float: left;
+    font-size: 100px;
+    height: 100px;
+    line-height: 1em;
+    text-align: center;
+    width: 100px;
+}
+#space1, #space2, #space4, #space5 {
+    border-right: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+}
+#space3, #space6 {
+    border-bottom: solid 1px #ddd;
+}
+#space7, #space8 {
+    border-right: solid 1px #ddd;
+}
