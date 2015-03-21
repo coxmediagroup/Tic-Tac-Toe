@@ -15,9 +15,9 @@ angular.module('tictactoe')
         /*
          * Grid is numbered this way:
          *
-         *   1, 2, 3
-         *   4, 5, 6
-         *   7, 8, 9
+         *   0, 1, 2
+         *   3, 4, 5
+         *   6, 7, 8
          *
          * Grid has the following binary designation for bitwise operations
          *
@@ -84,20 +84,30 @@ angular.module('tictactoe')
                 blockMove = [],
                 playerBinary = parseInt(playerMatrix.join(''), 2),
                 aiBinary = parseInt(aiMatrix.join(''), 2),
-                b, c, w, diff, left, pickSpace = '000000000', toMove = [];
+                b,
+                c,
+                w,
+                diff,
+                left,
+                toMove = [];
 
-            // Steps:
-            // 1. checks free spaces
-            // 2. check to see if needs to block player
-            // 3. check which space would complete a strategy
-            // 4. choose based on priority
-
-            // 1. check free spaces
+            // check free spaces
             for(c = 0; c < playerMatrix.length; c++){
                 if(!playerMatrix[c] && !aiMatrix[c]){
                     freeSpaces.push(c);
                 }
             }
+
+            /*
+             * AI flow to choose a space:
+             *
+             * 1. check for immediate win and choose space
+             * 2. check for immediate block of opponent to prevent win
+             * 3. make a list to possibly block
+             * 4. if possible blocking exists, choose one based on priority and random choice
+             * 5. choose a space to continue a strategy
+             * 6. choose a space based on priority
+             */
 
             // check for immediate win
             for(c = 0; c < winningStrategies.length; c++) {
@@ -120,15 +130,32 @@ angular.module('tictactoe')
                 }
             }
 
-            // 2. check to see if needs to block player
+            // check single case that the following code doesn't solve, the diagonal corner issue
+            if(space === -1){
+                if(playerBinary === 68 || playerBinary === 257){
+                    for(c = 0; c < freeSpaces.length; c++){
+                        if(spacePriority[freeSpaces[c]] === '0'){
+                            toMove.push(freeSpaces[c]);
+                        }
+                    }
+
+                    if(toMove.length){
+                        console.log('special case');
+                        space = toMove[Math.floor(Math.random() * toMove.length)];
+                    }
+                }
+            }
+
+            // check to see if needs to block player
             if(space === -1) {
                 for (c = 0; c < winningStrategies.length; c++) {
                     w = winningStrategies[c];
 
+                    // use bitwise operation to compare difference between this strategy and players pieces
                     diff = w - (w & playerBinary);
 
+                    // counts the unoccupied spaces in this strategy
                     left = diff.toString(2).match(/1/g).length;
-                    console.log(left);
 
                     // if there is one left to complete row, it needs to be immediately blocked
                     if (left === 1) {
@@ -136,14 +163,13 @@ angular.module('tictactoe')
                             if ((diff & (1 << b)) === (1 << b)) {
                                 console.log('b');
                                 if(freeSpaces.indexOf(8 - b) > -1) {
-                                    console.log('bb');
                                     space = 8 - b;
                                 }
                             }
                         }
                     }
 
-                    // if there are two left to complete row, add to list to block
+                    // if there are two left to complete row, add to list to possibly block
                     if (space === -1 && left === 2) {
                         for (b = 0; b < 9; b++) {
                             if ((diff & (1 << b)) === (1 << b)){
@@ -155,7 +181,6 @@ angular.module('tictactoe')
                     }
                 }
             }
-            console.log(blockMove);
 
             // choose a blocking strategy
             if(space === -1 && blockMove.length) {
@@ -164,12 +189,13 @@ angular.module('tictactoe')
                     if (spacePriority[blockMove[c]] === '2') {
                         console.log('c');
                         space = blockMove[c];
-                        // priority 1 is second most important
+                    // priority 1 is second most important
                     } else if (spacePriority[blockMove[c]] === '1') {
                         toMove.push(blockMove[c]);
                     }
                 }
 
+                // if all priority 1, choose a random one
                 if (space === -1 && toMove.length) {
                     console.log('d');
                     space = toMove[Math.floor(Math.random() * toMove.length)];
@@ -218,24 +244,19 @@ angular.module('tictactoe')
                 }
             }
 
-            console.log(space);
-
+            // mark the matrix
             aiMatrix[space] = 1;
 
+            // set hasWon
             hasWon = checkForWin('ai');
 
             playersTurn = true;
-
-
 
             return {
                 space: space,
                 hasWon: hasWon
             }
         }
-
-        // 1<<0 through 1<<8
-
 
         function pieces(){
             if(playerFirst){
