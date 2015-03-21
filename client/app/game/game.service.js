@@ -157,22 +157,65 @@ angular.module('tictactoe')
             }
             console.log(blockMove);
 
-            if(space === -1 && blockMove.length){
-                for(c = 0; c < blockMove.length; c++){
-                    if(spacePriority[blockMove[c]] === '2'){
+            // choose a blocking strategy
+            if(space === -1 && blockMove.length) {
+                for (c = 0; c < blockMove.length; c++) {
+                    // priority 2 is immediately picked
+                    if (spacePriority[blockMove[c]] === '2') {
                         console.log('c');
                         space = blockMove[c];
-                    } else if(spacePriority[blockMove[c]] === '1'){
+                        // priority 1 is second most important
+                    } else if (spacePriority[blockMove[c]] === '1') {
                         toMove.push(blockMove[c]);
+                    }
+                }
+
+                if (space === -1 && toMove.length) {
+                    console.log('d');
+                    space = toMove[Math.floor(Math.random() * toMove.length)];
+                }
+            }
+
+            // choose a strategy when there are no other priorities and at least one piece
+            if(space === -1){
+                for(c = 0; c < winningStrategies.length; c++) {
+                    w = winningStrategies[c];
+
+                    diff = w - (w & aiBinary);
+
+                    left = diff.toString(2).match(/1/g).length;
+
+                    // if there is one left to complete row, immediately pick
+                    if (left === 2) {
+                        for (b = 0; b < 9; b++) {
+                            if ((diff & (1 << b)) === (1 << b)) {
+                                if(freeSpaces.indexOf(8 - b) > -1) {
+                                    console.log('e');
+                                    space = 8 - b;
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            var r;
-            if(space === -1 && toMove.length){
-                r = Math.floor(Math.random() * toMove.length);
-                console.log('d');
-                space = toMove[r];
+            // just pick based on priority
+            if(space === -1) {
+                for (c = 0; c < freeSpaces.length; c++) {
+                    // priority 2 is immediately picked
+                    if (spacePriority[freeSpaces[c]] === '2') {
+                        console.log('f');
+                        space = freeSpaces[c];
+                        // priority 1 is second most important
+                    } else if (spacePriority[freeSpaces[c]] === '1') {
+                        toMove.push(freeSpaces[c]);
+                    }
+                }
+
+                if (space === -1 && toMove.length) {
+                    console.log('g');
+                    space = toMove[Math.floor(Math.random() * toMove.length)];
+                }
             }
 
             console.log(space);
