@@ -4,10 +4,10 @@
  * Service container for game logic to keep from complicating controller
  */
 angular.module('tictactoe')
-    .factory('Game', function(){
+    .factory('Game', ['Stats', function(Stats){
         var module,
             playerFirst = true,
-            playerTurn = true,
+            playersTurn = true,
             playerMatrix = [0,0,0,0,0,0,0,0,0],
             aiMatrix = [0,0,0,0,0,0,0,0,0],
             winner = null;
@@ -49,9 +49,10 @@ angular.module('tictactoe')
             return false;
         }
 
-        function checkPlayer(space){
-            playerMatrix[space - 1] = 1;
-            return checkForWin(player);
+        function checkMove(space){
+            playerMatrix[space] = 1;
+            playersTurn = false;
+            return checkForWin('player');
         }
 
         // returns winner string or null
@@ -60,31 +61,128 @@ angular.module('tictactoe')
         }
 
         // returns true if space is occupied
-        function spaceTaken(space){
+        function spaceFree(space){
              return !playerMatrix[space] && !aiMatrix[space];
         }
 
         // returns true if players turn
-        function playersTurn(){
-            return;
+        function isPlayersTurn(){
+            return playersTurn;
         }
 
         // returns true if the player can move
         function canMove(space){
-            return playersTurn() && !spaceTaken(space) && !gameOver();
+            return isPlayersTurn() && spaceFree(space) && !gameOver();
         }
 
         // function to start AI logic
         // function returns the space taken and if the AI won
         function aiTurn(){
-            var space,
-                hasWon;
+            var space = -1,
+                hasWon,
+                freeSpaces = [],
+                blockMove = [],
+                playerBinary = parseInt(playerMatrix.join(''), 2),
+                aiBinary = parseInt(aiMatrix.join(''), 2),
+                b, c, w, diff, left, pickSpace = '000000000', toMove = [];
 
             // Steps:
             // 1. checks free spaces
             // 2. check to see if needs to block player
             // 3. check which space would complete a strategy
             // 4. choose based on priority
+
+            // 1. check free spaces
+            for(c = 0; c < playerMatrix.length; c++){
+                if(!playerMatrix[c] && !aiMatrix[c]){
+                    freeSpaces.push(c);
+                }
+            }
+
+            // check for immediate win
+            for(c = 0; c < winningStrategies.length; c++) {
+                w = winningStrategies[c];
+
+                diff = w - (w & aiBinary);
+
+                left = diff.toString(2).match(/1/g).length;
+
+                // if there is one left to complete row, immediately pick
+                if (left === 1) {
+                    for (b = 0; b < 9; b++) {
+                        if ((diff & (1 << b)) === (1 << b)) {
+                            if(freeSpaces.indexOf(8 - b) > -1) {
+                                console.log('a');
+                                space = 8 - b;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 2. check to see if needs to block player
+            if(space === -1) {
+                for (c = 0; c < winningStrategies.length; c++) {
+                    w = winningStrategies[c];
+
+                    diff = w - (w & playerBinary);
+
+                    left = diff.toString(2).match(/1/g).length;
+                    console.log(left);
+
+                    // if there is one left to complete row, it needs to be immediately blocked
+                    if (left === 1) {
+                        for (b = 0; b < 9; b++) {
+                            if ((diff & (1 << b)) === (1 << b)) {
+                                console.log('b');
+                                if(freeSpaces.indexOf(8 - b) > -1) {
+                                    console.log('bb');
+                                    space = 8 - b;
+                                }
+                            }
+                        }
+                    }
+
+                    // if there are two left to complete row, add to list to block
+                    if (space === -1 && left === 2) {
+                        for (b = 0; b < 9; b++) {
+                            if ((diff & (1 << b)) === (1 << b)){
+                                if(freeSpaces.indexOf(8 - b) > -1) {
+                                    blockMove.push(8 - b);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(blockMove);
+
+            if(space === -1 && blockMove.length){
+                for(c = 0; c < blockMove.length; c++){
+                    if(spacePriority[blockMove[c]] === '2'){
+                        console.log('c');
+                        space = blockMove[c];
+                    } else if(spacePriority[blockMove[c]] === '1'){
+                        toMove.push(blockMove[c]);
+                    }
+                }
+            }
+
+            var r;
+            if(space === -1 && toMove.length){
+                r = Math.floor(Math.random() * toMove.length);
+                console.log('d');
+                space = toMove[r];
+            }
+
+            console.log(space);
+
+            aiMatrix[space] = 1;
+
+            hasWon = checkForWin('ai');
+
+            playersTurn = true;
+
 
 
             return {
@@ -105,12 +203,11 @@ angular.module('tictactoe')
         }
 
         module = {
-            player: player,
-            checkPlayer: checkPlayer,
+            checkMove: checkMove,
             canMove: canMove,
             aiTurn: aiTurn,
             pieces: pieces
         };
 
         return module;
-    });
+    }]);

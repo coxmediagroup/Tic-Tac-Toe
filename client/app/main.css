@@ -29,13 +29,13 @@
     text-align: center;
     width: 100px;
 }
-#space1, #space2, #space4, #space5 {
+#space0, #space1, #space3, #space4 {
     border-right: solid 1px #ddd;
     border-bottom: solid 1px #ddd;
 }
-#space3, #space6 {
+#space2, #space5 {
     border-bottom: solid 1px #ddd;
 }
-#space7, #space8 {
+#space6, #space7 {
     border-right: solid 1px #ddd;
 }
