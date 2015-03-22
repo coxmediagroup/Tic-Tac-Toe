@@ -6,9 +6,9 @@
 angular.module('tictactoe')
     .factory('Game', ['Stats', function(Stats){
         var module,
-            playerFirst = true,
-            playersTurn = true,
-            playerMatrix = [0,0,0,0,0,0,0,0,0],
+            userFirst = true,
+            usersTurn = true,
+            userMatrix = [0,0,0,0,0,0,0,0,0],
             aiMatrix = [0,0,0,0,0,0,0,0,0],
             winner = null;
 
@@ -33,7 +33,7 @@ angular.module('tictactoe')
 
         function checkForWin(player){
             var c,
-                matrix = player === 'player' ? playerMatrix : aiMatrix;
+                matrix = player === 'player' ? userMatrix : aiMatrix;
 
             // convert positions to their binary equivalent
             var binaryMatrix = parseInt(matrix.join(''), 2);
@@ -50,8 +50,8 @@ angular.module('tictactoe')
         }
 
         function checkMove(space){
-            playerMatrix[space] = 1;
-            playersTurn = false;
+            userMatrix[space] = 1;
+            usersTurn = false;
             return checkForWin('player');
         }
 
@@ -62,12 +62,12 @@ angular.module('tictactoe')
 
         // returns true if space is occupied
         function spaceFree(space){
-             return !playerMatrix[space] && !aiMatrix[space];
+            return !userMatrix[space] && !aiMatrix[space];
         }
 
         // returns true if players turn
         function isPlayersTurn(){
-            return playersTurn;
+            return usersTurn;
         }
 
         // returns true if the player can move
@@ -82,18 +82,15 @@ angular.module('tictactoe')
                 hasWon,
                 freeSpaces = [],
                 blockMove = [],
-                playerBinary = parseInt(playerMatrix.join(''), 2),
+                userBinary = parseInt(userMatrix.join(''), 2),
                 aiBinary = parseInt(aiMatrix.join(''), 2),
-                b,
                 c,
-                w,
-                diff,
-                left,
+                strategy,
                 toMove = [];
 
             // check free spaces
-            for(c = 0; c < playerMatrix.length; c++){
-                if(!playerMatrix[c] && !aiMatrix[c]){
+            for(c = 0; c < userMatrix.length; c++){
+                if(!userMatrix[c] && !aiMatrix[c]){
                     freeSpaces.push(c);
                 }
             }
@@ -109,30 +106,47 @@ angular.module('tictactoe')
              * 6. choose a space based on priority
              */
 
-            // check for immediate win
-            for(c = 0; c < winningStrategies.length; c++) {
-                w = winningStrategies[c];
+            function checkStrategies(player, leftToComplete, cb, t){
+                var c, b,
+                    left,
+                    diff,
+                    playerBinary = player === 'ai' ? aiBinary : userBinary;
 
-                diff = w - (w & aiBinary);
+                if(space === -1) {
 
-                left = diff.toString(2).match(/1/g).length;
+                    console.log(t);
 
-                // if there is one left to complete row, immediately pick
-                if (left === 1) {
-                    for (b = 0; b < 9; b++) {
-                        if ((diff & (1 << b)) === (1 << b)) {
-                            if(freeSpaces.indexOf(8 - b) > -1) {
-                                console.log('a');
-                                space = 8 - b;
+                    for (c = 0; c < winningStrategies.length; c++) {
+                        strategy = winningStrategies[c];
+
+                        diff = strategy - (strategy & playerBinary);
+
+                        left = diff.toString(2).match(/1/g).length;
+
+                        // if there is one left to complete row, immediately pick
+                        if (left === leftToComplete) {
+                            for (b = 0; b < 9; b++) {
+                                if ((diff & (1 << b)) === (1 << b)) {
+                                    if (freeSpaces.indexOf(8 - b) > -1) {
+                                        console.log(cb);
+                                        cb(8 - b);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
 
+            // check for immediate win
+            checkStrategies('ai', 1, function(val){ space = val; },'aa');
+
+            // block player from win
+            checkStrategies('player', 1, function(val){ space = val; },'bb');
+
             // check single case that the following code doesn't solve, the diagonal corner issue
             if(space === -1){
-                if(playerBinary === 68 || playerBinary === 257){
+                if(userBinary === 68 || userBinary === 257){
                     for(c = 0; c < freeSpaces.length; c++){
                         if(spacePriority[freeSpaces[c]] === '0'){
                             toMove.push(freeSpaces[c]);
@@ -141,46 +155,12 @@ angular.module('tictactoe')
 
                     if(toMove.length){
                         console.log('special case');
-                        space = toMove[Math.floor(Math.random() * toMove.length)];
+                        space = pickRandom(toMove);
                     }
                 }
             }
 
-            // check to see if needs to block player
-            if(space === -1) {
-                for (c = 0; c < winningStrategies.length; c++) {
-                    w = winningStrategies[c];
-
-                    // use bitwise operation to compare difference between this strategy and players pieces
-                    diff = w - (w & playerBinary);
-
-                    // counts the unoccupied spaces in this strategy
-                    left = diff.toString(2).match(/1/g).length;
-
-                    // if there is one left to complete row, it needs to be immediately blocked
-                    if (left === 1) {
-                        for (b = 0; b < 9; b++) {
-                            if ((diff & (1 << b)) === (1 << b)) {
-                                console.log('b');
-                                if(freeSpaces.indexOf(8 - b) > -1) {
-                                    space = 8 - b;
-                                }
-                            }
-                        }
-                    }
-
-                    // if there are two left to complete row, add to list to possibly block
-                    if (space === -1 && left === 2) {
-                        for (b = 0; b < 9; b++) {
-                            if ((diff & (1 << b)) === (1 << b)){
-                                if(freeSpaces.indexOf(8 - b) > -1) {
-                                    blockMove.push(8 - b);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            checkStrategies('player', 2, function(val){ blockMove.push(val); },'cc');
 
             // choose a blocking strategy
             if(space === -1 && blockMove.length) {
@@ -189,7 +169,7 @@ angular.module('tictactoe')
                     if (spacePriority[blockMove[c]] === '2') {
                         console.log('c');
                         space = blockMove[c];
-                    // priority 1 is second most important
+                        // priority 1 is second most important
                     } else if (spacePriority[blockMove[c]] === '1') {
                         toMove.push(blockMove[c]);
                     }
@@ -198,29 +178,24 @@ angular.module('tictactoe')
                 // if all priority 1, choose a random one
                 if (space === -1 && toMove.length) {
                     console.log('d');
-                    space = toMove[Math.floor(Math.random() * toMove.length)];
+                    space = pickRandom(toMove);
                 }
             }
 
-            // choose a strategy when there are no other priorities and at least one piece
+            checkStrategies('ai', 2, function(val){ space = val; },'dd');
+
+            // check single case that the following code doesn't solve, the diagonal corner issue
             if(space === -1){
-                for(c = 0; c < winningStrategies.length; c++) {
-                    w = winningStrategies[c];
-
-                    diff = w - (w & aiBinary);
-
-                    left = diff.toString(2).match(/1/g).length;
-
-                    // if there is one left to complete row, immediately pick
-                    if (left === 2) {
-                        for (b = 0; b < 9; b++) {
-                            if ((diff & (1 << b)) === (1 << b)) {
-                                if(freeSpaces.indexOf(8 - b) > -1) {
-                                    console.log('e');
-                                    space = 8 - b;
-                                }
-                            }
+                if(userBinary === 68 || userBinary === 257){
+                    for(c = 0; c < freeSpaces.length; c++){
+                        if(spacePriority[freeSpaces[c]] === '0'){
+                            toMove.push(freeSpaces[c]);
                         }
+                    }
+
+                    if(toMove.length){
+                        console.log('special case');
+                        space = pickRandom(toMove);
                     }
                 }
             }
@@ -240,17 +215,19 @@ angular.module('tictactoe')
 
                 if (space === -1 && toMove.length) {
                     console.log('g');
-                    space = toMove[Math.floor(Math.random() * toMove.length)];
+                    space = pickRandom(toMove);
                 }
             }
 
             // mark the matrix
-            aiMatrix[space] = 1;
+            if(space !== -1){
+                aiMatrix[space] = 1;
+            }
 
             // set hasWon
             hasWon = checkForWin('ai');
 
-            playersTurn = true;
+            usersTurn = true;
 
             return {
                 space: space,
@@ -258,8 +235,12 @@ angular.module('tictactoe')
             }
         }
 
+        function pickRandom(arr){
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
         function pieces(){
-            if(playerFirst){
+            if(userFirst){
                 return { player: 'X', ai: 'O' }
             } else {
                 return { player: 'O', ai: 'X' }
