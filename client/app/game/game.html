@@ -16,11 +16,13 @@
                 <th>AI</th>
                 <th>Tie</th>
                 <th>User</th>
+                <th>Moves</th>
             </tr>
             <tr ng-repeat="item in statistics">
                 <td>{{ item.winner === 'ai' ? '1' : '' }}</td>
                 <td>{{ item.winner === 'tie' ? '1' : '' }}</td>
                 <td>{{ item.winner === 'user' ? '1' : '' }}</td>
+                <td><a href="#" ng-click="replay($index)">Replay</a></td>
             </tr>
         </table>
     </div>

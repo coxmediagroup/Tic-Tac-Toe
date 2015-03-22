@@ -10,7 +10,8 @@ angular.module('tictactoe')
             usersTurn = true,
             userMatrix = [0,0,0,0,0,0,0,0,0],
             aiMatrix = [0,0,0,0,0,0,0,0,0],
-            winner = null;
+            winner = null,
+            moveMatrix = [];
 
         /*
          * Grid is numbered this way:
@@ -222,6 +223,7 @@ angular.module('tictactoe')
             // mark the matrix
             if(space !== -1){
                 aiMatrix[space] = 1;
+                addMove('ai', space);
             }
 
             // set hasWon
@@ -233,6 +235,11 @@ angular.module('tictactoe')
                 space: space,
                 hasWon: hasWon
             }
+        }
+
+        function addMove(player, space){
+            var shortenedPlayer = player === 'ai' ? 'a' : 'u';
+            moveMatrix.push(shortenedPlayer + space);
         }
 
         function pickRandom(arr){
@@ -253,14 +260,22 @@ angular.module('tictactoe')
             userMatrix = [0,0,0,0,0,0,0,0,0];
             aiMatrix = [0,0,0,0,0,0,0,0,0];
             winner = null;
+            moveMatrix = [];
         }
 
+        function getMoves(){
+            return moveMatrix;
+        }
+
+        // return only the functions that are used by the controller
         module = {
             checkMove: checkMove,
             canMove: canMove,
             aiTurn: aiTurn,
             pieces: pieces,
-            newGame: newGame
+            newGame: newGame,
+            addMove: addMove,
+            getMoves: getMoves
         };
 
         return module;
