@@ -247,11 +247,20 @@ angular.module('tictactoe')
             }
         }
 
+        function newGame(){
+            userFirst = true;
+            usersTurn = true;
+            userMatrix = [0,0,0,0,0,0,0,0,0];
+            aiMatrix = [0,0,0,0,0,0,0,0,0];
+            winner = null;
+        }
+
         module = {
             checkMove: checkMove,
             canMove: canMove,
             aiTurn: aiTurn,
-            pieces: pieces
+            pieces: pieces,
+            newGame: newGame
         };
 
         return module;

@@ -1,5 +1,27 @@
-<h3>Play game</h3>
-<div id="grid">
-    <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
+<div class="col-md-6">
+    <h4>Play Game</h4>
+    <div id="grid">
+        <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
+    </div>
+    <div ng-if="winner">
+        <h4>{{ winner }}</h4>
+        <a href="#" ng-click="newGame()">New Game</a>
+    </div>
 </div>
-<h4>{{ winner }}</h4>
+<div class="col-md-6">
+    <h4>Winner Stats</h4>
+    <div ng-if="statistics">
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th>AI</th>
+                <th>Tie</th>
+                <th>User</th>
+            </tr>
+            <tr ng-repeat="item in statistics">
+                <td>{{ item.winner === 'ai' ? '1' : '' }}</td>
+                <td>{{ item.winner === 'tie' ? '1' : '' }}</td>
+                <td>{{ item.winner === 'user' ? '1' : '' }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

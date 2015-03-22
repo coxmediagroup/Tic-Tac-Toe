@@ -14,7 +14,7 @@ angular.module('tictactoe')
         // expect obj to be of form:
         // { winner: player|ai|tie }
         function addStats(obj){
-            stats.push[obj];
+            stats.push(obj);
         }
 
         // return stats for controller to handle
