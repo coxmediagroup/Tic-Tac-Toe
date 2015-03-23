@@ -1,21 +1,30 @@
-<div class="col-md-6">
-    <h4>Play Game</h4>
-    <div id="grid">
-        <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
+<div class="col-sm-6">
+    <div class="row">
+        <h4>Tic-Tac-Toe
+            <span class="small" ng-if="userPiece">You are playing <strong>{{ userPiece }}</strong></span>
+        </h4>
     </div>
-    <div ng-if="winner">
-        <h3>{{ winner }}</h3>
-        <a href="#" ng-click="resetGame()">New Game</a>
+    <div class="row" id="grid-container">
+        <div id="grid">
+            <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
+        </div>
+
+        <div ng-if="winner">
+            <h3 ng-if="winner === 'ai'" class="pull-left"><span class="label label-warning">AI won!</span></h3>
+            <h3 ng-if="winner === 'tie'" class="pull-left"><span class="label label-info">Tie game!</span></h3>
+            <h3 ng-if="winner === 'user'" class="pull-left"><span class="label label-success">You won!</span></h3>
+            <button type="button" class="btn btn-default pull-right" ng-click="resetGame()">Play again</button>
+        </div>
     </div>
 </div>
-<div class="col-md-6">
-    <h4>Winner Stats</h4>
+<div class="col-sm-6">
+    <h4>Games Played <span class="small">Winner shown</span></h4>
     <div ng-if="statistics">
         <table class="table table-striped table-condensed">
             <tr>
                 <th>AI</th>
                 <th>Tie</th>
-                <th>User</th>
+                <th>Player</th>
                 <th>Moves</th>
             </tr>
             <tr ng-repeat="item in statistics">

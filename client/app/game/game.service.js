@@ -2,11 +2,11 @@
 
 /*
  * Service container for game logic to keep from complicating controller
+ * The factory service is used similar to a revealing module pattern
  */
 angular.module('tictactoe')
     .factory('Game', ['Stats', function(Stats){
-        var module,
-            userFirst = true,
+        var userFirst = true,
             usersTurn = true,
             userMatrix = [0,0,0,0,0,0,0,0,0],
             aiMatrix = [0,0,0,0,0,0,0,0,0],
@@ -32,14 +32,18 @@ angular.module('tictactoe')
         var winningStrategies = [7, 56, 73, 84, 146, 273, 292, 448];
         var spacePriority = '101020101';
 
+        /*
+         * Returns true if player won
+         */
         function checkForWin(player){
             var c,
-                matrix = player === 'player' ? userMatrix : aiMatrix;
+                matrix = player === 'user' ? userMatrix : aiMatrix;
 
             // convert positions to their binary equivalent
             var binaryMatrix = parseInt(matrix.join(''), 2);
 
-            // go through the winning strategies to find a possible match
+            // go through the winning strategies to find a possible match, which uses the bitwise AND operator:
+            // if the user pieces binary config matches exactly the winning strategy binary config, then true
             for(c = 0; c < winningStrategies.length; c++){
                 if((winningStrategies[c] & binaryMatrix) === winningStrategies[c]){
                     winner = player;
@@ -50,10 +54,12 @@ angular.module('tictactoe')
             return false;
         }
 
+        // checks the user move for win and sets variables
+        // if there is a win, true is returned
         function checkMove(space){
             userMatrix[space] = 1;
             usersTurn = false;
-            return checkForWin('player');
+            return checkForWin('user');
         }
 
         // returns winner string or null
@@ -76,8 +82,20 @@ angular.module('tictactoe')
             return isPlayersTurn() && spaceFree(space) && !gameOver();
         }
 
-        // function to start AI logic
-        // function returns the space taken and if the AI won
+        /*
+         * AI logic
+         *
+         * AI flow to choose a space:
+         *
+         * 1. compile list of open spaces
+         * 2. check for immediate win and choose space
+         * 3. check for immediate block of opponent to prevent win
+         * 4. check for the opposite corner win
+         * 5. make a list to possibly blocks
+         * 6. if possible blocking exists, choose one based on priority and random choice
+         * 7. choose a space to continue a strategy
+         * 8. choose a space based on randomization, with more change given to higher priority spaces
+         */
         function aiTurn(){
             var space = -1,
                 hasWon,
@@ -91,6 +109,9 @@ angular.module('tictactoe')
                 finished,
                 times;
 
+            /*
+             * Helper function to compare players pieces to the winning strategies
+             */
             function checkStrategies(player, leftToComplete, cb){
                 var c, b,
                     left,
@@ -119,38 +140,30 @@ angular.module('tictactoe')
                 }
             }
 
+            /*
+             * Helper function to pick a random value from the array provided
+             */
             function pickRandom(arr){
                 return arr[Math.floor(Math.random() * arr.length)];
             }
 
-            // check free spaces
+            // 1. compile list of free spaces
             for(c = 0; c < userMatrix.length; c++){
                 if(!userMatrix[c] && !aiMatrix[c]){
                     freeSpaces.push(c);
                 }
             }
-
-            // if no free spaces immediately return 'space: -1' to the controller, which triggers 'tie' message
+            // set finished to true if nothing left to do
             finished = freeSpaces.length === 1;
 
-            /*
-             * AI flow to choose a space:
-             *
-             * 1. check for immediate win and choose space
-             * 2. check for immediate block of opponent to prevent win
-             * 3. make a list to possibly block
-             * 4. if possible blocking exists, choose one based on priority and random choice
-             * 5. choose a space to continue a strategy
-             * 6. choose a space based on priority
-             */
-
-            // check for immediate win
+            // 2. check for immediate win
             checkStrategies('ai', 1, function(val){ space = val; });
 
-            // block player from win
+            // 3. block player from immediate win
             checkStrategies('player', 1, function(val){ space = val; });
 
-            // check single case that the following code doesn't solve, the diagonal corner issue
+            // 4. check single case that the following code doesn't solve, the opposite diagonal corner win
+            //    with this configuration, the opponent may win if the corner is selected, so select a side instead
             if(space === -1){
                 if(userBinary === 68 || userBinary === 257){
                     for(c = 0; c < freeSpaces.length; c++){
@@ -165,15 +178,16 @@ angular.module('tictactoe')
                 }
             }
 
+            // 5. find all possible ways the opponent may win
             checkStrategies('player', 2, function(val){ blockMove.push(val); });
 
-            // choose a blocking strategy
+            // 6. choose a blocking strategy
             if(space === -1 && blockMove.length) {
                 for (c = 0; c < blockMove.length; c++) {
-                    // priority 2 is immediately picked
+                    // priority 2 (center) is immediately picked
                     if (spacePriority[blockMove[c]] === '2') {
                         space = blockMove[c];
-                        // priority 1 is second most important
+                    // priority 1 (corners) is second most important
                     } else if (spacePriority[blockMove[c]] === '1') {
                         toMove.push(blockMove[c]);
                     }
@@ -185,11 +199,13 @@ angular.module('tictactoe')
                 }
             }
 
+            // 7. choose a space to continue building on a strategy
             checkStrategies('ai', 2, function(val){ space = val; });
 
-            // pick one based on randomization with more chance given to the higher-priority spaces
+            // 8. pick one based on randomization with more chance given to the higher priority spaces
             if(space === -1) {
                 for(c = 0; c < freeSpaces.length; c++){
+                    // priorities are 0,1,2, which translates to 1,2,4
                     times = 1 << +spacePriority[freeSpaces[c]];
                     for(cc = 0; cc < times; cc++){
                         toMove.push(freeSpaces[c]);
@@ -201,17 +217,17 @@ angular.module('tictactoe')
                 }
             }
 
-            // mark the matrix
+            // mark the matrix and add move to game
             if(space !== -1){
                 aiMatrix[space] = 1;
                 addMove('a', space);
             }
 
-            // set hasWon
             hasWon = checkForWin('ai');
 
             usersTurn = true;
 
+            // return object to the controller
             return {
                 space: space,
                 hasWon: hasWon,
@@ -219,18 +235,27 @@ angular.module('tictactoe')
             }
         }
 
+        /*
+         * Adds the move to the game
+         */
         function addMove(player, space){
             moveMatrix.push(player + space);
         }
 
+        /*
+         * Returns the pieces based on who is first
+         */
         function pieces(){
             if(userFirst){
-                return { player: 'X', ai: 'O' }
+                return { user: 'X', ai: 'O' }
             } else {
-                return { player: 'O', ai: 'X' }
+                return { user: 'O', ai: 'X' }
             }
         }
 
+        /*
+         * Reset the game
+         */
         function newGame(){
             userFirst = !userFirst;
             usersTurn = userFirst;
@@ -240,16 +265,24 @@ angular.module('tictactoe')
             moveMatrix = [];
         }
 
+        /*
+         * Getter for the userFirst variable
+         */
         function getUserFirst(){
             return userFirst;
         }
 
+        /*
+         * Getter for the moves
+         */
         function getMoves(){
             return moveMatrix;
         }
 
-        // return only the functions that are used by the controller
-        module = {
+        /*
+         * Object returned for interaction with the conroller
+         */
+        return {
             checkMove: checkMove,
             canMove: canMove,
             aiTurn: aiTurn,
@@ -259,6 +292,4 @@ angular.module('tictactoe')
             getMoves: getMoves,
             getUserFirst: getUserFirst
         };
-
-        return module;
     }]);

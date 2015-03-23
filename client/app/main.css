@@ -15,7 +15,18 @@
     min-height: 40px;
     border-radius: 0;
 }
-
+.margin-left {
+    margin-left: 10px;
+}
+h4 {
+    margin-bottom: 20px;
+}
+h4 span.small {
+    padding-left: 20px;
+}
+#grid-container {
+    width: 310px;
+}
 #grid {
     height: 302px;
     width: 302px;
@@ -38,4 +49,8 @@
 }
 #space6, #space7 {
     border-right: solid 1px #ddd;
+}
+#grid-container button {
+    margin-top: 19px;
+
 }

@@ -8,10 +8,6 @@ angular.module('tictactoe')
                 'link': 'play'
             },
             {
-                'title': 'Statistics',
-                'link': 'statistics'
-            },
-            {
                 'title': 'Instructions',
                 'link': 'instructions'
             }

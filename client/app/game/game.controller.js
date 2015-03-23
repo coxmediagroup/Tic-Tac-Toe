@@ -1,30 +1,40 @@
 'use strict';
 
+/*
+ * Game controller
+ *
+ * Contains interaction between the game logic (Game service) and game view
+ */
 angular.module('tictactoe')
     .controller('GameCtrl', ['$scope', 'Stats', 'Game', '$interval', function($scope, Stats, Game, $interval){
+
+        // setup first game
         var pieces = Game.pieces();
 
+        $scope.userPiece = pieces.user;
         $scope.statistics = Stats.getStats() || [];
         $scope.spaceNumbers = [0,1,2,3,4,5,6,7,8];
 
         /*
+         * Triggered when it's the AI's turn to move
          *
+         * The aiTurn variable calls the service to take the turn.
+         * This variable returns an object which tells the controller what to display.
          */
         function aiMoves(){
+            // returns space to mark, winner if at all, and if finished
             var aiTurn = Game.aiTurn();
 
             if(aiTurn.space > -1) {
                 $scope['space' + aiTurn.space] = pieces.ai;
-
-                if (aiTurn.hasWon) {
-                    $scope.winner = 'AI wins!';
-                    Stats.addStats({ winner: 'ai', moves: Game.getMoves() });
-                    updateStats();
-                }
             }
 
-            if(aiTurn.finished || aiTurn.space === -1){
-                $scope.winner = 'Tie Game!';
+            if(aiTurn.hasWon) {
+                $scope.winner = 'ai';
+                Stats.addStats({ winner: 'ai', moves: Game.getMoves() });
+                updateStats();
+            } else if(aiTurn.finished || aiTurn.space === -1){
+                $scope.winner = 'tie';
                 Stats.addStats({ winner: 'tie', moves: Game.getMoves() });
                 updateStats();
             }
@@ -42,21 +52,22 @@ angular.module('tictactoe')
          */
         function clearGrid(){
             var c;
-
             for(c = 0; c < $scope.spaceNumbers.length; c++){
                 $scope['space' + c] = '';
             }
-
             $scope.winner = '';
         }
 
         /*
          * Reset the game
+         *
+         * Clears grid and resets variables in service, then resets the pieces so that X is first determines if AI is first
          */
         $scope.resetGame = function(){
             clearGrid();
-
             Game.newGame();
+            pieces = Game.pieces();
+            $scope.userPiece = pieces.user;
 
             if(!Game.getUserFirst()){
                 aiMoves();
@@ -70,10 +81,10 @@ angular.module('tictactoe')
          */
         $scope.spaceClicked = function(space){
             if(Game.canMove(space)) {
-                $scope['space' + space] = pieces.player;
+                $scope['space' + space] = pieces.user;
                 Game.addMove('u', space);
                 if(Game.checkMove(space)){
-                    $scope.winner = 'User wins!';
+                    $scope.winner = 'user';
                     Stats.addStats({ winner: 'user', moves: Game.getMoves() });
                     updateStats();
                 } else {
@@ -85,27 +96,31 @@ angular.module('tictactoe')
         /*
          * Replays previous games
          * 
-         * Make a 
-         *
          * @param {Number} which Which game was selected to replay
          */
         $scope.replay = function(which){
-            console.log(which);
             var moves = angular.copy($scope.statistics[which].moves),
-                counter,
                 move,
-                x = true;
+                x = true; // first move is always x
 
             clearGrid();
 
+            $scope.userPiece = '';
+
+            // cancel any in-progress playbacks
+            if($scope.counter){
+                $interval.cancel($scope.counter);
+            }
+
             // emulate a real game with a 1s timeout and place pieces on the grid
-            counter = $interval(function(){
+            $scope.counter = $interval(function(){
                 if(moves.length){
                     move = moves.shift();
                     $scope['space' + move[1]] = x ? 'X' : 'O';
                     x = !x;
                 } else {
-                    $interval.cancel(counter);
+                    $interval.cancel($scope.counter);
+                    $scope.winner = $scope.statistics[which].winner;
                 }
             }, 1000);
         }
