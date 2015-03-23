@@ -1,0 +1,36 @@
+<!doctype html>
+
+<head>
+    <title>Tic-Tac-Toe Application</title>
+
+    <meta name="viewport" content="width=device-width initial-scale=1">
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="app/main.css" />
+
+    <base href="/"/>
+</head>
+<body ng-app="tictactoe">
+
+    <div class="container">
+        <!--header-->
+        <div ng-include="'shared/header/header.html'"></div>
+
+        <!--pages-->
+        <div class="margin-left" ui-view></div>
+    </div>
+
+    <!--next load scripts-->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/game/game.js"></script>
+    <script src="app/game/game.service.js"></script>
+    <script src="app/game/game.controller.js"></script>
+    <script src="app/instructions/instructions.js"></script>
+    <script src="app/instructions/instructions.controller.js"></script>
+    <script src="shared/header/header.js"></script>
+    <script src="shared/stats/stats.service.js"></script>
+</body>
+
+</html>

@@ -1,28 +1,28 @@
-Story
-======
+Tic-Tac-Toe
+===========
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+This is a simple game of Tic-Tac-Toe based on AngularJS.
 
-Acceptance criteria
-=======================
+Installing
+==========
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+1) You must download and install `node`_ on your computer.
 
+2) Download and install `git`_ if it is not installed.
 
-Technical notes
-------------------
+3) Make sure bower is installed globally: ``npm install -g bower``
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+4) Clone the repo: ``git clone https://github.com/aburchette/Tic-Tac-Toe.git``
 
+5) Change directory: ``cd Tic-Tac-Toe``
 
-Submissions
----------------
+6) Run ``npm install`` to install npm modules
 
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
+7) Run ``bower install``
 
+8) Start up the server: ``node server``
+
+9) Navigate to ``http://localhost:8000``
+
+.. _node: https://nodejs.org/download/
+.. _git: http://git-scm.com/downloads
