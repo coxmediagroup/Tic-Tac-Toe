@@ -1,3 +1,56 @@
 /*
  * Main CSS file for the Tic-Tac-Toe app
  */
+.container {
+    margin-top: 20px;
+}
+.navbar {
+    min-height: 40px;
+}
+.nav-tabs {
+    border-bottom: none;
+}
+.nav-tabs li a {
+    border-bottom: none;
+    min-height: 40px;
+    border-radius: 0;
+}
+.margin-left {
+    margin-left: 10px;
+}
+h4 {
+    margin-bottom: 20px;
+}
+h4 span.small {
+    padding-left: 20px;
+}
+#grid-container {
+    width: 310px;
+}
+#grid {
+    height: 302px;
+    width: 302px;
+}
+#grid > div {
+    cursor: pointer;
+    float: left;
+    font-size: 100px;
+    height: 100px;
+    line-height: 1em;
+    text-align: center;
+    width: 100px;
+}
+#space0, #space1, #space3, #space4 {
+    border-right: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+}
+#space2, #space5 {
+    border-bottom: solid 1px #ddd;
+}
+#space6, #space7 {
+    border-right: solid 1px #ddd;
+}
+#grid-container button {
+    margin-top: 19px;
+
+}

@@ -8,12 +8,8 @@ angular.module('tictactoe')
                 'link': 'play'
             },
             {
-                'title': 'Replay',
-                'link': 'replay'
-            },
-            {
-                'title': 'Statistics',
-                'link': 'statistics'
+                'title': 'Instructions',
+                'link': 'instructions'
             }
         ];
     }]);
