@@ -14,15 +14,13 @@ Installing
 
 4) Clone the repo: ``git clone https://github.com/aburchette/Tic-Tac-Toe.git``
 
-5) Run ``git checkout aburchette``
+5) Run ``npm install`` to install npm modules
 
-6) Run ``npm install`` to install npm modules
+6) Run ``bower install``
 
-7) Run ``bower install``
+7) Start up the server: ``node server``
 
-8) Start up the server: ``node server``
-
-9) Navigate to ``http://localhost:8000``
+8) Navigate to ``http://localhost:8000``
 
 .. _node: https://nodejs.org/download/
 .. _git: http://git-scm.com/downloads

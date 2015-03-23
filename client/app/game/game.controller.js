@@ -123,7 +123,9 @@ angular.module('tictactoe')
                     $scope.winner = $scope.statistics[which].winner;
                 }
             }, 1000);
-        }
+        };
+
+        $scope.resetGame();
     }]);
 
 

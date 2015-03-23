@@ -6,8 +6,8 @@
  */
 angular.module('tictactoe')
     .factory('Game', ['Stats', function(Stats){
-        var userFirst = true,
-            usersTurn = true,
+        var userFirst = false,
+            usersTurn,
             userMatrix = [0,0,0,0,0,0,0,0,0],
             aiMatrix = [0,0,0,0,0,0,0,0,0],
             winner = null,
