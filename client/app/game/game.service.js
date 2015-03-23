@@ -85,38 +85,19 @@ angular.module('tictactoe')
                 blockMove = [],
                 userBinary = parseInt(userMatrix.join(''), 2),
                 aiBinary = parseInt(aiMatrix.join(''), 2),
-                c,
+                c, cc,
                 strategy,
-                toMove = [];
+                toMove = [],
+                finished,
+                times;
 
-            // check free spaces
-            for(c = 0; c < userMatrix.length; c++){
-                if(!userMatrix[c] && !aiMatrix[c]){
-                    freeSpaces.push(c);
-                }
-            }
-
-            /*
-             * AI flow to choose a space:
-             *
-             * 1. check for immediate win and choose space
-             * 2. check for immediate block of opponent to prevent win
-             * 3. make a list to possibly block
-             * 4. if possible blocking exists, choose one based on priority and random choice
-             * 5. choose a space to continue a strategy
-             * 6. choose a space based on priority
-             */
-
-            function checkStrategies(player, leftToComplete, cb, t){
+            function checkStrategies(player, leftToComplete, cb){
                 var c, b,
                     left,
                     diff,
                     playerBinary = player === 'ai' ? aiBinary : userBinary;
 
                 if(space === -1) {
-
-                    console.log(t);
-
                     for (c = 0; c < winningStrategies.length; c++) {
                         strategy = winningStrategies[c];
 
@@ -129,7 +110,6 @@ angular.module('tictactoe')
                             for (b = 0; b < 9; b++) {
                                 if ((diff & (1 << b)) === (1 << b)) {
                                     if (freeSpaces.indexOf(8 - b) > -1) {
-                                        console.log(cb);
                                         cb(8 - b);
                                     }
                                 }
@@ -139,11 +119,36 @@ angular.module('tictactoe')
                 }
             }
 
+            function pickRandom(arr){
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            // check free spaces
+            for(c = 0; c < userMatrix.length; c++){
+                if(!userMatrix[c] && !aiMatrix[c]){
+                    freeSpaces.push(c);
+                }
+            }
+
+            // if no free spaces immediately return 'space: -1' to the controller, which triggers 'tie' message
+            finished = freeSpaces.length === 1;
+
+            /*
+             * AI flow to choose a space:
+             *
+             * 1. check for immediate win and choose space
+             * 2. check for immediate block of opponent to prevent win
+             * 3. make a list to possibly block
+             * 4. if possible blocking exists, choose one based on priority and random choice
+             * 5. choose a space to continue a strategy
+             * 6. choose a space based on priority
+             */
+
             // check for immediate win
-            checkStrategies('ai', 1, function(val){ space = val; },'aa');
+            checkStrategies('ai', 1, function(val){ space = val; });
 
             // block player from win
-            checkStrategies('player', 1, function(val){ space = val; },'bb');
+            checkStrategies('player', 1, function(val){ space = val; });
 
             // check single case that the following code doesn't solve, the diagonal corner issue
             if(space === -1){
@@ -155,20 +160,18 @@ angular.module('tictactoe')
                     }
 
                     if(toMove.length){
-                        console.log('special case');
                         space = pickRandom(toMove);
                     }
                 }
             }
 
-            checkStrategies('player', 2, function(val){ blockMove.push(val); },'cc');
+            checkStrategies('player', 2, function(val){ blockMove.push(val); });
 
             // choose a blocking strategy
             if(space === -1 && blockMove.length) {
                 for (c = 0; c < blockMove.length; c++) {
                     // priority 2 is immediately picked
                     if (spacePriority[blockMove[c]] === '2') {
-                        console.log('c');
                         space = blockMove[c];
                         // priority 1 is second most important
                     } else if (spacePriority[blockMove[c]] === '1') {
@@ -178,44 +181,22 @@ angular.module('tictactoe')
 
                 // if all priority 1, choose a random one
                 if (space === -1 && toMove.length) {
-                    console.log('d');
                     space = pickRandom(toMove);
                 }
             }
 
-            checkStrategies('ai', 2, function(val){ space = val; },'dd');
+            checkStrategies('ai', 2, function(val){ space = val; });
 
-            // check single case that the following code doesn't solve, the diagonal corner issue
-            if(space === -1){
-                if(userBinary === 68 || userBinary === 257){
-                    for(c = 0; c < freeSpaces.length; c++){
-                        if(spacePriority[freeSpaces[c]] === '0'){
-                            toMove.push(freeSpaces[c]);
-                        }
-                    }
-
-                    if(toMove.length){
-                        console.log('special case');
-                        space = pickRandom(toMove);
-                    }
-                }
-            }
-
-            // just pick based on priority
+            // pick one based on randomization with more chance given to the higher-priority spaces
             if(space === -1) {
-                for (c = 0; c < freeSpaces.length; c++) {
-                    // priority 2 is immediately picked
-                    if (spacePriority[freeSpaces[c]] === '2') {
-                        console.log('f');
-                        space = freeSpaces[c];
-                        // priority 1 is second most important
-                    } else if (spacePriority[freeSpaces[c]] === '1') {
+                for(c = 0; c < freeSpaces.length; c++){
+                    times = 1 << +spacePriority[freeSpaces[c]];
+                    for(cc = 0; cc < times; cc++){
                         toMove.push(freeSpaces[c]);
                     }
                 }
 
-                if (space === -1 && toMove.length) {
-                    console.log('g');
+                if(toMove.length){
                     space = pickRandom(toMove);
                 }
             }
@@ -223,7 +204,7 @@ angular.module('tictactoe')
             // mark the matrix
             if(space !== -1){
                 aiMatrix[space] = 1;
-                addMove('ai', space);
+                addMove('a', space);
             }
 
             // set hasWon
@@ -233,17 +214,13 @@ angular.module('tictactoe')
 
             return {
                 space: space,
-                hasWon: hasWon
+                hasWon: hasWon,
+                finished: finished
             }
         }
 
         function addMove(player, space){
-            var shortenedPlayer = player === 'ai' ? 'a' : 'u';
-            moveMatrix.push(shortenedPlayer + space);
-        }
-
-        function pickRandom(arr){
-            return arr[Math.floor(Math.random() * arr.length)];
+            moveMatrix.push(player + space);
         }
 
         function pieces(){
@@ -255,12 +232,16 @@ angular.module('tictactoe')
         }
 
         function newGame(){
-            userFirst = true;
-            usersTurn = true;
+            userFirst = !userFirst;
+            usersTurn = userFirst;
             userMatrix = [0,0,0,0,0,0,0,0,0];
             aiMatrix = [0,0,0,0,0,0,0,0,0];
             winner = null;
             moveMatrix = [];
+        }
+
+        function getUserFirst(){
+            return userFirst;
         }
 
         function getMoves(){
@@ -275,7 +256,8 @@ angular.module('tictactoe')
             pieces: pieces,
             newGame: newGame,
             addMove: addMove,
-            getMoves: getMoves
+            getMoves: getMoves,
+            getUserFirst: getUserFirst
         };
 
         return module;

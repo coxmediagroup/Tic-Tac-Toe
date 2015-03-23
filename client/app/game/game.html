@@ -4,8 +4,8 @@
         <div ng-repeat="number in spaceNumbers" id="space{{number}}" ng-click="spaceClicked(number)" ng-bind="space{{number}}"></div>
     </div>
     <div ng-if="winner">
-        <h4>{{ winner }}</h4>
-        <a href="#" ng-click="newGame()">New Game</a>
+        <h3>{{ winner }}</h3>
+        <a href="#" ng-click="resetGame()">New Game</a>
     </div>
 </div>
 <div class="col-md-6">

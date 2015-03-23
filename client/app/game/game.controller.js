@@ -7,6 +7,9 @@ angular.module('tictactoe')
         $scope.statistics = Stats.getStats() || [];
         $scope.spaceNumbers = [0,1,2,3,4,5,6,7,8];
 
+        /*
+         *
+         */
         function aiMoves(){
             var aiTurn = Game.aiTurn();
 
@@ -18,35 +21,59 @@ angular.module('tictactoe')
                     Stats.addStats({ winner: 'ai', moves: Game.getMoves() });
                     updateStats();
                 }
-            } else {
+            }
+
+            if(aiTurn.finished || aiTurn.space === -1){
                 $scope.winner = 'Tie Game!';
                 Stats.addStats({ winner: 'tie', moves: Game.getMoves() });
                 updateStats();
             }
         }
 
+        /*
+         * Update statistics in view
+         */
         function updateStats(){
             $scope.statistics = Stats.getStats() || [];
         }
 
-        $scope.newGame = function(){
+        /*
+         * Clear Grid
+         */
+        function clearGrid(){
             var c;
-
-            Game.newGame();
 
             for(c = 0; c < $scope.spaceNumbers.length; c++){
                 $scope['space' + c] = '';
             }
 
             $scope.winner = '';
+        }
+
+        /*
+         * Reset the game
+         */
+        $scope.resetGame = function(){
+            clearGrid();
+
+            Game.newGame();
+
+            if(!Game.getUserFirst()){
+                aiMoves();
+            }
         };
 
-        $scope.spaceClicked = function(which){
-            if(Game.canMove(which)) {
-                $scope['space' + which] = pieces.player;
-                Game.addMove('user', which);
-                if(Game.checkMove(which)){
-                    $scope.winner = 'Human wins!';
+        /*
+         * Handles clicks on Tic-Tac-Toe grid
+         *
+         * @param {Number} space Which space is clicked
+         */
+        $scope.spaceClicked = function(space){
+            if(Game.canMove(space)) {
+                $scope['space' + space] = pieces.player;
+                Game.addMove('u', space);
+                if(Game.checkMove(space)){
+                    $scope.winner = 'User wins!';
                     Stats.addStats({ winner: 'user', moves: Game.getMoves() });
                     updateStats();
                 } else {
@@ -55,23 +82,28 @@ angular.module('tictactoe')
             }
         };
 
+        /*
+         * Replays previous games
+         * 
+         * Make a 
+         *
+         * @param {Number} which Which game was selected to replay
+         */
         $scope.replay = function(which){
+            console.log(which);
             var moves = angular.copy($scope.statistics[which].moves),
                 counter,
-                move;
+                move,
+                x = true;
 
-            // change
-            $scope.newGame();
+            clearGrid();
 
+            // emulate a real game with a 1s timeout and place pieces on the grid
             counter = $interval(function(){
                 if(moves.length){
                     move = moves.shift();
-                    if(move[0] === 'a'){
-                        // X or O
-                        $scope['space' + move[1]] = 'O';
-                    } else {
-                        $scope['space' + move[1]] = 'X';
-                    }
+                    $scope['space' + move[1]] = x ? 'X' : 'O';
+                    x = !x;
                 } else {
                     $interval.cancel(counter);
                 }
