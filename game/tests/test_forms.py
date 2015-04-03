@@ -7,7 +7,7 @@ from game.forms import NewGameForm
 class NewGameFormTest(TestCase):
     def test_player_valid(self):
         form = NewGameForm({
-            'player1': 'game.players.RandomPlayer',
+            'player1': 'game.players.AIPlayer',
             'player2': 'human'
         })
         self.assertTrue(form.is_valid())
@@ -28,11 +28,11 @@ class NewGameFormTest(TestCase):
         random.seed(1)
 
         form = NewGameForm({
-            'player1': 'game.players.RandomPlayer',
+            'player1': 'game.players.AIPlayer',
             'player2': 'human'
         })
         self.assertTrue(form.is_valid())
         game = form.create()
         self.assertEqual(game.board, "         ")
         self.assertEqual(game.player_x, "human")
-        self.assertEqual(game.player_o, "game.players.RandomPlayer")
+        self.assertEqual(game.player_o, "game.players.AIPlayer")

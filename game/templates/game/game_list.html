@@ -8,7 +8,7 @@
                 <form method="POST">
                     {% csrf_token %}
                     <input name="player1" type="hidden" value="human"/>
-                    <input name="player2" type="hidden" value="game.players.RandomPlayer"/>
+                    <input name="player2" type="hidden" value="game.players.AIPlayer"/>
                     <button type="submit">Play against a dumb computer</button>
                 </form>
             </div>

@@ -40,7 +40,7 @@ class GameModelTest(TestCase):
 
     def test_play_auto_human_computer(self):
         "At the start of the game, human starts."
-        game = Game(player_x='human', player_o='game.players.RandomPlayer')
+        game = Game(player_x='human', player_o='game.players.AIPlayer')
         game.play_auto()
         self.assertEqual(game.board, "         ")
         self.assertEqual(game.next_player, "X")
@@ -48,7 +48,7 @@ class GameModelTest(TestCase):
     def test_play_auto_computer_human(self):
         "At the start of the game, computer starts."
         random.seed(0)
-        game = Game(player_o='human', player_x='game.players.RandomPlayer')
+        game = Game(player_o='human', player_x='game.players.AIPlayer')
         game.play_auto()
         self.assertEqual(game.board, "       X ")
         self.assertEqual(game.next_player, "O")
@@ -56,7 +56,7 @@ class GameModelTest(TestCase):
     def test_play_auto_computer_to_computer(self):
         "Two computers playing against themselves."
         random.seed(0)
-        game = Game(player_o='game.players.RandomPlayer', player_x='game.players.RandomPlayer')
+        game = Game(player_o='game.players.AIPlayer', player_x='game.players.AIPlayer')
         game.play_auto()
         self.assertEqual(game.board, "OOXOX OXX")
         self.assertEqual(game.is_game_over, 'O')

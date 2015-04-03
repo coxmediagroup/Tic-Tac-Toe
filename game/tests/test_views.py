@@ -24,7 +24,7 @@ class ViewsTest(TestCase):
         random.seed(0)
 
         response = self.client.post(reverse('game:index'), {
-            'player1': 'game.players.RandomPlayer',
+            'player1': 'game.players.AIPlayer',
             'player2': 'human'
         })
         self.assertEqual(Game.objects.count(), 1)
@@ -33,7 +33,7 @@ class ViewsTest(TestCase):
 
         # Players are assigned. The player should have played.
         self.assertEqual(game.board, "      X  ")
-        self.assertEqual(game.player_x, 'game.players.RandomPlayer')
+        self.assertEqual(game.player_x, 'game.players.AIPlayer')
         self.assertEqual(game.player_o, 'human')
 
     def test_detail(self):
@@ -47,7 +47,7 @@ class ViewsTest(TestCase):
         "Posting to the detail view plays a square."
         random.seed(0)
 
-        game = Game.objects.create(player_x='human', player_o='game.players.RandomPlayer')
+        game = Game.objects.create(player_x='human', player_o='game.players.AIPlayer')
         response = self.client.post(game.get_absolute_url(), {
             'index': 0
         })
