@@ -1,0 +1,64 @@
+body {
+  margin: 20px;
+}
+
+.placeholder {
+    width:300px;
+    height:100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.board {
+  width: 300px;
+}
+
+.board .ticrow {
+  border-bottom: 5px solid black;
+}
+
+.board .ticrow:after {
+  /* Clearfix */
+  clear: both;
+  content: " ";
+  display: table;
+}
+
+.board .ticrow:last-child {
+  border: none;
+}
+
+.square {
+  text-align: center;
+  vertical-align: middle;
+  color: #0000ff;
+  float: left;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 90px;
+}
+
+.square {
+  border-right: 5px solid black;
+}
+
+.square:last-child {
+  border: none;
+}
+
+.square button[type=submit] {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  background: none;
+  border: none;
+  opacity: 0;
+  color: rgba(0, 0, 255, 0.5);
+}
+
+.square button[type=submit]:hover {
+  opacity: 1;
+}

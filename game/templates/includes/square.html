@@ -1,0 +1,12 @@
+{% if play == ' ' %}
+    {# This square is open to be played #}
+    <form method="POST" class="square">
+        {% csrf_token %}
+        <input name="index" value="{{ index }}" type="hidden">
+        <button type="submit">{{ next_player }}</button>
+    </form>
+{% else %}
+    <div class="square">
+        {{ play }}
+    </div>
+{% endif %}

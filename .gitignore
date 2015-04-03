@@ -1,0 +1,6 @@
+*.swp
+*.pyc
+.idea/
+.tox/
+django_tictactoe.egg-info/
+db.sqlite3

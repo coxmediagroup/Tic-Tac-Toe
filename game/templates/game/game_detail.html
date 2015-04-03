@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block body %}
+    {% with next_player=game.next_player game_over=game.is_game_over %}
+        {% if game_over == 'X' %}
+            <div class="container">
+                <div class="col-md-12 brd">
+                    <div class="center-block placeholder">
+                        <h1>X wins!</h1>
+                        <a href="{% url 'game:index' %}">Start a new game</a>
+                    </div>
+                </div>
+            </div>
+        {% elif game_over == 'O' %}
+            <div class="container">
+                <div class="col-md-12 brd">
+                    <div class="center-block placeholder">
+                        <h1>O wins!</h1>
+                        <a href="{% url 'game:index' %}">Start a new game</a>
+                    </div>
+                </div>
+            </div>
+        {% elif game_over == ' ' %}
+            <div class="container">
+                <div class="col-md-12 brd">
+                    <div class="center-block placeholder">
+                        <h1>Stalemate</h1>
+                        <a href="{% url 'game:index' %}">Start a new game</a>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            {# Game still in progress #}
+            <div class="container">
+                <div class="col-md-12 brd">
+                    <div class="center-block placeholder"><h1>{{ next_player }} to play</h1></div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% comment %}
+        A note about passing 'index' and 'play' parameters to include:
+        The way you would normally access list-based indexes in Django templates is this:
+
+           game.board.0
+
+        However, in order to access them from the included template, you would have to do this:
+
+           game.board.index
+
+        Which will be interpreted as a dictionary based lookup
+        {% endcomment %}
+        <div class="container">
+            <div class="col-md-12 brd">
+                <div class="center-block placeholder">
+                    <div class="board">
+                        <div class="ticrow">
+                            {% include "includes/square.html" with game=game index=0 play=game.board.0 %}
+                            {% include "includes/square.html" with game=game index=1 play=game.board.1 %}
+                            {% include "includes/square.html" with game=game index=2 play=game.board.2 %}
+                        </div>
+                        <div class="ticrow">
+                            {% include "includes/square.html" with game=game index=3 play=game.board.3 %}
+                            {% include "includes/square.html" with game=game index=4 play=game.board.4 %}
+                            {% include "includes/square.html" with game=game index=5 play=game.board.5 %}
+                        </div>
+                        <div class="ticrow">
+                            {% include "includes/square.html" with game=game index=6 play=game.board.6 %}
+                            {% include "includes/square.html" with game=game index=7 play=game.board.7 %}
+                            {% include "includes/square.html" with game=game index=8 play=game.board.8 %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endwith %}
+{% endblock %}
