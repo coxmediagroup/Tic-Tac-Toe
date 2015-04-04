@@ -50,7 +50,7 @@ class GameModelTest(TestCase):
         random.seed(0)
         game = Game(player_o='human', player_x='game.players.AIPlayer')
         game.play_auto()
-        self.assertEqual(game.board, "       X ")
+        self.assertEqual(game.board, "    X    ")
         self.assertEqual(game.next_player, "O")
 
     def test_play_auto_computer_to_computer(self):
@@ -58,8 +58,8 @@ class GameModelTest(TestCase):
         random.seed(0)
         game = Game(player_o='game.players.AIPlayer', player_x='game.players.AIPlayer')
         game.play_auto()
-        self.assertEqual(game.board, "OOXOX OXX")
-        self.assertEqual(game.is_game_over, 'O')
+        self.assertEqual(game.board, "OXOXXOXOX")
+        self.assertEqual(game.is_game_over, ' ')
 
     def test_game_over(self):
         "Runs through a bunch of board states, with the expected result."

@@ -32,7 +32,7 @@ class ViewsTest(TestCase):
         self.assertRedirects(response, game.get_absolute_url())
 
         # Players are assigned. The player should have played.
-        self.assertEqual(game.board, "      X  ")
+        self.assertEqual(game.board, "    X    ")
         self.assertEqual(game.player_x, 'game.players.AIPlayer')
         self.assertEqual(game.player_o, 'human')
 
@@ -54,4 +54,4 @@ class ViewsTest(TestCase):
         self.assertRedirects(response, game.get_absolute_url())
         # Reload the game. Both the human and random player should have played.
         game = Game.objects.get(pk=game.pk)
-        self.assertEqual(game.board, "X      O ")
+        self.assertEqual(game.board, "X   O    ")

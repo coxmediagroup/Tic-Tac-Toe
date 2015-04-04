@@ -45,7 +45,27 @@ class AIPlayer(object):
         """squares that belong to a player"""
         return [k for k, v in enumerate(self.board) if v == player]
 
+    def determine_priorities(self, player):
+        enemy = self.get_enemy(player)
+        elements = self.get_squares(enemy)
+        result = None
+        for wins in self.game.WINNING:
+            # Create a tuple
+            w = [self.board[wins[0]], self.board[wins[1]], self.board[wins[2]]]
+            flag_priority = ([enemy, enemy] == w[0:2]) | ([enemy, enemy] == w[-2:])
+            other_priority = ([player, player] == w[0:2]) | ([player, player] == w[-2:])
+            if other_priority is True and enemy not in w:
+                result = wins[w.index(None)]
+                return result
+            if flag_priority and player not in w:
+                result = wins[w.index(None)]
+        return result
+
     def _determine(self, player):
+        if not all(v is None for v in self.board):
+            result = self.determine_priorities(player)
+            if result:
+                return result
         a = -2
         choices = []
         moves = self.available_moves()
@@ -60,6 +80,8 @@ class AIPlayer(object):
                 choices = [move]
             elif val == a:
                 choices.append(move)
+        if not choices:
+            return
         return random.choice(choices)
 
     def is_game_over(self):
@@ -74,14 +96,14 @@ class AIPlayer(object):
                 return 'X'
             if w == ('O', 'O', 'O'):
                 return 'O'
-        return ' '
+        return 'N'
 
     def alphabeta(self, player, alpha, beta):
         if None not in self.board:
             who_won = self.is_game_over()
             if who_won == 'X':
                 return -1
-            elif who_won == ' ':
+            elif who_won == 'N':
                 return 0
             elif who_won == 'O':
                 return 1

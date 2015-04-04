@@ -37,7 +37,6 @@ class Game(models.Model):
     player_x = models.CharField(max_length=64)
     player_o = models.CharField(max_length=64)
 
-
     def __unicode__(self):
         return '{0} vs {1}, state="{2}"'.format(self.player_x, self.player_o, self.board)
 
@@ -80,16 +79,16 @@ class Game(models.Model):
         If none of the winning states is reached and there are
         no empty squares, the game is declared a stalemate.
         """
-        the_board = list(self.board)
+        board = list(self.board)
         for wins in self.WINNING:
             # Create a tuple
-            w = (the_board[wins[0]], the_board[wins[1]], the_board[wins[2]])
+            w = (board[wins[0]], board[wins[1]], board[wins[2]])
             if w == ('X', 'X', 'X'):
                 return 'X'
             if w == ('O', 'O', 'O'):
                 return 'O'
         # Check for stalemate
-        if ' ' in the_board:
+        if ' ' in board:
             return None
         return ' '
 
