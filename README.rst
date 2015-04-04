@@ -2,7 +2,8 @@
 Tic-Tac-Toe in Django
 =====================
 
-Big Thanks to paulcwatts and his repo: https://github.com/paulcwatts/django-tictactoe
+Big Thanks to [paulcwatts](https://github.com/paulcwatts/django-tictactoe) and his repo
+Big Thanks to [Cecil Woebker](http://cwoebker.com/posts/tic-tac-toe), and [Maurits van der Schee](http://www.leaseweblabs.com/2013/12/python-tictactoe-tk-minimax-ai/)
 
 Building
 --------
@@ -21,3 +22,7 @@ Once you have virtualenv and the code, you can create a virtualenv and install t
 Then run the server::
 
     python manage.py runserver
+
+To run the tests:
+
+    python manage.py test
