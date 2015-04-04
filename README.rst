@@ -1,28 +1,28 @@
-Story
-======
+=====================
+Tic-Tac-Toe in Django
+=====================
 
-As a CMG manager, I want to see how you code a game of Tic Tac Toe, so that I can get a feel for a candidate's skills and strengths.
+Big Thanks to [paulcwatts](https://github.com/paulcwatts/django-tictactoe) and his repo
+Big Thanks to [Cecil Woebker](http://cwoebker.com/posts/tic-tac-toe), and [Maurits van der Schee](http://www.leaseweblabs.com/2013/12/python-tictactoe-tk-minimax-ai/)
 
-Acceptance criteria
-=======================
+Building
+--------
 
-* The AI should never lose
-* The submission must include both server & client side code -- no CLI-only or browser-only implementations. Play to your strengths, but show us your full range of skills.
-* Quality counts! A good submission that takes a while is better than a poor submission quickly.
-* You should include clear instructions for how to run your application
+The easiest way to get this set up is to use virtualenv_. Usually it's easy as::
 
+    sudo pip install virtualenv
 
-Technical notes
-------------------
+Once you have virtualenv and the code, you can create a virtualenv and install the dependencies::
 
-* We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-* Make sure your submission accurately reflects your development style.
-* Commit early and often, with good messages.
+    cd <path_to_code>
+    mkvirtualenv tictactoe
+    pip install -r requirements.txt
+    python manage.py syncdb
 
+Then run the server::
 
-Submissions
----------------
+    python manage.py runserver
 
-1. Publicly: Fork this repo and send us a pull request.
-2. Privately: Send us a tar.gz of your solution **including your .git folder** so we can see your commit history.
+To run the tests:
 
+    python manage.py test
