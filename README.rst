@@ -7,15 +7,9 @@ Big Thanks to [Cecil Woebker](http://cwoebker.com/posts/tic-tac-toe), and [Mauri
 
 Building
 --------
-
-The easiest way to get this set up is to use virtualenv_. Usually it's easy as::
-
-    sudo pip install virtualenv
-
-Once you have virtualenv and the code, you can create a virtualenv and install the dependencies::
+So far it has been tested for manage.py
 
     cd <path_to_code>
-    mkvirtualenv tictactoe
     pip install -r requirements.txt
     python manage.py syncdb
     python manage.py migrate  # This will create the game table in case syncdb failed 
