@@ -18,6 +18,7 @@ Once you have virtualenv and the code, you can create a virtualenv and install t
     mkvirtualenv tictactoe
     pip install -r requirements.txt
     python manage.py syncdb
+    python manage.py migrate  # This will create the game table in case syncdb failed 
 
 Then run the server::
 
