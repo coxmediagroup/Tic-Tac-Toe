@@ -4,12 +4,12 @@
     <title>Tic-Tac-Toe</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; background-color: #dedede; margin: 20px; }
+      body { font: 13px Helvetica, Arial; background-color: #dedede; margin: 7px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
-      #board { width: 302px; height: 302px; border: 3px solid #000; float: left }
-      #board div { float: left; width:100px; height:100px; text-align: center; font-size: 3em; line-height: 2.5; background-color: #FFF }
+      #board { width: 302px; height: 302px; float: left }
+      #board div { float: left; width:98px; height:98px; text-align: center; font-size: 3em; line-height: 2.5; background-color: #FFF; overflow: hidden }
       .bot { border-bottom: 1px solid #999; }
       .right { border-right: 1px solid #999; }
       .clear { clear: all }
@@ -47,6 +47,19 @@
         } else {
           $('#' + input.pos).html('X');
         }
+
+        if (input.pos === 9){
+            $('#0').html('');
+            $('#1').html('');
+            $('#2').html('');
+            $('#3').html('');
+            $('#4').html('');
+            $('#5').html('');
+            $('#6').html('');
+            $('#7').html('');
+            $('#8').html('');
+        }
+
       });
     </script>
   </body>

@@ -40,12 +40,12 @@ io.on('connection', function(socket){
         
         if (check_for_win(gamestate, 'AI')){
           // we've won
-          //reset_game('The AI Won Suckah!');
           io.emit('player_move', { pos: 9, msg: 'The AI Won Suckah!', state: gamestate, player: 'AI'});
+          reset_game('The AI Won Suckah!');
         } else {
           if (ai_input === 9) {
-            //reset_game('DRAW!');
             io.emit('player_move', { pos: 9, msg: 'DRAW', state: gamestate, player: 'AI'});
+            reset_game('DRAW!');
           }
           
         }
@@ -61,7 +61,7 @@ io.on('connection', function(socket){
 
 function reset_game(wintype){
   gamestate = [0,0,0,0,0,0,0,0,0];
-  io.emit('player_move', { pos: 10, msg: '------ ' + wintype + ' ------', state: gamestate, player: 'AI'});
+  io.emit('player_move', { pos: 9, msg: '------ ' + wintype + ' ------', state: gamestate, player: 'AI'});
 }
 
 function check_for_win(gamestate, player){
