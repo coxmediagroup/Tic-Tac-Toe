@@ -1,9 +1,13 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var path = require('path');
+
+app.use(express.static('public'));
 
 app.get('/', function(req, res){
-  res.sendfile('index.html');
+  res.sendFile(path.join(__dirname,'./public/index.html'));
 });
 
 io.on('connection', function(socket){
@@ -31,7 +35,6 @@ io.on('connection', function(socket){
 
         ai_input = ai_turn(gamestate, input);
         gamestate[ai_input] = 2;
-        //console.log(gamestate + ' | ' + ai_input)
 
         ai_move_msg = 'The AI picked position ' + ai_input
         // still need to show their turn, but immediately take the AI turn afterwards
@@ -53,7 +56,7 @@ io.on('connection', function(socket){
       }
     } else {
     //  the move is illegal  
-      io.emit('player_move', { pos: 9, msg: 'illegal manuever - please choose another position', state: gamestate, player: 'player'})
+      io.emit('player_move', { pos: 10, msg: 'illegal manuever - please choose another position', state: gamestate, player: 'player'})
     }
     
   });
@@ -61,7 +64,7 @@ io.on('connection', function(socket){
 
 function reset_game(wintype){
   gamestate = [0,0,0,0,0,0,0,0,0];
-  io.emit('player_move', { pos: 9, msg: '------ ' + wintype + ' ------', state: gamestate, player: 'AI'});
+  io.emit('player_move', { pos: 9, msg: wintype, state: gamestate, player: 'AI'});
 }
 
 function check_for_win(gamestate, player){
@@ -107,9 +110,6 @@ function check_for_win(gamestate, player){
 }
 
 function ai_turn(gamestate, input){
-
-  //console.log(input)
-
 
   //  If the AI can win, it should take it....
 
