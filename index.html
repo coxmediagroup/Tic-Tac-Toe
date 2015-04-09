@@ -42,13 +42,11 @@
       });
       socket.on('player_move', function(input){
         $('#messages').prepend($('<li>').text(input.msg));
-        //$('#messages').append($('<li>').text('Position already taken'));
-        if (input.player === 'AI') {
+        if (input.player === 'AI' && input.pos != 9) {
           $('#' + input.pos).html('O');
         } else {
           $('#' + input.pos).html('X');
         }
-        
       });
     </script>
   </body>

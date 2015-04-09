@@ -8,7 +8,7 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('Starting Game');
-  gamestate = [0,0,0,0,0,0,0,0,0]
+  gamestate = [0,0,0,0,0,0,0,0,0];
   socket.on('disconnect', function(){
     console.log('Game Finished / Exited');
   });
@@ -24,6 +24,7 @@ io.on('connection', function(socket){
         
         // if they've won, you've messed up
         io.emit('player_move', { pos: input, msg: 'You Won!', state: gamestate, player: 'player'});
+        reset_game();
 
       } else {
         // if they've failed to win, continue your AIs quest for glory
@@ -31,22 +32,23 @@ io.on('connection', function(socket){
         ai_input = ai_turn(gamestate, input);
         gamestate[ai_input] = 2;
         //console.log(gamestate + ' | ' + ai_input)
-        
-        if (check_for_win(gamestate, 'AI')){
-          // we've won
-          ai_move_msg = 'The AI Won Suckah!';
-        } else {
-          if (ai_input === 9) {
-            ai_move_msg = 'DRAW! Refresh the browser to try again';
-          } else {
-            ai_move_msg = 'The AI picked position ' + ai_input
-          }
-          
-        }
 
+        ai_move_msg = 'The AI picked position ' + ai_input
         // still need to show their turn, but immediately take the AI turn afterwards
         io.emit('player_move', { pos: input, msg: 'You picked position ' + input, state: gamestate, player: 'player'});
         io.emit('player_move', { pos: ai_input, msg: ai_move_msg, state: gamestate, player: 'AI'});
+        
+        if (check_for_win(gamestate, 'AI')){
+          // we've won
+          //reset_game('The AI Won Suckah!');
+          io.emit('player_move', { pos: 9, msg: 'The AI Won Suckah!', state: gamestate, player: 'AI'});
+        } else {
+          if (ai_input === 9) {
+            //reset_game('DRAW!');
+            io.emit('player_move', { pos: 9, msg: 'DRAW', state: gamestate, player: 'AI'});
+          }
+          
+        }
 
       }
     } else {
@@ -56,6 +58,11 @@ io.on('connection', function(socket){
     
   });
 });
+
+function reset_game(wintype){
+  gamestate = [0,0,0,0,0,0,0,0,0];
+  io.emit('player_move', { pos: 10, msg: '------ ' + wintype + ' ------', state: gamestate, player: 'AI'});
+}
 
 function check_for_win(gamestate, player){
   if (player === 'AI'){
@@ -103,9 +110,115 @@ function ai_turn(gamestate, input){
 
   //console.log(input)
 
+
+  //  If the AI can win, it should take it....
+
   // row 1 
 
-  if (gamestate[0] === 1 && gamestate[1] === 1 && gamestate[2] === 0 ){
+  if (gamestate[0] === 2 && gamestate[1] === 2 && gamestate[2] === 0 ){
+    return 2
+  }
+  else if (gamestate[0] === 2 && gamestate[2] === 2 && gamestate[1] === 0 ){
+    return 1
+  }
+  else if (gamestate[1] === 2 && gamestate[2] === 2 && gamestate[0] === 0 ){
+    return 0
+  }
+
+  // row 2 
+
+  else if (gamestate[3] === 2 && gamestate[4] === 2 && gamestate[5] === 0 ){
+    return 5
+  }
+  else if (gamestate[3] === 2 && gamestate[5] === 2 && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 2 && gamestate[5] === 2 && gamestate[3] === 0 ){
+    return 3
+  }
+
+  // row 3 
+
+  else if (gamestate[6] === 2 && gamestate[7] === 2 && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[6] === 2 && gamestate[8] === 2 && gamestate[7] === 0 ){
+    return 7
+  }
+  else if (gamestate[7] === 2 && gamestate[8] === 2 && gamestate[6] === 0 ){
+    return 6
+  }
+
+
+
+  // 1 column
+  else if (gamestate[0] === 2 && gamestate[3] === 2  && gamestate[6] === 0 ){
+    return 6
+  }
+  else if (gamestate[0] === 2 && gamestate[6] === 2  && gamestate[3] === 0 ){
+    return 3
+  }
+  else if (gamestate[3] === 2 && gamestate[6] === 2  && gamestate[0] === 0 ){
+    return 0
+  }
+
+  // 2 column
+  else if (gamestate[1] === 2 && gamestate[4] === 2  && gamestate[7] === 0 ){
+    return 7
+  }
+  else if (gamestate[1] === 2 && gamestate[7] === 2  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 2 && gamestate[7] === 2  && gamestate[1] === 0 ){
+    return 1
+  }
+
+  // 3 column
+  else if (gamestate[2] === 2 && gamestate[5] === 2  && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[2] === 2 && gamestate[8] === 2  && gamestate[5] === 0 ){
+    return 5
+  }
+  else if (gamestate[5] === 2 && gamestate[8] === 2  && gamestate[2] === 0 ){
+    return 2
+  }
+
+
+  // diagonals backslash
+
+  else if (gamestate[0] === 2 && gamestate[4] === 2 && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[0] === 2 && gamestate[8] === 2  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 2 && gamestate[8] === 2  && gamestate[0] === 0 ){
+    return 0
+  }
+
+
+  // diagonals forwardslash
+
+  else if (gamestate[2] === 2 && gamestate[4] === 2 && gamestate[6] === 0 ){
+    return 6
+  }
+  else if (gamestate[2] === 2 && gamestate[6] === 2  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 2 && gamestate[6] === 2  && gamestate[2] === 0 ){
+    return 2
+  }
+
+
+
+
+//  If the player can win, it should stop it....
+
+
+  // row 1 
+
+  else if (gamestate[0] === 1 && gamestate[1] === 1 && gamestate[2] === 0 ){
     return 2
   }
   else if (gamestate[0] === 1 && gamestate[2] === 1 && gamestate[1] === 0 ){
@@ -117,7 +230,7 @@ function ai_turn(gamestate, input){
 
   // row 2 
 
-  if (gamestate[3] === 1 && gamestate[4] === 1 && gamestate[5] === 0 ){
+  else if (gamestate[3] === 1 && gamestate[4] === 1 && gamestate[5] === 0 ){
     return 5
   }
   else if (gamestate[3] === 1 && gamestate[5] === 1 && gamestate[4] === 0 ){
@@ -129,7 +242,7 @@ function ai_turn(gamestate, input){
 
   // row 3 
 
-  if (gamestate[6] === 1 && gamestate[7] === 1 && gamestate[8] === 0 ){
+  else if (gamestate[6] === 1 && gamestate[7] === 1 && gamestate[8] === 0 ){
     return 8
   }
   else if (gamestate[6] === 1 && gamestate[8] === 1 && gamestate[7] === 0 ){
@@ -277,6 +390,31 @@ function ai_turn(gamestate, input){
 
   else if(input == 4 && gamestate[0] === 0){
     return 0;
+  }
+
+  else if (gamestate[0] === 0){
+    return 0
+  }
+  else if (gamestate[2] === 0){
+    return 2
+  }
+  else if (gamestate[6] === 0){
+    return 6
+  }
+  else if (gamestate[7] === 0){
+    return 7
+  }
+  else if (gamestate[1] === 0){
+    return 1
+  }
+  else if (gamestate[3] === 0){
+    return 3
+  }
+  else if (gamestate[5] === 0){
+    return 5
+  }
+  else if (gamestate[7] === 0){
+    return 7
   }
 
   else {
