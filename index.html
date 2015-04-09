@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; background-color: #dedede; margin: 20px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #board { width: 302px; height: 302px; border: 3px solid #000; float: left }
+      #board div { float: left; width:100px; height:100px; text-align: center; font-size: 3em; line-height: 2.5; background-color: #FFF }
+      .bot { border-bottom: 1px solid #999; }
+      .right { border-right: 1px solid #999; }
+      .clear { clear: all }
+      .message_container { width: 300px; height: 303px; float: left; overflow: auto;} 
+    </style>
+  </head>
+  <body>
+    
+    <div id="board">
+      <div id="0" class="bot right"></div>
+      <div id="1" class="bot right"></div>
+      <div id="2" class="bot"></div>
+      <div id="3" class="bot right"></div>
+      <div id="4" class="bot right"></div>
+      <div id="5" class="bot"></div>
+      <div id="6" class="right"></div>
+      <div id="7" class="right"></div>
+      <div id="8"></div>
+      <span class="clear"></span>
+    </div>
+    <div class="message_container"><ul id="messages"></ul></div>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('#board div').click(function(){
+          socket.emit('player_move', this.id);
+          return false;
+      });
+      socket.on('player_move', function(input){
+        $('#messages').append($('<li>').text(input.msg));
+        //$('#messages').append($('<li>').text('Position already taken'));
+        if (input.player === 'AI') {
+          $('#' + input.pos).html('O');
+        } else {
+          $('#' + input.pos).html('X');
+        }
+        
+      });
+    </script>
+  </body>
+</html>
