@@ -41,7 +41,7 @@
           return false;
       });
       socket.on('player_move', function(input){
-        $('#messages').append($('<li>').text(input.msg));
+        $('#messages').prepend($('<li>').text(input.msg));
         //$('#messages').append($('<li>').text('Position already taken'));
         if (input.player === 'AI') {
           $('#' + input.pos).html('O');

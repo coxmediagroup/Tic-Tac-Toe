@@ -28,16 +28,20 @@ io.on('connection', function(socket){
       } else {
         // if they've failed to win, continue your AIs quest for glory
 
-        ai_input = ai_turn(gamestate);
+        ai_input = ai_turn(gamestate, input);
         gamestate[ai_input] = 2;
-        console.log(gamestate + ' | ' + ai_input)
+        //console.log(gamestate + ' | ' + ai_input)
         
-
         if (check_for_win(gamestate, 'AI')){
           // we've won
           ai_move_msg = 'The AI Won Suckah!';
         } else {
-          ai_move_msg = 'The AI picked position ' + ai_input
+          if (ai_input === 9) {
+            ai_move_msg = 'DRAW! Refresh the browser to try again';
+          } else {
+            ai_move_msg = 'The AI picked position ' + ai_input
+          }
+          
         }
 
         // still need to show their turn, but immediately take the AI turn afterwards
@@ -95,25 +99,188 @@ function check_for_win(gamestate, player){
   }
 }
 
-function ai_turn(gamestate){
-  if (gamestate[4] == 0) {
+function ai_turn(gamestate, input){
+
+  //console.log(input)
+
+  // row 1 
+
+  if (gamestate[0] === 1 && gamestate[1] === 1 && gamestate[2] === 0 ){
+    return 2
+  }
+  else if (gamestate[0] === 1 && gamestate[2] === 1 && gamestate[1] === 0 ){
+    return 1
+  }
+  else if (gamestate[1] === 1 && gamestate[2] === 1 && gamestate[0] === 0 ){
+    return 0
+  }
+
+  // row 2 
+
+  if (gamestate[3] === 1 && gamestate[4] === 1 && gamestate[5] === 0 ){
+    return 5
+  }
+  else if (gamestate[3] === 1 && gamestate[5] === 1 && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 1 && gamestate[5] === 1 && gamestate[3] === 0 ){
+    return 3
+  }
+
+  // row 3 
+
+  if (gamestate[6] === 1 && gamestate[7] === 1 && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[6] === 1 && gamestate[8] === 1 && gamestate[7] === 0 ){
+    return 7
+  }
+  else if (gamestate[7] === 1 && gamestate[8] === 1 && gamestate[6] === 0 ){
+    return 6
+  }
+
+
+
+  // 1 column
+  else if (gamestate[0] === 1 && gamestate[3] === 1  && gamestate[6] === 0 ){
+    return 6
+  }
+  else if (gamestate[0] === 1 && gamestate[6] === 1  && gamestate[3] === 0 ){
+    return 3
+  }
+  else if (gamestate[3] === 1 && gamestate[6] === 1  && gamestate[0] === 0 ){
+    return 0
+  }
+
+  // 2 column
+  else if (gamestate[1] === 1 && gamestate[4] === 1  && gamestate[7] === 0 ){
+    return 7
+  }
+  else if (gamestate[1] === 1 && gamestate[7] === 1  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 1 && gamestate[7] === 1  && gamestate[1] === 0 ){
+    return 1
+  }
+
+  // 3 column
+  else if (gamestate[2] === 1 && gamestate[5] === 1  && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[2] === 1 && gamestate[8] === 1  && gamestate[5] === 0 ){
+    return 5
+  }
+  else if (gamestate[5] === 1 && gamestate[8] === 1  && gamestate[2] === 0 ){
+    return 2
+  }
+
+
+  // diagonals backslash
+
+  else if (gamestate[0] === 1 && gamestate[4] === 1 && gamestate[8] === 0 ){
+    return 8
+  }
+  else if (gamestate[0] === 1 && gamestate[8] === 1  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 1 && gamestate[8] === 1  && gamestate[0] === 0 ){
+    return 0
+  }
+
+
+  // diagonals forwardslash
+
+  else if (gamestate[2] === 1 && gamestate[4] === 1 && gamestate[6] === 0 ){
+    return 6
+  }
+  else if (gamestate[2] === 1 && gamestate[6] === 1  && gamestate[4] === 0 ){
+    return 4
+  }
+  else if (gamestate[4] === 1 && gamestate[6] === 1  && gamestate[2] === 0 ){
+    return 2
+  }
+
+
+  //  There aren't two picks that threaten a line, 
+  //  so pick the opposite of what was chosen or pick the middle square if it hasn't been picked yet
+
+  else if (gamestate[4] === 0){
     return 4;
-  } else if (gamestate[0] == 0) {
-    return 0;
-  } else if (gamestate[2] == 0) {
-    return 2;
-  } else if (gamestate[6] == 0) {
+  }
+
+  // 0
+  else if(input == 0 && gamestate[8] === 0){
+    return 8;
+  }
+  else if(input == 0 && gamestate[6] === 0){
     return 6;
-  } else if (gamestate[8] == 0) {
+  }
+  else if(input == 0 && gamestate[2] === 0){
+    return 2;
+  }
+
+  // 1
+  else if(input == 1 && gamestate[7] === 0){
+    return 7;
+  }
+
+  // 2
+  else if(input == 2 && gamestate[0] === 0){
+    return 0;
+  }
+  else if(input == 2 && gamestate[6] === 0){
+    return 6;
+  }
+  else if(input == 2 && gamestate[8] === 0){
     return 8;
-  } else if (gamestate[1] == 0) {
-    return 1;
-  } else if (gamestate[3] == 0) {
-    return 3;
-  } else if (gamestate[5] == 0) {
+  }
+
+
+  // 3
+  else if(input == 3 && gamestate[5] === 0){
     return 5;
-  } else if (gamestate[8] == 0) {
+  }
+
+  // 5
+  else if(input == 5 && gamestate[3] === 0){
+    return 3;
+  }
+
+  // 6
+  else if(input == 6 && gamestate[0] === 0){
+    return 0;
+  }
+  else if(input == 6 && gamestate[2] === 0){
+    return 2;
+  }
+  else if(input == 6 && gamestate[8] === 0){
     return 8;
+  }
+
+  // 7
+  else if(input == 7 && gamestate[1] === 0){
+    return 1;
+  }
+
+  // 8
+  else if(input == 8 && gamestate[0] === 0){
+    return 0;
+  }
+  else if(input == 8 && gamestate[2] === 0){
+    return 2;
+  }
+  else if(input == 8 && gamestate[6] === 0){
+    return 6;
+  }
+
+  // The Player picked the middle
+
+  else if(input == 4 && gamestate[0] === 0){
+    return 0;
+  }
+
+  else {
+    return 9
   }
 }
 
