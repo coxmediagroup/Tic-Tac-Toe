@@ -1,7 +1,7 @@
 Install
 ======
 
-Before starting the server run the following on the command-line in the /Tic-Tac-Tow directory:
+Before starting the server run the following on the command-line in the /Tic-Tac-Toe directory:
 
 npm install
 
