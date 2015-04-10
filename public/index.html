@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+  <body>
+    <div id="overlay" align="center">
+        <button id="refresh" type="button" class="btn btn-danger"></button>
+    </div>
+    <div id="board">
+      <div id="0" class="bot right"></div>
+      <div id="1" class="bot right"></div>
+      <div id="2" class="bot"></div>
+      <div id="3" class="bot right"></div>
+      <div id="4" class="bot right"></div>
+      <div id="5" class="bot"></div>
+      <div id="6" class="right"></div>
+      <div id="7" class="right"></div>
+      <div id="8"></div>
+      <span class="clear"></span>
+    </div>
+    <div class="message_container"><ul id="messages"></ul></div>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('#board div').click(function(){
+          socket.emit('player_move', this.id);
+          return false;
+      });
+      socket.on('player_move', function(input){
+        $('#messages').prepend($('<li>').text(input.msg));
+        if (input.player === 'AI' && input.pos != 9) {
+          $('#' + input.pos).html('O');
+        } else {
+          $('#' + input.pos).html('X');
+        }
+        if (input.pos === 9){
+          $('#refresh').html(input.msg + ' - Play Again?');
+          $('#overlay').css('display','block');
+        }
+      });
+
+      $('#refresh').click(function(){
+          location.reload();
+      });
+
+    </script>
+  </body>
+</html>

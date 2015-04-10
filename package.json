@@ -1,0 +1,29 @@
+{
+  "name": "Tic-Tac-Toe",
+  "version": "1.0.0",
+  "description": "TicTacToe test - Ryan Gordon",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Byteme8199/Tic-Tac-Toe.git"
+  },
+  "keywords": [
+    "tic-tac-toe",
+    "test"
+  ],
+  "author": "Ryan Gordon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Byteme8199/Tic-Tac-Toe/issues"
+  },
+  "homepage": "https://github.com/Byteme8199/Tic-Tac-Toe"
+}
