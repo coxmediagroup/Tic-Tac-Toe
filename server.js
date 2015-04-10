@@ -216,6 +216,20 @@ function ai_turn(gamestate, input){
 //  If the player can win, it should stop it....
 
 
+
+  // Mega Moves
+
+  else if (gamestate[2] === 1 && gamestate[6] === 1  && gamestate[4] === 2 && gamestate[1] == 0 ){
+    return 1
+  }
+
+
+  else if (gamestate[0] === 1 && gamestate[8] === 1  && gamestate[4] === 2 && gamestate[1] == 0 ){
+    return 1
+  }
+
+
+
   // row 1 
 
   else if (gamestate[0] === 1 && gamestate[1] === 1 && gamestate[2] === 0 ){
@@ -314,6 +328,9 @@ function ai_turn(gamestate, input){
   }
 
 
+
+
+
   //  There aren't two picks that threaten a line, 
   //  so pick the opposite of what was chosen or pick the middle square if it hasn't been picked yet
 
@@ -332,11 +349,6 @@ function ai_turn(gamestate, input){
     return 2;
   }
 
-  // 1
-  else if(input == 1 && gamestate[7] === 0){
-    return 7;
-  }
-
   // 2
   else if(input == 2 && gamestate[0] === 0){
     return 0;
@@ -348,31 +360,15 @@ function ai_turn(gamestate, input){
     return 8;
   }
 
-
-  // 3
-  else if(input == 3 && gamestate[5] === 0){
-    return 5;
-  }
-
-  // 5
-  else if(input == 5 && gamestate[3] === 0){
-    return 3;
-  }
-
   // 6
-  else if(input == 6 && gamestate[0] === 0){
-    return 0;
-  }
   else if(input == 6 && gamestate[2] === 0){
     return 2;
   }
+  else if(input == 6 && gamestate[0] === 0){
+    return 0;
+  }
   else if(input == 6 && gamestate[8] === 0){
     return 8;
-  }
-
-  // 7
-  else if(input == 7 && gamestate[1] === 0){
-    return 1;
   }
 
   // 8
