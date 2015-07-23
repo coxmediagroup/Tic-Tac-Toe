@@ -1,12 +1,5 @@
-This is a fork from the Tic-Tac-Toe coding challange created by Matthew Trump.
+This is a fork from a coding challenge I did a couple years back. The challenge was to design a Tic-Tac-Toe game played against the computer, where the computer never loses, and which the results of each game are reported and recorded on the server.
 
+The code here is a recently updated version, in which I've taken the old challenge and fleshed it out into a fully fledged web application. It has a Dojo-based front-end that simlulates the computer dialogue in the movie War Games (1983), which happens to feature a never-lose Tic-Tac-Toe game as part of the plot.
 
-Intructions:
-1. Fork this repo on GitHub.
-2. Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.
-3. Commit early and often, with good messages.
-4. Push your code back to GitHub and send me a pull request.
-
-We are a Django shop, but it is not a requirement that you implement your program as a Django app.
-
-(Don't be offended when I don't actually pull. I will clone your repo and inspect it locally when I receive the request. This repo will be left solution-less for obvious reasons.)
+I recently updated the backend to use Flask, which I think is ideal for this kind of simple server application. In this case I needed only to define two routes. It gave me some practice writing MongoDB code for Flask as well, which is something I wanted to implement in a proof-of-concept demo.
