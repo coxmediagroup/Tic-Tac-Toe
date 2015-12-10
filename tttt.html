@@ -18,7 +18,28 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function () {
-		console.log('document ready')
+		console.log('document ready');
+		/**
+		 * 00|01|02
+		 * 10|11|12
+		 * 20|21|22
+		 *
+		 * AI move algorithm:
+		 * Check and take win if possible (player has any two positions in a win, take the third
+		 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
+		 * No, then take 11 if available.
+		 * if not 11 then
+		 * 	if previous move was [01,10,12,21] take [00,20,02,22]
+		 * 	if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
+		 * last option, take any free position.
+		 *
+		 * After each move, check for win. If win, game over with winner.
+		 * 	if no win, check for full board. If full, game over with draw.
+		 * Wins:
+		 * [0,1,2][0,1,2]	//rows AND columns
+		 * 00,11,22 diagonal 1
+		 * 20,11,02 diagonal 2
+		 */
 	});
 </script>
 
