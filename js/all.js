@@ -40592,6 +40592,15 @@ $provide.value("$locale", {
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 /* app.js */
+angular.module('ticTacToeApp',[]);
 /* services.js */
 /* directives.js */
 /* controller.js */
+angular.module("ticTacToeApp").controller("gameCtrl", function($scope){
+	$scope.turn = 1;
+	$scope.gameState = [
+						'','','',
+						'','x','',
+						'','','',
+						];
+});
