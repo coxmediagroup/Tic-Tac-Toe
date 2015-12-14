@@ -5,10 +5,45 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TTT</title>
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">-->
 </head>
 <style>
 	html {
 		box-sizing: border-box;
+	}
+	#header {
+		width: 90vw;
+		max-width: 600px;
+		border: solid 1px black;
+		border-radius: 5px;
+		padding: 5px;
+	}
+	#gameSettings {
+		display: none;
+		margin: 10px;
+		background-color: antiquewhite;
+		overflow: hidden;
+	}
+
+	#show-detail {
+		float:right;
+	}
+	.title {
+		font-size: 24px;
+		font-weight:bold;
+	}
+	.settings-label {
+		display: inline-block;
+		width: 30%;
+		text-align: right;
+		float: left;
+	}
+	.settings-value {
+		display: inline-block;
+		width: 70%;
+	}
+	.frm-settings {
+		clear: both;
 	}
 	.game-board {
 		width: 90vw;
@@ -36,11 +71,11 @@
 		}
 	}
 
-	.game-over-even {
+	.game-over-one {
 		background-color: green;
 		color: white;
 	}
-	.game-over-odd {
+	.game-over-two {
 		background-color: blue;
 		color: white;
 	}
@@ -76,14 +111,16 @@
 		 */
 
 		var iRound = 1;														//each player has one turn/round
-		var player = 'even';											//Current player. even=first turn, usually "X", 'odd' second turn, usually 'O'
+		var player = 'one';											//Current player. one=first turn, usually "X", 'two' second turn, usually 'O'
 		var iPlays = 0;														//used to determine draw
 		var gameState = {};												//tracks plays, who has a given position
-		var oGamePiece = {even: 'X', odd: 'O', evenColor: 'green', oddColor: 'blue'};		//to support user selection of game piece
-		var oScores = {even: 0, odd: 0};
+		var oGamePiece = {one: 'X', two: 'O', oneColor: 'green', twoColor: 'blue'};		//to support user selection of game piece
+		var oScores = {one: 0, two: 0};
 
-		var aiMode = false;												//set to true to play against computer AI
-		var aiLevel = 'smart';										//smart=unbeatable, dumb = random plays
+		var autoNew = 2000;												//automatically start new game after timeout set to -1 to prevent
+		var aiMode = 1;														//0=two humans, 1=human vs AI, 2=AI vs AI
+		var aiLevel = 'dumb';										//smart=unbeatable, dumb = random plays
+		var aiThinking = 500;											//pause while AI thinks
 		var bPlayFull = true;											//false ends game when end is predictable
 		var bContinueToFull = true;								//allows completion of game when outcome is predictable
 
@@ -91,6 +128,13 @@
 		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
 		var aDiag2Win = ['20', '11', '02'];
 		//row and col wins programmatic
+		
+		function selectGamePiece(sGamePiece) {
+			oGamePiece.one = sGamePiece || 'X';
+			oGamePiece.two = (oGamePiece.one === 'X')? 'O':'X';
+			$('#oneGamePiece').html(oGamePiece.one);
+			$('#twoGamePiece').html(oGamePiece.two);
+		}
 
 		//handler for human click
 		$('.play-button').click(function (event) {
@@ -111,33 +155,53 @@
 			gameState[position] = player;																		//record move
 			var gameOver = checkWin(position);
 			if (!gameOver) {
-				player = (player === 'even') ? 'odd' : 'even';									//toggle player
+				player = (player === 'one') ? 'two' : 'one';									//toggle player
+				if (aiMode > 0) {
+					setTimeout(aiMove, aiThinking);
+				}
 			}
+		}
 
+		function aiMove() {
+			if (aiLevel === 'dumb') {
+				var aPositions = ['00','01','02','10','11','12','20','21','22'];
+				var index;
+				var position;
+				do {
+					index = getRandomPosition();
+					position = aPositions[index];
+					if (!gameState[position]) {
+						makePlay(position);
+						break;
+					}
+				} while (true)
+			}
+			else {
 
+			}
 		}
 
 		//setup handler for new game button click
-		$('#newGame').click(function (event) {
-			newGame();
+		$('#newGame').click(function (onet) {
+			newGame(true);
 		});
 		//setup handler for reset game button click
-		$('#resetGame').click(function (event) {
+		$('#resetGame').click(function (onet) {
 			resetGame();
 		});
 
 		function resetGame() {
 			newGame();
-			oScores = {even: 0, 'odd': 0};
-			$("#scoreEven").html(0);
-			$("#scoreOdd").html(0);
+			oScores = {one: 0, 'two': 0};
+			$("#scoreOne").html(0);
+			$("#scoreTwo").html(0);
 		}
 
 		/**
 		 * resets board, but not scores
 		 *
 		 */
-		function newGame() {
+		function newGame(bManual) {
 			for (var position in gameState) {
 				var $gameButton = $("button[data-position='" + position + "']");
 				$gameButton.html('');
@@ -149,8 +213,13 @@
 				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
 			});
 			gameState = {};
-			player = 'even';
+			player = 'one';
 			iPlays = 0;
+
+			//will play another Ai vs AI game
+			if (aiMode === 2 && bManual) {
+				aiMove();
+			}
 		}
 
 		/**
@@ -267,14 +336,77 @@
 				}
 				$(".game-board").addClass('game-over-' + player);
 			}
+			if (autoNew > -1) {
+				setTimeout(newGame, autoNew);
+			}
+		}
+
+		//***************************** Game setting/options handlers ********************************/
+		$('#show-detail').on('click', function(event){
+			var $e = $(this);
+			var $collapsible = $('#gameSettings');
+			$collapsible.toggle();
+			var sDisplay = $collapsible.css('display');
+			if (sDisplay === 'none') {
+				$e.html('+ options');
+			}
+			else {
+				$e.html('- options');
+			}
+		});
+
+
+		$('#frmGamePiece input').on('change', function() {
+			selectGamePiece($('input[name="gamePiece"]:checked', '#frmGamePiece').val());
+		});
+
+
+		$('#frmPlayerMode input').on('change', function() {
+			aiMode = $('input[name="playerMode"]:checked', '#frmPlayerMode').val();
+		});
+
+		function getRandomPosition() {
+			return Math.floor(Math.random() * 9);
+		}
+		
+		if (aiMode === 2) {
+			aiMove('11');
 		}
 	});
 </script>
 
 <body>
-Scores:
-<div>X: <span id="scoreEven">0</span></div>
-<div>O: <span id="scoreOdd">0</span></div>
+<div id="header" class="header">
+	<span class="title">Tracy's TicTacToe Trainer</span>
+	<a id="show-detail" href="#" >show game settings</a>
+	<div id="gameSettings">
+		<form id="frmGamePiece" class="frm-settings">
+			<label class="settings-label">Player One Game-Piece:</label>
+			<div class="settings-value">
+				<input type="radio" name="gamePiece" value="X" checked >"X"
+				<input type="radio" name="gamePiece" value="O" >"O"
+			</div>
+
+		</form>
+		<form id="frmPlayerMode"  class="frm-settings">
+			<label class="settings-label">Play Mode:</label>
+			<div class="settings-value">
+				<input type="radio" name="playerMode" value="0" checked >Player vs Player
+				<input type="radio" name="playerMode" value="1" >Player vs AI
+				<input type="radio" name="playerMode" value="1" >AI vs AI
+			</div>
+
+		</form>
+
+	</div>
+	<div class="scores">
+		Scores:
+		<div>Player One <span id="oneGamePiece">test</span>: <span id="scoreOne">0</span></div>
+		<div>Player Two <span id="twoGamePiece"></span>: <span id="scoreTwo">0</span></div>
+	</div>
+
+</div>
+
 <div class="game-board">
 	<div class="game-row">
 		<button class="play-button" data-position="00"></button>
