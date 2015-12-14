@@ -10,9 +10,43 @@
 	html {
 		box-sizing: border-box;
 	}
+	.game-board {
+		width: 90vw;
+		height: 90vw;
+		max-width: 600px;
+		max-height: 600px;
+		display: inline-block;
+		padding: 5px;
+		border: solid 1px #000000;
+	}
+	.play-button {
+		display: block;
+		float: left;
+		width: 30vw;
+		height: 30vw;
+		max-width: 200px;
+		max-height: 200px;
+		font-size: 20vw;
+		font-weight: bold;
+	}
 
-	.test {
-		color: red;
+	@media (min-width: 600px) {
+		.play-button {
+			font-size: 124px;
+		}
+	}
+
+	.game-over-even {
+		background-color: green;
+		color: white;
+	}
+	.game-over-odd {
+		background-color: blue;
+		color: white;
+	}
+	.game-over-draw {
+		background-color: black;
+		color: white;
 	}
 
 </style>
@@ -29,21 +63,238 @@
 		 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
 		 * No, then take 11 if available.
 		 * if not 11 then
-		 * 	if previous move was [01,10,12,21] take [00,20,02,22]
-		 * 	if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
+		 *  if previous move was [01,10,12,21] take [00,20,02,22]
+		 *  if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
 		 * last option, take any free position.
 		 *
 		 * After each move, check for win. If win, game over with winner.
-		 * 	if no win, check for full board. If full, game over with draw.
+		 *  if no win, check for full board. If full, game over with draw.
 		 * Wins:
-		 * [0,1,2][0,1,2]	//rows AND columns
+		 * [0,1,2][0,1,2]  //rows AND columns
 		 * 00,11,22 diagonal 1
 		 * 20,11,02 diagonal 2
 		 */
+
+		var iRound = 1;														//each player has one turn/round
+		var player = 'even';											//Current player. even=first turn, usually "X", 'odd' second turn, usually 'O'
+		var iPlays = 0;														//used to determine draw
+		var gameState = {};												//tracks plays, who has a given position
+		var oGamePiece = {even: 'X', odd: 'O', evenColor: 'green', oddColor: 'blue'};		//to support user selection of game piece
+		var oScores = {even: 0, odd: 0};
+
+		var aiMode = false;												//set to true to play against computer AI
+		var aiLevel = 'smart';										//smart=unbeatable, dumb = random plays
+		var bPlayFull = true;											//false ends game when end is predictable
+		var bContinueToFull = true;								//allows completion of game when outcome is predictable
+
+
+		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
+		var aDiag2Win = ['20', '11', '02'];
+		//row and col wins programmatic
+
+		//handler for human click
+		$('.play-button').click(function (event) {
+			var $e = $(this);
+			var position = $e.data('position').toString();
+			if (!gameState.hasOwnProperty(position)) {				//do not process click if position is already played
+				makePlay(position);
+			}
+		});
+
+
+		function makePlay(position) {
+			iPlays ++;
+			var playedElement = $("[data-position='" + position + "']");
+			console.log('button text:', playedElement.html());
+
+			playedElement.html(oGamePiece[player]);
+			gameState[position] = player;																		//record move
+			var gameOver = checkWin(position);
+			if (!gameOver) {
+				player = (player === 'even') ? 'odd' : 'even';									//toggle player
+			}
+
+
+		}
+
+		//setup handler for new game button click
+		$('#newGame').click(function (event) {
+			newGame();
+		});
+		//setup handler for reset game button click
+		$('#resetGame').click(function (event) {
+			resetGame();
+		});
+
+		function resetGame() {
+			newGame();
+			oScores = {even: 0, 'odd': 0};
+			$("#scoreEven").html(0);
+			$("#scoreOdd").html(0);
+		}
+
+		/**
+		 * resets board, but not scores
+		 *
+		 */
+		function newGame() {
+			for (var position in gameState) {
+				var $gameButton = $("button[data-position='" + position + "']");
+				$gameButton.html('');
+				$gameButton.removeClass(function(index, css){
+					return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+				});
+			}
+			$(".game-board").removeClass(function(index, css){
+				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+			});
+			gameState = {};
+			player = 'even';
+			iPlays = 0;
+		}
+
+		/**
+		 * checks last play for a win
+		 * @param position
+		 */
+		function checkWin(position) {
+			var row = position.charAt(0);
+			var col = position.charAt(1);
+
+			var idxRow = 0;
+			var idxCol = 0;
+			var i = -1;
+			var win = true;
+			var winOn = '';													//winOn records type of win
+			var key = '';
+			console.log('check row');
+			winOn = 'r' + row;
+			for (idxCol = 0; idxCol < 3; idxCol++) {
+				key = row + idxCol;
+				console.log('checking ', key);
+				if (gameState[key] !== player) {
+					win = false;
+					break;
+				}
+			}
+			if (!win) {
+				//check columns
+				console.log('check column');
+				win = true;
+				winOn = 'c' + col;
+				for (idxRow = 0; idxRow < 3; idxRow++) {
+					key = idxRow + col;
+					console.log('checking ', key);
+					if (gameState[key] !== player) {
+						win = false;
+						break;
+					}
+				}
+			}
+			if (!win) {
+				win = true;
+
+				//check diagonal not O1, not
+				console.log('check diag 1');
+				winOn = 'aDiag1Win';
+				for (i = 0; i < aDiag1Win.length; i++) {
+					if (gameState[aDiag1Win[i]] !== player) {
+						win = false;
+						break;
+					}
+				}
+				if (!win) {
+					win = true;
+					winOn = 'aDiag2Win';
+					console.log('check diag 2');
+					for (i = 0; i < aDiag2Win.length; i++) {
+						if (gameState[aDiag2Win[i]] !== player) {
+							win = false;
+							break;
+						}
+					}
+				}
+			}
+			if (win) {
+				gameOver(winOn);
+				return true;
+			}
+			else if (iPlays === 9) {
+				gameOver();
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		function gameOver(winOn) {
+			winOn = winOn || 'draw';
+			var sPosition;
+			var i = -1;
+			if (winOn === 'draw') {
+				for (position in gameState) {
+					$("button[data-position='" + position + "']").addClass('game-over-draw');
+				}
+				$(".game-board").addClass('game-over-draw');
+			}
+			else {
+				oScores[player]++;
+				$("#score" + player).html(oScores[player]);
+				if (winOn === 'aDiag1Win') {
+					for (i = 0; i < aDiag1Win.length; i++) {
+						sPosition = aDiag1Win[i];
+						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+					}
+				}
+				else if (winOn === 'aDiag2Win') {
+					for (i = 0; i < aDiag2Win.length; i++) {
+						sPosition = aDiag2Win[i];
+						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+					}
+				}
+				else if (winOn.charAt(0) === 'r') {
+					for (i = 0; i < 3; i++) {
+						sPosition = winOn.charAt(1) + i;
+						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+					}
+				}
+				else if (winOn.charAt(0) === 'c') {
+					for (i = 0; i < 3; i++) {
+						sPosition = i + winOn.charAt(1);
+						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+					}
+				}
+				$(".game-board").addClass('game-over-' + player);
+			}
+		}
 	});
 </script>
 
 <body>
-	<div class="test"> test2</div>
+Scores:
+<div>X: <span id="scoreEven">0</span></div>
+<div>O: <span id="scoreOdd">0</span></div>
+<div class="game-board">
+	<div class="game-row">
+		<button class="play-button" data-position="00"></button>
+		<button class="play-button" data-position="01"></button>
+		<button class="play-button" data-position="02"></button>
+	</div>
+	<div class="game-row">
+		<button class="play-button" data-position="10"></button>
+		<button class="play-button" data-position="11"></button>
+		<button class="play-button" data-position="12"></button>
+	</div>
+	<div class="game-row">
+		<button class="play-button" data-position="20"></button>
+		<button class="play-button" data-position="21"></button>
+		<button class="play-button" data-position="22"></button>
+	</div>
+</div>
+<br>
+<button id="newGame">New Game</button>
+<br>
+<button id="resetGame">Reset</button>
 </body>
 </html>
