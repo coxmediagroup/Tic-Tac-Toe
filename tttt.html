@@ -11,6 +11,7 @@
 	html {
 		box-sizing: border-box;
 	}
+
 	#header {
 		width: 90vw;
 		max-width: 600px;
@@ -18,6 +19,7 @@
 		border-radius: 5px;
 		padding: 5px;
 	}
+
 	#gameSettings {
 		display: none;
 		margin: 10px;
@@ -26,25 +28,37 @@
 	}
 
 	#show-detail {
-		float:right;
+		float: right;
 	}
+
 	.title {
 		font-size: 24px;
-		font-weight:bold;
+		font-weight: bold;
+	}
+	.settings-title {
+		font-size: 18px;
 	}
 	.settings-label {
 		display: inline-block;
 		width: 30%;
 		text-align: right;
 		float: left;
+		margin-right: 10px;
 	}
+
 	.settings-value {
 		display: inline-block;
-		width: 70%;
+		width: 65%;
 	}
+
+	.settings-value.number {
+		width: 80px;
+	}
+
 	.frm-settings {
 		clear: both;
 	}
+
 	.game-board {
 		width: 90vw;
 		height: 90vw;
@@ -54,6 +68,7 @@
 		padding: 5px;
 		border: solid 1px #000000;
 	}
+
 	.play-button {
 		display: block;
 		float: left;
@@ -75,10 +90,12 @@
 		background-color: green;
 		color: white;
 	}
+
 	.game-over-two {
 		background-color: blue;
 		color: white;
 	}
+
 	.game-over-draw {
 		background-color: black;
 		color: white;
@@ -114,30 +131,34 @@
 		var player = 'one';											//Current player. one=first turn, usually "X", 'two' second turn, usually 'O'
 		var iPlays = 0;														//used to determine draw
 		var gameState = {};												//tracks plays, who has a given position
-		var oGamePiece = {one: 'X', two: 'O', oneColor: 'green', twoColor: 'blue'};		//to support user selection of game piece
+		var oGamePiece = {one: 'X', two: 'O', oneColor: 'green', twoColor: 'blue', oneType: 'Human', twoType: 'AI'};		//to support user selection of game piece
 		var oScores = {one: 0, two: 0};
 
 		var autoNew = 2000;												//automatically start new game after timeout set to -1 to prevent
 		var aiMode = 1;														//0=two humans, 1=human vs AI, 2=AI vs AI
 		var aiLevel = 'dumb';										//smart=unbeatable, dumb = random plays
-		var aiThinking = 500;											//pause while AI thinks
-		var bPlayFull = true;											//false ends game when end is predictable
-		var bContinueToFull = true;								//allows completion of game when outcome is predictable
+		var aiThink = 500;											//pause while AI thinks
+//		var bPlayFull = true;											//false ends game when end is predictable
+//		var bContinueToFull = true;								//allows completion of game when outcome is predictable
 
 
 		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
 		var aDiag2Win = ['20', '11', '02'];
 		//row and col wins programmatic
-		
+
 		function selectGamePiece(sGamePiece) {
 			oGamePiece.one = sGamePiece || 'X';
-			oGamePiece.two = (oGamePiece.one === 'X')? 'O':'X';
-			$('#oneGamePiece').html(oGamePiece.one);
-			$('#twoGamePiece').html(oGamePiece.two);
+			oGamePiece.two = (oGamePiece.one === 'X') ? 'O' : 'X';
+			displayScoreSection();
+		}
+
+		function displayScoreSection() {
+			$('#oneGamePiece').html(oGamePiece.one + '(' + oGamePiece.oneType + ')');
+			$('#twoGamePiece').html(oGamePiece.two + '(' + oGamePiece.twoType + ')');
 		}
 
 		//handler for human click
-		$('.play-button').click(function (event) {
+		$('.play-button').on('click', function (event) {
 			var $e = $(this);
 			var position = $e.data('position').toString();
 			if (!gameState.hasOwnProperty(position)) {				//do not process click if position is already played
@@ -147,7 +168,8 @@
 
 
 		function makePlay(position) {
-			iPlays ++;
+			hideGameOptions();
+			iPlays++;
 			var playedElement = $("[data-position='" + position + "']");
 			console.log('button text:', playedElement.html());
 
@@ -156,15 +178,15 @@
 			var gameOver = checkWin(position);
 			if (!gameOver) {
 				player = (player === 'one') ? 'two' : 'one';									//toggle player
-				if (aiMode > 0) {
-					setTimeout(aiMove, aiThinking);
+				if (aiMode === 2 || (aiMode === 1 && player === 'two')) {
+					setTimeout(aiMove, aiThink);
 				}
 			}
 		}
 
 		function aiMove() {
 			if (aiLevel === 'dumb') {
-				var aPositions = ['00','01','02','10','11','12','20','21','22'];
+				var aPositions = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
 				var index;
 				var position;
 				do {
@@ -182,11 +204,11 @@
 		}
 
 		//setup handler for new game button click
-		$('#newGame').click(function (onet) {
+		$('#newGame').on('click', function (onet) {
 			newGame(true);
 		});
 		//setup handler for reset game button click
-		$('#resetGame').click(function (onet) {
+		$('#resetGame').on('click', function (onet) {
 			resetGame();
 		});
 
@@ -205,11 +227,11 @@
 			for (var position in gameState) {
 				var $gameButton = $("button[data-position='" + position + "']");
 				$gameButton.html('');
-				$gameButton.removeClass(function(index, css){
+				$gameButton.removeClass(function (index, css) {
 					return (css.match (/\bgame-over-\S+/g) || []).join(' ');
 				});
 			}
-			$(".game-board").removeClass(function(index, css){
+			$(".game-board").removeClass(function (index, css) {
 				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
 			});
 			gameState = {};
@@ -336,67 +358,137 @@
 				}
 				$(".game-board").addClass('game-over-' + player);
 			}
-			if (autoNew > -1) {
+			if (autoNew > 0) {
 				setTimeout(newGame, autoNew);
 			}
 		}
 
 		//***************************** Game setting/options handlers ********************************/
-		$('#show-detail').on('click', function(event){
+		$('#show-detail').on('click', function (event) {
 			var $e = $(this);
 			var $collapsible = $('#gameSettings');
-			$collapsible.toggle();
-			var sDisplay = $collapsible.css('display');
-			if (sDisplay === 'none') {
-				$e.html('+ options');
-			}
-			else {
-				$e.html('- options');
-			}
+			$collapsible.toggle('fast');
+			showOptionsLabel();
 		});
 
+		function hideGameOptions() {
+			$('#gameSettings').toggle(false);
+			showOptionsLabel();
+		}
 
-		$('#frmGamePiece input').on('change', function() {
+		function showOptionsLabel() {
+			var sDisplay = $('#gameSettings').css('display');
+			if (sDisplay === 'none') {
+				$('#show-detail').html('+ Game options');
+			}
+			else {
+				$('#show-detail').html('- Game Options');
+			}
+		}
+
+
+		$('#frmGamePiece input').on('change', function () {
 			selectGamePiece($('input[name="gamePiece"]:checked', '#frmGamePiece').val());
 		});
 
 
-		$('#frmPlayerMode input').on('change', function() {
+		$('#frmPlayerMode input').on('change', function () {
 			aiMode = $('input[name="playerMode"]:checked', '#frmPlayerMode').val();
+			setupAIMode();
 		});
+
+		$('#frmAILevel input').on('change', function () {
+			aiLevel = $('input[name="aiLevel"]:checked', '#frmAILevel').val();
+		});
+		$('#aiThink').on('change', function () {
+			aiThink = $(this).val();
+		});
+		$('#autoNew').on('change', function () {
+			autoNew = $(this).val();
+		});
+		/**
+		 * Work that must be done when the aiMode property is changed
+		 */
+		function setupAIMode() {
+			switch (aiMode) {
+				case '0':
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = 'Human';
+					break;
+				case '1':
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = 'AI';
+					break;
+				case '2':
+					oGamePiece.oneType = 'AI';
+					oGamePiece.twoType = 'AI';
+					aiLevel = 'dumb';
+					//$('input[name="aiLevel"][value="dumb"]').prop('checked', true);
+					break;
+			}
+			displayScoreSection();
+		}
+
 
 		function getRandomPosition() {
 			return Math.floor(Math.random() * 9);
 		}
-		
-		if (aiMode === 2) {
-			aiMove('11');
+
+		function initUI() {
+			$('#autoNew').val(autoNew);
+			$('#aiThink').val(aiThink);
+			selectGamePiece('X');
+			displayScoreSection();
+			if (aiMode === 2) {
+				aiMove();
+			}
 		}
+
+
+		initUI();
 	});
 </script>
 
 <body>
 <div id="header" class="header">
 	<span class="title">Tracy's TicTacToe Trainer</span>
-	<a id="show-detail" href="#" >show game settings</a>
+	<a id="show-detail" href="#">+ Game Options</a>
+
 	<div id="gameSettings">
+		<span class="settings-title">Game Options</span>
 		<form id="frmGamePiece" class="frm-settings">
 			<label class="settings-label">Player One Game-Piece:</label>
-			<div class="settings-value">
-				<input type="radio" name="gamePiece" value="X" checked >"X"
-				<input type="radio" name="gamePiece" value="O" >"O"
-			</div>
 
+			<div class="settings-value">
+				<input type="radio" name="gamePiece" value="X" checked>"X"
+				<input type="radio" name="gamePiece" value="O">"O"
+			</div>
 		</form>
-		<form id="frmPlayerMode"  class="frm-settings">
+		<form id="frmPlayerMode" class="frm-settings">
 			<label class="settings-label">Play Mode:</label>
-			<div class="settings-value">
-				<input type="radio" name="playerMode" value="0" checked >Player vs Player
-				<input type="radio" name="playerMode" value="1" >Player vs AI
-				<input type="radio" name="playerMode" value="1" >AI vs AI
-			</div>
 
+			<div class="settings-value">
+				<input type="radio" name="playerMode" value="0">Player vs Player
+				<input type="radio" name="playerMode" value="1" checked>Player vs AI
+				<input type="radio" name="playerMode" value="2">AI vs AI
+			</div>
 		</form>
+		<form id="frmAILevel" class="frm-settings">
+			<label class="settings-label">AI Level:</label>
+
+			<div class="settings-value">
+				<input type="radio" name="aiLevel" value="dumb" checked>Dumb
+				<input type="radio" name="aiLevel" value="smart">Smart (unbeatable)
+			</div>
+			<br>
+			<label class="settings-label">AI Think Delay:</label>
+			<input id="aiThink" type="number" class="settings-value number" min="0" step="100" max="5000">
+		</form>
+		<div class="frm-settings">
+			<label class="settings-label">Auto New Game:</label>
+			<input id="autoNew" type="number" class="settings-value number" min="0" step="500" max="10000"> (Delay in MS, 0 to
+			prevent)
+		</div>
 
 	</div>
 	<div class="scores">
