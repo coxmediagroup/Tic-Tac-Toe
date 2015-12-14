@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" ng-app="ticTacToeApp">
 <head>
   <meta charset="utf-8">
   <title>Cox Assessment</title>
@@ -47,7 +47,38 @@
   </div>
 </nav>
 
-
+<div class="container game" ng-controller='gameCtrl'>
+	<div class="row">
+		<div class="col-sm-4 hidden-xs"></div>
+		<div 
+			class="col-xs-6 col-sm-2 text-center bg-warning participant turn">
+			YOUR TURN
+		</div>
+		<div 
+			class="col-xs-6 col-sm-2 text-center bg-warning participant">
+			MY TURN
+		</div>
+		<div class="col-sm-4 hidden-xs"></div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4"></div>
+		<div class="col-lg-4 text-center bg-success">
+			<div class="row">
+				<div 
+					class="col-xs-4 pos pos{{$index}}" 
+					ng-repeat="result in gameState track by $index">
+					{{result}}
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4"></div>
+	</div>
+	<div class="row ">
+		<div class="col-sm-4  hidden-xs"></div>
+		<div class="col-lg-4 col-xs-12 text-center bg-warning turn-label">TURN:{{turn}}</div>
+		<div class="col-sm-4 hidden-xs"></div>
+	</div>
+</div>
 
 <nav class="navbar navbar-default navbar-fixed-bottom">
   <div class="container">
@@ -58,5 +89,6 @@
 </nav>
 
 	<script src="js/all.js"></script>
+
 </body>
 </html>
