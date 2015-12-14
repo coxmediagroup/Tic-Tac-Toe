@@ -67,7 +67,9 @@
 				<div 
 					class="col-xs-4 pos pos{{$index}}" 
 					ng-repeat="result in gameState track by $index">
-					{{result}}
+					<span ng-if="result==='o'" class="fa fa-times-circle-o fa-2x">
+					</span>
+					<span ng-if="result==='x'" class="fa fa-circle-o fa-2x"></span>
 				</div>
 			</div>
 		</div>
