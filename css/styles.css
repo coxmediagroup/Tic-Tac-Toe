@@ -18,6 +18,7 @@ body {
 .pos {
 	height:50px;
 	cursor: pointer;
+	padding:8px;
 }
 .pos:hover{
 	background-color: #FFFFFF;
