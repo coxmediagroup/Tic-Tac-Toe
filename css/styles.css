@@ -1,0 +1,55 @@
+body {
+	padding-top:70px;
+	padding-bottom:70px;
+}
+.turn-label{
+	font-size:1rem;	
+}
+.participant{
+	font-size:1rem;
+}
+.participant.turn{
+	background-color:#a94442;
+	color:#DDDDDD;
+}
+.game {
+	margin-top: 50px;
+}
+.pos {
+	height:50px;
+	cursor: pointer;
+}
+.pos:hover{
+	background-color: #FFFFFF;
+}
+.pos0 {
+
+}
+.pos1 {
+	border-left: 1px solid black; 
+	border-right: 1px solid black; 
+}
+.pos2 {
+
+}
+.pos3 {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black; 
+}
+.pos4 {
+	border: 1px solid black;
+}
+.pos5 {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black; 
+}
+.pos6 {
+
+}
+.pos7 {
+	border-left: 1px solid black; 
+	border-right: 1px solid black; 
+}
+.pos8 {
+
+}
