@@ -229,6 +229,136 @@
 		var aAIPlayerTestStarts = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
 		var iAIPlayerTestStart = 0;
 
+
+		/************ UI event handlers ***************************/
+
+		//Human game play handler
+		$('.play-button').on('click', function (event) {
+			var $e = $(this);
+			var position = $e.data('position').toString();
+			if (!gameState.hasOwnProperty(position)) {				//do not process click if position is already played
+				makePlay(position);
+			}
+		});
+
+		//setup handler for new game button click
+		$('#newGame').on('click', function (onet) {
+			newGame(true);
+		});
+
+		//setup handler for reset game button click
+		$('#resetGame').on('click', function (onet) {
+			resetGame();
+		});
+
+
+		//***************************** Game setting/options handlers ********************************/
+		$('#show-detail').on('click', function (event) {
+			var $e = $(this);
+			var $collapsible = $('#gameSettings');
+			$collapsible.toggle('fast');
+			showOptionsLabel();
+		});
+
+		$('#frmGamePiece input').on('change', function () {
+			selectGamePiece($('input[name="gamePiece"]:checked', '#frmGamePiece').val());
+		});
+
+
+		$('#frmPlayerMode input').on('change', function () {
+			aiMode = parseInt($('input[name="playerMode"]:checked', '#frmPlayerMode').val());
+			setupAIMode();
+		});
+
+		$('#frmAILevel input').on('change', function () {
+			aiLevel = $('input[name="aiLevel"]:checked', '#frmAILevel').val();
+			setupAIMode();
+		});
+		$('#aiThink').on('change', function () {
+			aiThink = $(this).val();
+		});
+		$('#autoNew').on('change', function () {
+			autoNew = $(this).val();
+		});
+
+		/*********** Game new and reset functions *******************************/
+		function resetGame() {
+			newGame();
+			oScores = {one: 0, 'two': 0, draw: 0};
+			$("#score_one").html(0);
+			$("#score_two").html(0);
+			$("#score_draw").html(0);
+		}
+
+		/**
+		 * resets board, but not scores
+		 *
+		 */
+		function newGame(bManual) {
+			for (var position in gameState) {
+				var $gameButton = $("button[data-position='" + position + "']");
+				$gameButton.html('');
+				$gameButton.removeClass(function (index, css) {
+					return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+				});
+			}
+			$(".game-board").removeClass(function (index, css) {
+				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+			});
+			gameState = {};
+			resetAIPlay();
+			player = 'one';
+			iPlays = 0;
+
+			//will play another Ai vs AI game if new game is started by button click, or if the 5 game set is in progress
+			if (aiMode === 2 && (bManual || iAIPlayerOneStart > 0)) {
+				aiMove(aAIPlayerOneStarts[iAIPlayerOneStart]);
+				iAIPlayerOneStart = (iAIPlayerOneStart === 4) ? 0 : iAIPlayerOneStart + 1;
+			}
+			//will play all atarting moves
+			if (aiMode === 3 && (bManual || iAIPlayerTestStart > 0)) {
+				aiMove(aAIPlayerTestStarts[iAIPlayerTestStart]);
+				iAIPlayerTestStart = (iAIPlayerTestStart === 8) ? 0 : iAIPlayerTestStart + 1;
+			}
+		}
+
+		function resetAIPlay() {
+			aiPlay = {
+				lastPlay: '',
+				aiPositions: [],
+				opponentPositions: [],
+				openPositions: {
+					"00": 'open',
+					"01": 'open',
+					"02": 'open',
+					"10": 'open',
+					"11": 'open',
+					"12": 'open',
+					"20": 'open',
+					"21": 'open',
+					"22": 'open'
+				}
+			};
+		}
+
+		/*********** Game option functions *******************************/
+
+		//hides the options section when a user makes a play
+		function hideGameOptions() {
+			$('#gameSettings').toggle(false);
+			showOptionsLabel();
+		}
+
+		function showOptionsLabel() {
+			var sDisplay = $('#gameSettings').css('display');
+			if (sDisplay === 'none') {
+				$('#show-detail').html('+ Game options');
+			}
+			else {
+				$('#show-detail').html('- Game Options');
+			}
+		}
+
 		function selectGamePiece(sGamePiece) {
 			oGamePiece.one = sGamePiece || 'X';
 			oGamePiece.two = (oGamePiece.one === 'X') ? 'O' : 'X';
@@ -240,15 +370,32 @@
 			$('#twoGamePiece').html('"' + oGamePiece.two + '" (' + oGamePiece.twoType + ')');
 		}
 
-		//handler for human click
-		$('.play-button').on('click', function (event) {
-			var $e = $(this);
-			var position = $e.data('position').toString();
-			if (!gameState.hasOwnProperty(position)) {				//do not process click if position is already played
-				makePlay(position);
+		//Work that must be done when the aiMode property is changed
+		function setupAIMode() {
+			switch (aiMode) {
+				case 0:
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = 'Human';
+					break;
+				case 1:
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = aiLevel + ' AI';
+					break;
+				case 2:
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
+					break;
+				case 3:
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
+					break;
 			}
-		});
+			displayScoreSection();
+			resetGame();
+		}
 
+
+		/*********** Game Play functions *******************************/
 
 		function makePlay(position) {
 			hideGameOptions();
@@ -266,6 +413,11 @@
 					setTimeout(aiMove, aiThink);
 				}
 			}
+		}
+
+		//used by dumb AI option
+		function getRandomPosition() {
+			return Math.floor(Math.random() * 9);
 		}
 
 		function aiMove(sStartPos) {
@@ -428,74 +580,6 @@
 			}
 		}
 
-		//setup handler for new game button click
-		$('#newGame').on('click', function (onet) {
-			newGame(true);
-		});
-		//setup handler for reset game button click
-		$('#resetGame').on('click', function (onet) {
-			resetGame();
-		});
-
-		function resetGame() {
-			newGame();
-			oScores = {one: 0, 'two': 0, draw: 0};
-			$("#score_one").html(0);
-			$("#score_two").html(0);
-			$("#score_draw").html(0);
-		}
-
-		/**
-		 * resets board, but not scores
-		 *
-		 */
-		function newGame(bManual) {
-			for (var position in gameState) {
-				var $gameButton = $("button[data-position='" + position + "']");
-				$gameButton.html('');
-				$gameButton.removeClass(function (index, css) {
-					return (css.match (/\bgame-over-\S+/g) || []).join(' ');
-				});
-			}
-			$(".game-board").removeClass(function (index, css) {
-				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
-			});
-			gameState = {};
-			resetAIPlay();
-			player = 'one';
-			iPlays = 0;
-
-			//will play another Ai vs AI game if new game is started by button click, or if the 5 game set is in progress
-			if (aiMode === 2 && (bManual || iAIPlayerOneStart > 0)) {
-				aiMove(aAIPlayerOneStarts[iAIPlayerOneStart]);
-				iAIPlayerOneStart = (iAIPlayerOneStart === 4) ? 0 : iAIPlayerOneStart + 1;
-			}
-			//will play all atarting moves
-			if (aiMode === 3 && (bManual || iAIPlayerTestStart > 0)) {
-				aiMove(aAIPlayerTestStarts[iAIPlayerTestStart]);
-				iAIPlayerTestStart = (iAIPlayerTestStart === 8) ? 0 : iAIPlayerTestStart + 1;
-			}
-		}
-
-		function resetAIPlay() {
-			aiPlay = {
-				lastPlay: '',
-				aiPositions: [],
-				opponentPositions: [],
-				openPositions: {
-					"00": 'open',
-					"01": 'open',
-					"02": 'open',
-					"10": 'open',
-					"11": 'open',
-					"12": 'open',
-					"20": 'open',
-					"21": 'open',
-					"22": 'open'
-				}
-			};
-		}
-
 		/**
 		 * checks last play for a win
 		 * @param position
@@ -615,82 +699,8 @@
 			}
 		}
 
-		//***************************** Game setting/options handlers ********************************/
-		$('#show-detail').on('click', function (event) {
-			var $e = $(this);
-			var $collapsible = $('#gameSettings');
-			$collapsible.toggle('fast');
-			showOptionsLabel();
-		});
 
-		//hides the options section when a user makes a play
-		function hideGameOptions() {
-			$('#gameSettings').toggle(false);
-			showOptionsLabel();
-		}
-
-		function showOptionsLabel() {
-			var sDisplay = $('#gameSettings').css('display');
-			if (sDisplay === 'none') {
-				$('#show-detail').html('+ Game options');
-			}
-			else {
-				$('#show-detail').html('- Game Options');
-			}
-		}
-
-
-		$('#frmGamePiece input').on('change', function () {
-			selectGamePiece($('input[name="gamePiece"]:checked', '#frmGamePiece').val());
-		});
-
-
-		$('#frmPlayerMode input').on('change', function () {
-			aiMode = parseInt($('input[name="playerMode"]:checked', '#frmPlayerMode').val());
-			setupAIMode();
-		});
-
-		$('#frmAILevel input').on('change', function () {
-			aiLevel = $('input[name="aiLevel"]:checked', '#frmAILevel').val();
-			setupAIMode();
-		});
-		$('#aiThink').on('change', function () {
-			aiThink = $(this).val();
-		});
-		$('#autoNew').on('change', function () {
-			autoNew = $(this).val();
-		});
-		/**
-		 * Work that must be done when the aiMode property is changed
-		 */
-		function setupAIMode() {
-			switch (aiMode) {
-				case 0:
-					oGamePiece.oneType = 'Human';
-					oGamePiece.twoType = 'Human';
-					break;
-				case 1:
-					oGamePiece.oneType = 'Human';
-					oGamePiece.twoType = aiLevel + ' AI';
-					break;
-				case 2:
-					oGamePiece.oneType = aiLevel + '&nbsp;AI';
-					oGamePiece.twoType = aiLevel + '&nbsp;AI';
-					break;
-				case 3:
-					oGamePiece.oneType = aiLevel + '&nbsp;AI';
-					oGamePiece.twoType = aiLevel + '&nbsp;AI';
-					break;
-			}
-			displayScoreSection();
-			resetGame();
-		}
-
-
-		function getRandomPosition() {
-			return Math.floor(Math.random() * 9);
-		}
-
+		//initialize the UI
 		function initUI() {
 			resetAIPlay();
 			selectGamePiece('X');
@@ -704,7 +714,6 @@
 				aiMove();
 			}
 		}
-
 
 		initUI();
 	});
