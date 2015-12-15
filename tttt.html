@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>TTT</title>
+	<title>TTTT</title>
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">-->
 </head>
@@ -18,12 +18,15 @@
 		border: solid 1px black;
 		border-radius: 5px;
 		padding: 5px;
+		background-color: whitesmoke;
 	}
 
 	#gameSettings {
-		display: none;
-		margin: 10px;
-		background-color: antiquewhite;
+		display: block;
+		margin: 5px;
+		padding: 5px;
+		background-color: aliceblue;
+		border-radius: 5px;
 		overflow: hidden;
 	}
 
@@ -35,7 +38,7 @@
 		font-size: 24px;
 		font-weight: bold;
 	}
-	.settings-title {
+	.sub-title {
 		font-size: 18px;
 	}
 	.settings-label {
@@ -58,7 +61,45 @@
 	.frm-settings {
 		clear: both;
 	}
-
+	.scores {
+		display: inline-block;
+		/*margin-left: 10px;*/
+		font-weight: bold;
+		border: solid 1px black;
+		width: 75%;
+	}
+	.score-label {
+		display: inline-block;
+		width: 35%;
+		text-align: center;
+	}
+	.score-label.col-title {
+		text-decoration: underline;
+	}
+	.score-label.one {
+		color: green;
+	}
+	.score-label.two {
+		color: blue;
+	}
+	.score-label.draw {
+		width: 20%;
+	}
+	.score-label.player {
+		width: 18%;
+	}
+	.score-label.wins {
+		width: 20%;
+	}
+	.button-block {
+		width: 24%;
+		float: right;
+	}
+	.game-button {
+		width: 100%;
+		margin-top: 5px;
+		font-weight: bold;
+	}
 	.game-board {
 		width: 90vw;
 		height: 90vw;
@@ -67,6 +108,7 @@
 		display: inline-block;
 		padding: 5px;
 		border: solid 1px #000000;
+		border-radius: 5px;
 	}
 
 	.play-button {
@@ -84,6 +126,14 @@
 		.play-button {
 			font-size: 124px;
 		}
+	}
+
+	.position-played-one {
+		color: green;
+	}
+
+	.position-played-two {
+		color: blue;
 	}
 
 	.game-over-one {
@@ -132,7 +182,7 @@
 		var iPlays = 0;														//used to determine draw
 		var gameState = {};												//tracks plays, who has a given position
 		var oGamePiece = {one: 'X', two: 'O', oneColor: 'green', twoColor: 'blue', oneType: 'Human', twoType: 'AI'};		//to support user selection of game piece
-		var oScores = {one: 0, two: 0};
+		var oScores = {one: 0, two: 0, draw: 0};
 
 		var autoNew = 2000;												//automatically start new game after timeout set to -1 to prevent
 		var aiMode = 1;														//0=two humans, 1=human vs AI, 2=AI vs AI
@@ -153,8 +203,8 @@
 		}
 
 		function displayScoreSection() {
-			$('#oneGamePiece').html(oGamePiece.one + '(' + oGamePiece.oneType + ')');
-			$('#twoGamePiece').html(oGamePiece.two + '(' + oGamePiece.twoType + ')');
+			$('#oneGamePiece').html(oGamePiece.one + ' (' + oGamePiece.oneType + ')');
+			$('#twoGamePiece').html(oGamePiece.two + ' (' + oGamePiece.twoType + ')');
 		}
 
 		//handler for human click
@@ -171,8 +221,7 @@
 			hideGameOptions();
 			iPlays++;
 			var playedElement = $("[data-position='" + position + "']");
-			console.log('button text:', playedElement.html());
-
+			playedElement.addClass('position-played-' + player);
 			playedElement.html(oGamePiece[player]);
 			gameState[position] = player;																		//record move
 			var gameOver = checkWin(position);
@@ -215,8 +264,9 @@
 		function resetGame() {
 			newGame();
 			oScores = {one: 0, 'two': 0};
-			$("#scoreOne").html(0);
-			$("#scoreTwo").html(0);
+			$("#score_one").html(0);
+			$("#score_two").html(0);
+			$("#score_draw").html(0);
 		}
 
 		/**
@@ -324,35 +374,42 @@
 			var sPosition;
 			var i = -1;
 			if (winOn === 'draw') {
+				oScores.draw++;
+				$("#score_draw").html(oScores.draw);
 				for (position in gameState) {
+					$("button[data-position='" + position + "']").removeClass('position-played-one position-played-two');
 					$("button[data-position='" + position + "']").addClass('game-over-draw');
 				}
 				$(".game-board").addClass('game-over-draw');
 			}
 			else {
 				oScores[player]++;
-				$("#score" + player).html(oScores[player]);
+				$("#score_" + player).html(oScores[player]);
 				if (winOn === 'aDiag1Win') {
 					for (i = 0; i < aDiag1Win.length; i++) {
 						sPosition = aDiag1Win[i];
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
 						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
 					}
 				}
 				else if (winOn === 'aDiag2Win') {
 					for (i = 0; i < aDiag2Win.length; i++) {
 						sPosition = aDiag2Win[i];
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
 						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
 					}
 				}
 				else if (winOn.charAt(0) === 'r') {
 					for (i = 0; i < 3; i++) {
 						sPosition = winOn.charAt(1) + i;
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
 						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
 					}
 				}
 				else if (winOn.charAt(0) === 'c') {
 					for (i = 0; i < 3; i++) {
 						sPosition = i + winOn.charAt(1);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
 						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
 					}
 				}
@@ -371,6 +428,7 @@
 			showOptionsLabel();
 		});
 
+		//hides the options section when a user makes a play
 		function hideGameOptions() {
 			$('#gameSettings').toggle(false);
 			showOptionsLabel();
@@ -393,12 +451,13 @@
 
 
 		$('#frmPlayerMode input').on('change', function () {
-			aiMode = $('input[name="playerMode"]:checked', '#frmPlayerMode').val();
+			aiMode = parseInt($('input[name="playerMode"]:checked', '#frmPlayerMode').val());
 			setupAIMode();
 		});
 
 		$('#frmAILevel input').on('change', function () {
 			aiLevel = $('input[name="aiLevel"]:checked', '#frmAILevel').val();
+			setupAIMode();
 		});
 		$('#aiThink').on('change', function () {
 			aiThink = $(this).val();
@@ -411,18 +470,18 @@
 		 */
 		function setupAIMode() {
 			switch (aiMode) {
-				case '0':
+				case 0:
 					oGamePiece.oneType = 'Human';
 					oGamePiece.twoType = 'Human';
 					break;
-				case '1':
+				case 1:
 					oGamePiece.oneType = 'Human';
-					oGamePiece.twoType = 'AI';
+					oGamePiece.twoType = aiLevel + ' AI';
 					break;
-				case '2':
-					oGamePiece.oneType = 'AI';
-					oGamePiece.twoType = 'AI';
-					aiLevel = 'dumb';
+				case 2:
+					oGamePiece.oneType =  aiLevel + ' AI';
+					oGamePiece.twoType =  aiLevel + ' AI';
+					//aiLevel = 'dumb';
 					//$('input[name="aiLevel"][value="dumb"]').prop('checked', true);
 					break;
 			}
@@ -439,6 +498,8 @@
 			$('#aiThink').val(aiThink);
 			selectGamePiece('X');
 			displayScoreSection();
+			setupAIMode();
+			showOptionsLabel();
 			if (aiMode === 2) {
 				aiMove();
 			}
@@ -451,11 +512,11 @@
 
 <body>
 <div id="header" class="header">
-	<span class="title">Tracy's TicTacToe Trainer</span>
+	<span class="title">Tracy's TicTacToe</span>
 	<a id="show-detail" href="#">+ Game Options</a>
 
 	<div id="gameSettings">
-		<span class="settings-title">Game Options</span>
+		<span class="sub-title">Game Options</span>
 		<form id="frmGamePiece" class="frm-settings">
 			<label class="settings-label">Player One Game-Piece:</label>
 
@@ -465,12 +526,12 @@
 			</div>
 		</form>
 		<form id="frmPlayerMode" class="frm-settings">
-			<label class="settings-label">Play Mode:</label>
+			<label class="settings-label">Competitors:</label>
 
 			<div class="settings-value">
 				<input type="radio" name="playerMode" value="0">Player vs Player
-				<input type="radio" name="playerMode" value="1" checked>Player vs AI
-				<input type="radio" name="playerMode" value="2">AI vs AI
+				<span style="white-space: nowrap"><input type="radio" name="playerMode" value="1" checked>Player&nbsp;vs&nbsp;AI
+				<input type="radio" name="playerMode" value="2">AI vs AI</span>
 			</div>
 		</form>
 		<form id="frmAILevel" class="frm-settings">
@@ -492,9 +553,25 @@
 
 	</div>
 	<div class="scores">
-		Scores:
-		<div>Player One <span id="oneGamePiece">test</span>: <span id="scoreOne">0</span></div>
-		<div>Player Two <span id="twoGamePiece"></span>: <span id="scoreTwo">0</span></div>
+		<div>
+			<span class="score-label player col-title">Player</span>
+			<span class="score-label col-title">Mark (type)</span>
+			<span class="score-label wins col-title">Wins!</span>
+			<span class="score-label draw">Draws: <span id="score_draw" >0</span></span></div>
+		<div>
+			<span class="score-label player one">One</span>
+			<span id="oneGamePiece" class="score-label one"></span>
+			<span id="score_one" class="score-label wins one">0</span></div>
+		<div>
+			<span class="score-label player two">Two</span>
+			<span id="twoGamePiece" class="score-label two"></span>
+			<span id="score_two" class="score-label wins two">0</span></div>
+
+	</div>
+	<div class="button-block">
+		<button id="newGame" class="game-button">New Game</button>
+		<br>
+		<button id="resetGame" class="game-button">Reset Game</button>
 	</div>
 
 </div>
@@ -516,9 +593,6 @@
 		<button class="play-button" data-position="22"></button>
 	</div>
 </div>
-<br>
-<button id="newGame">New Game</button>
-<br>
-<button id="resetGame">Reset</button>
+
 </body>
 </html>
