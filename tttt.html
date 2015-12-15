@@ -170,7 +170,6 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function () {
-		console.log('document ready');
 		/**
 		 * 00|01|02
 		 * 10|11|12
@@ -179,10 +178,6 @@
 		 *
 		 * After each move, check for win. If win, game over with winner.
 		 *  if no win, check for full board. If full, game over with draw.
-		 * Wins:
-		 * [0,1,2][0,1,2]  //rows AND columns
-		 * 00,11,22 diagonal 1
-		 * 20,11,02 diagonal 2
 		 */
 
 		var iRound = 1;														//each player has one turn/round
@@ -199,11 +194,40 @@
 //		var bPlayFull = true;											//false ends game when end is predictable
 //		var bContinueToFull = true;								//allows completion of game when outcome is predictable
 
-
+		var aWinSets = [
+			['00', '11', '22'],
+			['20', '11', '02'],
+			['00', '01', '02'],
+			['10', '11', '12'],
+			['20', '21', '22'],
+			['00', '10', '20'],
+			['01', '11', '21'],
+			['02', '12', '22'],
+		]																					//unless we keep track of the status of each win set between plays, we need to check them all each play
 		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
 		var aDiag2Win = ['20', '11', '02'];
-		//row and col wins programmatic
-		var aiPlay = {lastPlay: '', aiPositions: [], opponentPositions: [], openPositions: []};
+
+		var aiPlay = {
+			lastPlay: '',
+			aiPositions: [],
+			opponentPositions: [],
+			openPositions: {
+				"00": 'open',
+				"01": 'open',
+				"02": 'open',
+				"10": 'open',
+				"11": 'open',
+				"12": 'open',
+				"20": 'open',
+				"21": 'open',
+				"22": 'open'
+			}
+		};
+
+		var aAIPlayerOneStarts = ['11', '00', '20', '02', '22'];		//when playing ai vs ai, these are the start positions
+		var iAIPlayerOneStart = 0;															//set /reset to vary ai player one's start.
+		var aAIPlayerTestStarts = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
+		var iAIPlayerTestStart = 0;
 
 		function selectGamePiece(sGamePiece) {
 			oGamePiece.one = sGamePiece || 'X';
@@ -234,24 +258,38 @@
 			playedElement.html(oGamePiece[player]);
 			gameState[position] = player;																		//record move
 			aiPlay.lastPlay = position;
+			delete aiPlay.openPositions[position];												//remove the position from the available position dictionary
 			var gameOver = checkWin(position);
 			if (!gameOver) {
 				player = (player === 'one') ? 'two' : 'one';									//toggle player
-				if (aiMode === 2 || (aiMode === 1 && player === 'two')) {
+				if (aiMode === 2 || aiMode === 3 || (aiMode === 1 && player === 'two')) {
 					setTimeout(aiMove, aiThink);
 				}
 			}
 		}
 
-		function aiMove() {
+		function aiMove(sStartPos) {
 			var aPositions = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
-			if (aiLevel === 'dumb') {
+			var aSidePositions = ['01', '10', '12', '21'];
+			var aCornerPositions = ['00', '20', '02', '22'];
+			var row = aiPlay.lastPlay.charAt(0);
+			var col = aiPlay.lastPlay.charAt(1);
+			var idxRow = 0;
+			var idxCol = 0;
+			var posKey = '';
+			var aWinSet = [];
+			var sResult = '';
+			var idx = -1;
+			var position;
 
-				var index;
-				var position;
+			if (sStartPos) {
+				sResult = 'play';
+				makePlay(sStartPos);
+			}
+			else if (aiLevel === 'dumb') {
 				do {
-					index = getRandomPosition();
-					position = aPositions[index];
+					idx = getRandomPosition();
+					position = aPositions[idx];
 					if (!gameState[position]) {
 						makePlay(position);
 						break;
@@ -259,77 +297,134 @@
 				} while (true)
 			}
 			else if (aiLevel === 'smart') {
-				/**
-				 *
-				 * AI move algorithm:
-				 * Check and take win if possible (player has any two positions in a win, take the third
-				 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
-				 * No, then take 11 if available.
-				 * if not 11 then
-				 *  if previous move was [01,10,12,21] take [00,20,02,22]
-				 *  if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
-				 * last option, take any free position.
-				 */
-				var sResult = analyzeWinSet(aDiag1Win);
-				if (sResult === '') {
-					sResult = analyzeWinSet(aDiag2Win);
-				}
-				if (sResult === '') {
-					var row = aiPlay.lastPlay.charAt(0);
-					var col = aiPlay.lastPlay.charAt(1);
-					var idxRow = 0;
-					var idxCol = 0;
-					var posKey = '';
-					var aWinSet = [];
-					for (idxCol = 0; idxCol < 3; idxCol++) {		//all the positions in the last played row
-						posKey = row + idxCol;
-						aWinSet.push(posKey);
+				for (idx = 0; idx < aWinSets.length; idx++) {
+					aWinSet = aWinSets[idx];
+					sResult = analyzeWinSet(aWinSet);
+					if (sResult.length > 0) {
+						break;
 					}
-					sResult = analyzeWinSet(aDiag2Win);
 				}
 
+				//there was no win or required block, so select the best play from the remaining open positions
+
 				if (sResult === '') {
-					do {
-						index = getRandomPosition();
-						position = aPositions[index];
-						if (!gameState[position]) {
+					//Take center 11 if available.
+					if (aiPlay.openPositions.hasOwnProperty('11')) {
+						sResult = 'play';
+						makePlay('11');
+					}
+				}
+				if (sResult === '') {
+					//Take a corner if available.
+					for (idx = 0; idx < aCornerPositions.length; idx++) {
+						position = aCornerPositions[idx];
+						if (aiPlay.openPositions.hasOwnProperty(position)) {			//preferred position is available
+							sResult = 'play';
 							makePlay(position);
 							break;
 						}
-					} while (true)
+					}
 				}
-
-
+				if (sResult === '') {
+					//if previous move was [01,10,12,21] take [00,20,02,22]
+					for (idx = 0; idx < aSidePositions.length; idx++) {								//Check side positions
+						if (aiPlay.lastPlay === aSidePositions[idx]) {						//lastPlay was a side position, so we need to select a corner position
+							position = aCornerPositions[idx];
+							if (aiPlay.openPositions.hasOwnProperty(position)) {		//preferred position is available
+								sResult = 'play';
+								makePlay(position);
+								break;
+							}
+							else {																									//else pick any corner position
+								for (var j = 0; j < aCornerPositions.length; j++) {
+									position = aCornerPositions[j];
+									if (aiPlay.openPositions.hasOwnProperty(position)) {//this corner position is available
+										sResult = 'play';
+										makePlay(position);
+										break;
+									}
+								}
+							}
+						}
+						if (sResult === 'play') {
+							break;
+						}
+					}
+				}
+				if (sResult === '') {
+					//if previous move was corner [00,02,22,20] take [01,12,21,10] take matching side if available, otherwise take nearest
+					for (idx = 0; idx < aCornerPositions.length; idx++) {								//check last play
+						if (aiPlay.lastPlay === aCornerPositions[idx]) {						//lastPlay was a corner position, so we need to select a corner position
+							position = aSidePositions[idx];														//preferred choice
+							if (aiPlay.openPositions.hasOwnProperty(position)) {			//preferred position is available
+								sResult = 'play';
+								makePlay(position);
+								break;
+							}
+							else {																										//else pick any corner position
+								for (var j = 0; j < aSidePositions.length; j++) {
+									position = aSidePositions[j];
+									if (aiPlay.openPositions.hasOwnProperty(position)) {	//this corner position is available
+										sResult = 'play';
+										makePlay(position);
+										break;
+									}
+								}
+							}
+						}
+						if (sResult === 'play') {
+							break;
+						}
+					}
+				}
+				if (sResult === '') {
+					//Pick any open positon
+					for (position in aiPlay.openPositions) {
+						sResult = 'play';
+						makePlay(position);
+						break;
+					}
+				}
 			}
 		}
 
+		/*
+		 * Check and take win if possible (player has any two positions in a win, take the third
+		 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
+		 */
 		function analyzeWinSet(aWinSet) {
 			var sPositionCur;
+			var oOpenPositions = {};																	//open positions in the current winset,
+			var aOpponentPositions = [];															//opponent positions in the current winset,
+			var aAIPositions = [];
 			for (i = 0; i < aWinSet.length; i++) {
 				sPositionCur = aWinSet[i];
-				if (!gameState.hasOwnProperty(sPositionCur)) {
-					aiPlay.openPositions.push(sPositionCur);							//position is available for play
+				if (aiPlay.openPositions.hasOwnProperty(sPositionCur)) {//position is available for play
+					oOpenPositions[sPositionCur] = 'open';
 				}
-				else if (gameState[aWinSet[i]] !== player) {						//position is occupied by opponent so win is not possible here
-					aiPlay.opponentPositions.push(sPositionCur);
+				else if (gameState[sPositionCur] !== player) {					//position is occupied by opponent so win is not possible here
+					aOpponentPositions.push(sPositionCur);
 				}
 				else {
-					aiPlay.aiPositions.push(aWinSet[i]);									//ai owns position
+					aAIPositions.push(aWinSet[i]);									//current ai player owns position
 				}
 			}
-			if (aiPlay.openPositions.length > 0) {										//there ARE plays in this win set
-				if (aiPlay.aiPositions.length == 2) {										//if we own two, we can win
-					makePlay(aiPlay.openPositions.pop());
+			if (Object.keys(oOpenPositions).length > 0) {										//there ARE plays in this win set
+				if (aAIPositions.length == 2) {										//if we own two, we can win
+					makePlay(Object.keys(oOpenPositions)[0]);
 					return 'win';
 				}
-				else if (aiPlay.opponentPositions.length == 2) {				//opponent owns two, we MUST block
-					makePlay(aiPlay.openPositions.pop());
+				else if (aOpponentPositions.length == 2) {							//opponent owns two, we MUST block
+					makePlay(Object.keys(oOpenPositions)[0]);
 					return 'block';
 				}
 				else {
 					//don't play yet
 					return '';
 				}
+			}
+			else {
+				return '';
 			}
 		}
 
@@ -344,7 +439,7 @@
 
 		function resetGame() {
 			newGame();
-			oScores = {one: 0, 'two': 0};
+			oScores = {one: 0, 'two': 0, draw: 0};
 			$("#score_one").html(0);
 			$("#score_two").html(0);
 			$("#score_draw").html(0);
@@ -366,13 +461,39 @@
 				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
 			});
 			gameState = {};
+			resetAIPlay();
 			player = 'one';
 			iPlays = 0;
 
-			//will play another Ai vs AI game
-			if (aiMode === 2 && bManual) {
-				aiMove();
+			//will play another Ai vs AI game if new game is started by button click, or if the 5 game set is in progress
+			if (aiMode === 2 && (bManual || iAIPlayerOneStart > 0)) {
+				aiMove(aAIPlayerOneStarts[iAIPlayerOneStart]);
+				iAIPlayerOneStart = (iAIPlayerOneStart === 4) ? 0 : iAIPlayerOneStart + 1;
 			}
+			//will play all atarting moves
+			if (aiMode === 3 && (bManual || iAIPlayerTestStart > 0)) {
+				aiMove(aAIPlayerTestStarts[iAIPlayerTestStart]);
+				iAIPlayerTestStart = (iAIPlayerTestStart === 8) ? 0 : iAIPlayerTestStart + 1;
+			}
+		}
+
+		function resetAIPlay() {
+			aiPlay = {
+				lastPlay: '',
+				aiPositions: [],
+				opponentPositions: [],
+				openPositions: {
+					"00": 'open',
+					"01": 'open',
+					"02": 'open',
+					"10": 'open',
+					"11": 'open',
+					"12": 'open',
+					"20": 'open',
+					"21": 'open',
+					"22": 'open'
+				}
+			};
 		}
 
 		/**
@@ -382,18 +503,16 @@
 		function checkWin(position) {
 			var row = position.charAt(0);
 			var col = position.charAt(1);
-
 			var idxRow = 0;
 			var idxCol = 0;
 			var i = -1;
 			var win = true;
 			var winOn = '';													//winOn records type of win
 			var key = '';
-			console.log('check row');
+			var sSidePositions = '01,10,12,21';
 			winOn = 'r' + row;
 			for (idxCol = 0; idxCol < 3; idxCol++) {
 				key = row + idxCol;
-				console.log('checking ', key);
 				if (gameState[key] !== player) {
 					win = false;
 					break;
@@ -401,23 +520,18 @@
 			}
 			if (!win) {
 				//check columns
-				console.log('check column');
 				win = true;
 				winOn = 'c' + col;
 				for (idxRow = 0; idxRow < 3; idxRow++) {
 					key = idxRow + col;
-					console.log('checking ', key);
 					if (gameState[key] !== player) {
 						win = false;
 						break;
 					}
 				}
 			}
-			if (!win) {
+			if (!win && (sSidePositions.indexOf(position) === -1)) {//check diagonal but not for played side positons O1,10,21,12 which can't cause a diagonal win
 				win = true;
-
-				//check diagonal not O1, not
-				console.log('check diag 1');
 				winOn = 'aDiag1Win';
 				for (i = 0; i < aDiag1Win.length; i++) {
 					if (gameState[aDiag1Win[i]] !== player) {
@@ -428,7 +542,6 @@
 				if (!win) {
 					win = true;
 					winOn = 'aDiag2Win';
-					console.log('check diag 2');
 					for (i = 0; i < aDiag2Win.length; i++) {
 						if (gameState[aDiag2Win[i]] !== player) {
 							win = false;
@@ -450,6 +563,7 @@
 			}
 		}
 
+		//Runs on win or draw. Displays win, updates score, optionally launches new game
 		function gameOver(winOn) {
 			winOn = winOn || 'draw';
 			var sPosition;
@@ -563,8 +677,13 @@
 					oGamePiece.oneType = aiLevel + '&nbsp;AI';
 					oGamePiece.twoType = aiLevel + '&nbsp;AI';
 					break;
+				case 3:
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
+					break;
 			}
 			displayScoreSection();
+			resetGame();
 		}
 
 
@@ -573,13 +692,14 @@
 		}
 
 		function initUI() {
+			resetAIPlay();
+			selectGamePiece('X');
+			setupAIMode();
+			displayScoreSection();
+			showOptionsLabel();
 			$('#autoNew').val(autoNew);
 			$('input[name="aiLevel"][value="' + aiLevel + '"]').prop('checked', true);
 			$('#aiThink').val(aiThink);
-			selectGamePiece('X');
-			displayScoreSection();
-			setupAIMode();
-			showOptionsLabel();
 			if (aiMode === 2) {
 				aiMove();
 			}
@@ -619,15 +739,22 @@
 				<input type="radio" name="playerMode" value="0">Player vs Player
 				<span style="white-space: nowrap">
 					<input type="radio" name="playerMode" value="1" checked>Player&nbsp;vs&nbsp;AI
-				<label>
-					<input type="radio" name="playerMode" value="2">
-					AI vs AI
-				</label>
+					<label>
+						<input type="radio" name="playerMode" value="2">
+						AI vs AI
+					</label>
+				</span>
+				<span style="white-space: nowrap">
+					<label>
+						<input type="radio" name="playerMode" value="3">
+						TEST
+					</label>
 				</span>
 			</div>
 		</form>
 		<form id="frmAILevel" class="frm-settings">
 			<label class="settings-label">AI Level:</label>
+
 			<div class="settings-value">
 				<input type="radio" name="aiLevel" value="dumb" checked>Dumb
 				<input type="radio" name="aiLevel" value="smart">Smart (unbeatable)
