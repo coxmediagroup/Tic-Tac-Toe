@@ -40595,6 +40595,18 @@ $provide.value("$locale", {
 angular.module('ticTacToeApp',[]);
 /* services.js */
 /* directives.js */
+angular.module("ticTacToeApp").directive("header", function(){
+	return {
+		restrict:'A',
+		templateUrl:"header.html"
+	}
+});
+angular.module("ticTacToeApp").directive("footer", function(){
+	return {
+		restrict:'A',
+		templateUrl:"footer.html"
+	}
+});
 /* controller.js */
 angular.module("ticTacToeApp").controller("gameCtrl", function($scope){
 	$scope.turn = 1;
