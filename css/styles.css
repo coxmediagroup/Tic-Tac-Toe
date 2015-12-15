@@ -3,14 +3,7 @@ body {
 	padding-bottom:70px;
 }
 .turn-label{
-	font-size:1rem;	
-}
-.participant{
-	font-size:1rem;
-}
-.participant.turn{
-	background-color:#a94442;
-	color:#DDDDDD;
+	font-size:2rem;	
 }
 .game {
 	margin-top: 50px;
