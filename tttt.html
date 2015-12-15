@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -38,9 +39,11 @@
 		font-size: 24px;
 		font-weight: bold;
 	}
+
 	.sub-title {
 		font-size: 18px;
 	}
+
 	.settings-label {
 		display: inline-block;
 		width: 30%;
@@ -60,7 +63,10 @@
 
 	.frm-settings {
 		clear: both;
+		border-top: solid 2px whitesmoke;
+		border-bottom: solid 2px whitesmoke;
 	}
+
 	.scores {
 		display: inline-block;
 		/*margin-left: 10px;*/
@@ -68,38 +74,48 @@
 		border: solid 1px black;
 		width: 75%;
 	}
+
 	.score-label {
 		display: inline-block;
 		width: 35%;
 		text-align: center;
 	}
+
 	.score-label.col-title {
 		text-decoration: underline;
 	}
+
 	.score-label.one {
 		color: green;
 	}
+
 	.score-label.two {
 		color: blue;
 	}
+
 	.score-label.draw {
 		width: 20%;
 	}
+
 	.score-label.player {
 		width: 18%;
 	}
+
 	.score-label.wins {
 		width: 20%;
 	}
+
 	.button-block {
 		width: 24%;
 		float: right;
 	}
+
 	.game-button {
 		width: 100%;
 		margin-top: 5px;
 		font-weight: bold;
 	}
+
 	.game-board {
 		width: 90vw;
 		height: 90vw;
@@ -160,14 +176,6 @@
 		 * 10|11|12
 		 * 20|21|22
 		 *
-		 * AI move algorithm:
-		 * Check and take win if possible (player has any two positions in a win, take the third
-		 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
-		 * No, then take 11 if available.
-		 * if not 11 then
-		 *  if previous move was [01,10,12,21] take [00,20,02,22]
-		 *  if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
-		 * last option, take any free position.
 		 *
 		 * After each move, check for win. If win, game over with winner.
 		 *  if no win, check for full board. If full, game over with draw.
@@ -186,7 +194,7 @@
 
 		var autoNew = 2000;												//automatically start new game after timeout set to -1 to prevent
 		var aiMode = 1;														//0=two humans, 1=human vs AI, 2=AI vs AI
-		var aiLevel = 'dumb';										//smart=unbeatable, dumb = random plays
+		var aiLevel = 'smart';										//smart=unbeatable, dumb = random plays
 		var aiThink = 500;											//pause while AI thinks
 //		var bPlayFull = true;											//false ends game when end is predictable
 //		var bContinueToFull = true;								//allows completion of game when outcome is predictable
@@ -195,6 +203,7 @@
 		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
 		var aDiag2Win = ['20', '11', '02'];
 		//row and col wins programmatic
+		var aiPlay = {lastPlay: '', aiPositions: [], opponentPositions: [], openPositions: []};
 
 		function selectGamePiece(sGamePiece) {
 			oGamePiece.one = sGamePiece || 'X';
@@ -203,8 +212,8 @@
 		}
 
 		function displayScoreSection() {
-			$('#oneGamePiece').html(oGamePiece.one + ' (' + oGamePiece.oneType + ')');
-			$('#twoGamePiece').html(oGamePiece.two + ' (' + oGamePiece.twoType + ')');
+			$('#oneGamePiece').html('"' + oGamePiece.one + '" (' + oGamePiece.oneType + ')');
+			$('#twoGamePiece').html('"' + oGamePiece.two + '" (' + oGamePiece.twoType + ')');
 		}
 
 		//handler for human click
@@ -224,6 +233,7 @@
 			playedElement.addClass('position-played-' + player);
 			playedElement.html(oGamePiece[player]);
 			gameState[position] = player;																		//record move
+			aiPlay.lastPlay = position;
 			var gameOver = checkWin(position);
 			if (!gameOver) {
 				player = (player === 'one') ? 'two' : 'one';									//toggle player
@@ -234,8 +244,9 @@
 		}
 
 		function aiMove() {
+			var aPositions = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
 			if (aiLevel === 'dumb') {
-				var aPositions = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
+
 				var index;
 				var position;
 				do {
@@ -247,8 +258,78 @@
 					}
 				} while (true)
 			}
-			else {
+			else if (aiLevel === 'smart') {
+				/**
+				 *
+				 * AI move algorithm:
+				 * Check and take win if possible (player has any two positions in a win, take the third
+				 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third. Logic for win and block are the same!)
+				 * No, then take 11 if available.
+				 * if not 11 then
+				 *  if previous move was [01,10,12,21] take [00,20,02,22]
+				 *  if previous move was [00,02,22,20] take [01,12,21,10] match row or column if available, otherwise take nearest
+				 * last option, take any free position.
+				 */
+				var sResult = analyzeWinSet(aDiag1Win);
+				if (sResult === '') {
+					sResult = analyzeWinSet(aDiag2Win);
+				}
+				if (sResult === '') {
+					var row = aiPlay.lastPlay.charAt(0);
+					var col = aiPlay.lastPlay.charAt(1);
+					var idxRow = 0;
+					var idxCol = 0;
+					var posKey = '';
+					var aWinSet = [];
+					for (idxCol = 0; idxCol < 3; idxCol++) {		//all the positions in the last played row
+						posKey = row + idxCol;
+						aWinSet.push(posKey);
+					}
+					sResult = analyzeWinSet(aDiag2Win);
+				}
 
+				if (sResult === '') {
+					do {
+						index = getRandomPosition();
+						position = aPositions[index];
+						if (!gameState[position]) {
+							makePlay(position);
+							break;
+						}
+					} while (true)
+				}
+
+
+			}
+		}
+
+		function analyzeWinSet(aWinSet) {
+			var sPositionCur;
+			for (i = 0; i < aWinSet.length; i++) {
+				sPositionCur = aWinSet[i];
+				if (!gameState.hasOwnProperty(sPositionCur)) {
+					aiPlay.openPositions.push(sPositionCur);							//position is available for play
+				}
+				else if (gameState[aWinSet[i]] !== player) {						//position is occupied by opponent so win is not possible here
+					aiPlay.opponentPositions.push(sPositionCur);
+				}
+				else {
+					aiPlay.aiPositions.push(aWinSet[i]);									//ai owns position
+				}
+			}
+			if (aiPlay.openPositions.length > 0) {										//there ARE plays in this win set
+				if (aiPlay.aiPositions.length == 2) {										//if we own two, we can win
+					makePlay(aiPlay.openPositions.pop());
+					return 'win';
+				}
+				else if (aiPlay.opponentPositions.length == 2) {				//opponent owns two, we MUST block
+					makePlay(aiPlay.openPositions.pop());
+					return 'block';
+				}
+				else {
+					//don't play yet
+					return '';
+				}
 			}
 		}
 
@@ -377,8 +458,8 @@
 				oScores.draw++;
 				$("#score_draw").html(oScores.draw);
 				for (position in gameState) {
-					$("button[data-position='" + position + "']").removeClass('position-played-one position-played-two');
-					$("button[data-position='" + position + "']").addClass('game-over-draw');
+					$("button[data-position='" + position + "']").removeClass('position-played-one position-played-two')
+							.addClass('game-over-draw');
 				}
 				$(".game-board").addClass('game-over-draw');
 			}
@@ -388,29 +469,29 @@
 				if (winOn === 'aDiag1Win') {
 					for (i = 0; i < aDiag1Win.length; i++) {
 						sPosition = aDiag1Win[i];
-						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
-						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
 					}
 				}
 				else if (winOn === 'aDiag2Win') {
 					for (i = 0; i < aDiag2Win.length; i++) {
 						sPosition = aDiag2Win[i];
-						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
-						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
 					}
 				}
 				else if (winOn.charAt(0) === 'r') {
 					for (i = 0; i < 3; i++) {
 						sPosition = winOn.charAt(1) + i;
-						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
-						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
 					}
 				}
 				else if (winOn.charAt(0) === 'c') {
 					for (i = 0; i < 3; i++) {
 						sPosition = i + winOn.charAt(1);
-						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two');
-						$("button[data-position='" + sPosition + "']").addClass('game-over-' + player);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
 					}
 				}
 				$(".game-board").addClass('game-over-' + player);
@@ -479,10 +560,8 @@
 					oGamePiece.twoType = aiLevel + ' AI';
 					break;
 				case 2:
-					oGamePiece.oneType =  aiLevel + ' AI';
-					oGamePiece.twoType =  aiLevel + ' AI';
-					//aiLevel = 'dumb';
-					//$('input[name="aiLevel"][value="dumb"]').prop('checked', true);
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
 					break;
 			}
 			displayScoreSection();
@@ -495,6 +574,7 @@
 
 		function initUI() {
 			$('#autoNew').val(autoNew);
+			$('input[name="aiLevel"][value="' + aiLevel + '"]').prop('checked', true);
 			$('#aiThink').val(aiThink);
 			selectGamePiece('X');
 			displayScoreSection();
@@ -517,12 +597,19 @@
 
 	<div id="gameSettings">
 		<span class="sub-title">Game Options</span>
+
 		<form id="frmGamePiece" class="frm-settings">
 			<label class="settings-label">Player One Game-Piece:</label>
 
 			<div class="settings-value">
-				<input type="radio" name="gamePiece" value="X" checked>"X"
-				<input type="radio" name="gamePiece" value="O">"O"
+				<label>
+					<input type="radio" name="gamePiece" value="X" checked>
+					"X"
+				</label>
+				<label>
+					<input type="radio" name="gamePiece" value="O">
+					"O"
+				</label>
 			</div>
 		</form>
 		<form id="frmPlayerMode" class="frm-settings">
@@ -530,18 +617,23 @@
 
 			<div class="settings-value">
 				<input type="radio" name="playerMode" value="0">Player vs Player
-				<span style="white-space: nowrap"><input type="radio" name="playerMode" value="1" checked>Player&nbsp;vs&nbsp;AI
-				<input type="radio" name="playerMode" value="2">AI vs AI</span>
+				<span style="white-space: nowrap">
+					<input type="radio" name="playerMode" value="1" checked>Player&nbsp;vs&nbsp;AI
+				<label>
+					<input type="radio" name="playerMode" value="2">
+					AI vs AI
+				</label>
+				</span>
 			</div>
 		</form>
 		<form id="frmAILevel" class="frm-settings">
 			<label class="settings-label">AI Level:</label>
-
 			<div class="settings-value">
 				<input type="radio" name="aiLevel" value="dumb" checked>Dumb
 				<input type="radio" name="aiLevel" value="smart">Smart (unbeatable)
 			</div>
-			<br>
+		</form>
+		<form class="frm-settings">
 			<label class="settings-label">AI Think Delay:</label>
 			<input id="aiThink" type="number" class="settings-value number" min="0" step="100" max="5000">
 		</form>
@@ -555,9 +647,9 @@
 	<div class="scores">
 		<div>
 			<span class="score-label player col-title">Player</span>
-			<span class="score-label col-title">Mark (type)</span>
+			<span class="score-label col-title">"Mark" (Type)</span>
 			<span class="score-label wins col-title">Wins!</span>
-			<span class="score-label draw">Draws: <span id="score_draw" >0</span></span></div>
+			<span class="score-label draw">Draws: <span id="score_draw">0</span></span></div>
 		<div>
 			<span class="score-label player one">One</span>
 			<span id="oneGamePiece" class="score-label one"></span>
