@@ -25,7 +25,7 @@
 
 ####Scoreboard / Game buttons
 * There is a row for each player, colored accordingly.
-* The "Mark (Type)" column displays the selected mark, the tpe of player (human or AI) and indicates the AI level in effect.
+* The "Mark (Type)" column displays the selected mark, the type of player (human or AI) and indicates the AI level in effect.
 * The "Wins!" column counts the wins for each player.
 * The "Draw" column counts the number of tie or draw games.
 * "Reset Game" clears the scoreboard, but "New Game" does not.
