@@ -33,6 +33,8 @@
 ####Game Board & Play
 * Play is would be expected.
 * A play cannot be retracted.
+* On a win, the winning squares and the game board border are highlighted in the winners color.
+* On a draw, the entire board is highlighted in black and white.
 
 ####Notes
 * The AI play algorithm is an original, manual implementation of basic rules outlined in the first commit.
