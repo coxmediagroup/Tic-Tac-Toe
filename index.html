@@ -22,9 +22,9 @@
 					class="col-xs-4 pos pos{{$index}}" 
 					ng-repeat="result in gameState track by $index"
 					ng-click="userClick($index)">
-					<span ng-if="result==='o'" class="fa fa-times-circle-o fa-4x">
+					<span ng-if="result==='o'" class="fa fa-circle-o fa-4x">
 					</span>
-					<span ng-if="result==='x'" class="fa fa-circle-o fa-4x"></span>
+					<span ng-if="result==='x'" class="fa fa-times-circle-o fa-4x"></span>
 				</div>
 			</div>
 		</div>
@@ -79,7 +79,7 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom">
 	  <div class="container">
 		<h3 class='text-center'>
-			by Marty Trujillo
+			by Marty Trujillo {{hi}}
 		</h3>
 	  </div>
 	</nav>
