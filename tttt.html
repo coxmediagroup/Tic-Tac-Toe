@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TTTT</title>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+</head>
+<style>
+	html {
+		box-sizing: border-box;
+	}
+
+	#header {
+		width: 90vw;
+		max-width: 600px;
+		border: solid 1px black;
+		border-radius: 5px;
+		padding: 5px;
+		background-color: whitesmoke;
+	}
+
+	#gameSettings {
+		display: block;
+		margin: 5px;
+		padding: 5px;
+		background-color: aliceblue;
+		border-radius: 5px;
+		overflow: hidden;
+	}
+
+	#show-detail {
+		float: right;
+	}
+
+	.title {
+		font-size: 24px;
+		font-weight: bold;
+	}
+
+	.sub-title {
+		font-size: 18px;
+	}
+
+	.settings-label {
+		display: inline-block;
+		width: 30%;
+		text-align: right;
+		float: left;
+		margin-right: 10px;
+	}
+
+	.settings-value {
+		display: inline-block;
+		width: 65%;
+	}
+
+	.settings-value.number {
+		width: 80px;
+	}
+
+	.frm-settings {
+		clear: both;
+		border-top: solid 2px whitesmoke;
+		border-bottom: solid 2px whitesmoke;
+	}
+
+	.scores {
+		display: inline-block;
+		/*margin-left: 10px;*/
+		font-weight: bold;
+		border: solid 1px black;
+		width: 75%;
+	}
+
+	.score-label {
+		display: inline-block;
+		width: 35%;
+		text-align: center;
+	}
+
+	.score-label.col-title {
+		text-decoration: underline;
+	}
+
+	.score-label.one {
+		color: green;
+	}
+
+	.score-label.two {
+		color: blue;
+	}
+
+	.score-label.draw {
+		width: 20%;
+	}
+
+	.score-label.player {
+		width: 18%;
+	}
+
+	.score-label.wins {
+		width: 20%;
+	}
+
+	.button-block {
+		width: 24%;
+		float: right;
+	}
+
+	.game-button {
+		width: 100%;
+		margin-top: 5px;
+		font-weight: bold;
+	}
+
+	.game-board {
+		width: 90vw;
+		height: 90vw;
+		max-width: 600px;
+		max-height: 600px;
+		display: inline-block;
+		padding: 5px;
+		border: solid 1px #000000;
+		border-radius: 5px;
+	}
+
+	.play-button {
+		display: block;
+		float: left;
+		width: 30vw;
+		height: 30vw;
+		max-width: 200px;
+		max-height: 200px;
+		font-size: 20vw;
+		font-weight: bold;
+	}
+
+	@media (min-width: 600px) {
+		.play-button {
+			font-size: 124px;
+		}
+	}
+
+	.position-played-one {
+		color: green;
+	}
+
+	.position-played-two {
+		color: blue;
+	}
+
+	.game-over-one {
+		background-color: green;
+		color: white;
+	}
+
+	.game-over-two {
+		background-color: blue;
+		color: white;
+	}
+
+	.game-over-draw {
+		background-color: black;
+		color: white;
+	}
+
+</style>
+<script type="text/javascript">
+	$(document).ready(function () {
+		/**
+		 * 00|01|02
+		 * 10|11|12
+		 * 20|21|22
+		 *
+		 *
+		 * After each move, check for win. If win, game over with winner.
+		 *  if no win, check for full board. If full, game over with draw.
+		 */
+
+		var player = 'one';												//Current player. one=first turn, usually "X", 'two' second turn, usually 'O'
+		var iPlays = 0;														//used to determine draw
+		var gameState = {};												//tracks plays, who has a given position
+		var oGamePiece = {one: 'X', two: 'O', oneColor: 'green', twoColor: 'blue', oneType: 'Human', twoType: 'AI'};		//to support user selection of game piece
+		var oScores = {one: 0, two: 0, draw: 0};
+
+		var autoNew = 2000;												//automatically start new game after timeout set to -1 to prevent
+		var aiMode = 1;														//0=two humans, 1=human vs AI, 2=AI vs AI, 3=TEST, AI vs AI all starting plays
+		var aiLevel = 'smart';										//smart=unbeatable, dumb = random plays
+		var aiThink = 500;												//timeout to simulate AI thinking
+
+		var aWinSets = [
+			['00', '11', '22'],
+			['20', '11', '02'],
+			['00', '01', '02'],
+			['10', '11', '12'],
+			['20', '21', '22'],
+			['00', '10', '20'],
+			['01', '11', '21'],
+			['02', '12', '22'],
+		]																					//unless we keep track of the status of each win set between plays, we need to check them all each play
+		var aDiag1Win = ['00', '11', '22'];				//positions for diagonal wins
+		var aDiag2Win = ['20', '11', '02'];
+
+		var aiPlay = {
+			lastPlay: '',
+			openPositions: {
+				"00": 'open',
+				"01": 'open',
+				"02": 'open',
+				"10": 'open',
+				"11": 'open',
+				"12": 'open',
+				"20": 'open',
+				"21": 'open',
+				"22": 'open'
+			}
+		};
+
+		var aAIPlayerOneStarts = ['11', '00', '20', '02', '22'];		//when playing ai vs ai, these are the smart start positions
+		var iAIPlayerOneStart = 0;																	//set /reset to vary ai player one's start.
+		var aAIPlayerTestStarts = ['00', '01', '02', '10', '11', '12', '20', '21', '22']; //all possible start positions for Test mode
+		var iAIPlayerTestStart = 0;
+
+
+		/************ UI event handlers ***************************/
+
+			//Human game play handler
+		$('.play-button').on('click', function (event) {
+			var $e = $(this);
+			var position = $e.data('position').toString();
+			if (!gameState.hasOwnProperty(position)) {				//do not process click if position is already played
+				makePlay(position);
+			}
+		});
+
+		//setup handler for new game button click
+		$('#newGame').on('click', function (onet) {
+			newGame(true);
+		});
+
+		//setup handler for reset game button click
+		$('#resetGame').on('click', function (onet) {
+			resetGame();
+		});
+
+		//***************************** Game setting/options handlers ********************************/
+		$('#show-detail').on('click', function (event) {
+			var $e = $(this);
+			var $collapsible = $('#gameSettings');
+			$collapsible.toggle('fast', function () {
+				var display = ($collapsible.css('display'));
+				setCookie('optionsSection', display, 10);
+				showOptionsLabel();
+			});
+		});
+
+		$('#frmGamePiece input').on('change', function () {
+			var value = $('input[name="gamePiece"]:checked', '#frmGamePiece').val();
+			selectGamePiece(value);
+			setCookie('oneGamePiece', value, 10);
+		});
+
+		$('#frmPlayerMode input').on('change', function () {
+			aiMode = parseInt($('input[name="playerMode"]:checked', '#frmPlayerMode').val());
+			setCookie('aiMode', aiMode, 10);
+			setupAIMode();
+		});
+
+		$('#frmAILevel input').on('change', function () {
+			aiLevel = $('input[name="aiLevel"]:checked', '#frmAILevel').val();
+			setCookie('aiLevel', aiLevel, 10);
+			setupAIMode();
+		});
+		$('#aiThink').on('change', function () {
+			aiThink = $(this).val();
+			setCookie('aiThink', aiThink, 10);
+		});
+		$('#autoNew').on('change', function () {
+			autoNew = $(this).val();
+			setCookie('autoNew', autoNew, 10);
+
+		});
+
+		/*********** Game new and reset functions *******************************/
+		//resets game, including scores
+		function resetGame() {
+			newGame();
+			oScores = {one: 0, 'two': 0, draw: 0};
+			$("#score_one").html(0);
+			$("#score_two").html(0);
+			$("#score_draw").html(0);
+		}
+
+		//resets board, but not scores
+		function newGame(bManual) {
+			for (var position in gameState) {
+				var $gameButton = $("button[data-position='" + position + "']");
+				$gameButton.html('');
+				$gameButton.removeClass(function (index, css) {
+					return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+				});
+			}
+			$(".game-board").removeClass(function (index, css) {
+				return (css.match (/\bgame-over-\S+/g) || []).join(' ');
+			});
+			gameState = {};
+			resetAIPlay();
+			player = 'one';
+			iPlays = 0;
+
+			//will play another Ai vs AI game if new game is started by button click, or if the 5 game set is in progress
+			if (aiMode === 2 && (bManual || iAIPlayerOneStart > 0)) {
+				aiMove(aAIPlayerOneStarts[iAIPlayerOneStart]);
+				iAIPlayerOneStart = (iAIPlayerOneStart === 4) ? 0 : iAIPlayerOneStart + 1;	//increment the startin position index
+			}
+			//will play all starting moves
+			if (aiMode === 3 && (bManual || iAIPlayerTestStart > 0)) {
+				aiMove(aAIPlayerTestStarts[iAIPlayerTestStart]);
+				iAIPlayerTestStart = (iAIPlayerTestStart === 8) ? 0 : iAIPlayerTestStart + 1;
+			}
+		}
+
+		function resetAIPlay() {
+			aiPlay = {
+				lastPlay: '',
+				openPositions: {
+					"00": 'open',
+					"01": 'open',
+					"02": 'open',
+					"10": 'open',
+					"11": 'open',
+					"12": 'open',
+					"20": 'open',
+					"21": 'open',
+					"22": 'open'
+				}
+			};
+		}
+
+		/*********** Game option functions *******************************/
+
+		//hides the options section when a user or ai makes a play
+		function hideGameOptions() {
+			$('#gameSettings').toggle(false);
+			showOptionsLabel();
+		}
+
+		function showOptionsLabel() {
+			var sDisplay = $('#gameSettings').css('display');
+			if (sDisplay === 'none') {
+				$('#show-detail').html('+ Game options');
+			}
+			else {
+				$('#show-detail').html('- Game Options');
+			}
+		}
+
+		// first player can be "X" or "O"
+		function selectGamePiece(sGamePiece) {
+			oGamePiece.one = sGamePiece || 'X';
+			oGamePiece.two = (oGamePiece.one === 'X') ? 'O' : 'X';
+			displayScoreSection();
+		}
+
+		//formats the scores labels
+		function displayScoreSection() {
+			$('#oneGamePiece').html('"' + oGamePiece.one + '" (' + oGamePiece.oneType + ')');
+			$('#twoGamePiece').html('"' + oGamePiece.two + '" (' + oGamePiece.twoType + ')');
+		}
+
+		//Work that must be done when the aiMode property is changed
+		function setupAIMode() {
+			switch (aiMode) {
+				case 0:
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = 'Human';
+					break;
+				case 1:
+					oGamePiece.oneType = 'Human';
+					oGamePiece.twoType = aiLevel + ' AI';
+					break;
+				case 2:
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
+					break;
+				case 3:
+					oGamePiece.oneType = aiLevel + '&nbsp;AI';
+					oGamePiece.twoType = aiLevel + '&nbsp;AI';
+					break;
+			}
+			displayScoreSection();
+			resetGame();
+		}
+
+
+		/*********** Game Play functions *******************************/
+
+		function makePlay(position) {
+			hideGameOptions();
+			iPlays++;
+			var playedElement = $("[data-position='" + position + "']");
+			playedElement.addClass('position-played-' + player);
+			playedElement.html(oGamePiece[player]);
+			gameState[position] = player;																		//record move
+			aiPlay.lastPlay = position;
+			delete aiPlay.openPositions[position];												//remove the position from the available position dictionary
+			var gameOver = checkWin(position);
+			if (!gameOver) {
+				player = (player === 'one') ? 'two' : 'one';									//toggle player
+				if (aiMode === 2 || aiMode === 3 || (aiMode === 1 && player === 'two')) {
+					setTimeout(aiMove, aiThink);
+				}
+			}
+		}
+
+		//used by dumb AI option
+		function getRandomPosition() {
+			return Math.floor(Math.random() * 9);
+		}
+
+		function aiMove(sStartPos) {
+			var aPositions = ['00', '01', '02', '10', '11', '12', '20', '21', '22'];
+			var aSidePositions = ['01', '10', '12', '21'];
+			var aCornerPositions = ['00', '20', '02', '22'];
+			var aWinSet = [];
+			var sResult = '';
+			var idx = -1;
+			var position;
+
+			if (sStartPos) {								//used for automated ai vs ai play
+				sResult = 'play';
+				makePlay(sStartPos);
+			}
+			else if (aiLevel === 'dumb') {
+				do {
+					idx = getRandomPosition();
+					position = aPositions[idx];
+					if (!gameState[position]) {
+						makePlay(position);
+						break;
+					}
+				} while (true)
+			}
+			else if (aiLevel === 'smart') {
+				for (idx = 0; idx < aWinSets.length; idx++) {		//check for wins or blocks
+					aWinSet = aWinSets[idx];
+					sResult = analyzeWinSet(aWinSet);
+					if (sResult.length > 0) {
+						break;
+					}
+				}
+
+				if (sResult.length === 0) {			//there was no win or required block, so select the best play from the remaining open positions
+					if(aiPlay.openPositions.hasOwnProperty('11')) {
+						sResult = 'play';
+						makePlay('11');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('00')) {
+						sResult = 'play';
+						makePlay('00');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('22')) {
+						sResult = 'play';
+						makePlay('22');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('12')) {
+						sResult = 'play';
+						makePlay('12');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('01')) {
+						sResult = 'play';
+						makePlay('01');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('21')) {
+						sResult = 'play';
+						makePlay('21');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('02')) {
+						sResult = 'play';
+						makePlay('02');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('20')) {
+						sResult = 'play';
+						makePlay('20');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('10')) {
+						sResult = 'play';
+						makePlay('10');;
+					}
+				}
+			}
+		}
+
+		/*
+		 * Check and take win if possible (player has any two positions in a win, take the third
+		 * If no win, check and take block if required. (Opponent has any two positions in a win, take the third.)
+		 */
+		function analyzeWinSet(aWinSet) {
+			var sPositionCur;
+			var oOpenPositions = {};																	//open positions in the current winset,
+			var aOpponentPositions = [];															//opponent positions in the current winset,
+			var aAIPositions = [];
+			for (i = 0; i < aWinSet.length; i++) {
+				sPositionCur = aWinSet[i];
+				if (aiPlay.openPositions.hasOwnProperty(sPositionCur)) {//position is available for play
+					oOpenPositions[sPositionCur] = 'open';
+				}
+				else if (gameState[sPositionCur] !== player) {					//position is occupied by opponent so win is not possible here
+					aOpponentPositions.push(sPositionCur);
+				}
+				else {
+					aAIPositions.push(aWinSet[i]);												//current ai player owns position
+				}
+			}
+			if (Object.keys(oOpenPositions).length > 0) {							//there ARE plays in this win set
+				if (aAIPositions.length == 2) {													//if we own two, we can win
+					makePlay(Object.keys(oOpenPositions)[0]);
+					return 'win';
+				}
+				else if (aOpponentPositions.length == 2) {							//opponent owns two, we MUST block
+					makePlay(Object.keys(oOpenPositions)[0]);
+					return 'block';
+				}
+				else {
+					return '';																						//don't play yet
+				}
+			}
+			else {
+				return '';
+			}
+		}
+
+		/**
+		 * checks last play for a win
+		 * @param position
+		 */
+		function checkWin(position) {
+			var row = position.charAt(0);
+			var col = position.charAt(1);
+			var idxRow = 0;
+			var idxCol = 0;
+			var i = -1;
+			var win = true;
+			var winOn = '';													//winOn records type of win
+			var key = '';
+			var sSidePositions = '01,10,12,21';
+			winOn = 'r' + row;
+			for (idxCol = 0; idxCol < 3; idxCol++) {								//check rows possibly affected by the move
+				key = row + idxCol;
+				if (gameState[key] !== player) {
+					win = false;
+					break;
+				}
+			}
+			if (!win) {																							//check columns
+				win = true;
+				winOn = 'c' + col;
+				for (idxRow = 0; idxRow < 3; idxRow++) {
+					key = idxRow + col;
+					if (gameState[key] !== player) {
+						win = false;
+						break;
+					}
+				}
+			}
+			if (!win && (sSidePositions.indexOf(position) === -1)) {//check diagonal but not for played side positons O1,10,21,12 which can't cause a diagonal win
+				win = true;
+				winOn = 'aDiag1Win';
+				for (i = 0; i < aDiag1Win.length; i++) {
+					if (gameState[aDiag1Win[i]] !== player) {
+						win = false;
+						break;
+					}
+				}
+				if (!win) {
+					win = true;
+					winOn = 'aDiag2Win';
+					for (i = 0; i < aDiag2Win.length; i++) {
+						if (gameState[aDiag2Win[i]] !== player) {
+							win = false;
+							break;
+						}
+					}
+				}
+			}
+			if (win) {
+				gameOver(winOn);
+				return true;
+			}
+			else if (iPlays === 9) {
+				gameOver();
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		//Runs on win or draw. Displays win, updates score, optionally launches new game
+		function gameOver(winOn) {
+			winOn = winOn || 'draw';
+			var sPosition;
+			var i = -1;
+			if (winOn === 'draw') {
+				oScores.draw++;
+				$("#score_draw").html(oScores.draw);
+				for (position in gameState) {
+					$("button[data-position='" + position + "']").removeClass('position-played-one position-played-two')
+							.addClass('game-over-draw');
+				}
+				$(".game-board").addClass('game-over-draw');
+			}
+			else {
+				oScores[player]++;
+				$("#score_" + player).html(oScores[player]);
+				if (winOn === 'aDiag1Win') {
+					for (i = 0; i < aDiag1Win.length; i++) {
+						sPosition = aDiag1Win[i];
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
+					}
+				}
+				else if (winOn === 'aDiag2Win') {
+					for (i = 0; i < aDiag2Win.length; i++) {
+						sPosition = aDiag2Win[i];
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
+					}
+				}
+				else if (winOn.charAt(0) === 'r') {
+					for (i = 0; i < 3; i++) {
+						sPosition = winOn.charAt(1) + i;
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
+					}
+				}
+				else if (winOn.charAt(0) === 'c') {
+					for (i = 0; i < 3; i++) {
+						sPosition = i + winOn.charAt(1);
+						$("button[data-position='" + sPosition + "']").removeClass('position-played-one position-played-two')
+								.addClass('game-over-' + player);
+					}
+				}
+				$(".game-board").addClass('game-over-' + player);
+			}
+			if (aiMode === 2 || aiMode === 3 || autoNew > 0) {
+				setTimeout(newGame, autoNew);
+			}
+		}
+
+		function setCookie(name, value, iExpDays) {
+			var dt = new Date();
+			dt.setTime(dt.getTime() + (iExpDays * 24 * 60 * 60 * 1000));
+			var expires = "expires=" + dt.toUTCString();
+			var sCookie = name + "=" + value + "; " + expires;
+			console.log('setCookie:', sCookie);
+			document.cookie = sCookie;
+		}
+
+		function getCookie(name) {
+			var sReturn = null;
+			var name = name + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i].trim();
+				while (c.charAt(0) == ' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					sReturn = c.substring(name.length, c.length);
+				}
+			}
+			console.log('getCookie: ', name, sReturn);
+			return sReturn;
+		}
+
+		//retrieves settings values from cookies
+		function loadSettings() {
+			var sTmp;
+			sTmp = getCookie('autoNew') || '2000';
+			autoNew = parseInt(sTmp);
+			aiLevel = getCookie('aiLevel') || 'smart';
+			sTmp = getCookie('aiThink') || '500';
+			aiThink = parseInt(sTmp);
+			sTmp = getCookie('aiMode') || '1';					//human vs Ai
+			aiMode = parseInt(sTmp);
+			;
+			sTmp = getCookie('oneGamePiece') || 'X';
+			selectGamePiece(sTmp);
+			$('input[name="gamePiece"][value="' + sTmp + '"]').prop('checked', true);
+			sTmp = getCookie('optionsSection') || 'block';
+			$('#gameSettings').toggle(sTmp === 'block');
+		}
+
+		//initialize the UI
+		function initUI() {
+			loadSettings();
+			resetAIPlay();
+			setupAIMode();
+			displayScoreSection();
+			showOptionsLabel();
+			$('#autoNew').val(autoNew);
+			$('input[name="playerMode"][value="' + aiMode + '"]').prop('checked', true);
+			$('input[name="aiLevel"][value="' + aiLevel + '"]').prop('checked', true);
+			$('#aiThink').val(aiThink);
+		}
+
+		initUI();
+	});
+</script>
+
+<body>
+<div id="header" class="header">
+	<span class="title">Tracy's TicTacToe</span>
+	<a id="show-detail" href="#">+ Game Options</a>
+
+	<div id="gameSettings">
+		<span class="sub-title">Game Options</span>
+
+		<form id="frmGamePiece" class="frm-settings">
+			<label class="settings-label">Player One Mark:</label>
+
+			<div class="settings-value">
+				<label>
+					<input type="radio" name="gamePiece" value="X" checked>
+					"X"
+				</label>
+				<label>
+					<input type="radio" name="gamePiece" value="O">
+					"O"
+				</label>
+			</div>
+		</form>
+		<form id="frmPlayerMode" class="frm-settings">
+			<label class="settings-label">Competitors:</label>
+
+			<div class="settings-value">
+				<input type="radio" name="playerMode" value="0">Player vs Player
+				<span style="white-space: nowrap">
+					<input type="radio" name="playerMode" value="1" checked>Player&nbsp;vs&nbsp;AI
+					<label>
+						<input type="radio" name="playerMode" value="2">
+						AI vs AI
+					</label>
+				</span>
+				<span style="white-space: nowrap">
+					<label>
+						<input type="radio" name="playerMode" value="3">
+						TEST
+					</label>
+				</span>
+			</div>
+		</form>
+		<form id="frmAILevel" class="frm-settings">
+			<label class="settings-label">AI Level:</label>
+
+			<div class="settings-value">
+				<input type="radio" name="aiLevel" value="dumb" checked>Dumb
+				<input type="radio" name="aiLevel" value="smart">Smart (unbeatable)
+			</div>
+		</form>
+		<form class="frm-settings">
+			<label class="settings-label">AI Think Delay:</label>
+			<input id="aiThink" type="number" class="settings-value number" min="0" step="100" max="5000">
+		</form>
+		<div class="frm-settings">
+			<label class="settings-label">Auto New Game:</label>
+			<input id="autoNew" type="number" class="settings-value number" min="0" step="500" max="10000"> (Delay in MS, 0 to
+			prevent)
+		</div>
+
+	</div>
+	<div class="scores">
+		<div>
+			<span class="score-label player col-title">Player</span>
+			<span class="score-label col-title">"Mark" (Type)</span>
+			<span class="score-label wins col-title">Wins!</span>
+			<span class="score-label draw">Draws: <span id="score_draw">0</span></span></div>
+		<div>
+			<span class="score-label player one">One</span>
+			<span id="oneGamePiece" class="score-label one"></span>
+			<span id="score_one" class="score-label wins one">0</span></div>
+		<div>
+			<span class="score-label player two">Two</span>
+			<span id="twoGamePiece" class="score-label two"></span>
+			<span id="score_two" class="score-label wins two">0</span></div>
+
+	</div>
+	<div class="button-block">
+		<button id="newGame" class="game-button">New Game</button>
+		<br>
+		<button id="resetGame" class="game-button">Reset Game</button>
+	</div>
+
+</div>
+
+<div class="game-board">
+	<div class="game-row">
+		<button class="play-button" data-position="00"></button>
+		<button class="play-button" data-position="01"></button>
+		<button class="play-button" data-position="02"></button>
+	</div>
+	<div class="game-row">
+		<button class="play-button" data-position="10"></button>
+		<button class="play-button" data-position="11"></button>
+		<button class="play-button" data-position="12"></button>
+	</div>
+	<div class="game-row">
+		<button class="play-button" data-position="20"></button>
+		<button class="play-button" data-position="21"></button>
+		<button class="play-button" data-position="22"></button>
+	</div>
+</div>
+
+</body>
+</html>
