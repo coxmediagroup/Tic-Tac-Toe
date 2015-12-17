@@ -40595,7 +40595,11 @@ $provide.value("$locale", {
 angular.module('ticTacToeApp',[]);
 /* services.js */
 angular.module("ticTacToeApp").factory('ai', function(){
-	var LINE_INDEXES = [[0,1,2],[3,4,5],[6,7,8]];
+	var LINE_INDEXES = [
+		[0,1,2],[3,4,5],[6,7,8],
+		[0,3,6],[1,4,7],[2,5,8],
+		[0,4,8],[2,4,6]
+	];
 
 	var availableIndex = function(state, indexes){
 			var index = null;
@@ -40628,15 +40632,23 @@ angular.module("ticTacToeApp").factory('ai', function(){
 	};
 
 	getNextPosition = function(state){
-		var nextPosition = 0;
-		if(lineOppScore(state,LINE_INDEXES[0]) > 1){
-			nextPosition = availableIndex(state,LINE_INDEXES[0]);
-		} else if(lineOppScore(state,LINE_INDEXES[1]) > 1){
-			nextPosition = availableIndex(state,LINE_INDEXES[1]);
- 		} else if(lineOppScore(state,LINE_INDEXES[2]) > 1){
-			nextPosition = availableIndex(state,LINE_INDEXES[2]);
-		} else {
-			nextPosition = 8;				
+		var nextPosition = -1;
+		for(var i = 0; i < LINE_INDEXES.length; i++){
+			if(lineOppScore(state,LINE_INDEXES[i]) > 1){
+				nextPosition = availableIndex(state,LINE_INDEXES[i]);
+				break;
+			}
+		}
+		if(nextPosition === -1){
+			/* 
+			This takes the first available spot it should find the first
+			spot where a win is possible.
+			*/
+			for(var i = 0; i < 9; i++){
+				if(state[i] === ''){
+					nextPosition = i;	
+				}
+			}
 		}
 		return nextPosition;
 	}
@@ -40682,9 +40694,13 @@ angular.module("ticTacToeApp").factory('ai', function(){
 			}
 		} else if(this.turn(state) === 3){
 			nextPosition = getNextPosition(state);
-		} else {
-			nextPosition = 8;
-		}
+		} else if(this.turn(state) === 5){
+			// check for win move here
+			nextPosition = getNextPosition(state);
+		} else if(this.turn(state) === 7){
+			// check for win move here
+			nextPosition = getNextPosition(state);
+		} 
 		return nextPosition;
 	};
 	return ai;
