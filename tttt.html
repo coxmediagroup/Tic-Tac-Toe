@@ -452,84 +452,42 @@
 					}
 				}
 
-				//there was no win or required block, so select the best play from the remaining open positions
-
-				if (sResult === '') {
-					//Take center 11 if available.
-					if (aiPlay.openPositions.hasOwnProperty('11')) {
+				if (sResult.length === 0) {			//there was no win or required block, so select the best play from the remaining open positions
+					if(aiPlay.openPositions.hasOwnProperty('11')) {
 						sResult = 'play';
 						makePlay('11');
 					}
-				}
-				if (sResult === '') {
-					//Take a corner if available.
-					for (idx = 0; idx < aCornerPositions.length; idx++) {
-						position = aCornerPositions[idx];
-						if (aiPlay.openPositions.hasOwnProperty(position)) {			//preferred position is available
-							sResult = 'play';
-							makePlay(position);
-							break;
-						}
-					}
-				}
-				if (sResult === '') {
-					//if previous move was a side postion [01,10,12,21] take a corner [00,20,02,22]
-					for (idx = 0; idx < aSidePositions.length; idx++) {					//Check side positions
-						if (aiPlay.lastPlay === aSidePositions[idx]) {						//lastPlay was a side position, so we need to select a corner position
-							position = aCornerPositions[idx];
-							if (aiPlay.openPositions.hasOwnProperty(position)) {		//preferred position is available
-								sResult = 'play';
-								makePlay(position);
-								break;
-							}
-							else {																									//else pick any corner position
-								for (var j = 0; j < aCornerPositions.length; j++) {
-									position = aCornerPositions[j];
-									if (aiPlay.openPositions.hasOwnProperty(position)) {//this corner position is available
-										sResult = 'play';
-										makePlay(position);
-										break;
-									}
-								}
-							}
-						}
-						if (sResult === 'play') {
-							break;
-						}
-					}
-				}
-				if (sResult === '') {
-					//if previous move was corner [00,02,22,20] take [01,12,21,10] take matching side if available, otherwise take nearest
-					for (idx = 0; idx < aCornerPositions.length; idx++) {					//check last play
-						if (aiPlay.lastPlay === aCornerPositions[idx]) {						//lastPlay was a corner position, so we need to select a corner position
-							position = aSidePositions[idx];														//preferred choice
-							if (aiPlay.openPositions.hasOwnProperty(position)) {			//preferred position is available
-								sResult = 'play';
-								makePlay(position);
-								break;
-							}
-							else {																										//else pick any corner position
-								for (var j = 0; j < aSidePositions.length; j++) {
-									position = aSidePositions[j];
-									if (aiPlay.openPositions.hasOwnProperty(position)) {	//this corner position is available
-										sResult = 'play';
-										makePlay(position);
-										break;
-									}
-								}
-							}
-						}
-						if (sResult === 'play') {
-							break;
-						}
-					}
-				}
-				if (sResult === '') {
-					//Pick any open positon
-					for (position in aiPlay.openPositions) {
+					else if(aiPlay.openPositions.hasOwnProperty('00')) {
 						sResult = 'play';
-						makePlay(position);
-						break;
+						makePlay('00');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('22')) {
+						sResult = 'play';
+						makePlay('22');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('12')) {
+						sResult = 'play';
+						makePlay('12');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('01')) {
+						sResult = 'play';
+						makePlay('01');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('21')) {
+						sResult = 'play';
+						makePlay('21');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('02')) {
+						sResult = 'play';
+						makePlay('02');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('20')) {
+						sResult = 'play';
+						makePlay('20');
+					}
+					else if(aiPlay.openPositions.hasOwnProperty('10')) {
+						sResult = 'play';
+						makePlay('10');;
 					}
 				}
 			}
@@ -687,7 +645,7 @@
 				}
 				$(".game-board").addClass('game-over-' + player);
 			}
-			if (autoNew > 0) {
+			if (aiMode === 2 || aiMode === 3 || autoNew > 0) {
 				setTimeout(newGame, autoNew);
 			}
 		}
