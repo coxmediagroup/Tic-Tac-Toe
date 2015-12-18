@@ -133,7 +133,11 @@ angular.module("ticTacToeApp").factory('ai', function(){
 				nextPosition = 0;
 			}
 		} else if(this.turn(state) === 3){
-			nextPosition = getNextPosition(state);
+			if(state[4] === "x" && state[8] === "x"){
+				nextPosition = 2; // special case
+			} else {
+				nextPosition = getNextPosition(state);				
+			}
 		} else if(this.turn(state) === 5){
 			nextPosition = getNextPosition(state);
 		} else if(this.turn(state) === 7){
