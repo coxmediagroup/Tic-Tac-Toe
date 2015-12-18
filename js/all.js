@@ -40783,7 +40783,7 @@ angular.module("ticTacToeApp").directive("footer", function(){
 	}
 });
 /* controller.js */
-angular.module("ticTacToeApp").controller("gameCtrl", function($scope, ai){
+angular.module("ticTacToeApp").controller("gameCtrl", function($scope, $timeout, ai){
 	$scope.won = false;
 	$scope.tie = false;
 	$scope.gameState = [
@@ -40817,4 +40817,10 @@ angular.module("ticTacToeApp").controller("gameCtrl", function($scope, ai){
 			$scope.gameState[nextPosition] = "o";
 		}
 	}
+	
+	$timeout(function() {
+		$(".hide-during-load").removeClass("hide-during-load");
+		$scope.loaded = true;
+	}, 1000);
+	
 });

@@ -12,9 +12,13 @@
 
 </head>
 <body ng-controller='gameCtrl'>
-<div header></div>
-<div game></div>
-<div footer></div>
+<div ng-hide="loaded" class="loading">
+	<span class="fa fa-cog fa-spin"></span>
+	<p>LOADING</p>
+</div>
+<div header ng-show="loaded" class="hide-during-load"></div>
+<div game ng-show="loaded" class="hide-during-load"></div>
+<div footer ng-show="loaded" class="hide-during-load"></div>
 
 <script src="js/all.js"></script>
 <script type="text/ng-template" id="header.html">
