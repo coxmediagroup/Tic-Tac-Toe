@@ -32,7 +32,7 @@ angular.module("ticTacToeApp").controller("gameCtrl", function($scope, $timeout,
 			var nextPosition = ai.nextPlay($scope.gameState);
 			$scope.gameState[nextPosition] = "o";
 		}
-	}
+	};
 	
 	$timeout(function() {
 		$(".hide-during-load").removeClass("hide-during-load");

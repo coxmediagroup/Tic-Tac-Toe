@@ -40695,7 +40695,7 @@ angular.module("ticTacToeApp").factory('ai', function(){
 		
 		}
 		return nextPosition;
-	}
+	};
 
 	var ai = {};
 	ai.turn = function(state){
@@ -40764,23 +40764,23 @@ angular.module("ticTacToeApp").factory('ai', function(){
 	return ai;
 });
 /* directives.js */
-angular.module("ticTacToeApp").directive("header", function(){
-	return {
-		restrict:'A',
-		templateUrl:"header.html"
-	}
+angular.module("ticTacToeApp").directive("header", function() {
+    return {
+        restrict: "A",
+        templateUrl: "header.html"
+    };
 });
-angular.module("ticTacToeApp").directive("game", function(){
-	return {
-		restrict:'A',
-		templateUrl:"game.html"
-	}
+angular.module("ticTacToeApp").directive("game", function() {
+    return {
+        restrict: "A",
+        templateUrl: "game.html"
+    };
 });
-angular.module("ticTacToeApp").directive("footer", function(){
-	return {
-		restrict:'A',
-		templateUrl:"footer.html"
-	}
+angular.module("ticTacToeApp").directive("footer", function() {
+    return {
+        restrict: "A",
+        templateUrl: "footer.html"
+    };
 });
 /* controller.js */
 angular.module("ticTacToeApp").controller("gameCtrl", function($scope, $timeout, ai){
@@ -40816,7 +40816,7 @@ angular.module("ticTacToeApp").controller("gameCtrl", function($scope, $timeout,
 			var nextPosition = ai.nextPlay($scope.gameState);
 			$scope.gameState[nextPosition] = "o";
 		}
-	}
+	};
 	
 	$timeout(function() {
 		$(".hide-during-load").removeClass("hide-during-load");

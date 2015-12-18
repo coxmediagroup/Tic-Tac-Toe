@@ -100,7 +100,7 @@ angular.module("ticTacToeApp").factory('ai', function(){
 		
 		}
 		return nextPosition;
-	}
+	};
 
 	var ai = {};
 	ai.turn = function(state){
