@@ -1,12 +1,16 @@
 body {
 	padding-top:70px;
 	padding-bottom:70px;
+	min-width: 300px;
+}
+h1 {
+	font-size:3.3rem;
 }
 .turn-label{
 	font-size:2rem;	
 }
 .game {
-	margin-top: 50px;
+	margin-top: 10px;
 }
 .pos {
 	height: 114px;
@@ -46,4 +50,8 @@ body {
 }
 .pos8 {
 
+}
+
+.fa-refresh{
+	cursor: pointer;
 }
