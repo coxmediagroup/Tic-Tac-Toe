@@ -88,7 +88,17 @@ angular.module("ticTacToeApp").factory('ai', function(){
 		}
 		// if I can't win and I don't need to block...
 		if(nextPosition === -1){  // they don't have a winning move
-			nextPosition = availableIndex(state, LINE_INDEXES[bestScore.index]);
+			if(bestScore.score === -1){ // no possible victory for either side
+				for(var i = 0; i < state.length; i++){
+					if(state[i] === ''){
+						nextPosition = i; 
+						break;
+					}
+				}
+			} else {
+				nextPosition = availableIndex(state, LINE_INDEXES[bestScore.index]);
+			}
+		
 		}
 		return nextPosition;
 	}
