@@ -13,56 +13,7 @@
 </head>
 <body ng-controller='gameCtrl'>
 <div header></div>
-<div class="container game">
-	<div class="row">
-		<div class="col-lg-4"></div>
-		<div class="col-lg-4 text-center">
-			<div ng-hide="won || tie">
-				<h3>Welcome Noble Opponent.</h3>
-				<span class="fa fa-smile-o"></span>
-				Let's Play 
-				<span class="fa fa-smile-o"></span>
-			</div>
-			<div ng-show="won">
-				<h3>The victory is mine!</h3>
-				<span class="fa fa-bolt"></span>
-				Hmmm. I think you might have let me win
-				<span class="fa fa-bolt"></span>
-			</div>
-			<div ng-show="tie">
-				<h3>We Fought To A Draw!</h3>
-				<span class="fa fa-black-tie "></span>
-				Well fought you are a noble opponent
-				<span class="fa fa-black-tie"></span>
-			</div>			
-		</div>
-		<div class="col-lg-4"></div>
-	</div>	
-	<div class="row">
-		<div class="col-sm-3 col-md-4 col-lg-4"></div>
-		<div class="col-sm-6 col-md-4 col-lg-4 text-center bg-success">
-			<div class="row">
-				<div 
-					class="col-xs-4 pos pos{{$index}}" 
-					ng-repeat="result in gameState track by $index"
-					ng-click="userClick($index)">
-					<span ng-if="result==='o'" class="fa fa-circle-o fa-4x">
-					</span>
-					<span ng-if="result==='x'" class="fa fa-times-circle-o fa-4x"></span>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-3 col-md-4 col-lg-4"></div>
-	</div>
-	<div class="row ">
-		<div class="col-sm-4  hidden-xs"></div>
-		<div class="col-lg-4 col-xs-12 text-center turn-label">
-			TURN:{{turn}}
-			<span ng-click="resetGame()" class="fa fa-refresh text-success"></span>
-		</div> 
-		<div class="col-sm-4 hidden-xs"></div>
-	</div>
-</div>
+<div game></div>
 <div footer></div>
 
 
@@ -102,6 +53,60 @@
 	  </div>
 	</nav>
 </script>
+
+<script type="text/ng-template" id="game.html">
+	<div class="container game">
+		<div class="row">
+			<div class="col-lg-4"></div>
+			<div class="col-lg-4 text-center">
+				<div ng-hide="won || tie">
+					<h3>Welcome Noble Opponent.</h3>
+					<span class="fa fa-smile-o"></span>
+					Shall We Play? 
+					<span class="fa fa-smile-o"></span>
+				</div>
+				<div ng-show="won">
+					<h3>The victory is mine!</h3>
+					<span class="fa fa-bolt"></span>
+					Hmmm. I think you might have let me win
+					<span class="fa fa-bolt"></span>
+				</div>
+				<div ng-show="tie">
+					<h3>We Fought To A Draw!</h3>
+					<span class="fa fa-black-tie "></span>
+					Well fought you are a noble opponent
+					<span class="fa fa-black-tie"></span>
+				</div>			
+			</div>
+			<div class="col-lg-4"></div>
+		</div>	
+		<div class="row">
+			<div class="col-sm-3 col-md-4 col-lg-4"></div>
+			<div class="col-sm-6 col-md-4 col-lg-4 text-center bg-success">
+				<div class="row">
+					<div 
+						class="col-xs-4 pos pos{{$index}}" 
+						ng-repeat="result in gameState track by $index"
+						ng-click="userClick($index)">
+						<span ng-if="result==='o'" class="fa fa-circle-o fa-4x">
+						</span>
+						<span ng-if="result==='x'" class="fa fa-times-circle-o fa-4x"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-4 col-lg-4"></div>
+		</div>
+		<div class="row ">
+			<div class="col-sm-4  hidden-xs"></div>
+			<div class="col-lg-4 col-xs-12 text-center turn-label">
+				TURN:{{turn}}
+				<span ng-click="resetGame()" class="fa fa-refresh text-success"></span>
+			</div> 
+			<div class="col-sm-4 hidden-xs"></div>
+		</div>
+	</div>
+</script>
+
 <script type="text/ng-template" id="footer.html">
 	<nav class="navbar navbar-default navbar-fixed-bottom">
 	  <div class="container">

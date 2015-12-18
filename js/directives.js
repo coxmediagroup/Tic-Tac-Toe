@@ -5,6 +5,12 @@ angular.module("ticTacToeApp").directive("header", function(){
 		templateUrl:"header.html"
 	}
 });
+angular.module("ticTacToeApp").directive("game", function(){
+	return {
+		restrict:'A',
+		templateUrl:"game.html"
+	}
+});
 angular.module("ticTacToeApp").directive("footer", function(){
 	return {
 		restrict:'A',

@@ -40638,7 +40638,6 @@ angular.module("ticTacToeApp").factory('ai', function(){
 		return score;		
 	};
 
-
 	var lineOppScore = function(state, indexes){
 		var score = negativeScore(state, indexes, "o");
 		if(score === 0){
@@ -40769,6 +40768,12 @@ angular.module("ticTacToeApp").directive("header", function(){
 	return {
 		restrict:'A',
 		templateUrl:"header.html"
+	}
+});
+angular.module("ticTacToeApp").directive("game", function(){
+	return {
+		restrict:'A',
+		templateUrl:"game.html"
 	}
 });
 angular.module("ticTacToeApp").directive("footer", function(){

@@ -43,7 +43,6 @@ angular.module("ticTacToeApp").factory('ai', function(){
 		return score;		
 	};
 
-
 	var lineOppScore = function(state, indexes){
 		var score = negativeScore(state, indexes, "o");
 		if(score === 0){
