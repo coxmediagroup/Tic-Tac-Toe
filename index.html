@@ -1,0 +1,126 @@
+<html lang="en" ng-app="ticTacToeApp">
+<head>
+  <meta charset="utf-8">
+  <title>Cox Assessment</title>
+  <meta name="description" content="Cox Tic-Tac-Toe Assessment">
+  <meta name="author" content="Ralph Martin Trujillo">
+  <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css.map">
+  <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body ng-controller='gameCtrl'>
+<div ng-hide="loaded" class="loading">
+	<span class="fa fa-cog fa-spin"></span>
+	<p>LOADING</p>
+</div>
+<div header ng-show="loaded" class="hide-during-load"></div>
+<div game ng-show="loaded" class="hide-during-load"></div>
+<div footer ng-show="loaded" class="hide-during-load"></div>
+
+<script src="js/all.js"></script>
+<script type="text/ng-template" id="header.html">
+	<nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container-fluid">
+		  <div class="row">
+		  	<div class="visible-xs-block text-center">
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  	</div>
+		  	<div class="hidden-xs col-sm-4 col-md-4 col-lg-5 text-right">
+		  		<h1><span class="fa fa-star"></span></h1>
+		  	</div>
+		  	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 text-center">
+		  		<h1 class="hidden-xs">Tic-Tac-Toe</h1>
+		  		<span class="visible-xs-block">Tic-Tac-Toe</span>
+		  	</div>
+		  	<div class="hidden-xs col-sm-4 col-md-4 col-lg-5 text-left">
+		  		<h1><span class="fa fa-star"></span></h1>
+		  	</div>
+		  	<div class="visible-xs-block text-center">
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  		<span class="fa fa-star"></span>
+		  	</div>
+		  </div>
+	  </div>
+	</nav>
+</script>
+
+<script type="text/ng-template" id="game.html">
+	<div class="container game">
+		<div class="row">
+			<div class="col-lg-4"></div>
+			<div class="col-lg-4 text-center">
+				<div ng-hide="won || tie">
+					<h3>Welcome Noble Opponent.</h3>
+					<span class="fa fa-smile-o"></span>
+					Shall We Play? 
+					<span class="fa fa-smile-o"></span>
+				</div>
+				<div ng-show="won">
+					<h3>The victory is mine!</h3>
+					<span class="fa fa-bolt"></span>
+					Hmmm. I think you might have let me win
+					<span class="fa fa-bolt"></span>
+				</div>
+				<div ng-show="tie">
+					<h3>We Fought To A Draw!</h3>
+					<span class="fa fa-black-tie "></span>
+					Well fought you are a noble opponent
+					<span class="fa fa-black-tie"></span>
+				</div>			
+			</div>
+			<div class="col-lg-4"></div>
+		</div>	
+		<div class="row">
+			<div class="col-sm-3 col-md-4 col-lg-4"></div>
+			<div class="col-sm-6 col-md-4 col-lg-4 text-center bg-success">
+				<div class="row">
+					<div 
+						class="col-xs-4 pos pos{{$index}}" 
+						ng-repeat="result in gameState track by $index"
+						ng-click="userClick($index)">
+						<span ng-if="result==='o'" class="fa fa-circle-o fa-4x">
+						</span>
+						<span ng-if="result==='x'" class="fa fa-times-circle-o fa-4x"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-4 col-lg-4"></div>
+		</div>
+		<div class="row ">
+			<div class="col-sm-4  hidden-xs"></div>
+			<div class="col-lg-4 col-xs-12 text-center turn-label">
+				TURN:{{turn}}
+				<span ng-click="resetGame()" class="fa fa-refresh text-success"></span>
+			</div> 
+			<div class="col-sm-4 hidden-xs"></div>
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="footer.html">
+	<nav class="navbar navbar-default navbar-fixed-bottom">
+	  <div class="container">
+		<h3 class='text-center'>
+			by Marty Trujillo {{hi}}
+		</h3>
+	  </div>
+	</nav>
+</script>
+
+
+</body>
+</html>

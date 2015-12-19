@@ -1,0 +1,77 @@
+body {
+	padding-top:70px;
+	padding-bottom:70px;
+	min-width: 300px;
+}
+h1 {
+	font-size:3.3rem;
+}
+.turn-label{
+	font-size:2rem;	
+}
+.game {
+	margin-top: 10px;
+}
+.pos {
+	height: 114px;
+	cursor: pointer;
+	padding:30px;
+}
+.pos:hover{
+	background-color: #FFFFFF;
+}
+.pos0 {
+
+}
+.pos1 {
+	border-left: 1px solid black; 
+	border-right: 1px solid black; 
+}
+.pos2 {
+
+}
+.pos3 {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black; 
+}
+.pos4 {
+	border: 1px solid black;
+}
+.pos5 {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black; 
+}
+.pos6 {
+
+}
+.pos7 {
+	border-left: 1px solid black; 
+	border-right: 1px solid black; 
+}
+.pos8 {
+
+}
+.fa-refresh{
+	cursor: pointer;
+}
+.loading{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.5);
+  text-align: center;
+  padding-top: 200px;
+  font-size: 60px;
+  color:#EDEDED;
+
+}
+
+.loading p{
+  font-size: 30px;
+}
+.hide-during-load{
+	display:none;
+}
