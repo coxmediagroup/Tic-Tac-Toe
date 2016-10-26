@@ -1,0 +1,63 @@
+body {
+  padding-top: 50px;
+  background-color: #bbb;
+}
+
+.navbar-default {
+    background-color: rgb(34,34,34);
+    border-color: rgb(18, 18, 18);
+}
+
+h2 {
+    color: #FFF;
+    padding-bottom: 5px;
+}
+
+.navbar-info {
+    color: #fff;
+    margin-top: 27px;
+    margin-left: 15px;
+}
+
+.div-game {
+  padding: 40px 15px;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.table-game {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.span-game-grid {
+    text-align:center;
+    display:inline-block;
+}
+
+.btn-game {
+    float: left;
+    margin: 10px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+}
+
+.btn-computer {
+    background-color: #FFF;
+    background-image:url('../img/x.png');
+}
+
+.btn-player {
+    background-color: #FFF;
+    background-image:url('../img/o.png');
+}
+
+.clear-left {
+    clear: left;
+}
+
+.modal-gameend .modal-dialog {
+    width: 250px;
+    margin-top: 450px;
+}
