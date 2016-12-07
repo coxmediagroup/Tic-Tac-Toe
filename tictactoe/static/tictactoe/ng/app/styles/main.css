@@ -1,0 +1,60 @@
+/* Space out content a bit */
+
+a {
+  cursor:pointer;
+}
+
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.game-board .game-row-1,
+.game-board .game-row-2,
+.game-board .game-row-3 {
+  min-height:75px;
+  font-size:60px;
+  line-height:70px;
+  vertical-align: middle;
+  color:#666;
+  padding:0;
+  text-align: center;
+}
+
+.game-board .game-row-1,
+.game-board .game-row-2 {
+  border-bottom: 4px solid #666;
+}
+
+.game-board .game-col-A,
+.game-board .game-col-B {
+  border-right: 4px solid #666;
+}
+
+.game-records .label {
+  margin:0.7em 0 0 0.7em;
+
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .game-board .game-row-1,
+  .game-board .game-row-2,
+  .game-board .game-row-3 {
+    min-height:125px;
+    font-size:100px;
+    line-height:115px;
+  }
+}
+
+/* Customize container */
+@media (min-width: 1200px) {
+  .game-board .game-row-1,
+  .game-board .game-row-2,
+  .game-board .game-row-3 {
+    min-height:175px;
+    font-size:150px;
+    line-height:165px;
+  }
+}
+

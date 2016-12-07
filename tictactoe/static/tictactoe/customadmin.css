@@ -1,0 +1,38 @@
+.tic-tac-toe-sequence {
+  min-height:35px;
+  font-size:9px;
+  line-height:10px;
+  font-family:sans-serif;
+}
+
+.tic-tac-toe-sequence div {
+  margin:0;
+  padding:0;
+}
+
+.tic-tac-toe-sequence .tic-tac-toe-step {
+  float:left;
+  width:34px;
+  height:34px;
+  border-top:1px solid #000;
+  border-left:1px solid #000;
+  margin-left: 10px;
+}
+
+.tic-tac-toe-sequence .tic-tac-toe-step > div {
+  height:10px;
+  border-bottom:1px solid #000;
+}
+
+.tic-tac-toe-sequence .tic-tac-toe-step > div > div {
+  height:10px;
+  width:10px;
+  float:left;
+  text-align:center;
+  border-right:1px solid #000;
+}
+
+
+.tic-tac-toe-sequence .tic-tac-toe-step > div > div.tic-tac-toe-move {
+  color:red;
+}
