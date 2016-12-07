@@ -1,0 +1,37 @@
+#game-table {
+	/* Reduce the table's width and center it. */
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.piece-box {
+	/* Set a fixed size for each box. */
+	width: 9em;
+	height: 9em;
+
+	/* Center the icon. */
+	vertical-align: middle !important;
+}
+
+.piece-box:hover {
+	/* Highlight the Table Cell when the cursor is over it. */
+	background-color: #dff0d8;
+	cursor: pointer;
+}
+
+.disabled:hover {
+	background-color: #f2dede !important;
+}
+
+input[type=text]:disabled {
+	background-color: #ffffff;
+}
+
+.human-player {
+	background-color: #4BD12A !important;
+}
+
+.computer-player {
+	background-color: #D12A2A !important;
+}
