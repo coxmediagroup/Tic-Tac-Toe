@@ -1,0 +1,52 @@
+<html ng-app="TicTacToeApp">
+<head>
+    <title>Tic-Tac-Toe</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+    <script src="TicTacToeCtrl.js"></script>
+    <link rel="stylesheet" type="text/css" href="TicTacToe.css">
+</head>
+<body ng-controller="TicTacToeCtrl">
+    <h1 ng-if="winner=='X'">You Win</h1>
+    <h1 ng-if="tie">Tie Game</h1>
+    <h1 ng-if="winner=='O'">You Lose</h1>
+    <p>You are X. Click a Square to Play</p> 
+    <div id="board">
+        <div id="row0">
+            <div data-x="0" data-y="0" ng-click="updateBoard($event)">
+                {{board[0][0]}}
+            </div>
+            <div data-x="1" data-y="0" ng-click="updateBoard($event)">
+                {{board[0][1]}}
+            </div>
+            <div data-x="2" data-y="0" ng-click="updateBoard($event)">
+                {{board[0][2]}}
+            </div>
+        </div>
+        <div id="row1">
+            <div data-x="0" data-y="1" ng-click="updateBoard($event)">
+                {{board[1][0]}}
+            </div>
+            <div data-x="1" data-y="1" ng-click="updateBoard($event)">
+                {{board[1][1]}}
+            </div>
+            <div data-x="2" data-y="1" ng-click="updateBoard($event)">
+                {{board[1][2]}}
+            </div>
+        </div>
+        <div id="row2">
+            <div data-x="0" data-y="2" ng-click="updateBoard($event)">
+                {{board[2][0]}}
+            </div>
+            <div data-x="1" data-y="2" ng-click="updateBoard($event)">
+                {{board[2][1]}}
+            </div>
+            <div data-x="2" data-y="2" ng-click="updateBoard($event)">
+                {{board[2][2]}}
+            </div>
+        </div>
+    </div>
+    <br/>
+    <a href="/">New Game</a>
+</body>
+</html>

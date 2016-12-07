@@ -1,0 +1,45 @@
+body{
+    text-align: center;
+}
+
+#board{
+    height: 301px;
+    width: 301px;
+    margin: 0 auto;
+    margin-top: 100px;
+    display: table;
+}
+
+#board > div
+{
+    height: 100px;
+    display: table-row;
+}
+
+#board > div > div
+{
+    width: 100px;
+    height: 100px;
+    display: table-cell;
+    font-size: 80px;
+}
+
+[data-y="0"]
+{
+     border-bottom: solid black 1px;
+}
+
+[data-x="0"]
+{
+     border-right: solid black 1px;
+}
+
+[data-y="2"]
+{
+    border-top: solid black 1px;
+}
+
+[data-x="2"]
+{
+    border-left: solid black 1px;
+}
