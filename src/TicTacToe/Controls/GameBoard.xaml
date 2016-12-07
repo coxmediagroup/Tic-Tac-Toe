@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="TicTacToe.Controls.GameBoard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:TicTacToe.Controls"
+             mc:Ignorable="d" 
+             Width="315"
+             Height="290" x:Name="Self"
+             d:DesignHeight="300" d:DesignWidth="300" Background="#FF4E4C51">
+    <Grid>
+        <Image Source="../Resources/board.png" Stretch="None"></Image>
+        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Top"
+            ItemsSource="{Binding ElementName=Self,Path=Vm.Positions}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" >
+                        <WrapPanel.Resources>
+                            <Style TargetType="{x:Type controls:Position}">
+                                <Setter Property="Margin" Value="35,25,0,0" />
+                            </Style>
+                        </WrapPanel.Resources>
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <controls:Position Vm="{Binding}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
