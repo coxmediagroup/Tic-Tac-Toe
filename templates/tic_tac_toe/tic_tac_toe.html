@@ -1,0 +1,61 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'tic_tac_toe/css/style.css' %}" />
+<script type="text/javascript" src="{% static 'tic_tac_toe/js/main.js' %}"></script>
+
+<h1>Let's play Tic-Tac-Toe!</h1>
+
+{% if first %}
+<p>Click a square to mark it and click 'Submit' to make your decision final.</p>
+{% endif %}
+
+{% if winner %}
+    <p>We have a winner!</p>
+    <p>Click 'Reset' to play again.</p>
+</div>
+{% endif %}
+{% if draw %}
+    <p>It's a draw.</p>
+    <p>Click 'Reset' to play again.</p>
+{% endif %}
+
+<form action="{% url 'user_move' %}" method="post" id="board">
+{% csrf_token %}
+
+<div class="clear"></div>
+<div class="buttons">
+    <input type="hidden" value="" name="last_move" />
+    <input type="submit" value="Reset" name="reset" />
+{% if not winner %}
+    {% if not draw %}
+        <input type="submit" value="Submit" name="submit" />
+    {% endif %}
+{% endif %}
+</div>
+<div class="game_board">
+{% for cell in upper_row %}
+    <div class="cell upper {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
+{% endfor %}
+{% for cell in middle_row %}
+    <div class="cell middle {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
+{% endfor %}
+{% for cell in bottom_row %}
+    <div class="cell lower {{ cell.position }}" id="{{ cell.index }}"
+    {% if cell.value|length = 0 %}
+        onclick="addToken(this)"
+    {% endif %}
+    >{{ cell.value }}</div>
+    <input type="hidden" name="{{ cell.index }}" value="{{ cell.value }}"/>
+{% endfor %}
+</div>
+</form>

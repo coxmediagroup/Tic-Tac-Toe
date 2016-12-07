@@ -1,0 +1,53 @@
+h1 {
+    text-align: center;
+}
+
+.game_board {
+    width: 379px;
+    height: 375px;
+    display: block;
+    margin: auto;
+}
+
+.cell {
+    width: 125px;
+    height: 125px;
+    float: left;
+    font-size: 130px;
+    text-align: center;
+}
+
+.clear {
+    clear: both;
+}
+
+.cell.upper {
+    border-bottom: solid 2px;
+}
+
+.cell.lower {
+    border-top: solid 2px;
+}
+
+.cell.left {
+    border-right: solid 2px;
+}
+
+.cell.right {
+    border-left: solid 2px;
+}
+
+ .buttons {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: block;
+    text-align: center;
+}
+
+p {
+    margin: auto;
+    display: block;
+    text-align: center;
+}
