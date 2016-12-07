@@ -1,0 +1,9 @@
+{% extends "root.html" %}
+{% load cache i18n %}
+
+{% block title %}{% trans "Error 404: Page Not Found" %}{% endblock %}
+
+{% block main_content %}
+<h2>{% trans "Error 404: Page Not Found" %}</h2>
+<p>{{ request.path|escape }}</p>
+{% endblock %}

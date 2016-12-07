@@ -1,0 +1,57 @@
+
+App will consist of two pages.  
+
+Page one:
+
+Radio buttons to select Computer or user first.
+Radio buttons to select User is X or O.
+Play button
+
+Page two:
+
+Title
+game table (3x3)
+
+Page one and two will be generated with Django.
+Play on page two will be implemented in Jquery because
+it will not require reloads.  Click handler will display
+user input if square is open, otherwise a warning dialog.
+After each move, Dialog if win, lose, or tie.
+
+State of game could be represented several ways:
+
+1. as a single array of arrays.
+Each element is either 0 (not selected), 1 (X), or 4 (O).
+var board = [[1,0,4],[1,4,0],[1,1,1]];
+top left element is board[0][0]
+If any row column or diag = 3 or 12 then win, 2 or 8 means
+next move must prevent win.
+
+2. as two arrays as above, one per player.
+
+Each element is either 0 (not selected), 1 (selected)
+
+3. a single array of 9 elements.  This allows lists of
+all corner squares, all edge squares, all free squares.
+
+Start with the third one since it is the simplest.  
+
+Strategy is first option from following list (wikipedia):
+1. Win: If the player has two in a row, play the third to get three in a row.
+2. Block: If the [opponent] has two in a row, play the third to block them.
+3. Fork: Create an opportunity where you can win in two ways.
+4. Block opponent's Fork:
+Option 1: Create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork or winning. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
+Option 2: If there is a configuration where the opponent can fork, block that fork.
+5. Center: Play the center.
+6. Opposite corner: If the opponent is in the corner, play the opposite corner.
+7. Empty corner: Play in a corner square.
+8. Empty side: Play in a middle square on any of the 4 sides.
+
+Steps 3 and 4 are the hardest.  They may not be necessary if using a playbook for
+response to first moves.
+
+If computer is first, play corner.
+
+If computer is second,
+respond to a corner opening with a center mark, and to a center opening with a corner mark.  Respond to an edge opening with a center mark. 

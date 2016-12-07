@@ -1,0 +1,29 @@
+body {
+    color: #000;
+    background: #FFF;
+    margin: 0px;
+    padding: 0px;
+}
+
+#hd, #topmenu, #sidebar, #ft,
+.hidden {
+    display: none;
+}
+
+h1, h2, h3, h4, p, td {
+    color: #000;
+}
+
+h1 a, h2 a, h3 a, h4 a {
+    text-decoration: none;
+    color: #000;
+}
+
+a {
+    text-decoration: underline;
+    color: #000;
+}
+
+img {
+    border: none;
+}

@@ -1,0 +1,612 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Henning Hraban Ramm <hraba@fiee.net>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: project_name\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-09 11:38+0100\n"
+"PO-Revision-Date: 2010-11-09 11:45+0100\n"
+"Last-Translator: Henning Hraban Ramm <hraban@fiee.net>\n"
+"Language-Team: fiëé visuëlle <hraban@fiee.net>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: Germany\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: __init__.py:5
+msgid "project_name"
+msgstr "fiëé módulaîre"
+
+#: __init__.py:6
+msgid "project_names"
+msgstr "fiëé módulaîre"
+
+#: models.py:18
+msgid "Standard template"
+msgstr "Musterseite"
+
+#: models.py:21
+msgid "Main content area"
+msgstr "Hauptinhalt"
+
+#: models.py:32
+msgid "Event"
+msgstr "Termin"
+
+#: models.py:33
+msgid "Events"
+msgstr "Termine"
+
+#: models.py:43
+msgid "Calendar"
+msgstr "Kalender"
+
+#: models.py:44
+msgid "Calendars"
+msgstr "Kalender"
+
+#: models.py:75
+#: models.py:81
+msgid "right"
+msgstr "Rechts"
+
+#: models.py:76
+#: models.py:82
+msgid "center"
+msgstr "Mitte"
+
+#: settings.py:24
+msgid "STRING_NOT_SET"
+msgstr "ZEICHENKETTE_NICHT_DEFINIERT"
+
+#: settings.py:157
+msgid "English"
+msgstr "Englisch"
+
+#: settings.py:158
+msgid "German"
+msgstr "Deutsch"
+
+#: settings.py:251
+#, python-format
+msgid "Please create a %s file with random characters to generate your secret key!"
+msgstr "Bitte erzeugen Sie eine Datei %s mit zufälligen Zeichen, um Ihren geheimen Schlüssel zu erzeugen!"
+
+#: templates/404.html:4
+#: templates/404.html.py:7
+msgid "Error 404: Page Not Found"
+msgstr "Fehler 404: Seite nicht gefunden"
+
+#: templates/500.html:4
+#: templates/500.html.py:7
+msgid "Error 500: Server Error"
+msgstr "Fehler 500: Server-Fehler"
+
+#: templates/500.html:8
+msgid "Sorry, this page is temporalily unavailable due to a server misconfiguration."
+msgstr "Entschuldigung, diese Seite ist wegen einer Fehlkonfiguration des Servers vorübergehend nicht verfügbar."
+
+#: templates/root.html:6
+#: templates/admin/app_index.html:8
+#: templates/admin/change_form.html:18
+#: templates/admin/change_list.html:42
+msgid "Home"
+msgstr "Startseite"
+
+#: templates/root.html:12
+msgid "project_name events"
+msgstr "fiëé módulaîre Termine"
+
+#: templates/root.html:37
+msgid "Welcome!"
+msgstr "Willkommen!"
+
+#: templates/admin/base_site.html:4
+msgid "Site Admin"
+msgstr "Site-Verwaltung"
+
+#: templates/admin/base_site.html:7
+msgid "Administration"
+msgstr "Verwaltung"
+
+#: templates/admin/change_form.html:21
+#: templates/admin/index.html:29
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: templates/admin/change_form.html:28
+msgid "History"
+msgstr "Verlauf"
+
+#: templates/admin/change_form.html:29
+msgid "View on site"
+msgstr "Auf der Webseite anzeigen"
+
+#: templates/admin/change_form.html:39
+#: templates/admin/change_list.html:71
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "Bitte korrigieren Sie den unten stehenden Fehler."
+msgstr[1] "Bitte korrigieren Sie die unten stehenden Fehler."
+
+#: templates/admin/change_list.html:63
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s hinzufügen"
+
+#: templates/admin/change_list.html:82
+msgid "Filter"
+msgstr "Filter"
+
+#: templates/admin/index.html:18
+#, python-format
+msgid "Models available in the %(name)s application."
+msgstr "Modelle, die in der Anwendung %(name)s verfügbar sind."
+
+#: templates/admin/index.html:35
+msgid "Change"
+msgstr "Ändern"
+
+#: templates/admin/index.html:45
+msgid "You don't have permission to edit anything."
+msgstr "Sie haben keine Berechtigung, etwas zu bearbeiten."
+
+#: templates/admin/index.html:53
+msgid "Recent Actions"
+msgstr "Letzte Aktionen"
+
+#: templates/admin/index.html:54
+msgid "My Actions"
+msgstr "Meine Aktionen"
+
+#: templates/admin/index.html:58
+msgid "None available"
+msgstr "Nichts verfügbar"
+
+#: templates/admin/index.html:72
+msgid "Unknown content"
+msgstr "Unbekannter Inhalt"
+
+#: templates/snippets/languageselect.html:11
+msgid "Change language"
+msgstr "Sprache ändern"
+
+#: templates/snippets/pagination.html:7
+msgid "First"
+msgstr "Anfang"
+
+#: templates/snippets/pagination.html:8
+msgid "Previous"
+msgstr "Zurück"
+
+#: templates/snippets/pagination.html:14
+msgid "Next"
+msgstr "Weiter"
+
+#: templates/snippets/pagination.html:15
+msgid "Last"
+msgstr "Ende"
+
+#: templates/snippets/pagination.html:18
+msgid "New Item"
+msgstr "Neuer Eintrag"
+
+#~ msgid "Person template"
+#~ msgstr "Personen-Seite"
+
+#~ msgid "Right content area"
+#~ msgstr "Rechts"
+
+#~ msgid "TIME_FORMAT"
+#~ msgstr "G:i"
+
+#~ msgid "logout"
+#~ msgstr "Abmelden"
+
+#~ msgid "login"
+#~ msgstr "Anmelden"
+
+#~ msgid "search"
+#~ msgstr "Suchen"
+
+#~ msgid "Imprint"
+#~ msgstr "Impressum"
+
+#~ msgid "Cannot remove this frame while inside this admin section."
+#~ msgstr "Dieser Rahmen kann in diesem Admin-Bereich nicht entfernt werden."
+
+#~ msgid "remove"
+#~ msgstr "entfernen"
+
+#~ msgid "Reload"
+#~ msgstr "Neu laden"
+
+#~ msgid "Edit"
+#~ msgstr "Bearbeiten"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Save tree"
+#~ msgstr "Baum speichern"
+
+#~ msgid "Expand all"
+#~ msgstr "Alles ausklappen"
+
+#~ msgid "Collapse all"
+#~ msgstr "Alles einklappen"
+
+#~ msgid "Insert after"
+#~ msgstr "danach einfügen"
+
+#~ msgid "Insert before"
+#~ msgstr "davor einfügen"
+
+#~ msgid "Insert as child"
+#~ msgstr "untergeordnet einfügen"
+
+#~ msgid "Foto:"
+#~ msgstr "Foto: "
+
+#~ msgid "Starts"
+#~ msgstr "Beginn"
+
+#~ msgid "DATETIME_FORMAT"
+#~ msgstr "d.m.Y G:i"
+
+#~ msgid "Ends"
+#~ msgstr "Ende"
+
+#~ msgid "Reoccurs"
+#~ msgstr "Wiederholung"
+
+#~ msgid "until"
+#~ msgstr "bis"
+
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
+
+#~ msgid "ReStructured Text"
+#~ msgstr "ReStructured Text"
+
+#~ msgid "ReStructured Texts"
+#~ msgstr "ReStructured Texts"
+
+#~ msgid "Add Event"
+#~ msgstr "Termin hinzufügen"
+
+#~ msgid "%(start_date)s"
+#~ msgstr "%(start_date)s"
+
+#~ msgid "%(end_date)s"
+#~ msgstr "%(end_date)s"
+
+#~ msgid "Details"
+#~ msgstr "Details"
+
+#~ msgid "Question"
+#~ msgstr "Frage"
+
+#~ msgid ""
+#~ "Do you want to cancel this occurrence or delete all occurrences of this "
+#~ "event?"
+#~ msgstr ""
+#~ "Möchten Sie nur diese eine Wiederholung des Termins löschen oder alle?"
+
+#~ msgid "This is a recurring event"
+#~ msgstr "Dies ist ein wiederkehrender Termin"
+
+#~ msgid "Do you want to edit this occurrence or all occurrences?"
+#~ msgstr ""
+#~ "Möchten Sie nur diese eine Wiederholung des Termins bearbeiten oder alle?"
+
+#~ msgid "Edit Event"
+#~ msgstr "Termin bearbeiten"
+
+#~ msgid "Delete Event"
+#~ msgstr "Termin löschen"
+
+#~ msgid "YEAR_MONTH_FORMAT"
+#~ msgstr "F Y"
+
+#~ msgid "Continues"
+#~ msgstr "Weiter bis"
+
+#~ msgid "Week"
+#~ msgstr "Woche"
+
+#~ msgid "Month"
+#~ msgstr "Monat"
+
+#~ msgid "Year"
+#~ msgstr "Jahr"
+
+#~ msgid "Available Calendars"
+#~ msgstr "Verfügbare Kalender"
+
+#~ msgid "Small Month"
+#~ msgstr "Kleiner Monat"
+
+#~ msgid "1 Month"
+#~ msgstr "Monat"
+
+#~ msgid "3 Months"
+#~ msgstr "3 Monate"
+
+#~ msgid "This Year"
+#~ msgstr "Dieses Jahr"
+
+#~ msgid "Weekly"
+#~ msgstr "Wöchentlich"
+
+#~ msgid "Daily"
+#~ msgstr "Täglich"
+
+#~ msgid "Feed"
+#~ msgstr "Liste"
+
+#~ msgid "This month"
+#~ msgstr "Dieser Monat"
+
+#~ msgid "Three Months"
+#~ msgstr "3 Monate"
+
+#~ msgid "This week"
+#~ msgstr "Diese Woche"
+
+#~ msgid "Current Month"
+#~ msgstr "Dieser Monat"
+
+#~ msgid "Current Year"
+#~ msgstr "Dieses Jahr"
+
+#~ msgid "Are you sure that you really want to cancel this occurrence?"
+#~ msgstr "Sind Sie sicher, dass Sie diese Wiederholung absagen möchten?"
+
+#~ msgid "From"
+#~ msgstr "Von"
+
+#~ msgid "to"
+#~ msgstr "bis"
+
+#~ msgid "Cancel"
+#~ msgstr "Absagen"
+
+#~ msgid "Are you sure that you really want to delete it?"
+#~ msgstr "Sind Sie sicher, dass Sie löschen möchten?"
+
+#~ msgid "Back"
+#~ msgstr "Zurück"
+
+#~ msgid "%(end_recurring_date)s"
+#~ msgstr "%(end_recurring_date)s"
+
+#~ msgid "Never. This is a 'one time only' event."
+#~ msgstr "Nie. Dies ist ein einmaliger Termin."
+
+#~ msgid "Day"
+#~ msgstr "Tag"
+
+#~ msgid "left"
+#~ msgstr "Links"
+
+#~ msgid "Three Month Calendar"
+#~ msgstr "Drei-Monats-Kalender"
+
+#~ msgid "Full Year Calendar"
+#~ msgstr "Ganzjahres-Kalender"
+
+#~ msgid "Startseite"
+#~ msgstr "Startseite"
+
+#~ msgid "Impressum"
+#~ msgstr "Impressum"
+
+#~ msgid "monatlich"
+#~ msgstr "monatlich"
+
+#~ msgid "Addresses"
+#~ msgstr "Adressen"
+
+#~ msgid "key"
+#~ msgstr "Schlüssel"
+
+#~ msgid "inherited"
+#~ msgstr "Vererbt"
+
+#~ msgid ""
+#~ "Should the content be inherited by subpages if they do not define any "
+#~ "content for this region?"
+#~ msgstr ""
+#~ "Soll der Inhalt dieser Region durch Unterseiten geerbt werden, sofern "
+#~ "diese keinen eigenen Inhalt definieren?"
+
+#~ msgid "region"
+#~ msgstr "Region"
+
+#~ msgid "regions"
+#~ msgstr "Regionen"
+
+#~ msgid "ordering"
+#~ msgstr "Sortierung"
+
+#~ msgid "Database error"
+#~ msgstr "Datenbankfehler"
+
+#~ msgid "file"
+#~ msgstr "Datei"
+
+#~ msgid "files"
+#~ msgstr "Dateien"
+
+#~ msgid "image"
+#~ msgstr "Bild"
+
+#~ msgid "images"
+#~ msgstr "Bilder"
+
+#~ msgid "media file"
+#~ msgstr "Mediendatei"
+
+#~ msgid "media files"
+#~ msgstr "Mediendateien"
+
+#~ msgid "block"
+#~ msgstr "Block"
+
+#~ msgid "text"
+#~ msgstr "Text"
+
+#~ msgid "rich text"
+#~ msgstr "Text"
+
+#~ msgid "rich texts"
+#~ msgstr "Texte"
+
+#~ msgid ""
+#~ "The rss field is updated several times a day. A change in the title will "
+#~ "only be visible on the home page after the next feed update."
+#~ msgstr ""
+#~ "Der RSS Feed wird mehrmals täglich aktualisiert. Eine Änderung des Titels "
+#~ "erscheint erst nach der nächsten Feed-Aktualisierung auf der Webseite."
+
+#~ msgid "Pre-rendered content"
+#~ msgstr "Vor-gerenderter Inhalt"
+
+#~ msgid "Last updated"
+#~ msgstr "Letzte Aktualisierung"
+
+#~ msgid "Max. items"
+#~ msgstr "Maximale Anzahl"
+
+#~ msgid "RSS feed"
+#~ msgstr "RSS Feed"
+
+#~ msgid "RSS feeds"
+#~ msgstr "RSS Feeds"
+
+#~ msgid "video link"
+#~ msgstr "Video-Link"
+
+#~ msgid ""
+#~ "This should be a link to a youtube video, i.e.: http://www.youtube.com/"
+#~ "watch?v=zmj1rpzDRZ0"
+#~ msgstr ""
+#~ "Dies sollte ein Link zu einem Youtube-Video sein, z.B.: http://www."
+#~ "youtube.com/watch?v=zmj1rpzDRZ0"
+
+#~ msgid "video"
+#~ msgstr "Video"
+
+#~ msgid "videos"
+#~ msgstr "Videos"
+
+#~ msgid "Other options"
+#~ msgstr "Weitere Optionen"
+
+#~ msgid "navigation extension"
+#~ msgstr "Navigations-Erweiterung"
+
+#~ msgid "active"
+#~ msgstr "Aktiv"
+
+#~ msgid "This is used for the generated navigation too."
+#~ msgstr "Dies wird auch für die generierte Navigation verwendet."
+
+#~ msgid "in navigation"
+#~ msgstr "In der Navigation"
+
+#~ msgid "override URL"
+#~ msgstr "Überschriebene URL"
+
+#~ msgid "Override the target URL for the navigation."
+#~ msgstr "Überschreibe die Ziel-URL für die Navigation."
+
+#~ msgid "redirect to"
+#~ msgstr "Weiterleiten zu"
+
+#~ msgid "Target URL for automatic redirects."
+#~ msgstr "Ziel-URL für automatische Weiterleitungen."
+
+#~ msgid "Cached URL"
+#~ msgstr "Zwischengespeicherte URL"
+
+#~ msgid ""
+#~ "Select the module providing subpages for this page if you need to "
+#~ "customize the navigation."
+#~ msgstr "Wähle das Modul aus, welches weitere Navigationspunkte erstellt."
+
+#~ msgid "The first line is the main title, the following lines are subtitles."
+#~ msgstr "Die erste Zeile ist der Haupttitel, die weiteren Zeilen Untertitel"
+
+#~ msgid "page title"
+#~ msgstr "Seitentitel"
+
+#~ msgid "Page title for browser window. Same as title by default."
+#~ msgstr ""
+#~ "Seitentitel für das Browser-Fenster. Standardmässig gleich wie der Titel."
+
+#~ msgid "meta keywords"
+#~ msgstr "Meta Begriffe"
+
+#~ msgid "This will be prepended to the default keyword list."
+#~ msgstr "Diese Begriffe werden vor die Standard-Begriffsliste eingefügt."
+
+#~ msgid "This will be prepended to the default description."
+#~ msgstr "Diese Beschreibung wird vor der Standard-Beschreibung eingefügt."
+
+#~ msgid "page"
+#~ msgstr "Seite"
+
+#~ msgid "pages"
+#~ msgstr "Seiten"
+
+#~ msgid "Choose"
+#~ msgstr "Auswählen"
+
+#~ msgid "Change Template"
+#~ msgstr "Template ändern"
+
+#~ msgid "Region empty"
+#~ msgstr "Region leer"
+
+#~ msgid ""
+#~ "Content from the parent site is automatically inherited. To override this "
+#~ "behaviour, add some content."
+#~ msgstr ""
+#~ "Inhalt wird von der übergeordneten Seite geerbt. Füge Inhalt hinzu, um "
+#~ "dieses Verhalten zu ändern"
+
+#~ msgid "Page"
+#~ msgstr "Seite"
+
+#~ msgid "in navi"
+#~ msgstr "Im Menü"
+
+#~ msgid "delete"
+#~ msgstr "Löschen"
+
+#~ msgid "category"
+#~ msgstr "Kategorie"
+
+#~ msgid "categories"
+#~ msgstr "Kategorien"
+
+#~ msgid "caption"
+#~ msgstr "Legende"
+
+#~ msgid "copyright"
+#~ msgstr "Copyright"
+
+#~ msgid "media file translation"
+#~ msgstr "Mediendatei-Übersetzung"
+
+#~ msgid "media file translations"
+#~ msgstr "Mediendatei-Übersetzungen"
