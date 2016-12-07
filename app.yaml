@@ -1,0 +1,29 @@
+application: tic-tac-toe-you-can-never-win
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /_ah/spi/.*
+  script: server.api.application
+  secure: always
+- url: /css
+  static_dir: client/app/css
+  secure: always
+- url: /img
+  static_dir: client/app/img
+  secure: always
+- url: /js
+  static_dir: client/app/js
+  secure: always
+- url: /
+  static_files: client/app/index.html
+  upload: client/app/index\.html
+  secure: always
+
+libraries:
+- name: pycrypto
+  version: latest
+- name: endpoints
+  version: 1.0
