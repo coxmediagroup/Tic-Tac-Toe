@@ -1,0 +1,58 @@
+
+Project: TicTacToe
+
+TODO
+====
+- Update index template to show game status
+- User creation and authentication
+- Track games via User
+- Don't allow user to create a game if there's an incomplete game
+- Keep a talley of User wins and losses
+- Show a log of played games
+- Allow user to see re-play of game
+
+DONE
+====
+- Create django boiler plate
+- Create TODO
+- Configure database
+- Create game model
+- Create game model unit tests
+- Update models to make unit tests pass
+- Create views/controllers
+- Map urls / - Configure project urls to be aware of game app
+- Create unit tests for views/controllers
+- Implement unit tests for views/controllers
+- Implement views/controllers
+  - Get a game board
+  - Post a move
+  - Post a move via Ajax
+- Update index template to list games, link to games, create games
+- Update game template to play a game
+  - Update game board to post on div click
+  - Update game board to post via ajax on div click
+  - Dealt with cross site scripting - oi!
+- Provide a link back to game index from game board
+- Provide a hidden 'New Game' button to show when the game is complete
+- Ugly-style the submit button - 'cause I wanted to try it
+- Continue update game template to play a game
+  - Include player's token in game board form
+  - Also included game id - probably unneeded, but whatever
+  - Also update tictactoe.js so it could (presumably) handle multiple boards
+    on a page
+  - Place player's token on board when cell is clicked
+  - Update game board status from ajax response
+  - Introduce a ttt_done
+- Randomize whether user is X
+- Implement Comp move logic
+- Fix problem in unit tests
+  - Refetch database record after it has been written
+    - Was losing data because business logic wasn't saving the record
+- Complete Comp move logic
+- Probably should improve testing of controller business logic
+  - But how do you test the deliberately indeterminent method of play?
+
+NOT DOING
+=========
+- ttt_win ttt_lose class
+- Gray out loser tokens for complete boards

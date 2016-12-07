@@ -1,0 +1,57 @@
+
+My background: 16 years coding. 11 professionally:
+- 8 years systems programming
+  - First 4 years were a variety of things - I was a lone gunman that
+    went where needed
+  - Next 4 years I was heavy into systems and library development for 
+    simulation
+  - The last year to year and a half, I formalized and finalized 
+    requirements, design, and schedule so that my team could have an 
+    effective development cycle.  Took on mentoring at this point as well.
+- 2 years desktop programming
+  - with a bit of web
+  - and writing a scripting language
+- A little under a year of "titled" Project Management
+  - Prior to this project of tictactoe, this was my most significant 
+    exposure to python and web development
+  - Not a lot of coding (a little) - mostly documenting, streamlining, 
+    prioritizing, a bit of architecture, and just keeping things running
+
+So this project brought a lot of firsts for me:
+- first ground-up project for me in:
+  - python
+  - web app
+  - django
+  - with javascript/jquery
+  - and css - which, forgive me, I know it sucks.
+
+Things I liked:
+- Structure wise, I think it's pretty good
+  - Easily extensible
+    - For example, if we wanted to log moves, 
+      just tack on a MoveLog table off of Game and Board
+    - If I wanted to authenticate users and track games per user, 
+      there wouldn't really be any rework of consequence
+  - Pretty well unit tested
+    - I knew in the process of coding up the computer player I wasn't doing
+      something right.  I couldn't test the player.  I was blinded by
+      'getting it done' and, fortunately, once done it became clear what 
+      was needed.  The re-write wasn't bad - just some shuffling of code
+- I learned a lot doing this
+- For the most part, there wasn't a lot of toe stubbing.  Finding info on 
+  how to do things was fairly easily (csrf token and ajax, anyone?!).
+
+Places I could do have done better:
+- CSS, definitely
+- Prettier html structure in general.  I thought my use of classes was fairly
+  decent, though.  Messing with all that stuff via javascript and ajax was 
+  awesome
+- Error handling - Error codes - Error pages - etc.
+  - Specifically, posting a move on a complete game just quietly accepts the
+    move, ignores it, and gives you back an a-ok with new game state.
+- There's a particular pattern of first moves for each player that guarantees
+  the first player a win if the second player is negligent.  I'd have liked the
+  computer player to play accordingly, but it seemed like a good chunk of work
+  where the basic requirements were alredy complete.
+- And just all those areas where I have more to learn, which is everywhere
+
