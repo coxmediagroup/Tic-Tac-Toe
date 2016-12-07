@@ -1,0 +1,73 @@
+#gameboard {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+}
+
+#gameboard h1 {
+    text-align: center;
+}
+
+#gameboard .row {
+    width: 100%;
+    display: inline;
+}
+
+#gameboard .cell {
+    width: 33%;
+    height: 33%;
+    float: left;
+    font-size: 72px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+#gameboard .cell.angry {
+    color: red;
+}
+
+#gameboard .winner {
+    background-color: black;
+}
+
+#gameboard .cell.active:hover {
+    background-color: #444;
+}
+
+#cell-0\3A 0, #cell-0\3A 1, #cell-1\3A 0, #cell-1\3A 1, #cell-2\3A 0, #cell-2\3A 1 {
+    border-right: 1px solid white;
+}
+
+#cell-1\3A 0, #cell-1\3A 1, #cell-1\3A 2 {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+#narrative {
+    font-family: sans-serif;
+    margin-top: 100px;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#messages {
+    margin-bottom: 10px;
+}
+
+.choices {
+    margin-top: 10px;
+}
+
+.choices input[type="submit"] {
+    background-color: #444;
+    border: 1px solid #999;
+    color: #ccc;
+    padding: 5px;
+}
+
+.choices input[type="submit"]:hover {
+    border: 1px solid orange;
+}

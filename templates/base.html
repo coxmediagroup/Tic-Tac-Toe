@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+        {% block css %}{% endblock %}
+        
+        <script data-main="{{ url_for('static', filename='js/app.js') }}" src="{{ url_for('static', filename='js/lib/require.js') }}"></script>
+        <script>
+            var $ = function(id) {
+                return document.getElementById(id);
+            }
+        </script>
+        {% block script %}{% endblock %}
+    </head>
+    <body>
+        <div id="content">{% block content %}{% endblock %}</div>
+    </body>
+</html>
