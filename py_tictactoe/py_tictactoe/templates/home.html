@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="home">
+<div><h2>Let's Play TIC - TAC - TOE !!</h2>
+	<br/> <br/>
+	 Enter your name and whether you prefer to go first.
+	<br/> <br/> <br/>
+
+	<form id="homeform" method="GET" action="play">
+	<div id="field_name"><label for="player-name">Name </label><input id="player-name" name="player-name" type="text" value="{{ name }}"/></div>
+	<div id="field_first">
+	  <fieldset class="toggle">
+		  <input name="player-first" id="player-first-hidden" type="hidden" value="" />
+		  <input name="player-first" id="player-first" type="checkbox" checked="{{ first }}" />
+		  <label for="player-first">
+		  First Player &nbsp; 
+		  <div class="toggle-button"><div style="position:absolute">&nbsp;yes</div>
+		    <div class="toggle-tab"></div>
+		  </div>
+		  </label>
+	  </fieldset>
+	</div>
+	<button type="submit">PLAY!</button>
+	</form>
+</div>
+</div>
+<script>
+$(document).ready(function(){
+	$('.toggle-button').css('display','inline-block');
+	$('.toggle input').hide();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="intro">
+  {{ name }}, Good Luck! <br/>
+  <div class="player1">Player 1 (X): {% if first %}{{ name }}{% else %}Computer{% endif %}</div>
+  <div class="player2">Player 2 (O): {% if first %}Computer{% else %}{{ name }}{% endif %}</div>
+</div>
+
+<div id="game">
+  <table>
+    <tr><td id="cell_1" class="cell cell_corner_tl"></td><td id="cell_2" class="cell cell_edge_t"></td><td id="cell_3" class="cell cell_corner_tr"></td></tr>
+    <tr><td id="cell_4" class="cell cell_edge_l"></td><td id="cell_5" class="cell cell_center"></td><td id="cell_6" class="cell cell_edge_r"></td></tr>
+    <tr><td id="cell_7" class="cell cell_corner_bl"></td><td id="cell_8" class="cell cell_edge_b"></td><td id="cell_9" class="cell cell_corner_br"></td></tr>
+  </table>
+</div>
+
+<div id="status">
+  <a href="home" id="reset">Reset</a>
+  <a href="play" id="status_win" >You WIN!</a>
+  <a href="play" id="status_lose">You LOSE!</a>
+  <a href="play" id="status_tie" >TIE!!</a>
+</div>
+
+<script>
+$(document).ready(function(){
+	TicTacToe.human_data= "{{ human_data }}";
+	TicTacToe.computer_data= "{{ computer_data }}";
+
+	$('.cell').each(function(){
+		var cell = $(this);
+		cell.height(cell.width());
+	}).click(function(){
+		var cell = $(this);
+		TicTacToe.move_human(cell);
+	});
+
+	{% if move %}
+	TicTacToe.move_computer($('#cell_'+{{ move }}));
+	{% endif %}
+});
+</script>
+
+{% endblock %}
+ is {% if first %}FIRST{% else %}last{% endif %}}
