@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Tic Tac Toe</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script>
+            var is_first_move = true;
+            var blank_board = JSON.parse('[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]');
+
+            first_move = function() {
+                if(is_first_move) {
+                    is_first_move = false;
+                    if(Math.round(Math.random())) {
+                        ai_move();
+                    }
+                }
+            }
+
+            $(document).ready(function() {
+                first_move();
+
+                $("#play_again_bttn").click(function() {
+                    set_board(blank_board);
+                    $("#play_again").hide();
+                    $("#message").html("");
+                    is_first_move = true;
+                    first_move();
+                    $(".tictactoe_button").removeAttr("disabled");
+                });
+
+                $(".tictactoe_button").click(function() {
+                    if($(this).html() == "&nbsp;") {
+                        $(this).html("X");
+                        /*
+                         * We have to check for draw and win before and after we
+                         * move, and the joys of asynchronicity require that we
+                         * pass each step as a callback to the previous step.
+                         */
+                        check_for_win(function() {
+                            check_for_draw(function() {
+                                ai_move(function() {
+                                    check_for_win(function() {
+                                        check_for_draw();
+                                    });
+                                });
+                            });
+                        });
+                    }
+                });
+            });
+
+            get_board = function() {
+                var board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
+
+                for(y=0;y<=2;y++) {
+                    for(x=0;x<=2;x++) {
+                        var button_id = "#" + x + "_" + y;
+                        var square = $(button_id + ".tictactoe_button ").html();
+                        square = square.replace("&nbsp;", " ");
+                        board[x][y] = square;
+                    }
+                }
+
+                return board;
+            }
+
+            set_board = function(board) {
+                for(y=0;y<=2;y++) {
+                    for(x=0;x<=2;x++) {
+                        var button_id = "#" + x + "_" + y;
+                        var square = board[x][y];
+                        square = square.replace(" ", "&nbsp;");
+                        $(button_id + ".tictactoe_button ").html(square);
+                    }
+                }
+            }
+
+            check_for_draw = function(callback_func) {
+                var board = JSON.stringify(get_board());
+                var result;
+                $.ajax({
+                    type: "GET",
+                    url: "/is-draw",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    async: "false",
+                    success: function(data) {
+                        result = data;
+                        if(data != "False") {
+                            $(".tictactoe_button").attr("disabled", "disabled");
+                            $("#message").html("Oh, all right, we'll call it a draw.");
+                            $("#play_again").show();
+                            return;
+                        }
+                        if(callback_func) {
+                            callback_func();
+                        }
+                        return
+                    },
+                });
+            }
+
+            check_for_win = function(callback_func) {
+                var board = JSON.stringify(get_board());
+                var result;
+                $.ajax({
+                    type: "GET",
+                    url: "/is-win",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    async: "false",
+                    success: function(data) {
+                        result = data;
+                        if(data != '') {
+                            $(".tictactoe_button").attr("disabled", "disabled");
+                            if(data == 'player') {
+                                $("#message").html("You win.");
+                                $("#play_again").show();
+                                return;
+                            } else {
+                                $("#message").html("I win.");
+                                $("#play_again").show();
+                                return;
+                            }
+                        }
+                        if(callback_func) {
+                            callback_func();
+                        }
+                        return;
+                    },
+                });
+            }
+
+            ai_move = function(callback_func) {
+                var board = JSON.stringify(get_board());
+                $.ajax({
+                    type: "GET",
+                    url: "/ai-move",
+                    data: {layout: board},
+                    contentType: "application/json; charset=utf-8",
+                    async: "false",
+                    success: function(data) {
+                        var board = JSON.parse(data);
+                        set_board(board);
+                        if(callback_func) {
+                            callback_func();
+                        }
+                    }
+                });
+            }
+    </script>
+    </head>
+    <body>
+        <div id="message_wrap">
+            <span id="message"></span>
+            <span id="play_again" style="display: none;">
+                <button id="play_again_bttn">Play again?</button>
+            </span>
+        </div>
+        <div id="board" board_layout='[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]'>
+            {% for row in layout %}
+                {% set row_number=loop.index - 1 %}
+                {% for box in row %}
+                    {% if loop.index % 3 == 1 %}
+                        <br />
+                    {% endif %}
+                    <button class="tictactoe_button" id="{{ (loop.index - 1) % 3 }}_{{ row_number }}" style="width:200px;height:200px;font-size:10em;">&nbsp;</button>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </body>
+</html>
