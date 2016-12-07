@@ -1,0 +1,28 @@
+body {
+	margin: 25px auto;
+	text-align: center;
+}
+
+#header, #main a {
+    font-size: 2em;
+}
+
+#game_board {
+    margin: 25px 20%;
+}
+
+#game_board table, td {
+    border: 1px solid #000;
+}
+
+#game_board table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#game_board td {
+    height: 200px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 10em;
+}

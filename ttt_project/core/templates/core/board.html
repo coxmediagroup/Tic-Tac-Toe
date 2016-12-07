@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<div id="game_board">
+    <table>
+        <col width="20%" />
+        <col width="20%" />
+        <col width="20%" />
+        <tr>
+            <td id="1">{% if space1 == True %}X{% elif space1 == False %}O{% endif %}</td>
+            <td id="2">{% if space2 == True %}X{% elif space2 == False %}O{% endif %}</td>
+            <td id="3">{% if space3 == True %}X{% elif space3 == False %}O{% endif %}</td>
+        </tr>
+        <tr>
+            <td id="4">{% if space4 == True %}X{% elif space4 == False %}O{% endif %}</td>
+            <td id="5">{% if space5 == True %}X{% elif space5 == False %}O{% endif %}</td>
+            <td id="6">{% if space6 == True %}X{% elif space6 == False %}O{% endif %}</td>
+        </tr>
+        <tr>
+            <td id="7">{% if space7 == True %}X{% elif space7 == False %}O{% endif %}</td>
+            <td id="8">{% if space8 == True %}X{% elif space8 == False %}O{% endif %}</td>
+            <td id="9">{% if space9 == True %}X{% elif space9 == False %}O{% endif %}</td>
+        </tr>
+    </table>
+</div>
+{% if end_game %}
+    <a href="{% url 'main' %}"> Click here to play again</a>
+{% endif %}
+
+{% block scripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static 'core/js/core.js' %}"></script>
+{% endblock scripts %}

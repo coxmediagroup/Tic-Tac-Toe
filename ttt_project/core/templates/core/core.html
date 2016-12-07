@@ -1,0 +1,36 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if IE 7]> <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!--><html lang="en"><!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}Tic-Tac-Toe{% endblock %}</title>
+
+        {# css #}
+        <link rel="stylesheet" href="{% static 'core/css/core.css' %}">
+
+        {% block extra_head %}{% endblock %}
+    </head>
+
+    <body>
+
+    <!-- header -->
+    {% block header %}
+        <div id="header">
+            Unbeatable Tic-Tac-Toe <br>
+            Game #<span>{{ game_num }}</span>
+        </div>
+    {% endblock %}
+
+    <!-- content -->
+    {% block content %}
+        <div id="main">
+            {% include "core/board.html" %}
+        </div>
+    {% endblock %}
+
+    {% block scripts %}{% endblock %}
+    </body>
+
+</html>
