@@ -1,0 +1,9 @@
+Django==1.6
+South
+django-extensions
+django-bootstrap-form
+gunicorn==18.0
+meld3==1.0.0
+supervisor==3.0
+wsgiref==0.1.2
+

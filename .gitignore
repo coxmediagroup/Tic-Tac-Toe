@@ -1,0 +1,4 @@
+.DS_Store
+*.pyc
+var
+ttt/db.sqlite3
