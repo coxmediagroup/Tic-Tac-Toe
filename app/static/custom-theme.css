@@ -1,0 +1,23 @@
+.center-icon-lg{
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 20px;
+}
+
+
+.center-img {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #777;
+}
+
+.center {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tick Tack Toe - Flask Edition</title>
+        
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='font-awesome/css/font-awesome-ie7.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='nprogress/nprogress.css') }}" />
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom-theme.css') }}" />
+    
+    <style  type="text/css">
+        .white {
+            color: white;
+        }
+        .green {
+            color: #23BD15;
+        }
+        .red {
+            color: #ED2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                
+                <div class="navbar">
+                  <div class="navbar-inner">
+                    <div class="container">
+                      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </a>
+                      <a class="brand" href="#">Tic-Tac-Toe</a>
+                      <div class="nav-collapse collapse navbar-responsive-collapse">
+                        <ul class="nav pull-right">
+                          <li><a href="#">Home</a></li>
+                          <li><a href="#about">About/Contact</a></li>
+                        </ul>
+                        
+                        
+                      </div><!-- /.nav-collapse -->
+                    </div>
+                  </div><!-- /navbar-inner -->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="span12">
+
+                <h1 class="center">
+                    Tic Tac Toe
+                </h1>
+
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span12">
+
+                <h3 class="center">
+                    Computer always goes first :)
+                </h3>
+
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span4">
+
+                <div class="well">
+                    You: <i class="icon-circle-blank"></i>
+                    
+                </div>
+
+            </div>
+            <div class="span4">
+
+                <div class="well">
+                    Computer: <i class="icon-remove" ></i>
+                    
+                </div>
+
+            </div>
+            <div class="span4">
+
+                <div class="well">
+                    Empty: <i class="icon-circle white"></i>
+                    
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                
+                <!-- instructions and messages will appear here -->
+                <h4 class="center" id="messages">
+                    Click an empty tile to start.
+                </h4>
+
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-0" data-state="computer">
+                
+                        <i class="icon-remove icon-4x"></i>
+                
+                </div>
+            </div>        
+                    
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-1" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                    
+                </div>
+            </div>
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-2" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                  
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-3" data-state="empty">
+                    
+                        <i class="icon-circle icon-4x white"></i>
+                
+                </div>
+            </div>        
+                    
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-4" data-state="empty">
+                   
+                        <i class="icon-circle icon-4x white"></i>
+                  
+                </div>
+            </div>
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-5" data-state="empty">
+               
+                        <i class="icon-circle icon-4x white"></i>
+              
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-6" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+                </div>
+            </div>        
+                    
+            <div class="span4">
+                <div class="well center game-piece" id="ttt-7" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="well center  game-piece" id="ttt-8" data-state="empty">
+                        <i class="icon-circle icon-4x white"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span12">
+
+                <div class="well">
+                    <button class="btn btn-danger" id="restart">Restart</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row" id="about">
+            <div class="span12">
+                <hr />
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="span12">
+
+                <h3>
+                    About
+                </h3>
+                
+                <div class="well">
+                    <p>
+                        This is a tick-tack-toe game created as a code challenge for Cox Media Group. 
+                        Forked from <a href="https://github.com/coxmediagroup/Tic-Tac-Toe">here</a>.
+                    </p>
+                    <p>
+                        My name is <b>Aaron Decker</b> and I'm a python fan but I usually just use the best tool for the job.
+                        I am a Django enthusiast but I created this project using <a href="http://flask.pocoo.org/">Flask</a>.
+                    </p>
+                    <p>
+                        You can email me here <a href="mailto:me@a-r-d.me">me@a-r-d.me</a>.
+                    </p>
+                    <p>
+                        I built the game board using Font-Awesome 3 and Bootstrap 2. All
+                        of the code for this project is included in the repo and I am not using any CDNs. 
+                         
+                        The only dependency for the project is Flask (and the flask dependencies). 
+                        I decided to use python 2.7 because I think most people still are and I wanted
+                        to make things as easy as possible for you :)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <hr />
+            </div>
+        </div>
+        
+    </div>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='nprogress/nprogress.js') }}"></script>
+    
+     <script  type="text/javascript">
+    /***
+        1. get click.
+         //2. determine board state. *** skipping this.
+        3. send state to server + attempted move
+        4. get server response.
+        5. change board state to
+            a) reflect user move
+            b) reflect computer counter move.
+        
+        Board state Key:
+        -1 = computer
+        0 = empty
+        1 = user
+        Front end (data):
+        "empty"
+        "computer"
+        "user"
+    ***/
+    var TickTackToe = {};
+    TickTackToe.moveAllowed = true;
+    TickTackToe.winner = false;
+    TickTackToe.dataMap = [
+        "ttt-0",
+        "ttt-1",
+        "ttt-2", 
+        "ttt-3", 
+        "ttt-4", 
+        "ttt-5", 
+        "ttt-6", 
+        "ttt-7", 
+        "ttt-8"
+    ];
+    TickTackToe.message = function( msg, color ){
+        if( color == undefined ){
+            color = "black";
+        }
+        $("#messages").text( msg );
+        $("#messages").css("color",color);
+    };
+    TickTackToe.doComputerMove = function( moveint ){
+        $( "#" +  TickTackToe.dataMap[moveint] ).empty();
+        $( "#" +  TickTackToe.dataMap[moveint] ).append( "<i class='icon-remove icon-4x'></i>" );
+        $( "#" +  TickTackToe.dataMap[moveint]).data("state", "computer");
+    };
+    
+    $(document).ready(function(){
+        
+        $("#restart").click( function( e ){
+            $.each( $('.game-piece'), function( i ){
+                $(this).data("state", "empty");
+                $(this).removeClass("red");
+                $(this).removeClass("green");
+                $(this).empty();
+                $(this).append( "<i class='icon-circle icon-4x white'></i>" );
+            });
+            
+            $("#ttt-0").empty().append( "<i class='icon-remove icon-4x'></i>" );
+    
+            NProgress.start();
+            TickTackToe.moveAllowed = false;
+            $.ajax({
+                url: "/clear",
+                type: "POST"
+            }).done( function(e) {
+                //alert(e);
+                NProgress.done();
+                TickTackToe.moveAllowed = true;
+                TickTackToe.winner = false;
+                TickTackToe.message("Click an empty tile to begin");
+            }).fail( function(e) {
+                NProgress.done();
+                TickTackToe.moveAllowed = true;
+                TickTackToe.winner = false;
+                TickTackToe.message("Error: " + e, "red");
+            });
+        });
+    
+        $('.game-piece').click( function( e ){
+        
+            var id = $(this).attr('id');
+            if( $(this).data("state") == "empty"){
+            
+                if( TickTackToe.winner ){
+                    TickTackToe.message("Game is over, please restart", "red");
+                    return;
+                }
+                
+                $(this).empty();
+                $(this).append( "<i class='icon-circle-blank icon-4x'></i>" );
+                $(this).data("state", "user");
+                
+                var moveindex = 0;
+                for( var i = 0; i < TickTackToe.dataMap.length; i++){
+                    if( TickTackToe.dataMap[i] == id ){
+                        moveindex = i;
+                        break;
+                    }
+                }
+                
+                var datas = {
+                    position: moveindex
+                }
+                
+               NProgress.start();
+                TickTackToe.moveAllowed = false;
+                $.ajax( {
+                    url: "/move",
+                    type: "POST",
+                    data: datas
+                }).done( function(data){
+                    //alert(e);
+                    var move = parseInt(data.move);
+                    
+                    if( data.computer != null ){
+                        TickTackToe.message("Computer wins :(", "red");
+                        TickTackToe.winner = true;
+                        TickTackToe.doComputerMove( move );
+                        
+                        for( var i =0; i <= data.computer.length; i++){
+                            var id_target = TickTackToe.dataMap[ data.computer[i] ];
+                            $("#" + id_target).addClass("red");
+                        }
+                        
+                    } else if(  data.user != null ){
+                        TickTackToe.message("You win :)", "green");
+                        TickTackToe.winner = true;
+                        
+                        for( var i =0; i <= data.user.length; i++){
+                            var id_target = TickTackToe.dataMap[ data.user[i] ];
+                            $("#" + id_target).addClass("green");
+                        }
+                    } else  {
+                        var count = 0;
+                        for( var i =0; i <= data.state.length; i++){
+                            if( data.state[i] != 0){
+                                count++;
+                            }
+                        }
+                        if( count == 10){
+                            TickTackToe.message("Game was a draw ^__^", "blue");
+                            TickTackToe.winner = true;
+                        } 
+                        TickTackToe.doComputerMove( move );
+                    }
+                    
+                    NProgress.done();
+                    TickTackToe.moveAllowed = true;
+                    
+                }).fail( function(e){
+                    TickTackToe.message("Error: " + e, "red");
+                    NProgress.done();
+                    TickTackToe.moveAllowed = true;
+                });
+            }
+            
+        });
+    });
+    </script>
+</body>
+</html>
