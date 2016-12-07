@@ -1,3 +1,19 @@
+How to Run
+=============
+
+Pre-requisites
+--------------
+* npm
+* virtualenv
+
+Steps
+-----
+
+#. make install
+#. make
+
+Available at http://localhost:8000/
+
 Story
 ======
 
