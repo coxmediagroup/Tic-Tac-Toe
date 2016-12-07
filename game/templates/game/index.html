@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+
+  <div class="row">
+
+    {# Six columns for game board #}
+    <div class="span6">
+      <table class="board" width="100%">
+        <tbody>
+
+          {# Loop through all the cells #}
+          {% for cell in board %}
+
+            {# Start a new row every 3 cells #}
+            {% if forloop.counter0|divisibleby:"3" %}<tr>{% endif %}
+
+            {# Table cell for the square. The class #}
+            <td width="33%" class="{% if forloop.counter0 not in right_row %}right{% endif %} {% if forloop.counter0 not in bottom_row %}bottom{% endif %}">
+
+              {% if cell == ' ' %}
+                <a href="?cell={{ forloop.counter0 }}" class="cell">
+              {% endif %}
+              <div class="bigtext">
+                <div class="{% if forloop.counter0 in winning_cells %}red{% endif %}square">
+                  {{ cell }}
+                </div>
+              </div>
+              {% if cell == ' ' %}</a>{% endif %}
+            </td>
+
+            {# Terminate row every 3 cells #}
+            {% if forloop.counter|divisibleby:"3" %}</tr>{% endif %}
+
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+    {# Four columns for stats and buttons #}
+    <div class="span4">
+      <p><div class="well">
+        <a class="btn btn-large" href="{% url game:newX %}">
+          <i class="icon-play"></i>
+          {% trans "Play first in new game as X" %}
+        </a>
+      </div></p>
+      <p><div class="well">
+        <a class="btn btn-large" href="{% url game:newO %}">
+          <i class="icon-play"></i>
+          {% trans "Play second in new game as O" %}
+        </a>
+      </div></p>
+      <p><div class="well">
+        <h3>{% trans "Statistics" %}</h3>
+        <h4>{{ played }} games played</h4>
+        <h4>{{ won }} won</h4>
+        <h4>{{ tied }} tied</h4>
+        <h4>{{ lost }} lost</h4>
+      </div></p>
+    </div>
+  </div>
+
+{% endblock %}

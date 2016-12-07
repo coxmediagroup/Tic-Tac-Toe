@@ -1,0 +1,17 @@
+1. virtualenv Tic-Tac-Toe --no-site-packages
+
+2. cd Tic-Tac-Toe
+
+3. git clone git@github.com:vangale/Tic-Tac-Toe.git
+
+4. cd Tic-Tac-Toe
+
+5. pip install -r requirements/production.txt
+
+6. python manage.py syncdb
+
+7. python manage.py collectstatic
+
+8. python manage.py runserver
+
+Now, point browser to localhost:8080

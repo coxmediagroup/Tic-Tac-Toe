@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% load bootstrap_toolkit i18n %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tic-Tac-Toe by Van Gale</title>
+    <meta name="description" content="A Django/Bootstrap/jQuery based web game">
+    <meta name="author" content="Van Gale">
+    {% bootstrap_stylesheet_tag %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            background: #fff url({{ STATIC_URL }}i/white_paperboard.png) repeat;
+        }
+        .brand {
+            font-family: 'Permanent Marker', cursive;
+        }
+        .navbar-inner {
+            background: #468966 none repeat;
+        }
+        .navbar .nav li > a { color: #FFF0A5; } {# or darker red 8E2800 #}
+        .gameboard { color: #B64926; }
+        .score {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 96px;
+            line-height: 96px;
+            color: #8E2800;
+            margin: auto;
+            text-align: center;
+        }
+        .board td {
+            {#height: 299px;#}
+            height: 139px;
+        }
+	a.cell {
+            height: 98%;
+            display: block;
+        }
+        div.square {
+            font-family: 'Permanent Marker', cursive;
+            color: #FFB03B;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        div.redsquare {
+            font-family: 'Permanent Marker', cursive;
+            color: #8E2800;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        td.right {
+            border-right: 12px solid #666;
+        }
+        td.bottom {
+            border-bottom: 12px solid #666;
+        }
+    </style>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    {% bootstrap_javascript_tag "dropdown" %}
+    <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/">{% trans "Tic-Tac-Toe!" %}</a>
+      <ul class="nav">
+        <li>
+          <a href="{% url game:index %}" class="">
+            {% trans "Current Game" %}
+          </a>
+        </li>
+{% comment %}
+        <li><a href="{% url archived %}">{% trans "Old Games" %}</a></li>
+{% endcomment %}
+        <li><a href="{% url contact %}">{% trans "Contact" %}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  {% block content %}Empty page{% endblock %}
+</div>
+
+{% block deferred_javascript %}
+<script src="{{ STATIC_URL }}js/bigtext.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+<script>
+$(function() {
+    WebFont.load({
+        custom: {
+            families: ['Permanent Marker']
+        },
+        active: function() {
+            $('.bigtext').bigtext();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+</body>
+</html>
