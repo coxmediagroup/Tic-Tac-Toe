@@ -1,0 +1,14 @@
+* { margin: 0; padding: 0; }
+body { font-family: 'Permanent Marker', sans-serif; font-weight: bolder; color: #333; background-color: #f1f1f1; }
+article { position: relative; display: block; }
+h1 { text-align: center; font-size: 50px; font-weight: 300; color: #2B8994; margin: 50px 0; text-shadow: 0 -2px 1px #fff; }
+table { width: 450px; margin: 0 auto; }
+td { width: 150px; height: 150px; text-align: center; display: table-cell; vertical-align: middle; font-size: 70px; border: 1px solid #999; background-color: #fff; color: #2B8994; cursor: pointer; transition: background 0.3s linear; }
+td:hover { background-color: #E7E7E7; }
+td.done-cell { background-color: #fff; cursor: default; }
+td.user-cell { color: #333; }
+.mask { position: absolute; top: 0; right: 0; left: 0; display: none; }
+.util { text-align: center; }
+.util > div { display: inline-block; padding: 10px 20px; color: #2B8994; }
+.util a { color: #333; cursor: pointer; }
+.util a:hover { color: #777; }

@@ -1,0 +1,80 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Tic Tac Toe</title>
+	    <link href='//fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+	    <link rel="stylesheet" href="{% static "tic_tac_toe/css/style.css" %}" />
+    </head>
+    <body>
+        <article>
+	        <h1>Tic Tac Toe</h1>
+	        <div id="the-game"></div>
+	        <div class="mask"></div>
+	        <div class="util">
+			  <div>
+			    <a class="computer" id="start-computer">OK Computer</a>
+			  </div>
+			  <div>
+			    <h3 id="prompt">Who starts?</h3>
+			  </div>
+			  <div>
+			    <a class="human" id="start-human">I-Me-Mine</a>
+			  </div>
+			</div>
+	    </article>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static "tic_tac_toe/js/tic_tac_toe.js" %}"></script>
+        <script>
+            $(document).ready(function() {
+                var $computer_cell = $("#start-computer");
+                var $human_cell = $("#start-human");
+                var $prompt_cell = $("#prompt");
+                var $the_game_cell = $("#the-game");
+                
+                // create the game
+                var game = TTTGame(
+                    function (status) { // Subscribe to game events
+					    if (status === "INIT") {
+					        $prompt_cell.html("Go Go Go!");
+					        $computer_cell.html("OK Computer, start over");
+					        $human_cell.html("I'll start over");
+					        $(".mask").hide();
+					    }
+					    else if (status === "ACTIVE") {
+					        $prompt_cell.html("Go Go Go!");
+					        $(".mask").hide();
+					    }
+					    else if (status === "DRAW") {
+					        $prompt_cell.html("Not bad, It's a Draw.");
+					    }
+					    else if (status === "WIN") {
+					        $prompt_cell.html("Computer Wins!");
+					    }
+					    else if (status === "PENDING" || status === "NEW") {
+                            $(".mask").show().css({bottom: $(".util").outerHeight()});
+                        }
+                        else if (status === "FAIL") {
+                            $prompt_cell.html("Server Failure");
+                            $computer_cell.html("");
+                            $human_cell.html("");
+                        }
+					}
+                );
+                // draw the board
+                game.draw($the_game_cell);
+                // configure handlers 
+                $computer_cell.click(function () {
+                    game.draw($the_game_cell);
+                    game.start("X");
+                });
+                
+                $human_cell.click(function () {
+                    game.draw($the_game_cell);
+                    game.start("O");
+                });
+            });
+        </script>
+    </body>
+</html>
