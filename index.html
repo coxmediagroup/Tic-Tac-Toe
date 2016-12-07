@@ -1,0 +1,72 @@
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript">
+		var humanPiece ='';
+		var machinePiece ='';
+		var firstPlayer = '';
+		var whoseTurn = '';
+		//Winning moves on the board by TD index and ID,from top to bottom
+		var winningMoves = new Array(
+			'012', '345', '678', '036', '147', '258', '048', '246'
+		);
+	</script>
+	<script type="text/javascript" src="js/game.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/game.css" media="screen" />
+</head>
+<body>
+<div id="container">
+
+<div id="control-well">
+	<h1>
+	Welcome human.
+	</h1>
+	<div id="instructions">
+		<p>
+		Select the game options 
+		<select class="control" id="human-piece">
+			<option value ='' selected>Select Your Game Piece</option>
+			<option value="X">X</option>
+			<option value="O">O</option>
+		</select>		
+
+		<select class="control" id="first-player">
+			<option value='' selected>Who goes first?</option>
+			<option value="Human">Human</option>
+			<!--option value="Machine">Machine</option-->
+		</select>		
+		
+		</p>
+		<button onClick="setBoard()" id="set-board">Play</button>
+	</div>
+	
+</div>
+
+<div id="game-well">
+	<table id="game-board">
+		<tr id="game-message">
+		<th colspan="3" id="message-cell">
+
+		</th>
+		</tr>
+		<tr>
+			<td id="0"></td>
+			<td id="1"></td>
+			<td id="2"></td>
+		</tr>
+			<tr>
+			<td id="3"></td>
+			<td id="4"></td>
+			<td id="5"></td>
+		</tr>
+			<tr>
+			<td id="6"></td>
+			<td id="7"></td>
+			<td id="8"></td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>
