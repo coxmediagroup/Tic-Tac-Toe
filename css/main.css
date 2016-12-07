@@ -1,0 +1,17 @@
+.container {
+    text-align: center;
+}
+
+.square {
+    width: 15%;
+    margin:10px;
+    border: solid 1px black;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.square span {
+    position:relative;
+    font-size:60px;
+    font-weight:bold;
+}
