@@ -1,0 +1,83 @@
+{% extends 'tictactoe/game/base.html' %}
+
+{% block css %}
+{{ block.super }}
+#game_form {
+    display: none;
+}
+{% endblock css %}
+
+{% block extra_header %}
+<script type="text/javascript">
+$(function() {
+    // gameover value
+    var gameover = {% if gameover %}true{% else %}false{% endif %};
+
+    // save reference to game form and inputs
+    var game_form = $("#game_form");
+    var game_form_cell_row = $("#game_form input[name='cell_row']");
+    var game_form_cell_col = $("#game_form input[name='cell_col']");
+    var game_form_action = $("#game_form input[name='action']");
+
+    // mark this cell as done
+    if(!gameover) {
+        $(".grid-cell").click(function(event) {
+            // check for already selected and skip
+            if($(this).find("i").hasClass("fa-times") ||
+                $(this).find("i").hasClass("fa-circle-o")) {
+                // skip
+                return null;
+            }
+
+            // parse id
+            var m = $(this).attr("id").match(/grid-(\d).(\d)/);
+
+            // set game form values and submit
+            game_form_action.val("mark");
+            game_form_cell_row.val(m[1]);
+            game_form_cell_col.val(m[2]);
+            game_form.submit();
+        });
+    }
+
+    // clear the form
+    $("#clear_button").click(function(event) {
+        // set game form values and submit
+        game_form_action.val("clear");
+        game_form.submit();
+    });
+});
+</script>
+{% endblock %}
+
+{% block error %}{% if error %}
+<div class="row" id="error">
+    <div class="col-xs-offset-4 col-xs-4 alert alert-danger">{{ error }}</div>
+</div>
+{% endif %}{% endblock %}
+
+{% block panel_tag %}
+{% if gameover %}
+    {% if engine_won == False %}
+    <span class="label label-success">You won! Amazing... you beat logic somehow... record this somewhere.</span>
+    {% elif engine_won  %}
+    <span class="label label-warning">You lost!</span>
+    {% else %}
+    <span class="label label-default">Its a Draw!</span>
+    {% endif %}
+{% endif %}
+{% endblock %}
+
+
+{% block container %}
+{{ block.super }}
+
+<!-- game form hidden for submission -->
+<form id="game_form" method="POST" action="{% url 'normal_game' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="" />
+    <input type="hidden" name="cell_row" value="" />
+    <input type="hidden" name="cell_col" value="" />
+</form>
+{% endblock %}
+

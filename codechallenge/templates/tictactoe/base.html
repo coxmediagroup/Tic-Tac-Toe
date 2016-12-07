@@ -1,0 +1,76 @@
+{% load staticfiles %}
+{% load activelink %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Code Challenge{% endblock %}</title>
+
+    <!-- JQuery -->
+    <script src="{% static "lib/jquery/jquery-2.0.3.min.js" %}"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "lib/bootstrap/bootstrap.min.css" %}" rel="stylesheet">
+    <script src="{% static "lib/bootstrap/bootstrap.min.js" %}" type="text/javascript"></script>
+
+    <!-- FontAwesome -->
+    <link href="{% static "lib/fontawesome/css/font-awesome.min.css" %}" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <style>
+    {% block css %}
+    body {
+        margin-top: 75px;
+    }
+    {% endblock css %}
+    </style>
+
+    {% block extra_header %}{% endblock %}
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Code Challenge</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="{% ifactive "normal_game" %}active{% endifactive %}"><a href="{% url 'normal_game' %}">Normal Game</a>
+                    </li>
+                    {% comment %}
+                    <!-- TODO: implement game in Ajax and in angularjs -->
+                    <li class="{% ifactive "ajax_game" %}active{% endifactive %}"><a href="{% url 'ajax_game' %}">Ajax Game</a>
+                    </li>
+                    <li class="{% ifactive "angular_game" %}active{% endifactive %}"><a href="{% url 'angular_game' %}">Angular Game</a>
+                    {% endcomment %}
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div class="container">
+        {% block container %}{% endblock container %}
+    </div>
+    <!-- /.container -->
+</body>
+
+</html>
+

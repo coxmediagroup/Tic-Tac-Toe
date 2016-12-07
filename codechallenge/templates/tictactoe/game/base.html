@@ -1,0 +1,60 @@
+{% extends 'tictactoe/index.html' %}
+{% load tictactoe_extras %}
+
+{% block title %}Code Chanllenge - TicTacToe{% endblock %}
+
+{% block css %}
+{{ block.super }}
+.grid_content {
+    float: none;
+    margin: 0 auto;
+    max-width: 300px;
+    min-width: 220px;
+}
+.grid-cell {
+    max-width: 100px;
+    min-width: 75px;
+    max-height: 100px;
+    min-height: 75px;
+    height: 75px;
+}
+.grid-c0, .grid-c1 {
+    border-right: 2px solid black;
+}
+.grid-r0, .grid-r1 {
+    border-bottom: 2px solid black;
+}
+{% endblock css %}
+
+{% block container %}
+<div class="row grid_container">
+    <div class="col-xs-12 grid_content">
+        <div class="panel panel-default">
+            <div class="panel-heading">Tic-Tac-Toe{% block panel_tag %}{% endblock %}</div>
+
+            <div class="panel-body">
+                {% for row in "012" %}
+                <div class="row">
+                    {% for col in "012" %}
+                    <div class="col-xs-4 grid-cell grid-c{{col}} grid-r{{row}}" id="grid-{{row}}.{{col}}">
+                        {% if board  %}
+                        <i class="fa fa-5x {% board_cell board forloop.parentloop.counter0 forloop.counter0 %}"></i>
+                        {% else %}
+                        <i class="fa fa-5x"></i>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <hr />
+                <div class="row">
+                    <div class="col-xs-4 col-xs-offset-7">
+                        <button class="btn btn-danger" name="clear" id="clear_button">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
