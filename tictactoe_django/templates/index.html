@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>    
+    <head>
+        <title>Tic Tac Toe Test</title>
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/base.css" type="text/css" media="all" charset="utf-8" />
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ MEDIA_URL }}js/base.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <div id="container">
+            {% for i in layout %}
+            <div id="pos_{{ forloop.counter0 }}" class="board"><p>{{ i }}</p></div>
+            {% endfor %}
+            <div class="clear">&nbsp;</div>
+            
+            <div id="result" style="margin: 10px 0 0 0">
+                <p>Choose whether you want to be <a class="choose" href="#">X</a> or <a class="choose" href="#">O</a></p>
+            </div>
+        </div>
+    </body>
+</html>
