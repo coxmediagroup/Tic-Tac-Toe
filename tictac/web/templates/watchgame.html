@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% if not final %}
+    <meta http-equiv="refresh" content="1">
+    {% endif %}
+    <style>
+        table tr td { border: 1px solid black; }
+        td { 
+                width: 150px; 
+                height: 150px; 
+                text-align: center;
+                vertical-align: middle;
+                font-size: 800%;
+            }
+        .movebtn {
+            width: 100px;
+            height: 100px;
+            border: solid 1px #000;
+            display: block;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <h3>Game Board</h3>
+    {% if not final %}
+    <p>{{ game.active_player|upper }} has the next move.</p>
+    {% endif %}
+    <br />
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashlist">
+            {% for message in messages %}
+                <li class="flashmessage">{{ message }}</li>    
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <br/>
+    <p>Current Board</p>
+        <table>
+            <tr>
+                <td>
+                    {{ game.board.0|upper }}
+                </td>
+                <td>
+                    {{ game.board.1|upper }}
+                </td>
+                <td>
+                    {{ game.board.2|upper }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ game.board.3|upper }}
+                </td>
+                <td>
+                    {{ game.board.4|upper }}
+                </td>
+                <td>
+                    {{ game.board.5|upper }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ game.board.6|upper }}
+                </td>
+                <td>
+                    {{ game.board.7|upper }}
+                </td>
+                <td>
+                    {{ game.board.8|upper }}
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <form action="" method="POST">
+            <input type="submit" name="reset" value="Reset Game">
+        </form>
+
+{% endblock %}

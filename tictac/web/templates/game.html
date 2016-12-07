@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <style>
+        table tr td { border: 1px solid black; }
+        td { 
+                width: 150px; 
+                height: 150px; 
+                text-align: center;
+                vertical-align: middle;
+                font-size: 800%;
+            }
+        .movebtn {
+            width: 100px;
+            height: 100px;
+            border: solid 1px #000;
+            display: block;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+{% if game %}
+    <h3>Game Board</h3>
+    <p>You are playing as {{ player|upper }}.</p>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashlist">
+            {% for message in messages %}
+                <li class="flashmessage">{{ message }}</li>    
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <p>Please select your move below.</p>
+    <form action="" method="POST">
+        <table>
+            <tr>
+                <td>
+                    {% if game.board.0 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="0">
+                    {% else %}{{ game.board.0|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.1 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="1">
+                    {% else %}{{ game.board.1|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.2 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="2">
+                    {% else %}{{ game.board.2|upper }}{% endif %}
+                </td>
+            <tr>
+                <td>
+                    {% if game.board.3 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="3">
+                    {% else %}{{ game.board.3|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.4 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="4">
+                    {% else %}{{ game.board.4|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.5 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="5">
+                    {% else %}{{ game.board.5|upper }}{% endif %}
+                </td>
+            </tr>
+                <td>
+                    {% if game.board.6 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="6">
+                    {% else %}{{ game.board.6|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.7 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="7">
+                    {% else %}{{ game.board.7|upper }}{% endif %}
+                </td>
+                <td>
+                    {% if game.board.8 == '-' %}
+                    <input type="submit" class = "movebtn" name="square" value="8">
+                    {% else %}{{ game.board.8|upper }}{% endif %}
+                </td>
+            <tr>
+            </tr>
+        </table>
+        <br/><br/>
+    </form>
+    <form action="" method="POST">
+        <input type="submit" name="reset" value="Reset Game">
+    </form>
+
+{% else %}
+    <form action="" method="POST">
+        <p>What type of game would you like?</p>
+        <input type="radio" name="gametype" value="1" checked>Player vs. Bot<br/>
+        <input type="radio" name="gametype" value="2">Watch Bot vs. Bot<br/>
+        <input type="radio" name="gametype" value="3">Watch Bot vs. Crazy Bot<br/>
+        <p>If playing yourself, would you like to go first?</p>
+        <input type="radio" name="firstplayer" value="Y" checked>Yes<br/>
+        <input type="radio" name="firstplayer" value="N">No<br/>
+        <br/>
+        <input type="submit" name="newgame" value="Submit"><br/>
+    </form>
+{% endif %}
+
+{% endblock %}
