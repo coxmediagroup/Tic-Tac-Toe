@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="id_title" class="title">Tic Tac Toe</div>
+
+<div id="id_game_status_container" class="game-status">Game Status: <span id="game_status"></span></div>
+
+<div id="id_board_container" class="board_container">
+    <table id="id_board" class="board">
+      <tr>
+        <td id="space_0"><a id="0" name="move" class="board-space"></a></td>
+        <td id="space_1"><a id="1" name="move" class="board-space"></a></td>
+        <td id="space_2"><a id="2" name="move" class="board-space"></a></td>
+      </tr>
+      <tr>
+        <td id="space_3"><a id="3" name="move" class="board-space"></a></td>
+        <td id="space_4"><a id="4" name="move" class="board-space"></a></td>
+        <td id="space_5"><a id="5" name="move" class="board-space"></a></td>
+      </tr>
+      <tr>
+        <td id="space_6"><a id="6" name="move" class="board-space"></a></td>
+        <td id="space_7"><a id="7" name="move" class="board-space"></a></td>
+        <td id="space_8"><a id="8" name="move" class="board-space"></a></td>
+      </tr>
+    </table>
+</div>
+
+<div id="id_restart_game" class="restart-game">
+<a id="restart_game" href='/'>Restart The Game</a>
+<div>
+
+{% endblock %}
