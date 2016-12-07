@@ -1,0 +1,132 @@
+/* TicTacToe Default Style Sheet
+
+Author: Matt Davis
+http://matt.geekshack.net
+
+Current Version: 1.0.1
+(Nov 14, 2010)
+
+*/
+
+/*  General Page Stylings */
+body {
+    margin: 0 auto;
+    padding: 25px;
+    font: 80% Verdana,Tahoma,Arial,sans-serif;
+    background: #F4F4F4;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #505050;
+    margin: 1.5em 1.0em 0.5em 0.5em;
+}
+
+p {
+    margin: 1.0em 1.0em 1.0em 1.0em;
+}
+
+a {
+    text-decoration: none;
+    color: #286EA0;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+input {
+    background: #F0F0F0;
+    border: 1px solid #286EA0
+}
+
+#content {
+    margin: 0 auto;
+    padding: 0 10px 0 10px;
+    line-height: 1.6em;
+    text-align: center;
+}
+
+#content h2 {
+    font-size: 1.75em;
+    margin: 0 0 0.5em 0;
+}
+
+#footer {
+    clear: both;
+    margin: 0 auto;
+    padding: 10px 10px 10px 10px;
+    border-top: 4px solid #F0F0F0;
+    color: #808080;
+    width: 600px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/* Stylings for TicTacToe Game Board */
+.container {
+    width: 400px;
+    height: 250px;
+    margin: 0 auto;
+    text-align: center;
+    overflow: visible;
+}
+
+.board {
+    width: 168px;
+    height: 200px;
+    margin: 0 auto;
+    overflow: vissible;
+    text-align: center;
+}
+			
+ .row {
+    width: 168px;
+    float: left;
+}
+				
+.row .box {
+    width: 50px;
+    height: 50px;
+    border: 3px #FFFFFF solid;
+    float: left;
+    font-size: 30px;
+    color: #000000;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    background: #FFFF99;
+}
+
+ .row .box  a {
+    width: 50px;
+    height: 50px;
+    border: 3px #FFFFFF solid;
+    float: left;
+    font-size: 30px;
+    color: #000000;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    text-indent: -9520px;
+    background: #F0F0F0;
+}
+						
+.row .box a:hover {
+    text-indent: 0px;
+    text-decoration: none;
+    background: #A6D785;
+}
+
+ .row .winnerBox {
+     width: 50px;
+    height: 50px;
+    border: 3px #FFFFFF solid;
+    float: left;
+    font-size: 30px;
+    color: #000000;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    background: #79BAEC;
+}

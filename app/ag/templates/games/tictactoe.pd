@@ -1,0 +1,60 @@
+<html lang="en">
+    <head>
+        <title>Tic-Tac-Toe</title>
+	    [<commonjs>]
+        <link rel="stylesheet" type="text/css" href="[imghost]/css/ag/games.css"/>
+	    <script type="text/javascript" src="[imghost]/js/ag/games/tictactoe.js"></script>
+        <meta charset=utf-8">
+    </head>
+    <body>
+        <div id="content">
+            <h2>Welcome to Tic-Tac-Toe!</h2>
+
+            <div class="container">
+                <div class="board" id="board">
+                    <div class="row">
+                        <div class="box" id="box-7">
+                            <span id="move-7" style="opacity:0">X</span>
+                        </div>
+                    
+                        <div class="box" id="box-8">
+                            <span id="move-8" style="opacity:0">X</span>
+                        </div>
+                    
+                        <div class="box" id="box-9">
+                            <span id="move-9" style="opacity:0">X</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="box" id="box-4">
+                            <span id="move-4" style="opacity:0">X</span>
+                        </div>
+                        
+                        <div class="box" id="box-5">
+                            <span id="move-5" style="opacity:0">X</span>
+                        </div>
+                        <div class="box" id="box-6">
+                            <span id="move-6" style="opacity:0">X</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="box" id="box-1">
+                            <span id="move-1" style="opacity:0">X</span>
+                        </div>
+                        <div class="box" id="box-2">
+                            <span id="move-2" style="opacity:0">X</span>
+                        </div>
+                        <div class="box" id="box-3">
+                            <span id="move-3" style="opacity:0">X</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span id="reset"><a href"#">reset the board</a></span>
+
+        </div>
+    </body>
+</html>
