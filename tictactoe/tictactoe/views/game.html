@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <div id="main">
+    	<h3>Tic Tac Taco</h3>
+    	<h5>Beat the computer, win a year of tacos!</h5>
+    	<table class="board">
+    		<tr class="board-row">
+    			<td id="0" class="board-row-cell"></td>
+    			<td id="1" class="board-row-cell"></td>
+    			<td id="2" class="board-row-cell"></td>
+    		</tr>
+    		<tr class="board-row">
+    			<td id="3" class="board-row-cell"></td>
+    			<td id="4" class="board-row-cell"></td>
+    			<td id="5" class="board-row-cell"></td>
+    		</tr>
+    		<tr class="board-row">
+    			<td id="6" class="board-row-cell"></td>
+    			<td id="7" class="board-row-cell"></td>
+    			<td id="8" class="board-row-cell"></td>
+    		</tr>
+    	</table>
+    	<h5 id="loss-alert" class="alert alert-danger">Sorry, You Lose!</h5>
+    	<h5 id="tie-alert" class="alert alert-warning">Sorry, You Tied!</h5>
+    	<h4 class="player-indicator player-turn pull-left">Your Turn</h4>
+    	<h4 class="player-indicator cpu-turn pull-right">Computer Turn</h4>
+    </div>
+
+<script>
+	initBoard();
+	//Setup Functions
+	$('.new-game-btn').click(function(){
+		newGame();
+		return false;
+	})
+</script>
+{% endblock %}

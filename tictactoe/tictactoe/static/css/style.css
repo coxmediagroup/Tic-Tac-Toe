@@ -1,0 +1,41 @@
+html {
+    height:100%;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color:#313743;
+    /*background:url("/static/images/11.png");*/
+    margin:0;
+    padding:0;
+    border:none;
+    height:100%;
+    color: #CCC;
+}
+ul {list-style:none;}
+li {list-style:none;}
+.icon {margin:2px 0px auto 5px;}
+.title {position:relative; left:-40px; top:8px;}
+#main {
+	margin:0px auto;
+	padding:15px;
+	border:0px solid black;
+	width:600px;
+}
+#main h3, h5{
+	margin:10px auto;
+	text-align:center;
+	max-width:400px;
+}
+#main table {
+	margin:0 auto;
+}
+#main table td{
+	border:2px solid black;
+	height:100px;
+	width:100px;
+	text-align:center;
+	font-size:40px;
+}
+#main .new-game-form {margin:0 auto; max-width:500px;}
+.board-row-cell {cursor:pointer;}
+.board-row-cell.selected {background-color:#CCC; color:#333;}

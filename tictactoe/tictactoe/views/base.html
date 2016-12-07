@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head> 
+	<title>{% block title %}Tic-Tac-Taco{% endblock %}</title> 
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/bootstrap3.css">
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/style.css">
+	<script type="text/javascript" src=/static/js/jquery-2.0.3.min.js></script>
+	<script type="text/javascript" src=/static/js/tictactoe.js></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<img src='/static/img/taco_icon.png' class="icon pull-left"/>
+		<a class="navbar-brand title" href="/">Tic Tac Taco</a>
+		<button type="button" class="btn btn-inverse navbar-btn pull-right new-game-btn">New Game</button>
+	</nav>
+    <div id="container">
+        <div id="menu">
+            {% block nav-global %}
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
