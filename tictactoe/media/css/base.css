@@ -1,0 +1,176 @@
+body{
+	margin : 0px;
+	padding : 0px;
+	background-color : transparent;
+	width : 100%;
+	height : 100%;
+}
+
+div#wrapper{
+	position : absolute;
+	margin : 0px;
+	padding : 0px;
+	background-color : transparent;
+	width : 100%;
+	height : 100%;
+}
+
+	div#wrapper div#content{
+		position : relative;
+		margin : 0px auto;
+		padding : 0px;
+		background-color : transparent;
+		width : 800px;
+		height : 600px;
+	}
+	
+		div#wrapper div#content > h1{
+			text-align : center;
+		}
+		
+		div#wrapper div#content > div#board{
+			position : relative;
+			margin : 0px;
+			padding : 0px;
+			background-color : white;
+			width : 500px;
+			height : 200px;
+			float : left;
+		}
+
+			div#wrapper div#content > div#board table{
+				margin : auto;
+				border-spacing : 0px;
+				border-collapse : 0px;
+			}
+		
+			div#wrapper div#content > div#board td{
+				display : block;
+				width : 50px;
+				height : 50px;
+				background-color : transparent;
+				float : left;
+			}
+			
+			div#wrapper div#content > div#board td.left{
+				border-right-style : solid;
+				border-right-width : 2px;
+				border-right-color : black;
+			}
+			
+			div#wrapper div#content > div#board td.right{
+				border-left-style : solid;
+				border-left-width : 2px;
+				border-left-color : black;
+			}
+			
+			div#wrapper div#content > div#board td.top{
+				border-bottom-style : solid;
+				border-bottom-width : 2px;
+				border-bottom-color : black;
+			}
+			
+			div#wrapper div#content > div#board td.bottom{
+				border-top-style : solid;
+				border-top-width : 2px;
+				border-top-color : black;
+			}
+			
+				div#wrapper div#content > div#board td button{
+					display : block;
+					width : 95%;
+					height : 95%;
+					margin : auto;
+					background-color : transparent;
+					border : solid 0px transparent;
+					font-size : 40px;
+				}
+			
+			div#wrapper div#content > div#board td.title{
+				background-color : transparent;
+				font-size : 15px;
+			}
+			
+			div#wrapper div#content > div#board td.above{
+				height : 15px;
+				text-align : center;
+			}
+			
+			div#wrapper div#content > div#board td.aside{
+				text-align : right;
+				width : 15px;
+			}
+			
+		
+		div#wrapper div#content > div#log{
+			position : relative;
+			margin : 0px;
+			padding : 0px;
+			background-color : LightSteelBlue;
+			width : 300px;
+			height : auto;
+			float : right;
+		}
+
+			div#wrapper div#content > div#log > div#title , div#footer{
+				text-align : center;
+			}
+		
+			div#wrapper div#content > div#log > div#data{
+				position : relative;
+				width : 99%;
+				height : 255px;
+				background-color : transparent;
+				overflow : hidden;
+				border-style : solid;
+				border-width : 1px;
+				border-color : LightSteelBlue ;
+				margin : 0px auto;
+			}
+			
+				div#wrapper div#content > div#log > div#data > ul{
+					position : relative;
+					display : block;
+					margin : 0px;
+					padding : 0px;
+					width : 100%;
+					height : 100%;
+					background-color : white;
+				}
+				
+					div#wrapper div#content > div#log > div#data > ul > li{
+						display : block;
+						background-color : transparent;
+						list-style-type : none;
+						width : 100%;
+						height : 20px;
+						font-size : 12px;
+						margin : 0px;
+						padding : 0px;
+						border-style : solid;
+						border-color : LightSteelBlue;
+						border-width : 1px 0px 1px 0px;
+					}
+					
+						div#wrapper div#content > div#log > div#data > ul > li > p{
+							display : block;
+							width : 100%;
+							height : 100%;
+						}
+
+button#status , button#turn{
+	width : 40px;
+	height : 40px;
+	margin : auto;
+	background-color : transparent;
+	border : solid 0px transparent;
+	font-size : 30px;
+}
+
+button#status , button#turn{
+	width : 90px;
+}
+					
+.hide{
+	display : none;
+}

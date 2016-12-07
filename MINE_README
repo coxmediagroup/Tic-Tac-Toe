@@ -1,0 +1,34 @@
+Name: Tic Tac Toe Game, Django/Python
+
+Date: Sunday, January 1st, 2014
+
+Author: Tercero Solis, Ricardo
+
+Version: 1.0
+
+Description:
+
+It's a HTML Page with a Tic Tac Toe Board, in which the User plays agains the CPU. The CPU is programmed to never lost, it either win or tie.
+
+This is a Django Application.
+
+Installation Instruction:
+
+1. Copy and Paste the folder tictactoe to your [PROJECT_ROOT_FOLDER]/apps/
+2. Either Copy and Paste the folder named template (content in the tictactoe folder) into your PROJECT_TEMPLATE_FOLDER folder and change the name to tictactoe or create a symbolic link the folder named template to [PROJECT_TEMPLATE_FOLDER]/tictactoe/
+3. Either Copy and Paste the file named base.css (content in the tictactoe/media/css folder) into your [PROJECT_MEDIA_FOLDER]/css/apps/tictactoe/ folder  or create a symbolic link from the folder named css to [PROJECT_TEMPLATE_FOLDER]/css/app/tictactoe/
+4. Either Copy and Paste the file named base.js (content in the tictactoe/media/js folder) into your [PROJECT_MEDIA_FOLDER]/js/apps/tictactoe/ folder or create a symbolic link from the folder named css to [PROJECT_TEMPLATE_FOLDER]/js/app/tictactoe/
+5. Add the '[PROJECT_NAME].apps.tictactoe' into INSTALLED_APPS in your settings.py file
+6. Add the url(r'^tictactoe' , include('[PROJECT_NAME].apps.tictactoe.urls')) , into your urls.py file
+
+
+
+Personal github: https://github.com/tercero3/tictactoe
+Live Test: http://personal-charsoft.rhcloud.com/tictactoe/
+linkedin: http://www.linkedin.com/in/tercero3
+e-mail: tercero3@hotmail.com , ricardo.tercero.solis@gmail.com
+skype: ricardo.tercero.solis
+
+
+Please Test it, Feedback is wellcome
+	
