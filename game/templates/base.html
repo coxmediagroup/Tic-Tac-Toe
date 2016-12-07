@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class>
+<head>
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body>
+    {# Basic navigation #}
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li{% if not active %} class="active"{% endif %}><a href="/">Home</a></li>
+                    <li{% if active == "computer" %} class="active"{% endif %}><a href="{% url 'tictactoe.play' %}?start=computer">Computer start</a></li>
+                    <li{% if active == "human" %} class="active"{% endif %}><a href="{% url 'tictactoe.play' %}?start=human">Human start</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert-box"></div>
+
+        <div class="jumbotron">
+            {% block content %}
+                <h3>Welcome to Tic-Tac-Toe</h3>
+                <p>During the game, refreshing your browser will reset the game. To start playing, click on the 'Computer start' or 'Human start' links</p>
+            {% endblock %}
+        </div>
+    </div><!-- /container -->
+
+    {% if debug %}
+        <script src="{% static '/static/js/tictactoe.dev.js' %}"></script>
+    {% else %}
+        <script src="{% static '/static/js/tictactoe.min.js' %}"></script>
+    {% endif %}
+</body>
+</html>

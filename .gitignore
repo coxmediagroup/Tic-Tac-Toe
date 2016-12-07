@@ -1,0 +1,11 @@
+*.pyc
+*.DS_Store
+
+# Packages
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Node
+node_modules
