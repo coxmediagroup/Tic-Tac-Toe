@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block page_title %}About{% endblock %}
+
+{% block content %}
+<div class="span-16 shadowed">
+    <h3>About Daniel Naab</h3>
+    <p>Diverse career experience designing web applications, desktop software, enterprise tools, and quality assurance.  Python junkie.</p>
+    <dl>
+        <li><a href="{{STATIC_URL}}documents/Naab Resume.pdf">Resume (PDF)</a></li>
+        <li><a href="{{STATIC_URL}}documents/Naab Work History.pdf">Work History (PDF)</a></li>
+    </dl>
+</div>
+<div class="span-8 last accent shadowed">
+    <h4>On the web</h4>
+    <dl>
+        <li><a href="http://www.nattynerd.com/">Personal Website</a></li>
+        <li><a href="https://www.linkedin.com/in/danielnaab">LinkedIn Profile</a></li>
+        <li><a href="http://stackoverflow.com/users/32638/daniel-naab">Stack Overflow Account</a></li>
+        <li><a href="http://careers.stackoverflow.com/cv/publish/3178">Stack Overflow Career Profile</a></li>
+        <li><a href="https://github.com/danielnaab/">GitHub Account</a></li>
+    </dl>
+</div>
+{% endblock %}

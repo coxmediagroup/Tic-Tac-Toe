@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block page_title %}Gameboard{% endblock %}
+
+{% block extra_head %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/tictactoe.jquery.js"></script>
+{% endblock %}
+
+{% block content %}
+    <form id="board-form" action="{% url play %}" method="post">
+        <input id="replay-button" class="game-status" type="submit" value="Play Again" name="replay" {% if not gameover %}style="display: none"{% endif %}>
+        <h2 id="status-message">
+            {{status}}
+        </h2>
+        <table class="gameboard">
+            {% for row in game.board %}
+            <tr>
+                {% for col in row %}
+                <td>
+                    <input id="{{col.x}}_{{col.y}}" type="submit" value="{% firstof col.value '' %}" name="{{col.x}}_{{col.y}}" {% if col.value %}disabled="disabled"{% endif %}>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+{% endblock %}
+
+{% block extra_body %}
+    {{ block.super }}
+
+    <script>
+        $("#board-form").ticTacToe();
+    </script>
+{% endblock %}

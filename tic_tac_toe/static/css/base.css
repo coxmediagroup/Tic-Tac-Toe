@@ -1,0 +1,157 @@
+body {
+    font-size: 16px;
+    background-color: #eeeeee;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    padding-left: 1em;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: .25em;
+}
+
+a {
+    text-decoration: none
+}
+
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    zoom: 1;
+}
+
+#content {
+    min-height: 600px;
+}
+
+#body {
+    margin-top: 10px;
+    background-color: #DDDDDD;
+    padding: .5em;
+    -moz-box-shadow: 5px 5px 5px #888;
+    -webkit-box-shadow: 5px 5px 5px #888;
+    box-shadow: 5px 5px 5px #888;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+}
+
+#logo {
+    width: 200px;
+    float: left;
+    margin: 5px;
+}
+
+header {
+}
+
+footer {
+    font-size: 80%;
+    color: #555555;
+    text-align: center;
+    margin-top: .5em;
+}
+
+.accent {
+    background-color: #EEEEEE;
+    padding: 4px;
+    margin: -4px;
+}
+
+.shadowed {
+    -moz-box-shadow: 2px 2px 2px #888;
+    -webkit-box-shadow: 2px 2px 2px #888;
+    box-shadow: 2px 2px 2px #888;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.title-header {
+    text-shadow: 0px 0px 4px #000;
+}
+
+.alt {
+    color: #990000;
+}
+
+table.gameboard {
+    border-collapse: collapse;
+}
+
+input {
+    background: none;
+    display: block;
+    margin: 0 auto;
+    border: none;
+    padding: none;
+}
+
+table.gameboard input {
+    width: 250px;
+    height: 250px;
+    font-size: 15em;
+    font-family: serif;
+}
+
+table.gameboard input:not([disabled]) {
+    cursor: pointer;
+}
+
+table.gameboard input[disabled='disabled'] {
+    color: black;
+}
+
+table.gameboard td {
+    border: solid 1px black;
+}
+
+table.gameboard td:last-child {
+    border-right: none;
+}
+
+table.gameboard td:first-child {
+    border-left: none;
+    border-top: none;
+}
+
+table tr:first-child td {
+    border-top: none;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+input.game-status {
+    color: black;
+    cursor: pointer;
+    font-size: 1.75em;
+    border: solid 1px #aaa;
+    background-image: -ms-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -moz-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -o-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, #00A3EF));
+    background-image: -webkit-linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    background-image: linear-gradient(top left, #FFFFFF 0%, #00A3EF 100%);
+    float: right;
+}
+
+#board-form h2 {
+    color: #555;
+    margin-left: .5em;
+}
+
+.gameboard input {
+    text-shadow: 8px 8px 8px #555;
+}
