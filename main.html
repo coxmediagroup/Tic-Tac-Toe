@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CoxMedia Tic Tac Toe</title>
+		
+		<script src="scripts/lib/jquery-1.10.2.min.js"></script>
+		<script src="scripts/boilerplate.js"></script>
+		<script src="scripts/logger.js"></script>
+		<script src="scripts/players.js"></script>
+		<script src="scripts/grid.js"></script>
+		<script src="scripts/main.js"></script>
+		
+		<style type="text/css">
+			body { background: #222222; font-family: sans-serif; }
+			
+			.canvas-container { margin: 0 auto; width: 320px; }
+			
+			.description { background: #ffffff; padding: 10px; margin: 50px auto; width: 90%; border-radius: 15px; }
+			
+			.options-pane { width: 300px; padding: 10px; margin: 0 auto; background: #aaaaaa; clear: both; }
+			
+			#whose-turn { text-align: center; margin: 0; font-weight: bold; }
+			
+			.option p.header { margin: 0; font-size: 11px; text-align: center; }
+			.option { margin-top: 25px; }
+			
+			.stats { margin-top: 25px; }
+			.stats .item { float: left; width: 33%; font-size: 11px; text-align: center; }
+			.clear { clear: both; }
+			
+			#move-tracker, #debug-out, #debug-player-win {
+				background: #ffffff; font-size: 12px; height: 200px; 
+			}
+			
+			#debug-window { width: 100%; display: none; margin-left: 1%; }
+			#debug-window textarea { width: 32%; float: left; }
+			
+			#debug-header { background: #f85f03; height: 25px; text-align: center; 
+				display: block; width: 100%; clear: both; margin-top: 20px;
+				cursor: pointer; font-weight: bold; border: solid 1px #b21500; }
+		</style>
+		
+		<script>
+			$( document ).ready( function() {
+				
+				$( "#debug-header" ).click( function() {
+					
+					if ( $( "#debug-window" ).is( ":visible" ) ) {
+						$( "#debug-window" ).slideUp();
+						$( "#debug-header" ).html( "Debug (open)" );
+					}
+					else {
+						$( "#debug-window" ).slideDown();
+						$( "#debug-header" ).html( "Debug (close)" );
+					}
+					
+				} );
+				
+			} );
+		</script>
+
+	</head>
+	
+	<body>
+		
+		<div class="canvas-container">
+			<canvas id="cnvWindow">
+			</canvas>
+			
+			<div class="options-pane">
+				<p id="whose-turn">Computer's Turn</p>
+				
+				<div class="option">
+					<p class="header">Computer Movement</p>
+					<input type="radio" name="computer-movement" id="computer-strategy" value="strategy" checked="checked" />
+					<label for="computer-strategy">Strategic (Never lose)</label>
+					
+					
+					<input type="radio" name="computer-movement" id="computer-random" value="random" />
+					<label for="computer-random">Random</label>	
+				</div>
+				
+				<div class="option">
+					<p class="header">Player Movement</p>
+					<input type="radio" name="player-movement" id="player-manual" value="manual" checked="checked" />
+					<label for="player-manual">Manual (Mouse move)</label>					
+					
+					<input type="radio" name="player-movement" id="player-random" value="random" />
+					<label for="player-random">Random</label>						
+				</div>
+				
+				<div class="stats">
+					<div class="item">
+						<label>Computer Wins</label>
+						<p class="win-count" id="wins-computer">0</p>
+					</div>
+					
+					<div class="item">
+						<label>Player Wins</label>
+						<p class="win-count" id="wins-player">0</p>
+					</div>
+					
+					<div class="item">
+						<label>Ties</label>
+						<p class="win-count" id="wins-ties">0</p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<span id="debug-header">Debug (open)</span>
+		<div id="debug-window">
+			<textarea id="debug-out"></textarea>
+			<textarea id="move-tracker"></textarea>
+			<textarea id="debug-player-win"></textarea>
+			<div class="clear"></div>
+		</div>	
+		
+		<div class="description">
+			<h1>CoxMedia Tic-Tac-Toe</h1>
+			<p>
+				Cloned from <a href="https://github.com/coxmediagroup/Tic-Tac-Toe">here</a>.
+			</p>
+			<p>
+				<em>Create a program that can interactively play the game of Tic-Tac-Toe against a human player and never lose.</em>
+			</p>
+			
+			<h2>Resources:</h2>
+			<ul>
+				<li><a href="http://www.wikihow.com/Win-at-Tic-Tac-Toe">WikiHow</a></li>
+				<li><a href="http://www.youtube.com/watch?v=C07jkOu9Tsc">Howcast</a></li>
+			</ul>
+		</div>
+		
+	</body>
+</html>

@@ -1,0 +1,2500 @@
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:20:1.475] --- Computer ---
+[23:20:1.475] --- Turn 1 ---
+[23:20:1.475] Computer controls the center
+[23:20:1.475] Check for Computer win position
+[23:20:1.475] Check for Player win position
+[23:20:1.475] RIGHT: 1
+[23:20:1.541] --- Computer ---
+[23:20:1.541] --- Turn 3 ---
+[23:20:1.541] Computer controls the center
+[23:20:1.541] Check for Computer win position
+[23:20:1.541] Check for Player win position
+[23:20:1.607] --- Computer ---
+[23:20:1.607] --- Turn 5 ---
+[23:20:1.607] Computer controls the center
+[23:20:1.607] Check for Computer win position
+[23:20:1.608] Check for Player win position
+
+ROUND MOVES
+ROUND 45 turn 0:
+P--
+---
+---
+
+ROUND 45 turn 1:
+PC-
+---
+---
+
+ROUND 45 turn 2:
+PC-
+-P-
+---
+
+ROUND 45 turn 3:
+PC-
+-P-
+--C
+
+ROUND 45 turn 4:
+PC-
+PP-
+--C
+
+ROUND 45 turn 5:
+PC-
+PPC
+--C
+
+ROUND 45 turn 6:
+PC-
+PPC
+P-C
+!!!!!!!!!!!!!player won round 45
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:21:4.892] --- Computer ---
+[23:21:4.892] --- Turn 1 ---
+[23:21:4.892] Computer controls the center
+[23:21:4.892] Check for Computer win position
+[23:21:4.892] Check for Player win position
+[23:21:4.892] RIGHT: 7
+[23:21:4.959] --- Computer ---
+[23:21:4.959] --- Turn 3 ---
+[23:21:4.959] Computer controls the center
+[23:21:4.959] Check for Computer win position
+[23:21:4.959] Check for Player win position
+[23:21:4.959] TOP: 5
+[23:21:5.59] --- Computer ---
+[23:21:5.59] --- Turn 5 ---
+[23:21:5.59] Computer controls the center
+[23:21:5.59] Check for Computer win position
+[23:21:5.59] Check for Player win position
+
+ROUND MOVES
+ROUND 114 turn 0:
+---
+---
+P--
+
+ROUND 114 turn 1:
+---
+---
+PC-
+
+ROUND 114 turn 2:
+---
+---
+PCP
+
+ROUND 114 turn 3:
+---
+--C
+PCP
+
+ROUND 114 turn 4:
+P--
+--C
+PCP
+
+ROUND 114 turn 5:
+P--
+C-C
+PCP
+
+ROUND 114 turn 6:
+P--
+CPC
+PCP
+!!!!!!!!!!!!!player won round 114
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:22:32.622] --- Computer ---
+[23:22:32.622] --- Turn 1 ---
+[23:22:32.622] Player controls the center
+[23:22:32.622] Check for Computer win position
+[23:22:32.622] Check for Player win position
+[23:22:32.622] Take corner opposite to one controlled by the player
+[23:22:32.622] Player controls NW
+[23:22:32.688] --- Computer ---
+[23:22:32.688] --- Turn 3 ---
+[23:22:32.688] Player controls the center
+[23:22:32.688] Check for Computer win position
+[23:22:32.688] Check for Player win position
+[23:22:32.788] --- Computer ---
+[23:22:32.788] --- Turn 5 ---
+[23:22:32.788] Player controls the center
+[23:22:32.788] Check for Computer win position
+[23:22:32.788] Check for Player win position
+
+ROUND MOVES
+ROUND 209 turn 0:
+P--
+---
+---
+
+ROUND 209 turn 1:
+P--
+---
+--C
+
+ROUND 209 turn 2:
+P--
+---
+P-C
+
+ROUND 209 turn 3:
+P--
+C--
+P-C
+
+ROUND 209 turn 4:
+P-P
+C--
+P-C
+
+ROUND 209 turn 5:
+PCP
+C--
+P-C
+
+ROUND 209 turn 6:
+PCP
+CP-
+P-C
+!!!!!!!!!!!!!player won round 209
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:22:45.433] --- Computer ---
+[23:22:45.433] --- Turn 1 ---
+[23:22:45.433] Player controls the center
+[23:22:45.433] Check for Computer win position
+[23:22:45.433] Check for Player win position
+[23:22:45.433] Take corner opposite to one controlled by the player
+[23:22:45.433] Player controls NE
+[23:22:45.501] --- Computer ---
+[23:22:45.501] --- Turn 3 ---
+[23:22:45.501] Player controls the center
+[23:22:45.501] Check for Computer win position
+[23:22:45.501] Check for Player win position
+[23:22:45.568] --- Computer ---
+[23:22:45.568] --- Turn 5 ---
+[23:22:45.568] Player controls the center
+[23:22:45.568] Check for Computer win position
+[23:22:45.568] Check for Player win position
+
+ROUND MOVES
+ROUND 224 turn 0:
+--P
+---
+---
+
+ROUND 224 turn 1:
+--P
+---
+C--
+
+ROUND 224 turn 2:
+--P
+---
+C-P
+
+ROUND 224 turn 3:
+--P
+--C
+C-P
+
+ROUND 224 turn 4:
+P-P
+--C
+C-P
+
+ROUND 224 turn 5:
+PCP
+--C
+C-P
+
+ROUND 224 turn 6:
+PCP
+-PC
+C-P
+!!!!!!!!!!!!!player won round 224
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:22:47.864] --- Computer ---
+[23:22:47.864] --- Turn 1 ---
+[23:22:47.864] Computer controls the center
+[23:22:47.864] Check for Computer win position
+[23:22:47.864] Check for Player win position
+[23:22:47.864] RIGHT: 1
+[23:22:47.932] --- Computer ---
+[23:22:47.932] --- Turn 3 ---
+[23:22:47.932] Computer controls the center
+[23:22:47.932] Check for Computer win position
+[23:22:47.932] Check for Player win position
+[23:22:47.932] RIGHT: 8
+[23:22:47.998] --- Computer ---
+[23:22:47.998] --- Turn 5 ---
+[23:22:47.998] Computer controls the center
+[23:22:47.998] Check for Computer win position
+[23:22:47.998] Check for Player win position
+[23:22:47.998] BOTTOM: 5
+[23:22:48.65] --- Computer ---
+[23:22:48.65] --- Turn 7 ---
+[23:22:48.65] Computer controls the center
+[23:22:48.65] Check for Computer win position
+[23:22:48.65] Check for Player win position
+
+ROUND MOVES
+ROUND 227 turn 0:
+P--
+---
+---
+
+ROUND 227 turn 1:
+PC-
+---
+---
+
+ROUND 227 turn 2:
+PC-
+---
+-P-
+
+ROUND 227 turn 3:
+PC-
+---
+-PC
+
+ROUND 227 turn 4:
+PCP
+---
+-PC
+
+ROUND 227 turn 5:
+PCP
+--C
+-PC
+
+ROUND 227 turn 6:
+PCP
+--C
+PPC
+
+ROUND 227 turn 7:
+PCP
+C-C
+PPC
+
+ROUND 227 turn 8:
+PCP
+CPC
+PPC
+!!!!!!!!!!!!!player won round 227
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:23:11.967] --- Computer ---
+[23:23:11.967] --- Turn 1 ---
+[23:23:11.967] Computer controls the center
+[23:23:11.967] Check for Computer win position
+[23:23:11.967] Check for Player win position
+[23:23:11.967] RIGHT: 5
+[23:23:12.35] --- Computer ---
+[23:23:12.35] --- Turn 3 ---
+[23:23:12.35] Computer controls the center
+[23:23:12.35] Check for Computer win position
+[23:23:12.35] Check for Player win position
+[23:23:12.103] --- Computer ---
+[23:23:12.104] --- Turn 5 ---
+[23:23:12.104] Computer controls the center
+[23:23:12.104] Check for Computer win position
+[23:23:12.104] Check for Player win position
+
+ROUND MOVES
+ROUND 254 turn 0:
+---
+-P-
+---
+
+ROUND 254 turn 1:
+---
+-PC
+---
+
+ROUND 254 turn 2:
+---
+-PC
+--P
+
+ROUND 254 turn 3:
+C--
+-PC
+--P
+
+ROUND 254 turn 4:
+C--
+-PC
+P-P
+
+ROUND 254 turn 5:
+C--
+-PC
+PCP
+
+ROUND 254 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 254
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:23:13.433] --- Computer ---
+[23:23:13.433] --- Turn 1 ---
+[23:23:13.433] Player controls the center
+[23:23:13.433] Check for Computer win position
+[23:23:13.433] Check for Player win position
+[23:23:13.433] Take corner opposite to one controlled by the player
+[23:23:13.433] Find intersecting corner
+[23:23:13.433] 0 neighbors for corner 0
+[23:23:13.433] 0 neighbors for corner 2
+[23:23:13.434] 1 neighbors for corner 6
+[23:23:13.434] 1 neighbors for corner 8
+[23:23:13.434] Max is 0
+[23:23:13.501] --- Computer ---
+[23:23:13.502] --- Turn 3 ---
+[23:23:13.502] Player controls the center
+[23:23:13.502] Check for Computer win position
+[23:23:13.502] Check for Player win position
+[23:23:13.502] Take corner opposite to one controlled by the player
+[23:23:13.502] Find intersecting corner
+[23:23:13.503] 0 neighbors for corner 0
+[23:23:13.503] 1 neighbors for corner 2
+[23:23:13.503] 1 neighbors for corner 6
+[23:23:13.503] 2 neighbors for corner 8
+[23:23:13.503] Max is 0
+[23:23:13.504] Capture center if available
+[23:23:13.567] --- Computer ---
+[23:23:13.567] --- Turn 5 ---
+[23:23:13.567] Player controls the center
+[23:23:13.567] Check for Computer win position
+[23:23:13.568] Check for Player win position
+
+ROUND MOVES
+ROUND 256 turn 0:
+---
+--P
+---
+
+ROUND 256 turn 1:
+C--
+--P
+---
+
+ROUND 256 turn 2:
+C--
+--P
+-P-
+
+ROUND 256 turn 3:
+C--
+-CP
+-P-
+
+ROUND 256 turn 4:
+C--
+-CP
+-PP
+
+ROUND 256 turn 5:
+C--
+-CP
+CPP
+
+ROUND 256 turn 6:
+C-P
+-CP
+CPP
+!!!!!!!!!!!!!player won round 256
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:23:51.867] --- Computer ---
+[23:23:51.867] --- Turn 1 ---
+[23:23:51.867] Computer controls the center
+[23:23:51.867] Check for Computer win position
+[23:23:51.867] Check for Player win position
+[23:23:51.867] LEFT: 7
+[23:23:51.935] --- Computer ---
+[23:23:51.935] --- Turn 3 ---
+[23:23:51.935] Computer controls the center
+[23:23:51.935] Check for Computer win position
+[23:23:51.935] Check for Player win position
+[23:23:51.935] TOP: 3
+[23:23:52.68] --- Computer ---
+[23:23:52.68] --- Turn 5 ---
+[23:23:52.68] Computer controls the center
+[23:23:52.68] Check for Computer win position
+[23:23:52.68] Check for Player win position
+
+ROUND MOVES
+ROUND 299 turn 0:
+---
+---
+--P
+
+ROUND 299 turn 1:
+---
+---
+-CP
+
+ROUND 299 turn 2:
+---
+---
+PCP
+
+ROUND 299 turn 3:
+---
+C--
+PCP
+
+ROUND 299 turn 4:
+---
+CP-
+PCP
+
+ROUND 299 turn 5:
+C--
+CP-
+PCP
+
+ROUND 299 turn 6:
+C-P
+CP-
+PCP
+!!!!!!!!!!!!!player won round 299
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:24:32.601] --- Computer ---
+[23:24:32.601] --- Turn 1 ---
+[23:24:32.601] Computer controls the center
+[23:24:32.601] Check for Computer win position
+[23:24:32.601] Check for Player win position
+[23:24:32.601] RIGHT: 7
+[23:24:32.667] --- Computer ---
+[23:24:32.667] --- Turn 3 ---
+[23:24:32.667] Computer controls the center
+[23:24:32.667] Check for Computer win position
+[23:24:32.667] Check for Player win position
+[23:24:32.735] --- Computer ---
+[23:24:32.735] --- Turn 5 ---
+[23:24:32.735] Computer controls the center
+[23:24:32.735] Check for Computer win position
+[23:24:32.735] Check for Player win position
+
+ROUND MOVES
+ROUND 344 turn 0:
+---
+---
+P--
+
+ROUND 344 turn 1:
+---
+---
+PC-
+
+ROUND 344 turn 2:
+---
+-P-
+PC-
+
+ROUND 344 turn 3:
+--C
+-P-
+PC-
+
+ROUND 344 turn 4:
+--C
+PP-
+PC-
+
+ROUND 344 turn 5:
+--C
+PPC
+PC-
+
+ROUND 344 turn 6:
+P-C
+PPC
+PC-
+!!!!!!!!!!!!!player won round 344
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:24:34.916] --- Computer ---
+[23:24:34.916] --- Turn 1 ---
+[23:24:34.916] Player controls the center
+[23:24:34.916] Check for Computer win position
+[23:24:34.916] Check for Player win position
+[23:24:34.916] Take corner opposite to one controlled by the player
+[23:24:34.916] Player controls SE
+[23:24:34.982] --- Computer ---
+[23:24:34.982] --- Turn 3 ---
+[23:24:34.982] Player controls the center
+[23:24:34.982] Check for Computer win position
+[23:24:34.982] Check for Player win position
+[23:24:35.50] --- Computer ---
+[23:24:35.50] --- Turn 5 ---
+[23:24:35.50] Player controls the center
+[23:24:35.50] Check for Computer win position
+[23:24:35.50] Check for Player win position
+
+ROUND MOVES
+ROUND 347 turn 0:
+---
+---
+--P
+
+ROUND 347 turn 1:
+C--
+---
+--P
+
+ROUND 347 turn 2:
+C--
+---
+P-P
+
+ROUND 347 turn 3:
+C--
+---
+PCP
+
+ROUND 347 turn 4:
+C-P
+---
+PCP
+
+ROUND 347 turn 5:
+C-P
+--C
+PCP
+
+ROUND 347 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 347
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:24:55.694] --- Computer ---
+[23:24:55.694] --- Turn 1 ---
+[23:24:55.694] Player controls the center
+[23:24:55.694] Check for Computer win position
+[23:24:55.694] Check for Player win position
+[23:24:55.694] Take corner opposite to one controlled by the player
+[23:24:55.694] Find intersecting corner
+[23:24:55.694] 1 neighbors for corner 0
+[23:24:55.694] 0 neighbors for corner 2
+[23:24:55.694] 1 neighbors for corner 6
+[23:24:55.694] 0 neighbors for corner 8
+[23:24:55.694] Max is 0
+[23:24:55.795] --- Computer ---
+[23:24:55.795] --- Turn 3 ---
+[23:24:55.795] Player controls the center
+[23:24:55.795] Check for Computer win position
+[23:24:55.795] Check for Player win position
+[23:24:55.795] Take corner opposite to one controlled by the player
+[23:24:55.795] Player controls SW
+[23:24:55.895] --- Computer ---
+[23:24:55.895] --- Turn 5 ---
+[23:24:55.895] Player controls the center
+[23:24:55.907] Check for Computer win position
+[23:24:55.907] Check for Player win position
+
+ROUND MOVES
+ROUND 370 turn 0:
+-P-
+---
+---
+
+ROUND 370 turn 1:
+CP-
+---
+---
+
+ROUND 370 turn 2:
+CP-
+---
+P--
+
+ROUND 370 turn 3:
+CPC
+---
+P--
+
+ROUND 370 turn 4:
+CPC
+---
+PP-
+
+ROUND 370 turn 5:
+CPC
+---
+PPC
+
+ROUND 370 turn 6:
+CPC
+-P-
+PPC
+!!!!!!!!!!!!!player won round 370
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:25:17.429] --- Computer ---
+[23:25:17.429] --- Turn 1 ---
+[23:25:17.429] Player controls the center
+[23:25:17.429] Check for Computer win position
+[23:25:17.429] Check for Player win position
+[23:25:17.429] Take corner opposite to one controlled by the player
+[23:25:17.429] Player controls NE
+[23:25:17.530] --- Computer ---
+[23:25:17.530] --- Turn 3 ---
+[23:25:17.530] Player controls the center
+[23:25:17.530] Check for Computer win position
+[23:25:17.530] Check for Player win position
+[23:25:17.530] Take corner opposite to one controlled by the player
+[23:25:17.530] Player controls NE
+[23:25:17.530] Find intersecting corner
+[23:25:17.530] 2 neighbors for corner 0
+[23:25:17.530] 1 neighbors for corner 2
+[23:25:17.531] 2 neighbors for corner 6
+[23:25:17.531] 1 neighbors for corner 8
+[23:25:17.531] Max is 0
+[23:25:17.596] --- Computer ---
+[23:25:17.596] --- Turn 5 ---
+[23:25:17.596] Player controls the center
+[23:25:17.596] Check for Computer win position
+[23:25:17.596] Check for Player win position
+
+ROUND MOVES
+ROUND 396 turn 0:
+--P
+---
+---
+
+ROUND 396 turn 1:
+--P
+---
+C--
+
+ROUND 396 turn 2:
+--P
+P--
+C--
+
+ROUND 396 turn 3:
+C-P
+P--
+C--
+
+ROUND 396 turn 4:
+C-P
+P-P
+C--
+
+ROUND 396 turn 5:
+C-P
+PCP
+C--
+
+ROUND 396 turn 6:
+C-P
+PCP
+C-P
+!!!!!!!!!!!!!player won round 396
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:25:45.502] --- Computer ---
+[23:25:45.502] --- Turn 1 ---
+[23:25:45.502] Computer controls the center
+[23:25:45.502] Check for Computer win position
+[23:25:45.502] Check for Player win position
+[23:25:45.502] LEFT: 7
+[23:25:45.568] --- Computer ---
+[23:25:45.568] --- Turn 3 ---
+[23:25:45.568] Computer controls the center
+[23:25:45.568] Check for Computer win position
+[23:25:45.568] Check for Player win position
+[23:25:45.636] --- Computer ---
+[23:25:45.636] --- Turn 5 ---
+[23:25:45.636] Computer controls the center
+[23:25:45.636] Check for Computer win position
+[23:25:45.636] Check for Player win position
+
+ROUND MOVES
+ROUND 424 turn 0:
+---
+---
+--P
+
+ROUND 424 turn 1:
+---
+---
+-CP
+
+ROUND 424 turn 2:
+--P
+---
+-CP
+
+ROUND 424 turn 3:
+--P
+--C
+-CP
+
+ROUND 424 turn 4:
+P-P
+--C
+-CP
+
+ROUND 424 turn 5:
+PCP
+--C
+-CP
+
+ROUND 424 turn 6:
+PCP
+-PC
+-CP
+!!!!!!!!!!!!!player won round 424
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:26:3.867] --- Computer ---
+[23:26:3.867] --- Turn 1 ---
+[23:26:3.867] Computer controls the center
+[23:26:3.867] Check for Computer win position
+[23:26:3.867] Check for Player win position
+[23:26:3.867] RIGHT: 5
+[23:26:3.935] --- Computer ---
+[23:26:3.935] --- Turn 3 ---
+[23:26:3.935] Computer controls the center
+[23:26:3.935] Check for Computer win position
+[23:26:3.935] Check for Player win position
+[23:26:4.35] --- Computer ---
+[23:26:4.35] --- Turn 5 ---
+[23:26:4.35] Computer controls the center
+[23:26:4.35] Check for Computer win position
+[23:26:4.35] Check for Player win position
+
+ROUND MOVES
+ROUND 441 turn 0:
+---
+-P-
+---
+
+ROUND 441 turn 1:
+---
+-PC
+---
+
+ROUND 441 turn 2:
+---
+-PC
+-P-
+
+ROUND 441 turn 3:
+-C-
+-PC
+-P-
+
+ROUND 441 turn 4:
+-C-
+-PC
+PP-
+
+ROUND 441 turn 5:
+-C-
+-PC
+PPC
+
+ROUND 441 turn 6:
+-CP
+-PC
+PPC
+!!!!!!!!!!!!!player won round 441
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:26:6.661] --- Computer ---
+[23:26:6.661] --- Turn 1 ---
+[23:26:6.661] Computer controls the center
+[23:26:6.661] Check for Computer win position
+[23:26:6.661] Check for Player win position
+[23:26:6.661] LEFT: 1
+[23:26:6.729] --- Computer ---
+[23:26:6.729] --- Turn 3 ---
+[23:26:6.729] Computer controls the center
+[23:26:6.729] Check for Computer win position
+[23:26:6.729] Check for Player win position
+[23:26:6.795] --- Computer ---
+[23:26:6.795] --- Turn 5 ---
+[23:26:6.795] Computer controls the center
+[23:26:6.795] Check for Computer win position
+[23:26:6.795] Check for Player win position
+
+ROUND MOVES
+ROUND 443 turn 0:
+--P
+---
+---
+
+ROUND 443 turn 1:
+-CP
+---
+---
+
+ROUND 443 turn 2:
+-CP
+-P-
+---
+
+ROUND 443 turn 3:
+-CP
+-P-
+C--
+
+ROUND 443 turn 4:
+-CP
+-PP
+C--
+
+ROUND 443 turn 5:
+-CP
+CPP
+C--
+
+ROUND 443 turn 6:
+-CP
+CPP
+C-P
+!!!!!!!!!!!!!player won round 443
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:26:25.429] --- Computer ---
+[23:26:25.429] --- Turn 1 ---
+[23:26:25.429] Player controls the center
+[23:26:25.429] Check for Computer win position
+[23:26:25.429] Check for Player win position
+[23:26:25.429] Take corner opposite to one controlled by the player
+[23:26:25.429] Find intersecting corner
+[23:26:25.429] 0 neighbors for corner 0
+[23:26:25.429] 0 neighbors for corner 2
+[23:26:25.429] 1 neighbors for corner 6
+[23:26:25.429] 1 neighbors for corner 8
+[23:26:25.429] Max is 0
+[23:26:25.596] --- Computer ---
+[23:26:25.596] --- Turn 3 ---
+[23:26:25.596] Player controls the center
+[23:26:25.596] Check for Computer win position
+[23:26:25.596] Check for Player win position
+[23:26:25.664] --- Computer ---
+[23:26:25.664] --- Turn 5 ---
+[23:26:25.664] Player controls the center
+[23:26:25.664] Check for Computer win position
+[23:26:25.664] Check for Player win position
+
+ROUND MOVES
+ROUND 464 turn 0:
+---
+--P
+---
+
+ROUND 464 turn 1:
+C--
+--P
+---
+
+ROUND 464 turn 2:
+C-P
+--P
+---
+
+ROUND 464 turn 3:
+C-P
+--P
+--C
+
+ROUND 464 turn 4:
+C-P
+-PP
+--C
+
+ROUND 464 turn 5:
+C-P
+CPP
+--C
+
+ROUND 464 turn 6:
+C-P
+CPP
+P-C
+!!!!!!!!!!!!!player won round 464
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:26:28.565] --- Computer ---
+[23:26:28.565] --- Turn 1 ---
+[23:26:28.565] Player controls the center
+[23:26:28.565] Check for Computer win position
+[23:26:28.565] Check for Player win position
+[23:26:28.565] Take corner opposite to one controlled by the player
+[23:26:28.565] Player controls NE
+[23:26:28.636] --- Computer ---
+[23:26:28.636] --- Turn 3 ---
+[23:26:28.636] Player controls the center
+[23:26:28.636] Check for Computer win position
+[23:26:28.636] Check for Player win position
+[23:26:28.636] Take corner opposite to one controlled by the player
+[23:26:28.636] Player controls NE
+[23:26:28.636] Find intersecting corner
+[23:26:28.636] 2 neighbors for corner 0
+[23:26:28.637] 1 neighbors for corner 2
+[23:26:28.637] 2 neighbors for corner 6
+[23:26:28.637] 1 neighbors for corner 8
+[23:26:28.637] Max is 0
+[23:26:28.704] --- Computer ---
+[23:26:28.704] --- Turn 5 ---
+[23:26:28.704] Player controls the center
+[23:26:28.704] Check for Computer win position
+[23:26:28.704] Check for Player win position
+
+ROUND MOVES
+ROUND 468 turn 0:
+--P
+---
+---
+
+ROUND 468 turn 1:
+--P
+---
+C--
+
+ROUND 468 turn 2:
+--P
+P--
+C--
+
+ROUND 468 turn 3:
+C-P
+P--
+C--
+
+ROUND 468 turn 4:
+C-P
+P-P
+C--
+
+ROUND 468 turn 5:
+C-P
+PCP
+C--
+
+ROUND 468 turn 6:
+C-P
+PCP
+C-P
+!!!!!!!!!!!!!player won round 468
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:27:13.949] --- Computer ---
+[23:27:13.949] --- Turn 1 ---
+[23:27:13.949] Player controls the center
+[23:27:13.949] Check for Computer win position
+[23:27:13.949] Check for Player win position
+[23:27:13.949] Take corner opposite to one controlled by the player
+[23:27:13.949] Player controls NW
+[23:27:14.16] --- Computer ---
+[23:27:14.16] --- Turn 3 ---
+[23:27:14.16] Player controls the center
+[23:27:14.16] Check for Computer win position
+[23:27:14.16] Check for Player win position
+[23:27:14.149] --- Computer ---
+[23:27:14.149] --- Turn 5 ---
+[23:27:14.149] Player controls the center
+[23:27:14.149] Check for Computer win position
+[23:27:14.149] Check for Player win position
+
+ROUND MOVES
+ROUND 520 turn 0:
+P--
+---
+---
+
+ROUND 520 turn 1:
+P--
+---
+--C
+
+ROUND 520 turn 2:
+P--
+---
+P-C
+
+ROUND 520 turn 3:
+P--
+C--
+P-C
+
+ROUND 520 turn 4:
+P-P
+C--
+P-C
+
+ROUND 520 turn 5:
+PCP
+C--
+P-C
+
+ROUND 520 turn 6:
+PCP
+CP-
+P-C
+!!!!!!!!!!!!!player won round 520
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:28:49.264] --- Computer ---
+[23:28:49.264] --- Turn 1 ---
+[23:28:49.264] Player controls the center
+[23:28:49.264] Check for Computer win position
+[23:28:49.264] Check for Player win position
+[23:28:49.264] Take corner opposite to one controlled by the player
+[23:28:49.264] Find intersecting corner
+[23:28:49.264] 0 neighbors for corner 0
+[23:28:49.264] 0 neighbors for corner 2
+[23:28:49.265] 1 neighbors for corner 6
+[23:28:49.265] 1 neighbors for corner 8
+[23:28:49.265] Max is 0
+[23:28:49.330] --- Computer ---
+[23:28:49.330] --- Turn 3 ---
+[23:28:49.330] Player controls the center
+[23:28:49.330] Check for Computer win position
+[23:28:49.330] Check for Player win position
+[23:28:49.331] Take corner opposite to one controlled by the player
+[23:28:49.331] Find intersecting corner
+[23:28:49.331] 0 neighbors for corner 0
+[23:28:49.331] 1 neighbors for corner 2
+[23:28:49.331] 1 neighbors for corner 6
+[23:28:49.331] 2 neighbors for corner 8
+[23:28:49.332] Max is 0
+[23:28:49.332] Capture center if available
+[23:28:49.431] --- Computer ---
+[23:28:49.431] --- Turn 5 ---
+[23:28:49.431] Player controls the center
+[23:28:49.431] Check for Computer win position
+[23:28:49.432] Check for Player win position
+
+ROUND MOVES
+ROUND 627 turn 0:
+---
+--P
+---
+
+ROUND 627 turn 1:
+C--
+--P
+---
+
+ROUND 627 turn 2:
+C--
+--P
+-P-
+
+ROUND 627 turn 3:
+C--
+-CP
+-P-
+
+ROUND 627 turn 4:
+C--
+-CP
+-PP
+
+ROUND 627 turn 5:
+C--
+-CP
+CPP
+
+ROUND 627 turn 6:
+C-P
+-CP
+CPP
+!!!!!!!!!!!!!player won round 627
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:29:47.876] --- Computer ---
+[23:29:47.876] --- Turn 1 ---
+[23:29:47.876] Computer controls the center
+[23:29:47.876] Check for Computer win position
+[23:29:47.876] Check for Player win position
+[23:29:47.876] RIGHT: 8
+[23:29:47.943] --- Computer ---
+[23:29:47.943] --- Turn 3 ---
+[23:29:47.943] Computer controls the center
+[23:29:47.943] Check for Computer win position
+[23:29:47.943] Check for Player win position
+[23:29:47.943] RIGHT: 1
+[23:29:48.44] --- Computer ---
+[23:29:48.44] --- Turn 5 ---
+[23:29:48.44] Computer controls the center
+[23:29:48.44] Check for Computer win position
+[23:29:48.44] Check for Player win position
+[23:29:48.44] BOTTOM: 5
+[23:29:48.176] --- Computer ---
+[23:29:48.176] --- Turn 7 ---
+[23:29:48.176] Computer controls the center
+[23:29:48.176] Check for Computer win position
+[23:29:48.176] Check for Player win position
+
+ROUND MOVES
+ROUND 692 turn 0:
+---
+---
+-P-
+
+ROUND 692 turn 1:
+---
+---
+-PC
+
+ROUND 692 turn 2:
+P--
+---
+-PC
+
+ROUND 692 turn 3:
+PC-
+---
+-PC
+
+ROUND 692 turn 4:
+PCP
+---
+-PC
+
+ROUND 692 turn 5:
+PCP
+--C
+-PC
+
+ROUND 692 turn 6:
+PCP
+--C
+PPC
+
+ROUND 692 turn 7:
+PCP
+C-C
+PPC
+
+ROUND 692 turn 8:
+PCP
+CPC
+PPC
+!!!!!!!!!!!!!player won round 692
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:30:20.531] --- Computer ---
+[23:30:20.531] --- Turn 1 ---
+[23:30:20.531] Computer controls the center
+[23:30:20.531] Check for Computer win position
+[23:30:20.531] Check for Player win position
+[23:30:20.531] RIGHT: 5
+[23:30:20.599] --- Computer ---
+[23:30:20.599] --- Turn 3 ---
+[23:30:20.599] Computer controls the center
+[23:30:20.599] Check for Computer win position
+[23:30:20.599] Check for Player win position
+[23:30:20.665] --- Computer ---
+[23:30:20.665] --- Turn 5 ---
+[23:30:20.665] Computer controls the center
+[23:30:20.665] Check for Computer win position
+[23:30:20.666] Check for Player win position
+
+ROUND MOVES
+ROUND 729 turn 0:
+---
+-P-
+---
+
+ROUND 729 turn 1:
+---
+-PC
+---
+
+ROUND 729 turn 2:
+P--
+-PC
+---
+
+ROUND 729 turn 3:
+P--
+-PC
+--C
+
+ROUND 729 turn 4:
+P-P
+-PC
+--C
+
+ROUND 729 turn 5:
+PCP
+-PC
+--C
+
+ROUND 729 turn 6:
+PCP
+-PC
+P-C
+!!!!!!!!!!!!!player won round 729
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:30:43.248] --- Computer ---
+[23:30:43.248] --- Turn 1 ---
+[23:30:43.248] Player controls the center
+[23:30:43.248] Check for Computer win position
+[23:30:43.248] Check for Player win position
+[23:30:43.248] Take corner opposite to one controlled by the player
+[23:30:43.248] Player controls SW
+[23:30:43.348] --- Computer ---
+[23:30:43.348] --- Turn 3 ---
+[23:30:43.348] Player controls the center
+[23:30:43.348] Check for Computer win position
+[23:30:43.348] Check for Player win position
+[23:30:43.416] --- Computer ---
+[23:30:43.416] --- Turn 5 ---
+[23:30:43.416] Player controls the center
+[23:30:43.416] Check for Computer win position
+[23:30:43.416] Check for Player win position
+
+ROUND MOVES
+ROUND 752 turn 0:
+---
+---
+P--
+
+ROUND 752 turn 1:
+--C
+---
+P--
+
+ROUND 752 turn 2:
+--C
+---
+P-P
+
+ROUND 752 turn 3:
+--C
+---
+PCP
+
+ROUND 752 turn 4:
+P-C
+---
+PCP
+
+ROUND 752 turn 5:
+P-C
+C--
+PCP
+
+ROUND 752 turn 6:
+P-C
+CP-
+PCP
+!!!!!!!!!!!!!player won round 752
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:31:6.914] --- Computer ---
+[23:31:6.914] --- Turn 1 ---
+[23:31:6.914] Player controls the center
+[23:31:6.914] Check for Computer win position
+[23:31:6.914] Check for Player win position
+[23:31:6.914] Take corner opposite to one controlled by the player
+[23:31:6.914] Find intersecting corner
+[23:31:6.914] 0 neighbors for corner 0
+[23:31:6.915] 1 neighbors for corner 2
+[23:31:6.915] 0 neighbors for corner 6
+[23:31:6.915] 1 neighbors for corner 8
+[23:31:6.915] Max is 0
+[23:31:6.981] --- Computer ---
+[23:31:6.981] --- Turn 3 ---
+[23:31:6.981] Player controls the center
+[23:31:6.981] Check for Computer win position
+[23:31:6.981] Check for Player win position
+[23:31:7.47] --- Computer ---
+[23:31:7.47] --- Turn 5 ---
+[23:31:7.47] Player controls the center
+[23:31:7.47] Check for Computer win position
+[23:31:7.47] Check for Player win position
+
+ROUND MOVES
+ROUND 779 turn 0:
+---
+---
+-P-
+
+ROUND 779 turn 1:
+C--
+---
+-P-
+
+ROUND 779 turn 2:
+C--
+---
+PP-
+
+ROUND 779 turn 3:
+C--
+---
+PPC
+
+ROUND 779 turn 4:
+C--
+-P-
+PPC
+
+ROUND 779 turn 5:
+CC-
+-P-
+PPC
+
+ROUND 779 turn 6:
+CCP
+-P-
+PPC
+!!!!!!!!!!!!!player won round 779
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:31:7.978] --- Computer ---
+[23:31:7.978] --- Turn 1 ---
+[23:31:7.978] Computer controls the center
+[23:31:7.978] Check for Computer win position
+[23:31:7.978] Check for Player win position
+[23:31:7.978] RIGHT: 1
+[23:31:8.46] --- Computer ---
+[23:31:8.46] --- Turn 3 ---
+[23:31:8.46] Computer controls the center
+[23:31:8.46] Check for Computer win position
+[23:31:8.46] Check for Player win position
+[23:31:8.46] BOTTOM: 5
+[23:31:8.145] --- Computer ---
+[23:31:8.145] --- Turn 5 ---
+[23:31:8.145] Computer controls the center
+[23:31:8.145] Check for Computer win position
+[23:31:8.145] Check for Player win position
+
+ROUND MOVES
+ROUND 780 turn 0:
+P--
+---
+---
+
+ROUND 780 turn 1:
+PC-
+---
+---
+
+ROUND 780 turn 2:
+PCP
+---
+---
+
+ROUND 780 turn 3:
+PCP
+--C
+---
+
+ROUND 780 turn 4:
+PCP
+--C
+P--
+
+ROUND 780 turn 5:
+PCP
+C-C
+P--
+
+ROUND 780 turn 6:
+PCP
+CPC
+P--
+!!!!!!!!!!!!!player won round 780
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:31:13.524] --- Computer ---
+[23:31:13.524] --- Turn 1 ---
+[23:31:13.524] Computer controls the center
+[23:31:13.524] Check for Computer win position
+[23:31:13.524] Check for Player win position
+[23:31:13.524] RIGHT: 5
+[23:31:13.592] --- Computer ---
+[23:31:13.592] --- Turn 3 ---
+[23:31:13.592] Computer controls the center
+[23:31:13.592] Check for Computer win position
+[23:31:13.592] Check for Player win position
+[23:31:13.660] --- Computer ---
+[23:31:13.660] --- Turn 5 ---
+[23:31:13.660] Computer controls the center
+[23:31:13.660] Check for Computer win position
+[23:31:13.660] Check for Player win position
+
+ROUND MOVES
+ROUND 786 turn 0:
+---
+-P-
+---
+
+ROUND 786 turn 1:
+---
+-PC
+---
+
+ROUND 786 turn 2:
+---
+-PC
+--P
+
+ROUND 786 turn 3:
+C--
+-PC
+--P
+
+ROUND 786 turn 4:
+C--
+-PC
+-PP
+
+ROUND 786 turn 5:
+C--
+-PC
+CPP
+
+ROUND 786 turn 6:
+CP-
+-PC
+CPP
+!!!!!!!!!!!!!player won round 786
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:31:43.389] --- Computer ---
+[23:31:43.389] --- Turn 1 ---
+[23:31:43.389] Player controls the center
+[23:31:43.389] Check for Computer win position
+[23:31:43.389] Check for Player win position
+[23:31:43.389] Take corner opposite to one controlled by the player
+[23:31:43.389] Player controls NW
+[23:31:43.455] --- Computer ---
+[23:31:43.455] --- Turn 3 ---
+[23:31:43.455] Player controls the center
+[23:31:43.455] Check for Computer win position
+[23:31:43.455] Check for Player win position
+[23:31:43.523] --- Computer ---
+[23:31:43.523] --- Turn 5 ---
+[23:31:43.523] Player controls the center
+[23:31:43.523] Check for Computer win position
+[23:31:43.523] Check for Player win position
+
+ROUND MOVES
+ROUND 820 turn 0:
+P--
+---
+---
+
+ROUND 820 turn 1:
+P--
+---
+--C
+
+ROUND 820 turn 2:
+P--
+---
+P-C
+
+ROUND 820 turn 3:
+P--
+C--
+P-C
+
+ROUND 820 turn 4:
+P-P
+C--
+P-C
+
+ROUND 820 turn 5:
+PCP
+C--
+P-C
+
+ROUND 820 turn 6:
+PCP
+CP-
+P-C
+!!!!!!!!!!!!!player won round 820
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:31:58.518] --- Computer ---
+[23:31:58.518] --- Turn 1 ---
+[23:31:58.518] Computer controls the center
+[23:31:58.518] Check for Computer win position
+[23:31:58.518] Check for Player win position
+[23:31:58.518] RIGHT: 5
+[23:31:58.589] --- Computer ---
+[23:31:58.589] --- Turn 3 ---
+[23:31:58.589] Computer controls the center
+[23:31:58.589] Check for Computer win position
+[23:31:58.589] Check for Player win position
+[23:31:58.721] --- Computer ---
+[23:31:58.721] --- Turn 5 ---
+[23:31:58.721] Computer controls the center
+[23:31:58.721] Check for Computer win position
+[23:31:58.721] Check for Player win position
+
+ROUND MOVES
+ROUND 836 turn 0:
+---
+-P-
+---
+
+ROUND 836 turn 1:
+---
+-PC
+---
+
+ROUND 836 turn 2:
+---
+-PC
+-P-
+
+ROUND 836 turn 3:
+-C-
+-PC
+-P-
+
+ROUND 836 turn 4:
+-C-
+-PC
+PP-
+
+ROUND 836 turn 5:
+-C-
+-PC
+PPC
+
+ROUND 836 turn 6:
+-CP
+-PC
+PPC
+!!!!!!!!!!!!!player won round 836
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:33:16.77] --- Computer ---
+[23:33:16.77] --- Turn 1 ---
+[23:33:16.77] Player controls the center
+[23:33:16.77] Check for Computer win position
+[23:33:16.77] Check for Player win position
+[23:33:16.77] Take corner opposite to one controlled by the player
+[23:33:16.77] Player controls SE
+[23:33:16.143] --- Computer ---
+[23:33:16.143] --- Turn 3 ---
+[23:33:16.143] Player controls the center
+[23:33:16.144] Check for Computer win position
+[23:33:16.144] Check for Player win position
+[23:33:16.209] --- Computer ---
+[23:33:16.209] --- Turn 5 ---
+[23:33:16.209] Player controls the center
+[23:33:16.209] Check for Computer win position
+[23:33:16.209] Check for Player win position
+
+ROUND MOVES
+ROUND 926 turn 0:
+---
+---
+--P
+
+ROUND 926 turn 1:
+C--
+---
+--P
+
+ROUND 926 turn 2:
+C--
+---
+P-P
+
+ROUND 926 turn 3:
+C--
+---
+PCP
+
+ROUND 926 turn 4:
+C-P
+---
+PCP
+
+ROUND 926 turn 5:
+C-P
+--C
+PCP
+
+ROUND 926 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 926
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:33:38.747] --- Computer ---
+[23:33:38.747] --- Turn 1 ---
+[23:33:38.747] Computer controls the center
+[23:33:38.747] Check for Computer win position
+[23:33:38.747] Check for Player win position
+[23:33:38.747] LEFT: 7
+[23:33:38.815] --- Computer ---
+[23:33:38.815] --- Turn 3 ---
+[23:33:38.815] Computer controls the center
+[23:33:38.815] Check for Computer win position
+[23:33:38.815] Check for Player win position
+[23:33:38.815] TOP: 3
+[23:33:38.916] --- Computer ---
+[23:33:38.916] --- Turn 5 ---
+[23:33:38.916] Computer controls the center
+[23:33:38.916] Check for Computer win position
+[23:33:38.916] Check for Player win position
+
+ROUND MOVES
+ROUND 948 turn 0:
+---
+---
+--P
+
+ROUND 948 turn 1:
+---
+---
+-CP
+
+ROUND 948 turn 2:
+---
+---
+PCP
+
+ROUND 948 turn 3:
+---
+C--
+PCP
+
+ROUND 948 turn 4:
+--P
+C--
+PCP
+
+ROUND 948 turn 5:
+--P
+C-C
+PCP
+
+ROUND 948 turn 6:
+--P
+CPC
+PCP
+!!!!!!!!!!!!!player won round 948
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:33:40.801] --- Computer ---
+[23:33:40.801] --- Turn 1 ---
+[23:33:40.801] Computer controls the center
+[23:33:40.801] Check for Computer win position
+[23:33:40.801] Check for Player win position
+[23:33:40.801] RIGHT: 1
+[23:33:40.868] --- Computer ---
+[23:33:40.868] --- Turn 3 ---
+[23:33:40.868] Computer controls the center
+[23:33:40.868] Check for Computer win position
+[23:33:40.868] Check for Player win position
+[23:33:40.868] RIGHT: 8
+[23:33:41.2] --- Computer ---
+[23:33:41.2] --- Turn 5 ---
+[23:33:41.2] Computer controls the center
+[23:33:41.2] Check for Computer win position
+[23:33:41.2] Check for Player win position
+[23:33:41.2] BOTTOM: 5
+[23:33:41.170] --- Computer ---
+[23:33:41.170] --- Turn 7 ---
+[23:33:41.170] Computer controls the center
+[23:33:41.170] Check for Computer win position
+[23:33:41.170] Check for Player win position
+
+ROUND MOVES
+ROUND 950 turn 0:
+P--
+---
+---
+
+ROUND 950 turn 1:
+PC-
+---
+---
+
+ROUND 950 turn 2:
+PC-
+---
+-P-
+
+ROUND 950 turn 3:
+PC-
+---
+-PC
+
+ROUND 950 turn 4:
+PCP
+---
+-PC
+
+ROUND 950 turn 5:
+PCP
+--C
+-PC
+
+ROUND 950 turn 6:
+PCP
+--C
+PPC
+
+ROUND 950 turn 7:
+PCP
+C-C
+PPC
+
+ROUND 950 turn 8:
+PCP
+CPC
+PPC
+!!!!!!!!!!!!!player won round 950
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:33:45.190] --- Computer ---
+[23:33:45.190] --- Turn 1 ---
+[23:33:45.190] Computer controls the center
+[23:33:45.190] Check for Computer win position
+[23:33:45.190] Check for Player win position
+[23:33:45.190] RIGHT: 7
+[23:33:45.258] --- Computer ---
+[23:33:45.258] --- Turn 3 ---
+[23:33:45.258] Computer controls the center
+[23:33:45.258] Check for Computer win position
+[23:33:45.258] Check for Player win position
+[23:33:45.324] --- Computer ---
+[23:33:45.324] --- Turn 5 ---
+[23:33:45.324] Computer controls the center
+[23:33:45.324] Check for Computer win position
+[23:33:45.324] Check for Player win position
+
+ROUND MOVES
+ROUND 954 turn 0:
+---
+---
+P--
+
+ROUND 954 turn 1:
+---
+---
+PC-
+
+ROUND 954 turn 2:
+---
+-P-
+PC-
+
+ROUND 954 turn 3:
+--C
+-P-
+PC-
+
+ROUND 954 turn 4:
+P-C
+-P-
+PC-
+
+ROUND 954 turn 5:
+P-C
+CP-
+PC-
+
+ROUND 954 turn 6:
+P-C
+CP-
+PCP
+!!!!!!!!!!!!!player won round 954
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:34:17.455] --- Computer ---
+[23:34:17.455] --- Turn 1 ---
+[23:34:17.455] Computer controls the center
+[23:34:17.455] Check for Computer win position
+[23:34:17.455] Check for Player win position
+[23:34:17.455] RIGHT: 5
+[23:34:17.523] --- Computer ---
+[23:34:17.523] --- Turn 3 ---
+[23:34:17.523] Computer controls the center
+[23:34:17.523] Check for Computer win position
+[23:34:17.523] Check for Player win position
+[23:34:17.688] --- Computer ---
+[23:34:17.688] --- Turn 5 ---
+[23:34:17.688] Computer controls the center
+[23:34:17.688] Check for Computer win position
+[23:34:17.688] Check for Player win position
+
+ROUND MOVES
+ROUND 992 turn 0:
+---
+-P-
+---
+
+ROUND 992 turn 1:
+---
+-PC
+---
+
+ROUND 992 turn 2:
+--P
+-PC
+---
+
+ROUND 992 turn 3:
+--P
+-PC
+C--
+
+ROUND 992 turn 4:
+P-P
+-PC
+C--
+
+ROUND 992 turn 5:
+PCP
+-PC
+C--
+
+ROUND 992 turn 6:
+PCP
+-PC
+C-P
+!!!!!!!!!!!!!player won round 992
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:34:40.214] --- Computer ---
+[23:34:40.214] --- Turn 1 ---
+[23:34:40.214] Player controls the center
+[23:34:40.214] Check for Computer win position
+[23:34:40.214] Check for Player win position
+[23:34:40.214] Take corner opposite to one controlled by the player
+[23:34:40.214] Find intersecting corner
+[23:34:40.214] 1 neighbors for corner 0
+[23:34:40.214] 0 neighbors for corner 2
+[23:34:40.214] 1 neighbors for corner 6
+[23:34:40.214] 0 neighbors for corner 8
+[23:34:40.214] Max is 0
+[23:34:40.280] --- Computer ---
+[23:34:40.280] --- Turn 3 ---
+[23:34:40.280] Player controls the center
+[23:34:40.280] Check for Computer win position
+[23:34:40.280] Check for Player win position
+[23:34:40.280] Take corner opposite to one controlled by the player
+[23:34:40.281] Player controls SW
+[23:34:40.348] --- Computer ---
+[23:34:40.348] --- Turn 5 ---
+[23:34:40.348] Player controls the center
+[23:34:40.348] Check for Computer win position
+[23:34:40.348] Check for Player win position
+
+ROUND MOVES
+ROUND 1016 turn 0:
+-P-
+---
+---
+
+ROUND 1016 turn 1:
+CP-
+---
+---
+
+ROUND 1016 turn 2:
+CP-
+---
+P--
+
+ROUND 1016 turn 3:
+CPC
+---
+P--
+
+ROUND 1016 turn 4:
+CPC
+---
+PP-
+
+ROUND 1016 turn 5:
+CPC
+---
+PPC
+
+ROUND 1016 turn 6:
+CPC
+-P-
+PPC
+!!!!!!!!!!!!!player won round 1016
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:34:59.125] --- Computer ---
+[23:34:59.125] --- Turn 1 ---
+[23:34:59.125] Player controls the center
+[23:34:59.125] Check for Computer win position
+[23:34:59.125] Check for Player win position
+[23:34:59.125] Take corner opposite to one controlled by the player
+[23:34:59.125] Player controls NW
+[23:34:59.225] --- Computer ---
+[23:34:59.225] --- Turn 3 ---
+[23:34:59.225] Player controls the center
+[23:34:59.225] Check for Computer win position
+[23:34:59.225] Check for Player win position
+[23:34:59.291] --- Computer ---
+[23:34:59.291] --- Turn 5 ---
+[23:34:59.291] Player controls the center
+[23:34:59.291] Check for Computer win position
+[23:34:59.291] Check for Player win position
+
+ROUND MOVES
+ROUND 1038 turn 0:
+P--
+---
+---
+
+ROUND 1038 turn 1:
+P--
+---
+--C
+
+ROUND 1038 turn 2:
+P--
+---
+P-C
+
+ROUND 1038 turn 3:
+P--
+C--
+P-C
+
+ROUND 1038 turn 4:
+P-P
+C--
+P-C
+
+ROUND 1038 turn 5:
+PCP
+C--
+P-C
+
+ROUND 1038 turn 6:
+PCP
+CP-
+P-C
+!!!!!!!!!!!!!player won round 1038
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:35:44.701] --- Computer ---
+[23:35:44.701] --- Turn 1 ---
+[23:35:44.701] Computer controls the center
+[23:35:44.701] Check for Computer win position
+[23:35:44.701] Check for Player win position
+[23:35:44.701] RIGHT: 5
+[23:35:44.802] --- Computer ---
+[23:35:44.802] --- Turn 3 ---
+[23:35:44.802] Computer controls the center
+[23:35:44.802] Check for Computer win position
+[23:35:44.802] Check for Player win position
+[23:35:44.902] --- Computer ---
+[23:35:44.902] --- Turn 5 ---
+[23:35:44.902] Computer controls the center
+[23:35:44.902] Check for Computer win position
+[23:35:44.902] Check for Player win position
+
+ROUND MOVES
+ROUND 1087 turn 0:
+---
+-P-
+---
+
+ROUND 1087 turn 1:
+---
+-PC
+---
+
+ROUND 1087 turn 2:
+P--
+-PC
+---
+
+ROUND 1087 turn 3:
+P--
+-PC
+--C
+
+ROUND 1087 turn 4:
+P-P
+-PC
+--C
+
+ROUND 1087 turn 5:
+PCP
+-PC
+--C
+
+ROUND 1087 turn 6:
+PCP
+-PC
+P-C
+!!!!!!!!!!!!!player won round 1087
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:35:53.839] --- Computer ---
+[23:35:53.839] --- Turn 1 ---
+[23:35:53.839] Player controls the center
+[23:35:53.839] Check for Computer win position
+[23:35:53.839] Check for Player win position
+[23:35:53.839] Take corner opposite to one controlled by the player
+[23:35:53.839] Player controls NE
+[23:35:53.905] --- Computer ---
+[23:35:53.905] --- Turn 3 ---
+[23:35:53.905] Player controls the center
+[23:35:53.905] Check for Computer win position
+[23:35:53.905] Check for Player win position
+[23:35:53.971] --- Computer ---
+[23:35:53.971] --- Turn 5 ---
+[23:35:53.971] Player controls the center
+[23:35:53.971] Check for Computer win position
+[23:35:53.971] Check for Player win position
+
+ROUND MOVES
+ROUND 1097 turn 0:
+--P
+---
+---
+
+ROUND 1097 turn 1:
+--P
+---
+C--
+
+ROUND 1097 turn 2:
+--P
+---
+C-P
+
+ROUND 1097 turn 3:
+--P
+--C
+C-P
+
+ROUND 1097 turn 4:
+P-P
+--C
+C-P
+
+ROUND 1097 turn 5:
+PCP
+--C
+C-P
+
+ROUND 1097 turn 6:
+PCP
+-PC
+C-P
+!!!!!!!!!!!!!player won round 1097
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:36:10.328] --- Computer ---
+[23:36:10.328] --- Turn 1 ---
+[23:36:10.328] Computer controls the center
+[23:36:10.328] Check for Computer win position
+[23:36:10.328] Check for Player win position
+[23:36:10.328] LEFT: 7
+[23:36:10.395] --- Computer ---
+[23:36:10.395] --- Turn 3 ---
+[23:36:10.395] Computer controls the center
+[23:36:10.395] Check for Computer win position
+[23:36:10.395] Check for Player win position
+[23:36:10.463] --- Computer ---
+[23:36:10.463] --- Turn 5 ---
+[23:36:10.463] Computer controls the center
+[23:36:10.463] Check for Computer win position
+[23:36:10.463] Check for Player win position
+
+ROUND MOVES
+ROUND 1114 turn 0:
+---
+---
+--P
+
+ROUND 1114 turn 1:
+---
+---
+-CP
+
+ROUND 1114 turn 2:
+---
+-P-
+-CP
+
+ROUND 1114 turn 3:
+C--
+-P-
+-CP
+
+ROUND 1114 turn 4:
+C-P
+-P-
+-CP
+
+ROUND 1114 turn 5:
+C-P
+-PC
+-CP
+
+ROUND 1114 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 1114
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:36:50.754] --- Computer ---
+[23:36:50.754] --- Turn 1 ---
+[23:36:50.754] Player controls the center
+[23:36:50.754] Check for Computer win position
+[23:36:50.754] Check for Player win position
+[23:36:50.754] Take corner opposite to one controlled by the player
+[23:36:50.754] Player controls SE
+[23:36:50.822] --- Computer ---
+[23:36:50.822] --- Turn 3 ---
+[23:36:50.822] Player controls the center
+[23:36:50.822] Check for Computer win position
+[23:36:50.822] Check for Player win position
+[23:36:50.954] --- Computer ---
+[23:36:50.954] --- Turn 5 ---
+[23:36:50.954] Player controls the center
+[23:36:50.954] Check for Computer win position
+[23:36:50.954] Check for Player win position
+
+ROUND MOVES
+ROUND 1161 turn 0:
+---
+---
+--P
+
+ROUND 1161 turn 1:
+C--
+---
+--P
+
+ROUND 1161 turn 2:
+C--
+---
+P-P
+
+ROUND 1161 turn 3:
+C--
+---
+PCP
+
+ROUND 1161 turn 4:
+C-P
+---
+PCP
+
+ROUND 1161 turn 5:
+C-P
+--C
+PCP
+
+ROUND 1161 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 1161
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:37:17.448] --- Computer ---
+[23:37:17.448] --- Turn 1 ---
+[23:37:17.448] Computer controls the center
+[23:37:17.448] Check for Computer win position
+[23:37:17.448] Check for Player win position
+[23:37:17.448] RIGHT: 5
+[23:37:17.548] --- Computer ---
+[23:37:17.548] --- Turn 3 ---
+[23:37:17.548] Computer controls the center
+[23:37:17.548] Check for Computer win position
+[23:37:17.548] Check for Player win position
+[23:37:17.616] --- Computer ---
+[23:37:17.616] --- Turn 5 ---
+[23:37:17.616] Computer controls the center
+[23:37:17.616] Check for Computer win position
+[23:37:17.616] Check for Player win position
+
+ROUND MOVES
+ROUND 1191 turn 0:
+---
+-P-
+---
+
+ROUND 1191 turn 1:
+---
+-PC
+---
+
+ROUND 1191 turn 2:
+---
+-PC
+P--
+
+ROUND 1191 turn 3:
+--C
+-PC
+P--
+
+ROUND 1191 turn 4:
+--C
+-PC
+P-P
+
+ROUND 1191 turn 5:
+--C
+-PC
+PCP
+
+ROUND 1191 turn 6:
+P-C
+-PC
+PCP
+!!!!!!!!!!!!!player won round 1191
+________________________________________
+
+
+-------------------------------------------
+
+
+ROUND DEBUG[23:37:33.455] --- Computer ---
+[23:37:33.455] --- Turn 1 ---
+[23:37:33.455] Player controls the center
+[23:37:33.455] Check for Computer win position
+[23:37:33.455] Check for Player win position
+[23:37:33.455] Take corner opposite to one controlled by the player
+[23:37:33.455] Player controls SE
+[23:37:33.523] --- Computer ---
+[23:37:33.523] --- Turn 3 ---
+[23:37:33.523] Player controls the center
+[23:37:33.523] Check for Computer win position
+[23:37:33.523] Check for Player win position
+[23:37:33.623] --- Computer ---
+[23:37:33.623] --- Turn 5 ---
+[23:37:33.623] Player controls the center
+[23:37:33.623] Check for Computer win position
+[23:37:33.623] Check for Player win position
+
+ROUND MOVES
+ROUND 1208 turn 0:
+---
+---
+--P
+
+ROUND 1208 turn 1:
+C--
+---
+--P
+
+ROUND 1208 turn 2:
+C-P
+---
+--P
+
+ROUND 1208 turn 3:
+C-P
+--C
+--P
+
+ROUND 1208 turn 4:
+C-P
+--C
+P-P
+
+ROUND 1208 turn 5:
+C-P
+--C
+PCP
+
+ROUND 1208 turn 6:
+C-P
+-PC
+PCP
+!!!!!!!!!!!!!player won round 1208
+________________________________________
+
