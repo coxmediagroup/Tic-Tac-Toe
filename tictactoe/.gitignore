@@ -1,0 +1,4 @@
+*.pyc
+game/*.pyc
+tictactoe/*.pyc
+tictactoe.sqlite3

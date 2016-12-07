@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_PREFIX }}css/tictac.css" />
+{% endblock extra_head %}
+   
+    
+{% block main_content %}
+<div class="row">
+	<div>
+		<h1 class="subheader">Tic Tac Toe</h1>
+        <h2 class="subheader">Hi {{ xplayer }}, I am {{ oplayer }}</h2>
+		<h4 class="subheader">{{ xplayer }}, Play if you want, and wins if you can!</h4>
+	</div>
+</div>
+<noscript><p style="color:red;">You must enable javascript to be able to play tic-tac-toe.</p></noscript>
+<div class="row">
+	<div class="large-6 small-9 small-centered large-centered columns text-center">
+		<form name=board onsubmit="return false;">{% csrf_token %}
+			<table border=0>
+				<tr>
+					<td valign=top>
+						<table border=0 cellspacing=6>
+							<tr>
+							 <td class="square"><input id=grid0 class=cell name=c7 type=button accesskey=7 onclick="markGrid(this);"></td>
+							 <td class="square v"><input id=grid1 class=cell name=c8 type=button accesskey=8 onclick="markGrid(this);"></td>
+							 <td class="square"><input id=grid2 class=cell name=c9 type=button accesskey=9 onclick="markGrid(this);"></td>
+							</tr><tr>
+							 <td class="square h"><input id=grid3 class=cell name=c4 type=button accesskey=4 onclick="markGrid(this);"></td>
+							 <td class="square v h"><input id=grid4 class=cell name=c5 type=button accesskey=5 onclick="markGrid(this);"></td>
+							 <td class="square h"><input id=grid5 class=cell name=c6 type=button accesskey=6 onclick="markGrid(this);"></td>
+							</tr><tr> 
+							 <td class="square"><input id=grid6 class=cell name=c1 type=button accesskey=1 onclick="markGrid(this);"></td>
+							 <td class="square v"><input id=grid7 class=cell name=c2 type=button accesskey=2 onclick="markGrid(this);"></td>
+							 <td class="square"><input id=grid8 class=cell name=c3 type=button accesskey=3 onclick="markGrid(this);"></td>
+							</tr>
+						</table>
+					</td>
+					<td valign=top>
+						<table border=1 cellpadding=3>
+							<tr>
+								<th>Player</th>
+								<th>First</th>
+								<th>Wins</th>
+							</tr>
+							<tr>
+								<th class=player>X</th> 
+								<td><input type=radio name=firstMove value=X checked onchange="newGame();"></td> 
+								<td align=right><input type=button name=xWon class=winstat value="0"></td> 
+							</tr>
+							<tr>
+								<th class=player>O</th>
+								<td><input type=radio name=firstMove value=O onchange="newGame();"></td>
+								<td align=right><input type=button name=oWon class=winstat value="0"></td>
+							</tr
+							<tr>
+								<th>CatsGame</th>
+								<td colspan="3" =right><input type=button name=catsGame class=winstat value="0"></td>
+							</tr>
+						</table>
+						<p><input type=button name=newgame value="New Game" accesskey=n onclick="newGame();"><p>
+					</td>
+				</tr>
+			</table>
+            <input id="xplayer" name="xplayer" type="hidden" value="{{ xplayer }}"/>
+		</form>
+	</div>
+</div>
+<div class="row">
+	<div class="small-4 columns text-center">
+		<h3 class="subheader prompt" id="prompt"></h3>
+	</div>
+</div>
+{% endblock main_content %}
+
+{% block footer_scripts %}
+    <script src="{{ STATIC_PREFIX }}js/gameController.js"></script>
+{% endblock footer_scripts %}

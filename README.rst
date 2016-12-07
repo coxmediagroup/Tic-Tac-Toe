@@ -26,3 +26,12 @@ Submissions
 * Fork this repo and send us a pull request.
 * if you prefer you can send us a ZIP of your submission, due to email filters, rename the file to *.txt and mention it is a ZIP in your email.
 
+Run (Requirements)
+--------------
+
+1. download project tictactoe to a python virtual env
+
+2. Launch django server python manage.py runserver 0.0.0.0:8080
+
+3. There is a sqlite3 database with admin user sion/sion123
+
