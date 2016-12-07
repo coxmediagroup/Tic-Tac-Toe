@@ -1,0 +1,24 @@
+{% comment %}
+This template renders a game's board_state.
+{% endcomment %}
+
+<div id="game_board">
+    {% for row in game.board_state %}
+        {% for value in row %}
+            <div class="cell{% if value == 'X' %} exed{% endif %}{% if value == 'O' %} owed{% endif %}"
+                id="cell-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">&nbsp;</div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+{% if game.is_game_over %}
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+        {% if not game.get_winner %}
+            $("#game_board").block({ message: "The game is a tie!" });
+        {% else %}
+            $("#game_board").block({ message: "Player '{{ game.get_winner }}' is the winner!" });
+        {% endif %}
+        });
+    </script>
+{% endif %}

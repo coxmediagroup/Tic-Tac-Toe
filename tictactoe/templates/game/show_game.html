@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $("#play_area").delegate('.cell', 'click', function() {
+                // Extract the row and column from the cell's id.
+                var matches = this.id.match(/cell-(\d)-(\d)/);
+                var row = matches[1];
+                var column = matches[2];
+
+                $.post(
+                    '{% url make_move game.id %}',
+                    { 'row': row, 'column': column },
+                    function(data) {
+                        $('#play_area').html(data);
+                    }
+                );
+            });
+        });
+    </script>
+{% endblock head %}
+
+{% block content %}
+    <div id="play_area">
+        {% include "game/_board.html" %}
+    </div>
+
+    <p><a href="{% url new_game %}">New Game</a></p>
+{% endblock content %}
