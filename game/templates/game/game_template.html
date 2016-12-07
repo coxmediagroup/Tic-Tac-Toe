@@ -1,0 +1,32 @@
+{% if winner %}
+    <div id="play_header">
+        <h2>Game Over! You {{winner}}. Play Again?</h2>
+        <button id="goFirst" name="goFirst" class="button">Go First</button>
+        <button id="goSecond" name="goSecond" class="button">Go Second</button>
+    </div>
+{% endif %}
+
+<table id="trs">
+    <tbody>
+        {% for field in form %}
+            {% if forloop.first %}
+                <tr>
+            {% elif forloop.counter0 == 3 or forloop.counter0 == 6 %}
+            </tr><tr>
+            {% endif %}
+
+            <td {% if field.value == '0' and not winner %}class="active_cell"{% elif winner and forloop.counter0 in winning_three%}class="winning_cell"{% endif %}>
+                {% if field.value == first %}
+                    X
+                {% elif field.value == second %}
+                    O
+                {% endif %}
+                {{field}}
+            </td>
+            {% if forloop.last %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+

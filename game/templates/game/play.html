@@ -1,0 +1,38 @@
+{% extends "localcore/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Home{% endblock %}
+
+{% block head_static %}
+    <script src="{% static 'game/js/game.js' %}"></script>
+    <link href="{% static 'game/css/game.css' %}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block content %}
+    <form id="ticForm" method='POST' action="">{% csrf_token %}
+    {% if not board %}
+        <div id="play_header">
+            <h2>Would you like to:</h2>
+
+            <button id="goFirst" name="goFirst" class="button">Go First</button>
+            <button id="goSecond" name="goSecond" class="button">Go Second</button>
+        </div>
+    {% endif %}
+        
+        <div id="table_div">
+            <table id="ticTable" class="table table-bordered">
+                <tbody>
+                    {{board}}
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+<!--     <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="page-header jumbotron">
+                <h1>This is a header<small>Small Header</small></h1>
+            </div>
+        </div>
+    </div> -->
+{% endblock %}

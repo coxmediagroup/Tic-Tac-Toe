@@ -1,0 +1,35 @@
+#ticTable{
+    width:20%;
+    height: 200px;
+    text-align: center;
+    bottom:0;
+    position: absolute;
+}
+
+#ticTable td{
+    width:33%;
+    font-size: 250%;
+    height:65px;
+}
+
+#ticTable tr{
+    height:65px;
+}
+
+#play_header{
+    margin-bottom: 30px;
+}
+
+.winning_cell{
+    background-color: lawngreen;
+}
+
+#table_div{
+    height:250px;
+    position: relative;
+}
+
+#loading{
+    height:30px;
+    /*float:left;*/
+}
