@@ -1,0 +1,179 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+TicTacToe.py
+
+Created by Fredrick Stakem on 2011-01-29.
+Copyright (c) 2011 __Stakem Research__. All rights reserved.
+"""
+
+
+class TicTacToe(object):
+    """Main class to perform the game TIC TAC TOE.
+        
+       1)   Algorithm for a win is optimized to reduce the number of compares.
+            Each location is givin a unique number that are added together if
+            a player occupies that location. The sum of the location numbers
+            for each player are compared to the eight known numbers for a win to
+            see if the player won. I thought this sounded interesting so I 
+            implemented it from this discussion:
+            http://www.computing.net/answers/programming/tictactoe-algorithm/3126.html
+            
+               1  |    2  |    4
+             --------------------
+               8  |   16  |   32
+             --------------------
+              64  |  128  |  256 
+              
+        2)  Positions on the Tic Tac Toe board are defined as follows:
+        
+              0  |  1  |  2  
+            -----------------
+              3  |  4  |  5
+            -----------------
+              6  |  7  |  8
+            
+    
+    """
+    
+    # Class variables
+    empty_position = '-'
+    __min_position = 0
+    __max_position = 8
+    players = ('X', 'O')
+    move_results = ('GAME_OVER_ALREADY', 'INVALID_MOVE', 'INVALID_TURN', 'INVALID_PLAYER', 'WIN', 'CONTINUE')
+    game_location_values = (1, 2, 4, 8, 16, 32, 64, 128, 256)
+    game_location_win_scores = (7, 56, 73, 84, 146, 273, 292, 448)
+    
+    # Public methods
+    #--------------------------------------------------------------------------
+    def __init__(self):
+        # Initialize all the game state variables
+        self.__resetGameState()
+        
+    def newGame(self):
+        self.__resetGameState()
+                       
+    def nextMove(self, player, position):
+        # Check to make sure the move should be allowed
+        if self.__winner != None:
+            return TicTacToe.move_results[0]
+            
+        if self.__last_player_to_move == player:
+            return TicTacToe.move_results[2]
+            
+        if not self.__checkForValidPlayer(player):
+            return TicTacToe.move_results[3]
+            
+        if not self.__checkForValidMove(position):
+            return TicTacToe.move_results[1]
+        
+        # Update the game state
+        self.__updateGameState(player, position)
+        
+        # Check for a win    
+        if self.__checkForWin(player):
+            return TicTacToe.move_results[4]
+            
+        return TicTacToe.move_results[5]
+        
+    def getCurrentGameState(self):
+        return tuple(self.__state)
+        
+    def getWinner(self):
+        return self.__winner
+
+    # Private methods
+    #--------------------------------------------------------------------------     
+    def __resetGameState(self):
+       self.__winner = None
+       self.__last_player_to_move = None
+       self.__x_location_score = 0
+       self.__o_location_score = 0
+       self.__state = [ TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                        TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position,
+                        TicTacToe.empty_position, TicTacToe.empty_position, TicTacToe.empty_position ]
+                        
+    def __updateGameState(self, player, position):
+        self.__state[position] = player
+        self.__last_player_to_move = player
+        
+        if player == TicTacToe.players[0]:
+            self.__x_location_score += TicTacToe.game_location_values[position]
+        else:
+            self.__o_location_score += TicTacToe.game_location_values[position]
+            
+    def __checkForValidPlayer(self, player):
+        if player == TicTacToe.players[0] or player == TicTacToe.players[1]:
+            return True
+            
+        return False
+                        
+    def __checkForValidMove(self, position):
+        if self.__state[position] == TicTacToe.empty_position and \
+           position >= TicTacToe.__min_position and \
+           position <= TicTacToe.__max_position:
+            return True
+            
+        return False
+                        
+    def __checkForWin(self, player):
+        location_score = 0
+        if player == TicTacToe.players[0]:
+            location_score = self.__x_location_score
+        else:
+            location_score = self.__o_location_score
+        
+        if location_score in TicTacToe.game_location_win_scores:
+            return True     
+                
+        return False
+
+
+
+if __name__ == '__main__':
+    # Simple test of the class
+	game = TicTacToe()
+	
+	# Move 1
+	player = TicTacToe.players[0]
+	position = 0
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 2
+	player = TicTacToe.players[1]
+	position = 4
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 3
+	player = TicTacToe.players[0]
+	position = 1
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 4
+	player = TicTacToe.players[1]
+	position = 2
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 5
+	player = TicTacToe.players[0]
+	position = 3
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+	
+	# Move 6
+	player = TicTacToe.players[1]
+	position = 6
+	state = game.nextMove(player, position)
+	print str(player) + " on " + str(position)
+	print state + "\n"
+
