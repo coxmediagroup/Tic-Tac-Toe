@@ -1,0 +1,19 @@
+<div class="ttt" ng-class="{'ttt-inactive': !gameInProgress}">
+    <div ng-repeat="tile in board.tiles" ng-class="{
+    'ttt-rtop': Math.floor($index/3) == 0,
+    'ttt-rmid': Math.floor($index/3) == 1,
+    'ttt-rbot': Math.floor($index/3) == 2,
+    'ttt-cleft': ($index % 3) == 0,
+    'ttt-cmid': ($index % 3) == 1,
+    'ttt-cright': ($index % 3) == 2
+    }" ng-click="clickBoard($index)">{{displaySymbols[tile]}}</div>
+</div>
+
+<div style="text-align: center">
+    <div class="ttt-status">{{status}}</div>
+    <button class="btn" ng-click="startGame()">Start New Game</button>
+
+    <div class="ttt-playerSelect">{{displaySymbols['X']}}: <select ng-model="playerX" ng-options="c.name for c in playerTypes"></select></div>
+    <div class="ttt-playerSelect">{{displaySymbols['O']}}: <select ng-model="playerO" ng-options="c.name for c in playerTypes"></select></div>
+
+</div>
