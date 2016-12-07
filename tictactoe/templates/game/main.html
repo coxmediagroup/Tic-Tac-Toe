@@ -1,0 +1,127 @@
+{% extends "game/base.html" %}
+
+{% block javascript %}
+  $(document).ready(function() {
+    var EMPTY = " ";
+    var human_turn = false;
+    var next_marker;
+    resetGame();
+    
+    // Human player clicks on button to choose first player
+    $("input.player").click(function() {
+      human_turn = ($(this).attr('name') == "human");
+      $("#first_player").hide();
+      if (!human_turn) // computer goes first
+        computerTurn();
+    });
+    
+    // Reset button clicked
+    $("input[name='reset']").click(function() {
+      resetGame();
+    });
+    
+    // Human player clicks on cell
+    $("td").click(function() {     
+      if (human_turn && $(this).html() == EMPTY) {
+        human_turn = false;
+        $(this).html(next_marker);
+        $("#spinner").show() // show progress indicator
+        
+        ajaxRequest('{% url game-human-move %}', function(data, textStatus, jqXHR) {
+          if (data.is_winner) {
+            gameOver("You Win!");
+          } else {
+            next_marker = next_marker == "X" ? "O" : "X";
+            computerTurn();
+          }
+        });
+      }
+    });
+    
+    // Computer player turn
+    function computerTurn() {
+      ajaxRequest('{% url game-computer-move %}', function(data, textStatus, jqXHR) {
+        $("#spinner").hide() // hide progress indicator
+        $("td").eq(data.position).html(next_marker);
+        if (data.is_draw)
+          gameOver("Draw!");
+        else if (data.is_winner)
+          gameOver("Computer Wins!");
+        else {
+          human_turn = true;
+          next_marker = next_marker == "X" ? "O" : "X";
+        }
+      });
+    }
+    
+    // Make AJAX request to url and execute callback on success
+    function ajaxRequest(url, callback) {
+      $.ajax({
+        url: url,
+        data: buildArray(next_marker),
+        success: callback,
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert(errorThrown);
+        },
+      });
+    }
+    
+    // Build array from game board
+    function buildArray(marker) {
+      var board = {};
+      $("#board").find('td').each(function(index, element) {
+        board[index] = element.firstChild.nodeValue;
+      });
+      board['mark'] = marker;
+      return board;
+    }
+    
+    // Show game over message and reset button
+    function gameOver(message) {
+      alert(message);
+      $("#reset").show();
+    }
+    
+    // Reset game to initial state
+    function resetGame() {
+      next_marker = "X";
+      $("td").html(EMPTY);
+      $("#first_player").show();
+      $("#reset").hide();
+      $("#spinner").hide()
+    }
+  });
+{% endblock %}
+
+{% block content %}
+  <div id="first_player">
+    Choose First Player:<br />
+    <input type="button" value="Human" name="human" class="player" />
+    <input type="button" value="Computer" name="computer" class="player" />
+  </div>
+  <div id="reset">
+    <input type="button" value="Play Again" name="reset" />
+  </div>
+  <div id="progress">
+    <img id ="spinner" src="{{ MEDIA_URL }}images/spinner.gif" />
+  </div>
+  <div id="board">
+    <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}
