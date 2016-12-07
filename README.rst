@@ -26,3 +26,17 @@ Submissions
 * Fork this repo and send us a pull request.
 * if you prefer you can send us a ZIP of your submission, due to email filters, rename the file to *.txt and mention it is a ZIP in your email.
 
+Developer Notes:
+-----------------
+
+This is a sinatra app written under Ruby 1.9.3
+
+* Install sinatra $gem install sinatra : require in app file that starts the program
+	enable sessions after require (enable :sessions)
+* Adde files for Passenger since that's what runs on my VPS
+* Install rspec and run rspec --init
+* localdev install shotgun so you don't have to restart Sinatra at every code change:
+	$gem install shotgun
+	$shotgun -p 4567 app.rb
+* initial game will always have client move first. As tic-tac-toe goes this gives the upper hand and this exercise does not allow turn switching.
+
