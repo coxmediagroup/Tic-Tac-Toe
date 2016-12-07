@@ -1,0 +1,38 @@
+{% extends "tictactoe/base.html" %}
+{% block content %}
+    {% with game.game_over.0 as game_over %}
+        {% with game.game_over.1 as winner %}
+            <p>
+            {% if not game_over %}
+            Please select an open position to place your mark:
+            {% else %}
+            Game over! {{ winner }} won!
+            {% endif %}
+            </p>
+            <table border="1" cellpadding="5">
+            {% for r in grid %}
+                <tr>
+                {% with forloop.counter0 as rc %}
+                    {% for c in r %}
+                    <td>
+                        {% with forloop.counter0 as cc %}
+                            {% if not c %}
+                                {% if game_over %}
+                                    &nbsp;
+                                {% else %}
+                                    <a href="{% url move %}?row={{ rc }}&col={{ cc }}&mark={{ mark }}">_</a>
+                                {% endif %}
+                            {% else %}
+                                {{ c }}
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                    </td>
+                {% endwith %}
+                </tr>
+            {% endfor %}
+            </table>
+            <p><a href="{% url default %}?reset=1">{% if game_over %}Play Again{%else%}Reset{% endif %}</a></p>
+        {% endwith %}
+    {% endwith %}
+{% endblock %}
