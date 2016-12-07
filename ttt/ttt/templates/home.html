@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="starter-template">
+    <h1>Unbeatable Tic-Tac-Toe</h1>
+    <p class="lead">Want to challenge the unbeatable Tic-Tac-Toe?  Play a game now.</p>
+
+    <a href="play">
+      <button type="button" class="btn btn-success btn-lg" href="play">
+        <span class="glyphicon glyphicon-play"></span> Play Now
+      </button>
+    </a>
+
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function(){  $('li[name="home_link"]').addClass('active'); });
+</script>
+{% endblock %}

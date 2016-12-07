@@ -1,0 +1,49 @@
+table {
+    margin-left:auto; 
+    margin-right:auto;
+  }
+
+td.cell {
+  min-width: 120px;
+  height: 120px;
+  text-align: center;
+}
+
+td.cell:hover {
+  background-color: #eee;
+}
+
+.bl {
+  border-left: 5px solid #ccc;
+}
+
+.bt {
+  border-top: 5px solid #ccc;
+}
+
+.bb {
+  border-bottom: 5px solid #ccc;
+}
+
+.br {
+  border-right: 5px solid #ccc;
+}
+
+img {
+  width: 110px;
+}
+
+img.legend {
+  width: 35px;
+}
+
+.hide {
+  display: none;
+}
+
+.fix-container-margin {
+  margin-top: -20px;
+}
+div #board{
+  padding: 10px;
+}

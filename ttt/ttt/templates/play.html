@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="{{ STATIC_URL }}css/play.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="starter-template fix-container-margin">
+    <!--h1>Unbeatable Tic-Tac-Toe</h1-->
+    <div><table>
+      <tr>
+          <td><img class="legend" src="{{ STATIC_URL }}images/o.png" /></td>
+          <td><h2>Computer</h2></td>
+          <td width="10"> </td>
+          <td><img class="legend" src="{{ STATIC_URL }}images/x.png" /></td>
+          <td><h2>Challenger</h2></td>
+      </tr>
+    </table></div>
+    <div id="board">
+      <table>
+        <tr>
+          <td id="cell_1_1" class="cell bb br"></td>
+          <td id="cell_1_2" class="cell bl bb br"></td>
+          <td id="cell_1_3" class="cell bl bb"></td>
+        </tr>
+        <tr>
+          <td id="cell_2_1" class="cell bt bb br"></td>
+          <td id="cell_2_2" class="cell bl bt bb br"></td>
+          <td id="cell_2_3" class="cell bl bt bb"></td>
+        </tr>
+        <tr>
+          <td id="cell_3_1" class="cell bt br"></td>
+          <td id="cell_3_2" class="cell bl bt br"></td>
+          <td id="cell_3_3" class="cell bl bt"></td>
+        </tr>
+      </table>
+    </div>
+    <div id="end_of_game_labels" >
+      <div id="lose_lbl" class="hide"><h2>You lose!</h2></div>
+      <div id="tie_lbl" class="hide"><h2>Well done! Tie.</h2></div>
+      <a href="play">
+      <button id="play_again" type="button" class="btn btn-success btn-lg hide" href="play">
+        <span class="glyphicon glyphicon-play"></span> Play Again
+      </button>
+    </a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  // TODO: move all of this code to a JS file as it should be
+  var TTT = {
+    GAME_ID: {{ game_id }},
+    X: '<img src="/static/images/x.png" />',
+    O: '<img src="/static/images/o.png" />',
+
+    // randomly select first player
+    current_player: Math.random() >= 0.5 ? 1:2, //1=computer, 2=human
+
+    // request computer to make a move
+    computer_play: function() {
+      if (TTT.current_player == 1) {
+        $.getJSON('update/{{ game_id }}/play/computer',
+          function (data) {
+            var r = data.next_pos[0];
+            var c = data.next_pos[1];
+            $('#cell_' + r + '_' + c).append(TTT.O);
+            if (data.win_move) {
+              $('#lose_lbl').removeClass('hide');
+              $('#play_again').removeClass('hide');
+            } else if (data.end_of_game) {
+              $('#tie_lbl').removeClass('hide');
+              $('#play_again').removeClass('hide');
+            } else {
+              TTT.current_player = 2;
+            }
+          }
+        );
+      }
+    },
+
+
+    // mark a human square
+    mark_square: function(td) {
+        if (TTT.current_player === 2 && !$(td)[0].children.length) {
+          // post to server and ensure success
+          $.getJSON('update/{{ game_id }}/play/challenger/' + $(td).attr('id'),
+            function (data) {
+              // on successful post, update front-end and
+              $(td).append(TTT.X);
+              
+              // check for end of game
+              if (data.end_of_game) {
+                $('#tie_lbl').removeClass('hide');
+                $('#play_again').removeClass('hide');
+                // set current_player to computer but do not play
+                TTT.current_player = 1;
+              } else {
+                // have the computer play
+                TTT.current_player = 1;
+                TTT.computer_play();
+              }
+            }
+          );
+        }
+    },
+  };
+
+  // prepare the page after load
+  $(document).ready(
+    function(){
+      // set current page link
+      $('li[name="play_link"]').addClass('active');
+
+      // handle hover on setting challenger name
+      $('#challenger_div').mouseover(
+        function () {
+          if ($('#player_name').text() == 'Anonymous') {
+            $('#player_name').css('display', 'none');
+            $('#player_name_input').css('display', 'inline');
+          }
+        }
+      );
+      $('#challenger_div').mouseout(
+        function () {
+          if ($(document.activeElement).attr('id') == 'player_name_input'){
+            // do nothing
+          } else {
+            $('#player_name').css('display', 'inline');
+            $('#player_name_input').css('display', 'none');
+          }
+        }
+      );
+      $('#player_name_input').blur(
+        function () {
+          if( $('#player_name_input').val().length ){
+            // set label
+            $('#player_name').text( $('#player_name_input').val() );
+            $('#player_name').css('display', 'inline');
+            $('#player_name_input').css('display', 'none');
+
+            // save to database
+            $.post('/update/2/challenger/' + $('#player_name_input').val(),
+              function (data) {
+                // if no error, do nothing
+                // if error, rename to anonymous
+              }
+            );
+          }
+        }
+      );
+      
+      // assign click event to tic-tac-toe cells
+      $('.cell').on('click',
+        function () {
+          TTT.mark_square($(this));
+        }
+      );
+
+      if (TTT.current_player == 1){
+        TTT.computer_play();
+      }
+
+    }
+  );
+</script>
+{% endblock %}
