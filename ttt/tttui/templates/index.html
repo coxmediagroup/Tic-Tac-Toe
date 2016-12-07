@@ -1,0 +1,26 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel='stylesheet' type='text/css' href='{% static "css/tictactoe.css" %}'>
+<script type='text/javascript' src='{% static "js/jquery-1.7.1.js" %}'></script>
+<script type='text/javascript' src='{% static "js/tictactoe.js" %}'></script>
+</head>
+<body>
+{% if games %}
+  <ul>
+  {% for game in games %}
+    <li><a href="/{{ game.id }}/">Game {{ game.id }}</a> {{ game.status }}</il>
+  {% endfor %}
+  </ul>
+{% else %}
+  No Games Currently Exist
+{% endif %}
+
+<form>
+{% csrf_token %}
+<input type='button' class='ttt_new' value='New Game'></input>
+</form>
+
+</body>
+</html>
