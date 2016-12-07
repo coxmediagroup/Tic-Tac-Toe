@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+       <title>Tic Tac Toe</title>
+       <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
+       <link rel="stylesheet" type="text/css" href="static/css/main.css" />
+       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+
+  <body>
+    <div class="container">
+        <div class="row header">
+             <button id ="reset" class="btn btn-danger pull-right" type="button">Reset</button>
+            <div id="message"><h3>Go ahead and start!</h3></div>
+        </div>
+        <div class="row">
+            <div class="large-6 small-9 small-centered large-centered columns text-center">
+                <ul class="small-block-grid-3 board">
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space top-left"><i class="fa" id="1"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space top-center"><i class="fa" id="2"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space top-right"><i class="fa" id="3"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space middle-left"><i class="fa" id="4"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space middle-center"><i class="fa" id="5"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space middle-right"><i class="fa" id="6"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space bottom-left"><i class="fa" id="7"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space bottom-center"><i class="fa" id="8"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space-wrapper-1">
+                            <div class="space-wrapper-2">
+                                <div class="space-wrapper-3">
+                                    <div class="space bottom-right"><i class="fa" id="9"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </body>
+
+<script>
+
+    $(document).ready(function () {
+        $('.space').click(function () {
+            player_moved($(this).children('i').attr('id'));
+        });
+
+        $( "#reset" ).click(function() {
+            location.reload();
+        });
+
+    });
+
+    function paint_board(board){
+        $('#1').text(board[0]);
+        $('#2').text(board[1]);
+        $('#3').text(board[2]);
+        $('#4').text(board[3]);
+        $('#5').text(board[4]);
+        $('#6').text(board[5]);
+        $('#7').text(board[6]);
+        $('#8').text(board[7]);
+        $('#9').text(board[8]);
+        $('.fa').each(function() {
+            if ($(this).text() == 'X')
+            {
+                $(this).css('color', '#0099FF');
+                $(this).parent().css('cursor', 'not-allowed');
+                $(this).parent().click(false);
+            }
+            if ($(this).text() == 'O')
+            {
+                $(this).css('color', '#CC0066');
+                $(this).parent().css('cursor', 'not-allowed');
+                $(this).parent().click(false);
+            }
+        });
+    }
+
+    function player_moved(player_move) {
+        jsondata =
+        {
+          "player_move":player_move
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/get_move/',
+            dataType: 'json',
+            data: jsondata,
+            success: function (data, status, jqxhr) {
+              paint_board(data['board']);
+              console.log(data['game']);
+              $('#message').html("<h3>"+data['message']+"</h3>");
+              if (data['game'] == 'end')
+              {
+                $(".space").css('cursor', 'not-allowed');
+                $(".space").unbind('click');
+               }
+
+            },
+            error: function (request, status, error) {
+                console.log(request.responseText);
+            }
+    });
+    }
+
+
+</script>
+
+</html>
