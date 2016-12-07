@@ -1,0 +1,107 @@
+h1, h2 {
+    text-align: center;
+    background-color:yellow;
+}
+
+#board {
+    width: 33.5%;
+    margin: 0 auto;
+}
+
+#message {
+   width: 50%;
+   margin: 0 auto;
+   text-align: center;
+   margin-bottom:20px;
+}
+
+#board div {
+    border-color: black;
+    border-width:5px;
+    width:100px;
+    height:100px;
+}
+
+#header {
+    width:100%;
+}
+
+#main-section {
+    width:100%
+}
+
+#yes-no {
+    margin-left:40%;
+}
+
+#no-button {
+    margin-left: 15%;
+}
+
+#board div img {
+    width:100%;
+    height:100%;
+}
+
+#box1 {
+    border-bottom-style:solid;
+    border-right-style:solid;
+    float: left;
+}
+
+#box2 {
+    border-left-style:solid;
+    border-bottom-style:solid;
+    border-right-style:solid;
+    float: left;
+}
+
+#box3 {
+    border-left-style:solid;
+    border-bottom-style:solid;
+    float: left;
+}
+
+#box4 {
+    border-top-style:solid;
+    border-bottom-style:solid;
+    border-right-style:solid;
+    float: left;
+    clear: both;
+}
+
+#box5 {
+    border-top-style:solid;
+    border-left-style:solid;
+    border-bottom-style:solid;
+    border-right-style:solid;
+    float: left;
+}
+
+#box6 {
+    border-top-style:solid;
+    border-left-style:solid;
+    border-bottom-style:solid;
+    float: left;
+}
+
+#box7 {
+    border-top-style:solid;
+    border-right-style:solid;
+    float: left;
+    clear: both;
+}
+
+#box8 {
+    border-top-style:solid;
+    border-left-style:solid;
+    border-right-style:solid;
+    float: left;
+}
+
+#box9 {
+    border-top-style:solid;
+    border-left-style:solid;
+    float: left;
+}
+

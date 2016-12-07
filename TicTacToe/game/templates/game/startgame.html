@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "game/style.css" %}" />
+
+    <title>Lehel's Tic Tac Toe!</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Lehel's Tic Tac Toe!</h1>
+    </div>
+
+    <div id="main-section">
+        <h2>Play a new game of Tic Tac Toe?</h2>
+        <div id="yes-no">
+            <form action="{% url 'launch' %}" method="POST">
+                 {% csrf_token %}
+                <input type="checkbox" name="play-as-o" id="play-as-o" value="X">Play as O (start second)</input>
+                <input type="submit" value="Yes!" />
+            </form>
+            <button id="no-button">No!</button>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#no-button").click(function() { window.location.href = "http://www.oprah.com/index.html"});
+    });
+
+</script>
+
+
+</body>
+</html>
