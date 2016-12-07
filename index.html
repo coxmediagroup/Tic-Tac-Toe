@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tic-Tac-Toe game</title>
+    <style>
+
+#b_start
+{
+  width: 228px;
+  height: 76px;
+}
+.row
+{
+  width: 228px;
+  height: 76px;
+  /* border: 1px solid #000; */
+}
+
+.xy{
+  float: left;
+  width:  50px;
+  height: 50px;
+  margin: auto;
+  padding: 10px;
+  border: 3px solid #666;
+  background: #ffffff;
+}
+
+
+    </style>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+
+var isGameStarted = false;
+var playerBefore = '';
+
+/**
+* @desc Given a board state data, update the board UI.
+*/
+function updateBoard(board) {
+  playerBefore = board.playerBefore;
+
+  var value = '';
+  var x = board.data;
+  var idx = 0;
+  var idxStr = '';
+  for (i=0; i<3; i++) {
+    for (j=0; j<3; j++) {
+      value = x[i][j];
+      idx = i*3 + j + 1;
+      idxStr = '#x'+idx;
+      $(idxStr).text(value);
+    }
+  }
+}
+
+$( document ).ready(function() {
+console.log( "ready!" );
+
+  var socket = io();
+      
+  $('#b_start').click(function(event) {
+    isGameStarted = true;
+    socket.emit('gameStarted', {});
+    $(this).hide();
+  });
+
+  // Human player clicks a cell to make a move. This triggers pushing data to the server.
+  $(".xy").click(function(event) {
+    //var xy = $(this).attr();
+    var xy = $(this).attr('id');
+    //alert('div clicked '+xy);
+
+    // Ensure that it is the human's turn to make a move.
+    if ((isGameStarted == true) && (playerBefore != 'human')) {
+      var cellIdx = parseInt(xy.substr(1,2)); // Return the integer part.
+
+      // Tell the server that the human player made this move:
+      socket.emit('nextMove', {player:'human', cellIdx:cellIdx});
+    } else if (isGameStarted == false) {
+        alert('Game has not started.');
+    } else {
+        alert('You already made a move.');
+    }
+  });
+
+  // Server pushed a new board. On receiving the data, the client updates the board.
+  socket.on('updateBoard', function(board){
+    updateBoard(board);
+  });
+
+  socket.on('updateMsg', function(msg){
+    $('#msg').text(msg);
+  });
+
+
+});
+</script>
+  </head>
+  <body>
+
+
+<div id="msg"></div>
+
+<div>
+<br>
+You = 'X'
+<br>
+machine = 'O'
+<div>
+
+<div id="board">
+  <div class="row">
+    <div class="xy" id="x1">1</div>
+    <div class="xy" id="x2">2</div>
+    <div class="xy" id="x3">3</div>
+ </div>
+
+  <div class="row">
+    <div class="xy" id="x4">4</div>
+    <div class="xy" id="x5">5</div>
+    <div class="xy" id="x6">6</div>
+  </div>
+
+  <div class="row">
+    <div class="xy" id="x7">7</div>
+    <div class="xy" id="x8">8</div>
+    <div class="xy" id="x9">9</div>
+  </div>
+</div>
+ 
+<button id="b_start">Start</button>
+
+  </body>
+</html>
