@@ -1,0 +1,37 @@
+.content {
+    margin: 20px;
+}
+
+.grid {
+    border: 1px solid black;
+    margin: 10px 0;
+}
+
+.grid .cell {
+    font: 2em Tahoma;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #a8a8a8;
+    width: 50px;
+    height: 50px;
+    float: left;
+    background-color: #c8c8c8;
+}
+
+.grid.enabled .cell:hover {
+    background-color: #4ec253;
+    cursor: pointer;
+}
+
+.grid.enabled .cell.filled {
+    cursor: default;
+}
+
+.grid .cell.filled.win {
+    background-color: #37993b;
+}
+
+.grid .row {
+    clear: both;
+}
