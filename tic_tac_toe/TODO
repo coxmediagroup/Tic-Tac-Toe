@@ -1,0 +1,33 @@
+TODO
+[ - ] Game score persistence
+[ - ] High scores on splash screen
+[ - ] Resizing terminal will crash game
+[ - ] Game play preferences out of curses-game?
+[ - ] Add depth limiting for minimax on larger boards
+[ - ] Fix for "logical bad move"?
+
+Changes: 2014-02-17
+[ X ] Refactor based on Pylint report
+
+Changes: 2014-02-10
+[ X ] Comments!
+[ X ] Refactor game play logic out of curses-game? (nofix)
+[ X ] Make Players into objects with attributes? (nofix)
+
+Changes: 2014-02-09
+[ X ] AB pruning 
+
+Changes: 2014-02-08
+[ X ] Fix diagonal win bug
+
+Changes: 2014-02-06
+[ X ] AI minimax logic
+
+Changes: 2014-02-01
+[ X ] Major refactor of game script
+[ X ] View numbers game option: show numbers for empty spaces only instead of
+      replacing the placed "X" or "O"
+[ X ] Quit screen confirmation logic
+
+Changes: 2014-01-31
+[ X ] Rudimentary game play
