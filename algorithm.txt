@@ -1,0 +1,16 @@
+center
+sides
+corners
+
+1)Take center
+2)Take Corner
+3)Take corner
+4)Take win
+			
+
+todo list:
+shorten code algorithms
+add algorithms for space combination 2,3 & 7,8. 1,2 & 8,9. 1,4 & 6,9. 3,6 & 7,4.
+	check if vice versa is needed.
+add corner starting moves
+add npc taunting
