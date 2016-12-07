@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Tic-Tac-Toe</title></head>
+    <style>
+        html { -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important; 
+            font-weight: 300 !important;
+        }
+
+        html, body {
+            background-color:black;
+            color:white;
+            text-align: center;
+        }
+
+        #board {
+            margin: 0 auto;
+            background-color:white;
+        }
+    </style>
+    <body>
+        <h1>Tic-Tac-Toe</h1>
+        <p>Next Player: <span id="nextPlayer">Human Player</span></p>
+    	<div id="board"></div>
+        <div id="scores">
+            Human Score: <span id="humanScore">0</span>
+            <br/>
+            Computer Score: <span id="computerScore">0</span>
+        </div>
+    	<script src="build/PositionPrettyName.js"></script>
+    	<script src="build/IObserver.js"></script>
+    	<script src="build/Observable.js"></script>
+    	<script src="build/Game.js"></script>
+    	<script src="build/Player.js"></script>
+        <script src="build/ComputerPlayer.js"></script>
+        <script src="build/HumanPlayer.js"></script>
+        <script src="build/Board.js"></script>
+        <script src="build/Init.js"></script>
+    </body>
+</html>
