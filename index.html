@@ -1,0 +1,37 @@
+<html ng-app="ticTacToe">
+<head>
+<title>Tic Tac Toe!</title>
+
+<!-- javascript library includes -->
+<script type="text/javascript" src="Libraries/angular.min.js"></script>
+
+<!-- javascript application includes -->
+<script type="text/javascript" src="Scripts/app.js"></script>
+
+<!-- css style includes -->
+<link rel="stylesheet" type="text/css" href="Styles/tictactoeApplication.css">
+
+
+</head>
+<body>
+
+<span class="title">tic tac toe - eugene kolesnik</span>
+
+
+
+<div class="gameGrid" ng-controller="gameGridController">
+<div ng-repeat="row in gridVm track by $index" class="row ng-class: {bottom: $index == gridVm.length - 1}">
+	<div ng-repeat="cell in row track by $index" 
+		 class="cell ng-class: {right: $index == row.length - 1}"
+		 ng-click="makeTicTacToeMove($parent.$index, $index)">
+		{{cell}}
+	</div>
+</div>
+
+
+
+</div>
+
+</body>
+
+</html>

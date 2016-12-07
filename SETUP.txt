@@ -1,0 +1,5 @@
+This application requires PHP/Apache for the server side code.
+In Scripts/app.js make sure to change the apiUrl variable to point to the server/ folder location.
+The default is: 
+var apiUrl = "http://localhost/tictactoe/server/";
+
