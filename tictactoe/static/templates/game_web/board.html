@@ -1,0 +1,39 @@
+{% extends "game_web/game_web_main.html" %}
+
+{% block content %}
+{% csrf_token %}
+<head>
+    <link href="{{STATIC_URL}}css/game_web/board.css" rel="stylesheet" media="screen">
+</head>
+<div id="board-container" class="hcenter">
+<!-- Cell IDs contain indexes that will correspond to 2D Python array that represents
+	 the game board -->
+	<table id='tbl-board'>
+		<tr id="gamerow0">
+			<td id="cell-00" class="leftCell">
+			</td>
+			<td id="cell-01" class="centerCell">
+			</td>
+			<td id="cell-02" class="rightCell">
+			</td>						
+		</tr>
+
+		<tr id="gamerow1">
+			<td id="cell-10" class="leftCell">
+			</td>
+			<td id="cell-11" class="centerCell">
+			</td>
+			<td id="cell-12" class="rightCell">
+			</td>								
+		</tr>
+		<tr id="gamerow2">
+			<td id="cell-20" class="leftCell">
+			</td>
+			<td id="cell-21" class="centerCell">
+			</td>
+			<td id="cell-22" class="rightCell">
+			</td>							
+		</tr>
+	</table>
+</div>
+{% endblock %}

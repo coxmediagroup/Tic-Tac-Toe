@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<!--CSS Links Here-->
+    	<!--Custom CSS-->
+    	<link href="{{STATIC_URL}}css/game_web/main.css" rel="stylesheet" media="screen">
+    	<!--Javascript/Jquery Imports Here-->
+    	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    	<!-- Local Javascript Imports -->
+    	<script type="text/javascript" src="{{STATIC_URL}}js/game_web/main.js"></script>
+    	<script type="text/javascript"src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMX6C7yTKV7kRxRNGoTInLr0PJJXAzoFQ&sensor=false"></script>
+    	<title>Cox Media Tic-Tac-Toe</title>
+	</head>
+	<body id="game-web-main-body" class="hcenter">
+    	{% block content %}{% endblock %}
+        <div id="status" class="hcenter wordwrap"></div>
+	</body>
+</html>
