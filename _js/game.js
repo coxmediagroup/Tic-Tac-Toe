@@ -1,15 +1,10 @@
-var selected_icon,
-winning_line,
-gameover = false, 
-player1_selected_icon,
-player2_selected_icon, 
-setupuser = "player1",
-currentPlayer = null,
-computer_playing = false,
-p1_probablilty = [],
-p2_probablilty = [],
-turn_count = 0,
-currentGame;
+var selected_icon,winning_line,gameover = false, player1_selected_icon,player2_selected_icon, setupuser = "player1",currentPlayer = null,computer_playing = false,contin = true,p1_probablilty = [],p2_probablilty = [],turn_count = 0,currentGame;
+
+if(localStorage.getItem('scoreboard') == '' || localStorage.getItem('scoreboard') == null){
+	var scores = [];
+}else{
+	var scores = localStorage.getItem('scoreboard');
+}
 
 var waystowin = {
 	0 : ['a1','b1','c1'],
@@ -67,9 +62,8 @@ Game.prototype.checkWinner = function(){
 	}else{
 		if(turn_count == 9){
 			gameover == true;
-			winning_line = 'cat';
+			winning_line = 'draw';
 			$('#no-winner').show();
-			console.log('all are filled. Cat game');
 		}
 		return false;
 	}	
@@ -78,6 +72,7 @@ Game.prototype.drawLine = function(line){
 	gameover = true;
 	var playername = localStorage.getItem(currentPlayer+'name');
 	$('.grid-block').addClass('losing-block');
+
 	for(var o in winning_line){
 		$('#'+winning_line[o]).addClass('winning-block');
 	}
@@ -92,7 +87,7 @@ var computer = {
 		$('#playename').val("XO / Computer");
 		setTimeout(function(){
 			$('#done-name').click();
-		},600);
+		},300);
 	},
 	check_probability : function(){
 		var nowinner = true;
@@ -127,7 +122,7 @@ var computer = {
 			];
 			p1_probablilty.push(x);
 		}
-		computer.select_block('player1');
+		computer.select_block();
 	},
 	select_block : function(player){
 		var keeploop = true;
@@ -140,21 +135,14 @@ var computer = {
 				cval : 0
 			}
 		];
-		switch(player){
-			case "player1":
-				var dataset = p1_probablilty;
-			break;
-			case "player2":
-				var dataset = p2_probablilty;
-			break;
-		}
-		for(var w in dataset){
-			if(dataset[w][0].chance > highestchance[0].cval){
+		
+		for(var w in p1_probablilty){
+			if(p1_probablilty[w][0].chance > highestchance[0].cval){
 				highestchance = [
 					{
 						index : w,
-						id : dataset[w][0].id,
-						cval : dataset[w][0].chance
+						id : p1_probablilty[w][0].id,
+						cval : p1_probablilty[w][0].chance
 					}
 				];
 			}
@@ -167,7 +155,6 @@ var computer = {
 			if(keeploop){
 				if($('#'+el).html() == ''){
 					keeploop = false;
-					console.log('selected: '+el);
 					$('#'+el).click();
 				}else{
 					loopthrough = loopthrough + 1;
@@ -175,15 +162,12 @@ var computer = {
 			}
 		}
 		// if the computer can't figure out a move, go through the winning scenarios and fill it
-		var contin = true;
 		if(loopthrough === 3){
-			console.log('couldnt find move');
-			if(contin){
-				for(var i in waystowin){
+			for(var i in waystowin){
+				if(contin){
 					for(var n in waystowin[i]){
 							// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
 						var blockid = waystowin[i][n];
-						console.log('cpu id: '+blockid);
 						var sblock = $('#'+blockid);
 						var blockval = sblock.html();
 						if(blockval === ''){
@@ -196,24 +180,6 @@ var computer = {
 		}
 	}
 }
-
-var winning_lines_algo = function(line,value){
-	var returnVals = [];
-
-	for(var i in line){
-		// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
-		var blockid = line[i];
-		var sblock = $('#'+blockid);
-		var blockval = sblock.html();
-		if(blockval === value){
-			returnVals.push(1);
-		}else{
-			returnVals.push(0);
-		}
-	}
-	return returnVals;
-}
-
 /* SET UP DATA FOR GAME */
 var setupGame = {
 	init : function(){
@@ -240,7 +206,6 @@ var setupGame = {
 		}else{
 			setupGame.fillinfo();
 		}
-		
 	},
 	cleargame : function(){
 		localStorage.removeItem('numplayers');
@@ -248,12 +213,12 @@ var setupGame = {
 		localStorage.removeItem('player1icon');
 		localStorage.removeItem('player2name');
 		localStorage.removeItem('player2icon');
-		window.location = "game.html";
 	},
 	nameit : function(){
 		$('#playercard h5').html("Enter "+setupuser+"'s Name");
 		$('#icon-selection h5').html("Select "+setupuser+"'s Icon");
 		$('#playercard').show();
+
 		if(computer_playing === true && setupuser === "player2"){
 			computer.select_name();
 		}
@@ -267,14 +232,15 @@ var setupGame = {
 		}
 	},
 	fillinfo : function(){
-		console.log('fill info called');
 		for(var i = 1; i<3; i++){
 			$('#player'+i+'-info a').addClass(localStorage.getItem('player'+i+'icon'));
 			$('#player'+i+'-info .user-name').html(localStorage.getItem('player'+i+'name'));
 		}
 		if(setupuser === 'player2'){
+			// both players have filled in info
 			startGame();
 		}else{
+			// only player one is ready
 			setupuser = "player2";
 			setupGame.nameit();
 		}
@@ -287,8 +253,8 @@ var startGame  = function(){
 		player1 : localStorage.getItem('player1icon'),
 		player2 : localStorage.getItem('player2icon')
 	}
-	console.log('startgame called');
 	currentGame = new Game(2,playericons);
+
 }
 
 /* init game setup to gather info on users */
@@ -304,6 +270,7 @@ $('#icon-selection a').on('click',function(event){
 	var icon = obj.data('icon');
 	localStorage.setItem(setupuser+'icon',icon);
 	$('#error').html('');
+
 	if(setupuser === 'player1'){
 		setupuser = 'player2';
 		setupGame.nameit();
@@ -321,7 +288,7 @@ $('#clear-game').on('click',function(event){
 	event.preventDefault();
 	window.location.reload();
 });
-$('.startnew').on('click',function(event){
+$('.startnew,#logo').on('click',function(event){
 	event.preventDefault();
 	setupGame.cleargame();
 	window.location = 'index.html';
@@ -330,7 +297,6 @@ $('#done-name').on('click',function(event){
 	event.preventDefault();
 	event.stopPropagation();
 	var pname = $('#playename').val();
-	console.log(setupuser);
 	localStorage.setItem(setupuser+'name',pname);
 	$('#playename').val('');
 	setupGame.icons();
@@ -358,25 +324,24 @@ $('.grid-block').on('click',function(event){
 			break;
 		}
 		obj.addClass(selected_icon).html(selected_icon);
+
 		turn_count++;
+
 		var victory = currentGame.checkWinner(block);
+
 		if(!victory){
 			$('.active-player').removeClass('active-player');
 			localStorage.setItem('playerturn',nextplayer);
+			currentPlayer = nextplayer;
 			$('#'+nextplayer+'-info').addClass('active-player');
 			if(nextplayer === 'player2' && computer_playing === true){
+				contin = true;
 				computer.check_probability();
 			}
 		}else{
-			console.log('winning line '+winning_line);
 			currentGame.drawLine(winning_line);
 		}
 	}else{
-		if(nextplayer === 'player2' && computer_playing === true){
-			computer.check_probability();
-		}
 		console.log('that block is not available');
-	}
-	
-	console.log(turn_count);
+	}	
 });
