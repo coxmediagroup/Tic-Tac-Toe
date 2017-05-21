@@ -4,6 +4,7 @@ gameover = false,
 player1_selected_icon,
 player2_selected_icon, 
 setupuser = "player1",
+currentPlayer = null,
 computer_playing = false,
 p1_probablilty = [],
 p2_probablilty = [],
@@ -35,7 +36,6 @@ function Game (players,icons){
 }
 
 Game.prototype.checkWinner = function(){
-	var currentPlayer = localStorage.getItem('playerturn');
 	var nowinner = true;
 
 	for(var i in waystowin){
@@ -76,17 +76,17 @@ Game.prototype.checkWinner = function(){
 }
 Game.prototype.drawLine = function(line){
 	gameover = true;
-	var currentplayer = localStorage.getItem('playerturn');
-	var playername = localStorage.getItem(currentplayer+'name');
+	var playername = localStorage.getItem(currentPlayer+'name');
 	$('.grid-block').addClass('losing-block');
 	for(var o in winning_line){
 		$('#'+winning_line[o]).addClass('winning-block');
 	}
 	$('#winner-message').html(playername+' wins!');
 }
+/* AI FUNCTIONS */
 var computer = {
 	select_icon : function(){
-		$('#icon-selection a:not([data-icon="'+localStorage.getItem('player1icon')+'])').click();
+		$('#icon-selection a:not([data-icon="'+localStorage.getItem('player1icon')+'])')[2].click();
 	},
 	select_name : function(){
 		$('#playename').val("XO / Computer");
@@ -159,9 +159,9 @@ var computer = {
 				];
 			}
 		}
-		console.log(highestchance[0].index);
 		var line = parseInt(highestchance[0].index);
 		var loopthrough = 0;
+
 		for(var g in waystowin[line]){
 			var el = waystowin[line][g];
 			if(keeploop){
@@ -174,12 +174,47 @@ var computer = {
 				}
 			}
 		}
+		// if the computer can't figure out a move, go through the winning scenarios and fill it
+		var contin = true;
 		if(loopthrough === 3){
-			// go through all scenarios and find the one most likely to win
-			//computer.select_block('player2');
+			console.log('couldnt find move');
+			if(contin){
+				for(var i in waystowin){
+					for(var n in waystowin[i]){
+							// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
+						var blockid = waystowin[i][n];
+						console.log('cpu id: '+blockid);
+						var sblock = $('#'+blockid);
+						var blockval = sblock.html();
+						if(blockval === ''){
+							sblock.click();
+							contin = false;
+						}
+					}
+				}
+			}
 		}
 	}
 }
+
+var winning_lines_algo = function(line,value){
+	var returnVals = [];
+
+	for(var i in line){
+		// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
+		var blockid = line[i];
+		var sblock = $('#'+blockid);
+		var blockval = sblock.html();
+		if(blockval === value){
+			returnVals.push(1);
+		}else{
+			returnVals.push(0);
+		}
+	}
+	return returnVals;
+}
+
+/* SET UP DATA FOR GAME */
 var setupGame = {
 	init : function(){
 		var number_plys = localStorage.getItem('numplayers');
@@ -219,8 +254,7 @@ var setupGame = {
 		$('#playercard h5').html("Enter "+setupuser+"'s Name");
 		$('#icon-selection h5').html("Select "+setupuser+"'s Icon");
 		$('#playercard').show();
-		console.log(localStorage.getItem('player2icon'));
-		if(computer_playing === true && setupuser === "player2" && !localStorage.getItem('player2icon')){
+		if(computer_playing === true && setupuser === "player2"){
 			computer.select_name();
 		}
 	},
@@ -233,11 +267,17 @@ var setupGame = {
 		}
 	},
 	fillinfo : function(){
+		console.log('fill info called');
 		for(var i = 1; i<3; i++){
 			$('#player'+i+'-info a').addClass(localStorage.getItem('player'+i+'icon'));
 			$('#player'+i+'-info .user-name').html(localStorage.getItem('player'+i+'name'));
 		}
-		startGame();
+		if(setupuser === 'player2'){
+			startGame();
+		}else{
+			setupuser = "player2";
+			setupGame.nameit();
+		}
 	}
 }
 /* ALL INFORMATION ABOUT USERS IS CAPTURED, READY TO START A GAME */
@@ -281,7 +321,7 @@ $('#clear-game').on('click',function(event){
 	event.preventDefault();
 	window.location.reload();
 });
-$('#new-game').on('click',function(event){
+$('.startnew').on('click',function(event){
 	event.preventDefault();
 	setupGame.cleargame();
 	window.location = 'index.html';
@@ -300,7 +340,7 @@ $('.grid-block').on('click',function(event){
 	event.preventDefault();
 	var obj = $(this);
 	var block = obj.attr('id');
-	var currentPlayer = localStorage.getItem('playerturn');
+	currentPlayer = localStorage.getItem('playerturn');
 	if(obj.html() === '' && gameover == false){
 		// CHECK IF THE BLOCK IS EMPTY AND THE GAME IS NOT OVER
 		switch(currentPlayer){
