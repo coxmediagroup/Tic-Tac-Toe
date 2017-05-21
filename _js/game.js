@@ -241,8 +241,12 @@ var setupGame = {
 			startGame();
 		}else{
 			// only player one is ready
-			setupuser = "player2";
-			setupGame.nameit();
+			if(localStorage.getItem('player2icon') != ''){
+				startGame();
+			}else{
+				setupuser = "player2";
+				setupGame.nameit();
+			}
 		}
 	}
 }
