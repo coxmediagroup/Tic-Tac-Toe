@@ -1,11 +1,5 @@
 var selected_icon,winning_line,gameover = false, player1_selected_icon,player2_selected_icon, setupuser = "player1",currentPlayer = null,computer_playing = false,contin = true,p1_probablilty = [],p2_probablilty = [],turn_count = 0,currentGame;
 
-if(localStorage.getItem('scoreboard') == '' || localStorage.getItem('scoreboard') == null){
-	var scores = [];
-}else{
-	var scores = localStorage.getItem('scoreboard');
-}
-
 var waystowin = {
 	0 : ['a1','b1','c1'],
 	1 : ['a1','a2','a3'],
@@ -78,108 +72,7 @@ Game.prototype.drawLine = function(line){
 	}
 	$('#winner-message').html(playername+' wins!');
 }
-/* AI FUNCTIONS */
-var computer = {
-	select_icon : function(){
-		$('#icon-selection a:not([data-icon="'+localStorage.getItem('player1icon')+'])')[2].click();
-	},
-	select_name : function(){
-		$('#playename').val("XO / Computer");
-		setTimeout(function(){
-			$('#done-name').click();
-		},300);
-	},
-	check_probability : function(){
-		var nowinner = true;
-		p1_probablilty = [];
-		var p1_icon = localStorage.getItem('player1icon');
-		var p2_icon = localStorage.getItem('player2icon');
-		var selected = '';
 
-		for(var i in waystowin){
-			// LOOP THROUGH ALL WINNING SCENARIOS
-			var spots = [];
-			var p1_chances = 0;
-			var found = false;
-			var y = [];
-
-			for(var n in waystowin[i]){
-					// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
-				var blockid = waystowin[i][n];
-				var sblock = $('#'+blockid);
-				var blockval = sblock.html();
-				if(blockval === p1_icon){
-					//block is filled in
-					p1_chances = p1_chances + 1;
-				}
-				y.push(blockid);
-			}
-			var x = [
-				{
-					id : y,
-					chance : p1_chances
-				}
-			];
-			p1_probablilty.push(x);
-		}
-		computer.select_block();
-	},
-	select_block : function(player){
-		var keeploop = true;
-		var computer_selection = '';
-		var block = '';
-		var highestchance = [
-			{
-				index : 0,
-				id : '',
-				cval : 0
-			}
-		];
-		
-		for(var w in p1_probablilty){
-			if(p1_probablilty[w][0].chance > highestchance[0].cval){
-				highestchance = [
-					{
-						index : w,
-						id : p1_probablilty[w][0].id,
-						cval : p1_probablilty[w][0].chance
-					}
-				];
-			}
-		}
-		var line = parseInt(highestchance[0].index);
-		var loopthrough = 0;
-
-		for(var g in waystowin[line]){
-			var el = waystowin[line][g];
-			if(keeploop){
-				if($('#'+el).html() == ''){
-					keeploop = false;
-					$('#'+el).click();
-				}else{
-					loopthrough = loopthrough + 1;
-				}
-			}
-		}
-		// if the computer can't figure out a move, go through the winning scenarios and fill it
-		if(loopthrough === 3){
-			for(var i in waystowin){
-				if(contin){
-					for(var n in waystowin[i]){
-							// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
-						var blockid = waystowin[i][n];
-						var sblock = $('#'+blockid);
-						var blockval = sblock.html();
-						if(blockval === ''){
-							sblock.click();
-							contin = false;
-						}
-					}
-				}
-			}
-		}
-	}
-}
 /* SET UP DATA FOR GAME */
 var setupGame = {
 	init : function(){
@@ -247,6 +140,103 @@ var setupGame = {
 				setupuser = "player2";
 				setupGame.nameit();
 			}
+		}
+	}
+}
+
+/* AI LOGIC */
+var probablilty = function(player){
+	var p1_icon = localStorage.getItem('player1icon');
+	var highestchance = [
+		{
+			index : 0,
+			id : '',
+			cval : 0
+		}
+	];
+	switch(player){
+		case "player1":
+			var player_prob = p1_probablilty;
+			var condition = p1_icon;
+		break;
+		case "player2":
+			var player_prob = p2_probablilty;
+			var condition = '';
+		break;
+	}
+	
+	for(var i in waystowin){
+		var chances = 0;
+
+		for(var n in waystowin[i]){
+				// GET INDIVIDUAL BLOCKS FROM WINNING SCENARIO
+			var blockid = waystowin[i][n];
+			var sblock = $('#'+blockid);
+			var blockval = sblock.html();
+			if(blockval === condition){
+				chances = chances + 1;
+			}
+		}
+
+		var x = [
+			{
+				index : parseInt(i),
+				id : waystowin[i],
+				chance : chances
+			}
+		];
+		player_prob.push(x);
+	}
+	for(var k in player_prob){
+		if(player_prob[k][0].chance > highestchance[0].cval){
+			highestchance = [
+				{	
+					index : player_prob[k][0].index,
+					id : player_prob[k][0].id,
+					cval : player_prob[k][0].chance
+				}
+			];
+		}
+	}
+	return highestchance;
+}
+/* AI METHODS */
+var computer = {
+	select_icon : function(){
+		$('#icon-selection a:not([data-icon="'+localStorage.getItem('player1icon')+'])')[2].click();
+	},
+	select_name : function(){
+		$('#playename').val("XO / Computer");
+		setTimeout(function(){
+			$('#done-name').click();
+		},300);
+	},
+	check_probability : function(player){
+		var user_prob = probablilty(player);
+		computer.select_block(user_prob);
+	},
+	select_block : function(probability_block){
+		var keeploop = true;
+		var computer_selection = '';
+		var block = '';
+		
+		var line = parseInt(probability_block[0].index);
+		var loopthrough = 0;
+
+		for(var g in waystowin[line]){
+			var el = waystowin[line][g];
+			if(keeploop){
+				if($('#'+el).html() == ''){
+					keeploop = false;
+					$('#'+el).click();
+				}else{
+					loopthrough = loopthrough + 1;
+				}
+			}
+		}
+		// if the computer can't figure out a move, go through the winning scenarios and fill it
+		if(loopthrough === 3){
+			computer.check_probability('player2');
 		}
 	}
 }
@@ -340,7 +330,7 @@ $('.grid-block').on('click',function(event){
 			$('#'+nextplayer+'-info').addClass('active-player');
 			if(nextplayer === 'player2' && computer_playing === true){
 				contin = true;
-				computer.check_probability();
+				computer.check_probability('player1');
 			}
 		}else{
 			currentGame.drawLine(winning_line);
