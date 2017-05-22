@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tic Tac Toe</title>
+	<link rel="stylesheet" type="text/css" href="_css/main.css">
+</head>
+<body id="homepage">
+	<header>
+		<a href="#" id="logo"><img src="logo_2.png" alt="tic tac toe"></a>
+		<div id="links-wrapper">
+			<a href="http://www.chasvales.com">Portfolio Site</a>
+		</div>
+	</header>
+	<div id="players-wrapper">
+		<a href="#" data-players=1 class="players">1 Player</a>
+		<a href="#" data-players=2 class="players">2 Players</a>
+	</div>
+	<script type="text/javascript" src="_js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.players').on('click',function(event){
+				event.preventDefault();
+				var numply = $(this).data('players');
+				localStorage.setItem('numplayers',numply);
+				window.location = "game.html";
+			});
+		});
+	</script>
+</body>
+</html>
