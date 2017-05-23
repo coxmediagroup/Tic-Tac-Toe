@@ -1,0 +1,86 @@
+<a href="mailto:ferrerdallas@gmail.com">Alex's </a> Tic-Tac-Toe game <br>
+
+<br>
+<form action="your_move">
+<table BORDER=3 class="board" cellspacing="1" summary="Tic-Tac-Toe Board">
+<tr>
+ <td class="box" width="40">
+  {% if b0 != "_" or game_over %}
+     {{ b0 }}
+  {% else %}
+    <button type="submit" name="button" value="0"> {{ b0 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b1 != "_" or game_over %}
+     {{ b1 }}
+  {% else %}
+    <button type="submit" name="button" value="1"> {{ b1 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b2 != "_" or game_over %}
+     {{ b2 }}
+  {% else %}
+    <button type="submit" name="button" value="2"> {{ b2 }} </button>
+  {% endif %}
+ </td>
+<tr>
+<tr>
+ <td class="box" width="40">
+  {% if b3 != "_" or game_over  %}
+     {{ b3 }}
+  {% else %}
+    <button type="submit" name="button" value="3"> {{ b3 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b4 != "_" or game_over %}
+     {{ b4 }}
+  {% else %}
+    <button type="submit" name="button" value="4"> {{ b4 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b5 != "_" or game_over %}
+     {{ b5 }}
+  {% else %}
+    <button type="submit" name="button" value="5"> {{ b5 }} </button>
+  {% endif %}
+ </td>
+<tr>
+<tr>
+ <td class="box" width="40">
+  {% if b6 != "_" or game_over %}
+     {{ b6 }}
+  {% else %}
+    <button type="submit" name="button" value="6"> {{ b6 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b7 != "_" or game_over %}
+     {{ b7 }}
+  {% else %}
+    <button type="submit" name="button" value="7"> {{ b7 }} </button>
+  {% endif %}
+ </td>
+ <td class="box" width="40">
+  {% if b8 != "_" or game_over %}
+     {{ b8 }}
+  {% else %}
+    <button type="submit" name="button" value="8"> {{ b8 }} </button>
+  {% endif %}
+ </td>
+<tr>
+
+</table>
+</form>
+<br>
+{{ user_message }} <br><br>
+
+{% if game_over %}
+<form action="play_again">
+  <button type="submit" name="play_again" value="play"> Play Again? </button>
+</form>
+{% endif %}
+
