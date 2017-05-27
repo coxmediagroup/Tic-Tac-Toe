@@ -1,8 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+
+ReactDOM.render(
+  <div>
+    <h1>TicTacToe</h1>
+  </div>
+  , document.getElementById('root')
+)
