@@ -1,8 +1,8 @@
 import React from 'react'
-import {Route, IndexRoute} from 'react-router'
-import Template from '../containers/Template.js'
-import Home from '../containers/Home'
-import Profile from '../containers/Profile'
+import {Route} from 'react-router'
+import Template from '../containers/Template'
+// import Home from '../containers/Home'
+// import Profile from '../containers/Profile'
 
 const createRoutes = () => {
   return (
@@ -10,7 +10,7 @@ const createRoutes = () => {
       path='/'
       component={Template}
     >
-      <IndexRoute
+      {/* <IndexRoute
         component={Home}
       >
       </IndexRoute>
@@ -20,7 +20,7 @@ const createRoutes = () => {
         path={'/profile'}
         component={Profile}
       >
-      </Route>
+      </Route> */}
     </Route>
   )
 }
