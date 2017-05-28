@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 // Variables
 var painted;//array to check if canvas !empty
 var content;//array for what is on canvas
@@ -12,6 +10,7 @@ var sqrsFilled = 0;
 var y;//for user answer to playAgain?
 
 window.onload = function() {
+  alert("onload");
   painted = new Array();
   content = new Array();
   winCombo = [[0, 1, 2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
@@ -85,4 +84,3 @@ fucntion playAgain() {// ask to play again
     alert("See you, space cowboy.");
   }
 }
-</script>
