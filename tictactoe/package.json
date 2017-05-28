@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "material-ui": "^0.18.1",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-router": "^4.1.1",
+    "react-tap-event-plugin": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
@@ -46,8 +49,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "GRAPHQL_ENDPOINT=https://api.graph.cool/relay/v1/cj37mbr4fgaa501685f3uj798 node scripts/start.js",
+    "build": "GRAPHQL_ENDPOINT=https://api.graph.cool/relay/v1/cj37mbr4fgaa501685f3uj798 node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
@@ -76,7 +79,9 @@
     }
   },
   "babel": {
-    "plugins" : ["react-relay"],
+    "plugins": [
+      "react-relay"
+    ],
     "presets": [
       "react-app"
     ]
