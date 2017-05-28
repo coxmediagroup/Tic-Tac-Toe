@@ -7,7 +7,7 @@ var winCombo;//for possible winning combinations
 var turn = 0;
 var canvasID;//for canvas id
 var sqr;//hold actual canvas
-var context;
+var context;//for drawing on canvas
 var sqrsFilled = 0;
 var w;
 var y;
@@ -61,5 +61,17 @@ function canvasClicked(sqrNum) {
   }
   else {
     alert("That space is occupied!");
+  }
+}
+
+fucntion playAgain() {
+  y = confirm("Play again?");
+
+  if(y === true) {
+    alert("Lets play again!");
+    location.reload(true);
+  }
+  else {
+    alert("See you, space cowboy.");
   }
 }
