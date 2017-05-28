@@ -9,7 +9,6 @@ var canvasID;//for canvas id
 var sqr;//hold actual canvas
 var context;//for drawing on canvas
 var sqrsFilled = 0;
-var w;
 var y;//for user answer to playAgain?
 
 window.onload = function() {
@@ -28,7 +27,7 @@ function canvasClicked(sqrNum) {
   sqr = document.getElementById(canvasID);
   context = sqr.getContext("2d"); //to draw on canvas
 
-  if(painted[sqrNum - 1] == false) {//if square not used, use
+  if(painted[sqrNum - 1] === false) {//if square not used, use
     if(turn % 2 === 0) {
       //draw x TODO make this its own fucntion
       context.beginPath();
@@ -36,16 +35,18 @@ function canvasClicked(sqrNum) {
       context.lineTo(40, 40);
       context.moveTo(40, 10);
       context.lineTo(10, 40);
-      context.stroke();
       context.closePath();
+      context.strokeStyle='#ffffff';
+      context.stroke();
       content[sqrNum - 1] = 'X';//this canvas is marked with X
     }
     else {
       //draw circle TODO make this its own function
       context.beginPath();
-			context.arc(25,25,20,0,Math.PI*2,true);
-			context.stroke();
+			context.arc(25, 25, 20, 0, Math.PI*2, true);
 			context.closePath();
+      context.strokeStyle='#ffffff';
+      context.stroke();
 			content[sqrNum - 1] = 'O';//this canvas marked with O
     }
     turn++;//increment turn to know its next player
@@ -84,3 +85,4 @@ fucntion playAgain() {// ask to play again
     alert("See you, space cowboy.");
   }
 }
+</script>
