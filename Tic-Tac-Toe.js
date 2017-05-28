@@ -10,7 +10,7 @@ var sqr;//hold actual canvas
 var context;//for drawing on canvas
 var sqrsFilled = 0;
 var w;
-var y;
+var y;//for user answer to playAgain?
 
 window.onload = function() {
   painted = new Array();
@@ -52,9 +52,9 @@ function canvasClicked(sqrNum) {
     painted[sqrNum - 1] = true;//this square is used
     sqrsFilled++; //increment number of sqrs filled
 
-    checkWinners(content[sqrNum - 1]);
+    checkWinners(content[sqrNum - 1]);//check for winner after each move
 
-    if(sqrsFilled === 9) {
+    if(sqrsFilled === 9) {//check if board is full. if so, start again
       alert("Game Over!");
       location.reload(true);
     }
@@ -64,7 +64,16 @@ function canvasClicked(sqrNum) {
   }
 }
 
-fucntion playAgain() {
+function checkWinners(symbol) {//checks if anyone won the game
+  for(var i = 0; i < winCombo.length; i++) {//go through and check if either X or O has winning combo
+    if(content[winCombo[i][0]] == symbol && content[winCombo[i][1]] == symbol && content[winCombo[i][2]] == symbol) {
+      alert(symbol + " Won!");
+      playAgain();
+    }
+  }
+}
+
+fucntion playAgain() {// ask to play again
   y = confirm("Play again?");
 
   if(y === true) {
