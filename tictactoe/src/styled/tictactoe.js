@@ -10,18 +10,18 @@ for (let i = 1; i < rows; i++){
   let position  = unit * i
   grid.push(
     <Line
-      points={[position, 0, position, size ]}
+      points={[position, 0, position, size]}
       stroke={stroke}
       strokeWidth={strokeWidth}
-      key={i+'y'}
+      key={i+'v'}
     />
   )
   grid.push(
     <Line
-      points={[0, position, size, position ]}
+      points={[0, position, size, position]}
       stroke={stroke}
       strokeWidth={strokeWidth}
-      key={i+'x'}
+      key={i+'h'}
     />
   )
 }

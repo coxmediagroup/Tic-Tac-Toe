@@ -23,17 +23,15 @@ class Template extends Component {
   }
 
   state = {
-    rows:3,
+    rows: 3,
     gameState: new Array(9).fill(false),
     ownMark: 'X',
     otherMark: 'O',
     gameOver: false,
-    yourTurn: false,
+    yourTurn: true,
     winner: false,
     win: false
   }
-
-
 
   componentWillMount() {
     let height = window.innerHeight
@@ -56,20 +54,43 @@ class Template extends Component {
     })
   }
 
-  move = (marker, index) => {
-    console.log('Move made', marker, index)
+  move = (index, marker) => {
+    this.setState( (prevState, prop) => {
+        let {gameState, yourTurn, gameOver, winner} = prevState
+        yourTurn = !yourTurn
+        gameState.splice(index, 1, marker)
+        let foundWin = this.checkWin(gameState)
+        if (foundWin) {
+          winner = gameState[foundWin[0]]
+        }
+        if(foundWin || !gameState.includes(false)) {
+          gameOver = true
+        }
+        if (!yourTurn && !gameOver){
+          this.makeAiMove(gameState)
+        }
+        return {
+          gameState,
+          yourTurn,
+          gameOver,
+          win: foundWin || false,
+          winner
+        }
+    })
   }
 
   makeAiMove = (gameState) => {
     let otherMark = this.state.otherMark
     let openSquares = []
     gameState.forEach( (square, index)=> {
-      if(!squares) {
+      if(!square) {
         openSquares.push(index)
       }
     })
-    let aiMove = openSquares[this.random(0, openSquare.length)]
-    this.move(aiMove, otherMark)
+    let aiMove = openSquares[this.random(0, openSquares.length)]
+    setTimeout(()=>{
+      this.move(aiMove, otherMark)
+    }, 1000)
   }
 
   random = (min, max) => {
