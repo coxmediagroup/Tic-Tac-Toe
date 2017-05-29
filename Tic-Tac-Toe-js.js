@@ -8,6 +8,7 @@ var sqr;//hold actual canvas
 var context;//for drawing on canvas
 var sqrsFilled = 0;
 var y;//for user answer to playAgain?
+var userXO;
 
 window.onload = function() {
   painted = new Array();
@@ -42,16 +43,33 @@ function drawO(sqrNum) {
 }
 
 function canvasClicked(sqrNum) {
+  if(userXO === undefined) {
+    var choiceDiv = document.getElementById("XorO");
+    alert("X or O not selected. You are X");
+    userXO = "x";
+    choiceDiv.style.display = 'none';
+  }
+  //alert(userXO);
   canvasID = "s" + sqrNum;
   sqr = document.getElementById(canvasID);
   context = sqr.getContext("2d"); //to draw on canvas
 
   if(painted[sqrNum - 1] === false) {//if square not used, use
     if(turn % 2 === 0) {
-      drawX(sqrNum);
+      if(userXO === "x") {
+        drawX(sqrNum);
+      }
+      else {
+        drawO(sqrNum);
+      }
     }
     else {
-      drawO(sqrNum);
+      if(userXO === "x") {
+        drawO(sqrNum);
+      }
+      else {
+        drawX(sqrNum);
+      }
     }
     turn++;//increment turn to know its next player
     painted[sqrNum - 1] = true;//this square is used
@@ -88,4 +106,15 @@ function playAgain() {// ask to play again
   else {
     alert("See you, space cowboy.");
   }
+}
+
+function userChoice(choice) {
+  var choiceDiv = document.getElementById("XorO");
+  if(choice === "x") {
+    userXO = "x";
+  }
+  else if(choice === "o") {
+    userXO = "o";
+  }
+  choiceDiv.style.display = 'none';
 }
