@@ -13,7 +13,7 @@ Acceptance criteria
 
 Submission Tips
 ========================
-* Quality counts! A good submission that takes a while is better than a poor submission quickly. 
+* Quality counts! A good submission that takes a while is better than a poor submission quickly.
 * Make sure your submission accurately reflects your development style.
 * Commit early and often, with good messages.
 * Comments and Unit tests are appreciated but not required, if you know good practice, then show us.
@@ -26,3 +26,9 @@ Submissions
 * Fork this repo and send us a pull request.
 * if you prefer you can send us a ZIP of your submission, due to email filters, rename the file to *.txt and mention it is a ZIP in your email.
 
+
+Developer Notes
+---------------
+* Used tutorial found at: 'Tutorial <http://www.dreamincode.net/forums/topic/247361-simple-tic-tac-toe-using-html5-css3-and-javascript/>'
+* HTML/CSS Files loaded but JS did not. Realized I had to change name.
+* Got syntax error on js file. Misspelled function in playAgain().
