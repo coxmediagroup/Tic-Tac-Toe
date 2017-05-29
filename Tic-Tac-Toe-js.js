@@ -72,7 +72,7 @@ function checkWinners(symbol) {//checks if anyone won the game
   }
 }
 
-fucntion playAgain() {// ask to play again
+function playAgain() {// ask to play again
   y = confirm("Play again?");
 
   if(y === true) {
