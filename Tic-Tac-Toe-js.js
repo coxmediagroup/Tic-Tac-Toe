@@ -6,11 +6,12 @@ var turn = 0;
 var canvasID;//for canvas id
 var sqr;//hold actual canvas
 var context;//for drawing on canvas
-var sqrsFilled = 0;
+var sqrsFilled;
 var y;//for user answer to playAgain?
 var userXO;
 
 window.onload = function() {
+  sqrsFilled = 0;
   painted = new Array();
   content = new Array();
   winCombo = [[0, 1, 2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
@@ -49,7 +50,6 @@ function canvasClicked(sqrNum) {
     userXO = "x";
     choiceDiv.style.display = 'none';
   }
-  //alert(userXO);
   canvasID = "s" + sqrNum;
   sqr = document.getElementById(canvasID);
   context = sqr.getContext("2d"); //to draw on canvas
@@ -79,7 +79,7 @@ function canvasClicked(sqrNum) {
 
     if(sqrsFilled === 9) {//check if board is full. if so, start again
       alert("Game Over!");
-      location.reload(true);
+      playAgain();
     }
   }
   else {
