@@ -20,6 +20,27 @@ window.onload = function() {
   }
 }
 
+function drawX(sqrNum) {
+  context.beginPath();
+  context.moveTo(10, 10);
+  context.lineTo(40, 40);
+  context.moveTo(40, 10);
+  context.lineTo(10, 40);
+  context.closePath();
+  context.strokeStyle='#ffffff';
+  context.stroke();
+  content[sqrNum - 1] = 'X';//this canvas is marked with X
+}
+
+function drawO(sqrNum) {
+  context.beginPath();
+  context.arc(25, 25, 20, 0, Math.PI*2, true);
+  context.closePath();
+  context.strokeStyle='#ffffff';
+  context.stroke();
+  content[sqrNum - 1] = 'O';//this canvas marked with O
+}
+
 function canvasClicked(sqrNum) {
   canvasID = "s" + sqrNum;
   sqr = document.getElementById(canvasID);
@@ -27,25 +48,10 @@ function canvasClicked(sqrNum) {
 
   if(painted[sqrNum - 1] === false) {//if square not used, use
     if(turn % 2 === 0) {
-      //draw x TODO make this its own fucntion
-      context.beginPath();
-      context.moveTo(10, 10);
-      context.lineTo(40, 40);
-      context.moveTo(40, 10);
-      context.lineTo(10, 40);
-      context.closePath();
-      context.strokeStyle='#ffffff';
-      context.stroke();
-      content[sqrNum - 1] = 'X';//this canvas is marked with X
+      drawX(sqrNum);
     }
     else {
-      //draw circle TODO make this its own function
-      context.beginPath();
-			context.arc(25, 25, 20, 0, Math.PI*2, true);
-			context.closePath();
-      context.strokeStyle='#ffffff';
-      context.stroke();
-			content[sqrNum - 1] = 'O';//this canvas marked with O
+      drawO(sqrNum);
     }
     turn++;//increment turn to know its next player
     painted[sqrNum - 1] = true;//this square is used
