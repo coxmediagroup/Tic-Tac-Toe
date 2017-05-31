@@ -29,6 +29,6 @@ Submissions
 
 Developer Notes
 ---------------
-* Used tutorial found at: `Tutorial <http://www.dreamincode.net/forums/topic/247361-simple-tic-tac-toe-using-html5-css3-and-javascript/>`_
+* Used tutorials found at: `Tic-Tac-Toe Game <http://www.dreamincode.net/forums/topic/247361-simple-tic-tac-toe-using-html5-css3-and-javascript/>`, `MiniMax Algorithm <http://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/>`_
 * HTML/CSS Files loaded but JS did not. Realized I had to change name.
 * Got syntax error on js file. Misspelled function in playAgain().
