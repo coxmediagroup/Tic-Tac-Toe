@@ -10,7 +10,7 @@ var sqrsFilled;
 var y;//for user answer to playAgain?
 var userXO;
 
-window.onload = function() {
+window.onload = function() {//initailize vars 
   sqrsFilled = 0;
   painted = new Array();
   content = new Array();
@@ -22,7 +22,7 @@ window.onload = function() {
   }
 }
 
-function drawX(sqrNum) {
+function drawX(sqrNum) //draws X in sqaure
   context.beginPath();
   context.moveTo(10, 10);
   context.lineTo(40, 40);
@@ -34,7 +34,7 @@ function drawX(sqrNum) {
   content[sqrNum - 1] = 'X';//this canvas is marked with X
 }
 
-function drawO(sqrNum) {
+function drawO(sqrNum) {//draws O in sqaure
   context.beginPath();
   context.arc(25, 25, 20, 0, Math.PI*2, true);
   context.closePath();
@@ -44,7 +44,7 @@ function drawO(sqrNum) {
 }
 
 function canvasClicked(sqrNum) {
-  if(userXO === undefined) {
+  if(userXO === undefined) {//if user did not select a symbol it autoselects X
     var choiceDiv = document.getElementById("XorO");
     alert("X or O not selected. You are X");
     userXO = "x";
@@ -52,10 +52,10 @@ function canvasClicked(sqrNum) {
   }
   canvasID = "s" + sqrNum;
   sqr = document.getElementById(canvasID);
-  context = sqr.getContext("2d"); //to draw on canvas
+  context = sqr.getContext("2d"); //to draw on canvas with specific ID
 
   if(painted[sqrNum - 1] === false) {//if square not used, use
-    if(turn % 2 === 0) {
+    if(turn % 2 === 0) {//whichever symbol user picked goes first
       if(userXO === "x") {
         drawX(sqrNum);
       }
@@ -63,7 +63,7 @@ function canvasClicked(sqrNum) {
         drawO(sqrNum);
       }
     }
-    else {
+    else {//comp symbol goes second
       if(userXO === "x") {
         drawO(sqrNum);
       }
@@ -77,7 +77,7 @@ function canvasClicked(sqrNum) {
 
     checkWinners(content[sqrNum - 1]);//check for winner after each move
 
-    if(sqrsFilled === 9) {//check if board is full. if so, start again
+    if(sqrsFilled === 9) {//check if board is full. if so, ask to play again
       alert("Game Over!");
       playAgain();
     }
@@ -90,7 +90,12 @@ function canvasClicked(sqrNum) {
 function checkWinners(symbol) {//checks if anyone won the game
   for(var i = 0; i < winCombo.length; i++) {//go through and check if either X or O has winning combo
     if(content[winCombo[i][0]] == symbol && content[winCombo[i][1]] == symbol && content[winCombo[i][2]] == symbol) {
-      alert(symbol + " Won!");
+      if(symbol === userXO.toUpperCase()) {
+        alert("You Won!");
+      }
+      else {
+        alert("Computer Won!");
+      }
       playAgain();
     }
   }
@@ -108,7 +113,7 @@ function playAgain() {// ask to play again
   }
 }
 
-function userChoice(choice) {
+function userChoice(choice) {//checks which symbol user wants to use
   var choiceDiv = document.getElementById("XorO");
   if(choice === "x") {
     userXO = "x";
