@@ -8,9 +8,9 @@ var sqr;//hold actual canvas
 var context;//for drawing on canvas
 var sqrsFilled;
 var y;//for user answer to playAgain?
-var userXO;
+var userXO;//user symbol choice
 
-window.onload = function() {//initailize vars 
+window.onload = function() {//initailize vars
   sqrsFilled = 0;
   painted = new Array();
   content = new Array();
@@ -22,7 +22,7 @@ window.onload = function() {//initailize vars
   }
 }
 
-function drawX(sqrNum) //draws X in sqaure
+function drawX(sqrNum) {//draws X in sqaure
   context.beginPath();
   context.moveTo(10, 10);
   context.lineTo(40, 40);
