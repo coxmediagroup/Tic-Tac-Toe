@@ -9,11 +9,11 @@ Acceptance criteria
 * Computer (AI)  will never lose a game.
 * Application should be able to run based on HTML, CSS and Javascript.
 * Game will let player choose to be either X or O, computer will take other choice.
-* Game will let player go first.
+* Game will let player go first.cd Des
 
 Submission Tips
 ========================
-* Quality counts! A good submission that takes a while is better than a poor submission quickly. 
+* Quality counts! A good submission that takes a while is better than a poor submission quickly.
 * Make sure your submission accurately reflects your development style.
 * Commit early and often, with good messages.
 * Comments and Unit tests are appreciated but not required, if you know good practice, then show us.
@@ -26,3 +26,9 @@ Submissions
 * Fork this repo and send us a pull request.
 * if you prefer you can send us a ZIP of your submission, due to email filters, rename the file to *.txt and mention it is a ZIP in your email.
 
+
+Developer Notes
+---------------
+* Used tutorials found at: `Tic-Tac-Toe Game <http://www.dreamincode.net/forums/topic/247361-simple-tic-tac-toe-using-html5-css3-and-javascript/>`_, `MiniMax Algorithm <http://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/>`_
+* HTML/CSS Files loaded but JS did not. Realized I had to change name.
+* Got syntax error on js file. Misspelled function in playAgain().

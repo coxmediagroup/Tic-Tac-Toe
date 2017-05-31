@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- link css3 and js files -->
+  <link rel="stylesheet" type="text/css" href="Tic-Tac-Toe.css"/>
+  <script type="text/javascript" src="Tic-Tac-Toe-js.js"></script>
+  <title>Tic-Tac-Toe</title>
+</head>
+
+<body>
+  <!-- Create board.
+  TODO make board scale with device screen-->
+  <div id="box">
+    <!-- page title -->
+    <h1>Tic-Tac-Toe</h1>
+
+    <canvas id="s1" width="50" height="50" onclick="canvasClicked(1)"></canvas>
+    <canvas id="s2" width="50" height="50" onclick="canvasClicked(2)"></canvas>
+    <canvas id="s3" width="50" height="50" onclick="canvasClicked(3)"></canvas>
+    <br/>
+    <canvas id="s4" width="50" height="50" onclick="canvasClicked(4)"></canvas>
+    <canvas id="s5" width="50" height="50" onclick="canvasClicked(5)"></canvas>
+    <canvas id="s6" width="50" height="50" onclick="canvasClicked(6)"></canvas>
+    <br/>
+    <canvas id="s7" width="50" height="50" onclick="canvasClicked(7)"></canvas>
+    <canvas id="s8" width="50" height="50" onclick="canvasClicked(8)"></canvas>
+    <canvas id="s9" width="50" height="50" onclick="canvasClicked(9)"></canvas>
+    <br/>
+  </div>
+
+</br>
+
+  <div id="XorO">
+    <button id="x" onclick="userChoice(this.id)">X</button>
+    or
+    <button id="o" onclick="userChoice(this.id)">O</button>
+  </div>
+</body>
+
+</html>
