@@ -9,7 +9,7 @@ var context;//for drawing on canvas
 var sqrsFilled;
 var y;//for user answer to playAgain?
 var userXO;//user symbol choice
-var compXO;
+var compXO;//comp symbol
 var score;//board score for miniMax
 
 window.onload = function() {//initailize vars
@@ -183,6 +183,8 @@ function score() {
       else {
         return 0;
       }
+    }
+  }
 }
 
 function movesLeft() {
