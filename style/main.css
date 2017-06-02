@@ -1,3 +1,16 @@
 body {
   background-color: purple;
 }
+
+.board {
+  height: 400px;
+  width: 400px;
+}
+
+.board div {
+  float: left;
+  height: 8em;
+  width: 31%;
+  background-color: white;
+  border: 3px solid green;
+}
