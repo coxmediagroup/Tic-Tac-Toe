@@ -70,6 +70,47 @@ const GameEngine = {
   }
 };
 
+const AI = {
+  // Make a 2d array of boards which represent all possible sets of moves
+  buildBoard: function() {
+    this.board = GameEngine.board;
+  },
+  // Should output array with scores for each first move
+  buildScoreSheet: function() {
+
+  },
+  // Outputs array of all possible moves the ai could make
+  // check if in this array
+  buildPossibleMoves: function() {
+    var possibleMoves = [];
+    GameEngine.board.forEach(function(piece, pos) {
+      if (GameEngine.isValidMove(pos)) {
+        possibleMoves.push(pos);
+      }
+    });
+    return possibleMoves;
+  },
+  // Should iterate over all possible moves and score them
+  scoreAllMoves: function() {
+
+  },
+  // move is an array index
+  // Scores one move
+  scoreMove: function(move) {
+
+  },
+  // Moves the ai to this position
+  makeFakeAIMove: function(move) {
+
+  },
+  makeFakeHumanMove: function(move) {
+
+  },
+  toggleAIPlayer: function(move) {
+
+  }
+}
+
 const ViewEngine = {
   refreshBoardView: function(boardState) {
     var space = document.getElementById("board").firstElementChild;
