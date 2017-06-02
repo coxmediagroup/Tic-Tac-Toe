@@ -67,7 +67,12 @@ const GameEngine = {
 
 const ViewEngine = {
   refreshBoardView: function(boardState) {
+    var space = document.getElementById("board").firstElementChild;
 
+    for (var i = 0; i < boardState.length; i++) {
+      space.innerHTML = boardState[i];
+      space = space.nextElementSibling;
+    }
   },
   flashMessage: function(msg) {
 
