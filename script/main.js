@@ -73,6 +73,9 @@ const ViewEngine = {
       space.innerHTML = boardState[i];
       space = space.nextElementSibling;
     }
+
+    var playerDisplay = document.getElementById("current-player");
+    playerDisplay.innerHTML = GameEngine.currentPlayer
   },
   flashMessage: function(msg) {
     var messageBox = document.getElementById("message-box");
@@ -91,7 +94,12 @@ const GameController = {
     console.log("New game");
   },
   onClickBoardSpace: function(event) {
-    console.log(event);
+    var pos = event.path[0].getAttribute("data-position");
+    var move = GameEngine.makeMove(pos);
+    if (GameEngine.gameOver == true) {
+      ViewEngine.flashMessage(`${GameEngine.currentPlayer} has won the game!`)
+    }
+    ViewEngine.refreshBoardView(GameEngine.board)
   }
 };
 
@@ -102,7 +110,7 @@ window.onload = function() {
   button.onclick = GameController.onClickNewGame;
   // Click listeners for spaces
   var space = document.getElementById("board").firstElementChild;
-  for(var i = 0; i < 9; i++){
+  for (var i = 0; i < 9; i++) {
     space.onclick = GameController.onClickBoardSpace;
     space = space.nextElementSibling;
   }
