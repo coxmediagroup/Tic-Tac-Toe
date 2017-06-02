@@ -88,14 +88,22 @@ const GameController = {
   onClickNewGame: function(event) {
     GameEngine.resetGame();
     ViewEngine.refreshBoardView(GameEngine.board)
+    console.log("New game");
   },
   onClickBoardSpace: function(event) {
-    console.log("hello");
+    console.log(event);
   }
 };
 
 
 window.onload = function() {
-  const board = document.getElementById("board");
-  board.onclick = GameController.onClickBoardSpace;
+  // New game click listener
+  var button = document.getElementById("new-game");
+  button.onclick = GameController.onClickNewGame;
+  // Click listeners for spaces
+  var space = document.getElementById("board").firstElementChild;
+  for(var i = 0; i < 9; i++){
+    space.onclick = GameController.onClickBoardSpace;
+    space = space.nextElementSibling;
+  }
 }
