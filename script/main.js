@@ -75,10 +75,12 @@ const ViewEngine = {
     }
   },
   flashMessage: function(msg) {
-
+    var messageBox = document.getElementById("message-box");
+    messageBox.innerHTML = msg;
   },
   clearFlash: function() {
-
+    var messageBox = document.getElementById("message-box");
+    messageBox.innerHTML = "";
   }
 };
 
