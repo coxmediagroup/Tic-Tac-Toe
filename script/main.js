@@ -11,7 +11,8 @@ const GameEngine = {
   },
   toggleCurrentPlayer: function() {
     if (this.currentPlayer == "X") {
-      this.currentPlayer = "O"
+      this.currentPlayer = "O";
+      this.aiMove();
     } else {
       this.currentPlayer = "X";
     }
@@ -61,7 +62,11 @@ const GameEngine = {
       }
       return true;
     }
+    ViewEngine.flashMessage("Invalid move, please try again.")
     return false;
+  },
+  aiMove: function() {
+    console.log("Hello");
   }
 };
 

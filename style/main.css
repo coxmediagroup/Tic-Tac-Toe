@@ -9,8 +9,11 @@ body {
 
 .board div {
   float: left;
-  height: 8em;
-  width: 31%;
+  height: 133.333333px;
+  width: 33.3333333333%;
   background-color: white;
   border: 3px solid green;
+  text-align: center;
+  font-size: 5em;
+  cursor: pointer;
 }
