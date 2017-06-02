@@ -30,24 +30,24 @@ const GameEngine = {
     }
     return false;
   },
-  checkForVictory: function() {
+  checkForVictory: function(board) {
     // Check for column victory
     for (var i = 0; i < 3; i++) {
-      if (this.currentPlayer == this.board[i] && this.currentPlayer == this.board[i + 3] && this.currentPlayer == this.board[i + 6]) {
+      if (this.currentPlayer == board[i] && this.currentPlayer == board[i + 3] && this.currentPlayer == board[i + 6]) {
         return true;
       }
     }
     // Check for row victory
     for (var i = 0; i < 3; i += 3) {
-      if (this.currentPlayer == this.board[i] && this.currentPlayer == this.board[i + 1] && this.currentPlayer == this.board[i + 2]) {
+      if (this.currentPlayer == board[i] && this.currentPlayer == board[i + 1] && this.currentPlayer == board[i + 2]) {
         return true;
       }
     }
     // Check for diagonal victory
-    if (this.currentPlayer == this.board[0] && this.currentPlayer == this.board[4] && this.currentPlayer == this.board[8]) {
+    if (this.currentPlayer == board[0] && this.currentPlayer == board[4] && this.currentPlayer == board[8]) {
       return true;
     }
-    if (this.currentPlayer == this.board[2] && this.currentPlayer == this.board[4] && this.currentPlayer == this.board[6]) {
+    if (this.currentPlayer == board[2] && this.currentPlayer == board[4] && this.currentPlayer == board[6]) {
       return true;
     }
     return false;
@@ -55,7 +55,7 @@ const GameEngine = {
   makeMove: function(position) {
     if (this.isValidMove(position)) {
       this.board[position] = this.currentPlayer;
-      if (this.checkForVictory()) {
+      if (this.checkForVictory(this.board)) {
         this.gameOver = true;
       } else {
         this.toggleCurrentPlayer();
