@@ -86,15 +86,16 @@ const ViewEngine = {
 
 const GameController = {
   onClickNewGame: function(event) {
-
+    GameEngine.resetGame();
+    ViewEngine.refreshBoardView(GameEngine.board)
   },
   onClickBoardSpace: function(event) {
-
+    console.log("hello");
   }
 };
 
 
 window.onload = function() {
-  const board = document.querySelectorAll(".board div");
-  console.log(board);
+  const board = document.getElementById("board");
+  board.onclick = GameController.onClickBoardSpace;
 }
