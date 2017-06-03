@@ -82,9 +82,9 @@ const AI = {
     } else {
       console.log("Random position");
       var max = Math.floor(possibleMoves.length);
-      var move = Math.floor(Math.random() * max);
-      console.log(move);
-      GameEngine.makeMove(move);
+      var i = Math.floor(Math.random() * max);
+      console.log(i);
+      GameEngine.makeMove(possibleMoves[i]);
       ViewEngine.refreshBoardView(GameEngine.board);
       ViewEngine.clearFlash();
     }
