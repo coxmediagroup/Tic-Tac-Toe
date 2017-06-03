@@ -20,8 +20,8 @@ const GameEngine = {
   isValidMove: function(position) {
     // A move is valid if the game is not over, the position is in the board, and the position is not occupied
     if (this.gameOver == false) {
-      if (this.board.length > position) {
-        if (this.board[position] == null) {
+      if (position < GameEngine.board.length) {
+        if (GameEngine.board[position] == null) {
           return true;
         }
         return false;
@@ -68,37 +68,26 @@ const GameEngine = {
 };
 
 const AI = {
-  // Make a 2d array of boards which represent all possible sets of moves
-  buildTree: function() {
-    var board = GameEngine.board;
-    possibleMoves = this.buildPossibleMoves(board);
-    var tree = Array(possibleMoves.length).fill([]);
-    console.log(tree);
-    // tree[0].push(this.buildPossibleMoves(board));
-    // tree.forEach(function(pos, i) {
-    //
-    // })
-  },
   makeMove: function() {
     var possibleMoves = this.buildPossibleMoves(GameEngine.board);
     var lossPosition = this.findLoss(possibleMoves);
     var winPosition = this.findVictory(possibleMoves);
 
     if (winPosition == true) {
+      console.log("Win position");
       GameEngine.makeMove(winPosition);
     } else if (lossPosition == true) {
+      console.log("Loss position");
       GameEngine.makeMove(lossPosition);
     } else {
+      console.log("Random position");
       var max = Math.floor(possibleMoves.length);
       var move = Math.floor(Math.random() * max);
+      console.log(move);
       GameEngine.makeMove(move);
       ViewEngine.refreshBoardView(GameEngine.board);
       ViewEngine.clearFlash();
     }
-  },
-  // Should output array with scores for each first move
-  buildScoreSheet: function() {
-
   },
   // Outputs array of all possible moves the ai could make
   // check if in this array
@@ -110,15 +99,6 @@ const AI = {
       }
     });
     return possibleMoves;
-  },
-  // Should iterate over all possible moves and score them
-  scoreAllMoves: function() {
-
-  },
-  // move is an array index
-  // Scores one move
-  scoreMove: function(move) {
-
   },
   // Moves the ai to this position, returns temp board
   makeFakeAIMove: function(move) {
