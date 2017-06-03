@@ -93,6 +93,7 @@ const AI = {
       var move = Math.floor(Math.random() * max);
       GameEngine.makeMove(move);
       ViewEngine.refreshBoardView(GameEngine.board);
+      ViewEngine.clearFlash();
     }
   },
   // Should output array with scores for each first move
