@@ -85,9 +85,9 @@ const AI = {
     var lossPosition = this.findLoss(possibleMoves);
     var winPosition = this.findVictory(possibleMoves);
 
-    if (winPosition == true) {
+    if (winPosition != false) {
       GameEngine.makeMove(winPosition);
-    } else if (lossPosition == true) {
+    } else if (lossPosition != false) {
       GameEngine.makeMove(lossPosition);
     } else {
       var max = Math.floor(possibleMoves.length);
@@ -97,8 +97,29 @@ const AI = {
       ViewEngine.clearFlash();
     }
   },
+  checkForVictory: function(board, player) {
+    // Check for column victory
+    for (var i = 0; i < 3; i++) {
+      if (player == board[i] && player == board[i + 3] && player == board[i + 6]) {
+        return true;
+      }
+    }
+    // Check for row victory
+    for (var i = 0; i < 9; i += 3) {
+      if (player == board[i] && player == board[i + 1] && player == board[i + 2]) {
+        return true;
+      }
+    }
+    // Check for diagonal victory
+    if (player == board[0] && player == board[4] && player == board[8]) {
+      return true;
+    }
+    if (player == board[2] && player == board[4] && player == board[6]) {
+      return true;
+    }
+    return false;
+  },
   // Outputs array of all possible moves the ai could make
-  // check if in this array
   buildPossibleMoves: function(board) {
     var possibleMoves = [];
     board.forEach(function(piece, pos) {
@@ -117,27 +138,27 @@ const AI = {
   },
   makeFakeHumanMove: function(move) {
     var board = [];
-    board.push(GameEngine.board);
+    GameEngine.board.forEach(function(el) {
+      board.push(el);
+    })
     board[move] = "X";
     return board;
   },
-  toggleAIPlayer: function(move) {
-
-  },
   findVictory: function(possibleMoves) {
-    possibleMoves.forEach(function(i) {
-      var board = AI.makeFakeAIMove(i);
-      if (GameEngine.checkForVictory(board)) {
+    var board;
+    for (var i = 0; i < possibleMoves.length; i++) {
+      board = AI.makeFakeAIMove(i);
+      if (AI.checkForVictory(board, "O")) {
         return i;
       }
-    });
+    }
     return false;
   },
   findLoss: function(possibleMoves) {
     var board;
     for (var i = 0; i < possibleMoves.length; i++) {
       board = AI.makeFakeHumanMove(i);
-      if (GameEngine.checkForVictory(board)) {
+      if (AI.checkForVictory(board, "X")) {
         return i;
       }
     }
