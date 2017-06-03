@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Tic Tac Toe Game</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="style/main.css">
+</head>
+
+<body class="bg-primary">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a href="/" class="navbar-brand">Tic Tac Toe</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="board bg-info" id="board">
+      <div data-position="0"></div>
+      <div data-position="1"></div>
+      <div data-position="2"></div>
+      <div data-position="3"></div>
+      <div data-position="4"></div>
+      <div data-position="5"></div>
+      <div data-position="6"></div>
+      <div data-position="7"></div>
+      <div data-position="8"></div>
+    </div>
+    <div id="message-box"></div>
+    <div>
+      <h4>The current player is <span id="current-player">X</span></h4>
+    </div>
+    <button type="button" class="btn btn-default" id="new-game">New Game</button>
+    <p>To play, click the space you want to move. The computer will then make a move. When the game is over, click "New Game" to play again. The player is "X" and the computer is "O"</p>
+  </div>
+  <script src="script/main.js" type="text/javascript"></script>
+</body>
+
+</html>
