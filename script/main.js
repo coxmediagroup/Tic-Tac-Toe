@@ -52,10 +52,22 @@ const GameEngine = {
     }
     return false;
   },
+  checkForTie: function(board) {
+    for (var i = 0; i < board.length; i++) {
+      if (board[i] == null) {
+        return false;
+      }
+    }
+    if (GameEngine.checkForVictory(board)) {
+      return false;
+    } else {
+      return true;
+    }
+  },
   makeMove: function(position) {
     if (this.isValidMove(position)) {
       this.board[position] = this.currentPlayer;
-      if (this.checkForVictory(this.board)) {
+      if (this.checkForVictory(this.board) || this.checkForTie(this.board)) {
         this.gameOver = true;
       } else {
         this.toggleCurrentPlayer();
@@ -168,7 +180,11 @@ const GameController = {
     var pos = event.path[0].getAttribute("data-position");
     var move = GameEngine.makeMove(pos);
     if (GameEngine.gameOver == true) {
-      ViewEngine.flashMessage(`${GameEngine.currentPlayer} has won the game!`)
+      if (GameEngine.checkForTie(GameEngine.board) == true) {
+        ViewEngine.flashMessage("It's a tie!")
+      } else {
+        ViewEngine.flashMessage(`${GameEngine.currentPlayer} has won the game!`)
+      }
     }
     ViewEngine.refreshBoardView(GameEngine.board)
   }
