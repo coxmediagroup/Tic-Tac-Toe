@@ -12,7 +12,7 @@ const GameEngine = {
   toggleCurrentPlayer: function() {
     if (this.currentPlayer == "X") {
       this.currentPlayer = "O";
-      this.aiMove();
+      AI.makeMove();
     } else {
       this.currentPlayer = "X";
     }
@@ -64,16 +64,36 @@ const GameEngine = {
     }
     ViewEngine.flashMessage("Invalid move, please try again.")
     return false;
-  },
-  aiMove: function() {
-    console.log("Hello");
   }
 };
 
 const AI = {
   // Make a 2d array of boards which represent all possible sets of moves
-  buildBoard: function() {
-    this.board = GameEngine.board;
+  buildTree: function() {
+    var board = GameEngine.board;
+    possibleMoves = this.buildPossibleMoves(board);
+    var tree = Array(possibleMoves.length).fill([]);
+    console.log(tree);
+    // tree[0].push(this.buildPossibleMoves(board));
+    // tree.forEach(function(pos, i) {
+    //
+    // })
+  },
+  makeMove: function() {
+    var possibleMoves = this.buildPossibleMoves(GameEngine.board);
+    var lossPosition = this.findLoss(possibleMoves);
+    var winPosition = this.findVictory(possibleMoves);
+
+    if (winPosition == true) {
+      GameEngine.makeMove(winPosition);
+    } else if (lossPosition == true) {
+      GameEngine.makeMove(lossPosition);
+    } else {
+      var max = Math.floor(possibleMoves.length);
+      var move = Math.floor(Math.random() * max);
+      GameEngine.makeMove(move);
+      ViewEngine.refreshBoardView(GameEngine.board);
+    }
   },
   // Should output array with scores for each first move
   buildScoreSheet: function() {
@@ -81,9 +101,9 @@ const AI = {
   },
   // Outputs array of all possible moves the ai could make
   // check if in this array
-  buildPossibleMoves: function() {
+  buildPossibleMoves: function(board) {
     var possibleMoves = [];
-    GameEngine.board.forEach(function(piece, pos) {
+    board.forEach(function(piece, pos) {
       if (GameEngine.isValidMove(pos)) {
         possibleMoves.push(pos);
       }
@@ -99,15 +119,39 @@ const AI = {
   scoreMove: function(move) {
 
   },
-  // Moves the ai to this position
+  // Moves the ai to this position, returns temp board
   makeFakeAIMove: function(move) {
-
+    var board = [];
+    board.push(GameEngine.board);
+    board[move] = "O";
+    return board;
   },
   makeFakeHumanMove: function(move) {
-
+    var board = [];
+    board.push(GameEngine.board);
+    board[move] = "X";
+    return board;
   },
   toggleAIPlayer: function(move) {
 
+  },
+  findVictory: function(possibleMoves) {
+    possibleMoves.forEach(function(i) {
+      var board = AI.makeFakeAIMove(i);
+      if (GameEngine.checkForVictory(board)) {
+        return i;
+      }
+    });
+    return false;
+  },
+  findLoss: function(possibleMoves) {
+    possibleMoves.forEach(function(i) {
+      var board = AI.makeFakeHumanMove(i);
+      if (GameEngine.checkForVictory(board)) {
+        return i;
+      }
+    });
+    return false;
   }
 }
 
