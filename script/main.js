@@ -180,8 +180,8 @@ const ViewEngine = {
 const GameController = {
   onClickNewGame: function(event) {
     GameEngine.resetGame();
-    ViewEngine.refreshBoardView(GameEngine.board)
-    console.log("New game");
+    ViewEngine.refreshBoardView(GameEngine.board);
+    ViewEngine.clearFlash();
   },
   onClickBoardSpace: function(event) {
     var pos = event.path[0].getAttribute("data-position");

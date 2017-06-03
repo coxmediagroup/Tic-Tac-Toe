@@ -1,10 +1,12 @@
-body {
-  background-color: purple;
-}
-
 .board {
+  margin-top: 20px;
   height: 400px;
   width: 400px;
+  text-align: center;
+}
+
+#current-player {
+  text-align: center;
 }
 
 .board div {
@@ -12,6 +14,7 @@ body {
   height: 133.333333px;
   width: 33.3333333333%;
   background-color: white;
+  color: black;
   border: 3px solid green;
   text-align: center;
   font-size: 5em;

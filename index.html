@@ -8,10 +8,16 @@
   <link rel="stylesheet" href="style/main.css">
 </head>
 
-<body>
+<body class="bg-primary">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a href="/" class="navbar-brand">Tic Tac Toe</a>
+      </div>
+    </div>
+  </nav>
   <div class="container">
-    <h1>Tic Tac Toe</h1>
-    <div class="board" id="board">
+    <div class="board bg-info" id="board">
       <div data-position="0"></div>
       <div data-position="1"></div>
       <div data-position="2"></div>
@@ -24,10 +30,10 @@
     </div>
     <div id="message-box"></div>
     <div>
-      The current player is <span id="current-player">X</span>
+      <h4>The current player is <span id="current-player">X</span></h4>
     </div>
-    <button type="button" id="new-game">New Game</button>
-    <p>To play, click the space you want to move. The computer will then make a move. When the game is over, click "New Game" to play again.</p>
+    <button type="button" class="btn btn-default" id="new-game">New Game</button>
+    <p>To play, click the space you want to move. The computer will then make a move. When the game is over, click "New Game" to play again. The player is "X" and the computer is "O"</p>
   </div>
   <script src="script/main.js" type="text/javascript"></script>
 </body>
