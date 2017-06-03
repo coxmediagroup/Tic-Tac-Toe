@@ -38,7 +38,7 @@ const GameEngine = {
       }
     }
     // Check for row victory
-    for (var i = 0; i < 3; i += 3) {
+    for (var i = 0; i < 9; i += 3) {
       if (this.currentPlayer == board[i] && this.currentPlayer == board[i + 1] && this.currentPlayer == board[i + 2]) {
         return true;
       }
@@ -86,16 +86,12 @@ const AI = {
     var winPosition = this.findVictory(possibleMoves);
 
     if (winPosition == true) {
-      console.log("Win position");
       GameEngine.makeMove(winPosition);
     } else if (lossPosition == true) {
-      console.log("Loss position");
       GameEngine.makeMove(lossPosition);
     } else {
-      console.log("Random position");
       var max = Math.floor(possibleMoves.length);
       var i = Math.floor(Math.random() * max);
-      console.log(i);
       GameEngine.makeMove(possibleMoves[i]);
       ViewEngine.refreshBoardView(GameEngine.board);
       ViewEngine.clearFlash();
@@ -138,12 +134,13 @@ const AI = {
     return false;
   },
   findLoss: function(possibleMoves) {
-    possibleMoves.forEach(function(i) {
-      var board = AI.makeFakeHumanMove(i);
+    var board;
+    for (var i = 0; i < possibleMoves.length; i++) {
+      board = AI.makeFakeHumanMove(i);
       if (GameEngine.checkForVictory(board)) {
         return i;
       }
-    });
+    }
     return false;
   }
 }
