@@ -44,10 +44,22 @@ body, div {
 .messages {
   height: 60vmin;
   width: 30vmin;
-  /*background-color: red;*/
 }
 
 .game_message {
   width: 100%;
-  height: 50%;
+  height: 25%;
+  text-align: center;
+  font-size: 2em;
+}
+
+#x_select, #o_select {
+  line-height: 20vmin;
+  font-size: 15vmin;
+  text-align: center;
+}
+
+#x_select:hover, #o_select:hover {
+  background-color: black;
+  color: white;
 }
