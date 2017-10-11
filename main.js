@@ -23,6 +23,8 @@ $(document).ready(() => {
   // Select symbol to begin a game
   $("#x_select, #o_select").on('click', (event) => {
     if (!active_game) {
+      $("#x_select, #o_select").removeClass();
+      $("#" + event.currentTarget.id).addClass('player_1');
       selectSymbol(event.currentTarget.id.replace("_select", "").toUpperCase());
     }
   });
