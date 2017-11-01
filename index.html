@@ -2,15 +2,44 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
-  <title>Rush's Tic Tac Toe</title>
+  <title>Tic Tac Toe by Rush</title>
   <body>
-    <div class="container">
-      <header><h1>tic tac toe</h1></header>
+      <div class="header">
+        <h1 class="title">Tic Tac Toe</h1>
+      </div>
 
-      <footer>by Rush Myers </footer>
-    </div>
+      <div class="game">
+        <div class="score-card">
+          <div>You:</div>
+          <div>Computer:</div>
+          <div>Tie:</div>
+        </div>
+
+        <div class="board">
+          <div data-id=1 class="tile"></div>
+          <div data-id=2 class="tile"></div>
+          <div data-id=3 class="tile"></div>
+          <div data-id=4 class="tile"></div>
+          <div data-id=5 class="tile"></div>
+          <div data-id=6 class="tile"></div>
+          <div data-id=7 class="tile"></div>
+          <div data-id=8 class="tile"></div>
+          <div data-id=9 class="tile"></div>
+        </div>
+
+        <div class="choose-token chooseToken">
+          <div>Do you want to be X or 0 ?</div>
+          <button class="selectToken" data-id="X">X</button>
+          <button class="selectToken" data-id="O">O</button>
+        </div>
+
+      </div>
+
+    <footer class="footer">Created by Rush Myers</footer>
   </body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="main.js"></script>
 </html>

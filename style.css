@@ -1,0 +1,45 @@
+body {
+  font-family: 'PT Sans', sans-serif;
+}
+div.game {
+  margin:auto;
+  height: 475px;
+  width: 800px;
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-around;
+}
+div.score-card {
+  margin-right: 45px;
+  font-size: 20px;
+}
+div.board {
+  height: 100%;
+  width: 475px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 30px;
+}
+div.tile {
+  width: 28%;
+  height: 28%;
+  background-color: aqua;
+  border: 1px solid black;
+}
+div.tile:hover {
+  cursor: pointer;
+}
+h1.title {
+  text-align: center;
+}
+.footer {
+  text-align: right;
+  margin: 0 22px 0 0 ;
+}
+.hide {
+  display: none;
+}
+.tile.played {
+  background-color: orange;
+ }
