@@ -41,7 +41,6 @@ $(document).ready(function(){
   };
 
   function computerMove(){
-    console.log(unplayedTiles);
     var tileNumber = unplayedTiles[Math.floor(Math.random() * unplayedTiles.length)]
     var tile = $('[data-id = ' + tileNumber.toString() + ']');
     tile.addClass("played").html(computerToken);
