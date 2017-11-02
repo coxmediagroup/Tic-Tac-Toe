@@ -14,16 +14,20 @@
           <h1>Tic Tac Toe</h1>
         </div>
       </div>
-
       <div class="game card">
         <div class="score-card card">
           <ul class="list-group">
-            <li class="list-group-item">You: <span id="playerScore" class="score">0</span></li>
-            <li class="list-group-item">Computer: <span id="computerScore" class="score">0</span></li>
-            <li class="list-group-item">Tie: <span id="tieScore" class="score">0</span></li>
+            <li class="list-group-item">You:
+              <span id="playerScore" class="score">0</span>
+            </li>
+            <li class="list-group-item">Computer:
+              <span id="computerScore" class="score">0</span>
+            </li>
+            <li class="list-group-item">Tie:
+              <span id="tieScore" class="score">0</span>
+            </li>
           </ul>
         </div>
-
         <div class="board card">
           <div data-id=1 class="tile"></div>
           <div data-id=2 class="tile"></div>
@@ -36,9 +40,7 @@
           <div data-id=9 class="tile"></div>
         </div>
       </div>
-
     <footer class="footer">Created by Rush Myers</footer>
-
     <!-- Select Token Modal -->
     <div id="selectTokenModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -53,14 +55,35 @@
         </div>
       </div>
     </div>
-
     <!-- Player Wins Modal -->
     <div id="winModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
             <p>You Won! Play Again?</p>
-            <button type="button" class="btn btn-default newGame" data-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-default playAgain" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Player Loses Modal -->
+    <div id="loseGame" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>You Lost! Play Again?</p>
+            <button type="button" class="btn btn-default playAgain" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tied Game Modal -->
+    <div id="checkForTie" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>You Tied! Play Again?</p>
+            <button type="button" class="btn btn-default playAgain" data-dismiss="modal">Yes</button>
           </div>
         </div>
       </div>
