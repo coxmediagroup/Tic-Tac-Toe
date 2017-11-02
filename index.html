@@ -8,15 +8,27 @@
   </head>
   <title>Tic Tac Toe by Rush</title>
   <body>
-      <div class="header">
-        <h1 class="title">Tic Tac Toe</h1>
+
+
+      <div class="container text-center">
+        <div class="page-header">
+          <h1>Tic Tac Toe</h1>
+        </div>
+        <div class="chooseToken">
+          <p>Please choose X or O</p>
+          <button class="selectToken btn btn-success" data-id="X">X</button>
+          <button class="selectToken btn btn-info" data-id="O">O</button>
+        </div>
+
       </div>
 
       <div class="game">
         <div class="score-card">
-          <div>You:</div>
-          <div>Computer:</div>
-          <div>Tie:</div>
+          <ul class="list-group">
+            <li class="list-group-item">You: <span id="playerScore" class="score">12</span></li>
+            <li class="list-group-item">Computer: <span id="computerScore" class="score">5</span></li>
+            <li class="list-group-item">Tie: <span id="tieScore" class="score">3</span></li>
+          </ul>
         </div>
 
         <div class="board">
@@ -30,16 +42,18 @@
           <div data-id=8 class="tile"></div>
           <div data-id=9 class="tile"></div>
         </div>
-
+<!--
         <div class="choose-token chooseToken">
           <div>Do you want to be X or 0 ?</div>
           <button class="selectToken" data-id="X">X</button>
           <button class="selectToken" data-id="O">O</button>
-        </div>
+        </div> -->
 
       </div>
 
     <footer class="footer">Created by Rush Myers</footer>
+
+
   </body>
   <script src="main.js"></script>
 </html>
