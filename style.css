@@ -1,8 +1,9 @@
 body {
   font-family: 'PT Sans', sans-serif;
+  color: #001011;
 }
 div.game {
-  margin:auto;
+  margin-top: 50px;
   height: 475px;
   width: 800px;
   display: flex !important;
@@ -10,29 +11,38 @@ div.game {
   justify-content: space-around;
 }
 div.score-card {
-  margin-right: 45px;
   font-size: 20px;
 }
+span.score {
+  text-align: right;
+ }
 div.board {
   height: 100%;
   width: 475px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-left: 30px;
+  margin-left: 30px
+  background-color: #F5E6E8;
 }
 div.tile {
-  width: 28%;
-  height: 28%;
-  background-color: aqua;
-  border: 1px solid black;
+  width: 32%;
+  height: 32%;
+  border-radius: 15%;
+  color: #E9D758;
+  font-size: 11em;
+  font-weight: 75%;
+  line-height: 1em;
+  background-color: #2E282A;
+  margin: auto;
+  text-align: center;
+  vertical-align: middle;
 }
+/*TODO only do this if tile is unplayed*/
 div.tile:hover {
   cursor: pointer;
 }
-h1.title {
-  text-align: center;
-}
+
 .footer {
   text-align: right;
   margin: 0 22px 0 0 ;
@@ -41,5 +51,5 @@ h1.title {
   display: none;
 }
 .tile.played {
-  background-color: orange;
+  background-color: #AAA1C8;
  }

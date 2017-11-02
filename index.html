@@ -5,33 +5,26 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <title>Tic Tac Toe by Rush</title>
   <body>
-
-
       <div class="container text-center">
         <div class="page-header">
           <h1>Tic Tac Toe</h1>
         </div>
-        <div class="chooseToken">
-          <p>Please choose X or O</p>
-          <button class="selectToken btn btn-success" data-id="X">X</button>
-          <button class="selectToken btn btn-info" data-id="O">O</button>
-        </div>
-
       </div>
 
-      <div class="game">
-        <div class="score-card">
+      <div class="game card">
+        <div class="score-card card">
           <ul class="list-group">
-            <li class="list-group-item">You: <span id="playerScore" class="score">12</span></li>
-            <li class="list-group-item">Computer: <span id="computerScore" class="score">5</span></li>
-            <li class="list-group-item">Tie: <span id="tieScore" class="score">3</span></li>
+            <li class="list-group-item">You: <span id="playerScore" class="score">0</span></li>
+            <li class="list-group-item">Computer: <span id="computerScore" class="score">0</span></li>
+            <li class="list-group-item">Tie: <span id="tieScore" class="score">0</span></li>
           </ul>
         </div>
 
-        <div class="board">
+        <div class="board card">
           <div data-id=1 class="tile"></div>
           <div data-id=2 class="tile"></div>
           <div data-id=3 class="tile"></div>
@@ -42,17 +35,36 @@
           <div data-id=8 class="tile"></div>
           <div data-id=9 class="tile"></div>
         </div>
-<!--
-        <div class="choose-token chooseToken">
-          <div>Do you want to be X or 0 ?</div>
-          <button class="selectToken" data-id="X">X</button>
-          <button class="selectToken" data-id="O">O</button>
-        </div> -->
-
       </div>
 
     <footer class="footer">Created by Rush Myers</footer>
 
+    <!-- Select Token Modal -->
+    <div id="selectTokenModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>Which do you want to be?
+              <button type="button" class="selectToken btn btn-warning" data-dismiss="modal" data-id="X">X</button>
+              Or
+              <button type="button" class="selectToken btn btn-info"  data-dismiss="modal" data-id="O">O</button>
+             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Wins Modal -->
+    <div id="winModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>You Won! Play Again?</p>
+            <button type="button" class="btn btn-default newGame" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
   <script src="main.js"></script>
