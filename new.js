@@ -10,13 +10,13 @@ $(document).ready(function(){
 
   $('.tile').click(clickTile);
 
-  var winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 5],[2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
+  var winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],[1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
   newGame();
 
   function newGame() {
       $('.selectToken').click(selectToken);
-      currentBoard = [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9];
+      currentBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
       $('.tile').html('').removeClass('played');
       $('#selectTokenModal').modal('show');
   };
@@ -39,7 +39,7 @@ $(document).ready(function(){
   };
 
   function makeMove(currentPlayer, tileNumber){
-    currentBoard[tileNumber - 1] = currentPlayer;
+    currentBoard[tileNumber] = currentPlayer;
     $("#" + tileNumber).html(currentPlayer).addClass("played");
     if(checkForWin(currentPlayer, currentBoard)) {
       winGame(currentPlayer);
@@ -49,7 +49,7 @@ $(document).ready(function(){
   function checkForWin(player, gameBoard){
     var gameWon;
     var moves = gameBoard.reduce((array, element, i) =>
-      (element === player) ? array.concat(i + 1) : array, []);
+      (element === player) ? array.concat(i) : array, []);
 
     winningCombinations.forEach(function(combination) {
       var threeInARow = combination.every(function(value) {
@@ -83,7 +83,6 @@ $(document).ready(function(){
   };
 
   function selectBestMove(gameBoard, player) {
-    console.log(gameBoard);
     var openTiles = unplayedTiles(gameBoard);
 
     if (checkForWin(personToken, gameBoard)) {
