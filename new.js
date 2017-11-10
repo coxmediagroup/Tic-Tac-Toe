@@ -19,7 +19,6 @@ $(document).ready(function(){
       $('.playAgain').click(newGame);
       currentBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
       $('.tile').html('').removeClass('played');
-      console
       $('#selectTokenModal').modal('show');
   };
 
@@ -63,7 +62,6 @@ $(document).ready(function(){
   };
 
   function checkForTie(){
-    console.log(unplayedTiles(currentBoard).length === 0 );
     if( unplayedTiles(currentBoard).length === 0 ) {
       ties++;
       $("#tieGame").modal();
@@ -105,10 +103,10 @@ $(document).ready(function(){
     }
 
     var moves = [];
-    for (var i = 0; i < openTiles.length; i++) {
+    openTiles.forEach(function(tile, i) {
       var move = {};
-      move.index = gameBoard[openTiles[i]];
-      gameBoard[openTiles[i]] = player;
+      move.index = gameBoard[tile];
+      gameBoard[tile] = player;
       if (player == computerToken) {
         var result = selectBestMove(gameBoard, personToken);
         move.score = result.score;
@@ -116,29 +114,28 @@ $(document).ready(function(){
         var result = selectBestMove(gameBoard, computerToken);
         move.score = result.score;
       }
-
-      gameBoard[openTiles[i]] = move.index;
-
+      gameBoard[tile] = move.index;
       moves.push(move);
-    }
+    });
 
     var bestMove;
     if(player === computerToken) {
       var bestScore = -10000;
-      for(var i = 0; i < moves.length; i++) {
-        if (moves[i].score > bestScore) {
-          bestScore = moves[i].score;
+      moves.forEach(function(move, i) {
+        if (move.score > bestScore) {
+          bestScore = move.score;
           bestMove = i;
         }
-      }
+      });
     } else {
       var bestScore = 10000;
-      for(var i = 0; i < moves.length; i++) {
-        if (moves[i].score < bestScore) {
-          bestScore = moves[i].score;
+      // for(var i = 0; i < moves.length; i++) {
+        moves.forEach(function(move, i) {
+        if (move.score < bestScore) {
+          bestScore = move.score;
           bestMove = i;
         }
-      }
+      });
     }
     return moves[bestMove];
   }
