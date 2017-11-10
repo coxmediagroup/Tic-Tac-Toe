@@ -16,8 +16,10 @@ $(document).ready(function(){
 
   function newGame() {
       $('.selectToken').click(selectToken);
+      $('.playAgain').click(newGame);
       currentBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
       $('.tile').html('').removeClass('played');
+      console
       $('#selectTokenModal').modal('show');
   };
 
@@ -61,6 +63,7 @@ $(document).ready(function(){
   };
 
   function checkForTie(){
+    console.log(unplayedTiles(currentBoard).length === 0 );
     if( unplayedTiles(currentBoard).length === 0 ) {
       ties++;
       $("#tieGame").modal();
@@ -79,7 +82,15 @@ $(document).ready(function(){
   };
 
   function winGame(winner) {
-    console.log(winner);
+    if (winner === personToken) {
+      personWins++;
+      $('#playerScore').html(playerWins);
+      $("#winModal").modal();
+    } else {
+      computerWins++;
+      $('#computerScore').html(computerWins);
+      $("#loseGame").modal()
+    }
   };
 
   function selectBestMove(gameBoard, player) {

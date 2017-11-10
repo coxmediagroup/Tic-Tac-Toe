@@ -3,7 +3,7 @@ body {
   color: #001011;
 }
 div.game {
-  margin-top: 50px;
+  margin: 0 auto;
   height: 475px;
   width: 800px;
   display: flex !important;
@@ -12,9 +12,12 @@ div.game {
 }
 div.score-card {
   font-size: 20px;
+  box-shadow: 1px 1px 1px 1px black;
+  border-radius: 2%;
 }
 span.score {
-  text-align: right;
+  float: right;
+  margin-left: 4px;
  }
 div.board {
   height: 100%;
