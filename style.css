@@ -37,6 +37,8 @@ div.tile {
   margin: auto;
   text-align: center;
   vertical-align: middle;
+  text-shadow: 2px 2px black;
+  box-shadow: 2px 2px 2px 1px black;
 }
 /*TODO only do this if tile is unplayed*/
 div.tile:hover {
